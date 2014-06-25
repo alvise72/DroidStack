@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:id="@+id/mainLayout1ST"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+<ScrollView
+      android:id="@+id/scrollerST"
+      android:layout_width="fill_parent"
+      android:paddingLeft="5dip"
+      android:layout_height="wrap_content">
+
+<LinearLayout
+    android:id="@+id/login_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <TextView
+      android:id="@+id/endpointT"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Insert the Keystone's endpoint (only hostname or IP)"/>
+  
+  <EditText
+      android:id="@+id/endpointE"
+      android:layout_width="fill_parent"
+      android:layout_height="26sp"
+      android:paddingLeft="3sp"
+      android:paddingTop="3sp"
+      android:paddingBottom="3sp"
+      android:text=""
+      android:textSize="18sp"/>
+      
+  <TextView
+      android:id="@+id/tenantT"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Insert your tenant/project's name"/>
+  
+  <EditText
+      android:id="@+id/tenantE"
+      android:layout_width="fill_parent"
+      android:layout_height="26sp"
+      android:paddingLeft="3sp"
+      android:paddingTop="3sp"
+      android:paddingBottom="3sp"
+      android:text=""
+      android:textSize="18sp"/>  
+      
+  <TextView
+      android:id="@+id/usernameT"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Insert your username"/>
+        
+  <EditText
+      android:id="@+id/usernameE"
+      android:layout_width="fill_parent"
+      android:layout_height="26sp"
+      android:paddingLeft="3sp"
+      android:paddingBottom="3sp"
+      android:paddingTop="3sp"
+      android:text=""
+      android:textSize="18sp"/>  
+
+
+  <TextView
+      android:id="@+id/passwordT"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Insert your password"/>
+        
+  <EditText
+      android:id="@+id/passwordE"
+      android:layout_width="fill_parent"
+      android:layout_height="26sp"
+      android:paddingLeft="3sp"
+      android:paddingBottom="3sp"
+      android:paddingTop="3sp"
+      android:text=""
+      android:textSize="18sp"/>  
+  <View
+      android:layout_width="fill_parent"
+      android:layout_height="2dip"
+      android:background="#FF909090" />
+
+   <CheckBox 
+      android:id="@+id/ssl"
+      android:text="Use SSL"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" 
+      android:layout_gravity="left"
+      android:paddingLeft="10dip"
+      android:onClick="enableSSL"
+      android:checked="false"
+      android:enabled="true"/>
+      
+   <Button
+      android:id="@+id/browseCAFILE"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Browse CA File"
+      android:drawableLeft="@drawable/foldersmall"
+      android:layout_gravity="center_vertical"
+      android:onClick="browseCAFile"/>
+
+   <TextView
+      android:id="@+id/showCAFile"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="No file selected"/>   
+        <View
+      android:layout_width="fill_parent"
+      android:layout_height="2dip"
+      android:background="#FF909090" />
+   <Button
+	android:id="@+id/saveCredentials"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="Verify credentials"
+	android:layout_gravity="center_horizontal"
+	android:onClick="authorize"/>  
+
+  <LinearLayout
+      android:id="@+id/newuserButtons"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="vertical"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+  </LinearLayout>
+</LinearLayout>
+
+</ScrollView>
+</LinearLayout>
+

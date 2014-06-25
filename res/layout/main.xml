@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/mainRootLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+  
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:id="@+id/buttonlayout"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/LOGIN"
+        android:layout_width="200dip"
+        android:layout_height="90dip"
+        android:text="Set Credentials"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="10dip"
+	android:textSize="20dip"
+	android:drawableLeft="@drawable/security"
+        android:onClick="login"/>
+    
+    <Button
+        android:id="@+id/OVERVIEW"
+        android:layout_width="200dip"
+        android:layout_height="90dip"
+        android:text="OverView"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="10dip"
+	android:textSize="20dip"
+	android:drawableLeft="@drawable/overview"
+        android:onClick="overview"/>
+  </LinearLayout>
+
+  <LinearLayout 
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/buttonlayout2"
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+    
+    <Button
+        android:id="@+id/GLANCE"
+        android:layout_width="200dip"
+        android:layout_height="90dip"
+        android:text="List Glance Images"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="10dip"
+        android:onClick="list_glance"
+	android:textSize="20dip"
+	android:drawableLeft="@drawable/os"/>
+    
+    <Button
+        android:id="@+id/NOVA"
+        android:layout_width="200dip"
+        android:layout_height="90dip"
+        android:text="List Nova Instances"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="10dip"
+	android:textSize="20dip"
+	android:drawableLeft="@drawable/terminal"
+        android:onClick="list_vm"/>
+  </LinearLayout>  
+</LinearLayout>
+

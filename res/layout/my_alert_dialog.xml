@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:gravity="center_horizontal"
+    android:id="@+id/root"
+    >
+    <TextView 
+        android:id="@+id/title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:textSize="22dip"
+        android:text="Image Information"
+        />
+    <TextView 
+        android:id="@+id/message"
+        android:layout_height="wrap_content"
+        android:layout_width="300dip"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/title"
+        android:paddingTop="10dip"
+        android:textSize="18dip"
+        android:text=""
+        />
+	<LinearLayout 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_below="@id/message" 
+	    android:layout_centerHorizontal="true"
+	    >
+        <Button
+	    android:id="@+id/launch"
+	    android:layout_width="100dp"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_horizontal"
+	    android:text="Launch" 
+	    android:textSize="14dp"
+	    android:layout_weight="1"
+	    />
+	<Button 
+	    android:id="@+id/delete"
+	    android:text="Delete"
+	    android:layout_width="100dp"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_horizontal"
+	    android:textSize="14dip"
+	    android:layout_weight="1"
+	    />
+        <Button 
+            android:id="@+id/ok"
+            android:text="Ok" 
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="14dip"
+            android:layout_weight="1"
+            />
+
+	</LinearLayout>
+	
+</RelativeLayout>

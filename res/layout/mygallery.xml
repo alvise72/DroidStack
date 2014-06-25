@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:gravity="center"
+    android:orientation="vertical">
+  -->
+<LinearLayout
+    android:id="@+id/maingallerylayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+  
+  <Gallery 
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/Gallery"
+      android:layout_width="fill_parent"
+      android:layout_height="80dip" 
+      android:spacing="0dp"
+      android:unselectedAlpha="0.3"
+      android:drawingCacheQuality="auto"
+      android:fadingEdgeLength="0sp"
+      android:animationCache="false"
+      android:hapticFeedbackEnabled="true"
+      android:animationDuration="800"/>
+  
+  <LinearLayout
+      android:id="@+id/secondgallerylayout"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="vertical"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <WebView  
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_above="@+id/photodeletebt"
+	android:layout_below="@+id/Gallery"
+	android:id="@+id/mywebview"
+	android:focusable="true"
+	android:focusableInTouchMode="true"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:layout_weight="1"/>
+    
+    <Button
+	android:id="@+id/photodeletebt"
+	android:layout_width="wrap_content"
+	android:layout_height="fill_parent"
+	android:text=""
+	android:gravity="center"
+	android:layout_gravity="bottom"
+	android:layout_weight="7"
+	android:onClick="deleteCurrentPic"/>
+
+  </LinearLayout>
+</LinearLayout>
