@@ -92,16 +92,6 @@ public class main extends Activity implements OnClickListener
       
       super.onResume( );
       
-      // Button login = (Button)findViewById(R.id.LOGIN);
-      // Button glance= (Button)findViewById(R.id.GLANCE);
-      // Button nova  = (Button)findViewById(R.id.NOVA);
-      // int buttonSize = (Utils.getIntegerPreference( "SCREENW", 320, this )-12)/2;
-      // Log.d("MAIN.onResume", "SCREENW="+Utils.getIntegerPreference( "SCREENW", 320, this ) + " - ButtonSize="+buttonSize);
-      // LinearLayout.LayoutParams lp_l = new LinearLayout.LayoutParams( buttonSize, 200 );
-      // login.setLayoutParams(lp_l);
-      // glance.setLayoutParams(lp_l);
-      // nova.setLayoutParams(lp_l);
-
       if( !Utils.internetOn( this ) )
         Utils.alert( "The device is not connected to Internet. This App cannot work.", this );
       
@@ -179,10 +169,10 @@ public class main extends Activity implements OnClickListener
 	      return;
 	    }
 	    try {
-		Tenant t = ParseUtils.getToken( jsonResponse );
-		Utils.putStringPreference( "TOKEN_STRING", t.getToken(), this );
-		Utils.putLongPreference( "TOKEN_EXPIRATION", t.getExpireTime( ), this );
-		Utils.putStringPreference("TENANT_ID", t.getTenantID(), this );
+		User U = ParseUtils.getToken( jsonResponse );
+		Utils.putStringPreference( "TOKEN_STRING", U.getToken(), this );
+		Utils.putLongPreference( "TOKEN_EXPIRATION", U.getTokenExpireTime( ), this );
+		Utils.putStringPreference("TENANT_ID", U.getTenantID(), this );
 	    } catch(ParseException pe) {
 		Utils.alert( pe.getMessage( ), this);
 		return;

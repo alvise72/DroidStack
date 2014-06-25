@@ -108,7 +108,7 @@ public class Login extends Activity {
   //__________________________________________________________________________________
   public void authorize( View v ) {
     if( !Utils.internetOn( this ) )
-          Utils.alert( "The device is not connected to Internet. This App cannot work.", this );
+          Utils.alert( "ERROR: The device is not connected to Internet. This App cannot work.", this );
 	  
     String endpoint = (((EditText)findViewById(R.id.endpointE)).getText( ).toString( )).trim( );
     String tenant   = (((EditText)findViewById(R.id.tenantE)).getText( ).toString( )).trim( );
@@ -151,28 +151,25 @@ public class Login extends Activity {
       }
     }
     
-    // Tenant t = Utils.getToken( endpoint, tenant, username, password, usessl, this);
-    // if(t != null ) {
-    // 	Utils.putStringPreference( "TOKEN_STRING", t.getToken(), this );
-    // 	Utils.putLongPreference( "TOKEN_EXPIRATION", t.getExpireTime( ), this );
-    // 	Utils.putStringPreference( "TENANT_ID", t.getTenantID( ), this );
-    // 	Utils.alert("SUCCESS!\nYou can now go back and interact with OpenStack...", this);
-    // }
     String jsonResponse = null;
     try {
 	jsonResponse = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
     } catch(IOException e) {
-	Utils.alert( e.getMessage( ), this );
+	Utils.alert( "ERROR: " + e.getMessage( ), this );
 	return;
     }
     try {
-	Tenant t = ParseUtils.getToken( jsonResponse );
-	Utils.putStringPreference( "TOKEN_STRING", t.getToken(), this );
-	Utils.putLongPreference( "TOKEN_EXPIRATION", t.getExpireTime( ), this );
-	Utils.putStringPreference( "TENANT_ID", t.getTenantID( ), this );
+	User U = ParseUtils.getToken( jsonResponse );
+	Log.d("Login", U.toString( ) );
+	U.setPassword(password);
+	String S = new String(U.serialize());
+	Utils.alert( "SER: "+S, this );
+	Utils.putStringPreference( "TOKEN_STRING", U.getToken(), this );
+	Utils.putLongPreference( "TOKEN_EXPIRATION", U.getTokenExpireTime( ), this );
+	Utils.putStringPreference( "TENANT_ID", U.getTenantID( ), this );
 	Utils.alert("SUCCESS!\nYou can now go back and interact with OpenStack...", this);
     } catch(ParseException pe) {
-	Utils.alert( pe.getMessage( ), this );
+	Utils.alert( "ERROR: "+pe.getMessage( ), this );
 	return;
     } 
   }
@@ -192,6 +189,6 @@ public class Login extends Activity {
   //__________________________________________________________________________________
   public void makeTExpire( View v ) {
     Utils.putLongPreference( "TOKEN_EXPIRATION", Utils.now( ), this );
-    Utils.alert("Token is now expired", this);
+    Utils.alert("ERROR: Token is now expired", this);
   }
 }

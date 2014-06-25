@@ -18,7 +18,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static Tenant getToken( String jsonString ) throws ParseException
+    public static User getToken( String jsonString ) throws ParseException
     {
       try {
 	  JSONObject jsonObject = null;
@@ -32,6 +32,7 @@ public class ParseUtils {
 	  JSONObject tenant = (JSONObject)token.get("tenant");
 	  String tenantid = (String)tenant.get("id");
 	  String tenantname = (String)tenant.get("name");
+	  String username = (String)((JSONObject)jsonObject.get("user")).get("username");
 	  
 	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
@@ -42,8 +43,8 @@ public class ParseUtils {
 	      throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
 	  }
 	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-	  Tenant t = new Tenant( tenantname, tenantid, stoken, expireTimestamp );
-	  return t;
+	  User U = new User( username, tenantname, tenantid, stoken, expireTimestamp );
+	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );
       }

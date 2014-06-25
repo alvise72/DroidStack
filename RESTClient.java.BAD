@@ -2,12 +2,10 @@ package org.openstack;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.Proxy;
 import java.net.InetSocketAddress;
 import java.io.OutputStreamWriter;
-import javax.net.ssl.HttpsURLConnection;
 
 import javax.net.ssl.KeyManager;
 
@@ -21,7 +19,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URLConnection;
 import java.lang.Thread;
 import java.util.Date;
 
@@ -47,8 +46,8 @@ public class RESTClient {
 				     boolean usessl ) throws IOException 
   {
     String proto = "http://";
-    if(usessl)
-      proto = "https://";
+   if(usessl)
+     proto = "https://";
     
     String sUrl = proto + endpoint + ":5000/v2.0/tokens";
     URL url = null;
@@ -57,8 +56,8 @@ public class RESTClient {
     } catch(java.net.MalformedURLException mfu) {
       throw new IOException( mfu.toString( ) );
     }
-    URLConnection conn = null;
-    TrustManager[] trustAllCerts = null;
+    HttpURLConnection conn = null;
+   TrustManager[] trustAllCerts = null;
     if(usessl) {
       trustAllCerts = new TrustManager[] {
        new X509TrustManager() {
@@ -86,16 +85,22 @@ public class RESTClient {
       } catch(java.io.IOException ioe) {
         throw ioe;
       }
-    }
+    } else {
     
     try {
       conn = (HttpURLConnection)url.openConnection();
     } catch(java.io.IOException ioe) {
         throw ioe;
     }
+    }
     
     conn.setRequestProperty("Content-Type", "application/json");
     conn.setRequestProperty("Accept", "application/json");
+    conn.setRequestProperty("Accept-Encoding", "gzip");
+    //conn.setRequestProperty("User-Agent", "curl/7.36.0" );
+    conn.setRequestProperty("Connection", "Keep-Alive");
+    //((HttpURLConnection)conn).setChunkedStreamingMode(1048576);
+    //conn.setUseCaches(false);
     conn.setDoOutput(true);
     try {
       ((HttpURLConnection)conn).setRequestMethod("POST");
@@ -105,48 +110,40 @@ public class RESTClient {
     
     String data = "{\"auth\": {\"tenantName\": \"" + tenant + "\", \"passwordCredentials\": {\"username\": \"" + username + "\", \"password\": \"" + password + "\"}}}";
     OutputStreamWriter out = null;
-    try {
-      out = new OutputStreamWriter(conn.getOutputStream());
-      out.write(data);
-      out.close();
-    } catch(java.io.IOException ioe) {
-      throw ioe;
-    }
     
-    int status = ((HttpURLConnection)conn).getResponseCode();
-    if(status >= HttpStatus.SC_BAD_REQUEST) {
+      out = new OutputStreamWriter(conn.getOutputStream());
+      out.write(data); // TODO, ripetere la write finche' non ha mandato tutto
+      out.close();
+   
+    
+    
+//     int status = ((HttpURLConnection)conn).getResponseCode();
+//     //if(status >= HttpStatus.SC_BAD_REQUEST) {
+//     if(status != HttpURLConnection.HTTP_OK) {
 //       BufferedInputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream() );
-//       StringBuffer buf = new StringBuffer( 2048*1000 );
+//       //StringBuffer buf = new StringBuffer( 4096*1000 );
+//       String buf = new String();
 //       int read;
-//       byte[] b = new byte[ 2048 ];
+//       byte[] b = new byte[ 16384 ];
 //       int res = 0;
 //       
-//       while( (res = in.read( b, 0, 2048 )) != -1 ) {
+//       while( (res = in.read( b, 0, 16384 )) != -1 ) {
 //         if( res>0 ) {
-//           String tmp = new String( b, 0, res );
-//           buf.append( tmp );
+//           //String tmp = new String( b, 0, res );
+//           //buf.append( tmp );
+// 	  buf += new String( b, 0, res );
 //         } 
 //       }
-      InputStream in = ((HttpURLConnection)conn).getErrorStream( );
-       int len;
-	String buf = "";
-	byte[] buffer = new byte[4096];
-	while (-1 != (len = in.read(buffer))) {
-	  //bos.write(buffer, 0, len);
-	  buf += new String(buffer, 0, len);
-	  //Log.d("requestToken", new String(buffer, 0, len));
-	}
-	in.close();
-      //Log.d("RESTApiOpenStack.requestToken", buf.toString( ) );
-      if(ParseUtils.getErrorCode( buf)==HttpStatus.SC_UNAUTHORIZED) {
-        throw new IOException( ParseUtils.getErrorMessage( buf+"\nPlease check your credentials and try again..." ));
-      }
-      throw new IOException( ParseUtils.getErrorMessage( buf ) );
-    }
-    
-//     BufferedInputStream inStream = null;
-//     StringBuffer buf = new StringBuffer( 2048*1000 );
+//       //Log.d("RESTApiOpenStack.requestToken", buf.toString( ) );
+//       if(ParseUtils.getErrorCode( buf.toString( ) )==HttpStatus.SC_UNAUTHORIZED) {
+//         throw new IOException( ParseUtils.getErrorMessage( buf.toString( ) )+"\nPlease check your credentials and try again..." );
+//       }
+//       throw new IOException( ParseUtils.getErrorMessage( buf.toString( ) ) );
+//     }
 //     
+//     BufferedInputStream inStream = null;
+//     //StringBuffer buf = new StringBuffer( 4096*1000 );
+//     String buf = new String();
 //     try {
 //       inStream = new BufferedInputStream( conn.getInputStream() );
 //       int read;
@@ -156,16 +153,18 @@ public class RESTClient {
 //       
 //       while( (res = inStream.read( b, 0, 2048 )) != -1 ) {
 //         if( res>0 ) {
-//           String tmp = new String( b, 0, res );
-//           buf.append( tmp );
+//           //String tmp = new String( b, 0, res );
+//           //buf.append( tmp );
+// 	  buf += new String( b, 0, res );
 //         } 
 //       }
 //     } catch(java.io.IOException ioe) {
 //       throw ioe;
 //     }
-    
-    String buf = "";
-    InputStream in = conn.getInputStream( );
+//     Log.d("RESTClient", buf.toString( ) );
+//     return buf;//.toString( );    
+
+	InputStream in = conn.getInputStream( );
 	int len;
 	String res = "";
 	byte[] buffer = new byte[4096];
@@ -175,8 +174,9 @@ public class RESTClient {
 	  //Log.d("requestToken", new String(buffer, 0, len));
 	}
 	in.close();
-	((HttpURLConnection)conn).disconnect( );
-    return buf;    
+	conn.disconnect( );
+	Log.d("requestToken", res);
+    return res;
   }
 
   /**
