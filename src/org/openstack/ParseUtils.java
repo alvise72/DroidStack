@@ -32,8 +32,8 @@ public class ParseUtils {
 	  JSONObject tenant = (JSONObject)token.get("tenant");
 	  String tenantid = (String)tenant.get("id");
 	  String tenantname = (String)tenant.get("name");
-	  String username = (String)((JSONObject)jsonObject.get("user")).get("username");
-	  
+	  String username = (String)((JSONObject)access.get("user")).get("username");
+	  //String username="username";
 	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
 	  Calendar calendar = Calendar.getInstance();

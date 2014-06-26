@@ -1,26 +1,36 @@
 package org.openstack;
 
-import android.app.*;
-import android.widget.*;
-import android.webkit.WebView;
+//import android.webkit.WebView;
+
+import android.os.Bundle;
+
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.Button;
+import android.widget.Toast;
+
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ActivityInfo;
+
 import android.net.Uri;
+
 import android.util.Log;
-import android.view.*;
-import android.content.*;
-import android.content.pm.ActivityInfo;
-import android.app.AlertDialog;
-import android.view.inputmethod.InputMethodManager;
-import android.os.*;
-import android.view.View.OnClickListener;
-import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
+
 import android.app.ActivityManager.MemoryInfo;
-import android.content.pm.ActivityInfo;
+import android.app.AlertDialog;
 import android.app.ActivityManager;
 import android.app.Activity;
 
-//import java.util.Calendar;
+//import android.view.inputmethod.InputMethodManager;
+import android.view.WindowManager;
+import android.view.Gravity;
+import android.view.View;
+
+//import android.graphics.Bitmap;
+
 import java.io.IOException;
 
 import java.util.Vector;
@@ -155,23 +165,21 @@ public class Login extends Activity {
     try {
 	jsonResponse = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
     } catch(IOException e) {
-	Utils.alert( "ERROR: " + e.getMessage( ), this );
+	Utils.alert( "IOException: " + e.getMessage( ), this );
 	return;
     }
+
     try {
 	User U = ParseUtils.getToken( jsonResponse );
-	Log.d("Login", U.toString( ) );
 	U.setPassword(password);
-	String S = new String(U.serialize());
-	Utils.alert( "SER: "+S, this );
-	Utils.putStringPreference( "TOKEN_STRING", U.getToken(), this );
-	Utils.putLongPreference( "TOKEN_EXPIRATION", U.getTokenExpireTime( ), this );
-	Utils.putStringPreference( "TENANT_ID", U.getTenantID( ), this );
+	Utils.putStringPreference( "USER", Base64.encodeBytes( U.serialize() ), this );
 	Utils.alert("SUCCESS!\nYou can now go back and interact with OpenStack...", this);
     } catch(ParseException pe) {
-	Utils.alert( "ERROR: "+pe.getMessage( ), this );
+	Utils.alert( "ParseException: "+pe.getMessage( ), this );
 	return;
-    } 
+    } catch(IOException ioe) {
+	Utils.alert( "IOException: "+ioe.getMessage( ), this );
+    }
   }
   
 
@@ -187,8 +195,8 @@ public class Login extends Activity {
     } 
     
   //__________________________________________________________________________________
-  public void makeTExpire( View v ) {
-    Utils.putLongPreference( "TOKEN_EXPIRATION", Utils.now( ), this );
-    Utils.alert("ERROR: Token is now expired", this);
-  }
+//   public void makeTExpire( View v ) {
+//     Utils.putLongPreference( "TOKEN_EXPIRATION", Utils.now( ), this );
+//     Utils.alert("ERROR: Token is now expired", this);
+//   }
 }
