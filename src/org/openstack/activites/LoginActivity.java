@@ -180,6 +180,7 @@ public class LoginActivity extends Activity {
     try {
 	User U = ParseUtils.getToken( jsonResponse );
 	U.setPassword(password);
+	U.setEndpoint(endpoint);
 	Utils.putStringPreference( "USER", Base64.encodeBytes( U.serialize() ), this );
 	Utils.alert("SUCCESS!\nYou can now go back and interact with OpenStack...", this);
     } catch(ParseException pe) {

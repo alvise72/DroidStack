@@ -45,6 +45,10 @@ import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
+import org.openstack.activities.LoginActivity;
+import org.openstack.activities.OSImagesExploreActivity;
+import org.openstack.activities.OverViewActivity;
+
 public class MainActivity extends Activity implements OnClickListener
 {
     private static MainActivity ACTIVITY = null;
@@ -155,24 +159,36 @@ public class MainActivity extends Activity implements OnClickListener
       progressDialogWaitStop.show();
       downloading_image_list = true;
       
-      long expirationTime = Utils.getLongPreference(   "TOKEN_EXPIRATION", 0, this);
-      String endpoint     = Utils.getStringPreference( "LAST_ENDPOINT", "", this);
-      String tenant       = Utils.getStringPreference( "LAST_TENANT",   "", this);
-      String username     = Utils.getStringPreference( "LAST_USERNAME", "", this);
-      String password     = Utils.getStringPreference( "LAST_PASSWORD", "", this);
-      boolean usessl      = Utils.getBoolPreference(   "USESSL", true, this);
-      if(expirationTime <= Utils.now( )-10 ) {
+      //long expirationTime = Utils.getLongPreference(   "TOKEN_EXPIRATION", 0, this);
+      String serUser = Utils.getStringPreference( "USER", "", this );
+      User u = null;
+      if(serUser.length()!=0) {
+        u = User.deserialize( serUser.getBytes( ) ); 
+      }
+      
+      long expirationTime = 0;
+      
+      if( u!=null )
+        expirationTime = u.getTokenExpireTime( );
+      
+      if(u==null || expirationTime <= Utils.now( ) ) { // Login hasn't been done yet
+      
+        String endpoint     = Utils.getStringPreference( "LAST_ENDPOINT", "", this);
+        String tenant       = Utils.getStringPreference( "LAST_TENANT",   "", this);
+        String username     = Utils.getStringPreference( "LAST_USERNAME", "", this);
+        String password     = Utils.getStringPreference( "LAST_PASSWORD", "", this);
+        boolean usessl      = Utils.getBoolPreference(   "USESSL", true, this);
         
-	if( endpoint.length()==0 ||
+	  if( endpoint.length()==0 ||
 	    tenant.length()==0 ||
 	    username.length()==0 ||
 	    password.length()==0 ) 
-        {
+          {
 	  
-	  Utils.alert( "The token is expired and you haven't provided yet your credentials. Please press on Login.", this );
-	  return;
+	    Utils.alert( "You haven't provided yet your credentials.\nPlease touch the 'Set Credentials' button...", this );
+	    return;
 	      
-	} else {
+	  } else {
 	    String jsonResponse = null;
 	    try {
 	      jsonResponse = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
@@ -182,16 +198,15 @@ public class MainActivity extends Activity implements OnClickListener
 	    }
 	    try {
 		User U = ParseUtils.getToken( jsonResponse );
-		Utils.putStringPreference( "TOKEN_STRING", U.getToken(), this );
-		Utils.putLongPreference( "TOKEN_EXPIRATION", U.getTokenExpireTime( ), this );
-		Utils.putStringPreference("TENANT_ID", U.getTenantID(), this );
+		Utils.putStringPreference( "USER", Base64.encodeBytes( U.serialize() ), this );
+		
 	    } catch(ParseException pe) {
 		Utils.alert( pe.getMessage( ), this);
 		return;
 	    }
-	}
+	  }
+        
       }
- 
       (new AsyncTaskOSListImages( )).execute("");
       
     }

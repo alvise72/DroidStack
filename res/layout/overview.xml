@@ -4,20 +4,38 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:orientation="vertical">
-
+  
+  <ScrollView
+      android:id="@+id/scrollerST"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:paddingLeft="5dip">
+      
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ 	 android:layout_width="wrap_content"
+	 android:layout_height="wrap_content"
+ 	 android:orientation="vertical">
+         android:layout_height="wrap_content">
+      
   <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dip"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
-
-        <ProgressBar
-                    android:id="@+id/vmusagePB"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+	    
+	<ProgressBar
+            android:id="@+id/vmusagePB"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:max="10"
+            android:progress="3"
+            
+            android:progressDrawable="@drawable/progressbar" />
 
         <LinearLayout
                     android:layout_width="wrap_content"
@@ -28,8 +46,9 @@
                     android:id="@+id/vmusageLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resource"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:text="Instances"
+		    android:textColor="#555555"
+                    android:textSize="16dip" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -43,11 +62,13 @@
                     android:id="@+id/vmusageTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="0" />
                  <TextView
                     android:id="@+id/vmusageMAXTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="/10" />                 
             </LinearLayout>
 
@@ -61,18 +82,24 @@
 -->
 
   <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dip"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
 
-        <ProgressBar
-                    android:id="@+id/cpuPB"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+	<ProgressBar
+            android:id="@+id/vmusagePB"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:max="10"
+            android:progress="1"
+            
+            android:progressDrawable="@drawable/progressbar" />
 
         <LinearLayout
                     android:layout_width="wrap_content"
@@ -83,8 +110,9 @@
                     android:id="@+id/cpuusageLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resource"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:text="Virtual CPU"
+		    android:textColor="#555555"
+                    android:textSize="16dip" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -98,11 +126,13 @@
                     android:id="@+id/cpuusageTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="0" />
                  <TextView
                     android:id="@+id/cpuusageMAXTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="/10" />                 
             </LinearLayout>
 
@@ -115,19 +145,24 @@
 -->
 
   <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dip"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
-
-        <ProgressBar
-                    android:id="@+id/ramPB"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
+	<ProgressBar
+            android:id="@+id/vmusagePB"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:max="10"
+            android:progress="9"
+            
+            android:progressDrawable="@drawable/progressbar" />
+	   
         <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -137,8 +172,9 @@
                     android:id="@+id/ramusageLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resource"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:text="Memory"
+		    android:textColor="#555555"
+                    android:textSize="16dip" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -152,11 +188,13 @@
                     android:id="@+id/ramusageTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="0" />
                  <TextView
                     android:id="@+id/ramusageMAXTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="/10" />                 
             </LinearLayout>
 
@@ -169,19 +207,24 @@
 -->
 
   <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dip"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
-
-        <ProgressBar
-                    android:id="@+id/fipPB"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
+	<ProgressBar
+            android:id="@+id/vmusagePB"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:max="10"
+            android:progress="5"
+            
+            android:progressDrawable="@drawable/progressbar" />
+	   
         <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -191,8 +234,9 @@
                     android:id="@+id/fipusageLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resource"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:text="Floating IP"
+		    android:textColor="#555555"
+                    android:textSize="16dip" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -206,11 +250,13 @@
                     android:id="@+id/fipusageTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="0" />
                  <TextView
                     android:id="@+id/fipusageMAXTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="/10" />                 
             </LinearLayout>
 
@@ -223,18 +269,23 @@
 -->
 
   <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dip"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
-
-        <ProgressBar
-                    android:id="@+id/segPB"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+	<ProgressBar
+            android:id="@+id/vmusagePB"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:max="10"
+            android:progress="8"
+            android:textSize="14dip"
+            android:progressDrawable="@drawable/progressbar" />
 
         <LinearLayout
                     android:layout_width="wrap_content"
@@ -245,8 +296,10 @@
                     android:id="@+id/segusageLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resource"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:text="Security Groups"
+		    android:textColor="#555555"
+		    android:textSize="16dip"
+                    />
 
             <Space
                 android:layout_width="wrap_content"
@@ -260,17 +313,20 @@
                     android:id="@+id/segusageTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="0" />
                  <TextView
                     android:id="@+id/segusageMAXTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+		    android:textColor="#555555"
                     android:text="/10" />                 
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
+    </LinearLayout>
+  </ScrollView>
 </LinearLayout>
 

@@ -18,6 +18,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 2087368867376448459L;
 
+    private String endpoint;
     private String userName;
     private String tenantName;
     private String tenantId;
@@ -32,34 +33,25 @@ public class User implements Serializable {
     
 
     public User( String _userName, String _tenantName, String _tenantId, String _token, long _tokenExpireTime ) {
+        //endpoint	= _endpoint;
 	userName        = _userName;
 	tenantName      = _tenantName;
 	tenantId        = _tenantId;
 	token           = _token;
 	tokenExpireTime = _tokenExpireTime;
-	password        = "";//_password;
-//  	bos = new ByteArrayOutputStream(10240);
-//  	bin = new ByteArrayInputStream(new byte[10240]);
-//  	try {
-// 	  aOutputStream = new ObjectOutputStream( bos );
-//  	  aInputStream = new ObjectInputStream( bin );
-// 	} catch(IOException ioe) {
-// 	    Log.d("User.User", ioe.getMessage( ));
-// 	}
+	password        = "";
     }
     
     public void setPassword( String _password ) { password = _password ;} 
-
+    public void setEndpoint( String ep ) { endpoint = ep; }
+    
+    public String getEndpoint( ) { return endpoint; }
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
     public String getToken( ) { return token; }
     public long   getTokenExpireTime( ) { return tokenExpireTime; }
     public String getUserName( ) { return userName; }
     public String getPassword( ) { return password; }
-
-//     public void prepareForStream( ) {
-//       
-//     }
 
     private void writeObject( ) throws IOException {
 	aOutputStream.defaultWriteObject();
@@ -71,12 +63,7 @@ public class User implements Serializable {
     }
     
     public byte[] serialize(  ) {
-// 	try {
-// 	    writeObject( );
-// 	} catch(IOException ioe) { 
-// 	    return ioe.getMessage().getBytes(); 
-// 	}
-// 	return bos.toByteArray( );
+
 	try {
 	    //FileOutputStream fos = new FileOutputStream(fileName);
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -105,6 +92,6 @@ public class User implements Serializable {
 
     @Override
     public String toString( ) {
-	return "User{userName="+userName+",tenantName="+tenantName+",tenantId="+tenantId+",tokenExpireTime="+tokenExpireTime+",password="+password+"}";
+	return "User{endpoint="+endpoint+",userName="+userName+",tenantName="+tenantName+",tenantId="+tenantId+",tokenExpireTime="+tokenExpireTime+",password="+password+"}";
     }
 }

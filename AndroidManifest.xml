@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0.0">
 
-    <uses-sdk android:minSdkVersion="9"/>
+    <uses-sdk android:minSdkVersion="14"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -25,7 +25,7 @@
 
     <application android:label="OpenStack" android:icon="@drawable/openstack">
 
-        <activity android:launchMode="singleInstance" android:name="activities.MainActivity"
+        <activity android:launchMode="singleInstance" android:name="MainActivity"
                   android:label="OpenStack"
 		  android:icon="@drawable/openstack" android:screenOrientation="portrait">
 
