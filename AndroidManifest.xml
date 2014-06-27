@@ -42,7 +42,7 @@
 	   />
 
 	<activity
-	    android:name="org.openstack.activities.LoginActivity" 
+	    android:name="org.openstack.activities.LoginActivity2" 
 	    android:launchMode="singleInstance" 
 	    android:label="Login into OpenStack" 
 	  />
@@ -61,6 +61,15 @@
              android:screenOrientation="portrait"
              android:configChanges="keyboardHidden|orientation"
            />
+
+       <activity
+             android:name="org.openstack.activities.UserAddActivity" 
+             android:launchMode="singleInstance" 
+             android:label="Add new User"
+             android:screenOrientation="portrait"
+             android:configChanges="keyboardHidden|orientation"
+           />
+
 
     </application>
 </manifest> 

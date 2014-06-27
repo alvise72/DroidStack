@@ -12,11 +12,15 @@ import java.io.FileNotFoundException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-import android.util.Log;
+//import android.content.Context;
+
+//import android.util.Log;
 
 public class User implements Serializable {
 
     private static final long serialVersionUID = 2087368867376448459L;
+
+
 
     private String endpoint;
     private String userName;

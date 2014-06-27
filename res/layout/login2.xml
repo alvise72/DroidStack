@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+	    android:layout_gravity="right"
+	    android:orientation="horizontal"
+            android:gravity="right" >
+
+        <ImageButton
+                    android:id="@+id/addUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_input_add"
+		    android:onClick="addUser" />
+
+    </LinearLayout>
+        
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        <TextView
+                    android:id="@+id/users"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Available Users:"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <LinearLayout
+            android:id="@+id/userLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+<!--
+        <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+            <TextView
+                     android:id="@+id/user"
+                     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+                     android:text="User" />
+
+            <TextView
+                     android:id="@+id/endpoint"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Endpoint" />
+
+        </LinearLayout>
+
+        <ImageButton
+                    android:id="@+id/modifyUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+                    android:id="@+id/deleteUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_delete" />
+
+    </LinearLayout>
+-->
+</LinearLayout>
+</LinearLayout>
+</LinearLayout>

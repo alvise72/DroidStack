@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+  <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+    <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+      <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Endpoint (only hostname):"
+		android:ems="10" />
+		
+        <EditText
+                    android:id="@+id/endpointET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:ems="10" >
+          <requestFocus />
+        </EditText>
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Tenant's name:"
+		android:ems="10" />
+		
+        <EditText
+                    android:id="@+id/tenantnameET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:ems="10" />
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Username:"
+		android:ems="10" />	    
+        <EditText
+                    android:id="@+id/usernameET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:ems="10" />
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Password:"
+		android:ems="10" />
+        <EditText
+                    android:id="@+id/passwordET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:text=""
+                    android:inputType="textPassword" />
+        <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+          <CheckBox
+                        android:id="@+id/usesslCB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Use SSL" />
+        </LinearLayout>
+        <LinearLayout
+   	  android:layout_width="fill_parent"
+    	  android:layout_height="wrap_content"
+   	  android:layout_gravity="center_horizontal"
+  	  android:gravity="center_horizontal" >
+          
+	  <Button
+   	    android:id="@+id/button1"
+   	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+   	    android:layout_gravity="center_horizontal"
+   	    android:fadingEdge="horizontal"
+  	    android:shadowDx="3"
+     	    android:shadowDy="3"
+     	    android:shadowRadius="3"
+     	    android:text="Add"
+	    android:onClick="add" />
+	    
+        </LinearLayout></LinearLayout>
+      </ScrollView>
+    </LinearLayout></LinearLayout>

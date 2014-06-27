@@ -45,7 +45,7 @@ import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
-import org.openstack.activities.LoginActivity;
+import org.openstack.activities.LoginActivity2;
 import org.openstack.activities.OSImagesExploreActivity;
 import org.openstack.activities.OverViewActivity;
 
@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener
      *
      */
     public void login( View v ) {
-      Class<?> c = (Class<?>)LoginActivity.class;
+      Class<?> c = (Class<?>)LoginActivity2.class;
       Intent I = new Intent( MainActivity.this, c );
       startActivity( I );
     }
