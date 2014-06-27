@@ -25,7 +25,7 @@
 
     <application android:label="OpenStack" android:icon="@drawable/openstack">
 
-        <activity android:launchMode="singleInstance" android:name="main"
+        <activity android:launchMode="singleInstance" android:name="MainActivity"
                   android:label="OpenStack"
 		  android:icon="@drawable/openstack" android:screenOrientation="portrait">
 
@@ -36,19 +36,19 @@
         </activity>
 
 	<activity 
-	    android:name="org.openstack.FileExplore"
+	    android:name="org.openstack.activities.CAFileExploreActivity"
 	    android:launchMode="singleInstance"
 	    android:label="Select CA File"
 	   />
 
 	<activity
-	    android:name="org.openstack.Login" 
+	    android:name="org.openstack.activities.LoginActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Login into OpenStack" 
 	  />
 
 	<activity 
-	    android:name="org.openstack.ImagesExplore" 
+	    android:name="org.openstack.activities.OSImagesExploreActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Show OpenStack Images" 
 	    android:screenOrientation="portrait"
