@@ -1,6 +1,4 @@
-package org.openstack.activities;
-
-import org.openstack.*;
+package org.openstack;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -141,9 +139,9 @@ public class MainActivity extends Activity implements OnClickListener
      *
      */
     public void overview( View v ) {
-	// Class<?> c = (Class<?>)OverView.class;
-	// Intent I = new Intent( main.this, c );
-	// startActivity( I );
+	Class<?> c = (Class<?>)OverViewActivity.class;
+	Intent I = new Intent( MainActivity.this, c );
+	startActivity( I );
     }
     
     /**
