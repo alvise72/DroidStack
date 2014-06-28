@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
+import android.app.Dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.*;
+
+
+import android.os.Bundle;
+import android.os.Environment;
+
 import android.content.Context;
+import android.content.DialogInterface;
 
 import android.util.Log;
 import android.view.View;
@@ -47,8 +51,6 @@ public class CAFileExploreActivity extends Activity {
 		loadFileList();
 
 		showDialog(DIALOG_LOAD_FILE);
-		//Log.d(TAG, path.getAbsolutePath());
-
 	}
 
 	private void loadFileList() {

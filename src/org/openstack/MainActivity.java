@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import android.content.Intent;
 import android.content.Context;
@@ -26,7 +27,7 @@ import android.widget.TextView;
 import android.content.res.Configuration;
 
 import java.io.IOException;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -34,10 +35,12 @@ import java.util.Vector;
 import java.util.Set;
 
 import org.openstack.R;
+
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Named;
 import org.openstack.utils.Base64;
+import org.openstack.utils.UserException;
 import org.openstack.utils.OpenStackImage;
 import org.openstack.utils.CustomProgressDialog;
 
@@ -82,6 +85,8 @@ public class MainActivity extends Activity implements OnClickListener
         Display d = wm.getDefaultDisplay();
         SCREENH = d.getHeight();
 	SCREENW = d.getWidth();
+	//(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).mkdirs();
+	Utils.createDir( Environment.getExternalStorageDirectory() + "/AndroStack/users/" );
     }
     
     /**
@@ -163,7 +168,11 @@ public class MainActivity extends Activity implements OnClickListener
       String serUser = Utils.getStringPreference( "USER", "", this );
       User u = null;
       if(serUser.length()!=0) {
-        u = User.deserialize( serUser.getBytes( ) ); 
+        try{u = User.deserialize( serUser.getBytes( ) ); }
+	catch(UserException ue) {
+          Utils.alert( "ERROR: "+ue.getMessage( ), this );
+	return;
+      }
       }
       
       long expirationTime = 0;

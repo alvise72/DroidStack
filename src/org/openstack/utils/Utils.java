@@ -8,7 +8,12 @@ import java.nio.channels.FileChannel;
 import java.nio.MappedByteBuffer;
 import java.nio.charset.Charset;
 
-import android.content.*;
+import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences;
+import android.content.DialogInterface;
+import android.content.Context;
+
 import android.app.*;
 import android.graphics.*;
 import android.util.Log;
@@ -22,10 +27,20 @@ import android.view.*;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
-//import java.util.Hashtable;
+import java.util.Set;
 
 
 public class Utils {
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public static boolean createDir( String path ) {
+      return (new File(path)).mkdirs();
+    }
 
     /**
      *
@@ -123,6 +138,41 @@ public class Utils {
      *
      *
      */
+//     public static Set<String> getStringSetPreference( String key, Set<String> _default, Context ctx ) {
+// 	
+//         SharedPreferences settings = ctx.getSharedPreferences( "OPENSTACK", 0);
+//         if( settings != null ) {
+//             Set<String> value = settings.getStringSet( key, _default );
+//             
+//             if(value != null ) {
+//                 return value;
+//             } else {
+//                 return _default;
+//             }
+//         } else {
+//             return _default;
+//         }
+//     }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+//     public static Set<String> putStringSetPreference( String key, Set<String> val, Context ctx ) {
+// 	SharedPreferences settings = ctx.getSharedPreferences( "OPENSTACK", 0);
+//         SharedPreferences.Editor editor = settings.edit();
+// 	editor.putStringSet(key, val );
+//         editor.commit();
+//     }
+    
+    /**
+     *
+     *
+     *
+     *
+     */
     public static String getStringPreference( String key, String _default, Context ctx ) {
 	
         SharedPreferences settings = ctx.getSharedPreferences( "OPENSTACK", 0);
@@ -132,7 +182,7 @@ public class Utils {
             if(value != null ) {
                 return value;
             } else {
-                return "";
+                return _default;
             }
         } else {
             return _default;
@@ -497,6 +547,23 @@ public class Utils {
      *
      *
      *
+     * 
+     */
+//     public static void stringToFile( String buffer, String file ) throws IOException {
+// 	FileOutputStream stream = new FileOutputStream(new File(file));
+// 	try {
+// 	    FileChannel fc = stream.getChannel();
+// 	    MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+// 	    return Charset.defaultCharset().decode(bb).toString();
+// 	}
+// 	finally {
+// 	    stream.close();
+// 	}
+//     }
+    /**
+     *
+     *
+     *
      *
      */    
     public static long now( ) {
@@ -508,17 +575,42 @@ public class Utils {
      *
      *
      *
-     */   
-    public static TenantQuota getLimits(  ) {
-	return null;
+     */    
+    public static void toFile( String buffer, String path ) throws Exception, IOException {
+      File f = new File( path /*Environment.getExternalStorageDirectory() + "/AndroStack/users/" + filename*/ );
+      if(f.exists()) f.delete();
+      Writer writer = new BufferedWriter(new FileWriter(f));
+      writer.write( buffer );
+      writer.close( );
     }
-     
-     
+    
     /**
      *
      *
      *
      *
-     */    
+     */        
+     public static String fromFile( String filename ) throws Exception, IOException {
+      File f = new File( filename );
+      if(f.exists()==false) {
+        throw new IOException("File ["+filename+"] doesn't exist");
+      } 
+      Reader reader = new FileReader(f);
+      BufferedReader breader = new BufferedReader( reader, 524288 );
+      StringBuffer buffer = new StringBuffer((int)f.length());
+      int c = 0;
+      do {
+        c = breader.read();
+	buffer.append((char)c);
+      } while(c!=-1);
+      breader.close();
+      reader.close();
+      return buffer.toString( );
+// 
+//       byte[] encoded = Files.readAllBytes(Paths.get(path));
+//       return new String(encoded, "utf-8");
+//       //return new String( buffer );
+     }
+ 
 
 }

@@ -11,10 +11,12 @@ import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.Writer;
 
-//import android.content.Context;
-
-//import android.util.Log;
+import android.os.Environment;
 
 public class User implements Serializable {
 
@@ -66,7 +68,7 @@ public class User implements Serializable {
       catch(java.lang.ClassNotFoundException e) { throw new IOException(e.getMessage( )); }
     }
     
-    public byte[] serialize(  ) {
+    public byte[] serialize( ) {
 
 	try {
 	    //FileOutputStream fos = new FileOutputStream(fileName);
@@ -80,22 +82,36 @@ public class User implements Serializable {
 	return null;
     }
 
-    public static User deserialize( byte[] source ) {
+    public static User deserialize( byte[] source ) throws UserException {
 	try {
-	    //FileInputStream fis = new FileInputStream(fileName);
 	    ByteArrayInputStream bis = new ByteArrayInputStream( source );
 	    ObjectInputStream ois = new ObjectInputStream(bis);
 	    User obj = (User)ois.readObject();
 	    ois.close();
 	    return obj;
-	} catch(FileNotFoundException fnfe) {}
-	catch(IOException ioe) {}
-	catch(ClassNotFoundException cnfe) {}
-	return null;
+	} catch(FileNotFoundException fnfe) {
+	  throw new UserException( fnfe.getMessage() );
+	}
+	catch(IOException ioe) {
+	  throw new UserException( ioe.getMessage() );
+	}
+	catch(ClassNotFoundException cnfe) {
+	  throw new UserException( cnfe.getMessage() );
+	}
+	//return null;
     }
 
     @Override
     public String toString( ) {
 	return "User{endpoint="+endpoint+",userName="+userName+",tenantName="+tenantName+",tenantId="+tenantId+",tokenExpireTime="+tokenExpireTime+",password="+password+"}";
+    }
+    
+    public void toFile( String filename ) throws Exception, IOException {
+      Utils.toFile( new String(this.serialize()), Environment.getExternalStorageDirectory() + "/AndroStack/users/" + filename );
+    }
+    
+    public static User fromFile(String filename) throws Exception, IOException {
+      String userSER = Utils.fromFile( filename );
+      return User.deserialize( userSER.getBytes( ) );
     }
 }

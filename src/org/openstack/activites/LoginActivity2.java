@@ -3,6 +3,7 @@ package org.openstack.activities;
 //import android.webkit.WebView;
 
 import android.os.Bundle;
+import android.os.Environment;
 
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,10 +31,13 @@ import android.view.View;
 
 import java.io.IOException;
 
+import java.util.Iterator;
 import java.util.Vector;
+import java.util.Set;
 
 import org.openstack.R;
 import org.openstack.utils.User;
+import org.openstack.utils.UserException;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
 import org.openstack.comm.RESTClient;
@@ -49,23 +53,31 @@ public class LoginActivity2 extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView( R.layout.login2 );
-    
-//      if(Utils.getBoolPreference("USESSL", false, this ) ) {
-//        ((CheckBox)findViewById(R.id.ssl)).setChecked( true );
-//      } else {
-// 	((CheckBox)findViewById(R.id.ssl)).setChecked( false );
-//      }
-//     
-//     toggleSSL( findViewById(R.id.ssl) );
-
-    //userListview = (ListView) findViewById(R.id.userList);
-    
   }
   
   //__________________________________________________________________________________
   @Override
   public void onResume( ) {
     super.onResume( );
+    try {
+      User u = User.fromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+      Utils.alert(u.toString(), this );
+    } catch(Exception ex) {
+      Utils.alert(ex.getMessage( ), this);
+    }
+    //Set<String> users = Utils.getStringSetPreference( "USERS", null, this );
+    //if(users == null) return;
+    //Iterator<String> it = users.iterator();
+//     while( it.hasNext()) {
+//       String userSER = it.next( );
+//       try {
+//         User U = User.deserialize( userSER.getBytes( ) );
+//         Utils.alert( U.toString( ), this );
+//       } catch(UserException ue ) {
+//         Utils.alert( ue.getMessage( ), this );
+//       }
+//     }
+    
     
 //     String selected_ca_file = Utils.getStringPreference("SELECTED_CA_FILE", null, this);
 //     if(selected_ca_file != null) 
