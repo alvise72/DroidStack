@@ -146,41 +146,6 @@ public class Utils {
      *
      *
      */
-//     public static Set<String> getStringSetPreference( String key, Set<String> _default, Context ctx ) {
-// 	
-//         SharedPreferences settings = ctx.getSharedPreferences( "OPENSTACK", 0);
-//         if( settings != null ) {
-//             Set<String> value = settings.getStringSet( key, _default );
-//             
-//             if(value != null ) {
-//                 return value;
-//             } else {
-//                 return _default;
-//             }
-//         } else {
-//             return _default;
-//         }
-//     }
-
-    /**
-     *
-     *
-     *
-     *
-     */
-//     public static Set<String> putStringSetPreference( String key, Set<String> val, Context ctx ) {
-// 	SharedPreferences settings = ctx.getSharedPreferences( "OPENSTACK", 0);
-//         SharedPreferences.Editor editor = settings.edit();
-// 	editor.putStringSet(key, val );
-//         editor.commit();
-//     }
-    
-    /**
-     *
-     *
-     *
-     *
-     */
     public static String getStringPreference( String key, String _default, Context ctx ) {
 	
         SharedPreferences settings = ctx.getSharedPreferences( "OPENSTACK", 0);
@@ -550,24 +515,7 @@ public class Utils {
 	    stream.close();
 	}
     }
-    
-    /**
-     *
-     *
-     *
-     * 
-     */
-//     public static void stringToFile( String buffer, String file ) throws IOException {
-// 	FileOutputStream stream = new FileOutputStream(new File(file));
-// 	try {
-// 	    FileChannel fc = stream.getChannel();
-// 	    MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
-// 	    return Charset.defaultCharset().decode(bb).toString();
-// 	}
-// 	finally {
-// 	    stream.close();
-// 	}
-//     }
+
     /**
      *
      *
@@ -589,9 +537,6 @@ public class Utils {
 	File f = new File( filename );
 	if(f.exists()) f.delete();
 
-	// Writer writer = new BufferedWriter(new FileWriter(f));
-	// writer.write( buffer );
-	// writer.close( );
 	OutputStream os = new FileOutputStream( filename );
 	ObjectOutputStream oos = new ObjectOutputStream( os );
 	oos.writeObject( U );
