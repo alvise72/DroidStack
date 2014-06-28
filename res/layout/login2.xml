@@ -15,7 +15,7 @@
                     android:id="@+id/addUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"
+                    android:src="@drawable/newuser"
 		    android:onClick="addUser" />
     
   </LinearLayout>
@@ -43,12 +43,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
 	android:orientation="vertical" >
+
  <!--     
       <ListView android:layout_width="fill_parent"   
 		android:layout_height="fill_parent"   
 		android:id="@+id/userListView">  
       </ListView>  
 -->
+
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>

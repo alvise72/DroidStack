@@ -62,13 +62,13 @@ public class UserView extends LinearLayout {
       deleteUser = new ImageButton( ctx );
       deleteUser.setImageResource(android.R.drawable.ic_menu_delete);
 
-      LinearLayout.LayoutParams params4 = modifyUser.getLayoutParams();
-      params4.weight = 1;
-      modifyUser.setLayoutParams(params4);
+      // LinearLayout.LayoutParams params4 = modifyUser.getLayoutParams();
+      // params4.weight = 1;
+      // modifyUser.setLayoutParams(params4);
 
-      LinearLayout.LayoutParams params5 = deleteUser.getLayoutParams();
-      params5.weight = 1;
-      deleteUser.setLayoutParams(params5);
+      // LinearLayout.LayoutParams params5 = deleteUser.getLayoutParams();
+      // params5.weight = 1;
+      // deleteUser.setLayoutParams(params5);
 
       buttonsLayout.addView( modifyUser );
       buttonsLayout.addView( deleteUser );

@@ -223,7 +223,7 @@ public class UserAddActivity extends Activity {
       U.setPassword(password);
       U.setEndpoint(endpoint);
 
-      Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+      Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserName() );
       //User U2 = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
 
       // OutputStream os = new FileOutputStream( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );

@@ -19,7 +19,7 @@
         android:layout_gravity="center_vertical"
         android:paddingTop="10dip"
 	android:textSize="20dip"
-	android:drawableLeft="@drawable/security"
+	android:drawableLeft="@drawable/users"
         android:onClick="login"/>
     
     <Button
