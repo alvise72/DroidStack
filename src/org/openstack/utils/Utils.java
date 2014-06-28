@@ -8,6 +8,14 @@ import java.nio.channels.FileChannel;
 import java.nio.MappedByteBuffer;
 import java.nio.charset.Charset;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences;
@@ -576,12 +584,18 @@ public class Utils {
      *
      *
      */    
-    public static void toFile( String buffer, String path ) throws Exception, IOException {
-      File f = new File( path /*Environment.getExternalStorageDirectory() + "/AndroStack/users/" + filename*/ );
-      if(f.exists()) f.delete();
-      Writer writer = new BufferedWriter(new FileWriter(f));
-      writer.write( buffer );
-      writer.close( );
+    public static void userToFile( User U, String filename ) throws Exception, IOException {
+	// File f = new File( path /*Environment.getExternalStorageDirectory() + "/AndroStack/users/" + filename*/ );
+	File f = new File( filename );
+	if(f.exists()) f.delete();
+
+	// Writer writer = new BufferedWriter(new FileWriter(f));
+	// writer.write( buffer );
+	// writer.close( );
+	OutputStream os = new FileOutputStream( filename );
+	ObjectOutputStream oos = new ObjectOutputStream( os );
+	oos.writeObject( U );
+	oos.close( );
     }
     
     /**
@@ -590,26 +604,15 @@ public class Utils {
      *
      *
      */        
-     public static String fromFile( String filename ) throws Exception, IOException {
-      File f = new File( filename );
-      if(f.exists()==false) {
-        throw new IOException("File ["+filename+"] doesn't exist");
-      } 
-      Reader reader = new FileReader(f);
-      BufferedReader breader = new BufferedReader( reader, 524288 );
-      StringBuffer buffer = new StringBuffer((int)f.length());
-      int c = 0;
-      do {
-        c = breader.read();
-	buffer.append((char)c);
-      } while(c!=-1);
-      breader.close();
-      reader.close();
-      return buffer.toString( );
-// 
-//       byte[] encoded = Files.readAllBytes(Paths.get(path));
-//       return new String(encoded, "utf-8");
-//       //return new String( buffer );
+     public static User userFromFile( String filename ) throws Exception, IOException {
+	 if(false == (new File(filename)).exists())
+	     throw new IOException( "File ["+filename+"] doesn't exist" );
+	 
+	 InputStream is = new FileInputStream( filename );
+	 ObjectInputStream ois = new ObjectInputStream( is );
+	 User U = (User)ois.readObject( );
+	 ois.close( );
+	 return U;
      }
  
 

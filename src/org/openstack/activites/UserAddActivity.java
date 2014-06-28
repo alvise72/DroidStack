@@ -1,7 +1,8 @@
 package org.openstack.activities;
 
-import android.os.Bundle;
+import android.os.Bundle; 
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,7 +27,13 @@ import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
 
-import java.io.IOException;
+// import java.io.IOException;
+// import java.io.InputStream;
+// import java.io.OutputStream;
+// import java.io.FileInputStream;
+// import java.io.FileOutputStream;
+// import java.io.ObjectInputStream;
+// import java.io.ObjectOutputStream;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.utils.CustomProgressDialog;
@@ -39,10 +46,15 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
+import org.openstack.R;
+
+import org.openstack.utils.User;
+
 public class UserAddActivity extends Activity {
 
     private boolean requesting_token = false;
     private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
+
     /**
      *
      *
@@ -64,6 +76,17 @@ public class UserAddActivity extends Activity {
     setContentView( org.openstack.R.layout.useradd );
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
+    
+    String last_endpoint = Utils.getStringPreference("LAST_ENDPOINT", "", this);
+    String last_tenant   = Utils.getStringPreference("LAST_TENANT", "", this);
+    String last_username = Utils.getStringPreference("LAST_USERNAME", "", this);
+    String last_password = Utils.getStringPreference("LAST_PASSWORD", "", this);
+    boolean usessl       = Utils.getBoolPreference("LAST_USESSL", false, this);
+    ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
+    ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
+    ((EditText)findViewById(R.id.usernameET)).setText( last_username );
+    ((EditText)findViewById(R.id.passwordET)).setText( last_password );
+    ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
   }
   
   
@@ -104,6 +127,11 @@ public class UserAddActivity extends Activity {
   @Override
   public void onPause( ) {
     super.onPause( );
+      Utils.putStringPreference("LAST_ENDPOINT", ((EditText)findViewById(R.id.endpointET)).getText().toString().trim(), this);
+      Utils.putStringPreference("LAST_TENANT",   ((EditText)findViewById(R.id.tenantnameET)  ).getText().toString().trim(), this);
+      Utils.putStringPreference("LAST_USERNAME", ((EditText)findViewById(R.id.usernameET)).getText().toString().trim(), this);
+      Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);     
+      Utils.putBoolPreference("LAST_USESSL", ((CheckBox)findViewById(R.id.usesslCB)).isChecked( ), this);
   } 
   
     /**
@@ -123,10 +151,10 @@ public class UserAddActivity extends Activity {
      */    
     @Override
     public void onDestroy( ) {
-      //ACTIVITY = null;
       super.onDestroy( );
       progressDialogWaitStop.dismiss();
     }
+
     /**
      *
      *
@@ -194,22 +222,22 @@ public class UserAddActivity extends Activity {
       User U = ParseUtils.getToken( jsonResponse );
       U.setPassword(password);
       U.setEndpoint(endpoint);
-      U.toFile( U.getUserName( ) );
-      
-      //final Set<String> users = Utils.getStringSetPreference("USERS", null, this);
-      // Iterator<String> it = users.iterator();
-//       Vector<String> newUsers = new Vector();
-//       while( it.hasNext( ) ) {
-//       	newUsers.add( it.next() );
-//       }
-//       newUsers.add( Base64.encodeBytes( U.serialize() ) );
-      
-      //User tmp = User.deserialize(  Base64.encodeBytes( U.serialize() ).getBytes( ) );
-      
-      //Utils.putStringSetPreference( "USERS", newUsers, this );
-      
-    } catch(Exception pe) {
-      Utils.alert("ERROR: "+pe.getMessage(), this);
+
+      Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+      //User U2 = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+
+      // OutputStream os = new FileOutputStream( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+      // ObjectOutputStream oos = new ObjectOutputStream( os );
+      // oos.writeObject( U );
+      // oos.close( );
+      // InputStream is = new FileInputStream( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+      // ObjectInputStream ois = new ObjectInputStream( is );
+      // User U2 = (User)ois.readObject( );
+      // ois.close( );
+      //Utils.alert( U2.toString( ), this );
+
+    } catch(Exception e) {
+      Utils.alert("ERROR: "+e.getMessage(), this);
     } 
   }
   
@@ -246,7 +274,7 @@ public class UserAddActivity extends Activity {
 	   
    	   try {
              jsonBuf = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
-     	   } catch(IOException e) {
+     	   } catch(Exception e) {
 	     errorMessage = e.getMessage();
 	     hasError = true;
     	     return "";

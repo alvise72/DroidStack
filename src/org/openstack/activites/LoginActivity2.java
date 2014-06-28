@@ -60,7 +60,7 @@ public class LoginActivity2 extends Activity {
   public void onResume( ) {
     super.onResume( );
     try {
-      User u = User.fromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
+      User u = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
       Utils.alert(u.toString(), this );
     } catch(Exception ex) {
       Utils.alert(ex.getMessage( ), this);
@@ -87,22 +87,7 @@ public class LoginActivity2 extends Activity {
 //     
 //     
 // 
-//     String last_endpoint = Utils.getStringPreference("LAST_ENDPOINT", "", this);
-//     String last_tenant   = Utils.getStringPreference("LAST_TENANT", "", this);
-//     String last_username = Utils.getStringPreference("LAST_USERNAME", "", this);
-//     String last_password = Utils.getStringPreference("LAST_PASSWORD", "", this);
-// 
-//     ((EditText)findViewById(R.id.endpointE)).setText( last_endpoint );
-//     ((EditText)findViewById(R.id.tenantE)).setText( last_tenant );
-//     ((EditText)findViewById(R.id.usernameE)).setText( last_username );
-//     ((EditText)findViewById(R.id.passwordE)).setText( last_password );
-// 
-//     if(last_password.length()!=0 &&
-//        last_tenant.length()!=0 &&
-//        last_username.length()!=0 &&
-//        last_endpoint.length()!=0) {
-// 	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-//     }
+
     
     
 
@@ -214,10 +199,6 @@ public class LoginActivity2 extends Activity {
   @Override
     public void onPause( ) {
       super.onPause( );
-//       Utils.putStringPreference("LAST_ENDPOINT", ((EditText)findViewById(R.id.endpointE)).getText().toString().trim(), this);
-//       Utils.putStringPreference("LAST_TENANT",   ((EditText)findViewById(R.id.tenantE)  ).getText().toString().trim(), this);
-//       Utils.putStringPreference("LAST_USERNAME", ((EditText)findViewById(R.id.usernameE)).getText().toString().trim(), this);
-//       Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordE)).getText().toString().trim(), this);     
     } 
     
   //__________________________________________________________________________________

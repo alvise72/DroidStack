@@ -165,58 +165,58 @@ public class MainActivity extends Activity implements OnClickListener
       downloading_image_list = true;
       
       //long expirationTime = Utils.getLongPreference(   "TOKEN_EXPIRATION", 0, this);
-      String serUser = Utils.getStringPreference( "USER", "", this );
-      User u = null;
-      if(serUser.length()!=0) {
-        try{u = User.deserialize( serUser.getBytes( ) ); }
-	catch(UserException ue) {
-          Utils.alert( "ERROR: "+ue.getMessage( ), this );
-	return;
-      }
-      }
+      // String serUser = Utils.getStringPreference( "USER", "", this );
+      // User u = null;
+      // if(serUser.length()!=0) {
+      // 	  //try{u = User.deserialize( serUser.getBytes( ) ); }
+      // 	catch(UserException ue) {
+      //     Utils.alert( "ERROR: "+ue.getMessage( ), this );
+      // 	return;
+      // }
+      // }
       
       long expirationTime = 0;
       
-      if( u!=null )
-        expirationTime = u.getTokenExpireTime( );
+      // if( u!=null )
+      //   expirationTime = u.getTokenExpireTime( );
       
-      if(u==null || expirationTime <= Utils.now( ) ) { // Login hasn't been done yet
+      // if(u==null || expirationTime <= Utils.now( ) ) { // Login hasn't been done yet
       
-        String endpoint     = Utils.getStringPreference( "LAST_ENDPOINT", "", this);
-        String tenant       = Utils.getStringPreference( "LAST_TENANT",   "", this);
-        String username     = Utils.getStringPreference( "LAST_USERNAME", "", this);
-        String password     = Utils.getStringPreference( "LAST_PASSWORD", "", this);
-        boolean usessl      = Utils.getBoolPreference(   "USESSL", true, this);
+      //   String endpoint     = Utils.getStringPreference( "LAST_ENDPOINT", "", this);
+      //   String tenant       = Utils.getStringPreference( "LAST_TENANT",   "", this);
+      //   String username     = Utils.getStringPreference( "LAST_USERNAME", "", this);
+      //   String password     = Utils.getStringPreference( "LAST_PASSWORD", "", this);
+      //   boolean usessl      = Utils.getBoolPreference(   "USESSL", true, this);
         
-	  if( endpoint.length()==0 ||
-	    tenant.length()==0 ||
-	    username.length()==0 ||
-	    password.length()==0 ) 
-          {
+      // 	  if( endpoint.length()==0 ||
+      // 	    tenant.length()==0 ||
+      // 	    username.length()==0 ||
+      // 	    password.length()==0 ) 
+      //     {
 	  
-	    Utils.alert( "You haven't provided yet your credentials.\nPlease touch the 'Set Credentials' button...", this );
-	    return;
+      // 	    Utils.alert( "You haven't provided yet your credentials.\nPlease touch the 'Set Credentials' button...", this );
+      // 	    return;
 	      
-	  } else {
-	    String jsonResponse = null;
-	    try {
-	      jsonResponse = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
-	    } catch(IOException e) {
-	      Utils.alert(e.getMessage( ), this);
-	      return;
-	    }
-	    try {
-		User U = ParseUtils.getToken( jsonResponse );
-		Utils.putStringPreference( "USER", Base64.encodeBytes( U.serialize() ), this );
+      // 	  } else {
+      // 	    String jsonResponse = null;
+      // 	    try {
+      // 	      jsonResponse = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
+      // 	    } catch(IOException e) {
+      // 	      Utils.alert(e.getMessage( ), this);
+      // 	      return;
+      // 	    }
+      // 	    try {
+      // 		User U = ParseUtils.getToken( jsonResponse );
+      // 		//Utils.putStringPreference( "USER", Base64.encodeBytes( U.serialize() ), this );
 		
-	    } catch(ParseException pe) {
-		Utils.alert( pe.getMessage( ), this);
-		return;
-	    }
-	  }
+      // 	    } catch(ParseException pe) {
+      // 		Utils.alert( pe.getMessage( ), this);
+      // 		return;
+      // 	    }
+      // 	  }
         
-      }
-      (new AsyncTaskOSListImages( )).execute("");
+      // }
+      // (new AsyncTaskOSListImages( )).execute("");
       
     }
     
