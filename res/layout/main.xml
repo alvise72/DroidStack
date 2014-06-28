@@ -15,10 +15,10 @@
         android:id="@+id/LOGIN"
         android:layout_width="200dip"
         android:layout_height="90dip"
-        android:text="Set Credentials"
+        android:text="Select User"
         android:layout_gravity="center_vertical"
         android:paddingTop="10dip"
-	android:textSize="20dip"
+	android:textSize="18dip"
 	android:drawableLeft="@drawable/users"
         android:onClick="login"/>
     
@@ -29,7 +29,7 @@
         android:text="OverView"
         android:layout_gravity="center_vertical"
         android:paddingTop="10dip"
-	android:textSize="20dip"
+	android:textSize="18dip"
 	android:drawableLeft="@drawable/overview"
         android:onClick="overview"/>
   </LinearLayout>
@@ -45,11 +45,11 @@
         android:id="@+id/GLANCE"
         android:layout_width="200dip"
         android:layout_height="90dip"
-        android:text="List Glance Images"
+        android:text="Glance Images"
         android:layout_gravity="center_vertical"
         android:paddingTop="10dip"
         android:onClick="list_glance"
-	android:textSize="20dip"
+	android:textSize="18dip"
 	android:drawableLeft="@drawable/os"/>
     
     <Button
@@ -59,7 +59,7 @@
         android:text="List Nova Instances"
         android:layout_gravity="center_vertical"
         android:paddingTop="10dip"
-	android:textSize="20dip"
+	android:textSize="18dip"
 	android:drawableLeft="@drawable/terminal"
         android:onClick="list_vm"/>
   </LinearLayout>  
