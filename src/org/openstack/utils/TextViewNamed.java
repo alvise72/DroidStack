@@ -5,13 +5,16 @@ import android.content.Context;
 
 public class TextViewNamed extends TextView implements Named {
 
-    private String name = null;
+    private String extras;// = null;
+    private int type;
 
-    TextViewNamed( Context ctx, String name ) {
+    TextViewNamed( Context ctx, int _type, String _extras ) {
 	super( ctx );
-	this.name = name;
+	this.type = _type;
+	this.extras = _extras;
     }
 
-    public String getName( ) { return name; }
+    public String getExtras( ) { return extras; }
+    public int getType( ) { return type; }
 
 };

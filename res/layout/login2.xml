@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	      android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+	      android:background="#f2f2f2"
               android:orientation="vertical" >
   
   <LinearLayout
@@ -9,6 +10,9 @@
             android:layout_height="wrap_content"
 	    android:layout_gravity="right"
 	    android:orientation="horizontal"
+	    android:paddingLeft="6dip"
+	    android:paddingTop="2dip"
+	    android:paddingBottom="2dip"
             android:gravity="right" >
     
     <ImageButton
@@ -16,6 +20,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/newuser"
+		    android:background="#f2f2f2"
 		    android:onClick="addUser" />
     
   </LinearLayout>
@@ -24,7 +29,7 @@
       android:layout_width="fill_parent"
       android:layout_height="3dip"
       android:background="#FF909090" />   
-
+  
   <LinearLayout
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
@@ -35,22 +40,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Available Users:"
+	android:textColor="#333333"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
+  <ScrollView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical" >
     
     <LinearLayout
         android:id="@+id/userLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
 	android:orientation="vertical" >
-
- <!--     
-      <ListView android:layout_width="fill_parent"   
-		android:layout_height="fill_parent"   
-		android:id="@+id/userListView">  
-      </ListView>  
--->
-
+      
     </LinearLayout>
+  </ScrollView>
   </LinearLayout>
 </LinearLayout>
+  

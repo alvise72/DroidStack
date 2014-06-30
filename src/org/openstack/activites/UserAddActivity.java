@@ -27,14 +27,6 @@ import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
 
-// import java.io.IOException;
-// import java.io.InputStream;
-// import java.io.OutputStream;
-// import java.io.FileInputStream;
-// import java.io.FileOutputStream;
-// import java.io.ObjectInputStream;
-// import java.io.ObjectOutputStream;
-
 import org.openstack.comm.RESTClient;
 import org.openstack.utils.CustomProgressDialog;
 import org.openstack.utils.User;
@@ -219,23 +211,14 @@ public class UserAddActivity extends Activity {
     }
     
     try {
-      User U = ParseUtils.getToken( jsonResponse );
+      User U = ParseUtils.parseUser( jsonResponse );
       U.setPassword(password);
       U.setEndpoint(endpoint);
-
+      U.setSSL( usessl );
       Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserName() );
-      //User U2 = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
 
-      // OutputStream os = new FileOutputStream( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
-      // ObjectOutputStream oos = new ObjectOutputStream( os );
-      // oos.writeObject( U );
-      // oos.close( );
-      // InputStream is = new FileInputStream( Environment.getExternalStorageDirectory() + "/AndroStack/users/admin" );
-      // ObjectInputStream ois = new ObjectInputStream( is );
-      // User U2 = (User)ois.readObject( );
-      // ois.close( );
-      //Utils.alert( U2.toString( ), this );
-
+      Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
+      
     } catch(Exception e) {
       Utils.alert("ERROR: "+e.getMessage(), this);
     } 
@@ -289,16 +272,6 @@ public class UserAddActivity extends Activity {
 	    requesting_token = true;
 	}
 	
-// 	@Override
-// 	    protected void onProgressUpdate() {
-// 	    super.onProgressUpdate();
-// 	}
-// 	
-// 	@Override
-// 	    protected void onCancelled() {
-// 	    super.onCancelled();
-// 	}
-	
 	@Override
 	    protected void onPostExecute( String result ) {
 	    super.onPostExecute(result);
@@ -313,8 +286,6 @@ public class UserAddActivity extends Activity {
 	    
 	    requesting_token = false; // questo non va spostato da qui a
 	    UserAddActivity.this.progressDialogWaitStop.dismiss( );
-	    //ACTIVITY.progressDialogWaitStop.dismiss( );
-	    //ACTIVITY.showImageList( jsonBuf );
 	}
     }
 }

@@ -21,7 +21,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static org.openstack.utils.User getToken( String jsonString ) throws ParseException
+    public static User parseUser( String jsonString ) throws ParseException
     {
       try {
 	  JSONObject jsonObject = null;

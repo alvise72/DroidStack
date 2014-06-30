@@ -17,12 +17,14 @@ import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.Display;
+import android.view.Gravity;
 
 import android.util.Log;
 
 import android.widget.LinearLayout;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import android.content.res.Configuration;
 
@@ -52,7 +54,9 @@ import org.openstack.activities.LoginActivity2;
 import org.openstack.activities.OSImagesExploreActivity;
 import org.openstack.activities.OverViewActivity;
 
-public class MainActivity extends Activity implements OnClickListener
+import java.util.concurrent.ExecutionException;
+
+public class MainActivity extends Activity //implements OnClickListener
 {
     private static MainActivity ACTIVITY = null;
     private Hashtable<String, org.openstack.utils.OpenStackImage> osimages = null;
@@ -60,6 +64,7 @@ public class MainActivity extends Activity implements OnClickListener
     private int SCREENH = 0;
     private int SCREENW = 0;
     private static boolean downloading_image_list = false;
+    private String selectedUser;
 
     /**
      *
@@ -85,7 +90,6 @@ public class MainActivity extends Activity implements OnClickListener
         Display d = wm.getDefaultDisplay();
         SCREENH = d.getHeight();
 	SCREENW = d.getWidth();
-	//(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).mkdirs();
 	Utils.createDir( Environment.getExternalStorageDirectory() + "/AndroStack/users/" );
     }
     
@@ -110,11 +114,10 @@ public class MainActivity extends Activity implements OnClickListener
      */
     @Override
     public void onResume( ) {
-      
       super.onResume( );
       
       if( !Utils.internetOn( this ) )
-        Utils.alert( "The device is not connected to Internet. This App cannot work.", this );
+        Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
       
       String osimage = Utils.getStringPreference("SELECTED_OSIMAGE", "", this);
       if(osimage.length() != 0) {
@@ -124,8 +127,13 @@ public class MainActivity extends Activity implements OnClickListener
 	    + "\nFormat: " + osimages.get(osimage).getFormat();
 	
         Utils.putStringPreference("SELECTED_OSIMAGE", "", this);
-	
-	
+      }
+
+      selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+      if(selectedUser.length()!=0) {
+	  Toast t = Toast.makeText(this, "Current user: "+selectedUser, Toast.LENGTH_SHORT);
+	  t.setGravity( Gravity.CENTER, 0, 0 );
+	  t.show();
       }
     }
     
@@ -148,6 +156,10 @@ public class MainActivity extends Activity implements OnClickListener
      *
      */
     public void overview( View v ) {
+	if(selectedUser.length()==0) {
+	    Utils.alert("You haven't yet selected any user. Please touch on 'Select User' button...", this);
+	    return;
+	}
 	Class<?> c = (Class<?>)OverViewActivity.class;
 	Intent I = new Intent( MainActivity.this, c );
 	startActivity( I );
@@ -160,64 +172,36 @@ public class MainActivity extends Activity implements OnClickListener
      *
      */
     public void list_glance( View v ) {
+	if(selectedUser.length()==0) {
+	    Utils.alert("You haven't yet selected any user. Please touch on 'Select User' button...", this);
+	    return;
+	}
+
+	progressDialogWaitStop.show();
+	downloading_image_list = true;
       
-      progressDialogWaitStop.show();
-      downloading_image_list = true;
-      
-      //long expirationTime = Utils.getLongPreference(   "TOKEN_EXPIRATION", 0, this);
-      // String serUser = Utils.getStringPreference( "USER", "", this );
-      // User u = null;
-      // if(serUser.length()!=0) {
-      // 	  //try{u = User.deserialize( serUser.getBytes( ) ); }
-      // 	catch(UserException ue) {
-      //     Utils.alert( "ERROR: "+ue.getMessage( ), this );
-      // 	return;
-      // }
-      // }
-      
-      long expirationTime = 0;
-      
-      // if( u!=null )
-      //   expirationTime = u.getTokenExpireTime( );
-      
-      // if(u==null || expirationTime <= Utils.now( ) ) { // Login hasn't been done yet
-      
-      //   String endpoint     = Utils.getStringPreference( "LAST_ENDPOINT", "", this);
-      //   String tenant       = Utils.getStringPreference( "LAST_TENANT",   "", this);
-      //   String username     = Utils.getStringPreference( "LAST_USERNAME", "", this);
-      //   String password     = Utils.getStringPreference( "LAST_PASSWORD", "", this);
-      //   boolean usessl      = Utils.getBoolPreference(   "USESSL", true, this);
-        
-      // 	  if( endpoint.length()==0 ||
-      // 	    tenant.length()==0 ||
-      // 	    username.length()==0 ||
-      // 	    password.length()==0 ) 
-      //     {
-	  
-      // 	    Utils.alert( "You haven't provided yet your credentials.\nPlease touch the 'Set Credentials' button...", this );
-      // 	    return;
-	      
-      // 	  } else {
-      // 	    String jsonResponse = null;
-      // 	    try {
-      // 	      jsonResponse = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
-      // 	    } catch(IOException e) {
-      // 	      Utils.alert(e.getMessage( ), this);
-      // 	      return;
-      // 	    }
-      // 	    try {
-      // 		User U = ParseUtils.getToken( jsonResponse );
-      // 		//Utils.putStringPreference( "USER", Base64.encodeBytes( U.serialize() ), this );
-		
-      // 	    } catch(ParseException pe) {
-      // 		Utils.alert( pe.getMessage( ), this);
-      // 		return;
-      // 	    }
-      // 	  }
-        
-      // }
-      // (new AsyncTaskOSListImages( )).execute("");
-      
+	User U = null;
+	try {
+	    U = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	} catch(Exception e) {
+	    Utils.alert("ERROR: "+e.getMessage( ), this);
+	    return;
+	}
+
+	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
+	task.execute(U);
+        String jsonResponse = null;
+	try {
+	    jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
+	} catch(InterruptedException ie) {
+	    Utils.alert( "ERROR: " + ie.getMessage(), this );
+	} catch(ExecutionException ee ) {
+	    Utils.alert( "ERROR: " + ee.getMessage(), this );
+	}
+	if(jsonResponse == null || jsonResponse.length()==0) {
+	    Utils.alert( "ERROR: Unknown", this );
+	    return;
+	}
     }
     
     /**
@@ -259,18 +243,6 @@ public class MainActivity extends Activity implements OnClickListener
 	    }
 	} 
     } 
-
-    /**
-     *
-     *
-     *
-     *
-     */    
-    public void onClick( View v ) {
-        v.requestFocus();
-        String name = ((Named)v).getName();
-        Utils.alert(name, this);
-    }
     
     /**
      *
@@ -287,26 +259,46 @@ public class MainActivity extends Activity implements OnClickListener
      *
      *
      */
-    protected class AsyncTaskOSListImages extends AsyncTask<String, String, String>
+    protected class AsyncTaskOSListImages extends AsyncTask<User, String, String>
     {
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
 	
-	protected String doInBackground( String... v ) 
+	protected String doInBackground(User... u ) 
 	{
-	   //String jsonBuf = null;
-	   
-   	   try {
-             jsonBuf = RESTClient.requestImages( Utils.getStringPreference( "LAST_ENDPOINT", "", ACTIVITY), 
-						 Utils.getStringPreference( "TOKEN_STRING", "", ACTIVITY) );
-     	   } catch(IOException e) {
-	     errorMessage = e.getMessage();
-	     hasError = true;
-    	     return "";
-    	   }
-      
-    	   return "";
+	    User U = u[0];
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( pwd );
+		    newUser.setEndpoint( edp );
+		    newUser.setSSL( ssl );
+		    U = newUser;
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    try {
+		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
+	    } catch(IOException e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return "";
 	}
 	
 	@Override

@@ -180,7 +180,6 @@ public class RESTClient {
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
-	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
 	    throw ioe;
 	}
 	
@@ -206,7 +205,6 @@ public class RESTClient {
 		} 
 	    }
 	} catch(java.io.IOException ioe) {
-	    //Log.d("RESTApiOpenStack.requestImages", "STEP 5");
 	    throw ioe;
 	}
 	

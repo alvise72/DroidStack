@@ -27,6 +27,7 @@ import android.app.AlertDialog;
 import android.app.ActivityManager;
 import android.app.Activity;
 
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
@@ -49,8 +50,12 @@ import org.openstack.parse.ParseException;
 import java.io.File;
 
 import org.openstack.utils.UserView;
+import org.openstack.utils.Named;
+import org.openstack.utils.ImageViewNamed;
+import org.openstack.utils.TextViewNamed;
+import org.openstack.utils.ImageButtonNamed;
 
-public class LoginActivity2 extends Activity {
+public class LoginActivity2 extends Activity implements OnClickListener {
 
   //__________________________________________________________________________________
   @Override
@@ -64,21 +69,7 @@ public class LoginActivity2 extends Activity {
   public void onResume( ) {
     super.onResume( );
     
-    File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
-    LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
-    usersL.removeAllViews();
-    for(int i = 0; i<users.length; ++i) {
-	User U = null;
-	try {
-	    U = Utils.userFromFile( users[i].toString() );
-	    //Utils.alert(U.toString(), this );
-	} catch(Exception e) {
-	    Utils.alert("ERROR: " + e.getMessage(), this);
-	    continue;
-	}
-	UserView uv = new UserView ( U, this );
-	usersL.addView( uv );
-    }
+    refreshUserViews();
   }
   
   //__________________________________________________________________________________
@@ -93,4 +84,52 @@ public class LoginActivity2 extends Activity {
     public void onPause( ) {
       super.onPause( );
     } 
+
+  //__________________________________________________________________________________
+    public void onClick( View v ) { 
+	if(v instanceof ImageButtonNamed) {
+	    if(((ImageButtonNamed)v).getType( ) == Named.BUTTON_DELETE_USER ) {
+		String usernameToDelete = ((ImageButtonNamed)v).getExtras( );
+		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+usernameToDelete)).delete();
+		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+		if(selectedUser.compareTo(usernameToDelete)==0)
+		    Utils.putStringPreference( "SELECTEDUSER", "", this);
+		    
+		refreshUserViews();
+		return;
+	    }
+	    if(((ImageButtonNamed)v).getType( ) == Named.BUTTON_MODIFY_USER ) {
+		Utils.alert("Not implemented yet." , this);
+		return;
+	    }
+	}
+
+	if(v instanceof TextViewNamed) {
+	    String selectedUser = ((TextViewNamed)v).getExtras();
+	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
+	    Toast t = Toast.makeText(this, "Selected user: "+selectedUser, Toast.LENGTH_SHORT);
+	    t.setGravity( Gravity.CENTER, 0, 0 );
+	    t.show();
+	    return;
+	}
+    }
+
+    //__________________________________________________________________________________
+    private void refreshUserViews( ) {
+	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
+	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
+	usersL.removeAllViews();
+	for(int i = 0; i<users.length; ++i) {
+	    User U = null;
+	    try {
+		U = Utils.userFromFile( users[i].toString() );
+		//Utils.alert(U.toString(), this );
+	    } catch(Exception e) {
+		Utils.alert("ERROR: " + e.getMessage(), this);
+		continue;
+	    }
+	    UserView uv = new UserView ( U, this );
+	    usersL.addView( uv );
+	}
+    }
 }
