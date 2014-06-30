@@ -2,11 +2,14 @@ package org.openstack.utils;
 
 import android.widget.TextView;
 import android.content.Context;
+import android.widget.ImageView;
 
 public class TextViewNamed extends TextView implements Named {
 
-    private String extras;// = null;
+    private String extras;
     private int type;
+    //private ImageView relatedImage = null;
+    private TextViewNamed relatedText = null;
 
     TextViewNamed( Context ctx, int _type, String _extras ) {
 	super( ctx );
@@ -16,5 +19,9 @@ public class TextViewNamed extends TextView implements Named {
 
     public String getExtras( ) { return extras; }
     public int getType( ) { return type; }
+    public TextViewNamed getRelatedTextViewNamed( ) { return relatedText; }
+    public void setRelatedTextViewNamed( TextViewNamed tv ) { relatedText = tv; }
+    // public void setRelatedImage( ImageView iv ) { relatedImage = iv; }
+    // public ImageView getRelatedImage( ) { return relatedImage; }
 
 };

@@ -1,7 +1,5 @@
 package org.openstack.activities;
 
-//import android.webkit.WebView;
-
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -55,6 +53,9 @@ import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.TextViewNamed;
 import org.openstack.utils.ImageButtonNamed;
 
+import android.graphics.Typeface;
+import android.graphics.Color;
+
 public class LoginActivity2 extends Activity implements OnClickListener {
 
   //__________________________________________________________________________________
@@ -94,7 +95,7 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 		if(selectedUser.compareTo(usernameToDelete)==0)
 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
-		    
+		
 		refreshUserViews();
 		return;
 	    }
@@ -107,9 +108,18 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	if(v instanceof TextViewNamed) {
 	    String selectedUser = ((TextViewNamed)v).getExtras();
 	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
-	    Toast t = Toast.makeText(this, "Selected user: "+selectedUser, Toast.LENGTH_SHORT);
-	    t.setGravity( Gravity.CENTER, 0, 0 );
-	    t.show();
+	    //Toast t = Toast.makeText(this, "Selected user: "+selectedUser, Toast.LENGTH_SHORT);
+	    
+	    int childcount = ((LinearLayout)findViewById(R.id.userLayout)).getChildCount();
+	    for (int i=0; i < childcount; i++){
+		UserView uv = (UserView)((LinearLayout)findViewById(R.id.userLayout)).getChildAt(i);
+		uv.setUnselected();
+	    }
+	    ((TextViewNamed)v).setTypeface(null, Typeface.BOLD);
+	    ((TextViewNamed)v).getRelatedTextViewNamed( ).setTypeface(null, Typeface.BOLD);
+	    ((TextViewNamed)v).setTextColor( Color.parseColor("#00AA00"));
+	    ((TextViewNamed)v).getRelatedTextViewNamed().setTextColor( Color.parseColor("#00AA00"));
+	    
 	    return;
 	}
     }
@@ -130,6 +140,8 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	    }
 	    UserView uv = new UserView ( U, this );
 	    usersL.addView( uv );
+	    if( uv.getUserName().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
+		uv.setSelected( );
 	}
     }
 }

@@ -206,7 +206,7 @@ public class UserAddActivity extends Activity {
       Utils.alert( "ERROR: " + ee.getMessage(), this );
     }
     if(jsonResponse == null || jsonResponse.length()==0) {
-      Utils.alert( "ERROR: Unknown", this );
+      Utils.alert( "UserAddActivity.add: ERROR - Unknown, jsonResponse is NULL or zero length", this );
       return;
     }
     

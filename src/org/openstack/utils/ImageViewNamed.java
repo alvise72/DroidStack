@@ -16,5 +16,6 @@ public class ImageViewNamed extends ImageView implements Named {
 
     public String getExtras( ) { return extras; }
     public int getType( ) { return type; }
-
+    // public void setRelatedImage( ImageView iv ) { }
+    // public ImageView getRelatedImage( ) { return null; }
 };

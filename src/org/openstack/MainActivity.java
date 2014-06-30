@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
 
 import android.util.Log;
 
@@ -91,6 +92,18 @@ public class MainActivity extends Activity //implements OnClickListener
         SCREENH = d.getHeight();
 	SCREENW = d.getWidth();
 	Utils.createDir( Environment.getExternalStorageDirectory() + "/AndroStack/users/" );
+
+	Button su = (Button)findViewById( R.id.LOGIN );
+	Button ov = (Button)findViewById( R.id.OVERVIEW );
+	Button gl = (Button)findViewById( R.id.GLANCE );
+	Button no = (Button)findViewById( R.id.NOVA );
+
+	LayoutParams lp = new LinearLayout.LayoutParams((SCREENW-6)/2, (SCREENH-14)/6);
+	su.setLayoutParams( lp );
+	ov.setLayoutParams( lp );
+	gl.setLayoutParams( lp );
+	no.setLayoutParams( lp );
+	//	su.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
     }
     
     /**
@@ -157,7 +170,7 @@ public class MainActivity extends Activity //implements OnClickListener
      */
     public void overview( View v ) {
 	if(selectedUser.length()==0) {
-	    Utils.alert("You haven't yet selected any user. Please touch on 'Select User' button...", this);
+	    Utils.alert(getString(R.string.NOUSERSELECTED), this);
 	    return;
 	}
 	Class<?> c = (Class<?>)OverViewActivity.class;
@@ -173,7 +186,7 @@ public class MainActivity extends Activity //implements OnClickListener
      */
     public void list_glance( View v ) {
 	if(selectedUser.length()==0) {
-	    Utils.alert("You haven't yet selected any user. Please touch on 'Select User' button...", this);
+	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
 	    return;
 	}
 
@@ -199,7 +212,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	    Utils.alert( "ERROR: " + ee.getMessage(), this );
 	}
 	if(jsonResponse == null || jsonResponse.length()==0) {
-	    Utils.alert( "ERROR: Unknown", this );
+	    Utils.alert( "MainActivity.list_glance: ERROR - Unknown, jsonResponse is NULL or zero length", this );
 	    return;
 	}
     }
@@ -298,7 +311,7 @@ public class MainActivity extends Activity //implements OnClickListener
 		return "";
 	    }
 	    
-	    return "";
+	    return jsonBuf;
 	}
 	
 	@Override

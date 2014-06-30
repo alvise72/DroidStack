@@ -10,9 +10,9 @@
             android:layout_height="wrap_content"
 	    android:layout_gravity="right"
 	    android:orientation="horizontal"
-	    android:paddingLeft="6dip"
-	    android:paddingTop="2dip"
-	    android:paddingBottom="2dip"
+	    android:paddingLeft="6dp"
+	    android:paddingTop="2dp"
+	    android:paddingBottom="2dp"
             android:gravity="right" >
     
     <ImageButton
@@ -27,7 +27,7 @@
 
   <View   
       android:layout_width="fill_parent"
-      android:layout_height="3dip"
+      android:layout_height="3dp"
       android:background="#FF909090" />   
   
   <LinearLayout

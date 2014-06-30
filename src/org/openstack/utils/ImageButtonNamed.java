@@ -1,6 +1,7 @@
 package org.openstack.utils;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.content.Context;
 
 public class ImageButtonNamed extends ImageButton implements Named {
@@ -16,4 +17,6 @@ public class ImageButtonNamed extends ImageButton implements Named {
 
     public int getType( ) { return type; }
     public String getExtras( ) { return extras; }
+    // public void setRelatedImage( ImageView iv ) { }
+    // public ImageView getRelatedImage( ) { return null; }
 };

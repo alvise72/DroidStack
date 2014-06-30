@@ -4,22 +4,29 @@ package org.openstack.utils;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import android.graphics.Typeface;
 import android.graphics.Color;
+
 import android.view.Gravity;
+import android.view.View;
 
 import android.content.Context;
+
+import org.openstack.R;
 
 public class UserView extends LinearLayout {
 
     private Context ctx = null;
 
-    private LinearLayout buttonsLayout = null;
-    private LinearLayout userLayout = null;
-    private TextViewNamed textUserName = null;
-    private TextViewNamed textEndpoint = null;
-    private ImageButtonNamed modifyUser = null;
-    private ImageButtonNamed deleteUser = null; 
+    private LinearLayout     buttonsLayout = null;
+    private LinearLayout     userLayout    = null;
+    private TextViewNamed    textUserName  = null;
+    private TextViewNamed    textEndpoint  = null;
+    private ImageButtonNamed modifyUser    = null;
+    private ImageButtonNamed deleteUser    = null; 
     
     private String username = null;
 
@@ -45,6 +52,10 @@ public class UserView extends LinearLayout {
 	textEndpoint.setText(U.getEndpoint( ));
 	textEndpoint.setTextColor( Color.parseColor("#333333") );
 	textEndpoint.setOnClickListener( (OnClickListener)ctx );
+	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
+	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
+	textUserName.setRelatedTextViewNamed( textEndpoint );
+	textEndpoint.setRelatedTextViewNamed( textUserName );
 
 	userLayout.addView(textUserName);
 	userLayout.addView(textEndpoint);
@@ -65,11 +76,24 @@ public class UserView extends LinearLayout {
 	deleteUser.setImageResource(android.R.drawable.ic_menu_delete);
 	deleteUser.setOnClickListener( (OnClickListener)ctx );
 	
-	
 	buttonsLayout.addView( modifyUser );
 	buttonsLayout.addView( deleteUser );
 	
 	addView( buttonsLayout );
 	
     }
+
+    public void setSelected( ) {
+	textEndpoint.setTypeface( null, Typeface.BOLD );
+	textUserName.setTypeface( null, Typeface.BOLD );
+	textEndpoint.setTextColor( Color.parseColor("#00AA00") );
+	textUserName.setTextColor( Color.parseColor("#00AA00") );
+    }
+    public void setUnselected( ) {
+	textEndpoint.setTypeface( null, Typeface.NORMAL );
+	textUserName.setTypeface( null, Typeface.NORMAL );
+	textEndpoint.setTextColor( Color.parseColor("#BBBBBB") );
+	textUserName.setTextColor( Color.parseColor("#BBBBBB") );
+    }
+    public String getUserName( ) { return textUserName.getText().toString(); }
 }
