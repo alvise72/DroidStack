@@ -15,7 +15,25 @@
 </style>
 -->
 <resources>
-<!--
-    <string name="LASTPHOTO">Last</string>
--->
+    <string name="USERS">Users</string>
+    <string name="OVERVIEW">Overview</string>
+    <string name="IMAGEs">Immagini</string>
+    <string name="INSTANCES">Instances</string>
+    <string name="OVERVIEW">Overview</string>
+    <string name="CURRENTUSER">Current user</string>
+    <string name="AVAILUSERS">Added users</string>
+    <string name="CURRENTUSER">Current user</string>
+    <string name="ADDNEWUSER">Add new user</string>
+    <string name="CURRENTUSER">Current user</string>
+    <string name="ENDPOINT">Endpoint</string>
+    <string name="ONLYHOSTNAME">only hostname</string>
+    <string name="PROJECTNAME">Project's name</string>
+    <string name="USERNAME">Username</string>
+    <string name="PASSWORD">Password</string>
+    <string name="USESSL">Keystone/SSL</string>
+    <string name="ENDPOINT">Endpoint</string>
+    <string name="ADD">Add</string>
+    <string name="ENDPOINT">Endpoint</string>
+    <string name="ADDSUCCESS">Success !\nYou can add another user or go back and select a user.</string>
+    
 </resources>
