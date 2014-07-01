@@ -143,8 +143,7 @@ public class ParseUtils {
       }
       Log.d("ParseUtils.getErrorCode", "Returning: "+errorCode);
       return errorCode;
-    } 
-
+    }
            
     /**
      *
@@ -181,9 +180,7 @@ public class ParseUtils {
 	    throw new ParseException( je.getMessage( ) );
 	}
     }
-
-
-           
+      
     /**
      *
      *
@@ -191,11 +188,20 @@ public class ParseUtils {
      *
      */    
     public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
-// 	try {
+ 	try {
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray servers     = (JSONArray)jsonObject.getJSONArray("servers");
 
-// 	} catch(org.json.JSONException je) {
-// 	    throw new ParseException( je.getMessage( ) );
-// 	}
+	    for(int i=0; i<servers.length( ); ++i) {
+		JSONObject server = (JSONObject)serversgetJSONObject(i);
+		String status     = (String)server.getJSONString("status");
+		String keyname    = (String)server.getJSONString("key_name");
+		String secg       = (String) ((JSONArray)(server.getJSONArray("security_groups"))[0].getJSONString("name"));
+		
+	    }
+ 	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
 	return null;
     }
 }

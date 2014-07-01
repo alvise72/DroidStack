@@ -1,16 +1,10 @@
 package org.openstack.utils;
 
 public class Server {
+    public final static int POWER_RUNNING   = 1;
+    public final static int POWER_SHUTDOWN  = 2;
 
-    public final static int STATUS_ACTIVE = 0;
-    public final static int STATUS_SPAWN  = 1;
-    public final static int STATUS_BUILD  = 2;
-    public final static int STATUS_ERROR  = 3;
-    public final static int STATUS_DELETING = 4;
-    public final static int STATUS_SHUTOFF = 5;
-
-    public final static int POWER_RUNNING = 6;
-    public final static int POWER_SHUTDOWN  = 7;
+    public final String[] POWER_STRING = {"Running", "Shutdown"};
 
     private String name;
     private String ID;
@@ -63,5 +57,4 @@ public class Server {
     public String getKeyName() { return keyname; }
     public String getFlavorID() { return flavorID; }
     public String getSecurityGroupdID() { return secgrpID; }
-
 }

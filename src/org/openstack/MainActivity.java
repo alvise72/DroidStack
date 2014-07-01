@@ -50,6 +50,7 @@ import org.openstack.utils.CustomProgressDialog;
 import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
+import org.openstack.utils.Server;
 import org.openstack.utils.Quota;
 
 import org.openstack.activities.LoginActivity2;
@@ -69,6 +70,8 @@ public class MainActivity extends Activity //implements OnClickListener
     private int SCREENW = 0;
     private static boolean downloading_image_list = false;
     private static boolean downloading_quota_list = false;
+    private static boolean downloading_server_list = false;
+
     private String selectedUser;
 
     /**
@@ -289,6 +292,54 @@ public class MainActivity extends Activity //implements OnClickListener
 	} 
     } 
     
+    
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void list_vm( View v ) {
+	if(selectedUser.length()==0) {
+	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+	    return;
+	}
+
+	progressDialogWaitStop.show();
+	downloading_image_list = true;
+      
+	User U = null;
+	try {
+	    U = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	} catch(Exception e) {
+	    Utils.alert("ERROR: "+e.getMessage( ), this);
+	    return;
+	}
+
+	AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+	task.execute(U);
+
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void showServerList( String jsonBuffer ) 
+    {
+	try {
+	    Vector<Server> servers = ParseUtils.parseServers( jsonBuffer );
+	} catch( ParseException pe ) {
+	    Utils.alert("ERROR: "+pe.getMessage( ), this);
+	}
+
+	// Class<?> c = (Class<?>)ServersActivity.class;
+	// Intent I = new Intent( MainActivity.this, c );
+	//I.putStringArrayListExtra("SERVERS", 
+    }
+
     /**
      *
      *
@@ -468,6 +519,97 @@ public class MainActivity extends Activity //implements OnClickListener
 	    downloading_quota_list = false; // questo non va spostato da qui a
 	    MainActivity.this.progressDialogWaitStop.dismiss( );
 	    MainActivity.this.showQuotas( jsonBuf );
+	}
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskOSListServers extends AsyncTask<User, String, String>
+    {
+     	private  String   errorMessage  =  null;
+	private  boolean  hasError      =  false;
+	private  String   jsonBuf       = null;
+	
+	protected String doInBackground(User... u ) 
+	{
+	    User U = u[0];
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( pwd );
+		    newUser.setEndpoint( edp );
+		    newUser.setSSL( ssl );
+		    U = newUser;
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    try {
+		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+	    } catch(IOException e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPreExecute() {
+	    super.onPreExecute();
+	    
+	    downloading_image_list = true;
+	}
+	
+	@Override
+	    protected void onProgressUpdate(String... values) {
+	    super.onProgressUpdate(values);
+	}
+	
+	@Override
+	    protected void onCancelled() {
+	    super.onCancelled();
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, MainActivity.this );
+ 		downloading_server_list = false;
+ 		MainActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    downloading_server_list = false; // questo non va spostato da qui a
+	    MainActivity.this.progressDialogWaitStop.dismiss( );
+	    MainActivity.this.showServerList( jsonBuf );
 	}
     }
 }
