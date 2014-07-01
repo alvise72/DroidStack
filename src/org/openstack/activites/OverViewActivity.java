@@ -81,7 +81,7 @@ public class OverViewActivity extends Activity {
     ((ProgressBar)findViewById(R.id.fipusagePB)).setProgress(bundle.getInt("CURRFIP"));
     
     ((TextView)findViewById(R.id.segusageTV)).setText(""+bundle.getInt("CURRSECG"));
-    ((TextView)findViewById(R.id.segusageMAXTV)).setText("/"+bundle.getInt("MASECG"));
+    ((TextView)findViewById(R.id.segusageMAXTV)).setText("/"+bundle.getInt("MAXSECG"));
     ((ProgressBar)findViewById(R.id.segusagePB)).setMax( bundle.getInt("MAXSECG") );
     ((ProgressBar)findViewById(R.id.segusagePB)).setProgress(bundle.getInt("CURRSECG"));
    

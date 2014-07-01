@@ -43,6 +43,7 @@ public class Server {
 	task        = _task;
 	powerstate  = _power;
 	privIP      = _privIP;
+	pubIP       = _pubIP;
 	computeNode = _computeNode;
 	MAC         = _MAC;
 	keyname     = _keyname;
@@ -50,5 +51,17 @@ public class Server {
 	secgrpID    = _secgrpID;
     }
 
-    
+    public String getName() { return name; }
+    public String getID() { return ID; }
+    public int    getStatus() { return status; }
+    public int    getTask() { return task; }
+    public int    getPowerState() { return powerstate; }
+    public String getPrivateIP() { return privIP; }
+    public String getPublicIP() { return pubIP; }
+    public String getComputeNode() { return computeNode; }
+    public String getMACAddress() { return MAC; }
+    public String getKeyName() { return keyname; }
+    public String getFlavorID() { return flavorID; }
+    public String getSecurityGroupdID() { return secgrpID; }
+
 }

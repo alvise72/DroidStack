@@ -196,8 +196,6 @@ public class UserAddActivity extends Activity {
 
     AsyncTaskRequestToken task = new AsyncTaskRequestToken();
     task.execute(endpoint,tenant,username,password,""+usessl);
-    
-
   }
 
 
@@ -218,7 +216,6 @@ public class UserAddActivity extends Activity {
      */  
     protected void completeUserAdd( String jsonResponse, String password, String endpoint, boolean usessl ) {
 	if(jsonResponse == null || jsonResponse.length()==0) {
-	    //Utils.alert( "UserAddActivity.add: ERROR - Unknown, jsonResponse is NULL or zero length", this );
 	    return;
 	}
 	try {

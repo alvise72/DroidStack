@@ -92,10 +92,11 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	if(v instanceof ImageButtonNamed) {
 	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
-		String usernameToDelete = ((ImageButtonNamed)v).getUserView( ).getUserName();
-		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+usernameToDelete)).delete();
+		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
+		
+		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+filenameToDelete)).delete();
 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
-		if(selectedUser.compareTo(usernameToDelete)==0)
+		if(selectedUser.compareTo(filenameToDelete)==0)
 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
 		
 		refreshUserViews();
@@ -108,9 +109,9 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	}
 
 	if(v instanceof TextViewNamed) {
-	    String selectedUser = ((TextViewNamed)v).getUserView().getUserName();
+	    //String selectedUser = ((TextViewNamed)v).getUserView().getFilename();
 
-	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
+	    Utils.putStringPreference("SELECTEDUSER", ((TextViewNamed)v).getUserView().getFilename(), this);
 	    
 	    refreshUserViews();
 
@@ -118,10 +119,8 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	}
 
 	if(v instanceof LinearLayoutNamed) {
-	    
-	    String selectedUser = ((LinearLayoutNamed)v).getUserView().getUserName();
-	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
-	     refreshUserViews();
+	    Utils.putStringPreference("SELECTEDUSER", ((LinearLayoutNamed)v).getUserView().getFilename(), this);
+	    refreshUserViews();
 	}
 	
     }
@@ -145,15 +144,10 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	    
 	    UserView uv = new UserView ( U, this );
 	    usersL.addView( uv );
-	    if( uv.getUserName().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
+	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
 		uv.setSelected( );
 	    else
 		uv.setUnselected( );
 	}
-// 	if(users.length==1) {
-// 	    UserView uv = ((UserView)usersL.getChildAt( 0 ));
-// 	    uv.setSelected( );
-// 	    Utils.putStringPreference("SELECTEDUSER", uv.getUserName( ), this);
-// 	}
     }
 }

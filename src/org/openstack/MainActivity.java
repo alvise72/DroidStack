@@ -81,13 +81,9 @@ public class MainActivity extends Activity //implements OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-	//	ACTIVITY = this;
 	
 	setContentView(R.layout.main);
 	
-        if( !Utils.internetOn( this ) )
-          Utils.alert( "The device is not connected to Internet. This App cannot work.", this );
-	  
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
 
@@ -146,9 +142,15 @@ public class MainActivity extends Activity //implements OnClickListener
 
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
-	  Toast t = Toast.makeText(this, "Current user: "+selectedUser, Toast.LENGTH_SHORT);
-	  t.setGravity( Gravity.CENTER, 0, 0 );
-	  t.show();
+	  try {
+	      User u = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	      Toast t = Toast.makeText(this, "Current user: "+u.getUserName() + " (" + u.getTenantName() + ")", Toast.LENGTH_SHORT);
+	      t.setGravity( Gravity.CENTER, 0, 0 );
+	      t.show();
+	  } catch(Exception e) {
+	      Utils.alert("ERROR: "+e.getMessage(), this );
+	      return;
+	  }
       }
     }
     
@@ -188,6 +190,12 @@ public class MainActivity extends Activity //implements OnClickListener
 	task.execute(U);
     }
 
+    /**
+     *
+     *
+     *
+     *
+     */
     private void showQuotas( String jsonResponse ) {
 	Quota q = null;
 	try {

@@ -30,10 +30,14 @@ public class UserView extends LinearLayout {
     
     private String username = null;
 
+    private User user = null;
+
     public UserView ( User U, Context ctx ) {
 	super(ctx);
 
-	username = U.getUserName( );
+	user = U;
+
+	//username = U.getUserName( );
 	
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -45,7 +49,7 @@ public class UserView extends LinearLayout {
 	userLayout.setLayoutParams( params2 );
 	
 	textUserName = new TextViewNamed( ctx, this );
-	textUserName.setText(username+" ("+U.getTenantName()+")");
+	textUserName.setText(user.getUserName()+" ("+user.getTenantName()+")");
 	textUserName.setTextColor( Color.parseColor("#333333") );
 	textUserName.setOnClickListener( (OnClickListener)ctx );
 	textEndpoint = new TextViewNamed( ctx, this );
@@ -99,6 +103,7 @@ public class UserView extends LinearLayout {
 	textUserName.setTextColor( Color.parseColor("#BBBBBB") );
     }
 
-    public String getUserName( ) { return textUserName.getText().toString(); }
+    //    public String getUserName( ) { return usertextUserName.getText().toString(); }
 
+    public String getFilename( ) { return user.getUserID()+"."+user.getTenantID(); }
 }
