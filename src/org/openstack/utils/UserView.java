@@ -45,7 +45,7 @@ public class UserView extends LinearLayout {
 	userLayout.setLayoutParams( params2 );
 	
 	textUserName = new TextViewNamed( ctx, this );
-	textUserName.setText(username);
+	textUserName.setText(username+" ("+U.getTenantName()+")");
 	textUserName.setTextColor( Color.parseColor("#333333") );
 	textUserName.setOnClickListener( (OnClickListener)ctx );
 	textEndpoint = new TextViewNamed( ctx, this );

@@ -63,7 +63,6 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity //implements OnClickListener
 {
-    //    private static MainActivity ACTIVITY = null;
     private Hashtable<String, org.openstack.utils.OpenStackImage> osimages = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     private int SCREENH = 0;
@@ -108,7 +107,6 @@ public class MainActivity extends Activity //implements OnClickListener
 	ov.setLayoutParams( lp );
 	gl.setLayoutParams( lp );
 	no.setLayoutParams( lp );
-	//	su.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
     }
     
     /**
@@ -119,7 +117,6 @@ public class MainActivity extends Activity //implements OnClickListener
      */
     @Override
     public void onDestroy( ) {
-	//      ACTIVITY = null;
       super.onDestroy( );
       progressDialogWaitStop.dismiss();
     }
@@ -189,18 +186,6 @@ public class MainActivity extends Activity //implements OnClickListener
 	downloading_quota_list = true;
 	AsyncTaskQuota task = new AsyncTaskQuota();
 	task.execute(U);
-//         String jsonResponse = null;
-// 	try {
-// 	    jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
-// 	} catch(InterruptedException ie) {
-// 	    Utils.alert( "ERROR: " + ie.getMessage(), this );
-// 	} catch(ExecutionException ee ) {
-// 	    Utils.alert( "ERROR: " + ee.getMessage(), this );
-// 	}
-// 	if(jsonResponse == null || jsonResponse.length()==0) {
-// 	    Utils.alert( "MainActivity.list_glance: ERROR - Unknown, jsonResponse is NULL or zero length", this );
-// 	    return;
-// 	}
     }
 
     private void showQuotas( String jsonResponse ) {
@@ -253,18 +238,7 @@ public class MainActivity extends Activity //implements OnClickListener
 
 	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
 	task.execute(U);
-//         String jsonResponse = null;
-// 	try {
-// 	    jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
-// 	} catch(InterruptedException ie) {
-// 	    Utils.alert( "ERROR: " + ie.getMessage(), this );
-// 	} catch(ExecutionException ee ) {
-// 	    Utils.alert( "ERROR: " + ee.getMessage(), this );
-// 	}
-// 	if(jsonResponse == null || jsonResponse.length()==0) {
-// 	    Utils.alert( "MainActivity.list_glance: ERROR - Unknown, jsonResponse is NULL or zero length", this );
-// 	    return;
-// 	}
+
     }
     
     /**
@@ -277,7 +251,7 @@ public class MainActivity extends Activity //implements OnClickListener
     
 	Hashtable<String, OpenStackImage> result = null;
 	try {
-	    result = ParseUtils.getImages( jsonBuf.toString( ) );
+	    result = ParseUtils.parseImages( jsonBuf.toString( ) );
 	} catch(ParseException pe) {
 	    Utils.alert( pe.getMessage( ), this );
 	    return;

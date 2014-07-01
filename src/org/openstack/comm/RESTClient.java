@@ -268,5 +268,64 @@ public class RESTClient {
 	//Log.d("requestToken", buf);
 	return res;    
     }
+
+    /**
+     *
+     *
+     * curl -i http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/limits -X GET -H "X-Auth-Project-Id: admin" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     *
+     *
+     *
+     */
+    public static String requestServers( String endpoint,
+					 String token,
+					 String tenantid,
+					 String tenantname ) throws IOException
+    {
+	String proto = "http://";
+	
+	String sUrl = proto + endpoint + ":8774/v2/"+tenantid+"/servers/detail";
+	URL url = null;
+	try {
+	    url = new URL(sUrl);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new IOException(mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	TrustManager[] trustAllCerts = null;
+    
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+	    throw new IOException("url.openConnection https: "+ioe.getMessage( ) );
+	}
+    
+	conn.setRequestProperty("X-Auth-Project-Id", tenantname);
+	conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("X-Auth-Token", token);
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("GET");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new IOException( pe.getMessage( ) );
+	}
+	
+    	String buf = "";
+	InputStream in = conn.getInputStream( );
+	int len;
+	String res = "";
+	byte[] buffer = new byte[4096];
+	while (-1 != (len = in.read(buffer))) {
+	    //bos.write(buffer, 0, len);
+	    res += new String(buffer, 0, len);
+	    //Log.d("requestToken", new String(buffer, 0, len));
+	}
+	in.close();
+	((HttpURLConnection)conn).disconnect( );
+	//System.out.println(buf)
+	//Log.d("requestToken", buf);
+	return res;    
+    }
 }
 

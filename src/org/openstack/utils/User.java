@@ -10,6 +10,7 @@ public class User implements Serializable {
 
     private String endpoint;
     private String userName;
+    private String userID;
     private String tenantName;
     private String tenantId;
     private String token;
@@ -17,8 +18,9 @@ public class User implements Serializable {
     private String password;
     private boolean usessl;
     
-    public User( String _userName, String _tenantName, String _tenantId, String _token, long _tokenExpireTime /*, boolean _usessl*/ ) {
+    public User( String _userName, String _userID, String _tenantName, String _tenantId, String _token, long _tokenExpireTime  ) {
         userName        = _userName;
+	userID          = _userID;
 	tenantName      = _tenantName;
 	tenantId        = _tenantId;
 	token           = _token;
@@ -36,6 +38,7 @@ public class User implements Serializable {
     public String getToken( ) { return token; }
     public long   getTokenExpireTime( ) { return tokenExpireTime; }
     public String getUserName( ) { return userName; }
+    public String getUserID( ) { return userID; }
     public String getPassword( ) { return password; }
     public boolean useSSL( ) { return usessl; }
 
@@ -43,6 +46,7 @@ public class User implements Serializable {
     public String toString( ) {
 	return "User{endpoint="+endpoint+
 	    ",userName="+userName+
+	    ",userID="+userID+
 	    ",tenantName="+tenantName+
 	    ",tenantId="+tenantId+
 	    ",tokenExpireTime="+tokenExpireTime+

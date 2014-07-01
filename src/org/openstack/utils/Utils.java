@@ -532,8 +532,8 @@ public class Utils {
      *
      *
      */    
-    public static void userToFile( User U, String filename ) throws Exception, IOException {
-	// File f = new File( path /*Environment.getExternalStorageDirectory() + "/AndroStack/users/" + filename*/ );
+    public static void userToFile( User U ) throws Exception, IOException {
+	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserID( ) + "." + U.getTenantID( );
 	File f = new File( filename );
 	if(f.exists()) f.delete();
 

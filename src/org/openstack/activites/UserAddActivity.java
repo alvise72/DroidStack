@@ -226,7 +226,7 @@ public class UserAddActivity extends Activity {
 	    U.setPassword(password);
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
-	    Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserName() );
+	    Utils.userToFile( U );
 	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage(), this);

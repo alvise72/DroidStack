@@ -3,6 +3,7 @@ package org.openstack.parse;
 import java.util.Hashtable;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import java.text.SimpleDateFormat;
 
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import org.openstack.utils.OpenStackImage;
+import org.openstack.utils.Server;
 import org.openstack.utils.Quota;
 import org.openstack.utils.User;
 
@@ -39,7 +41,8 @@ public class ParseUtils {
 	  String tenantid = (String)tenant.get("id");
 	  String tenantname = (String)tenant.get("name");
 	  String username = (String)((JSONObject)access.get("user")).get("username");
-	  //String username="username";
+	  String userID = (String)((JSONObject)access.get("user")).get("id");
+
 	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
 	  Calendar calendar = Calendar.getInstance();
@@ -49,7 +52,7 @@ public class ParseUtils {
 	      throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
 	  }
 	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-	  User U = new User( username, tenantname, tenantid, stoken, expireTimestamp );
+	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp );
 	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );
@@ -62,7 +65,7 @@ public class ParseUtils {
      *
      *
      */ 
-    public static Hashtable<String, org.openstack.utils.OpenStackImage> getImages( String jsonString ) throws ParseException
+    public static Hashtable<String, org.openstack.utils.OpenStackImage> parseImages( String jsonString ) throws ParseException
     {
       try {
         Hashtable<String, OpenStackImage> result = new Hashtable<String, OpenStackImage>();
@@ -177,5 +180,22 @@ public class ParseUtils {
 	} catch(org.json.JSONException je) {
 	    throw new ParseException( je.getMessage( ) );
 	}
+    }
+
+
+           
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
+// 	try {
+
+// 	} catch(org.json.JSONException je) {
+// 	    throw new ParseException( je.getMessage( ) );
+// 	}
+	return null;
     }
 }

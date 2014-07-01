@@ -109,21 +109,11 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 
 	if(v instanceof TextViewNamed) {
 	    String selectedUser = ((TextViewNamed)v).getUserView().getUserName();
+
 	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
+	    
 	    refreshUserViews();
 
-	    //Toast t = Toast.makeText(this, "Selected user: "+selectedUser, Toast.LENGTH_SHORT);
-	    
-// 	    int childcount = ((LinearLayout)findViewById(R.id.userLayout)).getChildCount();
-// 	    for (int i=0; i < childcount; i++){
-// 		UserView uv = (UserView)((LinearLayout)findViewById(R.id.userLayout)).getChildAt(i);
-// 		uv.setUnselected();
-// 	    }
-// 	    ((TextViewNamed)v).setTypeface(null, Typeface.BOLD);
-// 	    ((TextViewNamed)v).getRelatedTextViewNamed( ).setTypeface(null, Typeface.BOLD);
-// 	    ((TextViewNamed)v).setTextColor( Color.parseColor("#00AA00"));
-// 	    ((TextViewNamed)v).getRelatedTextViewNamed().setTextColor( Color.parseColor("#00AA00"));
-	    
 	    return;
 	}
 
@@ -132,13 +122,6 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	    String selectedUser = ((LinearLayoutNamed)v).getUserView().getUserName();
 	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
 	     refreshUserViews();
-
-// 	    int childcount = ((LinearLayout)findViewById(R.id.userLayout)).getChildCount();
-// 	    for (int i=0; i < childcount; i++){
-// 		UserView uv = (UserView)((LinearLayout)findViewById(R.id.userLayout)).getChildAt(i);
-// 		uv.setUnselected();
-// 	    }
-	    
 	}
 	
     }
