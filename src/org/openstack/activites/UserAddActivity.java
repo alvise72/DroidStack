@@ -197,32 +197,41 @@ public class UserAddActivity extends Activity {
     AsyncTaskRequestToken task = new AsyncTaskRequestToken();
     task.execute(endpoint,tenant,username,password,""+usessl);
     
-    String jsonResponse = null;
-    try {
-      jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
-    } catch(InterruptedException ie) {
-      Utils.alert( "ERROR: " + ie.getMessage(), this );
-    } catch(ExecutionException ee ) {
-      Utils.alert( "ERROR: " + ee.getMessage(), this );
-    }
-    if(jsonResponse == null || jsonResponse.length()==0) {
-      Utils.alert( "UserAddActivity.add: ERROR - Unknown, jsonResponse is NULL or zero length", this );
-      return;
-    }
-    
-    try {
-      User U = ParseUtils.parseUser( jsonResponse );
-      U.setPassword(password);
-      U.setEndpoint(endpoint);
-      U.setSSL( usessl );
-      Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserName() );
 
-      Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
-      
-    } catch(Exception e) {
-      Utils.alert("ERROR: "+e.getMessage(), this);
-    } 
   }
+
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */  
+    protected void completeUserAdd( String jsonResponse, String password, String endpoint, boolean usessl ) {
+	if(jsonResponse == null || jsonResponse.length()==0) {
+	    //Utils.alert( "UserAddActivity.add: ERROR - Unknown, jsonResponse is NULL or zero length", this );
+	    return;
+	}
+	try {
+	    User U = ParseUtils.parseUser( jsonResponse );
+	    U.setPassword(password);
+	    U.setEndpoint(endpoint);
+	    U.setSSL( usessl );
+	    Utils.userToFile( U, Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserName() );
+	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
+	} catch(Exception e) {
+	    Utils.alert("ERROR: "+e.getMessage(), this);
+	} 	
+    }
   
     /**
      *
@@ -239,31 +248,36 @@ public class UserAddActivity extends Activity {
      *
      *
      */
-    protected class AsyncTaskRequestToken extends AsyncTask<String, Void, String>
+    protected class AsyncTaskRequestToken extends AsyncTask<String, Void, Void>
     {
      	private  String   errorMessage  = null;
 	private  boolean  hasError      = false;
 	private  String   jsonBuf       = null;
 	
-	protected String doInBackground( String... args ) 
+	private String endpoint = null;
+	private String password = null;
+	private boolean usessl;
+	
+	protected Void doInBackground( String... args ) 
 	{
-	   String endpoint = args[0];
-	   String tenant   = args[1];
-	   String username = args[2];
-	   String password = args[3];
-	   String s_usessl = args[4];
-	   
-	   boolean usessl = Boolean.parseBoolean( s_usessl );
-	   
-   	   try {
-             jsonBuf = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
-     	   } catch(Exception e) {
-	     errorMessage = e.getMessage();
-	     hasError = true;
-    	     return "";
-    	   }
-      
-    	   return jsonBuf;
+	    endpoint = args[0];
+	    String tenant   = args[1];
+	    String username = args[2];
+	    password = args[3];
+	    String s_usessl = args[4];
+	    
+	    usessl = Boolean.parseBoolean( s_usessl );
+	    
+	    try {
+		jsonBuf = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		//    	     return "";
+		//return;
+	    }
+	    return null;
+	    //    	   return jsonBuf;
 	}
 	
 	@Override
@@ -273,10 +287,11 @@ public class UserAddActivity extends Activity {
 	}
 	
 	@Override
-	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	    protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
 	    
- 	    if(hasError) {
+ 	    if(hasError) {	
+		UserAddActivity.this.progressDialogWaitStop.dismiss( );
  		Utils.alert( errorMessage, UserAddActivity.this );
  		requesting_token = false;
  		//ACTIVITY.progressDialogWaitStop.dismiss( );
@@ -286,6 +301,7 @@ public class UserAddActivity extends Activity {
 	    
 	    requesting_token = false; // questo non va spostato da qui a
 	    UserAddActivity.this.progressDialogWaitStop.dismiss( );
+	    UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
 	}
     }
 }

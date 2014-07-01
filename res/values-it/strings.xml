@@ -17,5 +17,5 @@
     <string name="ADDSUCCESS">Successo !\nPuoi aggiungere un altro
     utente o tornare indietro e selezionarne uno.</string>
     <string name="SELECTOSIMAGE">Seleziona un\'immagine OpenStack</string>
-    <string name="NOUSERSELECTED">Non hai ancora selezionato un utente. Tocca sul pulsante \'Seleziona utente\'</string>
+    <string name="NOUSERSELECTED">Non hai ancora selezionato un utente. Tocca il pulsante \'Utenti\'</string>
 </resources>

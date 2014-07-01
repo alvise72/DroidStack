@@ -52,6 +52,7 @@ import org.openstack.utils.Named;
 import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.TextViewNamed;
 import org.openstack.utils.ImageButtonNamed;
+import org.openstack.utils.LinearLayoutNamed;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
@@ -89,8 +90,9 @@ public class LoginActivity2 extends Activity implements OnClickListener {
   //__________________________________________________________________________________
     public void onClick( View v ) { 
 	if(v instanceof ImageButtonNamed) {
-	    if(((ImageButtonNamed)v).getType( ) == Named.BUTTON_DELETE_USER ) {
-		String usernameToDelete = ((ImageButtonNamed)v).getExtras( );
+	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
+	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
+		String usernameToDelete = ((ImageButtonNamed)v).getUserView( ).getUserName();
 		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+usernameToDelete)).delete();
 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 		if(selectedUser.compareTo(usernameToDelete)==0)
@@ -99,29 +101,46 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 		refreshUserViews();
 		return;
 	    }
-	    if(((ImageButtonNamed)v).getType( ) == Named.BUTTON_MODIFY_USER ) {
+	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_MODIFY_USER ) {
 		Utils.alert("Not implemented yet." , this);
 		return;
 	    }
 	}
 
 	if(v instanceof TextViewNamed) {
-	    String selectedUser = ((TextViewNamed)v).getExtras();
+	    String selectedUser = ((TextViewNamed)v).getUserView().getUserName();
 	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
+	    refreshUserViews();
+
 	    //Toast t = Toast.makeText(this, "Selected user: "+selectedUser, Toast.LENGTH_SHORT);
 	    
-	    int childcount = ((LinearLayout)findViewById(R.id.userLayout)).getChildCount();
-	    for (int i=0; i < childcount; i++){
-		UserView uv = (UserView)((LinearLayout)findViewById(R.id.userLayout)).getChildAt(i);
-		uv.setUnselected();
-	    }
-	    ((TextViewNamed)v).setTypeface(null, Typeface.BOLD);
-	    ((TextViewNamed)v).getRelatedTextViewNamed( ).setTypeface(null, Typeface.BOLD);
-	    ((TextViewNamed)v).setTextColor( Color.parseColor("#00AA00"));
-	    ((TextViewNamed)v).getRelatedTextViewNamed().setTextColor( Color.parseColor("#00AA00"));
+// 	    int childcount = ((LinearLayout)findViewById(R.id.userLayout)).getChildCount();
+// 	    for (int i=0; i < childcount; i++){
+// 		UserView uv = (UserView)((LinearLayout)findViewById(R.id.userLayout)).getChildAt(i);
+// 		uv.setUnselected();
+// 	    }
+// 	    ((TextViewNamed)v).setTypeface(null, Typeface.BOLD);
+// 	    ((TextViewNamed)v).getRelatedTextViewNamed( ).setTypeface(null, Typeface.BOLD);
+// 	    ((TextViewNamed)v).setTextColor( Color.parseColor("#00AA00"));
+// 	    ((TextViewNamed)v).getRelatedTextViewNamed().setTextColor( Color.parseColor("#00AA00"));
 	    
 	    return;
 	}
+
+	if(v instanceof LinearLayoutNamed) {
+	    
+	    String selectedUser = ((LinearLayoutNamed)v).getUserView().getUserName();
+	    Utils.putStringPreference("SELECTEDUSER", selectedUser, this);
+	     refreshUserViews();
+
+// 	    int childcount = ((LinearLayout)findViewById(R.id.userLayout)).getChildCount();
+// 	    for (int i=0; i < childcount; i++){
+// 		UserView uv = (UserView)((LinearLayout)findViewById(R.id.userLayout)).getChildAt(i);
+// 		uv.setUnselected();
+// 	    }
+	    
+	}
+	
     }
 
     //__________________________________________________________________________________
@@ -129,19 +148,29 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
 	usersL.removeAllViews();
+
 	for(int i = 0; i<users.length; ++i) {
 	    User U = null;
 	    try {
+		
 		U = Utils.userFromFile( users[i].toString() );
-		//Utils.alert(U.toString(), this );
+		
 	    } catch(Exception e) {
 		Utils.alert("ERROR: " + e.getMessage(), this);
 		continue;
 	    }
+	    
 	    UserView uv = new UserView ( U, this );
 	    usersL.addView( uv );
 	    if( uv.getUserName().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
 		uv.setSelected( );
+	    else
+		uv.setUnselected( );
 	}
+// 	if(users.length==1) {
+// 	    UserView uv = ((UserView)usersL.getChildAt( 0 ));
+// 	    uv.setSelected( );
+// 	    Utils.putStringPreference("SELECTEDUSER", uv.getUserName( ), this);
+// 	}
     }
 }

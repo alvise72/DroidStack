@@ -13,6 +13,8 @@ import org.json.JSONException;
 import org.openstack.utils.OpenStackImage;
 import org.openstack.utils.User;
 
+import android.util.Log;
+
 public class ParseUtils {
 
     /**
@@ -109,15 +111,15 @@ public class ParseUtils {
      */
     public static String getErrorMessage ( String jsonBuf ) {
       JSONObject jsonObject = null;
-      String errorMEssage = null;
+      String errorMessage = null;
       try {
         jsonObject = new JSONObject( jsonBuf );
-	errorMEssage = (String)jsonObject.getJSONObject("error").get("message");
+	errorMessage = (String)jsonObject.getJSONObject("error").get("message");
       } catch(org.json.JSONException joe) {
         return "Cannot parse json error message from remote server";
       }
-      
-      return errorMEssage;
+      Log.d("ParseUtils.getErrorCodeMessage", "Returning: "+errorMessage);
+      return errorMessage;
     }
        
     /**
@@ -135,7 +137,7 @@ public class ParseUtils {
       } catch(org.json.JSONException joe) {
         return -1;
       }
-      
+      Log.d("ParseUtils.getErrorCode", "Returning: "+errorCode);
       return errorCode;
     } 
 }

@@ -16,8 +16,8 @@ public class ImageOSElement {
 
     public ImageOSElement( String name, String format, long size, int imageResource, Context ctx ) {
 	
-	view = new TextViewNamed( ctx, Named.TEXTVIEW, name );
-	img  = new ImageViewNamed( ctx, Named.IMAGEVIEW, name );
+	view = new TextViewNamed( ctx, null );
+	img  = new ImageViewNamed( ctx, null );
 	img.setClickable( true );
 	img.setImageResource(imageResource);
 	

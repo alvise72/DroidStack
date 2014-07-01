@@ -25,7 +25,7 @@ import java.net.*;
 import java.lang.Thread;
 import java.util.Date;
 
-import android.util.Log;
+//import android.util.Log;
 import org.apache.http.HttpStatus;
 
 import org.openstack.parse.ParseUtils;
@@ -118,7 +118,7 @@ public class RESTClient {
 	}
 	
 	int status = ((HttpURLConnection)conn).getResponseCode();
-	if(status >= HttpStatus.SC_BAD_REQUEST) {
+	if( status != HttpStatus.SC_OK ) {
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    int len;
 	    String buf = "";
@@ -130,9 +130,8 @@ public class RESTClient {
 	    }
 	    in.close();
 	    //Log.d("RESTApiOpenStack.requestToken", buf.toString( ) );
-	    if(ParseUtils.getErrorCode( buf)==HttpStatus.SC_UNAUTHORIZED) {
-		
-		throw new IOException(  "ParseError: "+ParseUtils.getErrorMessage( buf+"\nPlease check your credentials and try again..." ));
+	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
+		throw new IOException(  "ParseError: "+ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
 	    }
 	    throw new IOException( "ParseError: "+ParseUtils.getErrorMessage( buf ) );
 	}
