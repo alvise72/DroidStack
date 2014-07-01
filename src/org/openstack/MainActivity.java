@@ -50,21 +50,26 @@ import org.openstack.utils.CustomProgressDialog;
 import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
+import org.openstack.utils.Quota;
 
 import org.openstack.activities.LoginActivity2;
 import org.openstack.activities.OSImagesExploreActivity;
 import org.openstack.activities.OverViewActivity;
+import org.openstack.utils.CustomProgressDialog;
 
 import java.util.concurrent.ExecutionException;
 
+
+
 public class MainActivity extends Activity //implements OnClickListener
 {
-    private static MainActivity ACTIVITY = null;
+    //    private static MainActivity ACTIVITY = null;
     private Hashtable<String, org.openstack.utils.OpenStackImage> osimages = null;
-    private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
+    private CustomProgressDialog progressDialogWaitStop = null;
     private int SCREENH = 0;
     private int SCREENW = 0;
     private static boolean downloading_image_list = false;
+    private static boolean downloading_quota_list = false;
     private String selectedUser;
 
     /**
@@ -77,7 +82,7 @@ public class MainActivity extends Activity //implements OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-	ACTIVITY = this;
+	//	ACTIVITY = this;
 	
 	setContentView(R.layout.main);
 	
@@ -114,7 +119,7 @@ public class MainActivity extends Activity //implements OnClickListener
      */
     @Override
     public void onDestroy( ) {
-      ACTIVITY = null;
+	//      ACTIVITY = null;
       super.onDestroy( );
       progressDialogWaitStop.dismiss();
     }
@@ -173,8 +178,53 @@ public class MainActivity extends Activity //implements OnClickListener
 	    Utils.alert(getString(R.string.NOUSERSELECTED), this);
 	    return;
 	}
+	User U = null;
+	try {
+	    U = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	} catch(Exception e) {
+	    Utils.alert("ERROR: "+e.getMessage( ), this);
+	    return;
+	}
+	progressDialogWaitStop.show();
+	downloading_quota_list = true;
+	AsyncTaskQuota task = new AsyncTaskQuota();
+	task.execute(U);
+//         String jsonResponse = null;
+// 	try {
+// 	    jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
+// 	} catch(InterruptedException ie) {
+// 	    Utils.alert( "ERROR: " + ie.getMessage(), this );
+// 	} catch(ExecutionException ee ) {
+// 	    Utils.alert( "ERROR: " + ee.getMessage(), this );
+// 	}
+// 	if(jsonResponse == null || jsonResponse.length()==0) {
+// 	    Utils.alert( "MainActivity.list_glance: ERROR - Unknown, jsonResponse is NULL or zero length", this );
+// 	    return;
+// 	}
+    }
+
+    private void showQuotas( String jsonResponse ) {
+	Quota q = null;
+	try {
+	    q = ParseUtils.parseQuota( jsonResponse );
+	} catch(ParseException pe) {
+	    Utils.alert("MainActivity.overview - ERROR: " + pe.getMessage( ), this );
+	    return;
+	}
+	
 	Class<?> c = (Class<?>)OverViewActivity.class;
 	Intent I = new Intent( MainActivity.this, c );
+	I.putExtra("MAXVM", q.getMaxInstances());
+	I.putExtra("MAXRAM", q.getMaxRAM());
+	I.putExtra("MAXSECG", q.getMaxSecurityGroups());
+	I.putExtra("MAXFIP", q.getMaxFloatingIP());
+	I.putExtra("MAXCPU", q.getMaxCPU());
+	I.putExtra("CURRVM", q.getCurrentInstances());
+	I.putExtra("CURRRAM", q.getCurrentRAM());
+	I.putExtra("CURRSECG", q.getCurrentSecurityGroups());
+	I.putExtra("CURRFIP", q.getCurrentFloatingIP());
+	I.putExtra("CURRCPU", q.getCurrentCPU());
+
 	startActivity( I );
     }
     
@@ -203,18 +253,18 @@ public class MainActivity extends Activity //implements OnClickListener
 
 	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
 	task.execute(U);
-        String jsonResponse = null;
-	try {
-	    jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
-	} catch(InterruptedException ie) {
-	    Utils.alert( "ERROR: " + ie.getMessage(), this );
-	} catch(ExecutionException ee ) {
-	    Utils.alert( "ERROR: " + ee.getMessage(), this );
-	}
-	if(jsonResponse == null || jsonResponse.length()==0) {
-	    Utils.alert( "MainActivity.list_glance: ERROR - Unknown, jsonResponse is NULL or zero length", this );
-	    return;
-	}
+//         String jsonResponse = null;
+// 	try {
+// 	    jsonResponse = task.get( ); // attende la fine del task senza congelare la UI
+// 	} catch(InterruptedException ie) {
+// 	    Utils.alert( "ERROR: " + ie.getMessage(), this );
+// 	} catch(ExecutionException ee ) {
+// 	    Utils.alert( "ERROR: " + ee.getMessage(), this );
+// 	}
+// 	if(jsonResponse == null || jsonResponse.length()==0) {
+// 	    Utils.alert( "MainActivity.list_glance: ERROR - Unknown, jsonResponse is NULL or zero length", this );
+// 	    return;
+// 	}
     }
     
     /**
@@ -336,15 +386,106 @@ public class MainActivity extends Activity //implements OnClickListener
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
- 		Utils.alert( errorMessage, ACTIVITY );
+ 		Utils.alert( errorMessage, MainActivity.this );
  		downloading_image_list = false;
- 		ACTIVITY.progressDialogWaitStop.dismiss( );
+ 		MainActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }
 	    
 	    downloading_image_list = false; // questo non va spostato da qui a
-	    ACTIVITY.progressDialogWaitStop.dismiss( );
-	    ACTIVITY.showImageList( jsonBuf );
+	    MainActivity.this.progressDialogWaitStop.dismiss( );
+	    MainActivity.this.showImageList( jsonBuf );
+	}
+    }
+    
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskQuota extends AsyncTask<User, String, String>
+    {
+     	private  String   errorMessage  =  null;
+	private  boolean  hasError      =  false;
+	private  String   jsonBuf       = null;
+	
+	protected String doInBackground(User... u ) 
+	{
+	    User U = u[0];
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( pwd );
+		    newUser.setEndpoint( edp );
+		    newUser.setSSL( ssl );
+		    U = newUser;
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    try {
+		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+	    } catch(IOException e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPreExecute() {
+	    super.onPreExecute();
+	    
+	    downloading_quota_list = true;
+	}
+	
+	@Override
+	    protected void onProgressUpdate(String... values) {
+	    super.onProgressUpdate(values);
+	}
+	
+	@Override
+	    protected void onCancelled() {
+	    super.onCancelled();
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, MainActivity.this );
+ 		downloading_quota_list = false;
+ 		MainActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    downloading_quota_list = false; // questo non va spostato da qui a
+	    MainActivity.this.progressDialogWaitStop.dismiss( );
+	    MainActivity.this.showQuotas( jsonBuf );
 	}
     }
 }

@@ -90,7 +90,7 @@
             android:orientation="horizontal" >
 
 	<ProgressBar
-            android:id="@+id/vmusagePB"
+            android:id="@+id/cpuusagePB"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="50dip"
             android:layout_height="50dip"
@@ -152,7 +152,7 @@
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
 	<ProgressBar
-            android:id="@+id/vmusagePB"
+            android:id="@+id/ramusagePB"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="50dip"
             android:layout_height="50dip"
@@ -172,7 +172,7 @@
                     android:id="@+id/ramusageLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Memory"
+                    android:text="Memory (MB)"
 		    android:textColor="#555555"
                     android:textSize="16dip" />
 
@@ -214,7 +214,7 @@
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
 	<ProgressBar
-            android:id="@+id/vmusagePB"
+            android:id="@+id/fipusagePB"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="50dip"
             android:layout_height="50dip"
@@ -276,7 +276,7 @@
             android:background="@drawable/rounded_corner"
             android:orientation="horizontal" >
 	<ProgressBar
-            android:id="@+id/vmusagePB"
+            android:id="@+id/segusagePB"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="50dip"
             android:layout_height="50dip"

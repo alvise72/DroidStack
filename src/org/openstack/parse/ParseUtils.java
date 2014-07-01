@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import org.openstack.utils.OpenStackImage;
+import org.openstack.utils.Quota;
 import org.openstack.utils.User;
 
 import android.util.Log;
@@ -140,4 +141,41 @@ public class ParseUtils {
       Log.d("ParseUtils.getErrorCode", "Returning: "+errorCode);
       return errorCode;
     } 
+
+           
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static Quota parseQuota( String jsonBuf )  throws ParseException {
+	try {
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONObject limits     = (JSONObject)jsonObject.getJSONObject("limits");
+	    JSONObject absolute   = (JSONObject)limits.getJSONObject("absolute");
+	    int maxInstances      = absolute.getInt("maxTotalInstances");
+	    int maxVirtCPU        = absolute.getInt("maxTotalCores");
+	    int maxRAM            = absolute.getInt("maxTotalRAMSize");
+	    int maxFIP            = absolute.getInt("maxTotalFloatingIps");
+	    int maxSecGroups      = absolute.getInt("maxSecurityGroups");
+	    int currentInstance   = absolute.getInt("totalInstancesUsed");
+	    int currentVirtCPU    = absolute.getInt("totalCoresUsed");
+	    int currentRAM        = absolute.getInt("totalRAMUsed");
+	    int currentFIP        = absolute.getInt("totalFloatingIpsUsed");
+	    int currentSECG       = absolute.getInt("totalSecurityGroupsUsed");
+	    return new Quota(currentInstance, 
+			     currentVirtCPU,
+			     currentRAM,
+			     currentFIP,
+			     currentSECG,
+			     maxInstances,
+			     maxVirtCPU,
+			     maxRAM,
+			     maxFIP,
+			     maxSecGroups );
+	} catch(org.json.JSONException je) {
+	    throw new ParseException( je.getMessage( ) );
+	}
+    }
 }

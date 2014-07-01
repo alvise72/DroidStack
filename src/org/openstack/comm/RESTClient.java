@@ -103,7 +103,7 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
-	    throw new IOException( pe.toString( ) );
+	    throw new IOException( pe.getMessage( ) );
 	}
 	
 	String data = "{\"auth\": {\"tenantName\": \"" + tenant + "\", \"passwordCredentials\": {\"username\": \"" + username + "\", \"password\": \"" + password + "\"}}}";
@@ -239,7 +239,7 @@ public class RESTClient {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
 	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw ioe;
+	    throw new IOException("url.openConnection https: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("X-Auth-Project-Id", tenant);
@@ -249,30 +249,24 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
-	    throw new IOException( pe.toString( ) );
+	    throw new IOException( pe.getMessage( ) );
 	}
-	BufferedInputStream inStream = null;
-	StringBuffer buf = new StringBuffer( 2048*1000 );
-    
-	try {
-	    inStream = new BufferedInputStream( conn.getInputStream() );
-	    int read;
-            
-	    byte[] b = new byte[ 2048 ];
-	    int res = 0;
-	    
-	    while( (res = inStream.read( b, 0, 2048 )) != -1 ) {
-		if( res>0 ) {
-		    String tmp = new String( b, 0, res );
-		    buf.append( tmp );
-		} 
-	    }
-	} catch(java.io.IOException ioe) {
-	    //Log.d("RESTApiOpenStack.requestImages", "STEP 5");
-	    throw ioe;
+	
+    	String buf = "";
+	InputStream in = conn.getInputStream( );
+	int len;
+	String res = "";
+	byte[] buffer = new byte[4096];
+	while (-1 != (len = in.read(buffer))) {
+	    //bos.write(buffer, 0, len);
+	    res += new String(buffer, 0, len);
+	    //Log.d("requestToken", new String(buffer, 0, len));
 	}
-    
-	return buf.toString( );    
+	in.close();
+	((HttpURLConnection)conn).disconnect( );
+	//System.out.println(buf)
+	//Log.d("requestToken", buf);
+	return res;    
     }
 }
 
