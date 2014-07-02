@@ -28,7 +28,6 @@ public class UserView extends LinearLayout {
     private TextViewNamed     textEndpoint  = null;
     private ImageButtonNamed  modifyUser    = null;
     private ImageButtonNamed  deleteUser    = null;
-    // private View              space         = null;
     
     private String username = null;
 
@@ -54,11 +53,11 @@ public class UserView extends LinearLayout {
 	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 	userLayout.setLayoutParams( params2 );
 	
-	textUserName = new TextViewNamed( ctx, this );
+	textUserName = new TextViewNamed( ctx, (UserView)this );
 	textUserName.setText(user.getUserName()+" ("+user.getTenantName()+")");
 	textUserName.setTextColor( Color.parseColor("#333333") );
 	textUserName.setOnClickListener( (OnClickListener)ctx );
-	textEndpoint = new TextViewNamed( ctx, this );
+	textEndpoint = new TextViewNamed( ctx, (UserView)this );
 	textEndpoint.setText(U.getEndpoint( ));
 	textEndpoint.setTextColor( Color.parseColor("#333333") );
 	textEndpoint.setOnClickListener( (OnClickListener)ctx );

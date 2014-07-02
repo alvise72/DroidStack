@@ -48,7 +48,7 @@ public class ServerView extends LinearLayout {
 	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 	text.setLayoutParams( params2 );
 
-	Name = new TextViewNamed( ctx, this );
+	Name = new TextViewNamed( ctx, (ServerView)this );
 	String servName = S.getName();
 	if(servName.length()>16)
 	    servName = servName.substring(0,14) + "..";
@@ -57,7 +57,7 @@ public class ServerView extends LinearLayout {
 	Name.setOnClickListener( (OnClickListener)ctx );
 	Name.setTypeface( null, Typeface.BOLD );
 	
-	Flavor = new TextViewNamed( ctx, this );
+	Flavor = new TextViewNamed( ctx, (ServerView)this );
 	String flavName = S.getFlavor( ).getName();
 	if(flavName.length()>16)
 	    flavName = flavName.substring(0,14) + "..";
