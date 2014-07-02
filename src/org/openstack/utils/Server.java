@@ -20,6 +20,7 @@ public class Server {
     private String flavorID;
     private String[] secgrpID;
     private long creationTime;
+    private Flavor flavor;
     
     public Server( String _name,
 		   String _ID,
@@ -62,6 +63,9 @@ public class Server {
     public String getFlavorID() { return flavorID; }
     public String[] getSecurityGroupdID() { return secgrpID; }
     public long getCreationTime() { return creationTime; }
+
+    public void setFlavor( Flavor f ) { flavor = f; }
+    public Flavor getFlavor( ) { return flavor; }
 
     @Override
     public String toString( ) {

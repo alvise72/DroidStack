@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import android.os.Environment;
 
-public class User implements Serializable {
+public class User implements Serializable, Comparable<User> {
 
     private static final long serialVersionUID = 2087368867376448460L;
 
@@ -53,5 +53,11 @@ public class User implements Serializable {
 	    ",password="+password+
 	    ",usessl"+usessl+
 	    "}";
+    }
+
+    public int compareTo( User u ) {
+	if(u.getUserID()!=this.getUserID())
+	    return 1;
+	return 0;
     }
 }

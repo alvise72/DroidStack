@@ -239,7 +239,7 @@ public class RESTClient {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
 	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw new IOException("url.openConnection https: "+ioe.getMessage( ) );
+	    throw new IOException("url.openConnection http: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("X-Auth-Project-Id", tenant);
@@ -272,7 +272,7 @@ public class RESTClient {
     /**
      *
      *
-     * curl -i http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/limits -X GET -H "X-Auth-Project-Id: admin" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     * curl -i http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers/details -X GET -H "X-Auth-Project-Id: admin" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
      *
      *
      *
@@ -298,7 +298,7 @@ public class RESTClient {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
 	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw new IOException("url.openConnection https: "+ioe.getMessage( ) );
+	    throw new IOException("url.openConnection http: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("X-Auth-Project-Id", tenantname);
@@ -325,6 +325,62 @@ public class RESTClient {
 	((HttpURLConnection)conn).disconnect( );
 	//System.out.println(buf)
 	//Log.d("requestToken", buf);
+	return res;    
+    }
+
+
+    /**
+     *
+     *
+     *curl -i 'http://90.147.77.40:8774/v2/f4d55a77e1d14023ba0be21ac5b140cb/flavors/detail' -X GET -H "X-Auth-Project-Id: Alvise" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     *
+     *
+     *
+     */
+    public static String requestFlavors( String endpoint,
+					 String token,
+					 String tenantid,
+					 String tenantname ) throws IOException
+    {
+	String proto = "http://";
+	
+	String sUrl = proto + endpoint + ":8774/v2/"+tenantid+"/flavors/detail";
+	URL url = null;
+	try {
+	    url = new URL(sUrl);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new IOException(mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	TrustManager[] trustAllCerts = null;
+    
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+	    throw new IOException("url.openConnection http: "+ioe.getMessage( ) );
+	}
+    
+	conn.setRequestProperty("X-Auth-Project-Id", tenantname);
+	conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("X-Auth-Token", token);
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("GET");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new IOException( pe.getMessage( ) );
+	}
+	
+    	String buf = "";
+	InputStream in = conn.getInputStream( );
+	int len;
+	String res = "";
+	byte[] buffer = new byte[4096];
+	while (-1 != (len = in.read(buffer)))
+	    res += new String(buffer, 0, len);
+
+	in.close();
+	((HttpURLConnection)conn).disconnect( );
 	return res;    
     }
 }

@@ -1,6 +1,5 @@
 package org.openstack.utils;
 
-
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ImageButton;

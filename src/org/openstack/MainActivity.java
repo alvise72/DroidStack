@@ -50,6 +50,7 @@ import org.openstack.utils.CustomProgressDialog;
 import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
+import org.openstack.utils.Flavor;
 import org.openstack.utils.Server;
 import org.openstack.utils.Quota;
 
@@ -327,15 +328,23 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      *
      */
-    public void showServerList( String jsonBuffer, String username ) 
+    public void showServerList( String jsonBuffer, String jsonBufferFlavor, String username ) 
     {
 	try {
 	    Vector<Server> servers = ParseUtils.parseServers( jsonBuffer, username );
+	    Vector<Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
 
 	    Iterator<Server> it = servers.iterator();
 	    while(it.hasNext()) {
 		Server s = it.next();
-		Utils.alert( s.toString(), this );
+		Iterator<Flavor> fit = flavors.iterator();
+		while(fit.hasNext()) {
+		    Flavor f = fit.next();
+		    if(f.getID().compareTo(s.getFlavorID())==0)
+			s.setFlavor( f );
+		}
+		
+		//		Utils.alert( s.toString(), this );
 	    }
 	    return;
 
@@ -552,6 +561,7 @@ public class MainActivity extends Activity //implements OnClickListener
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
+	private  String   jsonBufForFlavor = null;
 	private  String   username      = null;
 	protected String doInBackground(User... u ) 
 	{
@@ -582,6 +592,7 @@ public class MainActivity extends Activity //implements OnClickListener
 
 	    try {
 		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBufForFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(IOException e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -621,7 +632,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	    
 	    downloading_server_list = false; // questo non va spostato da qui a
 	    MainActivity.this.progressDialogWaitStop.dismiss( );
-	    MainActivity.this.showServerList( jsonBuf, username );
+	    MainActivity.this.showServerList( jsonBuf, jsonBufForFlavor, username );
 	}
     }
 }

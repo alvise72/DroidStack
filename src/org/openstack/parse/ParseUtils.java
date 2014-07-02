@@ -13,6 +13,7 @@ import org.json.JSONException;
 
 import org.openstack.utils.OpenStackImage;
 import org.openstack.utils.Server;
+import org.openstack.utils.Flavor;
 import org.openstack.utils.Quota;
 import org.openstack.utils.User;
 
@@ -233,5 +234,34 @@ public class ParseUtils {
  	    throw new ParseException( je.getMessage( ) );
  	}
 	return serverVector;
+    }   
+
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static Vector<Flavor> parseFlavors( String jsonBuf )  throws ParseException {
+	Vector<Flavor> flavorVector = new Vector();
+	try {
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray flavors = (JSONArray)jsonObject.getJSONArray("flavors");
+	    for(int i=0; i<flavors.length(); ++i ) {
+		JSONObject flavor = flavors.getJSONObject(i);
+		String name = (String)flavor.getString("name");
+		int ram = flavor.getInt("ram");
+		int cpus = flavor.getInt("vcpus");
+		int swap = Integer.parseInt((String)flavor.getString("swap"));
+		int ephemeral = flavor.getInt("OS-FLV-EXT-DATA:ephemeral");
+		int disk = flavor.getInt("disk");
+		String ID = (String)flavor.getString("ID");
+		Flavor F = new Flavor(name, ID, ram, cpus, swap, ephemeral, disk);
+		flavorVector.add(F);
+	    }
+	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
+	return flavorVector;
     }
 }

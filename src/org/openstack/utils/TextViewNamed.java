@@ -12,21 +12,18 @@ public class TextViewNamed extends TextView implements Named {
     //    private TextViewNamed relatedText = null;
 
     private UserView relatedUserView = null;
+    private ServerView relatedServerView = null;
 
     TextViewNamed( Context ctx, UserView uv ) {
 	super( ctx );
 	relatedUserView = uv;
-// 	this.type = _type;
-// 	this.extras = _extras;
     }
 
-//     public String getExtras( ) { return extras; }
-//     public int getType( ) { return type; }
-//     public TextViewNamed getRelatedTextViewNamed( ) { return relatedText; }
-//     public void setRelatedTextViewNamed( TextViewNamed tv ) { relatedText = tv; }
-    // public void setRelatedImage( ImageView iv ) { relatedImage = iv; }
-    // public ImageView getRelatedImage( ) { return relatedImage; }
+    TextViewNamed( Context ctx, ServerView sv ) {
+	super( ctx );
+	relatedServerView = sv;
+    }
 
     public UserView getUserView( ) { return relatedUserView; }
-
+    public ServerView getServerView( ) { return relatedServerView; }
 };

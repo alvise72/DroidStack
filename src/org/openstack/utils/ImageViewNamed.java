@@ -5,23 +5,20 @@ import android.content.Context;
 
 public class ImageViewNamed extends ImageView implements Named {
 
-//     private String extras;
-//     private int type;
-
     private UserView relatedUserView = null;
+    private ServerView relatedServerView = null;
 
     ImageViewNamed( Context ctx, UserView uv ) {
 	super( ctx );
-// 	this.type = _type;
-// 	this.extras = _extras;
 	relatedUserView = uv;
     }
+    ImageViewNamed( Context ctx, ServerView sv ) {
+	super( ctx );
+	relatedServerView = sv;
+    }
 
-//     public String getExtras( ) { return extras; }
-//     public int getType( ) { return type; }
-    // public void setRelatedImage( ImageView iv ) { }
-    // public ImageView getRelatedImage( ) { return null; }
     public UserView getUserView( ) { return relatedUserView; }
+    public ServerView getServerView( ) { return relatedServerView; }
 };
 
 

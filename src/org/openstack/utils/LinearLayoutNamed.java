@@ -5,23 +5,19 @@ import android.content.Context;
 
 public class LinearLayoutNamed extends LinearLayout implements Named {
 
-//     private int type;
-//     private String extras;
-
     private UserView relatedUserView = null;
+    private ServerView relatedServerView = null;
 
     public LinearLayoutNamed( Context ctx, UserView uv ) {
 	super( ctx );
-// 	this.type = _type;
-// 	this.extras = _extras;
 	relatedUserView = uv;
     }
 
-//     public int getType( ) { return type; }
-//     public String getExtras( ) { return extras; }
-//     public TextViewNamed getRelatedTextViewNamed( ) { return relatedText; }
-//     public void setRelatedTextViewNamed( TextViewNamed tv ) { relatedText = tv; }
-    // public void setRelatedImage( ImageView iv ) { }
-    // public ImageView getRelatedImage( ) { return null; } 
+    public LinearLayoutNamed( Context ctx, ServerView sv ) {
+	super( ctx );
+	relatedServerView = sv;
+    }
+
     public UserView getUserView( ) { return relatedUserView; }
+    public ServerView getServerView( ) { return relatedServerView; }
 };
