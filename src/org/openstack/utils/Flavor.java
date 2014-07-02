@@ -1,6 +1,8 @@
 package org.openstack.utils;
 
-public class Flavor  implements Comparable<Flavor> {
+import java.io.Serializable;
+
+public class Flavor  implements Comparable<Flavor>, Serializable {
     private String name = null;
     private String ID = null;
     private int ram = 0;

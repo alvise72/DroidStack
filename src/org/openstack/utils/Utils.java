@@ -556,6 +556,9 @@ public class Utils {
 	 InputStream is = new FileInputStream( filename );
 	 ObjectInputStream ois = new ObjectInputStream( is );
 	 User U = (User)ois.readObject( );
+
+	 //	 Log.d("Utils.userFromFile", "USERID="+U.getUserID() );
+
 	 ois.close( );
 	 return U;
      }

@@ -47,13 +47,19 @@ public class ServerView extends LinearLayout {
 	text.setLayoutParams( params2 );
 
 	Name = new TextViewNamed( ctx, this );
-	Name.setText( S.getName() );
+	String servName = S.getName();
+	if(servName.length()>16)
+	    servName = servName.substring(0,14) + "..";
+	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
 	Name.setOnClickListener( (OnClickListener)ctx );
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	Flavor = new TextViewNamed( ctx, this );
-	Flavor.setText( S.getFlavorID( ));
+	String flavName = S.getFlavor( ).getName();
+	if(flavName.length()>16)
+	    flavName = flavName.substring(0,14) + "..";
+	Flavor.setText( flavName );
 	Flavor.setOnClickListener( (OnClickListener)ctx );
 	Flavor.setTextColor( Color.parseColor("#BBBBBB"));
 	
@@ -79,9 +85,7 @@ public class ServerView extends LinearLayout {
 	info.addView( deleteServer );
 	info.addView( status );
 	
-	addView( text );
 	addView( info );
-	
     }
     
 }

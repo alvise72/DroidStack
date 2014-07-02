@@ -1,11 +1,13 @@
 package org.openstack.utils;
 
-public class Server {
+import java.io.Serializable;
+
+public class Server implements Serializable {
     public final static int POWER_RUNNING = 1;
     public final static int POWER_NOSTATE = 0;
     public final static int POWER_SHUTDOWN = 4;
 
-    public final String[] POWER_STRING = {"No State", "Running", "", "", "Shutdown"};
+    public final static String[] POWER_STRING = {"No State", "Running", "", "", "Shutdown"};
 
     private String name;
     private String ID;

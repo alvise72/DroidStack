@@ -70,7 +70,6 @@ public class LoginActivity2 extends Activity implements OnClickListener {
   @Override
   public void onResume( ) {
     super.onResume( );
-    
     refreshUserViews();
   }
   
@@ -90,7 +89,7 @@ public class LoginActivity2 extends Activity implements OnClickListener {
   //__________________________________________________________________________________
     public void onClick( View v ) { 
 	if(v instanceof ImageButtonNamed) {
-	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
+	    //	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
 		
@@ -128,6 +127,9 @@ public class LoginActivity2 extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
+
+	// TODO: should we filter here ?
+
 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
 	usersL.removeAllViews();
 
@@ -144,6 +146,9 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	    
 	    UserView uv = new UserView ( U, this );
 	    usersL.addView( uv );
+	    //	    Log.d("LoginActivity2.refresh", "uv.getFilename="+uv.getFilename());
+	    //	    Log.d("LoginActivity2.refresh", "SELECTEDUSER"+Utils.getStringPreference("SELECTEDUSER","",this));
+	    
 	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
 		uv.setSelected( );
 	    else

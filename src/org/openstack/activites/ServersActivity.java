@@ -32,25 +32,30 @@ import android.view.View;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.Set;
 
-import org.openstack.R;
-import org.openstack.utils.User;
-import org.openstack.utils.UserException;
-import org.openstack.utils.Utils;
-import org.openstack.utils.Base64;
+import java.io.File;
+
 import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
-import java.io.File;
 
-import org.openstack.utils.UserView;
+
+import org.openstack.R;
+import org.openstack.utils.User;
+import org.openstack.utils.Utils;
 import org.openstack.utils.Named;
-import org.openstack.utils.ImageViewNamed;
+import org.openstack.utils.Server;
+import org.openstack.utils.Base64;
+import org.openstack.utils.UserView;
+import org.openstack.utils.ServerView;
 import org.openstack.utils.TextViewNamed;
+import org.openstack.utils.UserException;
+import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.LinearLayoutNamed;
 
@@ -59,27 +64,36 @@ import android.graphics.Color;
 
 public class ServersActivity extends Activity implements OnClickListener {
 
-  //__________________________________________________________________________________
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView( R.layout.serverlist );
-  }
-  
-  //__________________________________________________________________________________
-  @Override
-  public void onResume( ) {
-    super.onResume( );
-    
-    //refreshUserViews();
-  }
- 
-  //__________________________________________________________________________________
-  @Override
-  public void onPause( ) {
-      super.onPause( );
-  } 
+    private Bundle bundle = null;
+    private ArrayList<Server> S = null;
 
+    //__________________________________________________________________________________
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView( R.layout.serverlist );
+	bundle = getIntent().getExtras();
+	S = (ArrayList<Server>)bundle.getSerializable("SERVERS");
+// 	Iterator<Server> sit = S.iterator();
+// 	while(sit.hasNext()) {
+// 	    Server s = sit.next();
+// 	    Utils.alert(s.toString(), this );
+// 	}
+    }
+    
+    //__________________________________________________________________________________
+    @Override
+    public void onResume( ) {
+	super.onResume( );
+	refreshServerViews();
+    }
+ 
+    //__________________________________________________________________________________
+    @Override
+    public void onPause( ) {
+	super.onPause( );
+    } 
+    
   //__________________________________________________________________________________
     public void onClick( View v ) { 
 // 	if(v instanceof ImageButtonNamed) {
@@ -119,7 +133,14 @@ public class ServersActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshUserViews( ) {
+    private void refreshServerViews( ) {
+	Iterator<Server> sit = S.iterator();
+	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
+	while( sit.hasNext( )) {
+	    Server s = sit.next();
+	    ((LinearLayout)findViewById(R.id.serverLayout)).addView( new ServerView(s, this) );
+	}
+
 // 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
 // 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
 // 	usersL.removeAllViews();

@@ -55,6 +55,7 @@ import org.openstack.utils.Server;
 import org.openstack.utils.Quota;
 
 import org.openstack.activities.LoginActivity2;
+import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesExploreActivity;
 import org.openstack.activities.OverViewActivity;
 import org.openstack.utils.CustomProgressDialog;
@@ -330,8 +331,9 @@ public class MainActivity extends Activity //implements OnClickListener
      */
     public void showServerList( String jsonBuffer, String jsonBufferFlavor, String username ) 
     {
+	Vector<Server> servers = null;
 	try {
-	    Vector<Server> servers = ParseUtils.parseServers( jsonBuffer, username );
+	    servers = ParseUtils.parseServers( jsonBuffer, username );
 	    Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
 
 	    Iterator<Server> it = servers.iterator();
@@ -350,17 +352,20 @@ public class MainActivity extends Activity //implements OnClickListener
 		
 		//Utils.alert( s.toString(), this );
 	    }
-	    return;
+	    //return;
 
 	} catch( ParseException pe ) {
 	    Utils.alert("ERROR: "+pe.getMessage( ), this);
 	}
 
-	
-
-	// Class<?> c = (Class<?>)ServersActivity.class;
-	// Intent I = new Intent( MainActivity.this, c );
-	//I.putStringArrayListExtra("SERVERS", 
+	if(servers!=null) {
+	    Class<?> c = (Class<?>)ServersActivity.class;
+	    Intent I = new Intent( MainActivity.this, c );
+	    I.putExtra("SERVERS", servers );//StringArrayListExtra("SERVERS", 
+	    startActivity(I);
+	} else {
+	    Utils.alert("Vector<Server> servers is NULL !!", this );
+	}
     }
 
     /**
