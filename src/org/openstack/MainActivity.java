@@ -327,13 +327,23 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      *
      */
-    public void showServerList( String jsonBuffer ) 
+    public void showServerList( String jsonBuffer, String username ) 
     {
 	try {
-	    Vector<Server> servers = ParseUtils.parseServers( jsonBuffer );
+	    Vector<Server> servers = ParseUtils.parseServers( jsonBuffer, username );
+
+	    Iterator<Server> it = servers.iterator();
+	    while(it.hasNext()) {
+		Server s = it.next();
+		Utils.alert( s.toString(), this );
+	    }
+	    return;
+
 	} catch( ParseException pe ) {
 	    Utils.alert("ERROR: "+pe.getMessage( ), this);
 	}
+
+	
 
 	// Class<?> c = (Class<?>)ServersActivity.class;
 	// Intent I = new Intent( MainActivity.this, c );
@@ -542,7 +552,7 @@ public class MainActivity extends Activity //implements OnClickListener
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
-	
+	private  String   username      = null;
 	protected String doInBackground(User... u ) 
 	{
 	    User U = u[0];
@@ -567,6 +577,8 @@ public class MainActivity extends Activity //implements OnClickListener
 		    return "";
 		}
 	    }
+
+	    username = U.getUserName();
 
 	    try {
 		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
@@ -609,7 +621,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	    
 	    downloading_server_list = false; // questo non va spostato da qui a
 	    MainActivity.this.progressDialogWaitStop.dismiss( );
-	    MainActivity.this.showServerList( jsonBuf );
+	    MainActivity.this.showServerList( jsonBuf, username );
 	}
     }
 }

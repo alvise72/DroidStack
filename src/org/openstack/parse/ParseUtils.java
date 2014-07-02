@@ -187,21 +187,51 @@ public class ParseUtils {
      *
      *
      */    
-    public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
- 	try {
+    public static Vector<Server> parseServers( String jsonBuf, String username )  throws ParseException {
+	Vector<Server> serverVector = new Vector();
+	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray servers     = (JSONArray)jsonObject.getJSONArray("servers");
 
 	    for(int i=0; i<servers.length( ); ++i) {
-		JSONObject server = (JSONObject)serversgetJSONObject(i);
-		String status     = (String)server.getJSONString("status");
-		String keyname    = (String)server.getJSONString("key_name");
-		String secg       = (String) ((JSONArray)(server.getJSONArray("security_groups"))[0].getJSONString("name"));
-		
+		JSONObject server = (JSONObject)servers.getJSONObject(i);
+		String status     = (String)server.getString("status");
+		String keyname    = (String)server.getString("key_name");
+		JSONArray secgarray  =  ((JSONArray)server.getJSONArray("security_groups"));
+		String secgrps[] = new String[secgarray.length()];
+		for(int j=0; j<secgarray.length(); j++)
+		    secgrps[j] = (String)((JSONObject)secgarray.getJSONObject(j)).getString("name");
+
+		String flavorID = (String)((JSONObject)server.getJSONObject("flavor")).getString("id");
+		String ID = (String)server.getString("id");
+		//		String status = (String)server.get("OS-EXT-STS:vm_state");
+		String computeNode = (String)server.getString("OS-EXT-SRV-ATTR:hypervisor_hostname");
+		String name = (String)server.getString("name");
+		String task = (String)server.getString("OS-EXT-STS:task_state");
+		JSONObject addresses = (JSONObject)server.getJSONObject("addresses");
+		JSONArray user_addresses = (JSONArray)addresses.getJSONArray( username );
+
+		String privIP = (String)((JSONObject)user_addresses.getJSONObject(0)).getString("addr");
+		String pubIP = null;
+		if(user_addresses.length()>1)
+		    pubIP = (String)((JSONObject)user_addresses.getJSONObject(1)).getString("addr");
+		String creation = (String)server.getString("created");
+		SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		timeFormatter.setTimeZone( TimeZone.getDefault( ) );
+		Calendar calendar = Calendar.getInstance();
+		try {
+		    calendar.setTime(timeFormatter.parse(creation));
+		} catch(java.text.ParseException pe) {
+		    throw new ParseException( "Error parsing the creation date ["+creation+"]" );
+		}
+		long creationTime = calendar.getTimeInMillis() / 1000;
+		int power = (int)server.getInt("OS-EXT-STS:power_state");
+		Server S = new Server(name,ID,status,task,power,privIP,pubIP,computeNode,keyname,flavorID,secgrps,creationTime);
+		serverVector.add(S);
 	    }
  	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
  	}
-	return null;
+	return serverVector;
     }
 }
