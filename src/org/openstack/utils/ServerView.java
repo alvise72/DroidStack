@@ -68,7 +68,19 @@ public class ServerView extends LinearLayout {
 	deleteServer.setOnClickListener( (OnClickListener)ctx );
 
 	status = new ImageViewNamed( ctx, this );
-	status.setImage( );
+	status.setImageResource( R.drawable.statusok );
+	
+	info = new LinearLayoutNamed( ctx, this );
+	info.setOrientation( LinearLayout.HORIZONTAL );
+	LinearLayout.LayoutParams params3 = 
+	    new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+	info.setLayoutParams( params3 );
+	info.setGravity( Gravity.RIGHT );
+	info.addView( deleteServer );
+	info.addView( status );
+	
+	addView( text );
+	addView( info );
 	
     }
     

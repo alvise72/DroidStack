@@ -21,7 +21,7 @@ public class ImageButtonNamed extends ImageButton implements Named {
 
     public ImageButtonNamed( Context ctx, ServerView sv, int _type ) {
 	super( ctx );
-	relatedServerView = uv;
+	relatedServerView = sv;
  	this.type = _type;
     }
 
