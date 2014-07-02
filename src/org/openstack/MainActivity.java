@@ -54,7 +54,7 @@ import org.openstack.utils.Flavor;
 import org.openstack.utils.Server;
 import org.openstack.utils.Quota;
 
-import org.openstack.activities.LoginActivity2;
+import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesExploreActivity;
 import org.openstack.activities.OverViewActivity;
@@ -166,7 +166,7 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      */
     public void login( View v ) {
-      Class<?> c = (Class<?>)LoginActivity2.class;
+      Class<?> c = (Class<?>)UsersActivity.class;
       Intent I = new Intent( MainActivity.this, c );
       startActivity( I );
     }
@@ -201,7 +201,7 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      *
      */
-    private void showQuotas( String jsonResponse ) {
+    private void showQuotas( String jsonResponse, User U ) {
 	Quota q = null;
 	try {
 	    q = ParseUtils.parseQuota( jsonResponse );
@@ -222,7 +222,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	I.putExtra("CURRSECG", q.getCurrentSecurityGroups());
 	I.putExtra("CURRFIP", q.getCurrentFloatingIP());
 	I.putExtra("CURRCPU", q.getCurrentCPU());
-
+	I.putExtra("INFOUSER", U.getUserName()+" ("+U.getTenantName()+")");
 	startActivity( I );
     }
     
@@ -479,10 +479,10 @@ public class MainActivity extends Activity //implements OnClickListener
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
-	
+	User U = null;
 	protected String doInBackground(User... u ) 
 	{
-	    User U = u[0];
+	    U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
 		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
@@ -546,7 +546,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	    
 	    downloading_quota_list = false; // questo non va spostato da qui a
 	    MainActivity.this.progressDialogWaitStop.dismiss( );
-	    MainActivity.this.showQuotas( jsonBuf );
+	    MainActivity.this.showQuotas( jsonBuf, U );
 	}
     }
 

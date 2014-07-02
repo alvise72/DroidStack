@@ -42,7 +42,7 @@
 	   />
 
 	<activity
-	    android:name="org.openstack.activities.LoginActivity2" 
+	    android:name="org.openstack.activities.UsersActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Select OpenStack user" 
 	  />

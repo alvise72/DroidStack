@@ -25,7 +25,8 @@ public class UserView extends LinearLayout {
     private TextViewNamed     textUserName  = null;
     private TextViewNamed     textEndpoint  = null;
     private ImageButtonNamed  modifyUser    = null;
-    private ImageButtonNamed  deleteUser    = null; 
+    private ImageButtonNamed  deleteUser    = null;
+    // private View              space         = null;
     
     private String username = null;
 
@@ -39,12 +40,16 @@ public class UserView extends LinearLayout {
 	//username = U.getUserName( );
 	
 	setOrientation( LinearLayout.HORIZONTAL );
-	LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	LinearLayout.LayoutParams params1 
+	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 	setLayoutParams( params1 );
+	setBackgroundResource(R.drawable.rounded_corner_thin);
 	
+
 	userLayout = new LinearLayoutNamed( ctx, this );
 	userLayout.setOrientation( LinearLayout.VERTICAL );
-	LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+	LinearLayout.LayoutParams params2 
+	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 	userLayout.setLayoutParams( params2 );
 	
 	textUserName = new TextViewNamed( ctx, this );

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	      android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="fill_parent"
 	      android:background="#f2f2f2"
               android:orientation="vertical" >
   
@@ -39,10 +39,16 @@
 	android:id="@+id/users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available Users:"
+        android:text=" Available Users:"
 	android:textColor="#333333"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"/>
+
+
+
   <ScrollView
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"

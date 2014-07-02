@@ -17,4 +17,6 @@
     <string name="ADDSUCCESS">Success !\nYou can add another user or go back and select a user.</string>
     <string name="SELECTOSIMAGE">Select an OpenStack Image</string>    
     <string name="NOUSERSELECTED">You haven\'t selected any user yet. Please touch on \'Users\' button</string>
+    <string name="USAGEOVERVIEW">Quota for user</string>
+
 </resources>

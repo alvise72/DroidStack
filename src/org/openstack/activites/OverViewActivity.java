@@ -52,7 +52,7 @@ public class OverViewActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView( R.layout.overview );
     bundle = getIntent().getExtras();
-    
+    setTitle(getString(R.string.USAGEOVERVIEW) + " " + bundle.getString("INFOUSER"));
   }
   
   //__________________________________________________________________________________

@@ -26,6 +26,7 @@ import android.app.ActivityManager;
 import android.app.Activity;
 
 import android.view.View.OnClickListener;
+//import android.view.View.LayoutParams;
 import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
@@ -57,13 +58,13 @@ import org.openstack.utils.LinearLayoutNamed;
 import android.graphics.Typeface;
 import android.graphics.Color;
 
-public class LoginActivity2 extends Activity implements OnClickListener {
+public class UsersActivity extends Activity implements OnClickListener {
 
   //__________________________________________________________________________________
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView( R.layout.login2 );
+    setContentView( R.layout.users );
   }
   
   //__________________________________________________________________________________
@@ -76,7 +77,7 @@ public class LoginActivity2 extends Activity implements OnClickListener {
   //__________________________________________________________________________________
   public void addUser( View v ) {
     Class<?> c = (Class<?>)UserAddActivity.class;
-    Intent I = new Intent( LoginActivity2.this, c );
+    Intent I = new Intent( UsersActivity.this, c );
     startActivity( I );  
   }
 
@@ -89,7 +90,6 @@ public class LoginActivity2 extends Activity implements OnClickListener {
   //__________________________________________________________________________________
     public void onClick( View v ) { 
 	if(v instanceof ImageButtonNamed) {
-	    //	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
 		
@@ -146,8 +146,9 @@ public class LoginActivity2 extends Activity implements OnClickListener {
 	    
 	    UserView uv = new UserView ( U, this );
 	    usersL.addView( uv );
-	    //	    Log.d("LoginActivity2.refresh", "uv.getFilename="+uv.getFilename());
-	    //	    Log.d("LoginActivity2.refresh", "SELECTEDUSER"+Utils.getStringPreference("SELECTEDUSER","",this));
+	    View space = new View( this );
+	    space.setMinimumHeight(10);
+	    usersL.addView( space );
 	    
 	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
 		uv.setSelected( );
