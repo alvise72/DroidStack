@@ -26,8 +26,8 @@ public class ServerView extends LinearLayout {
     private TextViewNamed Name = null;
     private TextViewNamed Flavor = null;
 
-    private ImageButtonNamed delete = null;
-    private ImageView status = null;
+    private ImageButtonNamed deleteServer = null;
+    private ImageViewNamed status = null;
 
     private Server S = null;
 
@@ -62,6 +62,14 @@ public class ServerView extends LinearLayout {
 	text.setOnClickListener( (OnClickListener)ctx );
 	addView(text);
 	setOnClickListener( (OnClickListener)ctx );
+
+	deleteServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SERVER );
+	deleteServer.setImageResource(android.R.drawable.ic_menu_delete);
+	deleteServer.setOnClickListener( (OnClickListener)ctx );
+
+	status = new ImageViewNamed( ctx, this );
+	status.setImage( );
+	
     }
     
 }

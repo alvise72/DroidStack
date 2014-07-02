@@ -332,19 +332,23 @@ public class MainActivity extends Activity //implements OnClickListener
     {
 	try {
 	    Vector<Server> servers = ParseUtils.parseServers( jsonBuffer, username );
-	    Vector<Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
+	    Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
 
 	    Iterator<Server> it = servers.iterator();
 	    while(it.hasNext()) {
 		Server s = it.next();
-		Iterator<Flavor> fit = flavors.iterator();
-		while(fit.hasNext()) {
-		    Flavor f = fit.next();
-		    if(f.getID().compareTo(s.getFlavorID())==0)
-			s.setFlavor( f );
-		}
+		Flavor F = flavors.get( s.getFlavorID( ) );
+		if( F != null)
+		    s.setFlavor( F );
+		    
+// 		Iterator<Flavor> fit = flavors.iterator();
+// 		while(fit.hasNext()) {
+// 		    Flavor f = fit.next();
+// 		    if(f.getID().compareTo(s.getFlavorID())==0)
+// 			s.setFlavor( f );
+// 		}
 		
-		//		Utils.alert( s.toString(), this );
+		//Utils.alert( s.toString(), this );
 	    }
 	    return;
 

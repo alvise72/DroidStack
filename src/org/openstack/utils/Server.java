@@ -78,7 +78,7 @@ public class Server {
 	    ",public IP=" + ( getPublicIP()!= null ? getPublicIP() : "N/A") +
 	    ",compute node=" + ( getComputeNode()!= null ? getComputeNode() : "N/A") +
 	    ",Key name=" + ( getKeyName()!= null ? getKeyName() : "N/A") +
-	    ",flavor ID=" + ( getFlavorID()!= null ? getFlavorID() : "N/A") +
+	    ",flavor=" + ( getFlavor()!= null ? getFlavor().getName() : "N/A") +
 	    ",creation time=" + getCreationTime();
     }
 }

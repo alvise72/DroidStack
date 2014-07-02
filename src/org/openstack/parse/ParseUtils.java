@@ -242,8 +242,8 @@ public class ParseUtils {
      *
      *
      */    
-    public static Vector<Flavor> parseFlavors( String jsonBuf )  throws ParseException {
-	Vector<Flavor> flavorVector = new Vector();
+    public static Hashtable<String, Flavor> parseFlavors( String jsonBuf )  throws ParseException {
+	Hashtable<String, Flavor> flavorTable = new Hashtable();
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray flavors = (JSONArray)jsonObject.getJSONArray("flavors");
@@ -252,16 +252,19 @@ public class ParseUtils {
 		String name = (String)flavor.getString("name");
 		int ram = flavor.getInt("ram");
 		int cpus = flavor.getInt("vcpus");
-		int swap = Integer.parseInt((String)flavor.getString("swap"));
+		String s_swap = (String)flavor.getString("swap");
+		int swap = 0;
+		if(s_swap!=null & s_swap.length()!=0)
+		    swap = Integer.parseInt( (String)flavor.getString("swap") );
 		int ephemeral = flavor.getInt("OS-FLV-EXT-DATA:ephemeral");
 		int disk = flavor.getInt("disk");
-		String ID = (String)flavor.getString("ID");
+		String ID = (String)flavor.getString("id");
 		Flavor F = new Flavor(name, ID, ram, cpus, swap, ephemeral, disk);
-		flavorVector.add(F);
+		flavorTable.put(F.getID(), F);
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
  	}
-	return flavorVector;
+	return flavorTable;
     }
 }

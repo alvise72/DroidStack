@@ -12,6 +12,7 @@ public class ImageViewNamed extends ImageView implements Named {
 	super( ctx );
 	relatedUserView = uv;
     }
+
     ImageViewNamed( Context ctx, ServerView sv ) {
 	super( ctx );
 	relatedServerView = sv;
