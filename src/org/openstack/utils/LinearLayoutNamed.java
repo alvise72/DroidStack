@@ -2,6 +2,8 @@ package org.openstack.utils;
 
 import android.widget.LinearLayout;
 import android.content.Context;
+import org.openstack.views.UserView;
+import org.openstack.views.ServerView;
 
 public class LinearLayoutNamed extends LinearLayout implements Named {
 

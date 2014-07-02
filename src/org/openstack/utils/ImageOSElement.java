@@ -3,10 +3,10 @@ package org.openstack.utils;
 import android.widget.LinearLayout;
 import android.content.Context;
 import android.widget.Gallery.LayoutParams;
-//import android.view.LayoutParams;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.util.Log;
+import org.openstack.views.UserView;
 
 public class ImageOSElement {
 

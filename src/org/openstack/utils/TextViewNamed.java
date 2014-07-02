@@ -4,6 +4,9 @@ import android.widget.TextView;
 import android.content.Context;
 import android.widget.ImageView;
 
+import org.openstack.views.UserView;
+import org.openstack.views.ServerView;
+
 public class TextViewNamed extends TextView implements Named {
 
 //     private String extras;

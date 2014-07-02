@@ -40,7 +40,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.openstack.R;
 
-import org.openstack.utils.User;
+import org.openstack.views.UserView;
 
 public class UserAddActivity extends Activity {
 

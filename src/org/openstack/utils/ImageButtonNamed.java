@@ -4,6 +4,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.content.Context;
 
+import org.openstack.views.UserView;
+import org.openstack.views.ServerView;
+
 public class ImageButtonNamed extends ImageButton implements Named {
 
     public static int BUTTON_MODIFY_USER = 1;

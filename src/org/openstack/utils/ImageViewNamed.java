@@ -2,6 +2,8 @@ package org.openstack.utils;
 
 import android.widget.ImageView;
 import android.content.Context;
+import org.openstack.views.UserView;
+import org.openstack.views.ServerView;
 
 public class ImageViewNamed extends ImageView implements Named {
 

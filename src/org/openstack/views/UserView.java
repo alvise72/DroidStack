@@ -1,4 +1,4 @@
-package org.openstack.utils;
+package org.openstack.views;
 
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.content.Context;
 
 import org.openstack.R;
+
+import org.openstack.utils.*;
 
 public class UserView extends LinearLayout {
 

@@ -48,7 +48,7 @@ import org.openstack.parse.ParseException;
 
 import java.io.File;
 
-import org.openstack.utils.UserView;
+import org.openstack.views.UserView;
 import org.openstack.utils.Named;
 import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.TextViewNamed;
