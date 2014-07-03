@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import org.openstack.utils.Image;
+import org.openstack.utils.OSImage;
 import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.Quota;
@@ -66,18 +66,18 @@ public class ParseUtils {
      *
      *
      */ 
-    public static Hashtable<String, Image> parseImages( String jsonString ) throws ParseException
+    //public static Hashtable<String, OSImage> parseImages( String jsonString ) throws ParseException
+    public static Vector<OSImage> parseImages( String jsonString ) throws ParseException
     {
       try {
-        Hashtable<String, Image> result = new Hashtable();
+        Vector<OSImage> result = new Vector();
         
         JSONObject jsonObject = new JSONObject( jsonString );
         JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
       
         for(int i=0; i<images.length( ); ++i ) {
-	
           String name         = (String)images.getJSONObject(i).get("name");
-	  long   size         = (long)images.getJSONObject(i).getLong("size");
+	  long   size         = (long)  images.getJSONObject(i).getLong("size");
 	  String format       = (String)images.getJSONObject(i).get("disk_format");
 	  String creationDate = (String)images.getJSONObject(i).get("created_at");
 	  String visibility   = (String)images.getJSONObject(i).get("visibility");
@@ -96,10 +96,10 @@ public class ParseUtils {
           	  
 	  boolean pub = (visibility.compareTo("public")==0 ? true : false);
 	  
-	  Image img = new Image( name, ID, size, format, status, pub, cdate );
+	  OSImage osimg = new OSImage( name, ID, size, format, status, pub, cdate );
 	  
 	  if(format.compareToIgnoreCase("ari")!=0 && format.compareToIgnoreCase("aki") != 0)
-	    result.put( name, img );
+	    result.add( osimg );
 	  
         }
         return result;

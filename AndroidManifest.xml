@@ -48,9 +48,9 @@
 	  />
 
 	<activity 
-	    android:name="org.openstack.activities.OSImagesExploreActivity" 
+	    android:name="org.openstack.activities.OSImagesActivity" 
 	    android:launchMode="singleInstance" 
-	    android:label="Show OpenStack Images" 
+	    android:label="Manage Glance Images" 
 	    android:screenOrientation="portrait"
 	    android:configChanges="keyboardHidden|orientation"
 	   />

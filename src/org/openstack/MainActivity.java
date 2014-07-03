@@ -42,9 +42,8 @@ import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Named;
-import org.openstack.utils.Base64;
+import org.openstack.utils.OSImage;
 import org.openstack.utils.UserException;
-import org.openstack.utils.Image;
 import org.openstack.utils.CustomProgressDialog;
 
 import org.openstack.comm.RESTClient;
@@ -56,7 +55,7 @@ import org.openstack.utils.Quota;
 
 import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
-import org.openstack.activities.OSImagesExploreActivity;
+import org.openstack.activities.OSImagesActivity;
 import org.openstack.activities.OverViewActivity;
 import org.openstack.utils.CustomProgressDialog;
 
@@ -66,7 +65,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity //implements OnClickListener
 {
-    private Hashtable<String, Image> osimages = null;
+    private Hashtable<String, OSImage> osimages = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     private int SCREENH = 0;
     private int SCREENW = 0;
@@ -135,15 +134,15 @@ public class MainActivity extends Activity //implements OnClickListener
       if( !Utils.internetOn( this ) )
         Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
       
-      String osimage = Utils.getStringPreference("SELECTED_OSIMAGE", "", this);
-      if(osimage.length() != 0) {
+//       String osimage = Utils.getStringPreference("SELECTED_OSIMAGE", "", this);
+//       if(osimage.length() != 0) {
       
-        String message = "Name: \""+osimage+"\""
-	    + "\nSize: "   + osimages.get(osimage).getSize()/1048576 + " MBytes"
-	    + "\nFormat: " + osimages.get(osimage).getFormat();
+//         String message = "Name: \""+osimage+"\""
+// 	    + "\nSize: "   + osimages.get(osimage).getSize()/1048576 + " MBytes"
+// 	    + "\nFormat: " + osimages.get(osimage).getFormat();
 	
-        Utils.putStringPreference("SELECTED_OSIMAGE", "", this);
-      }
+//         Utils.putStringPreference("SELECTED_OSIMAGE", "", this);
+//       }
 
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
@@ -262,36 +261,39 @@ public class MainActivity extends Activity //implements OnClickListener
      */  
     private void showImageList( String jsonBuf ) {
     
-	Hashtable<String, Image> result = null;
+	Vector<OSImage> osimages = null;
 	try {
-	    result = ParseUtils.parseImages( jsonBuf.toString( ) );
+	    osimages = ParseUtils.parseImages( jsonBuf.toString( ) );
 	} catch(ParseException pe) {
 	    Utils.alert( pe.getMessage( ), this );
 	    return;
 	}
 
-	Class<?> c = (Class<?>)OSImagesExploreActivity.class;
-	Intent I = new Intent( MainActivity.this, c );
-	ArrayList<String> imageNames = null;
-	if(result!=null) {
-	    osimages = result;
-	    Set<String> keys = result.keySet();
-	    Iterator<String> it = keys.iterator();
-	    if(keys.isEmpty() == true) {
-		Utils.alert("No image", this);
-		return;
-	    }
-	    imageNames = new ArrayList<String>();
-	    while( it.hasNext( ) ) {
-		String image = it.next();
-		imageNames.add( image );
-	    }
+ 	Class<?> c = (Class<?>)OSImagesActivity.class;
+ 	Intent I = new Intent( MainActivity.this, c );
+	
+	I.putExtra("OSIMAGES", osimages );//StringArrayListExtra("SERVERS", 
+	startActivity(I);
+// 	ArrayList<String> imageNames = null;
+// 	if(result!=null) {
+// 	    osimages = result;
+// 	    Set<String> keys = result.keySet();
+// 	    Iterator<String> it = keys.iterator();
+// 	    if(keys.isEmpty() == true) {
+// 		Utils.alert("No image", this);
+// 		return;
+// 	    }
+// 	    imageNames = new ArrayList<String>();
+// 	    while( it.hasNext( ) ) {
+// 		String image = it.next();
+// 		imageNames.add( image );
+// 	    }
       
-	    if(imageNames.size() > 0) {
-		I.putStringArrayListExtra("OSIMAGELIST", imageNames);
-		startActivity( I );
-	    }
-	} 
+// 	    if(imageNames.size() > 0) {
+// 		I.putStringArrayListExtra("OSIMAGELIST", imageNames);
+// 		startActivity( I );
+// 	    }
+// 	} 
     } 
     
     

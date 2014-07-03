@@ -51,7 +51,7 @@
         android:onClick="list_glance"
 	android:textSize="18dp"
 	
-	android:drawableLeft="@drawable/os"/>
+	android:drawableLeft="@drawable/openstack"/>
     
     <Button
         android:id="@+id/NOVA"

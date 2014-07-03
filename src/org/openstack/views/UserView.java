@@ -29,8 +29,6 @@ public class UserView extends LinearLayout {
     private ImageButtonNamed  modifyUser    = null;
     private ImageButtonNamed  deleteUser    = null;
     
-    //private String username = null;
-
     private User user = null;
 
     public UserView ( User U, Context ctx ) {
@@ -38,8 +36,6 @@ public class UserView extends LinearLayout {
 
 	user = U;
 
-	//username = U.getUserName( );
-	
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
 	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -91,7 +87,6 @@ public class UserView extends LinearLayout {
 	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
 	
 	addView( buttonsLayout );
-	
     }
 
     public void setSelected( ) {
@@ -107,8 +102,6 @@ public class UserView extends LinearLayout {
 	textEndpoint.setTextColor( Color.parseColor("#BBBBBB") );
 	textUserName.setTextColor( Color.parseColor("#BBBBBB") );
     }
-
-    //    public String getUserName( ) { return usertextUserName.getText().toString(); }
 
     public String getFilename( ) { return user.getUserID()+"."+user.getTenantID(); }
 }

@@ -24,24 +24,22 @@ public class OSImageView extends LinearLayout {
 
     private LinearLayoutNamed buttonsLayout = null;
     private LinearLayoutNamed nameLayout    = null;
-    private LinearLayoutNamed formatLayout  = null;
     private TextViewNamed     textImageName = null;
     private TextViewNamed     textPublic    = null;
-    private TextViewNamed     textFormatLabel = null;
     private TextViewNamed     textFormat    = null;
     private ImageButtonNamed  launchImage   = null;
     private ImageButtonNamed  deleteImage   = null;
     
-    private Image image = null;
+    private OSImage image = null;
 
-    public OSImageView ( Image I, Context ctx ) {
+    public OSImageView ( OSImage I, Context ctx ) {
 	super(ctx);
 
 	image = I;
 
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 	setLayoutParams( params1 );
 	setBackgroundResource(R.drawable.rounded_corner_thin);
 	
@@ -49,53 +47,43 @@ public class OSImageView extends LinearLayout {
 	nameLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	nameLayout.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 
-	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	nameLayout.setLayoutParams( params2 );
 	
 	textImageName = new TextViewNamed( ctx, (OSImageView)this );
-	textImageName.setText( image.getName( ) );
+	String name = image.getName( );
+	if(name.length()>20) {
+	    name = name.substring(0,17) + "..";
+	}
+	textImageName.setText( name );
 	textImageName.setTextColor( Color.parseColor("#333333") );
+	textImageName.setTypeface( null, Typeface.BOLD );
 	textImageName.setOnClickListener( (OnClickListener)ctx );
 	textPublic = new TextViewNamed( ctx, (OSImageView)this );
 	textPublic.setText("Public: " + (image.isPublic() ? "yes" : "no"));
 	textPublic.setTextColor( Color.parseColor("#333333") );
 	textPublic.setOnClickListener( (OnClickListener)ctx );
 	textPublic.setTextColor( Color.parseColor("#BBBBBB"));
-	textImageName.setTextColor( Color.parseColor("#BBBBBB"));
 	
+	textFormat = new TextViewNamed( ctx, (OSImageView)this );
+	textFormat.setText( "Format: "+image.getFormat( ) + ", Size: " + image.getSizeMB() + " MB" );
+	textFormat.setTextColor( Color.parseColor("#BBBBBB") );
+	textFormat.setOnClickListener( (OnClickListener)ctx );
+
 	nameLayout.addView(textImageName);
 	nameLayout.addView(textPublic);
 	nameLayout.setOnClickListener( (OnClickListener)ctx );
-
+	nameLayout.addView( textFormat );
+	
 	addView(nameLayout);
 	setOnClickListener( (OnClickListener)ctx );
       
-
-	formatLayout = new LinearLayoutNamed( ctx, this );
-	formatLayout.setOrientation( LinearLayout.VERTICAL );
-	LinearLayout.LayoutParams params3 
-	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-	formatLayout.setLayoutParams( params3 );
-
-	textFormatLabel = new TextViewNamed( ctx, (OSImageView)this );
-	textFormatLabel.setText("Format");
-	textFormatLabel.setTextColor( Color.parseColor("#333333") );
-	textFormatLabel.setOnClickListener( (OnClickListener)ctx );
-	textFormat = new TextViewNamed( ctx, (OSImageView)this );
-	textFormat.setText( image.getFormat( ) );
-	textFormat.setTextColor( Color.parseColor("#333333") );
-	textFormat.setOnClickListener( (OnClickListener)ctx );
-
-	formatLayout.addView( textFormatLabel );
-	formatLayout.addView( textFormat );
-	
-	addView( formatLayout );
 
 	buttonsLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params4 
 	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT );
-	params3.gravity=Gravity.RIGHT;
+	params4.gravity=Gravity.RIGHT;
 	buttonsLayout.setLayoutParams( params4 );
 	buttonsLayout.setGravity( Gravity.RIGHT );
 	
