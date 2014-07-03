@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import org.openstack.utils.OpenStackImage;
+import org.openstack.utils.Image;
 import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.Quota;
@@ -66,10 +66,10 @@ public class ParseUtils {
      *
      *
      */ 
-    public static Hashtable<String, org.openstack.utils.OpenStackImage> parseImages( String jsonString ) throws ParseException
+    public static Hashtable<String, Image> parseImages( String jsonString ) throws ParseException
     {
       try {
-        Hashtable<String, OpenStackImage> result = new Hashtable<String, OpenStackImage>();
+        Hashtable<String, Image> result = new Hashtable();
         
         JSONObject jsonObject = new JSONObject( jsonString );
         JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
@@ -82,7 +82,8 @@ public class ParseUtils {
 	  String creationDate = (String)images.getJSONObject(i).get("created_at");
 	  String visibility   = (String)images.getJSONObject(i).get("visibility");
 	  String status       = (String)images.getJSONObject(i).get("status");
-	  
+	  String ID           = (String)images.getJSONObject(i).get("id");
+
 	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
           timeFormatter.setTimeZone( TimeZone.getDefault( ) );
           Calendar calendar = Calendar.getInstance();
@@ -95,7 +96,7 @@ public class ParseUtils {
           	  
 	  boolean pub = (visibility.compareTo("public")==0 ? true : false);
 	  
-	  OpenStackImage img = new OpenStackImage( name, size, format, status, pub, cdate );
+	  Image img = new Image( name, ID, size, format, status, pub, cdate );
 	  
 	  if(format.compareToIgnoreCase("ari")!=0 && format.compareToIgnoreCase("aki") != 0)
 	    result.put( name, img );

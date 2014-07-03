@@ -18,28 +18,27 @@ import org.openstack.R;
 
 import org.openstack.utils.*;
 
-public class UserView extends LinearLayout {
+public class OSImageView extends LinearLayout {
 
     private Context ctx = null;
 
     private LinearLayoutNamed buttonsLayout = null;
-    private LinearLayoutNamed userLayout    = null;
-    private TextViewNamed     textUserName  = null;
-    private TextViewNamed     textEndpoint  = null;
-    private ImageButtonNamed  modifyUser    = null;
-    private ImageButtonNamed  deleteUser    = null;
+    private LinearLayoutNamed nameLayout    = null;
+    private LinearLayoutNamed formatLayout  = null;
+    private TextViewNamed     textImageName = null;
+    private TextViewNamed     textPublic    = null;
+    private TextViewNamed     textFormatLabel = null;
+    private TextViewNamed     textFormat    = null;
+    private ImageButtonNamed  launchImage   = null;
+    private ImageButtonNamed  deleteImage   = null;
     
-    private String username = null;
+    private Image image = null;
 
-    private User user = null;
-
-    public UserView ( User U, Context ctx ) {
+    public OSImageView ( Image I, Context ctx ) {
 	super(ctx);
 
-	user = U;
+	image = I;
 
-	//username = U.getUserName( );
-	
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
 	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -47,68 +46,72 @@ public class UserView extends LinearLayout {
 	setBackgroundResource(R.drawable.rounded_corner_thin);
 	
 
-	userLayout = new LinearLayoutNamed( ctx, this );
-	userLayout.setOrientation( LinearLayout.VERTICAL );
+	nameLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
+	nameLayout.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 
 	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-	userLayout.setLayoutParams( params2 );
+	nameLayout.setLayoutParams( params2 );
 	
-	textUserName = new TextViewNamed( ctx, (UserView)this );
-	textUserName.setText(user.getUserName()+" ("+user.getTenantName()+")");
-	textUserName.setTextColor( Color.parseColor("#333333") );
-	textUserName.setOnClickListener( (OnClickListener)ctx );
-	textEndpoint = new TextViewNamed( ctx, (UserView)this );
-	textEndpoint.setText(U.getEndpoint( ));
-	textEndpoint.setTextColor( Color.parseColor("#333333") );
-	textEndpoint.setOnClickListener( (OnClickListener)ctx );
-	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
-	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
+	textImageName = new TextViewNamed( ctx, (OSImageView)this );
+	textImageName.setText( image.getName( ) );
+	textImageName.setTextColor( Color.parseColor("#333333") );
+	textImageName.setOnClickListener( (OnClickListener)ctx );
+	textPublic = new TextViewNamed( ctx, (OSImageView)this );
+	textPublic.setText("Public: " + (image.isPublic() ? "yes" : "no"));
+	textPublic.setTextColor( Color.parseColor("#333333") );
+	textPublic.setOnClickListener( (OnClickListener)ctx );
+	textPublic.setTextColor( Color.parseColor("#BBBBBB"));
+	textImageName.setTextColor( Color.parseColor("#BBBBBB"));
+	
+	nameLayout.addView(textImageName);
+	nameLayout.addView(textPublic);
+	nameLayout.setOnClickListener( (OnClickListener)ctx );
 
-	userLayout.addView(textUserName);
-	userLayout.addView(textEndpoint);
-	userLayout.setOnClickListener( (OnClickListener)ctx );
-
-	addView(userLayout);
+	addView(nameLayout);
 	setOnClickListener( (OnClickListener)ctx );
       
-	buttonsLayout = new LinearLayoutNamed( ctx, this );
+
+	formatLayout = new LinearLayoutNamed( ctx, this );
+	formatLayout.setOrientation( LinearLayout.VERTICAL );
+	LinearLayout.LayoutParams params3 
+	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+	formatLayout.setLayoutParams( params3 );
+
+	textFormatLabel = new TextViewNamed( ctx, (OSImageView)this );
+	textFormatLabel.setText("Format");
+	textFormatLabel.setTextColor( Color.parseColor("#333333") );
+	textFormatLabel.setOnClickListener( (OnClickListener)ctx );
+	textFormat = new TextViewNamed( ctx, (OSImageView)this );
+	textFormat.setText( image.getFormat( ) );
+	textFormat.setTextColor( Color.parseColor("#333333") );
+	textFormat.setOnClickListener( (OnClickListener)ctx );
+
+	formatLayout.addView( textFormatLabel );
+	formatLayout.addView( textFormat );
+	
+	addView( formatLayout );
+
+	buttonsLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
-	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT );
+	LinearLayout.LayoutParams params4 
+	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT );
 	params3.gravity=Gravity.RIGHT;
-	buttonsLayout.setLayoutParams( params3 );
+	buttonsLayout.setLayoutParams( params4 );
 	buttonsLayout.setGravity( Gravity.RIGHT );
 	
-	modifyUser = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_MODIFY_USER );
-	modifyUser.setImageResource(android.R.drawable.ic_menu_edit);
-	modifyUser.setOnClickListener( (OnClickListener)ctx );
+	launchImage = new ImageButtonNamed( ctx, (OSImageView)this, ImageButtonNamed.BUTTON_LAUNCH_IMAGE );
+	launchImage.setImageResource(R.drawable.ic_menu_play_clip );
+	launchImage.setOnClickListener( (OnClickListener)ctx );
 	
-	deleteUser = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_USER );
-	deleteUser.setImageResource(android.R.drawable.ic_menu_delete);
-	deleteUser.setOnClickListener( (OnClickListener)ctx );
+	deleteImage = new ImageButtonNamed( ctx, (OSImageView)this, ImageButtonNamed.BUTTON_DELETE_IMAGE );
+	deleteImage.setImageResource(android.R.drawable.ic_menu_delete);
+	deleteImage.setOnClickListener( (OnClickListener)ctx );
 	
-	buttonsLayout.addView( modifyUser );
-	buttonsLayout.addView( deleteUser );
+	buttonsLayout.addView( launchImage );
+	buttonsLayout.addView( deleteImage );
 	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
 	
 	addView( buttonsLayout );
 	
     }
-
-    public void setSelected( ) {
-	textEndpoint.setTypeface( null, Typeface.BOLD );
-	textUserName.setTypeface( null, Typeface.BOLD );
-	textEndpoint.setTextColor( Color.parseColor("#00AA00") );
-	textUserName.setTextColor( Color.parseColor("#00AA00") );
-    }
-
-    public void setUnselected( ) {
-	textEndpoint.setTypeface( null, Typeface.NORMAL );
-	textUserName.setTypeface( null, Typeface.NORMAL );
-	textEndpoint.setTextColor( Color.parseColor("#BBBBBB") );
-	textUserName.setTextColor( Color.parseColor("#BBBBBB") );
-    }
-
-    //    public String getUserName( ) { return usertextUserName.getText().toString(); }
-
-    public String getFilename( ) { return user.getUserID()+"."+user.getTenantID(); }
 }

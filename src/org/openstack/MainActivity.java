@@ -44,7 +44,7 @@ import org.openstack.utils.Utils;
 import org.openstack.utils.Named;
 import org.openstack.utils.Base64;
 import org.openstack.utils.UserException;
-import org.openstack.utils.OpenStackImage;
+import org.openstack.utils.Image;
 import org.openstack.utils.CustomProgressDialog;
 
 import org.openstack.comm.RESTClient;
@@ -66,7 +66,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity //implements OnClickListener
 {
-    private Hashtable<String, org.openstack.utils.OpenStackImage> osimages = null;
+    private Hashtable<String, Image> osimages = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     private int SCREENH = 0;
     private int SCREENW = 0;
@@ -262,7 +262,7 @@ public class MainActivity extends Activity //implements OnClickListener
      */  
     private void showImageList( String jsonBuf ) {
     
-	Hashtable<String, OpenStackImage> result = null;
+	Hashtable<String, Image> result = null;
 	try {
 	    result = ParseUtils.parseImages( jsonBuf.toString( ) );
 	} catch(ParseException pe) {

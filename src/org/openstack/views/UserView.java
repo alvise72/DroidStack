@@ -29,7 +29,7 @@ public class UserView extends LinearLayout {
     private ImageButtonNamed  modifyUser    = null;
     private ImageButtonNamed  deleteUser    = null;
     
-    private String username = null;
+    //private String username = null;
 
     private User user = null;
 

@@ -18,6 +18,8 @@ import org.openstack.R;
 
 import org.openstack.utils.*;
 
+//import android.R;
+
 public class ServerView extends LinearLayout {
     
     private Context ctx = null;
@@ -42,7 +44,7 @@ public class ServerView extends LinearLayout {
 	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 	setLayoutParams( params1 );
 
-	text = new LinearLayoutNamed( ctx, this );
+	text = new LinearLayoutNamed( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 = 
 	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
@@ -75,10 +77,10 @@ public class ServerView extends LinearLayout {
 	deleteServer.setImageResource(android.R.drawable.ic_menu_delete);
 	deleteServer.setOnClickListener( (OnClickListener)ctx );
 
-	status = new ImageViewNamed( ctx, this );
-	status.setImageResource( R.drawable.statusok );
+	status = new ImageViewNamed( ctx, (ServerView)this );
+	status.setImageResource( R.drawable.btn_circle_pressed );
 	
-	info = new LinearLayoutNamed( ctx, this );
+	info = new LinearLayoutNamed( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
 	    new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);

@@ -95,32 +95,31 @@ public class OSImagesExploreActivity extends Activity {
 	String[] iList = osimages.toArray(new String[osimages.size()]);
 	imageList = new Item[iList.length];
 	for (int i = 0; i < iList.length; i++) {
-				imageList[i] = new Item(iList[i], R.drawable.osimage);
+	    imageList[i] = new Item(iList[i], R.drawable.osimage);
 	}
 	
 	adapter = new ArrayAdapter<Item>( this,
 					  android.R.layout.select_dialog_item, 
 					  android.R.id.text1,
 					  imageList) 
-		  {
-			  @Override
-			  public View getView(int position, View convertView, ViewGroup parent) {
-			      // creates view
-			      View view = super.getView(position, convertView, parent);
-			      TextView textView = (TextView) view
-			      .findViewById(android.R.id.text1);
-			      
-			      // put the image on the text view
-			      textView.setCompoundDrawablesWithIntrinsicBounds(
-									       imageList[position].icon, 0, 0, 0);
-			      
-			      // add margin between image and text (support various screen
-			      // densities)
-			      int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
-			      textView.setCompoundDrawablePadding(dp5);
-			      
-			      return view;
-			  }
+	    {
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+		    // creates view
+		    View view = super.getView(position, convertView, parent);
+		    TextView textView = (TextView) view
+		    .findViewById(android.R.id.text1);
+		    
+		    // put the image on the text view
+		    textView.setCompoundDrawablesWithIntrinsicBounds(imageList[position].icon, 0, 0, 0);
+		    
+		    // add margin between image and text (support various screen
+		    // densities)
+		    int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
+		    textView.setCompoundDrawablePadding(dp5);
+		    
+		    return view;
+		}
 	    };
 	
     }
@@ -143,7 +142,7 @@ public class OSImagesExploreActivity extends Activity {
 	}
 	
 	@Override
-	public String toString() {
+	    public String toString() {
 	    return file;
 	}
     }
