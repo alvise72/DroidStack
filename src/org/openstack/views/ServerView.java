@@ -30,6 +30,7 @@ public class ServerView extends LinearLayout {
     private TextViewNamed Name = null;
     private TextViewNamed Flavor = null;
 
+    private ImageButtonNamed snapServer = null;
     private ImageButtonNamed deleteServer = null;
     private ImageViewNamed status = null;
 
@@ -74,8 +75,13 @@ public class ServerView extends LinearLayout {
 	setOnClickListener( (OnClickListener)ctx );
 
 	deleteServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SERVER );
-	deleteServer.setImageResource(android.R.drawable.ic_menu_delete);
+//	deleteServer.setImageResource(android.R.drawable.ic_menu_delete);
+	deleteServer.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
 	deleteServer.setOnClickListener( (OnClickListener)ctx );
+
+	snapServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_SNAP_SERVER );
+	snapServer.setImageResource(android.R.drawable.ic_menu_camera);
+	snapServer.setOnClickListener( (OnClickListener)ctx );
 
 	status = new ImageViewNamed( ctx, (ServerView)this );
 	status.setImageResource( R.drawable.btn_circle_pressed );
@@ -86,6 +92,7 @@ public class ServerView extends LinearLayout {
 	    new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 	info.setLayoutParams( params3 );
 	info.setGravity( Gravity.RIGHT );
+	info.addView( snapServer );
 	info.addView( deleteServer );
 	info.addView( status );
 	

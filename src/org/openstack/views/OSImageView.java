@@ -25,8 +25,8 @@ public class OSImageView extends LinearLayout {
     private LinearLayoutNamed buttonsLayout = null;
     private LinearLayoutNamed nameLayout    = null;
     private TextViewNamed     textImageName = null;
-    private TextViewNamed     textPublic    = null;
-    private TextViewNamed     textFormat    = null;
+    private TextViewNamed     textSize    = null;
+    //    private TextViewNamed     textFormat    = null;
     private ImageButtonNamed  launchImage   = null;
     private ImageButtonNamed  deleteImage   = null;
     
@@ -59,25 +59,23 @@ public class OSImageView extends LinearLayout {
 	textImageName.setTextColor( Color.parseColor("#333333") );
 	textImageName.setTypeface( null, Typeface.BOLD );
 	textImageName.setOnClickListener( (OnClickListener)ctx );
-	textPublic = new TextViewNamed( ctx, (OSImageView)this );
-	textPublic.setText("Public: " + (image.isPublic() ? "yes" : "no"));
-	textPublic.setTextColor( Color.parseColor("#333333") );
-	textPublic.setOnClickListener( (OnClickListener)ctx );
-	textPublic.setTextColor( Color.parseColor("#BBBBBB"));
+// 	textPublic = new TextViewNamed( ctx, (OSImageView)this );
+// 	textPublic.setText("Public: " + (image.isPublic() ? "yes" : "no"));
+// 	textPublic.setTextColor( Color.parseColor("#333333") );
+// 	textPublic.setOnClickListener( (OnClickListener)ctx );
+// 	textPublic.setTextColor( Color.parseColor("#BBBBBB"));
 	
-	textFormat = new TextViewNamed( ctx, (OSImageView)this );
-	textFormat.setText( "Format: "+image.getFormat( ) + ", Size: " + image.getSizeMB() + " MB" );
-	textFormat.setTextColor( Color.parseColor("#BBBBBB") );
-	textFormat.setOnClickListener( (OnClickListener)ctx );
+	textSize = new TextViewNamed( ctx, (OSImageView)this );
+	textSize.setText( "Size: " + image.getSizeMB() + " MB" );
+	textSize.setTextColor( Color.parseColor("#BBBBBB") );
+	textSize.setOnClickListener( (OnClickListener)ctx );
 
 	nameLayout.addView(textImageName);
-	nameLayout.addView(textPublic);
+	nameLayout.addView(textSize);
 	nameLayout.setOnClickListener( (OnClickListener)ctx );
-	nameLayout.addView( textFormat );
 	
 	addView(nameLayout);
 	setOnClickListener( (OnClickListener)ctx );
-      
 
 	buttonsLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );

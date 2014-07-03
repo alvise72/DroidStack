@@ -14,7 +14,8 @@ public class ImageButtonNamed extends ImageButton implements Named {
     public static int BUTTON_DELETE_USER = 2;
     public static int BUTTON_DELETE_SERVER = 3;
     public static int BUTTON_DELETE_IMAGE = 4;
-    public static int BUTTON_LAUNCH_IMAGE = 4;
+    public static int BUTTON_LAUNCH_IMAGE = 5;
+    public static int BUTTON_SNAP_SERVER = 6;
 
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
