@@ -46,7 +46,7 @@ import org.openstack.utils.OSImage;
 import org.openstack.utils.UserException;
 import org.openstack.utils.CustomProgressDialog;
 
-import org.openstack.comm.RESTClient;
+import org.openstack.comm.*;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.Flavor;
@@ -418,7 +418,7 @@ public class MainActivity extends Activity //implements OnClickListener
 
 	    try {
 		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
-	    } catch(IOException e) {
+	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
 		return "";
@@ -509,7 +509,7 @@ public class MainActivity extends Activity //implements OnClickListener
 
 	    try {
 		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-	    } catch(IOException e) {
+	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
 		return "";
@@ -604,7 +604,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	    try {
 		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 		jsonBufForFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-	    } catch(IOException e) {
+	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
 		return "";

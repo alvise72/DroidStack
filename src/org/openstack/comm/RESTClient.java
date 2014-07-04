@@ -117,19 +117,28 @@ public class RESTClient {
 	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
 	}
 	
-	int status = ((HttpURLConnection)conn).getResponseCode();
+	int status = HttpStatus.SC_OK;
+	try {
+	     status = ((HttpURLConnection)conn).getResponseCode();
+	} catch(IOException ioe) {
+	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
+	}
 	if( status != HttpStatus.SC_OK ) {
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    int len;
 	    String buf = "";
 	    byte[] buffer = new byte[4096];
-	    while (-1 != (len = in.read(buffer))) {
-		//bos.write(buffer, 0, len);
-		buf += new String(buffer, 0, len);
-		//Log.d("requestToken", new String(buffer, 0, len));
+	    try {
+		while (-1 != (len = in.read(buffer))) {
+		    //bos.write(buffer, 0, len);
+		    buf += new String(buffer, 0, len);
+		    //Log.d("requestToken", new String(buffer, 0, len));
+		}
+		in.close();
+	    } catch(IOException ioe) {
+		throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 	    }
-	    in.close();
-
+	    
 	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
 		throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
 	    }
@@ -138,16 +147,20 @@ public class RESTClient {
 	    throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	}
 	
-	String buf = "";
-	InputStream in = conn.getInputStream( );
-	int len;
-	String res = "";
-	byte[] buffer = new byte[4096];
-	while (-1 != (len = in.read(buffer)))
-	    res += new String(buffer, 0, len);
-	in.close();
-	((HttpURLConnection)conn).disconnect( );
-	return res;    
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer)))
+		res += new String(buffer, 0, len);
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    return res;    
+	} catch(java.io.IOException ioe) {
+	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
+	}    
     }
     
     /**
@@ -176,7 +189,7 @@ public class RESTClient {
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
-	    throw RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
 	
 	conn.setRequestProperty("User-Agent", "python-glanceclient");
@@ -201,7 +214,7 @@ public class RESTClient {
 		} 
 	    }
 	} catch(java.io.IOException ioe) {
-	    throw RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
+	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
 	}
 	
 	return buf.toString( );    
@@ -248,21 +261,25 @@ public class RESTClient {
 	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 	
-    	String buf = "";
-	InputStream in = conn.getInputStream( );
-	int len;
-	String res = "";
-	byte[] buffer = new byte[4096];
-	while (-1 != (len = in.read(buffer))) {
-	    //bos.write(buffer, 0, len);
-	    res += new String(buffer, 0, len);
-	    //Log.d("requestToken", new String(buffer, 0, len));
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer))) {
+		//bos.write(buffer, 0, len);
+		res += new String(buffer, 0, len);
+		//Log.d("requestToken", new String(buffer, 0, len));
+	    }
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    //System.out.println(buf)
+	    //Log.d("requestToken", buf);
+	    return res;    
+	} catch(java.io.IOException ioe) {
+	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );
 	}
-	in.close();
-	((HttpURLConnection)conn).disconnect( );
-	//System.out.println(buf)
-	//Log.d("requestToken", buf);
-	return res;    
     }
 
     /**
@@ -307,21 +324,25 @@ public class RESTClient {
 	    throw new RuntimeException("setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 	
-    	String buf = "";
-	InputStream in = conn.getInputStream( );
-	int len;
-	String res = "";
-	byte[] buffer = new byte[4096];
-	while (-1 != (len = in.read(buffer))) {
-	    //bos.write(buffer, 0, len);
-	    res += new String(buffer, 0, len);
-	    //Log.d("requestToken", new String(buffer, 0, len));
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer))) {
+		//bos.write(buffer, 0, len);
+		res += new String(buffer, 0, len);
+		//Log.d("requestToken", new String(buffer, 0, len));
+	    }
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    //System.out.println(buf)
+	    //Log.d("requestToken", buf);
+	    return res;    
+	} catch(IOException ioe) {
+	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );
 	}
-	in.close();
-	((HttpURLConnection)conn).disconnect( );
-	//System.out.println(buf)
-	//Log.d("requestToken", buf);
-	return res;    
     }
 
 
@@ -367,17 +388,21 @@ public class RESTClient {
 	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 	
-    	String buf = "";
-	InputStream in = conn.getInputStream( );
-	int len;
-	String res = "";
-	byte[] buffer = new byte[4096];
-	while (-1 != (len = in.read(buffer)))
-	    res += new String(buffer, 0, len);
-
-	in.close();
-	((HttpURLConnection)conn).disconnect( );
-	return res;    
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer)))
+		res += new String(buffer, 0, len);
+	    
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    return res; 
+	} catch(IOException ioe) {
+	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
+	}
     }
 
     /**
@@ -421,19 +446,27 @@ public class RESTClient {
 	}
 	
 
-	int status = ((HttpURLConnection)conn).getResponseCode();
+	int status = HttpStatus.SC_OK;
+	try {
+	    status = ((HttpURLConnection)conn).getResponseCode();
+	} catch(IOException ioe) {
+	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
+	}
 	if( status != HttpStatus.SC_OK ) {
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    int len;
 	    String buf = "";
 	    byte[] buffer = new byte[4096];
-	    while (-1 != (len = in.read(buffer))) {
-		//bos.write(buffer, 0, len);
-		buf += new String(buffer, 0, len);
-		//Log.d("requestToken", new String(buffer, 0, len));
+	    try {
+		while (-1 != (len = in.read(buffer))) {
+		    //bos.write(buffer, 0, len);
+		    buf += new String(buffer, 0, len);
+		    //Log.d("requestToken", new String(buffer, 0, len));
+		}
+		in.close();
+	    } catch(IOException ioe) {
+		throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
 	    }
-	    in.close();
-
 	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
 		throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
 	    
