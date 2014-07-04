@@ -1,8 +1,18 @@
 package org.openstack.utils;
 
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.File;
 
 import android.os.Environment;
+
+import org.openstack.comm.RuntimeException;
 
 public class User implements Serializable, Comparable<User> {
 
@@ -61,7 +71,7 @@ public class User implements Serializable, Comparable<User> {
 	return 0;
     }
 
-    public static User fromFileID( String ID ) RuntimeException {
+    public static User fromFileID( String ID ) throws RuntimeException {
 	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + ID;
 	if(false == (new File(filename)).exists())
 	    throw new RuntimeException( "File ["+filename+"] doesn't exist" );
@@ -73,20 +83,22 @@ public class User implements Serializable, Comparable<User> {
 	    return U;
 	} catch(IOException ioe) {
 	    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+	} catch(ClassNotFoundException cnfe) {
+	    throw new RuntimeException( "ObjectInputStream.readObject: " + cnfe.getMessage( ) );
 	}
     }
 
-    public static void toFile( ) throws {
-    	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserID( ) + "." + U.getTenantID( );
+    public void toFile( ) throws RuntimeException {
+    	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + getUserID( ) + "." + getTenantID( );
     	File f = new File( filename );
     	if(f.exists()) f.delete();
 	try {
 	    OutputStream os = new FileOutputStream( filename );
 	    ObjectOutputStream oos = new ObjectOutputStream( os );
-	    oos.writeObject( U );
+	    oos.writeObject( this );
 	    oos.close( );
 	} catch(IOException ioe) {
-	    throw RuntimeException("OutputStream.write/close: "+ioe.getMessage() );
+	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage() );
 	}
     }
 }

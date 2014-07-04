@@ -223,7 +223,8 @@ public class UserAddActivity extends Activity {
 	    U.setPassword(password);
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
-	    Utils.userToFile( U );
+	    //Utils.userToFile( U );
+	    U.toFile( );
 	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage(), this);

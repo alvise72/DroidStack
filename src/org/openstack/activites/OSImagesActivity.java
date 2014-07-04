@@ -1,6 +1,7 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.os.Environment;
 
 
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.DialogInterface;
 
+
 import android.net.Uri;
 
 import android.util.Log;
@@ -22,6 +24,7 @@ import android.util.DisplayMetrics;
 
 import android.app.ActivityManager.MemoryInfo;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.ActivityManager;
 import android.app.Activity;
 
@@ -40,8 +43,10 @@ import java.util.Set;
 import java.io.File;
 
 import org.openstack.comm.RESTClient;
+import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
+import org.openstack.utils.CustomProgressDialog;
 
 import org.openstack.R;
 import org.openstack.utils.User;
@@ -63,6 +68,7 @@ import android.graphics.Color;
 
 public class OSImagesActivity extends Activity implements OnClickListener {
 
+    private CustomProgressDialog progressDialogWaitStop = null;
     private Bundle bundle = null;
     private ArrayList<OSImage> OS = null;
     private String ID = null;
@@ -74,6 +80,8 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	setContentView( R.layout.osimagelist );
 	bundle = getIntent().getExtras();
 	OS = (ArrayList<OSImage>)bundle.getSerializable("OSIMAGES");
+	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
     }
     
     //__________________________________________________________________________________
@@ -83,7 +91,19 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	refreshOSImagesViews();
     }
  
-    
+ 
+    /**
+     *
+     *
+     *
+     *
+     */
+    @Override
+    public void onDestroy( ) {
+      super.onDestroy( );
+      progressDialogWaitStop.dismiss();
+    }
+   
   //__________________________________________________________________________________
     public void onClick( View v ) { 
 
@@ -121,8 +141,10 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 
     private  void deleteGlanceImage( String ID ) {
 	try {
-	    User U = User.fromFile( ID );
-	    ...
+	    User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER","",this) );
+	    progressDialogWaitStop.show();
+	    AsyncTaskOSDelete task = new AsyncTaskOSDelete();
+	    task.execute(U.getEndpoint(), U.getTenantName(), U.getUserName(), U.getPassword(), ""+U.useSSL(), ""+U.getTokenExpireTime(), ID );
 	} catch(RuntimeException re) {
 	    Utils.alert(re.getMessage(), this );
 	}
@@ -139,28 +161,94 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    space.setMinimumHeight(10);
 	    ((LinearLayout)findViewById(R.id.osimagesLayout)).addView( space );
 	}
+    }
 
-// 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
-// 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
-// 	usersL.removeAllViews();
+/**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskOSDelete extends AsyncTask<String, String, String>
+    {
+     	private  String   errorMessage  =  null;
+	private  boolean  hasError      =  false;
+	private  String   jsonBuf       = null;
+	
+	protected String doInBackground(String... u ) 
+	{
+	    String endpoint   = u[0];
+	    String tenantname = u[1];
+	    String username   = u[2];
+	    String password   = u[3];
+	    boolean usessl    = Boolean.parseBoolean(u[4]);
+	    long   expire     = Integer.parseInt(u[5]);
+	    String imagetodel = u[6];
+	    User newUser = null;
+	    Log.d("AsyncTaskOSDelete.doInBackground", "endpoint="+endpoint+", tenantname="+tenantname+", username="+username+", password="+password+", userssl="+usessl+", expire="+expire+", imagetodel="+imagetodel);
+	    if(expire <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( endpoint,
+						       tenantname,
+						       username,
+						       password,
+						       usessl );
+		    // String  pwd = U.getPassword();
+		    // String  edp = U.getEndpoint();
+		    // boolean ssl = U.useSSL();
+		    newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setEndpoint( endpoint );
+		    newUser.setPassword( password );
+		    newUser.setSSL( usessl );
+		    //U = newUser;
+		    newUser.toFile( ); // to save the new token+expiration
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
 
-// 	for(int i = 0; i<users.length; ++i) {
-// 	    User U = null;
-// 	    try {
-		
-// 		U = Utils.userFromFile( users[i].toString() );
-		
-// 	    } catch(Exception e) {
-// 		Utils.alert("ERROR: " + e.getMessage(), this);
-// 		continue;
-// 	    }
+	    try {
+		jsonBuf = RESTClient.requestImages( newUser.getEndpoint(), newUser.getToken() );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
 	    
-// 	    UserView uv = new UserView ( U, this );
-// 	    usersL.addView( uv );
-// 	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
-// 		uv.setSelected( );
-// 	    else
-// 		uv.setUnselected( );
-// 	}
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPreExecute() {
+	    super.onPreExecute();
+	    
+	    //	    downloading_image_list = true;
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, OSImagesActivity.this );
+		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+	    OSImagesActivity.this.refreshOSImagesViews();
+	    //OSImagesActivity.this.showImageList( jsonBuf );
+	}
     }
 }

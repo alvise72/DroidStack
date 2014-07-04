@@ -61,8 +61,6 @@ import org.openstack.utils.CustomProgressDialog;
 
 import java.util.concurrent.ExecutionException;
 
-
-
 public class MainActivity extends Activity //implements OnClickListener
 {
     private Hashtable<String, OSImage> osimages = null;
@@ -134,20 +132,10 @@ public class MainActivity extends Activity //implements OnClickListener
       if( !Utils.internetOn( this ) )
         Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
       
-//       String osimage = Utils.getStringPreference("SELECTED_OSIMAGE", "", this);
-//       if(osimage.length() != 0) {
-      
-//         String message = "Name: \""+osimage+"\""
-// 	    + "\nSize: "   + osimages.get(osimage).getSize()/1048576 + " MBytes"
-// 	    + "\nFormat: " + osimages.get(osimage).getFormat();
-	
-//         Utils.putStringPreference("SELECTED_OSIMAGE", "", this);
-//       }
-
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
 	  try {
-	      User u = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	      User u = User.fromFileID( selectedUser );//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
 	      Toast t = Toast.makeText(this, "Current user: "+u.getUserName() + " (" + u.getTenantName() + ")", Toast.LENGTH_SHORT);
 	      t.setGravity( Gravity.CENTER, 0, 0 );
 	      t.show();
@@ -183,7 +171,7 @@ public class MainActivity extends Activity //implements OnClickListener
 	}
 	User U = null;
 	try {
-	    U = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	    U = User.fromFileID(selectedUser);//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage( ), this);
 	    return;
@@ -243,7 +231,7 @@ public class MainActivity extends Activity //implements OnClickListener
       
 	User U = null;
 	try {
-	    U = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	    U = User.fromFileID( selectedUser ) ;//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage( ), this);
 	    return;
@@ -295,7 +283,7 @@ public class MainActivity extends Activity //implements OnClickListener
       
 	User U = null;
 	try {
-	    U = Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	    U = User.fromFileID( selectedUser );//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage( ), this);
 	    return;
@@ -380,6 +368,7 @@ public class MainActivity extends Activity //implements OnClickListener
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
+		    U.toFile( ); // to save new token+expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -403,16 +392,6 @@ public class MainActivity extends Activity //implements OnClickListener
 	    super.onPreExecute();
 	    
 	    downloading_image_list = true;
-	}
-	
-	@Override
-	    protected void onProgressUpdate(String... values) {
-	    super.onProgressUpdate(values);
-	}
-	
-	@Override
-	    protected void onCancelled() {
-	    super.onCancelled();
 	}
 	
 	@Override
@@ -471,6 +450,7 @@ public class MainActivity extends Activity //implements OnClickListener
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
+		    U.toFile( );//to save new token + expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -494,16 +474,6 @@ public class MainActivity extends Activity //implements OnClickListener
 	    super.onPreExecute();
 	    
 	    downloading_quota_list = true;
-	}
-	
-	@Override
-	    protected void onProgressUpdate(String... values) {
-	    super.onProgressUpdate(values);
-	}
-	
-	@Override
-	    protected void onCancelled() {
-	    super.onCancelled();
 	}
 	
 	@Override
@@ -563,6 +533,7 @@ public class MainActivity extends Activity //implements OnClickListener
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
+		    U.toFile();// to save new token + expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -589,16 +560,6 @@ public class MainActivity extends Activity //implements OnClickListener
 	    super.onPreExecute();
 	    
 	    downloading_image_list = true;
-	}
-	
-	@Override
-	    protected void onProgressUpdate(String... values) {
-	    super.onProgressUpdate(values);
-	}
-	
-	@Override
-	    protected void onCancelled() {
-	    super.onCancelled();
 	}
 	
 	@Override

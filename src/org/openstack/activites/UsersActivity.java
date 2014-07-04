@@ -137,7 +137,8 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    User U = null;
 	    try {
 		
-		U = Utils.userFromFile( users[i].toString() );
+		//U = Utils.userFromFile( users[i].toString() );
+		U = User.fromFileID( users[i].getName( ) );
 		
 	    } catch(Exception e) {
 		Utils.alert("ERROR: " + e.getMessage(), this);
