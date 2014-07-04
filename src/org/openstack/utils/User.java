@@ -60,4 +60,33 @@ public class User implements Serializable, Comparable<User> {
 	    return 1;
 	return 0;
     }
+
+    public static User fromFileID( String ID ) RuntimeException {
+	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + ID;
+	if(false == (new File(filename)).exists())
+	    throw new RuntimeException( "File ["+filename+"] doesn't exist" );
+	try {
+	    InputStream is = new FileInputStream( filename );
+	    ObjectInputStream ois = new ObjectInputStream( is );
+	    User U = (User)ois.readObject( );
+	    ois.close( );
+	    return U;
+	} catch(IOException ioe) {
+	    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+	}
+    }
+
+    public static void toFile( ) throws {
+    	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserID( ) + "." + U.getTenantID( );
+    	File f = new File( filename );
+    	if(f.exists()) f.delete();
+	try {
+	    OutputStream os = new FileOutputStream( filename );
+	    ObjectOutputStream oos = new ObjectOutputStream( os );
+	    oos.writeObject( U );
+	    oos.close( );
+	} catch(IOException ioe) {
+	    throw RuntimeException("OutputStream.write/close: "+ioe.getMessage() );
+	}
+    }
 }

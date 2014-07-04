@@ -100,4 +100,6 @@ public class OSImageView extends LinearLayout {
 	addView( buttonsLayout );
 	
     }
+
+    public OSImage getOSImage( ) { return image; }
 }

@@ -211,17 +211,18 @@ public class MainActivity extends Activity //implements OnClickListener
 	
 	Class<?> c = (Class<?>)OverViewActivity.class;
 	Intent I = new Intent( MainActivity.this, c );
-	I.putExtra("MAXVM", q.getMaxInstances());
-	I.putExtra("MAXRAM", q.getMaxRAM());
-	I.putExtra("MAXSECG", q.getMaxSecurityGroups());
-	I.putExtra("MAXFIP", q.getMaxFloatingIP());
-	I.putExtra("MAXCPU", q.getMaxCPU());
-	I.putExtra("CURRVM", q.getCurrentInstances());
-	I.putExtra("CURRRAM", q.getCurrentRAM());
+	I.putExtra("MAXVM",    q.getMaxInstances());
+	I.putExtra("MAXRAM",   q.getMaxRAM());
+	I.putExtra("MAXSECG",  q.getMaxSecurityGroups());
+	I.putExtra("MAXFIP",   q.getMaxFloatingIP());
+	I.putExtra("MAXCPU",   q.getMaxCPU());
+	I.putExtra("CURRVM",   q.getCurrentInstances());
+	I.putExtra("CURRRAM",  q.getCurrentRAM());
 	I.putExtra("CURRSECG", q.getCurrentSecurityGroups());
-	I.putExtra("CURRFIP", q.getCurrentFloatingIP());
-	I.putExtra("CURRCPU", q.getCurrentCPU());
+	I.putExtra("CURRFIP",  q.getCurrentFloatingIP());
+	I.putExtra("CURRCPU",  q.getCurrentCPU());
 	I.putExtra("INFOUSER", U.getUserName()+" ("+U.getTenantName()+")");
+
 	startActivity( I );
     }
     
@@ -272,28 +273,8 @@ public class MainActivity extends Activity //implements OnClickListener
  	Class<?> c = (Class<?>)OSImagesActivity.class;
  	Intent I = new Intent( MainActivity.this, c );
 	
-	I.putExtra("OSIMAGES", osimages );//StringArrayListExtra("SERVERS", 
+	I.putExtra("OSIMAGES", osimages );
 	startActivity(I);
-// 	ArrayList<String> imageNames = null;
-// 	if(result!=null) {
-// 	    osimages = result;
-// 	    Set<String> keys = result.keySet();
-// 	    Iterator<String> it = keys.iterator();
-// 	    if(keys.isEmpty() == true) {
-// 		Utils.alert("No image", this);
-// 		return;
-// 	    }
-// 	    imageNames = new ArrayList<String>();
-// 	    while( it.hasNext( ) ) {
-// 		String image = it.next();
-// 		imageNames.add( image );
-// 	    }
-      
-// 	    if(imageNames.size() > 0) {
-// 		I.putStringArrayListExtra("OSIMAGELIST", imageNames);
-// 		startActivity( I );
-// 	    }
-// 	} 
     } 
     
     
@@ -344,17 +325,7 @@ public class MainActivity extends Activity //implements OnClickListener
 		Flavor F = flavors.get( s.getFlavorID( ) );
 		if( F != null)
 		    s.setFlavor( F );
-		    
-// 		Iterator<Flavor> fit = flavors.iterator();
-// 		while(fit.hasNext()) {
-// 		    Flavor f = fit.next();
-// 		    if(f.getID().compareTo(s.getFlavorID())==0)
-// 			s.setFlavor( f );
-// 		}
-		
-		//Utils.alert( s.toString(), this );
 	    }
-	    //return;
 
 	} catch( ParseException pe ) {
 	    Utils.alert("ERROR: "+pe.getMessage( ), this);

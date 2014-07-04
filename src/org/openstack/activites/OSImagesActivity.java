@@ -65,6 +65,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 
     private Bundle bundle = null;
     private ArrayList<OSImage> OS = null;
+    private String ID = null;
 
     //__________________________________________________________________________________
     @Override
@@ -89,13 +90,14 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	if(v instanceof ImageButtonNamed) {
 
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_IMAGE ) {
+		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage( "Are you sure to delete this image ?" );
 		builder.setCancelable(false);
 	    
 		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-			    //deleteCurrentPhoto( );
+			    deleteGlanceImage( ID );
 			}
 		    };
 
@@ -114,41 +116,16 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		alert.show();
 	    }
 	}
-
-// 	if(v instanceof ImageButtonNamed) {
-// 	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
-// 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
-// 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
-		
-// 		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+filenameToDelete)).delete();
-// 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
-// 		if(selectedUser.compareTo(filenameToDelete)==0)
-// 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
-		
-// 		refreshUserViews();
-// 		return;
-// 	    }
-// 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_MODIFY_USER ) {
-// 		Utils.alert("Not implemented yet." , this);
-// 		return;
-// 	    }
-// 	}
-
-// 	if(v instanceof TextViewNamed) {
-// 	    //String selectedUser = ((TextViewNamed)v).getUserView().getFilename();
-
-// 	    Utils.putStringPreference("SELECTEDUSER", ((TextViewNamed)v).getUserView().getFilename(), this);
-	    
-// 	    refreshUserViews();
-
-// 	    return;
-// 	}
-
-// 	if(v instanceof LinearLayoutNamed) {
-// 	    Utils.putStringPreference("SELECTEDUSER", ((LinearLayoutNamed)v).getUserView().getFilename(), this);
-// 	    refreshUserViews();
-// 	}
 	
+    }
+
+    private  void deleteGlanceImage( String ID ) {
+	try {
+	    User U = User.fromFile( ID );
+	    ...
+	} catch(RuntimeException re) {
+	    Utils.alert(re.getMessage(), this );
+	}
     }
 
     //__________________________________________________________________________________

@@ -532,16 +532,16 @@ public class Utils {
      *
      *
      */    
-    public static void userToFile( User U ) throws Exception, IOException {
-	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserID( ) + "." + U.getTenantID( );
-	File f = new File( filename );
-	if(f.exists()) f.delete();
+    // public static void userToFile( User U ) throws Exception, IOException {
+    // 	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserID( ) + "." + U.getTenantID( );
+    // 	File f = new File( filename );
+    // 	if(f.exists()) f.delete();
 
-	OutputStream os = new FileOutputStream( filename );
-	ObjectOutputStream oos = new ObjectOutputStream( os );
-	oos.writeObject( U );
-	oos.close( );
-    }
+    // 	OutputStream os = new FileOutputStream( filename );
+    // 	ObjectOutputStream oos = new ObjectOutputStream( os );
+    // 	oos.writeObject( U );
+    // 	oos.close( );
+    // }
     
     /**
      *
@@ -549,19 +549,19 @@ public class Utils {
      *
      *
      */        
-     public static User userFromFile( String filename ) throws Exception, IOException {
-	 if(false == (new File(filename)).exists())
-	     throw new IOException( "File ["+filename+"] doesn't exist" );
+     // public static User userFromFile( String filename ) throws Exception, IOException {
+     // 	 if(false == (new File(filename)).exists())
+     // 	     throw new IOException( "File ["+filename+"] doesn't exist" );
 	 
-	 InputStream is = new FileInputStream( filename );
-	 ObjectInputStream ois = new ObjectInputStream( is );
-	 User U = (User)ois.readObject( );
+     // 	 InputStream is = new FileInputStream( filename );
+     // 	 ObjectInputStream ois = new ObjectInputStream( is );
+     // 	 User U = (User)ois.readObject( );
 
-	 //	 Log.d("Utils.userFromFile", "USERID="+U.getUserID() );
+     // 	 //	 Log.d("Utils.userFromFile", "USERID="+U.getUserID() );
 
-	 ois.close( );
-	 return U;
-     }
+     // 	 ois.close( );
+     // 	 return U;
+     // }
  
 
 }
