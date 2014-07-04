@@ -46,7 +46,7 @@ public class RESTClient {
 				       String tenant,
 				       String username,
 				       String password,
-				       boolean usessl ) throws IOException 
+				       boolean usessl ) throws RuntimeException, GenericException, NotFoundException, NotAuthorizedException
     {
 	String proto = "http://";
 	if(usessl)
@@ -57,7 +57,7 @@ public class RESTClient {
 	try {
 	    url = new URL(sUrl);
 	} catch(java.net.MalformedURLException mfu) {
-	    throw new IOException( mfu.toString( ) );
+	    throw new RuntimeException( "new URL: "+mfu.toString( ) );
 	}
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
@@ -86,14 +86,14 @@ public class RESTClient {
 	    try {
 		conn = (HttpsURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {
-		throw  new IOException("url.openConnection https: "+ioe.getMessage( ) );
+		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
 	    }
 	} else {
 	
 	    try {
 		conn = (HttpURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {
-		throw new IOException("url.openConnection http: "+ioe.getMessage());
+		throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
 	    }
 	}
 	
@@ -103,7 +103,7 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
-	    throw new IOException( pe.getMessage( ) );
+	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 	
 	String data = "{\"auth\": {\"tenantName\": \"" + tenant + "\", \"passwordCredentials\": {\"username\": \"" + username + "\", \"password\": \"" + password + "\"}}}";
@@ -114,7 +114,7 @@ public class RESTClient {
 	    out.close();
 	} catch(java.io.IOException ioe) {
 	    ioe.printStackTrace( );
-	    throw new IOException("out.write: "+ioe.getMessage( ) );
+	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
 	}
 	
 	int status = ((HttpURLConnection)conn).getResponseCode();
@@ -129,11 +129,13 @@ public class RESTClient {
 		//Log.d("requestToken", new String(buffer, 0, len));
 	    }
 	    in.close();
-	    //Log.d("RESTApiOpenStack.requestToken", buf.toString( ) );
+
 	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
-		throw new IOException(  "ParseError: "+ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+		throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
 	    }
-	    throw new IOException( "ParseError: "+ParseUtils.getErrorMessage( buf ) );
+	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+	    throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	}
 	
 	String buf = "";
@@ -141,15 +143,10 @@ public class RESTClient {
 	int len;
 	String res = "";
 	byte[] buffer = new byte[4096];
-	while (-1 != (len = in.read(buffer))) {
-	    //bos.write(buffer, 0, len);
+	while (-1 != (len = in.read(buffer)))
 	    res += new String(buffer, 0, len);
-	    //Log.d("requestToken", new String(buffer, 0, len));
-	}
 	in.close();
 	((HttpURLConnection)conn).disconnect( );
-	//System.out.println(buf)
-	//Log.d("requestToken", buf);
 	return res;    
     }
     
@@ -162,7 +159,7 @@ public class RESTClient {
      *
      */
     public static String requestImages( String endpoint,
-					String token ) throws IOException  
+					String token ) throws RuntimeException  
     {
 	String proto = "http://";
 	
@@ -171,7 +168,7 @@ public class RESTClient {
 	try {
 	    url = new URL(sUrl);
 	} catch(java.net.MalformedURLException mfu) {
-	    throw new IOException(mfu.toString( ) );
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
 	}
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
@@ -179,7 +176,7 @@ public class RESTClient {
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
-	    throw ioe;
+	    throw RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
 	
 	conn.setRequestProperty("User-Agent", "python-glanceclient");
@@ -204,7 +201,7 @@ public class RESTClient {
 		} 
 	    }
 	} catch(java.io.IOException ioe) {
-	    throw ioe;
+	    throw RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
 	}
 	
 	return buf.toString( );    
@@ -221,7 +218,7 @@ public class RESTClient {
     public static String requestQuota( String endpoint,
 				       String token,
 				       String tenantid,
-				       String tenant ) throws IOException
+				       String tenant ) throws RuntimeException
     {
 	String proto = "http://";
 	
@@ -230,7 +227,7 @@ public class RESTClient {
 	try {
 	    url = new URL(sUrl);
 	} catch(java.net.MalformedURLException mfu) {
-	    throw new IOException(mfu.toString( ) );
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
 	}
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
@@ -238,8 +235,7 @@ public class RESTClient {
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
-	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw new IOException("url.openConnection http: "+ioe.getMessage( ) );
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("X-Auth-Project-Id", tenant);
@@ -249,7 +245,7 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
-	    throw new IOException( pe.getMessage( ) );
+	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 	
     	String buf = "";
@@ -280,7 +276,7 @@ public class RESTClient {
     public static String requestServers( String endpoint,
 					 String token,
 					 String tenantid,
-					 String tenantname ) throws IOException
+					 String tenantname ) throws RuntimeException
     {
 	String proto = "http://";
 	
@@ -289,7 +285,7 @@ public class RESTClient {
 	try {
 	    url = new URL(sUrl);
 	} catch(java.net.MalformedURLException mfu) {
-	    throw new IOException(mfu.toString( ) );
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
 	}
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
@@ -298,7 +294,7 @@ public class RESTClient {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
 	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw new IOException("url.openConnection http: "+ioe.getMessage( ) );
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("X-Auth-Project-Id", tenantname);
@@ -308,7 +304,7 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
-	    throw new IOException( pe.getMessage( ) );
+	    throw new RuntimeException("setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 	
     	String buf = "";
@@ -340,7 +336,7 @@ public class RESTClient {
     public static String requestFlavors( String endpoint,
 					 String token,
 					 String tenantid,
-					 String tenantname ) throws IOException
+					 String tenantname ) throws RuntimeException
     {
 	String proto = "http://";
 	
@@ -349,7 +345,7 @@ public class RESTClient {
 	try {
 	    url = new URL(sUrl);
 	} catch(java.net.MalformedURLException mfu) {
-	    throw new IOException(mfu.toString( ) );
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
 	}
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
@@ -358,7 +354,7 @@ public class RESTClient {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
 	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw new IOException("url.openConnection http: "+ioe.getMessage( ) );
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("X-Auth-Project-Id", tenantname);
@@ -368,7 +364,7 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
-	    throw new IOException( pe.getMessage( ) );
+	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 	
     	String buf = "";
@@ -382,6 +378,70 @@ public class RESTClient {
 	in.close();
 	((HttpURLConnection)conn).disconnect( );
 	return res;    
+    }
+
+    /**
+     *
+     *
+     * curl -i -X GET -H "X-Auth-Token: $TOKEN"  -H 'Content-Type: application/octet-stream' http://90.147.77.40:9292/v2/images/$IMAGEID
+     * curl -i -X DELETE -H "X-Auth-Token: $TOKEN" -H 'Content-Type: application/octet-stream' http://90.147.77.40:9292/v2/images/$IMAGEID
+     *
+     *
+     *
+     */
+    public static void deleteGlanceImage( String endpoint, String token, String imageid) throws RuntimeException, NotFoundException, NotAuthorizedException {
+	String proto = "http://";
+	
+	String sUrl = proto + endpoint + ":9292/v2/images/"+imageid;
+	URL url = null;
+	try {
+	    url = new URL(sUrl);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	TrustManager[] trustAllCerts = null;
+    
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	}
+    
+	//conn.setRequestProperty("X-Auth-Project-Id", tenantname);
+	//conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("Content-Type", "application/octet-stream");
+	conn.setRequestProperty("X-Auth-Token", token);
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("DELETE");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
+	}
+	
+
+	int status = ((HttpURLConnection)conn).getResponseCode();
+	if( status != HttpStatus.SC_OK ) {
+	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
+	    int len;
+	    String buf = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer))) {
+		//bos.write(buffer, 0, len);
+		buf += new String(buffer, 0, len);
+		//Log.d("requestToken", new String(buffer, 0, len));
+	    }
+	    in.close();
+
+	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
+		throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
+	    
+	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+
+	    throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
+	}
     }
 }
 

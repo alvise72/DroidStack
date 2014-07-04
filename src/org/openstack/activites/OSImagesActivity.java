@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ActivityInfo;
+import android.content.DialogInterface;
 
 import android.net.Uri;
 
@@ -82,15 +82,39 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	refreshOSImagesViews();
     }
  
-    //__________________________________________________________________________________
-//     @Override
-//     public void onPause( ) {
-// 	super.onPause( );
-//     }
-    
     
   //__________________________________________________________________________________
     public void onClick( View v ) { 
+
+	if(v instanceof ImageButtonNamed) {
+
+	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_IMAGE ) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage( "Are you sure to delete this image ?" );
+		builder.setCancelable(false);
+	    
+		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			    //deleteCurrentPhoto( );
+			}
+		    };
+
+		DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			    dialog.cancel( );
+			}
+		    };
+
+		builder.setPositiveButton("Yes", yesHandler );
+		builder.setNegativeButton("No", noHandler );
+            
+		AlertDialog alert = builder.create();
+		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+		alert.show();
+	    }
+	}
+
 // 	if(v instanceof ImageButtonNamed) {
 // 	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
 // 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
