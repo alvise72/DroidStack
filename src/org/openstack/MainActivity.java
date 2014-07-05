@@ -202,8 +202,8 @@ public class MainActivity extends Activity //implements OnClickListener
 	    return;
 	}
 
-	progressDialogWaitStop.show();
-	downloading_image_list = true;
+	// progressDialogWaitStop.show();
+	// downloading_image_list = true;
       
 	// User U = null;
 	// try {
@@ -227,34 +227,34 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      *
      */
-    public void showServerList( String jsonBuffer, String jsonBufferFlavor, String username ) 
-    {
-	Vector<Server> servers = null;
-	try {
-	    servers = ParseUtils.parseServers( jsonBuffer, username );
-	    Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
+    // public void showServerList( String jsonBuffer, String jsonBufferFlavor, String username ) 
+    // {
+    // 	Vector<Server> servers = null;
+    // 	try {
+    // 	    servers = ParseUtils.parseServers( jsonBuffer, username );
+    // 	    Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
 
-	    Iterator<Server> it = servers.iterator();
-	    while(it.hasNext()) {
-		Server s = it.next();
-		Flavor F = flavors.get( s.getFlavorID( ) );
-		if( F != null)
-		    s.setFlavor( F );
-	    }
+    // 	    Iterator<Server> it = servers.iterator();
+    // 	    while(it.hasNext()) {
+    // 		Server s = it.next();
+    // 		Flavor F = flavors.get( s.getFlavorID( ) );
+    // 		if( F != null)
+    // 		    s.setFlavor( F );
+    // 	    }
 
-	} catch( ParseException pe ) {
-	    Utils.alert("ERROR: "+pe.getMessage( ), this);
-	}
+    // 	} catch( ParseException pe ) {
+    // 	    Utils.alert("ERROR: "+pe.getMessage( ), this);
+    // 	}
 
-	if(servers!=null) {
-	    Class<?> c = (Class<?>)ServersActivity.class;
-	    Intent I = new Intent( MainActivity.this, c );
-	    I.putExtra("SERVERS", servers );//StringArrayListExtra("SERVERS", 
-	    startActivity(I);
-	} else {
-	    Utils.alert("Vector<Server> servers is NULL !!", this );
-	}
-    }
+    // 	if(servers!=null) {
+    // 	    Class<?> c = (Class<?>)ServersActivity.class;
+    // 	    Intent I = new Intent( MainActivity.this, c );
+    // 	    I.putExtra("SERVERS", servers );//StringArrayListExtra("SERVERS", 
+    // 	    startActivity(I);
+    // 	} else {
+    // 	    Utils.alert("Vector<Server> servers is NULL !!", this );
+    // 	}
+    // }
 
 
     

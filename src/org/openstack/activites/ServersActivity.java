@@ -26,6 +26,8 @@ import android.app.AlertDialog;
 import android.app.ActivityManager;
 import android.app.Activity;
 
+import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.Gravity;
@@ -33,6 +35,7 @@ import android.view.View;
 
 import java.io.IOException;
 
+import java.util.Hashtable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -41,6 +44,7 @@ import java.util.Set;
 import java.io.File;
 
 import org.openstack.comm.RESTClient;
+import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
@@ -51,6 +55,7 @@ import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Named;
 import org.openstack.utils.Server;
+import org.openstack.utils.Flavor;
 import org.openstack.utils.Base64;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
@@ -73,6 +78,46 @@ public class ServersActivity extends Activity implements OnClickListener {
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
 
+    /**
+     *
+     *
+     *
+     */
+    public boolean onCreateOptionsMenu( Menu menu ) {
+        
+        super.onCreateOptionsMenu( menu );
+        
+        int order = Menu.FIRST;
+        int GROUP = 0;
+                
+        menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
+        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+        return true;
+    }
+    
+     public boolean onOptionsItemSelected( MenuItem item ) {
+	 
+        int id = item.getItemId();     
+        
+        if( id == Menu.FIRST-1 ) {
+            Utils.alert( "Not implemented yet" ,this );
+            return true;
+        }
+        
+        if( id == Menu.FIRST ) { 
+	    //            Utils.customAlert(  );
+	    if(U==null) {
+		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+	    } else {
+		progressDialogWaitStop.show();
+		AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+		task.execute( U );
+		return true;
+	    }
+        }
+	return super.onOptionsItemSelected( item );
+    }
+
     //__________________________________________________________________________________
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,9 +125,21 @@ public class ServersActivity extends Activity implements OnClickListener {
 	setContentView( R.layout.serverlist );
 	//	bundle = getIntent().getExtras();
 	//S = (ArrayList<Server>)bundle.getSerializable("SERVERS");
+
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
 	
+	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+	try {
+	    U = User.fromFileID( selectedUser );
+	} catch(RuntimeException re) {
+	    Utils.alert("OSImagesActivity: "+re.getMessage(), this );
+	    return;
+	}
+
+	progressDialogWaitStop.show();
+	AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+	task.execute( U );
     }
     
     //__________________________________________________________________________________
@@ -143,36 +200,16 @@ public class ServersActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshServerViews( ) {
-	// Iterator<Server> sit = S.iterator();
-	// ((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
-	// while( sit.hasNext( )) {
-	//     Server s = sit.next();
-	//     ((LinearLayout)findViewById(R.id.serverLayout)).addView( new ServerView(s, this) );
-	// }
+    private void refreshView( Vector<Server> servers, Hashtable<String, Flavor> flavors ) {
 
-// 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
-// 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
-// 	usersL.removeAllViews();
-
-// 	for(int i = 0; i<users.length; ++i) {
-// 	    User U = null;
-// 	    try {
-		
-// 		U = Utils.userFromFile( users[i].toString() );
-		
-// 	    } catch(Exception e) {
-// 		Utils.alert("ERROR: " + e.getMessage(), this);
-// 		continue;
-// 	    }
-	    
-// 	    UserView uv = new UserView ( U, this );
-// 	    usersL.addView( uv );
-// 	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
-// 		uv.setSelected( );
-// 	    else
-// 		uv.setUnselected( );
-// 	}
+	Iterator<Server> it = servers.iterator();
+	while(it.hasNext()) {
+	    Server s = it.next();
+	    Flavor F = flavors.get( s.getFlavorID( ) );
+	    if( F != null)
+		s.setFlavor( F );
+	    ((LinearLayout)findViewById(R.id.serverLayout)).addView( new ServerView(s, this) );
+	}
     }
 
     /**
@@ -195,7 +232,7 @@ public class ServersActivity extends Activity implements OnClickListener {
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
-	private  String   jsonBufForFlavor = null;
+	private  String   jsonBufferFlavor = null;
 	private  String   username      = null;
 	protected String doInBackground(User... u ) 
 	{
@@ -227,7 +264,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 
 	    try {
 		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		jsonBufForFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -237,12 +274,12 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    return jsonBuf;
 	}
 	
-	@Override
-	    protected void onPreExecute() {
-	    super.onPreExecute();
+	// @Override
+	//     protected void onPreExecute() {
+	//     super.onPreExecute();
 	    
-	    //downloading_image_list = true;
-	}
+	//     //downloading_image_list = true;
+	// }
 	
 	@Override
 	    protected void onPostExecute( String result ) {
@@ -256,8 +293,14 @@ public class ServersActivity extends Activity implements OnClickListener {
  	    }
 	    
 	    //downloading_server_list = false; // questo non va spostato da qui a
+	    try {
+		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, username );
+		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
+		ServersActivity.this.refreshView( servers, flavors );
+	    } catch(ParseException pe) {
+		Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
+	    }
 	    ServersActivity.this.progressDialogWaitStop.dismiss( );
-	    //ServersActivity.this.showServerList( jsonBuf, jsonBufForFlavor, username );
 	}
     }
 }
