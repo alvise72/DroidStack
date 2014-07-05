@@ -61,7 +61,7 @@ import org.openstack.utils.CustomProgressDialog;
 
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends Activity //implements OnClickListener
+public class MainActivity extends Activity
 {
     private Hashtable<String, OSImage> osimages = null;
     private CustomProgressDialog progressDialogWaitStop = null;

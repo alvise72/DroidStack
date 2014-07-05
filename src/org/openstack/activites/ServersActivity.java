@@ -73,8 +73,6 @@ import org.openstack.utils.CustomProgressDialog;
 
 public class ServersActivity extends Activity implements OnClickListener {
 
-    //private Bundle bundle = null;
-    //private ArrayList<Server> S = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
 
@@ -105,7 +103,6 @@ public class ServersActivity extends Activity implements OnClickListener {
         }
         
         if( id == Menu.FIRST ) { 
-	    //            Utils.customAlert(  );
 	    if(U==null) {
 		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
 	    } else {
@@ -123,9 +120,7 @@ public class ServersActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView( R.layout.serverlist );
-	//	bundle = getIntent().getExtras();
-	//S = (ArrayList<Server>)bundle.getSerializable("SERVERS");
-
+	
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
 	
@@ -133,7 +128,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	try {
 	    U = User.fromFileID( selectedUser );
 	} catch(RuntimeException re) {
-	    Utils.alert("OSImagesActivity: "+re.getMessage(), this );
+	    Utils.alert("ServerssActivity: "+re.getMessage(), this );
 	    return;
 	}
 
@@ -247,11 +242,10 @@ public class ServersActivity extends Activity implements OnClickListener {
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
-		    U = newUser;
+		    U = ParseUtils.parseUser( jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
 		    U.toFile();// to save new token + expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
