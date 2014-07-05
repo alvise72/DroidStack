@@ -48,7 +48,7 @@
         android:text="@string/IMAGES"
         android:layout_gravity="center_vertical"
         android:padding="10dp"
-        android:onClick="list_glance"
+        android:onClick="glance"
 	android:textSize="18dp"
 	
 	android:drawableLeft="@drawable/openstack"/>
@@ -62,7 +62,7 @@
         android:padding="10dp"
 	android:textSize="18dp"
 	android:drawableLeft="@drawable/terminal"
-        android:onClick="list_vm"/>
+        android:onClick="nova"/>
   </LinearLayout>  
 </LinearLayout>
 

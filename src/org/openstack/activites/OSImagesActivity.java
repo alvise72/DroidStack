@@ -30,8 +30,10 @@ import android.app.Activity;
 
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.view.MenuItem;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Menu;
 
 import java.io.IOException;
 
@@ -44,6 +46,8 @@ import java.io.File;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.comm.RuntimeException;
+import org.openstack.comm.NotFoundException;
+import org.openstack.comm.NotAuthorizedException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.CustomProgressDialog;
@@ -69,26 +73,76 @@ import android.graphics.Color;
 public class OSImagesActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
-    private Bundle bundle = null;
-    private ArrayList<OSImage> OS = null;
     private String ID = null;
+    User U = null;
+
+    
+    /**
+     *
+     *
+     *
+     */
+    public boolean onCreateOptionsMenu( Menu menu ) {
+        
+        super.onCreateOptionsMenu( menu );
+        
+        int order = Menu.FIRST;
+        int GROUP = 0;
+                
+        menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
+        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+        return true;
+    }
+    
+     public boolean onOptionsItemSelected( MenuItem item ) {
+	 
+        int id = item.getItemId();     
+        
+        if( id == Menu.FIRST-1 ) {
+            Utils.alert( "Not implemented yet" ,this );
+            return true;
+        }
+        
+        if( id == Menu.FIRST ) { 
+	    //            Utils.customAlert(  );
+	    if(U==null) {
+		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+	    } else {
+		progressDialogWaitStop.show();
+		AsyncTaskOSListImages task = new AsyncTaskOSListImages();
+		task.execute( U );
+		return true;
+	    }
+        }
+	return super.onOptionsItemSelected( item );
+    }
+
 
     //__________________________________________________________________________________
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView( R.layout.osimagelist );
-	bundle = getIntent().getExtras();
-	OS = (ArrayList<OSImage>)bundle.getSerializable("OSIMAGES");
+	//bundle = getIntent().getExtras();
+	//OS = (ArrayList<OSImage>)bundle.getSerializable("OSIMAGES");
+	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+	try {
+	    U = User.fromFileID( selectedUser );
+	} catch(RuntimeException re) {
+	    Utils.alert("OSImagesActivity: "+re.getMessage(), this );
+	    return;
+	}
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+	progressDialogWaitStop.show();
+	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
+	task.execute( U );
     }
     
     //__________________________________________________________________________________
     @Override
     public void onResume( ) {
 	super.onResume( );
-	refreshOSImagesViews();
     }
  
  
@@ -136,22 +190,23 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		alert.show();
 	    }
 	}
-	
     }
 
     private  void deleteGlanceImage( String ID ) {
-	try {
-	    User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER","",this) );
-	    progressDialogWaitStop.show();
-	    AsyncTaskOSDelete task = new AsyncTaskOSDelete();
-	    task.execute(U.getEndpoint(), U.getTenantName(), U.getUserName(), U.getPassword(), ""+U.useSSL(), ""+U.getTokenExpireTime(), ID );
-	} catch(RuntimeException re) {
-	    Utils.alert(re.getMessage(), this );
-	}
+	progressDialogWaitStop.show();
+	AsyncTaskOSDelete task = new AsyncTaskOSDelete();
+	task.execute(U.getEndpoint(), 
+		     U.getTenantName(), 
+		     U.getUserName(), 
+		     U.getPassword(), 
+		     ""+U.useSSL(), 
+		     ""+U.getTokenExpireTime(), 
+		     U.getToken(), 
+		     ID );
     }
 
     //__________________________________________________________________________________
-    private void refreshOSImagesViews( ) {
+    private void refreshView( Vector<OSImage> OS ) {
 	Iterator<OSImage> sit = OS.iterator();
 	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
 	while( sit.hasNext( )) {
@@ -163,7 +218,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	}
     }
 
-/**
+    /**
      *
      *
      *
@@ -192,9 +247,10 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    String password   = u[3];
 	    boolean usessl    = Boolean.parseBoolean(u[4]);
 	    long   expire     = Integer.parseInt(u[5]);
-	    String imagetodel = u[6];
+	    String imagetodel = u[7];
 	    User newUser = null;
-	    Log.d("AsyncTaskOSDelete.doInBackground", "endpoint="+endpoint+", tenantname="+tenantname+", username="+username+", password="+password+", userssl="+usessl+", expire="+expire+", imagetodel="+imagetodel);
+	    String token = u[6];
+	    //Log.d("AsyncTaskOSDelete.doInBackground", "endpoint="+endpoint+", tenantname="+tenantname+", username="+username+", password="+password+", userssl="+usessl+", expire="+expire+", imagetodel="+imagetodel);
 	    if(expire <= Utils.now() + 5) {
 		try {
 		    jsonBuf = RESTClient.requestToken( endpoint,
@@ -205,12 +261,12 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		    // String  pwd = U.getPassword();
 		    // String  edp = U.getEndpoint();
 		    // boolean ssl = U.useSSL();
-		    newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setEndpoint( endpoint );
-		    newUser.setPassword( password );
-		    newUser.setSSL( usessl );
-		    //U = newUser;
-		    newUser.toFile( ); // to save the new token+expiration
+		    U = ParseUtils.parseUser( jsonBuf );
+		    U.setEndpoint( endpoint );
+		    U.setPassword( password );
+		    U.setSSL( usessl );
+		    U.toFile( ); // to save the new token+expiration
+		    token = U.getToken();
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -219,7 +275,97 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    }
 
 	    try {
-		jsonBuf = RESTClient.requestImages( newUser.getEndpoint(), newUser.getToken() );
+		RESTClient.deleteGlanceImage( endpoint, token, imagetodel );
+		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
+	    } catch(RuntimeException e) {
+		errorMessage = "Runtime: " + e.getMessage();
+		hasError = true;
+		return "";
+	    } catch(NotFoundException nfe) {
+		errorMessage = "NotFound: " + nfe.getMessage();
+		hasError = true;
+		return "";
+	    } catch(NotAuthorizedException nfe) {
+		errorMessage = "NotAuthorized: " + nfe.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, OSImagesActivity.this );
+		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    try {
+		Vector<OSImage> OS = ParseUtils.parseImages(jsonBuf);
+		OSImagesActivity.this.refreshView( OS );
+	    } catch(ParseException pe) {
+		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+			    OSImagesActivity.this);
+	    }
+
+	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+	    //OSImagesActivity.this.refreshView( jsonBuf );
+	}
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskOSListImages extends AsyncTask<User, String, String>
+    {
+     	private  String   errorMessage  =  null;
+	private  boolean  hasError      =  false;
+	private  String   jsonBuf       = null;
+	
+	protected String doInBackground(User... u ) 
+	{
+	    User U = u[0];
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( pwd );
+		    newUser.setEndpoint( edp );
+		    newUser.setSSL( ssl );
+		    U = newUser;
+		    U.toFile( ); // to save new token+expiration
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    try {
+		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -233,7 +379,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    protected void onPreExecute() {
 	    super.onPreExecute();
 	    
-	    //	    downloading_image_list = true;
+	    //downloading_image_list = true;
 	}
 	
 	@Override
@@ -242,13 +388,21 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    
  	    if(hasError) {
  		Utils.alert( errorMessage, OSImagesActivity.this );
-		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+ 		//downloading_image_list = false;
+ 		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }
 	    
+	    //downloading_image_list = false; // questo non va spostato da qui a
+	    try {
+		Vector<OSImage> OS = ParseUtils.parseImages(jsonBuf);
+		OSImagesActivity.this.refreshView( OS );
+	    } catch(ParseException pe) {
+		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+			    OSImagesActivity.this);
+	    }
 	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );
-	    OSImagesActivity.this.refreshOSImagesViews();
-	    //OSImagesActivity.this.showImageList( jsonBuf );
+	    //OSImagesActivity.this.refreshView( jsonBuf );
 	}
     }
 }

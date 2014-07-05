@@ -31,6 +31,10 @@ import org.apache.http.HttpStatus;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
+import org.openstack.comm.RuntimeException;
+
+import android.util.Log;
+
 public class RESTClient {
 
   
@@ -123,28 +127,32 @@ public class RESTClient {
 	} catch(IOException ioe) {
 	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
 	}
+
 	if( status != HttpStatus.SC_OK ) {
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
-	    int len;
-	    String buf = "";
-	    byte[] buffer = new byte[4096];
-	    try {
-		while (-1 != (len = in.read(buffer))) {
-		    //bos.write(buffer, 0, len);
-		    buf += new String(buffer, 0, len);
-		    //Log.d("requestToken", new String(buffer, 0, len));
+	    if(in!=null) {
+		int len;
+		String buf = "";
+		byte[] buffer = new byte[4096];
+		try {
+		    while (-1 != (len = in.read(buffer))) {
+			//bos.write(buffer, 0, len);
+			buf += new String(buffer, 0, len);
+			//Log.d("requestToken", new String(buffer, 0, len));
+		    }
+		    in.close();
+		
+		} catch(IOException ioe) {
+		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 		}
-		in.close();
-	    } catch(IOException ioe) {
-		throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
-	    }
 	    
-	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
-		throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
+		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+		}
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	    }
-	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
-		throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
-	    throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	}
 	
 	try {
@@ -452,28 +460,35 @@ public class RESTClient {
 	} catch(IOException ioe) {
 	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
 	}
+
+	//Log.d("RESTClient.deleteGlanceImage", "status="+status);
+	if( status == HttpStatus.SC_NO_CONTENT) {
+	    return;
+	}
 	if( status != HttpStatus.SC_OK ) {
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
-	    int len;
-	    String buf = "";
-	    byte[] buffer = new byte[4096];
-	    try {
-		while (-1 != (len = in.read(buffer))) {
-		    //bos.write(buffer, 0, len);
-		    buf += new String(buffer, 0, len);
-		    //Log.d("requestToken", new String(buffer, 0, len));
+	    if(in!=null) {
+		int len;
+		String buf = "";
+		byte[] buffer = new byte[4096];
+		try {
+		    while (-1 != (len = in.read(buffer))) {
+			//bos.write(buffer, 0, len);
+			buf += new String(buffer, 0, len);
+			//Log.d("requestToken", new String(buffer, 0, len));
+		    }
+		    in.close();
+		} catch(IOException ioe) {
+		    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
 		}
-		in.close();
-	    } catch(IOException ioe) {
-		throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
+		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
+		
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+		
+		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
 	    }
-	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
-		throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
-	    
-	    if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
-		throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
-
-	    throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
 	}
     }
 }

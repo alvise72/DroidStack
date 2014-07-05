@@ -51,7 +51,7 @@ import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.Server;
-import org.openstack.utils.Quota;
+//import org.openstack.utils.Quota;
 
 import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
@@ -165,81 +165,40 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      */
     public void overview( View v ) {
-	if(selectedUser.length()==0) {
-	    Utils.alert(getString(R.string.NOUSERSELECTED), this);
-	    return;
-	}
-	User U = null;
-	try {
-	    U = User.fromFileID(selectedUser);//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
-	} catch(Exception e) {
-	    Utils.alert("ERROR: "+e.getMessage( ), this);
-	    return;
-	}
-	progressDialogWaitStop.show();
-	downloading_quota_list = true;
-	AsyncTaskQuota task = new AsyncTaskQuota();
-	task.execute(U);
-    }
-
-    /**
-     *
-     *
-     *
-     *
-     */
-    private void showQuotas( String jsonResponse, User U ) {
-	Quota q = null;
-	try {
-	    q = ParseUtils.parseQuota( jsonResponse );
-	} catch(ParseException pe) {
-	    Utils.alert("MainActivity.overview - ERROR: " + pe.getMessage( ), this );
-	    return;
-	}
-	
+	// if(selectedUser.length()==0) {
+	//     Utils.alert(getString(R.string.NOUSERSELECTED), this);
+	//     return;
+	// }
+	// User U = null;
+	// try {
+	//     U = User.fromFileID(selectedUser);//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	// } catch(Exception e) {
+	//     Utils.alert("ERROR: "+e.getMessage( ), this);
+	//     return;
+	// }
+	// progressDialogWaitStop.show();
+	// downloading_quota_list = true;
+	// AsyncTaskQuota task = new AsyncTaskQuota();
+	// task.execute(U);
 	Class<?> c = (Class<?>)OverViewActivity.class;
 	Intent I = new Intent( MainActivity.this, c );
-	I.putExtra("MAXVM",    q.getMaxInstances());
-	I.putExtra("MAXRAM",   q.getMaxRAM());
-	I.putExtra("MAXSECG",  q.getMaxSecurityGroups());
-	I.putExtra("MAXFIP",   q.getMaxFloatingIP());
-	I.putExtra("MAXCPU",   q.getMaxCPU());
-	I.putExtra("CURRVM",   q.getCurrentInstances());
-	I.putExtra("CURRRAM",  q.getCurrentRAM());
-	I.putExtra("CURRSECG", q.getCurrentSecurityGroups());
-	I.putExtra("CURRFIP",  q.getCurrentFloatingIP());
-	I.putExtra("CURRCPU",  q.getCurrentCPU());
-	I.putExtra("INFOUSER", U.getUserName()+" ("+U.getTenantName()+")");
-
 	startActivity( I );
     }
-    
+
     /**
      *
      *
      *
      *
      */
-    public void list_glance( View v ) {
-	if(selectedUser.length()==0) {
-	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
-	    return;
-	}
-
-	progressDialogWaitStop.show();
-	downloading_image_list = true;
-      
-	User U = null;
-	try {
-	    U = User.fromFileID( selectedUser ) ;//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
-	} catch(Exception e) {
-	    Utils.alert("ERROR: "+e.getMessage( ), this);
-	    return;
-	}
-
-	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
-	task.execute(U);
-
+    public void glance( View v ) {
+    	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
+	Class<?> c = (Class<?>)OSImagesActivity.class;
+ 	Intent I = new Intent( MainActivity.this, c );
+	startActivity(I);
     }
     
     /**
@@ -247,32 +206,8 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      *
      *
-     */  
-    private void showImageList( String jsonBuf ) {
-    
-	Vector<OSImage> osimages = null;
-	try {
-	    osimages = ParseUtils.parseImages( jsonBuf.toString( ) );
-	} catch(ParseException pe) {
-	    Utils.alert( pe.getMessage( ), this );
-	    return;
-	}
-
- 	Class<?> c = (Class<?>)OSImagesActivity.class;
- 	Intent I = new Intent( MainActivity.this, c );
-	
-	I.putExtra("OSIMAGES", osimages );
-	startActivity(I);
-    } 
-    
-    
-    /**
-     *
-     *
-     *
-     *
      */
-    public void list_vm( View v ) {
+    public void nova( View v ) {
 	if(selectedUser.length()==0) {
 	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
 	    return;
@@ -283,7 +218,7 @@ public class MainActivity extends Activity //implements OnClickListener
       
 	User U = null;
 	try {
-	    U = User.fromFileID( selectedUser );//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	    U = User.fromFileID( selectedUser );
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage( ), this);
 	    return;
@@ -329,169 +264,9 @@ public class MainActivity extends Activity //implements OnClickListener
 	}
     }
 
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-    protected class AsyncTaskOSListImages extends AsyncTask<User, String, String>
-    {
-     	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
-	private  String   jsonBuf       = null;
-	
-	protected String doInBackground(User... u ) 
-	{
-	    User U = u[0];
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
-		    U = newUser;
-		    U.toFile( ); // to save new token+expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
 
-	    try {
-		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
-	    }
-	    
-	    return jsonBuf;
-	}
-	
-	@Override
-	    protected void onPreExecute() {
-	    super.onPreExecute();
-	    
-	    downloading_image_list = true;
-	}
-	
-	@Override
-	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
-	    
- 	    if(hasError) {
- 		Utils.alert( errorMessage, MainActivity.this );
- 		downloading_image_list = false;
- 		MainActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
-	    
-	    downloading_image_list = false; // questo non va spostato da qui a
-	    MainActivity.this.progressDialogWaitStop.dismiss( );
-	    MainActivity.this.showImageList( jsonBuf );
-	}
-    }
     
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-    protected class AsyncTaskQuota extends AsyncTask<User, String, String>
-    {
-     	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
-	private  String   jsonBuf       = null;
-	User U = null;
-	protected String doInBackground(User... u ) 
-	{
-	    U = u[0];
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
-		    U = newUser;
-		    U.toFile( );//to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
 
-	    try {
-		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
-	    }
-	    
-	    return jsonBuf;
-	}
-	
-	@Override
-	    protected void onPreExecute() {
-	    super.onPreExecute();
-	    
-	    downloading_quota_list = true;
-	}
-	
-	@Override
-	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
-	    
- 	    if(hasError) {
- 		Utils.alert( errorMessage, MainActivity.this );
- 		downloading_quota_list = false;
- 		MainActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
-	    
-	    downloading_quota_list = false; // questo non va spostato da qui a
-	    MainActivity.this.progressDialogWaitStop.dismiss( );
-	    MainActivity.this.showQuotas( jsonBuf, U );
-	}
-    }
 
     /**
      *
