@@ -135,7 +135,7 @@ public class MainActivity extends Activity //implements OnClickListener
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
 	  try {
-	      User u = User.fromFileID( selectedUser );//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
+	      User u = User.fromFileID( selectedUser );
 	      Toast t = Toast.makeText(this, "Current user: "+u.getUserName() + " (" + u.getTenantName() + ")", Toast.LENGTH_SHORT);
 	      t.setGravity( Gravity.CENTER, 0, 0 );
 	      t.show();
@@ -165,21 +165,10 @@ public class MainActivity extends Activity //implements OnClickListener
      *
      */
     public void overview( View v ) {
-	// if(selectedUser.length()==0) {
-	//     Utils.alert(getString(R.string.NOUSERSELECTED), this);
-	//     return;
-	// }
-	// User U = null;
-	// try {
-	//     U = User.fromFileID(selectedUser);//Utils.userFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/users/"+selectedUser );
-	// } catch(Exception e) {
-	//     Utils.alert("ERROR: "+e.getMessage( ), this);
-	//     return;
-	// }
-	// progressDialogWaitStop.show();
-	// downloading_quota_list = true;
-	// AsyncTaskQuota task = new AsyncTaskQuota();
-	// task.execute(U);
+	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
 	Class<?> c = (Class<?>)OverViewActivity.class;
 	Intent I = new Intent( MainActivity.this, c );
 	startActivity( I );
@@ -216,16 +205,19 @@ public class MainActivity extends Activity //implements OnClickListener
 	progressDialogWaitStop.show();
 	downloading_image_list = true;
       
-	User U = null;
-	try {
-	    U = User.fromFileID( selectedUser );
-	} catch(Exception e) {
-	    Utils.alert("ERROR: "+e.getMessage( ), this);
-	    return;
-	}
-
-	AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-	task.execute(U);
+	// User U = null;
+	// try {
+	//     U = User.fromFileID( selectedUser );
+	// } catch(Exception e) {
+	//     Utils.alert("ERROR: "+e.getMessage( ), this);
+	//     return;
+	// }
+	Class<?> c = (Class<?>)ServersActivity.class;
+	Intent I = new Intent( MainActivity.this, c );
+	startActivity(I);
+	
+	//	AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+	//task.execute(U);
 
     }
 
@@ -268,89 +260,5 @@ public class MainActivity extends Activity //implements OnClickListener
     
 
 
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-    protected class AsyncTaskOSListServers extends AsyncTask<User, String, String>
-    {
-     	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
-	private  String   jsonBuf       = null;
-	private  String   jsonBufForFlavor = null;
-	private  String   username      = null;
-	protected String doInBackground(User... u ) 
-	{
-	    User U = u[0];
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
-		    U = newUser;
-		    U.toFile();// to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
 
-	    username = U.getUserName();
-
-	    try {
-		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		jsonBufForFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
-	    }
-	    
-	    return jsonBuf;
-	}
-	
-	@Override
-	    protected void onPreExecute() {
-	    super.onPreExecute();
-	    
-	    downloading_image_list = true;
-	}
-	
-	@Override
-	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
-	    
- 	    if(hasError) {
- 		Utils.alert( errorMessage, MainActivity.this );
- 		downloading_server_list = false;
- 		MainActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
-	    
-	    downloading_server_list = false; // questo non va spostato da qui a
-	    MainActivity.this.progressDialogWaitStop.dismiss( );
-	    MainActivity.this.showServerList( jsonBuf, jsonBufForFlavor, username );
-	}
-    }
 }

@@ -3,7 +3,7 @@ package org.openstack.activities;
 import android.os.Bundle;
 import android.os.Environment;
 
-
+import android.widget.ProgressBar;
 import android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +21,7 @@ import android.util.Log;
 import android.util.DisplayMetrics;
 
 import android.app.ActivityManager.MemoryInfo;
+import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.ActivityManager;
 import android.app.Activity;
@@ -62,38 +63,47 @@ import org.openstack.utils.LinearLayoutNamed;
 import android.graphics.Typeface;
 import android.graphics.Color;
 
+import android.os.AsyncTask;
+import org.openstack.utils.CustomProgressDialog;
+
 public class ServersActivity extends Activity implements OnClickListener {
 
-    private Bundle bundle = null;
-    private ArrayList<Server> S = null;
+    //private Bundle bundle = null;
+    //private ArrayList<Server> S = null;
+    private CustomProgressDialog progressDialogWaitStop = null;
+    private User U = null;
 
     //__________________________________________________________________________________
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView( R.layout.serverlist );
-	bundle = getIntent().getExtras();
-	S = (ArrayList<Server>)bundle.getSerializable("SERVERS");
-// 	Iterator<Server> sit = S.iterator();
-// 	while(sit.hasNext()) {
-// 	    Server s = sit.next();
-// 	    Utils.alert(s.toString(), this );
-// 	}
+	//	bundle = getIntent().getExtras();
+	//S = (ArrayList<Server>)bundle.getSerializable("SERVERS");
+	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+	
     }
     
     //__________________________________________________________________________________
     @Override
     public void onResume( ) {
 	super.onResume( );
-	refreshServerViews();
+	//refreshServerViews();
     }
  
-    //__________________________________________________________________________________
+    /**
+     *
+     *
+     *
+     *
+     */
     @Override
-    public void onPause( ) {
-	super.onPause( );
-    } 
-    
+    public void onDestroy( ) {
+	super.onDestroy( );
+	progressDialogWaitStop.dismiss();
+    }
+  
   //__________________________________________________________________________________
     public void onClick( View v ) { 
 // 	if(v instanceof ImageButtonNamed) {
@@ -134,12 +144,12 @@ public class ServersActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshServerViews( ) {
-	Iterator<Server> sit = S.iterator();
-	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
-	while( sit.hasNext( )) {
-	    Server s = sit.next();
-	    ((LinearLayout)findViewById(R.id.serverLayout)).addView( new ServerView(s, this) );
-	}
+	// Iterator<Server> sit = S.iterator();
+	// ((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
+	// while( sit.hasNext( )) {
+	//     Server s = sit.next();
+	//     ((LinearLayout)findViewById(R.id.serverLayout)).addView( new ServerView(s, this) );
+	// }
 
 // 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
 // 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
@@ -163,5 +173,91 @@ public class ServersActivity extends Activity implements OnClickListener {
 // 	    else
 // 		uv.setUnselected( );
 // 	}
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskOSListServers extends AsyncTask<User, String, String>
+    {
+     	private  String   errorMessage  =  null;
+	private  boolean  hasError      =  false;
+	private  String   jsonBuf       = null;
+	private  String   jsonBufForFlavor = null;
+	private  String   username      = null;
+	protected String doInBackground(User... u ) 
+	{
+	    User U = u[0];
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( pwd );
+		    newUser.setEndpoint( edp );
+		    newUser.setSSL( ssl );
+		    U = newUser;
+		    U.toFile();// to save new token + expiration
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    username = U.getUserName();
+
+	    try {
+		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBufForFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPreExecute() {
+	    super.onPreExecute();
+	    
+	    //downloading_image_list = true;
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, ServersActivity.this );
+ 		//downloading_server_list = false;
+ 		ServersActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    //downloading_server_list = false; // questo non va spostato da qui a
+	    ServersActivity.this.progressDialogWaitStop.dismiss( );
+	    //ServersActivity.this.showServerList( jsonBuf, jsonBufForFlavor, username );
+	}
     }
 }
