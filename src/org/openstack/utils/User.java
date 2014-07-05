@@ -12,7 +12,7 @@ import java.io.File;
 
 import android.os.Environment;
 
-import org.openstack.comm.RuntimeException;
+//import org.openstack.comm.RuntimeException;
 
 public class User implements Serializable, Comparable<User> {
 

@@ -45,7 +45,7 @@ import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
 import org.openstack.comm.RESTClient;
-import org.openstack.comm.RuntimeException;
+//import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.CustomProgressDialog;
@@ -179,6 +179,8 @@ public class OverViewActivity extends Activity {
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
 	User U = null;
+
+	@Override
 	protected String doInBackground(User... u ) 
 	{
 	    U = u[0];

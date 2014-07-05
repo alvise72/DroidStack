@@ -44,7 +44,7 @@ import java.util.Set;
 import java.io.File;
 
 import org.openstack.comm.RESTClient;
-import org.openstack.comm.RuntimeException;
+//import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
@@ -229,6 +229,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	private  String   jsonBuf       = null;
 	private  String   jsonBufferFlavor = null;
 	private  String   username      = null;
+
+	@Override
 	protected String doInBackground(User... u ) 
 	{
 	    User U = u[0];

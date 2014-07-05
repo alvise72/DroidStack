@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+  <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+    <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+      <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Instance name:"
+		android:ems="10" />
+		
+        <EditText
+                    android:id="@+id/vmnameET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:ems="10" >
+          <requestFocus />
+        </EditText>
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Tenant's name:"
+		android:ems="10" />
+	<Spinner
+	    android:id="@+id/flavorSP"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" />
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Username:"
+		android:ems="10" />	    
+        <EditText
+                    android:id="@+id/countET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:ems="10" />
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Password:"
+		android:ems="10" />
+        <EditText
+                    android:id="@+id/passwordET"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:text=""
+                    android:inputType="textPassword" />
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="KeyPair:"
+		android:ems="10" />
+	<Spinner
+	    android:id="@+id/keypairSP"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" />
+        
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Network:"
+		android:ems="10" />
+	<Spinner
+	    android:id="@+id/networkSP"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" />
+        
+<!--
+        <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+          <CheckBox
+                        android:id="@+id/keypair"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/USESSL" />
+        </LinearLayout>
+-->
+        <LinearLayout
+   	  android:layout_width="fill_parent"
+    	  android:layout_height="wrap_content"
+   	  android:layout_gravity="center_horizontal"
+  	  android:gravity="center_horizontal" >
+          
+	  <Button
+   	    android:id="@+id/button1"
+   	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+   	    android:layout_gravity="center_horizontal"
+   	    android:fadingEdge="horizontal"
+  	    android:shadowDx="3"
+     	    android:shadowDy="3"
+     	    android:shadowRadius="3"
+     	    android:text="Launch"
+	    android:onClick="lauch" />
+	    
+        </LinearLayout></LinearLayout>
+      </ScrollView>
+    </LinearLayout></LinearLayout>

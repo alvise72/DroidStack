@@ -45,7 +45,7 @@ import java.util.Set;
 import java.io.File;
 
 import org.openstack.comm.RESTClient;
-import org.openstack.comm.RuntimeException;
+//import org.openstack.comm.RuntimeException;
 import org.openstack.comm.NotFoundException;
 import org.openstack.comm.NotAuthorizedException;
 import org.openstack.parse.ParseUtils;
@@ -189,6 +189,41 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 		alert.show();
 	    }
+	}
+
+	if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_LAUNCH_IMAGE ) {
+		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
+		Class<?> c = (Class<?>)UsersActivity.class;
+		Intent I = new Intent( OSImagesActivity.this, c );
+		I.putExtra( "IMAGEID", ID );
+		startActivity( I );
+
+		// AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		// builder.setMessage( "Are you sure to delete this image ?" );
+		// builder.setCancelable(false);
+	    
+		// DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+		// 	public void onClick(DialogInterface dialog, int id) {
+		// 	    deleteGlanceImage( ID );
+		// 	}
+		//     };
+
+		// DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+		// 	public void onClick(DialogInterface dialog, int id) {
+		// 	    dialog.cancel( );
+		// 	}
+		//     };
+
+		// builder.setPositiveButton("Yes", yesHandler );
+		// builder.setNegativeButton("No", noHandler );
+            
+		// AlertDialog alert = builder.create();
+		// alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+		// 			    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+		// alert.show();
+		//}
+		//	}
+
 	}
     }
 
@@ -337,7 +372,8 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
-	
+
+	@Override
 	protected String doInBackground(User... u ) 
 	{
 	    User U = u[0];
@@ -356,7 +392,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
-		    U.toFile( ); // to save new token+expiration
+		    U.toFile( ); 
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;

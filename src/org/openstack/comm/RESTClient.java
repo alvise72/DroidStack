@@ -31,7 +31,7 @@ import org.apache.http.HttpStatus;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
-import org.openstack.comm.RuntimeException;
+//import org.openstack.comm.RuntimeException;
 
 import android.util.Log;
 
@@ -442,8 +442,6 @@ public class RESTClient {
 	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
-	//conn.setRequestProperty("X-Auth-Project-Id", tenantname);
-	//conn.setRequestProperty("Accept", "application/json");
 	conn.setRequestProperty("Content-Type", "application/octet-stream");
 	conn.setRequestProperty("X-Auth-Token", token);
     
@@ -489,6 +487,64 @@ public class RESTClient {
 		
 		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
 	    }
+	}
+    }
+
+    /**
+     *
+     *
+     * curl -i 'http://90.147.77.40:9696/v2.0/networks' -X GET -H "X-Auth-Project-Id: Alvise" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     *
+     *
+     *
+     */
+    public static String requestNetworks( String endpoint,
+					  String token,
+					  String tenantname ) throws RuntimeException
+    {
+	String proto = "http://";
+	
+	String sUrl = proto + endpoint + ":9696/v2.0/networks";
+	URL url = null;
+	try {
+	    url = new URL(sUrl);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	TrustManager[] trustAllCerts = null;
+    
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	}
+    
+	conn.setRequestProperty("X-Auth-Project-Id", tenantname);
+	conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("X-Auth-Token", token);
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("GET");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
+	}
+	
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer)))
+		res += new String(buffer, 0, len);
+	    
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    return res; 
+	} catch(IOException ioe) {
+	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
 	}
     }
 }
