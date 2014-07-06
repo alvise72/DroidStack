@@ -193,7 +193,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 
 	if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_LAUNCH_IMAGE ) {
 		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
-		Class<?> c = (Class<?>)UsersActivity.class;
+		Class<?> c = (Class<?>)ImageLaunchActivity.class;
 		Intent I = new Intent( OSImagesActivity.this, c );
 		I.putExtra( "IMAGEID", ID );
 		startActivity( I );

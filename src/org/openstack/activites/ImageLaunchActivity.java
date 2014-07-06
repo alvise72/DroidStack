@@ -29,8 +29,12 @@ import org.openstack.utils.Base64;
 import org.openstack.utils.Flavor;
 
 import org.openstack.comm.RESTClient;
+
 import org.openstack.utils.CustomProgressDialog;
+import org.openstack.utils.SubNetwork;
+import org.openstack.utils.Network;
 import org.openstack.utils.User;
+
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
@@ -67,7 +71,7 @@ public class ImageLaunchActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView( org.openstack.R.layout.useradd );
+    setContentView( org.openstack.R.layout.launchimage );
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
     
@@ -204,9 +208,9 @@ public class ImageLaunchActivity extends Activity {
     // }
     
     progressDialogWaitStop.show();
-
-    // AsyncTaskLaunchImage task = new AsyncTaskLaunchImage();
-    // task.execute();
+    User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+    AsyncTaskGetOptions task = new AsyncTaskGetOptions();
+    task.execute( U );
   }
 
 
@@ -334,7 +338,9 @@ public class ImageLaunchActivity extends Activity {
     {
      	private  String   errorMessage  = null;
 	private  boolean  hasError      = false;
-	private  String   jsonBuf       = null;
+	private  String   jsonBufFlavor = null;
+	private  String   jsonBufNetwork= null;
+	private  String   jsonBufSubnet = null;
 
 	@Override
 	protected Void doInBackground( User... u ) 
@@ -342,11 +348,11 @@ public class ImageLaunchActivity extends Activity {
 	    User U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
+		    String jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+							      U.getTenantName(),
+							      U.getUserName(),
+							      U.getPassword(),
+							      U.useSSL() );
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
@@ -365,8 +371,10 @@ public class ImageLaunchActivity extends Activity {
 	    }
 
 	    try {
-		jsonBuf = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
-		jsonBuf = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
+		jsonBufFlavor = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
+		jsonBufNetwork = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
+		jsonBufSubnet = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
+		
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -394,8 +402,12 @@ public class ImageLaunchActivity extends Activity {
 	    
 	    //downloading_image_list = false; // questo non va spostato da qui a
 	    try {
-		ImageLaunchActivity.this.flavorTable = ParseUtils.parseFlavors(jsonBuf);
-		//ImageLaunchActivity.this.addFlavorsToView( );
+		// ImageLaunchActivity.this.flavorTable = ParseUtils.parseFlavors(jsonBufFlavor);
+		// ImageLaunchActivity.this.addFlavorsToView( );
+		Vector<Network> nets = ParseUtils.parseNetwork( jsonBufNetwork, jsonBufSubnet );
+		Iterator<Network> it = nets.iterator( );
+		while( it.hasNext( ) )
+		    Utils.alert(it.next().toString( ), ImageLaunchActivity.this );
 	    } catch(ParseException pe) {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);

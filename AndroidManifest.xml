@@ -79,5 +79,12 @@
             android:configChanges="keyboardHidden|orientation"
            />
 
+       <activity
+            android:name="org.openstack.activities.ImageLaunchActivity"
+            android:launchMode="singleInstance"
+            android:label="Manage Nova Instances"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
+           />
     </application>
 </manifest> 

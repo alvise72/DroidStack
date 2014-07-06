@@ -109,7 +109,7 @@
      	    android:shadowDy="3"
      	    android:shadowRadius="3"
      	    android:text="Launch"
-	    android:onClick="lauch" />
+	    android:onClick="launch" />
 	    
         </LinearLayout></LinearLayout>
       </ScrollView>

@@ -28,6 +28,18 @@ public class SubNetwork { //implements Serializable {
     public AllocationPool[] getAllocationPools( ) { return allocPools; }
     public String[] getDNS( ) { return dns; }
 
+    @Override
+    public String toString() {
+	return "Subnet{name=" + name
+	    + ",cidr="+cidr
+	    + ",gateway="+gw
+	    + ",start=" + allocPools[0].getStartIP( )
+	    + ",end=" + allocPools[0].getEndIP( ) 
+	    + ",dns=" + dns[0]
+	    + ",dhcp="+dhcp
+	    +"}";
+    }
+
     // public class AllocationPool {
     // 	private String start;
     // 	private String end;

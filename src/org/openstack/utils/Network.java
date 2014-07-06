@@ -19,6 +19,17 @@ public class Network {
 	this.ext = ext;
     }
 
+    @Override
+    public String toString( ) {
+	return "Network{name=" + name
+	    + ",status=" + status
+	    + ",shared="+shared
+	    + ",up="+up
+	    + ",external="+ext
+	    + ",Subnet="+(subnets[0]!=null ? subnets[0].toString() : "N/A")
+	    + "}";
+    }
+
     public String getName( ) { return name; }
     public String getID( ) { return ID; }
     public SubNetwork[] getSubNetworks( ) { return subnets; }
