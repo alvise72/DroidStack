@@ -29,7 +29,6 @@ import java.util.Iterator;
 
 import android.util.Pair;
 
-//import android.util.Log;
 import org.apache.http.HttpStatus;
 
 import org.openstack.parse.ParseUtils;
@@ -39,15 +38,24 @@ import android.util.Log;
 
 public class RESTConnection {
     
-    private static final int METHOD_GET = 1;
-    private static final int METHOD_POST = 2;
-    private static final int METHOD_DELETE = 3;
+    public static final int METHOD_GET = 1;
+    public static final int METHOD_POST = 2;
+    public static final int METHOD_DELETE = 3;
 
-    private static final String[] methods = {"GET", "POST", "DELETE"};
+    public static final String[] methods = {"GET", "POST", "DELETE"};
 
-    private StringBuffer buf = null;
+    private StringBuffer buf = new StringBuffer(1048576);
 
-    public RESTConnection( String url, Vector<Pair<String, String> > properties, int method ) throws RuntimeException {
+    /**
+     *
+     *
+     *
+     *
+     *
+     */
+    public RESTConnection( String url, Vector<Pair<String, String> > properties, int method ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException {
+	Log.d("RESTConnection", "URL="+url);
+
 	URL _url = null;
 	try {
 	    _url = new URL(url);
@@ -64,10 +72,60 @@ public class RESTConnection {
 	Iterator<Pair<String,String>> it = properties.iterator();
 	while( it.hasNext( ) ) {
 	    Pair<String,String> p = it.next( );
+	    Log.d("RESTConnection", "Adding property: " + p.first + " -> " + p.second);
 	    conn.setRequestProperty(p.first, p.second);
 	}
 	conn.setRequestProperty("Content-Type", "application/json");
 	conn.setRequestProperty("Accept", "application/json");
+
+	try {
+	    Log.d("RESTConnection", "Setting method: "+methods[method]);
+	    ((HttpURLConnection)conn).setRequestMethod(methods[method]);
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod(" + methods[method]+"): " + pe.getMessage( ) );
+	}
+	Log.d("RESTConnection", "Getting Status");
+	int status = HttpStatus.SC_OK;
+	try {
+	     status = ((HttpURLConnection)conn).getResponseCode();
+	} catch(IOException ioe) {
+	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
+	}
+
+	if( status == HttpStatus.SC_NO_CONTENT) {
+	    return;
+	}
+
+	if( status != HttpStatus.SC_OK ) {
+	    Log.d("RESTConnection", "STATUS NOT OK="+status);
+	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
+	    if(in!=null) {
+		int len;
+		String buf = "";
+		byte[] buffer = new byte[4096];
+		try {
+		    while (-1 != (len = in.read(buffer))) {
+			//bos.write(buffer, 0, len);
+			buf += new String(buffer, 0, len);
+			//Log.d("requestToken", new String(buffer, 0, len));
+		    }
+		    in.close();
+		
+		} catch(IOException ioe) {
+		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
+		}
+
+		Log.d("RESTConnection", "ERRORBUF="+buf);
+	    
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
+		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+		}
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+
+		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
+	    }
+	}
 
 	BufferedInputStream inStream = null;
 	buf = new StringBuffer( 1048576 );
@@ -87,13 +145,19 @@ public class RESTConnection {
 	    }
 	    inStream.close();
 	    ((HttpURLConnection)conn).disconnect( );
-
 	} catch(java.io.IOException ioe) {
 	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
 	}
-	
-	//return buf.toString( );    	
+
+	Log.d("RESTConnection", "buf="+buf.toString());
     }
 
+    /**
+     *
+     *
+     *
+     *
+     *
+     */
     public String getJSONResponse( ) { return buf.toString(); }
 }

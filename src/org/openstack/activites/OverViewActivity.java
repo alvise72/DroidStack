@@ -44,11 +44,14 @@ import org.openstack.utils.Quota;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
-import org.openstack.comm.RESTClient;
+import org.openstack.comm.*;
 //import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.CustomProgressDialog;
+
+import android.util.Pair;
+
 
 public class OverViewActivity extends Activity {
 
@@ -209,6 +212,7 @@ public class OverViewActivity extends Activity {
 
 	    try {
 		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;

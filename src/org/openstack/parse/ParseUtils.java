@@ -11,6 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import org.openstack.utils.AllocationPool;
+import org.openstack.utils.SubNetwork;
+import org.openstack.utils.Network;
 import org.openstack.utils.OSImage;
 import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
@@ -286,5 +289,81 @@ public class ParseUtils {
  	    throw new ParseException( je.getMessage( ) );
  	}
 	return flavorTable;
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static Vector<Network> parseNetwork ( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
+
+	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
+
+	try {
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
+	    for(int i =0; i<networks.length(); ++i) {
+		JSONObject network = networks.getJSONObject(i);
+		String status = (String)network.getString("status");
+		String name = (String)network.getString("name");
+		boolean up = network.getBoolean("admin_state_up");
+		boolean ext = network.getBoolean("router:external");
+		boolean shared = network.getBoolean("router:external");
+		String ID = network.getString("id");
+		JSONArray subnets  = network.getJSONArray("subnets");
+		String[] arraySubnetID = new String[ subnets.length() ];
+		for(int j = 0; j<subnets.length(); ++j)
+		    arraySubnetID[j] = (String)subnets.getString(j);
+		
+		SubNetwork[] _subnets = new SubNetwork[subnets.length()];
+		for(int j = 0; j< arraySubnetID.length; j++) {
+		    if(subnetsTable.contains(arraySubnetID[j]))
+			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
+		}
+		new Network(status, name, ID, _subnets, shared, up, ext );
+	    }
+	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
+	return null;
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static Hashtable<String, SubNetwork> parseSubNetworks( String jsonBuf )  throws ParseException  {
+	Hashtable<String, SubNetwork> result = new Hashtable();
+	try{
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray subnets = (JSONArray)jsonObject.getJSONArray("subnets");
+	    for(int i =0; i<subnets.length(); ++i) {
+		JSONObject subnet = subnets.getJSONObject(i);
+		boolean dhcp = subnet.getBoolean("enable_dhcp");
+		String ID = (String)subnet.getString("id");
+		String name = (String)subnet.getString("name");
+		String gateway = (String)subnet.getString("gateway_ip");
+		String cidr = (String)subnet.getString("cidr");
+		JSONArray dnsarray = (JSONArray)subnet.getJSONArray("dns_nameservers");
+		String[] dns = new String[dnsarray.length()];
+		for(int j = 0; j<dnsarray.length(); j++)
+		    dns[j] = (String)dnsarray.getString(j);
+		JSONArray allocpools = (JSONArray)subnet.getJSONArray("allocation_pools");
+		AllocationPool[] pools = new AllocationPool[allocpools.length()];
+		for(int j=0; j<allocpools.length(); j++) {
+		    AllocationPool pool = new AllocationPool( (String)allocpools.getJSONObject(j).getString("start"), 
+										    (String)allocpools.getJSONObject(j).getString("end") );
+		    pools[j] = pool;
+		}
+		result.put( ID, new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp ));
+	    }
+	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
+	return result;
     }
 }
