@@ -360,6 +360,8 @@ public class ParseUtils {
 										    (String)allocpools.getJSONObject(j).getString("end") );
 		    pools[j] = pool;
 		}
+		SubNetwork sub = new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp );
+		Log.d("parseSubNetworks", "SubNetwork="+sub.toString() );
 		result.put( ID, new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp ));
 	    }
 	} catch(org.json.JSONException je) {
