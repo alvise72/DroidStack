@@ -45,4 +45,15 @@ public class Flavor  implements Comparable<Flavor>, Serializable {
 	    return 1;
 	return 0;
     }
+
+    @Override
+	public String toString( ) {
+	return "Flavor{name="+name
+	    + ",ID=" + ID
+	    + ",RAM=" + ram
+	    + ",CPU=" + vcpus
+	    + ",SWAP=" + swap
+	    + ",DISK=" + disk
+	    + ",Ephemeral=" + ephemeral + "}";
+    }
 }

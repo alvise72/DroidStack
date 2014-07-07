@@ -11,4 +11,7 @@ public class SecGroup {
 
     public String getName( ) { return name; }
     public String getID( ) { return id; }
+
+    @Override
+	public String toString( ) { return "SecGroup{name="+name+",ID="+id+"}"; }
 }

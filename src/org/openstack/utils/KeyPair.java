@@ -15,4 +15,8 @@ public class KeyPair {
     public String getKey( ) { return key; }
     public String getFingerPrint( ) { return fingerprint; }
     
+    @Override
+	public String toString() {
+	return "KeyPair{name=" + name + ", fingerprint="+fingerprint+"}";
+    }
 }

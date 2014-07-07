@@ -12,6 +12,10 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
       <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+      <LinearLayout
                 android:id="@+id/optionLayer"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -89,7 +93,7 @@
 		android:text="Security groups:"
 		android:ems="10" />       
 
-
+        </LinearLayout>
 
         <LinearLayout
    	  android:layout_width="fill_parent"
@@ -109,6 +113,7 @@
      	    android:text="Launch"
 	    android:onClick="launch" />
 	    
-        </LinearLayout></LinearLayout>
+        </LinearLayout>
+</LinearLayout>
       </ScrollView>
     </LinearLayout></LinearLayout>

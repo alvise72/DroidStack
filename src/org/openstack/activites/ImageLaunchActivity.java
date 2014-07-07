@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.os.Environment;
 
+import android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.CheckBox;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
@@ -34,9 +36,10 @@ import org.openstack.utils.Flavor;
 import org.openstack.utils.KeyPair;
 
 import org.openstack.comm.RESTClient;
-
+import org.openstack.views.SecGroupView;
 import org.openstack.utils.CustomProgressDialog;
 import org.openstack.utils.SubNetwork;
+import org.openstack.utils.SecGroup;
 import org.openstack.utils.Network;
 import org.openstack.utils.User;
 
@@ -54,7 +57,7 @@ import org.openstack.R;
 
 import org.openstack.views.UserView;
 
-public class ImageLaunchActivity extends Activity {
+public class ImageLaunchActivity extends Activity implements OnClickListener {
 
     private boolean requesting_token = false;
     private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
@@ -62,15 +65,41 @@ public class ImageLaunchActivity extends Activity {
     private ArrayAdapter<String> spinnerNetworksArrayAdapter = null;
     private ArrayAdapter<String> spinnerFlavorsArrayAdapter  = null;
     private ArrayAdapter<String> spinnerKeypairsArrayAdapter = null;
+    //private ArrayAdapter<String> spinnerSecgroupsArrayAdapter = null;
+
+    private Spinner spinnerNetworks  = null;
+    private Spinner spinnerFlavors   = null;
+    private Spinner spinnerKeypairs  = null;
+    //private Spinner spinnerSecgroups = null;
     
-    private Spinner spinnerNetworks = null;
-    private Spinner spinnerFlavors  = null;
-    private Spinner spinnerKeypairs = null;
 
     private Network networks[] = null;
     private Flavor flavors[] = null;
     private KeyPair keypairs[] = null;
-    //private SecGroup secgroups[] = null;
+    private SecGroup secgroups[] = null;
+
+    private LinearLayout options = null;
+
+    private Hashtable<String, Boolean> selectedSecgroups = null;
+
+    @Override
+    public void onClick( View v ) {
+	if(v instanceof CheckBox) {
+	    SecGroupView s = (SecGroupView)v;
+	    if(s.isChecked()) {
+		selectedSecgroups.remove( s.getSecGroup().getID() );
+		selectedSecgroups.put( s.getSecGroup().getID(), new Boolean(true) );
+	    } else {
+		selectedSecgroups.remove(s.getSecGroup().getID());
+		selectedSecgroups.put( s.getSecGroup().getID(), new Boolean(false) );
+	    }
+// 	    String ID = ((SecGroupView)v).getSecGroup().getID();
+// 	    String name = ((SecGroupView)v).getSecGroup().getName();
+// 	    Toast t = Toast.makeText(this, name+" - "+ID, Toast.LENGTH_SHORT);
+// 	    t.show();
+//	    Utils.alert(selectedSecgroups.toString( ), this);
+	}
+    }
 
     /**
      *
@@ -97,7 +126,10 @@ public class ImageLaunchActivity extends Activity {
     spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
     spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
     spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
+    //spinnerSecgroups = (Spinner)findViewById(R.id.);
 
+    options = (LinearLayout)findViewById( R.id.optionLayer );
+    
     progressDialogWaitStop.show();
     User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
     AsyncTaskGetOptions task = new AsyncTaskGetOptions();
@@ -211,6 +243,14 @@ public class ImageLaunchActivity extends Activity {
      *
      */  
   public void launch( View v ) {
+
+      int i = spinnerNetworks.getSelectedItemPosition( );
+      int j = spinnerFlavors.getSelectedItemPosition( );
+      int k = spinnerKeypairs.getSelectedItemPosition( );
+      Utils.alert( networks[i].toString(), this);
+      Utils.alert( flavors[j].toString(), this );
+      Utils.alert( keypairs[k].toString(), this );
+
     // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
     // EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
     // EditText usernameET = (EditText)findViewById(org.openstack.R.id.usernameET);
@@ -456,6 +496,21 @@ public class ImageLaunchActivity extends Activity {
 		spinnerKeypairsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,keypairNames );
 		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerKeypairs.setAdapter(spinnerKeypairsArrayAdapter);
+
+		secgroups = ParseUtils.parseSecgroup( jsonBufSecgroups );
+		String[] secgroupNames = new String[secgroups.length];
+		selectedSecgroups = new Hashtable();
+		for(int i =0; i< secgroups.length; ++i) {
+		    SecGroupView sgv = new SecGroupView( secgroups[i],ImageLaunchActivity.this );
+		    sgv.setOnClickListener( ImageLaunchActivity.this );
+		    options.addView( sgv );
+		    selectedSecgroups.put( sgv.getSecGroup( ).getID(), new Boolean(sgv.isChecked( )) );
+		}
+
+
+// 		spinnerSecgroupsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,secgroupNames );
+// 		spinnerSecgroupsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// 		spinnerSecgroups.setAdapter(spinnerSecgroupsArrayAdapter);
 
 		
 		
