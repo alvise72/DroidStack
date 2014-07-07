@@ -290,6 +290,22 @@ public class Utils {
      *
      *
      */
+    public static String join(String[] s, String delimiter) {
+        StringBuffer buffer = new StringBuffer();
+	for(int i = 0; i<s.length; ++i) {
+            buffer.append( s[i]  );
+	    if(i!=s.length-1)
+		buffer.append(delimiter);
+        }
+        return buffer.toString();
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
     public static void alert( String message, Context ctx ) {
 	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
         alertbox.setMessage( message );

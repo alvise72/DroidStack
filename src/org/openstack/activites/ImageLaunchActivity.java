@@ -65,13 +65,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private ArrayAdapter<String> spinnerNetworksArrayAdapter = null;
     private ArrayAdapter<String> spinnerFlavorsArrayAdapter  = null;
     private ArrayAdapter<String> spinnerKeypairsArrayAdapter = null;
-    //private ArrayAdapter<String> spinnerSecgroupsArrayAdapter = null;
-
     private Spinner spinnerNetworks  = null;
     private Spinner spinnerFlavors   = null;
     private Spinner spinnerKeypairs  = null;
-    //private Spinner spinnerSecgroups = null;
-    
 
     private Network networks[] = null;
     private Flavor flavors[] = null;
@@ -81,6 +77,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private LinearLayout options = null;
 
     private Hashtable<String, Boolean> selectedSecgroups = null;
+
+    private User currentUser = null;
+
+    private Bundle bundle = null;
+    
+    private String imageID = null;
 
     @Override
     public void onClick( View v ) {
@@ -120,6 +122,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView( org.openstack.R.layout.launchimage );
+
+    bundle = getIntent( ).getExtras( );
+    imageID = bundle.getString("IMAGEID");
+
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
     
@@ -131,9 +137,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     options = (LinearLayout)findViewById( R.id.optionLayer );
     
     progressDialogWaitStop.show();
-    User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+    currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
     AsyncTaskGetOptions task = new AsyncTaskGetOptions();
-    task.execute( U );
+    task.execute( currentUser );
 
 //    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colors);
 //    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -247,9 +253,23 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       int i = spinnerNetworks.getSelectedItemPosition( );
       int j = spinnerFlavors.getSelectedItemPosition( );
       int k = spinnerKeypairs.getSelectedItemPosition( );
-      Utils.alert( networks[i].toString(), this);
-      Utils.alert( flavors[j].toString(), this );
-      Utils.alert( keypairs[k].toString(), this );
+
+      String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
+      int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
+
+      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+      AsyncTaskLaunch task = new AsyncTaskLaunch();
+
+      Set<String> setSecgroups = selectedSecgroups.keySet();
+      String[] arraySecgroups = new String[selectedSecgroups.size()];
+      setSecgroups.toArray( arraySecgroups );
+      
+      task.execute( currentUser.getEndpoint(), currentUser.getTenantID(),
+		    currentUser.getTenantName(), currentUser.getToken(),
+		    instanceName, imageID,
+		    keypairs[k].getName(), flavors[j].getID(),
+		    ""+count, networks[i].getName(),
+		    Utils.join( arraySecgroups, "," ) );
 
     // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
     // EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
@@ -518,6 +538,96 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);
 	    }
+	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+	}
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
+    {
+     	private  String   errorMessage  = null;
+	private  boolean  hasError      = false;
+	private  String jsonBuf         = null;
+
+	@Override
+	protected Void doInBackground( String... args ) 
+	{
+	    Log.d("DROIDSTACK", Utils.join(args,","));
+	    User U = ImageLaunchActivity.this.currentUser;
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    String jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+							      U.getTenantName(),
+							      U.getUserName(),
+							      U.getPassword(),
+							      U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( pwd );
+		    newUser.setEndpoint( edp );
+		    newUser.setSSL( ssl );
+		    U = newUser;
+		    U.toFile( ); // to save new token+expiration
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return null;
+		}
+	    }
+
+	    try {
+		jsonBuf = RESTClient.requestInstanceCreation( U.getEndpoint(),
+							      U.getTenantID(),
+							      U.getTenantName(),
+							      U.getToken(),
+							      args[0],
+							      args[1],
+							      args[2],
+							      args[3],
+							      Integer.parseInt(args[4]),
+							      args[5],
+							      args[6] );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return null;
+	    }
+	    
+	    return null;//jsonBuf;
+	}
+	
+	@Override
+	    protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
+	    if(hasError) {
+ 		Utils.alert( "Launch: "+errorMessage, ImageLaunchActivity.this );
+ 		//downloading_image_list = false;
+ 		ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    Log.d("DROIDSTACK", "onPostExecute, jsonBuf="+jsonBuf);
+		
+	    // } catch(ParseException pe) {
+	    // 	Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+	    // 		    ImageLaunchActivity.this);
+	    // }
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
 	}
     }

@@ -30,6 +30,10 @@ import org.apache.http.HttpStatus;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+
 import android.util.Log;
 
 public class RESTClient {
@@ -718,23 +722,17 @@ public class RESTClient {
      *
      * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
      *
-     *
-     *
      */
-    public static String requestInstanceCreation( String endpoint,
-						  String tenantid,
-						  String tenantname,
-						  String token,
-						  String instanceName,
-						  String glanceImageID,
-						  String key_name,
-						  String flavorID,
-						  int count,
-						  String netID,
-						  String[] secgrpIDs ) throws RuntimeException {
-   String proto = "http://";
+    public static String requestInstanceCreation( String endpoint, String tenantid,
+						  String tenantname, String token,
+						  String instanceName, String glanceImageID,
+						  String key_name, String flavorID,
+						  int count, String netID,
+						  String _secgrpIDs ) throws RuntimeException 
+    {
+	String proto = "http://";
 	
-	String sUrl = proto + endpoint + ":8774/v2/" + tenantid + "servers";
+	String sUrl = proto + endpoint + ":8774/v2/" + tenantid + "/servers";
 	URL url = null;
 	try {
 	    url = new URL(sUrl);
@@ -742,12 +740,10 @@ public class RESTClient {
 	    throw new RuntimeException("new URL: " + mfu.toString( ) );
 	}
 	URLConnection conn = null;
-	TrustManager[] trustAllCerts = null;
     
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
-	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
 	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
@@ -761,8 +757,30 @@ public class RESTClient {
 	} catch(java.net.ProtocolException pe ) {
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
+	String _data = "{\"server\": {\"name\": \"" + instanceName + 
+	    "\", \"imageRef\": \"" + glanceImageID + 
+	    "\", \"key_name\": \"" + key_name + 
+	    "\", \"flavorRef\": \"" + flavorID + 
+	    "\", \"max_count\": " + count + 
+	    ", \"min_count\": " + count + 
+	    ", \"networks\": [{\"uuid\": \"" + netID + "\"}]}}";
+
+	JSONObject obj = null;
+	String []secgrpIDs = _secgrpIDs.split(",");
+	try {
+	    obj = new JSONObject( _data );
+	    JSONArray secgs = new JSONArray();
+	    for(int i = 0; i<secgrpIDs.length; ++i)
+		secgs.put( new JSONObject("{\"name\": \"848f1b29-c793-415c-8f3f-10836c1f99f7\"}") );
+	    obj.put("security_group", secgs);
+	} catch(JSONException je) {
+	    throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
+	}
 	
-	String data = "{\"servers\": {\"name\": \"" + instanceName + "\", \"\"}";
+	String data = obj.toString( );
+
+	Log.d("RESTClient", "OBJ="+obj.toString());
+	
 	OutputStreamWriter out = null;
 	try {
 	    out = new OutputStreamWriter(conn.getOutputStream());
@@ -788,7 +806,7 @@ public class RESTClient {
 	} catch(IOException ioe) {
 	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
 	}
-	return null;
+	//return res;
     } 
 						  
 						  
