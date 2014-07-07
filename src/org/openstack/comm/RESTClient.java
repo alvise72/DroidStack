@@ -712,5 +712,85 @@ public class RESTClient {
 	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
 	}
     }
+
+    /**
+     *
+     *
+     * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
+     *
+     *
+     *
+     */
+    public static String requestInstanceCreation( String endpoint,
+						  String tenantid,
+						  String tenantname,
+						  String token,
+						  String instanceName,
+						  String glanceImageID,
+						  String key_name,
+						  String flavorID,
+						  int count,
+						  String netID,
+						  String[] secgrpIDs ) throws RuntimeException {
+   String proto = "http://";
+	
+	String sUrl = proto + endpoint + ":8774/v2/" + tenantid + "servers";
+	URL url = null;
+	try {
+	    url = new URL(sUrl);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	TrustManager[] trustAllCerts = null;
+    
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	}
+    
+	conn.setRequestProperty("X-Auth-Project-Id", tenantname );
+	conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("Content-Type", "application/json");
+	conn.setRequestProperty("X-Auth-Token", token );
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("POST");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
+	}
+	
+	String data = "{\"servers\": {\"name\": \"" + instanceName + "\", \"\"}";
+	OutputStreamWriter out = null;
+	try {
+	    out = new OutputStreamWriter(conn.getOutputStream());
+	    out.write(data);
+	    out.close();
+	} catch(java.io.IOException ioe) {
+	    ioe.printStackTrace( );
+	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
+	}
+
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer)))
+		res += new String(buffer, 0, len);
+	    
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    return res; 
+	} catch(IOException ioe) {
+	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
+	}
+	return null;
+    } 
+						  
+						  
 }
 
