@@ -602,6 +602,7 @@ public class RESTClient {
 	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
 	}
     }
+
     /**
      *
      *
@@ -614,6 +615,61 @@ public class RESTClient {
 	String proto = "http://";
 	
 	String sUrl = proto + endpoint + ":8774/v2/" + tenantid + "/os-keypairs";
+	URL url = null;
+	try {
+	    url = new URL(sUrl);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new RuntimeException("new URL: " + mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	TrustManager[] trustAllCerts = null;
+    
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	}
+    
+	conn.setRequestProperty("X-Auth-Project-Id", tenantname );
+	conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("X-Auth-Token", token );
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("GET");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
+	}
+	
+	try {
+	    String buf = "";
+	    InputStream in = conn.getInputStream( );
+	    int len;
+	    String res = "";
+	    byte[] buffer = new byte[4096];
+	    while (-1 != (len = in.read(buffer)))
+		res += new String(buffer, 0, len);
+	    
+	    in.close();
+	    ((HttpURLConnection)conn).disconnect( );
+	    return res; 
+	} catch(IOException ioe) {
+	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
+	}
+    }
+
+    /**
+     *
+     *
+     *
+     * curl -i 'http://90.147.77.40:8774/v2/$TENANT_ID/os-security-groups' -X GET -H "X-Auth-Project-Id: admin" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     *
+     *
+     */
+    public static String requestSecgroups( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException {
+	String proto = "http://";
+	
+	String sUrl = proto + endpoint + ":8774/v2/" + tenantid + "/os-security-groups";
 	URL url = null;
 	try {
 	    url = new URL(sUrl);

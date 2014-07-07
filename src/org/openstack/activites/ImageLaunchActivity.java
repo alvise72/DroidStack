@@ -31,6 +31,7 @@ import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
 import org.openstack.utils.Flavor;
+import org.openstack.utils.KeyPair;
 
 import org.openstack.comm.RESTClient;
 
@@ -68,7 +69,7 @@ public class ImageLaunchActivity extends Activity {
 
     private Network networks[] = null;
     private Flavor flavors[] = null;
-    //private Keypair keypairs[] = null;
+    private KeyPair keypairs[] = null;
     //private SecGroup secgroups[] = null;
 
     /**
@@ -370,6 +371,8 @@ public class ImageLaunchActivity extends Activity {
 	private  String   jsonBufFlavor = null;
 	private  String   jsonBufNetwork= null;
 	private  String   jsonBufSubnet = null;
+	private  String   jsonBufKeypairs = null;
+	private  String   jsonBufSecgroups = null;
 
 	@Override
 	protected Void doInBackground( User... u ) 
@@ -400,10 +403,11 @@ public class ImageLaunchActivity extends Activity {
 	    }
 
 	    try {
-		jsonBufFlavor  = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
-		jsonBufNetwork = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
-		jsonBufSubnet  = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
-		//		Log.d("DROIDSTACK", "SUBNET JSON="+jsonBufSubnet);
+		jsonBufFlavor    = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
+		jsonBufNetwork   = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
+		jsonBufSubnet    = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
+		jsonBufKeypairs  = RESTClient.requestKeypairs( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
+		jsonBufSecgroups = RESTClient.requestSecgroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -444,6 +448,17 @@ public class ImageLaunchActivity extends Activity {
 		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
 
+		keypairs = ParseUtils.parseKeypair( jsonBufKeypairs );
+		String [] keypairNames = new String[keypairs.length];
+		for(int i =0; i< keypairs.length; ++i)
+		    keypairNames[i] = keypairs[i].getName();
+
+		spinnerKeypairsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,keypairNames );
+		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerKeypairs.setAdapter(spinnerKeypairsArrayAdapter);
+
+		
+		
 	    } catch(ParseException pe) {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);

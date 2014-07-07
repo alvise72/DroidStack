@@ -13,6 +13,7 @@ import org.json.JSONException;
 
 import org.openstack.utils.AllocationPool;
 import org.openstack.utils.SubNetwork;
+import org.openstack.utils.SecGroup;
 import org.openstack.utils.Network;
 import org.openstack.utils.KeyPair;
 import org.openstack.utils.OSImage;
@@ -383,7 +384,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static KeyPair[] parseKeypair( String jsonBuf )   throws ParseException  {
+    public static KeyPair[] parseKeypair( String jsonBuf ) throws ParseException  {
 	KeyPair kpairs[] = null;
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
@@ -400,5 +401,29 @@ public class ParseUtils {
  	    throw new ParseException( je.getMessage( ) );
  	}
 	return kpairs;
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static SecGroup[] parseSecgroup( String jsonBuf ) throws ParseException  {
+	SecGroup secg[] = null;
+	try{
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray secgroups = (JSONArray)jsonObject.getJSONArray("security_groups");
+	    secg = new SecGroup[secgroups.length()];
+	    for(int i =0; i<secgroups.length(); ++i) {
+		JSONObject secgrp = secgroups.getJSONObject(i);
+		String id   = secgrp.getString("id");
+		String name = secgrp.getString("name");
+		secg[i] = new SecGroup( name, id );
+	    }
+	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
+	return secg;
     }
 }

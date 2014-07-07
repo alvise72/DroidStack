@@ -12,6 +12,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
       <LinearLayout
+                android:id="@+id/optionLayer"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical" >
@@ -22,12 +23,12 @@
 		android:ems="10" />
 		
         <EditText
-                    android:id="@+id/vmnameET"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:ems="10" >
-          <requestFocus />
+                android:id="@+id/vmnameET"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:ems="10" >
+                <requestFocus />
         </EditText>
 	<TextView
 		android:layout_width="fill_parent"
@@ -81,19 +82,15 @@
 	    android:id="@+id/networkSP"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" />
-        
-<!--
-        <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-          <CheckBox
-                        android:id="@+id/keypair"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/USESSL" />
-        </LinearLayout>
--->
+
+ 	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="Security groups:"
+		android:ems="10" />       
+
+
+
         <LinearLayout
    	  android:layout_width="fill_parent"
     	  android:layout_height="wrap_content"
