@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.openstack.utils.AllocationPool;
 import org.openstack.utils.SubNetwork;
 import org.openstack.utils.Network;
+import org.openstack.utils.KeyPair;
 import org.openstack.utils.OSImage;
 import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
@@ -374,5 +375,30 @@ public class ParseUtils {
  	    throw new ParseException( je.getMessage( ) );
  	}
 	return result;
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static KeyPair[] parseKeypair( String jsonBuf )   throws ParseException  {
+	KeyPair kpairs[] = null;
+	try{
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray keypairs = (JSONArray)jsonObject.getJSONArray("keypairs");
+	    kpairs = new KeyPair[keypairs.length()];
+	    for(int i =0; i<keypairs.length(); ++i) {
+		JSONObject keypair = keypairs.getJSONObject(i).getJSONObject("keypair");
+		String key  = keypair.getString("public_key");
+		String fp   = keypair.getString("fingerprint");
+		String name = keypair.getString("name");
+		kpairs[i] = new KeyPair( name, key, fp );
+	    }
+	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
+	return kpairs;
     }
 }
