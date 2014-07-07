@@ -9,6 +9,10 @@ import android.widget.TextView;
 import android.widget.CheckBox;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -42,6 +46,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 import org.openstack.R;
@@ -53,6 +58,18 @@ public class ImageLaunchActivity extends Activity {
     private boolean requesting_token = false;
     private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
     private Hashtable<String, Flavor> flavorTable = null;
+    private ArrayAdapter<String> spinnerNetworksArrayAdapter = null;
+    private ArrayAdapter<String> spinnerFlavorsArrayAdapter  = null;
+    private ArrayAdapter<String> spinnerKeypairsArrayAdapter = null;
+    
+    private Spinner spinnerNetworks = null;
+    private Spinner spinnerFlavors  = null;
+    private Spinner spinnerKeypairs = null;
+
+    private Network networks[] = null;
+    private Flavor flavors[] = null;
+    //private Keypair keypairs[] = null;
+    //private SecGroup secgroups[] = null;
 
     /**
      *
@@ -76,8 +93,22 @@ public class ImageLaunchActivity extends Activity {
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
     
-    //ArrayAdapter<String> adapter = new ArrayAdapter(this, 1, flavors );
-    
+    spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
+    spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
+    spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
+
+    progressDialogWaitStop.show();
+    User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+    AsyncTaskGetOptions task = new AsyncTaskGetOptions();
+    task.execute( U );
+
+//    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colors);
+//    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//    spinner.setAdapter(spinnerArrayAdapter);
+//    spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nets);
+//    spinner.setAdapter(spinnerArrayAdapter);
+
+    //    adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
     /*
      *
      * Spawn a task collecting flavors, keypairs, networks
@@ -208,10 +239,7 @@ public class ImageLaunchActivity extends Activity {
     //   return;
     // }
     
-    progressDialogWaitStop.show();
-    User U = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
-    AsyncTaskGetOptions task = new AsyncTaskGetOptions();
-    task.execute( U );
+
   }
 
 
@@ -385,12 +413,6 @@ public class ImageLaunchActivity extends Activity {
 	    return null;//jsonBuf;
 	}
 	
-	// @Override
-	// protected void onPreExecute() {
-	//     super.onPreExecute();
-	//     requesting_token = true;
-	// }
-	
 	@Override
 	    protected void onPostExecute( Void v ) {
 	    super.onPostExecute( v );
@@ -403,12 +425,25 @@ public class ImageLaunchActivity extends Activity {
 	    
 	    //downloading_image_list = false; // questo non va spostato da qui a
 	    try {
-		// ImageLaunchActivity.this.flavorTable = ParseUtils.parseFlavors(jsonBufFlavor);
-		// ImageLaunchActivity.this.addFlavorsToView( );
-		Vector<Network> nets = ParseUtils.parseNetwork( jsonBufNetwork, jsonBufSubnet );
-		Iterator<Network> it = nets.iterator( );
-		while( it.hasNext( ) )
-		    Utils.alert(it.next().toString( ), ImageLaunchActivity.this );
+		networks = ParseUtils.parseNetwork( jsonBufNetwork, jsonBufSubnet );
+		String[] netNames = new String[networks.length];
+		for(int i = 0; i<networks.length; ++i)
+		    netNames[i] = networks[i].getName();
+		spinnerNetworksArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item, netNames);
+		spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerNetworks.setAdapter(spinnerNetworksArrayAdapter);
+
+		Hashtable<String, Flavor> flavorTable = ParseUtils.parseFlavors( jsonBufFlavor );
+		Collection<Flavor> collFlav = flavorTable.values();
+		flavors = new Flavor[collFlav.size()];
+		collFlav.toArray(flavors);
+		String flavorNames[] = new String[flavors.length];
+		for(int i = 0; i<flavors.length; ++i)
+		    flavorNames[i] = flavors[i].getName();
+		spinnerFlavorsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,flavorNames );
+		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
+
 	    } catch(ParseException pe) {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);

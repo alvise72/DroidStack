@@ -296,14 +296,16 @@ public class ParseUtils {
      *
      *
      */    
-    public static Vector<Network> parseNetwork ( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
+    public static Network[] parseNetwork ( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
 
 	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
-	Vector<Network> nets = null;
+	//	Vector<Network> nets = null;
+	Network nets[] = null;
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
-	    nets = new Vector();
+	    //	    nets = new Vector();
+	    nets = new Network[networks.length()];
 	    for(int i =0; i<networks.length(); ++i) {
 		JSONObject network = networks.getJSONObject(i);
 		String status = (String)network.getString("status");
@@ -326,7 +328,8 @@ public class ParseUtils {
 			//Log.d("DROIDSTACK", "FOUND!");
 			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
 		}
-		nets.add(new Network(status, name, ID, _subnets, shared, up, ext ));
+		//nets.add(new Network(status, name, ID, _subnets, shared, up, ext ));
+		nets[i] = new Network(status, name, ID, _subnets, shared, up, ext );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
