@@ -53,6 +53,7 @@ public class ImageLaunchActivity extends Activity {
     private boolean requesting_token = false;
     private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
     private Hashtable<String, Flavor> flavorTable = null;
+
     /**
      *
      *
@@ -371,10 +372,10 @@ public class ImageLaunchActivity extends Activity {
 	    }
 
 	    try {
-		jsonBufFlavor = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
+		jsonBufFlavor  = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
 		jsonBufNetwork = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
-		jsonBufSubnet = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
-		
+		jsonBufSubnet  = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
+		//		Log.d("DROIDSTACK", "SUBNET JSON="+jsonBufSubnet);
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;

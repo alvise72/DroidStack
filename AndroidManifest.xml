@@ -23,10 +23,10 @@
                       android:largeScreens="true" 
                       android:anyDensity="true" />
 
-    <application android:label="OpenStack" android:icon="@drawable/openstack">
+    <application android:label="DroidStack" android:icon="@drawable/openstack">
 
         <activity android:launchMode="singleInstance" android:name="MainActivity"
-                  android:label="OpenStack"
+                  android:label="DroidStack"
 		  android:icon="@drawable/openstack" android:screenOrientation="portrait">
 
             <intent-filter>

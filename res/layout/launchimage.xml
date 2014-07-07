@@ -32,7 +32,7 @@
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Tenant's name:"
+		android:text="Flavor:"
 		android:ems="10" />
 	<Spinner
 	    android:id="@+id/flavorSP"
@@ -41,18 +41,19 @@
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Username:"
+		android:text="Count:"
 		android:ems="10" />	    
         <EditText
                     android:id="@+id/countET"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="1"
+                    android:inputType="number"
                     android:ems="10" />
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Password:"
+		android:text="Admin\'s Password:"
 		android:ems="10" />
         <EditText
                     android:id="@+id/passwordET"

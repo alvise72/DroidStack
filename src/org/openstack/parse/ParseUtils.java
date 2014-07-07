@@ -69,7 +69,6 @@ public class ParseUtils {
      *
      *
      */ 
-    //public static Hashtable<String, OSImage> parseImages( String jsonString ) throws ParseException
     public static Vector<OSImage> parseImages( String jsonString ) throws ParseException
     {
       try {
@@ -127,7 +126,7 @@ public class ParseUtils {
       } catch(org.json.JSONException joe) {
         return "Cannot parse json error message from remote server";
       }
-      Log.d("ParseUtils.getErrorCodeMessage", "Returning: "+errorMessage);
+      //      Log.d("ParseUtils.getErrorCodeMessage", "Returning: "+errorMessage);
       return errorMessage;
     }
        
@@ -146,7 +145,7 @@ public class ParseUtils {
       } catch(org.json.JSONException joe) {
         return -1;
       }
-      Log.d("ParseUtils.getErrorCode", "Returning: "+errorCode);
+      //      Log.d("ParseUtils.getErrorCode", "Returning: "+errorCode);
       return errorCode;
     }
            
@@ -315,12 +314,16 @@ public class ParseUtils {
 		String ID = network.getString("id");
 		JSONArray subnets  = network.getJSONArray("subnets");
 		String[] arraySubnetID = new String[ subnets.length() ];
-		for(int j = 0; j<subnets.length(); ++j)
+		for(int j = 0; j<subnets.length(); ++j) {
 		    arraySubnetID[j] = (String)subnets.getString(j);
+		    //		    Log.d("DROIDSTACK", "arraySubnetID[" + j + "]="+arraySubnetID[j]);
+		}
 		
 		SubNetwork[] _subnets = new SubNetwork[subnets.length()];
 		for(int j = 0; j< arraySubnetID.length; j++) {
-		    if(subnetsTable.contains(arraySubnetID[j]))
+		    //		    Log.d("DROIDSTACK", "CHECKING if " + arraySubnetID[j] + " is in the subnetsTable...");
+		    if(subnetsTable.containsKey(arraySubnetID[j]) == true) 
+			//Log.d("DROIDSTACK", "FOUND!");
 			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
 		}
 		nets.add(new Network(status, name, ID, _subnets, shared, up, ext ));
@@ -361,7 +364,7 @@ public class ParseUtils {
 		    pools[j] = pool;
 		}
 		SubNetwork sub = new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp );
-		Log.d("parseSubNetworks", "SubNetwork="+sub.toString() );
+		//		Log.d("parseSubNetworks", "SubNetwork="+sub.toString() );
 		result.put( ID, new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp ));
 	    }
 	} catch(org.json.JSONException je) {

@@ -31,12 +31,13 @@ public class SubNetwork { //implements Serializable {
     @Override
     public String toString() {
 	return "Subnet{name=" + name
+	    + ",ID="+ID
 	    + ",cidr="+cidr
 	    + ",gateway="+gw
 	    + ",start=" + allocPools[0].getStartIP( )
 	    + ",end=" + allocPools[0].getEndIP( ) 
 	    + ",dns=" + dns[0]
-	    + ",dhcp="+dhcp
+	    + ",dhcp=" + dhcp
 	    +"}";
     }
 
