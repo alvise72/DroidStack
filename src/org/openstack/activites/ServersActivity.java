@@ -196,7 +196,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshView( Vector<Server> servers, Hashtable<String, Flavor> flavors ) {
-
+	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
 	Iterator<Server> it = servers.iterator();
 	while(it.hasNext()) {
 	    Server s = it.next();

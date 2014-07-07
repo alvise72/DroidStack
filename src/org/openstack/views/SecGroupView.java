@@ -1,6 +1,6 @@
 package org.openstack.views;
 
-import org.openstack.utils.CheckBoxNamed;
+
 import org.openstack.utils.SecGroup;
 import android.widget.CheckBox;
 import android.content.Context;
