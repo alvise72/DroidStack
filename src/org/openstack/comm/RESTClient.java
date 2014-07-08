@@ -723,11 +723,16 @@ public class RESTClient {
      * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
      *
      */
-    public static String requestInstanceCreation( String endpoint, String tenantid,
-						  String tenantname, String token,
-						  String instanceName, String glanceImageID,
-						  String key_name, String flavorID,
-						  int count, String netID,
+    public static String requestInstanceCreation( String endpoint, 
+						  String tenantid,
+						  String tenantname, 
+						  String token,
+						  String instanceName, 
+						  String glanceImageID,
+						  String key_name, 
+						  String flavorID,
+						  int count, 
+						  String netID,
 						  String _secgrpIDs ) throws RuntimeException 
     {
 	String proto = "http://";
