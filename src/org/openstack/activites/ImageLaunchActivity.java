@@ -269,7 +269,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    keypairs[k].getName(), 
 		    flavors[j].getID(),
 		    ""+count, 
-		    networks[i].getName(),
+		    networks[i].getID(),
 		    Utils.join( arraySecgroups, "," ) );
 
     // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
@@ -568,6 +568,15 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	protected Void doInBackground( String... args ) 
 	{
 	    //	    Log.d("DROIDSTACK", Utils.join(args,","));
+	    Log.d("IMAGELAUNCH", "args.size="+args.length);
+	    Log.d("IMAGELAUNCH", "args[0]="+args[0]);
+	    Log.d("IMAGELAUNCH", "args[1]="+args[1]);
+	    Log.d("IMAGELAUNCH", "args[2]="+args[2]);
+	    Log.d("IMAGELAUNCH", "args[3]="+args[3]);
+	    Log.d("IMAGELAUNCH", "args[4]="+args[4]);
+	    Log.d("IMAGELAUNCH", "args[5]="+args[5]);
+	    Log.d("IMAGELAUNCH", "args[6]="+args[6]);
+	    
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {

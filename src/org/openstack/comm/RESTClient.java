@@ -429,9 +429,10 @@ public class RESTClient {
 						  String netID,
 						  String _secgrpIDs ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
-	String proto = "http://";
-	
-	String sUrl = proto + endpoint + ":8774/v2/" + tenantid + "/servers";
+
+	Log.d("RESTClient", "netID="+netID);
+
+	String sUrl = "http://" + endpoint + ":8774/v2/" + tenantid + "/servers";
 	//String sUrl = proto + "192.168.1.106" + ":8774/v2/" + tenantid + "/servers";
 	URL url = null;
 	try {
@@ -555,11 +556,6 @@ public class RESTClient {
 	}
 	//return res;
     } 
-						  
-    
-
-
-
 
     //________________________________________________________________________________
     public static String sendGETRequest( String sURL, 
