@@ -430,7 +430,7 @@ public class RESTClient {
 						  String _secgrpIDs ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
 
-	Log.d("RESTClient", "netID="+netID);
+	//	Log.d("RESTClient", "netID="+netID);
 
 	String sUrl = "http://" + endpoint + ":8774/v2/" + tenantid + "/servers";
 	//String sUrl = proto + "192.168.1.106" + ":8774/v2/" + tenantid + "/servers";
@@ -487,7 +487,7 @@ public class RESTClient {
 	
 	String data = obj.toString( );
 
-	//Log.d("RESTClient", "OBJ="+obj.toString());
+	//        Log.d("RESTClient", "OBJ="+obj.toString());
 	
 	OutputStreamWriter out = null;
 	try {
@@ -495,7 +495,7 @@ public class RESTClient {
 	    out.write(data);
 	    out.close();
 	} catch(java.io.IOException ioe) {
-	    Log.d("RESTClient", "EXCEPTION 5: "+ioe.getMessage( ));
+	    //	    Log.d("RESTClient", "EXCEPTION 5: "+ioe.getMessage( ));
 	    ioe.printStackTrace( );
 	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
 	}
@@ -507,8 +507,8 @@ public class RESTClient {
 	} catch(IOException ioe) {
 	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
 	}
-	Log.d("RESTClient", "STATUS="+status);
-	if( status != HttpStatus.SC_OK ) {
+	//	Log.d("RESTClient", "STATUS="+status);
+	if( status != HttpStatus.SC_OK && status !=HttpStatus.SC_ACCEPTED ) {
 	    if(status == HttpStatus.SC_BAD_REQUEST) 
 		throw new RuntimeException("Bad HTTP request" );
 

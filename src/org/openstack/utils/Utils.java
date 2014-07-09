@@ -290,6 +290,24 @@ public class Utils {
      *
      *
      */
+    public static String join(HashSet<String> s, String delimiter) {
+        StringBuffer buffer = new StringBuffer();
+        Iterator iter = s.iterator();
+        while (iter.hasNext()) {
+            buffer.append(iter.next());
+            if (iter.hasNext()) {
+                buffer.append(delimiter);
+            }
+        }
+        return buffer.toString();
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
     public static String join(String[] s, String delimiter) {
         StringBuffer buffer = new StringBuffer();
 	for(int i = 0; i<s.length; ++i) {

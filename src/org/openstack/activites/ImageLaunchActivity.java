@@ -48,6 +48,7 @@ import org.openstack.parse.ParseException;
 
 import java.util.Set;
 import java.util.Vector;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.Collection;
@@ -76,7 +77,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
     private LinearLayout options = null;
 
-    private Hashtable<String, Boolean> selectedSecgroups = null;
+    //private Hashtable<String, Boolean> selectedSecgroups = null;
+    HashSet<String> selectedSecgroups = null;
 
     private User currentUser = null;
 
@@ -88,18 +90,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     public void onClick( View v ) {
 	if(v instanceof CheckBox) {
 	    SecGroupView s = (SecGroupView)v;
-	    if(s.isChecked()) {
-		selectedSecgroups.remove( s.getSecGroup().getID() );
-		selectedSecgroups.put( s.getSecGroup().getID(), new Boolean(true) );
-	    } else {
+	    if(s.isChecked())
+		selectedSecgroups.add( s.getSecGroup().getID() );
+	    else
 		selectedSecgroups.remove(s.getSecGroup().getID());
-		selectedSecgroups.put( s.getSecGroup().getID(), new Boolean(false) );
-	    }
-// 	    String ID = ((SecGroupView)v).getSecGroup().getID();
-// 	    String name = ((SecGroupView)v).getSecGroup().getName();
-// 	    Toast t = Toast.makeText(this, name+" - "+ID, Toast.LENGTH_SHORT);
-// 	    t.show();
-//	    Utils.alert(selectedSecgroups.toString( ), this);
 	}
     }
 
@@ -260,9 +254,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
-      Set<String> setSecgroups = selectedSecgroups.keySet();
-      String[] arraySecgroups = new String[selectedSecgroups.size()];
-      setSecgroups.toArray( arraySecgroups );
+      // Set<String> setSecgroups = selectedSecgroups.keySet();
+      // String[] arraySecgroups = new String[selectedSecgroups.size()];
+      // setSecgroups.toArray( arraySecgroups );
       
       task.execute( instanceName, 
 		    imageID,
@@ -270,7 +264,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    flavors[j].getID(),
 		    ""+count, 
 		    networks[i].getID(),
-		    Utils.join( arraySecgroups, "," ) );
+		    Utils.join( selectedSecgroups, "," ) );
 
     // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
     // EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
@@ -520,21 +514,14 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
 		secgroups = ParseUtils.parseSecgroup( jsonBufSecgroups );
 		String[] secgroupNames = new String[secgroups.length];
-		selectedSecgroups = new Hashtable();
+		selectedSecgroups = new HashSet();
 		for(int i =0; i< secgroups.length; ++i) {
-		    SecGroupView sgv = new SecGroupView( secgroups[i],ImageLaunchActivity.this );
+		    SecGroupView sgv = new SecGroupView( secgroups[i], ImageLaunchActivity.this );
 		    sgv.setOnClickListener( ImageLaunchActivity.this );
 		    options.addView( sgv );
-		    selectedSecgroups.put( sgv.getSecGroup( ).getID(), new Boolean(sgv.isChecked( )) );
+		    selectedSecgroups.add( sgv.getSecGroup( ).getID() );
 		}
 
-
-// 		spinnerSecgroupsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,secgroupNames );
-// 		spinnerSecgroupsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// 		spinnerSecgroups.setAdapter(spinnerSecgroupsArrayAdapter);
-
-		
-		
 	    } catch(ParseException pe) {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);
@@ -568,14 +555,14 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	protected Void doInBackground( String... args ) 
 	{
 	    //	    Log.d("DROIDSTACK", Utils.join(args,","));
-	    Log.d("IMAGELAUNCH", "args.size="+args.length);
-	    Log.d("IMAGELAUNCH", "args[0]="+args[0]);
-	    Log.d("IMAGELAUNCH", "args[1]="+args[1]);
-	    Log.d("IMAGELAUNCH", "args[2]="+args[2]);
-	    Log.d("IMAGELAUNCH", "args[3]="+args[3]);
-	    Log.d("IMAGELAUNCH", "args[4]="+args[4]);
-	    Log.d("IMAGELAUNCH", "args[5]="+args[5]);
-	    Log.d("IMAGELAUNCH", "args[6]="+args[6]);
+	    // Log.d("IMAGELAUNCH", "args.size="+args.length);
+	    // Log.d("IMAGELAUNCH", "args[0]="+args[0]);
+	    // Log.d("IMAGELAUNCH", "args[1]="+args[1]);
+	    // Log.d("IMAGELAUNCH", "args[2]="+args[2]);
+	    // Log.d("IMAGELAUNCH", "args[3]="+args[3]);
+	    // Log.d("IMAGELAUNCH", "args[4]="+args[4]);
+	    // Log.d("IMAGELAUNCH", "args[5]="+args[5]);
+	    // Log.d("IMAGELAUNCH", "args[6]="+args[6]);
 	    
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
