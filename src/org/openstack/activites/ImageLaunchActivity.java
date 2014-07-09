@@ -264,11 +264,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       String[] arraySecgroups = new String[selectedSecgroups.size()];
       setSecgroups.toArray( arraySecgroups );
       
-      task.execute( currentUser.getEndpoint(), currentUser.getTenantID(),
-		    currentUser.getTenantName(), currentUser.getToken(),
-		    instanceName, imageID,
-		    keypairs[k].getName(), flavors[j].getID(),
-		    ""+count, networks[i].getName(),
+      task.execute( instanceName, 
+		    imageID,
+		    keypairs[k].getName(), 
+		    flavors[j].getID(),
+		    ""+count, 
+		    networks[i].getName(),
 		    Utils.join( arraySecgroups, "," ) );
 
     // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
@@ -566,7 +567,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	@Override
 	protected Void doInBackground( String... args ) 
 	{
-	    Log.d("DROIDSTACK", Utils.join(args,","));
+	    //	    Log.d("DROIDSTACK", Utils.join(args,","));
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
@@ -585,6 +586,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    U = newUser;
 		    U.toFile( ); // to save new token+expiration
 		} catch(Exception e) {
+		    //		    Log.d("DROIDSTACK", "Launch2: "+e.getMessage());
 		    errorMessage = e.getMessage();
 		    hasError = true;
 		    return null;
@@ -592,6 +594,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    }
 
 	    try {
+		//		Log.d("DROIDSTACK", "Launch4: args-4="+args[4]);
 		jsonBuf = RESTClient.requestInstanceCreation( U.getEndpoint(),
 							      U.getTenantID(),
 							      U.getTenantName(),
@@ -604,6 +607,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      args[5],
 							      args[6] );
 	    } catch(Exception e) {
+		//		Log.d("DROIDSTACK", "Launch3: "+e.getMessage());
 		errorMessage = e.getMessage();
 		hasError = true;
 		return null;
@@ -622,7 +626,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
  		return;
  	    }
 	    
-	    Log.d("DROIDSTACK", "onPostExecute, jsonBuf="+jsonBuf);
+	    //	    Log.d("DROIDSTACK", "onPostExecute, jsonBuf="+jsonBuf);
 		
 	    // } catch(ParseException pe) {
 	    // 	Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 

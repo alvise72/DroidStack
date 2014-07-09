@@ -127,7 +127,11 @@ public class UsersActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
 	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
-
+	if(users==null) {
+	    Utils.alert("UsersActivity.refreshUserViews: directory " + Environment.getExternalStorageDirectory() + "/AndroStack/users/" + " exists but it is not a file !", this);
+	    return;
+	}
+	    
 	// TODO: should we filter here ?
 
 	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
@@ -137,7 +141,6 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    User U = null;
 	    try {
 		
-		//U = Utils.userFromFile( users[i].toString() );
 		U = User.fromFileID( users[i].getName( ) );
 		
 	    } catch(Exception e) {
