@@ -427,7 +427,8 @@ public class RESTClient {
 						  String flavorID,
 						  int count, 
 						  String netID,
-						  String _secgrpIDs ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+						  String _secgrpIDs,
+						  String FixedIP) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
 
 	//	Log.d("RESTClient", "netID="+netID);
@@ -462,13 +463,19 @@ public class RESTClient {
 	    //    Log.d("RESTClient", "EXCEPTION 3");
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
+
+	String fixedip="";
+	if(FixedIP != null) {
+	    fixedip = ",\"fixed_ip\": \"" + FixedIP + "\"";
+	}
+
 	String _data = "{\"server\": {\"name\": \"" + instanceName + 
 	    "\", \"imageRef\": \"" + glanceImageID + 
 	    "\", \"key_name\": \"" + key_name + 
 	    "\", \"flavorRef\": \"" + flavorID + 
 	    "\", \"max_count\": " + count + 
 	    ", \"min_count\": " + count + 
-	    ", \"networks\": [{\"uuid\": \"" + netID + "\"}]}}";
+	    ", \"networks\": [{\"uuid\": \"" + netID + "\"" + fixedip + "}]}}";
 
 	JSONObject obj = null;
 	String []secgrpIDs = _secgrpIDs.split(",");

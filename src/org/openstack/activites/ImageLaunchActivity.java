@@ -54,6 +54,8 @@ import java.util.Hashtable;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.http.conn.util.InetAddressUtils;
+
 import org.openstack.R;
 
 import org.openstack.views.UserView;
@@ -258,13 +260,22 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       // String[] arraySecgroups = new String[selectedSecgroups.size()];
       // setSecgroups.toArray( arraySecgroups );
       
+      String fixedip = ((EditText)findViewById(R.id.fixedIPET)).getText( ).toString( );
+      if(fixedip.length()!=0) {
+	  if(!InetAddressUtils.isIPv4Address(fixedip)) {
+	      Utils.alert("The inserted IP address ["+fixedip+"] is invalid", this);
+	      return;
+	  }
+      } else fixedip=null;
+
       task.execute( instanceName, 
 		    imageID,
 		    keypairs[k].getName(), 
 		    flavors[j].getID(),
 		    ""+count, 
 		    networks[i].getID(),
-		    Utils.join( selectedSecgroups, "," ) );
+		    Utils.join( selectedSecgroups, "," ),
+		    fixedip);
 
     // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
     // EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
@@ -601,7 +612,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      args[3],
 							      Integer.parseInt(args[4]),
 							      args[5],
-							      args[6] );
+							      args[6],
+							      args[7]);
 	    } catch(Exception e) {
 		//		Log.d("DROIDSTACK", "Launch3: "+e.getMessage());
 		errorMessage = e.getMessage();
