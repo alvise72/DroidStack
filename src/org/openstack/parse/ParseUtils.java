@@ -23,6 +23,7 @@ import org.openstack.utils.Quota;
 import org.openstack.utils.User;
 
 import android.util.Log;
+import android.util.Pair;
 
 public class ParseUtils {
 
@@ -186,7 +187,67 @@ public class ParseUtils {
 	    throw new ParseException( je.getMessage( ) );
 	}
     }
-      
+	       
+    /**
+     *
+     *
+     *
+     *
+     */    
+    // public static Quota parseQuota( String jsonBuf )  throws ParseException {
+    // 	try {
+    // 	    JSONObject jsonObject = new JSONObject( jsonBuf );
+    // 	    JSONObject limits     = (JSONObject)jsonObject.getJSONObject("limits");
+    // 	    JSONObject absolute   = (JSONObject)limits.getJSONObject("absolute");
+    // 	    int maxInstances      = absolute.getInt("maxTotalInstances");
+    // 	    int maxVirtCPU        = absolute.getInt("maxTotalCores");
+    // 	    int maxRAM            = absolute.getInt("maxTotalRAMSize");
+    // 	    int maxFIP            = absolute.getInt("maxTotalFloatingIps");
+    // 	    int maxSecGroups      = absolute.getInt("maxSecurityGroups");
+    // 	    int currentInstance   = absolute.getInt("totalInstancesUsed");
+    // 	    int currentVirtCPU    = absolute.getInt("totalCoresUsed");
+    // 	    int currentRAM        = absolute.getInt("totalRAMUsed");
+    // 	    int currentFIP        = absolute.getInt("totalFloatingIpsUsed");
+    // 	    int currentSECG       = absolute.getInt("totalSecurityGroupsUsed");
+    // 	    return new Quota(currentInstance, 
+    // 			     currentVirtCPU,
+    // 			     currentRAM,
+    // 			     currentFIP,
+    // 			     currentSECG,
+    // 			     maxInstances,
+    // 			     maxVirtCPU,
+    // 			     maxRAM,
+    // 			     maxFIP,
+    // 			     maxSecGroups );
+    // 	} catch(org.json.JSONException je) {
+    // 	    throw new ParseException( je.getMessage( ) );
+    // 	}
+    // }
+    
+    /**
+     *
+     *
+     *
+     *
+     */    
+    public static Vector<Pair<String, String>> parseFloatingIPs( String jsonBuf ) throws ParseException {
+	try {
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray fips = jsonObject.getJSONArray( "floating_ips" );
+	    Vector<Pair<String, String>> res = new Vector();
+	    for(int i = 0; i<fips.length(); ++i) {
+		JSONObject fip = fips.getJSONObject( i );
+		String id = fip.getString("id");
+		String ip = fip.getString("ip");
+		Pair<String, String> ip_info = new Pair(id, fip);
+		res.add( ip_info );
+	    }
+	    return res;
+	} catch(org.json.JSONException je) {
+	    throw new ParseException( je.getMessage( ) );
+	}
+    }
+    
     /**
      *
      *

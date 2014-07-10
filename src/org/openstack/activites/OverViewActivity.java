@@ -128,37 +128,35 @@ public class OverViewActivity extends Activity {
 	progressDialogWaitStop.dismiss();
     }
   
-    private void refreshView( String jsonBuf ) {
-	try {
-	    Quota Q = ParseUtils.parseQuota( jsonBuf );
-	    ((TextView)findViewById(R.id.vmusageTV)).setText("" + Q.getCurrentInstances() );
-	    ((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
-	    ((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
-	    ((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( Q.getCurrentInstances() );
-
-	    ((TextView)findViewById(R.id.cpuusageTV)).setText("" + Q.getCurrentCPU() );
-	    ((TextView)findViewById(R.id.cpuusageMAXTV)).setText("/" + Q.getMaxCPU() );
-	    ((ProgressBar)findViewById(R.id.cpuusagePB)).setMax( Q.getMaxCPU() );
-	    ((ProgressBar)findViewById(R.id.cpuusagePB)).setProgress( Q.getCurrentCPU() );
-    
-	    ((TextView)findViewById(R.id.ramusageTV)).setText("" + Q.getCurrentRAM( ) );
-	    ((TextView)findViewById(R.id.ramusageMAXTV)).setText("/" + Q.getMaxRAM( ) );
-	    ((ProgressBar)findViewById(R.id.ramusagePB)).setMax( Q.getMaxRAM( ) );
-	    ((ProgressBar)findViewById(R.id.ramusagePB)).setProgress( Q.getCurrentRAM( ) );
-
-	    ((TextView)findViewById(R.id.fipusageTV)).setText("" + Q.getCurrentFloatingIP( ) );
-	    ((TextView)findViewById(R.id.fipusageMAXTV)).setText("/" + Q.getMaxFloatingIP( ) );
-	    ((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
-	    ((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( Q.getCurrentFloatingIP( ) );
-    
-	    ((TextView)findViewById(R.id.segusageTV)).setText("" + Q.getCurrentSecurityGroups( ) );
-	    ((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
-	    ((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-	    ((ProgressBar)findViewById(R.id.segusagePB)).setProgress( Q.getCurrentSecurityGroups( ) );
-	} catch(ParseException pe) {
-	    Utils.alert("OverViewActivity.refreshView:" + pe.getMessage( ), this );
-	}
+    private void refreshView( Quota Q, Vector<Pair<String, String>> fips ) {
 	
+	//Quota Q = ParseUtils.parseQuota( jsonBuf );
+	((TextView)findViewById(R.id.vmusageTV)).setText("" + Q.getCurrentInstances() );
+	((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
+	((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
+	((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( Q.getCurrentInstances() );
+	
+	((TextView)findViewById(R.id.cpuusageTV)).setText("" + Q.getCurrentCPU() );
+	((TextView)findViewById(R.id.cpuusageMAXTV)).setText("/" + Q.getMaxCPU() );
+	((ProgressBar)findViewById(R.id.cpuusagePB)).setMax( Q.getMaxCPU() );
+	((ProgressBar)findViewById(R.id.cpuusagePB)).setProgress( Q.getCurrentCPU() );
+	
+	((TextView)findViewById(R.id.ramusageTV)).setText("" + Q.getCurrentRAM( ) );
+	((TextView)findViewById(R.id.ramusageMAXTV)).setText("/" + Q.getMaxRAM( ) );
+	((ProgressBar)findViewById(R.id.ramusagePB)).setMax( Q.getMaxRAM( ) );
+	((ProgressBar)findViewById(R.id.ramusagePB)).setProgress( Q.getCurrentRAM( ) );
+
+	
+
+	((TextView)findViewById(R.id.fipusageTV)).setText("" + fips.size() );
+	((TextView)findViewById(R.id.fipusageMAXTV)).setText("/" + Q.getMaxFloatingIP( ) );
+	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
+	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips.size() );
+	
+	((TextView)findViewById(R.id.segusageTV)).setText("" + Q.getCurrentSecurityGroups( ) );
+	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
+	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
+	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( Q.getCurrentSecurityGroups( ) );
     }
 
     /**
@@ -178,9 +176,10 @@ public class OverViewActivity extends Activity {
      */
     protected class AsyncTaskQuota extends AsyncTask<User, String, String>
     {
-     	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
+     	private  String   errorMessage  = null;
+	private  boolean  hasError      = false;
 	private  String   jsonBuf       = null;
+	private  String   jsonBufFIPs   = null;
 	User U = null;
 
 	@Override
@@ -212,7 +211,7 @@ public class OverViewActivity extends Activity {
 
 	    try {
 		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		
+		jsonBufFIPs = RESTClient.requestFloatingIPs( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -225,8 +224,6 @@ public class OverViewActivity extends Activity {
 	@Override
 	    protected void onPreExecute() {
 	    super.onPreExecute();
-	    
-	    //downloading_quota_list = true;
 	}
 	
 	@Override
@@ -235,15 +232,18 @@ public class OverViewActivity extends Activity {
 	    
  	    if(hasError) {
  		Utils.alert( errorMessage, OverViewActivity.this );
- 		//downloading_quota_list = false;
  		OverViewActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }
 	    
-	    // downloading_quota_list = false; // questo non va spostato da qui a
+	    
+	    try {
+		
+		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBuf ), ParseUtils.parseFloatingIPs(jsonBufFIPs)  );
+	    } catch(ParseException pe) {
+		Utils.alert( pe.getMessage( ), OverViewActivity.this );
+	    }
 	    OverViewActivity.this.progressDialogWaitStop.dismiss( );
-	    OverViewActivity.this.refreshView( jsonBuf );
-	    //	    OverViewActivity.this.showQuotas( jsonBuf, U );
 	}
     }
 }
