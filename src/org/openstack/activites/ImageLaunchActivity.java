@@ -79,7 +79,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
     private LinearLayout options = null;
 
-    //private Hashtable<String, Boolean> selectedSecgroups = null;
     HashSet<String> selectedSecgroups = null;
 
     private User currentUser = null;
@@ -136,31 +135,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
     AsyncTaskGetOptions task = new AsyncTaskGetOptions();
     task.execute( currentUser );
-
-//    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colors);
-//    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//    spinner.setAdapter(spinnerArrayAdapter);
-//    spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nets);
-//    spinner.setAdapter(spinnerArrayAdapter);
-
-    //    adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
-    /*
-     *
-     * Spawn a task collecting flavors, keypairs, networks
-     * the task finishes with populating the spinner with its result
-     *
-     */ 
-
-    // String last_endpoint = Utils.getStringPreference("LAST_ENDPOINT", "", this);
-    // String last_tenant   = Utils.getStringPreference("LAST_TENANT", "", this);
-    // String last_username = Utils.getStringPreference("LAST_USERNAME", "", this);
-    // String last_password = Utils.getStringPreference("LAST_PASSWORD", "", this);
-    // boolean usessl       = Utils.getBoolPreference("LAST_USESSL", false, this);
-    // ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
-    // ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
-    // ((EditText)findViewById(R.id.usernameET)).setText( last_username );
-    // ((EditText)findViewById(R.id.passwordET)).setText( last_password );
-    // ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
   }
   
   
@@ -201,11 +175,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
   @Override
   public void onPause( ) {
     super.onPause( );
-      // Utils.putStringPreference("LAST_ENDPOINT", ((EditText)findViewById(R.id.endpointET)).getText().toString().trim(), this);
-      // Utils.putStringPreference("LAST_TENANT",   ((EditText)findViewById(R.id.tenantnameET)  ).getText().toString().trim(), this);
-      // Utils.putStringPreference("LAST_USERNAME", ((EditText)findViewById(R.id.usernameET)).getText().toString().trim(), this);
-      // Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);     
-      // Utils.putBoolPreference("LAST_USESSL", ((CheckBox)findViewById(R.id.usesslCB)).isChecked( ), this);
   } 
   
     /**
@@ -256,10 +225,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
-      // Set<String> setSecgroups = selectedSecgroups.keySet();
-      // String[] arraySecgroups = new String[selectedSecgroups.size()];
-      // setSecgroups.toArray( arraySecgroups );
-      
       String fixedip = ((EditText)findViewById(R.id.fixedIPET)).getText( ).toString( );
       if(fixedip.length()!=0) {
 	  if(!InetAddressUtils.isIPv4Address(fixedip)) {
@@ -268,6 +233,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	  }
       } else fixedip=null;
 
+      String adminPass = null;
+      if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
+	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
+
       task.execute( instanceName, 
 		    imageID,
 		    keypairs[k].getName(), 
@@ -275,145 +244,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    ""+count, 
 		    networks[i].getID(),
 		    Utils.join( selectedSecgroups, "," ),
-		    fixedip);
-
-    // EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
-    // EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
-    // EditText usernameET = (EditText)findViewById(org.openstack.R.id.usernameET);
-    // EditText passwordET = (EditText)findViewById(org.openstack.R.id.passwordET);
-    // CheckBox usesslET   = (CheckBox)findViewById(org.openstack.R.id.usesslCB);
-    
-    // String  endpoint = endpointET.getText().toString().trim();
-    // String  tenant   = tenantET.getText().toString().trim();
-    // String  username = usernameET.getText().toString().trim();
-    // String  password = passwordET.getText().toString().trim();
-    // boolean usessl   = usesslET.isChecked();
-    
-    // if( endpoint.length()==0 ) {
-    //   Utils.alert("Please fill the endpoint field.", this);
-    //   return;
-    // }
-    // if( tenant.length()==0 ) {
-    //   Utils.alert("Please fill the tenant field.", this);
-    //   return;
-    // }
-    // if( username.length()==0 ) {
-    //   Utils.alert("Please fill the username field.", this);
-    //   return;
-    // }
-    // if( password.length()==0 ) {
-    //   Utils.alert("Please fill the password field.", this);
-    //   return;
-    // }
-    
-
+		    fixedip,
+		    adminPass);
   }
-
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */  
-    // protected void completeUserAdd( String jsonResponse, String password, String endpoint, boolean usessl ) {
-    // 	if(jsonResponse == null || jsonResponse.length()==0) {
-    // 	    return;
-    // 	}
-    // 	try {
-    // 	    User U = ParseUtils.parseUser( jsonResponse );
-    // 	    U.setPassword(password);
-    // 	    U.setEndpoint(endpoint);
-    // 	    U.setSSL( usessl );
-    // 	    //Utils.userToFile( U );
-    // 	    U.toFile( );
-    // 	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
-    // 	} catch(Exception e) {
-    // 	    Utils.alert("ERROR: "+e.getMessage(), this);
-    // 	} 	
-    // }
-  
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-    // protected class AsyncTaskLaunchImage extends AsyncTask<String, Void, Void>
-    // {
-    //  	private  String   errorMessage  = null;
-    // 	private  boolean  hasError      = false;
-    // 	private  String   jsonBuf       = null;
-	
-    // 	private String endpoint = null;
-    // 	private String password = null;
-    // 	private boolean usessl;
-	
-    // 	protected Void doInBackground( String... args ) 
-    // 	{
-    // 	    endpoint = args[0];
-    // 	    String tenant   = args[1];
-    // 	    String username = args[2];
-    // 	    password = args[3];
-    // 	    String s_usessl = args[4];
-	    
-    // 	    usessl = Boolean.parseBoolean( s_usessl );
-	    
-    // 	    try {
-    // 		jsonBuf = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
-    // 	    } catch(Exception e) {
-    // 		errorMessage = e.getMessage();
-    // 		hasError = true;
-    // 		//    	     return "";
-    // 		//return;
-    // 	    }
-    // 	    return null;
-    // 	    //    	   return jsonBuf;
-    // 	}
-	
-    // 	@Override
-    // 	protected void onPreExecute() {
-    // 	    super.onPreExecute();
-    // 	    requesting_token = true;
-    // 	}
-	
-    // 	@Override
-    // 	    protected void onPostExecute( Void v ) {
-    // 	    super.onPostExecute( v );
-	    
-    // 	    if(hasError) {	
-    // 		ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
-    // 		Utils.alert( errorMessage, ImageLaunchActivity.this );
-    // 		requesting_token = false;
-    // 		//ACTIVITY.progressDialogWaitStop.dismiss( );
-    // 		ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
-    // 		return;
-    // 	    }
-	    
-    // 	    requesting_token = false; // questo non va spostato da qui a
-    // 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
-    // 	    //	    ImageLaunchActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
-    // 	}
-    // }
-
     
     /**
      *
@@ -593,7 +426,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    U = newUser;
 		    U.toFile( ); // to save new token+expiration
 		} catch(Exception e) {
-		    //		    Log.d("DROIDSTACK", "Launch2: "+e.getMessage());
 		    errorMessage = e.getMessage();
 		    hasError = true;
 		    return null;
@@ -601,7 +433,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    }
 
 	    try {
-		//		Log.d("DROIDSTACK", "Launch4: args-4="+args[4]);
 		jsonBuf = RESTClient.requestInstanceCreation( U.getEndpoint(),
 							      U.getTenantID(),
 							      U.getTenantName(),
@@ -613,9 +444,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      Integer.parseInt(args[4]),
 							      args[5],
 							      args[6],
-							      args[7]);
+							      args[7],
+							      args[8] );
 	    } catch(Exception e) {
-		//		Log.d("DROIDSTACK", "Launch3: "+e.getMessage());
 		errorMessage = e.getMessage();
 		hasError = true;
 		return null;
@@ -629,7 +460,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    super.onPostExecute( v );
 	    if(hasError) {
  		Utils.alert( "Launch: "+errorMessage, ImageLaunchActivity.this );
- 		//downloading_image_list = false;
  		ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }

@@ -197,33 +197,6 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		Intent I = new Intent( OSImagesActivity.this, c );
 		I.putExtra( "IMAGEID", ID );
 		startActivity( I );
-
-		// AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		// builder.setMessage( "Are you sure to delete this image ?" );
-		// builder.setCancelable(false);
-	    
-		// DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
-		// 	public void onClick(DialogInterface dialog, int id) {
-		// 	    deleteGlanceImage( ID );
-		// 	}
-		//     };
-
-		// DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
-		// 	public void onClick(DialogInterface dialog, int id) {
-		// 	    dialog.cancel( );
-		// 	}
-		//     };
-
-		// builder.setPositiveButton("Yes", yesHandler );
-		// builder.setNegativeButton("No", noHandler );
-            
-		// AlertDialog alert = builder.create();
-		// alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-		// 			    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-		// alert.show();
-		//}
-		//	}
-
 	}
     }
 
@@ -320,11 +293,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		errorMessage = "NotFound: " + nfe.getMessage();
 		hasError = true;
 		return "";
-	    } catch(NotAuthorizedException nfe) {
-		errorMessage = "NotAuthorized: " + nfe.getMessage();
-		hasError = true;
-		return "";
-	    }
+	    } // catch(NotAuthorizedException nfe) {
+	    // 	errorMessage = "NotAuthorized: " + nfe.getMessage();
+	    // 	hasError = true;
+	    // 	return "";
+	    // }
 	    
 	    return jsonBuf;
 	}

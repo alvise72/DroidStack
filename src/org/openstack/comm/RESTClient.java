@@ -32,6 +32,7 @@ import org.apache.http.HttpStatus;
 
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
+import org.openstack.utils.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -392,7 +393,9 @@ public class RESTClient {
 						  int count, 
 						  String netID,
 						  String _secgrpIDs,
-						  String FixedIP) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+						  String FixedIP,
+						  String adminPass ) 
+	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
 	String sUrl = "http://" + endpoint + ":8774/v2/" + tenantid + "/servers";
 	URL url = null;
@@ -427,12 +430,23 @@ public class RESTClient {
 	    fixedip = ",\"fixed_ip\": \"" + FixedIP + "\"";
 	}
 
+	String userdata="";
+	if(adminPass!=null) {
+	    try {
+		String _userdata = "#!/bin/bash\npasswd -d root\necho \"alvise\" >/tmp/pwd\ncat /tmp/pwd | passwd --stdin root";
+		userdata = ", \"user_data\": \"" + Base64.encodeObject(_userdata) + "\"";
+	    } catch(IOException ioe) {
+		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
+		userdata = "";
+	    }
+	}
+
 	String _data = "{\"server\": {\"name\": \"" + instanceName + 
 	    "\", \"imageRef\": \"" + glanceImageID + 
 	    "\", \"key_name\": \"" + key_name + 
 	    "\", \"flavorRef\": \"" + flavorID + 
 	    "\", \"max_count\": " + count + 
-	    ", \"min_count\": " + count + 
+	    ", \"min_count\": " + count + userdata +
 	    ", \"networks\": [{\"uuid\": \"" + netID + "\"" + fixedip + "}]}}";
 
 	JSONObject obj = null;
@@ -449,7 +463,7 @@ public class RESTClient {
 	}
 	
 	String data = obj.toString( );
-
+	Log.d("RESTClient.requestInstanceCreation","data="+data);
 	OutputStreamWriter out = null;
 	try {
 	    out = new OutputStreamWriter(conn.getOutputStream());
