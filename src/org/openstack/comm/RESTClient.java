@@ -40,6 +40,7 @@ import org.json.JSONException;
 
 import android.util.Log;
 import android.util.Pair;
+import android.os.Environment;
 
 public class RESTClient {
 
@@ -433,8 +434,22 @@ public class RESTClient {
 	String userdata="";
 	if(adminPass!=null) {
 	    try {
-		String _userdata = "#!/bin/bash\npasswd -d root\necho \"alvise\" >/tmp/pwd\ncat /tmp/pwd | passwd --stdin root";
-		userdata = ", \"user_data\": \"" + Base64.encodeObject(_userdata) + "\"";
+		//String _userdata = "#!/bin/bash\npasswd -d root\necho \"alvise\" >/tmp/pwd\ncat /tmp/pwd | passwd --stdin root";
+		File f = new File(Environment.getExternalStorageDirectory() + "/AndroStack/userdata");
+		if( f.exists( ) ) f.delete();
+		BufferedWriter bw = new BufferedWriter( new FileWriter(f) );
+		bw.write("#!/bin/bash");
+		bw.newLine();
+		bw.write("passwd -d root");
+		bw.newLine();
+		bw.write("echo \"alvise\" >/tmp/pwd");
+		bw.newLine();
+		bw.write("cat /tmp/pwd | passwd --stdin root");
+		bw.newLine();
+		bw.write("\rm -f /tmp/pwd");
+		bw.newLine();
+		bw.close();
+		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/userdata" ) + "\"";
 	    } catch(IOException ioe) {
 		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
 		userdata = "";
