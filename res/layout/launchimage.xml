@@ -58,7 +58,7 @@
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Admin\'s Password:"
+		android:text="Admin\'s Password (optional):"
 		android:ems="10" />
         <EditText
                     android:id="@+id/passwordET"

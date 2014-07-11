@@ -27,7 +27,6 @@ import java.lang.Thread;
 import java.util.Date;
 import java.util.Vector;
 import java.util.Iterator;
-//import java.util.Hashtable;
 
 import org.apache.http.HttpStatus;
 
@@ -288,72 +287,84 @@ public class RESTClient {
      *
      *
      */
-    public static void deleteGlanceImage( String endpoint, String token, String imageid) throws RuntimeException, NotFoundException, NotAuthorizedException {
-	String proto = "http://";
-	
-	String sUrl = proto + endpoint + ":9292/v2/images/"+imageid;
-	URL url = null;
-	try {
-	    url = new URL(sUrl);
-	} catch(java.net.MalformedURLException mfu) {
-	    throw new RuntimeException("new URL: " + mfu.toString( ) );
-	}
-	URLConnection conn = null;
-	TrustManager[] trustAllCerts = null;
-    
-	try {
-	    conn = (HttpURLConnection)url.openConnection();
-	} catch(java.io.IOException ioe) {
-	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
-	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
-	}
-    
-	conn.setRequestProperty("Content-Type", "application/octet-stream");
-	conn.setRequestProperty("X-Auth-Token", token);
-    
-	try {
-	    ((HttpURLConnection)conn).setRequestMethod("DELETE");
-	} catch(java.net.ProtocolException pe ) {
-	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
-	}
-	
+    public static void deleteGlanceImage( String endpoint, String token, String imageid) 
+	throws RuntimeException, NotFoundException, NotAuthorizedException 
+    {
+	//	 +"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..."
 
-	int status = HttpStatus.SC_OK;
 	try {
-	    status = ((HttpURLConnection)conn).getResponseCode();
-	} catch(IOException ioe) {
-	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
+	    sendDELETERequest( "http://" + endpoint + ":9292/v2/images/"+imageid, 
+			       token,
+			       null );
+	} catch(NotAuthorizedException na) {
+	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the image you're trying to delete is owned by you...");
 	}
 
-	//Log.d("RESTClient.deleteGlanceImage", "status="+status);
-	if( status == HttpStatus.SC_NO_CONTENT) {
-	    return;
-	}
-	if( status != HttpStatus.SC_OK ) {
-	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
-	    if(in!=null) {
-		int len;
-		String buf = "";
-		byte[] buffer = new byte[4096];
-		try {
-		    while (-1 != (len = in.read(buffer))) {
-			//bos.write(buffer, 0, len);
-			buf += new String(buffer, 0, len);
-			//Log.d("requestToken", new String(buffer, 0, len));
-		    }
-		    in.close();
-		} catch(IOException ioe) {
-		    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
-		}
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
-		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
+// 	String proto = "http://";
+	
+// 	String sUrl = proto + endpoint + ":9292/v2/images/"+imageid;
+// 	URL url = null;
+// 	try {
+// 	    url = new URL(sUrl);
+// 	} catch(java.net.MalformedURLException mfu) {
+// 	    throw new RuntimeException("new URL: " + mfu.toString( ) );
+// 	}
+// 	URLConnection conn = null;
+// 	TrustManager[] trustAllCerts = null;
+    
+// 	try {
+// 	    conn = (HttpURLConnection)url.openConnection();
+// 	} catch(java.io.IOException ioe) {
+// 	    //Log.d("RESTApiOpenStack.requestImages", "STEP 2");
+// 	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+// 	}
+    
+// 	conn.setRequestProperty("Content-Type", "application/octet-stream");
+// 	conn.setRequestProperty("X-Auth-Token", token);
+    
+// 	try {
+// 	    ((HttpURLConnection)conn).setRequestMethod("DELETE");
+// 	} catch(java.net.ProtocolException pe ) {
+// 	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
+// 	}
+	
+
+// 	int status = HttpStatus.SC_OK;
+// 	try {
+// 	    status = ((HttpURLConnection)conn).getResponseCode();
+// 	} catch(IOException ioe) {
+// 	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
+// 	}
+
+// 	//Log.d("RESTClient.deleteGlanceImage", "status="+status);
+// 	if( status == HttpStatus.SC_NO_CONTENT) {
+// 	    return;
+// 	}
+// 	if( status != HttpStatus.SC_OK ) {
+// 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
+// 	    if(in!=null) {
+// 		int len;
+// 		String buf = "";
+// 		byte[] buffer = new byte[4096];
+// 		try {
+// 		    while (-1 != (len = in.read(buffer))) {
+// 			//bos.write(buffer, 0, len);
+// 			buf += new String(buffer, 0, len);
+// 			//Log.d("requestToken", new String(buffer, 0, len));
+// 		    }
+// 		    in.close();
+// 		} catch(IOException ioe) {
+// 		    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+// 		}
+// 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
+// 		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
 		
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
-		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+// 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+// 		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
 		
-		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
-	    }
-	}
+// 		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
+// 	    }
+// 	}
     }
 
     /**
@@ -620,6 +631,73 @@ public class RESTClient {
 	}
 	
 	return buf.toString( );    	
+    } 
+
+    //________________________________________________________________________________
+    public static void sendDELETERequest( String sURL, 
+					  String token,
+					  Vector<Pair<String,String>> properties ) 
+	throws RuntimeException, NotFoundException, NotAuthorizedException
+    {
+	URL url = null;
+	try {
+	    url = new URL(sURL);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new RuntimeException("Malformed URL: " + mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	}
+    
+	conn.setRequestProperty("Content-Type", "application/octet-stream");
+	conn.setRequestProperty("X-Auth-Token", token);
+    
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("DELETE");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
+	}
+	
+
+	int status = HttpStatus.SC_OK;
+	try {
+	    status = ((HttpURLConnection)conn).getResponseCode();
+	} catch(IOException ioe) {
+	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
+	}
+
+	if( status == HttpStatus.SC_NO_CONTENT) {
+	    return;
+	}
+	if( status != HttpStatus.SC_OK ) {
+	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
+	    if(in!=null) {
+		int len;
+		String buf = "";
+		byte[] buffer = new byte[4096];
+		try {
+		    while (-1 != (len = in.read(buffer))) {
+			//bos.write(buffer, 0, len);
+			buf += new String(buffer, 0, len);
+			//Log.d("requestToken", new String(buffer, 0, len));
+		    }
+		    in.close();
+		} catch(IOException ioe) {
+		    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+		}
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
+		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf ) );//+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
+		
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+		
+		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
+	    }
+	}	
     }
 }
 
