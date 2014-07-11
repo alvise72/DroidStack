@@ -22,4 +22,5 @@
     <string name="MENUHELP">Help</string>
     <string name="MENUUPDATE">Update</string>
     <string name="TOUCHUSERTOSELECT">Touch a use to select it</string>
+    <string name="MUSTSELECTNET">You haven\'t selected any network. Cannot start an instance without a network to attach.</string>
 </resources>

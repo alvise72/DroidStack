@@ -36,7 +36,10 @@ import org.openstack.utils.Flavor;
 import org.openstack.utils.KeyPair;
 
 import org.openstack.comm.RESTClient;
+
 import org.openstack.views.SecGroupView;
+import org.openstack.views.NetworkView;
+
 import org.openstack.utils.CustomProgressDialog;
 import org.openstack.utils.SubNetwork;
 import org.openstack.utils.SecGroup;
@@ -78,8 +81,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private SecGroup secgroups[] = null;
 
     private LinearLayout options = null;
+    private LinearLayout networksL = null;
+
 
     HashSet<String> selectedSecgroups = null;
+    HashSet<String> selectedNetworks = null;
 
     private User currentUser = null;
 
@@ -89,12 +95,22 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick( View v ) {
-	if(v instanceof CheckBox) {
+	if(v instanceof SecGroupView) {
 	    SecGroupView s = (SecGroupView)v;
 	    if(s.isChecked())
 		selectedSecgroups.add( s.getSecGroup().getID() );
 	    else
 		selectedSecgroups.remove(s.getSecGroup().getID());
+	    return;
+	}
+	
+	if(v instanceof NetworkView) {
+	    NetworkView nv = (NetworkView)v;
+	    if(nv.isChecked())
+		selectedNetworks.add( nv.getNetwork().getID() );
+	    else
+		selectedNetworks.remove(nv.getNetwork().getID());
+	    return;
 	}
     }
 
@@ -124,14 +140,19 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
     
-    spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
+    //    spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
     spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
     spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
 
-    options = (LinearLayout)findViewById( R.id.optionLayer );
+    options = (LinearLayout)findViewById( R.id.secgroupsLayer );
+    networksL = (LinearLayout)findViewById( R.id.networksLayer );
     
     progressDialogWaitStop.show();
     currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+
+    selectedSecgroups = new HashSet();
+    selectedNetworks = new HashSet();
+
     AsyncTaskGetOptions task = new AsyncTaskGetOptions();
     task.execute( currentUser );
   }
@@ -214,7 +235,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */  
   public void launch( View v ) {
 
-      int i = spinnerNetworks.getSelectedItemPosition( );
+      //int i = spinnerNetworks.getSelectedItemPosition( );
       int j = spinnerFlavors.getSelectedItemPosition( );
       int k = spinnerKeypairs.getSelectedItemPosition( );
 
@@ -236,13 +257,18 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
 	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
 
+      if(selectedNetworks.size()==0) {
+	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
+	  return;
+      }
+      
       task.execute( instanceName, 
 		    imageID,
 		    keypairs[k].getName(), 
 		    flavors[j].getID(),
 		    ""+count, 
-		    networks[i].getID(),
 		    Utils.join( selectedSecgroups, "," ),
+		    Utils.join( selectedNetworks, "," ),
 		    fixedip,
 		    adminPass);
   }
@@ -264,12 +290,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */
     protected class AsyncTaskGetOptions extends AsyncTask<User, Void, Void>
     {
-     	private  String   errorMessage  = null;
-	private  boolean  hasError      = false;
-	private  String   jsonBufFlavor = null;
-	private  String   jsonBufNetwork= null;
-	private  String   jsonBufSubnet = null;
-	private  String   jsonBufKeypairs = null;
+     	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+	private  String   jsonBufFlavor    = null;
+	private  String   jsonBufNetwork   = null;
+	private  String   jsonBufSubnet    = null;
+	private  String   jsonBufKeypairs  = null;
 	private  String   jsonBufSecgroups = null;
 
 	@Override
@@ -329,11 +355,16 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    try {
 		networks = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
 		String[] netNames = new String[networks.length];
-		for(int i = 0; i<networks.length; ++i)
+		for(int i = 0; i<networks.length; ++i) {
 		    netNames[i] = networks[i].getName();
-		spinnerNetworksArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item, netNames);
-		spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerNetworks.setAdapter(spinnerNetworksArrayAdapter);
+		    NetworkView nv = new NetworkView( networks[i], ImageLaunchActivity.this );
+		    nv.setOnClickListener( ImageLaunchActivity.this );
+		    networksL.addView( nv );
+		}
+
+		// spinnerNetworksArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item, netNames);
+		// spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// spinnerNetworks.setAdapter(spinnerNetworksArrayAdapter);
 
 		Hashtable<String, Flavor> flavorTable = ParseUtils.parseFlavors( jsonBufFlavor );
 		Collection<Flavor> collFlav = flavorTable.values();
@@ -357,7 +388,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
 		secgroups = ParseUtils.parseSecGroups( jsonBufSecgroups );
 		String[] secgroupNames = new String[secgroups.length];
-		selectedSecgroups = new HashSet();
+		
 		for(int i =0; i< secgroups.length; ++i) {
 		    SecGroupView sgv = new SecGroupView( secgroups[i], ImageLaunchActivity.this );
 		    sgv.setOnClickListener( ImageLaunchActivity.this );
@@ -444,7 +475,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      args[5],
 							      args[6],
 							      args[7],
-							      args[8] );
+							      args[8]);
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;

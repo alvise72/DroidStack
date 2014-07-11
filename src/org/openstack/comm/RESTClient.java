@@ -392,8 +392,8 @@ public class RESTClient {
 						  String key_name, 
 						  String flavorID,
 						  int count, 
-						  String netID,
 						  String _secgrpIDs,
+						  String _networkIDs,
 						  String FixedIP,
 						  String adminPass ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
@@ -461,17 +461,22 @@ public class RESTClient {
 	    "\", \"key_name\": \"" + key_name + 
 	    "\", \"flavorRef\": \"" + flavorID + 
 	    "\", \"max_count\": " + count + 
-	    ", \"min_count\": " + count + userdata +
-	    ", \"networks\": [{\"uuid\": \"" + netID + "\"" + fixedip + "}]}}";
+	    ", \"min_count\": " + count + userdata + fixedip + "}}";
+	// ", \"networks\": [{\"uuid\": \"" + netID + "\"" + fixedip + "}]}}";
 
 	JSONObject obj = null;
-	String []secgrpIDs = _secgrpIDs.split(",");
+	String[] secgrpIDs = _secgrpIDs.split(",");
+	String[] networkIDs = _networkIDs.split(",");
 	try {
 	    obj = new JSONObject( _data );
 	    JSONArray secgs = new JSONArray();
+	    JSONArray nets = new JSONArray();
 	    for(int i = 0; i<secgrpIDs.length; ++i)
 		secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
+	    for(int i = 0; i<networkIDs.length; ++i)
+		nets.put( new JSONObject("{\"uuid\": \"" + networkIDs[i] + "\"}") );
 	    obj.getJSONObject("server").put("security_groups", secgs);
+	    obj.getJSONObject("server").put("networks", nets);// );
 	    
 	} catch(JSONException je) {
 	    throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
