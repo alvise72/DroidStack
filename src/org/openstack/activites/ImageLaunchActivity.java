@@ -473,7 +473,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		jsonBufNetwork   = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
 		jsonBufSubnet    = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
 		jsonBufKeypairs  = RESTClient.requestKeypairs( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
-		jsonBufSecgroups = RESTClient.requestSecgroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
+		jsonBufSecgroups = RESTClient.requestSecGroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -495,7 +495,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    
 	    //downloading_image_list = false; // questo non va spostato da qui a
 	    try {
-		networks = ParseUtils.parseNetwork( jsonBufNetwork, jsonBufSubnet );
+		networks = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
 		String[] netNames = new String[networks.length];
 		for(int i = 0; i<networks.length; ++i)
 		    netNames[i] = networks[i].getName();
@@ -514,7 +514,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
 
-		keypairs = ParseUtils.parseKeypair( jsonBufKeypairs );
+		keypairs = ParseUtils.parseKeyPairs( jsonBufKeypairs );
 		String [] keypairNames = new String[keypairs.length];
 		for(int i =0; i< keypairs.length; ++i)
 		    keypairNames[i] = keypairs[i].getName();
@@ -523,7 +523,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerKeypairs.setAdapter(spinnerKeypairsArrayAdapter);
 
-		secgroups = ParseUtils.parseSecgroup( jsonBufSecgroups );
+		secgroups = ParseUtils.parseSecGroups( jsonBufSecgroups );
 		String[] secgroupNames = new String[secgroups.length];
 		selectedSecgroups = new HashSet();
 		for(int i =0; i< secgroups.length; ++i) {

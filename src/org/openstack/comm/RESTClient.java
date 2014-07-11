@@ -235,7 +235,6 @@ public class RESTClient {
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/os-floating-ips", token, v);
     }
-					    
 
     /**
      *
@@ -423,7 +422,7 @@ public class RESTClient {
      *
      *
      */
-    public static String requestSecgroups( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException 
+    public static String requestSecGroups( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException 
     {
 	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
 	Vector<Pair<String, String>> v = new Vector();

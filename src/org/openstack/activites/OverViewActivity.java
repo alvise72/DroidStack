@@ -24,7 +24,6 @@ import android.app.ProgressDialog;
 import android.app.ActivityManager;
 import android.app.Activity;
 
-//import android.view.inputmethod.InputMethodManager;
 import android.view.WindowManager;
 import android.view.MenuItem;
 import android.view.Gravity;
@@ -33,22 +32,23 @@ import android.view.Menu;
 
 import android.os.AsyncTask;
 
-//import android.graphics.Bitmap;
 
 import java.io.IOException;
 
 import java.util.Vector;
 
 import org.openstack.R;
-import org.openstack.utils.Quota;
 import org.openstack.utils.User;
+import org.openstack.utils.Quota;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
+import org.openstack.utils.SecGroup;
+import org.openstack.utils.CustomProgressDialog;
+
 import org.openstack.comm.*;
-//import org.openstack.comm.RuntimeException;
+
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
-import org.openstack.utils.CustomProgressDialog;
 
 import android.util.Pair;
 
@@ -128,7 +128,7 @@ public class OverViewActivity extends Activity {
 	progressDialogWaitStop.dismiss();
     }
   
-    private void refreshView( Quota Q, Vector<Pair<String, String>> fips ) {
+    private void refreshView( Quota Q, Vector<Pair<String, String>> fips, SecGroup[] secgs ) {
 	
 	//Quota Q = ParseUtils.parseQuota( jsonBuf );
 	((TextView)findViewById(R.id.vmusageTV)).setText("" + Q.getCurrentInstances() );
@@ -153,10 +153,10 @@ public class OverViewActivity extends Activity {
 	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
 	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips.size() );
 	
-	((TextView)findViewById(R.id.segusageTV)).setText("" + Q.getCurrentSecurityGroups( ) );
+	((TextView)findViewById(R.id.segusageTV)).setText("" + secgs.length );
 	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
 	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( Q.getCurrentSecurityGroups( ) );
+	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs.length );
     }
 
     /**
@@ -180,6 +180,7 @@ public class OverViewActivity extends Activity {
 	private  boolean  hasError      = false;
 	private  String   jsonBuf       = null;
 	private  String   jsonBufFIPs   = null;
+	private  String   jsonBufSecgs  = null;
 	User U = null;
 
 	@Override
@@ -212,6 +213,7 @@ public class OverViewActivity extends Activity {
 	    try {
 		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 		jsonBufFIPs = RESTClient.requestFloatingIPs( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBufSecgs = RESTClient.requestSecGroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken() );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -239,7 +241,9 @@ public class OverViewActivity extends Activity {
 	    
 	    try {
 		
-		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBuf ), ParseUtils.parseFloatingIPs(jsonBufFIPs)  );
+		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBuf ), 
+						   ParseUtils.parseFloatingIPs(jsonBufFIPs),
+						   ParseUtils.parseSecGroups(jsonBufSecgs  ) );
 	    } catch(ParseException pe) {
 		Utils.alert( pe.getMessage( ), OverViewActivity.this );
 	    }

@@ -359,7 +359,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static Network[] parseNetwork ( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
+    public static Network[] parseNetworks( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
 
 	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
 	//	Vector<Network> nets = null;
@@ -445,7 +445,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static KeyPair[] parseKeypair( String jsonBuf ) throws ParseException  {
+    public static KeyPair[] parseKeyPairs( String jsonBuf ) throws ParseException  {
 	KeyPair kpairs[] = null;
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
@@ -470,7 +470,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static SecGroup[] parseSecgroup( String jsonBuf ) throws ParseException  {
+    public static SecGroup[] parseSecGroups( String jsonBuf ) throws ParseException  {
 	SecGroup secg[] = null;
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
