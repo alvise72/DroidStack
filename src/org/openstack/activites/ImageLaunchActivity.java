@@ -127,7 +127,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
     spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
     spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
-    //spinnerSecgroups = (Spinner)findViewById(R.id.);
 
     options = (LinearLayout)findViewById( R.id.optionLayer );
     
@@ -363,7 +362,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    SecGroupView sgv = new SecGroupView( secgroups[i], ImageLaunchActivity.this );
 		    sgv.setOnClickListener( ImageLaunchActivity.this );
 		    options.addView( sgv );
-		    selectedSecgroups.add( sgv.getSecGroup( ).getID() );
+		    if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
 		}
 
 	    } catch(ParseException pe) {

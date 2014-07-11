@@ -8,8 +8,9 @@ public class Network {
     private boolean shared;
     private boolean up;
     private boolean ext;
+    private String tenantID;
     
-    public Network( String status, String name, String ID, SubNetwork[] subnets, boolean shared, boolean up, boolean ext ) {
+    public Network( String status, String name, String ID, SubNetwork[] subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
 	this.status = status;
 	this.name = name;
 	this.ID   = ID;
@@ -17,6 +18,7 @@ public class Network {
 	this.shared= shared;
 	this.up = up;
 	this.ext = ext;
+	this.tenantID = tenantID;
     }
 
     @Override
@@ -36,4 +38,5 @@ public class Network {
     public boolean isShared( ) { return shared; }
     public boolean isUp( ) { return up; }
     public boolean isExt( ) { return ext; }
+    public String getTenantID() { return tenantID; }
 }

@@ -22,4 +22,5 @@
     <string name="MENUABOUT">Informazioni</string>
     <string name="MENUHELP">Aiuto</string>
     <string name="MENUUPDATE">Aggiorna</string>
+    <string name="TOUCHUSERTOSELECT">Tocca un utente per selezionarlo</string>
 </resources>

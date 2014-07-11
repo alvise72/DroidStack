@@ -65,6 +65,8 @@ public class UsersActivity extends Activity implements OnClickListener {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView( R.layout.users );
+    Toast t = Toast.makeText(this, getString(R.string.TOUCHUSERTOSELECT), Toast.LENGTH_SHORT) ;
+    t.show( );
   }
   
   //__________________________________________________________________________________

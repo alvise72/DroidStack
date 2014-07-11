@@ -379,6 +379,7 @@ public class ParseUtils {
 		String ID = network.getString("id");
 		JSONArray subnets  = network.getJSONArray("subnets");
 		String[] arraySubnetID = new String[ subnets.length() ];
+		String tenantID = network.getString("tenant_id");
 		for(int j = 0; j<subnets.length(); ++j) {
 		    arraySubnetID[j] = (String)subnets.getString(j);
 		    //		    Log.d("DROIDSTACK", "arraySubnetID[" + j + "]="+arraySubnetID[j]);
@@ -392,7 +393,7 @@ public class ParseUtils {
 			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
 		}
 		//nets.add(new Network(status, name, ID, _subnets, shared, up, ext ));
-		nets[i] = new Network(status, name, ID, _subnets, shared, up, ext );
+		nets[i] = new Network(status, name, ID, _subnets, shared, up, ext, tenantID );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );

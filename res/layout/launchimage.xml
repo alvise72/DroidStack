@@ -82,6 +82,8 @@
 		android:layout_height="wrap_content"
 		android:text="Network:"
 		android:ems="10" />
+
+
 	<Spinner
 	    android:id="@+id/networkSP"
 	    android:layout_width="fill_parent"
