@@ -93,6 +93,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     
     private String imageID = null;
 
+    private Button launchButton = null;
+
     @Override
     public void onClick( View v ) {
 	if(v instanceof SecGroupView) {
@@ -133,7 +135,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView( org.openstack.R.layout.launchimage );
-
+    setTitle("Launch Nova Instance");
     bundle = getIntent( ).getExtras( );
     imageID = bundle.getString("IMAGEID");
 
@@ -152,6 +154,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
     selectedSecgroups = new HashSet();
     selectedNetworks = new HashSet();
+
+    launchButton = (Button)findViewById( R.id.launchButton );
 
     AsyncTaskGetOptions task = new AsyncTaskGetOptions();
     task.execute( currentUser );
@@ -242,6 +246,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
+      progressDialogWaitStop.show();
       currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
@@ -297,11 +302,13 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	private  String   jsonBufSubnet    = null;
 	private  String   jsonBufKeypairs  = null;
 	private  String   jsonBufSecgroups = null;
+	User U = null;
 
 	@Override
 	protected Void doInBackground( User... u ) 
 	{
-	    User U = u[0];
+	    //	    ImageLaunchActivity.this.launchButton.setEnabled(false);
+	    U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
 		    String jsonBuf = RESTClient.requestToken( U.getEndpoint(),
@@ -357,6 +364,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		String[] netNames = new String[networks.length];
 		for(int i = 0; i<networks.length; ++i) {
 		    netNames[i] = networks[i].getName();
+
+		    if(U.getTenantID().compareTo( networks[i].getTenantID() )!=0) {
+			if(networks[i].isShared()==false)
+			    continue;
+		    }
+		    
 		    NetworkView nv = new NetworkView( networks[i], ImageLaunchActivity.this );
 		    nv.setOnClickListener( ImageLaunchActivity.this );
 		    networksL.addView( nv );
@@ -400,6 +413,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);
 	    }
+	    //	    ImageLaunchActivity.this.launchButton.setEnabled(true);
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
 	}
     }
@@ -437,7 +451,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    // Log.d("IMAGELAUNCH", "args[4]="+args[4]);
 	    // Log.d("IMAGELAUNCH", "args[5]="+args[5]);
 	    // Log.d("IMAGELAUNCH", "args[6]="+args[6]);
-	    
+	    //ImageLaunchActivity.this.launchButton.setEnabled(false);
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
@@ -490,8 +504,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    super.onPostExecute( v );
 	    if(hasError) {
  		Utils.alert( "Launch: "+errorMessage, ImageLaunchActivity.this );
- 		ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
+ 		// ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+		// ImageLaunchActivity.this.launchButton.setEnabled(true);
+ 		// return;
  	    }
 	    
 	    //	    Log.d("DROIDSTACK", "onPostExecute, jsonBuf="+jsonBuf);
@@ -501,6 +516,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    // 		    ImageLaunchActivity.this);
 	    // }
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+	    //	    ImageLaunchActivity.this.launchButton.setEnabled(true);
 	}
     }
 }

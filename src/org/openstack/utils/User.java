@@ -12,11 +12,9 @@ import java.io.File;
 
 import android.os.Environment;
 
-//import org.openstack.comm.RuntimeException;
-
 public class User implements Serializable, Comparable<User> {
 
-    private static final long serialVersionUID = 2087368867376448460L;
+    private static final long serialVersionUID = 2087368867376448461L;
 
     private String endpoint;
     private String userName;
@@ -27,8 +25,9 @@ public class User implements Serializable, Comparable<User> {
     private long   tokenExpireTime;
     private String password;
     private boolean usessl;
+    private boolean role_admin;
     
-    public User( String _userName, String _userID, String _tenantName, String _tenantId, String _token, long _tokenExpireTime  ) {
+    public User( String _userName, String _userID, String _tenantName, String _tenantId, String _token, long _tokenExpireTime, boolean roleadmin  ) {
         userName        = _userName;
 	userID          = _userID;
 	tenantName      = _tenantName;
@@ -36,6 +35,7 @@ public class User implements Serializable, Comparable<User> {
 	token           = _token;
 	tokenExpireTime = _tokenExpireTime;
 	password        = "";
+	role_admin      = roleadmin;
     }
     
     public void setPassword( String _password ) { password = _password ;} 
@@ -51,6 +51,7 @@ public class User implements Serializable, Comparable<User> {
     public String getUserID( ) { return userID; }
     public String getPassword( ) { return password; }
     public boolean useSSL( ) { return usessl; }
+    public boolean isRoleAdmin( ) { return role_admin; }
 
     @Override
     public String toString( ) {
@@ -62,6 +63,7 @@ public class User implements Serializable, Comparable<User> {
 	    ",tokenExpireTime="+tokenExpireTime+
 	    ",password="+password+
 	    ",usessl"+usessl+
+	    ",role_admin"+role_admin+
 	    "}";
     }
 

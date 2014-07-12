@@ -49,7 +49,13 @@ public class ParseUtils {
 	  String tenantname = (String)tenant.get("name");
 	  String username = (String)((JSONObject)access.get("user")).get("username");
 	  String userID = (String)((JSONObject)access.get("user")).get("id");
-
+	  //boolean is_admin = access.getJSONObject("metadata").getInt("is_admin") == 0 ? true : false;
+	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
+	  boolean role_admin = false;
+	  for(int i = 0; i<roleArray.length(); ++i)
+	      if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
+		  role_admin = true;
+	  
 	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
 	  Calendar calendar = Calendar.getInstance();
@@ -59,7 +65,7 @@ public class ParseUtils {
 	      throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
 	  }
 	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp );
+	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin );
 	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );
@@ -375,24 +381,20 @@ public class ParseUtils {
 		String name = (String)network.getString("name");
 		boolean up = network.getBoolean("admin_state_up");
 		boolean ext = network.getBoolean("router:external");
-		boolean shared = network.getBoolean("router:external");
+		boolean shared = network.getBoolean("shared");
 		String ID = network.getString("id");
 		JSONArray subnets  = network.getJSONArray("subnets");
 		String[] arraySubnetID = new String[ subnets.length() ];
 		String tenantID = network.getString("tenant_id");
-		for(int j = 0; j<subnets.length(); ++j) {
+		for(int j = 0; j<subnets.length(); ++j)
 		    arraySubnetID[j] = (String)subnets.getString(j);
-		    //		    Log.d("DROIDSTACK", "arraySubnetID[" + j + "]="+arraySubnetID[j]);
-		}
+
 		
 		SubNetwork[] _subnets = new SubNetwork[subnets.length()];
-		for(int j = 0; j< arraySubnetID.length; j++) {
-		    //		    Log.d("DROIDSTACK", "CHECKING if " + arraySubnetID[j] + " is in the subnetsTable...");
+		for(int j = 0; j< arraySubnetID.length; j++)
 		    if(subnetsTable.containsKey(arraySubnetID[j]) == true) 
-			//Log.d("DROIDSTACK", "FOUND!");
 			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
-		}
-		//nets.add(new Network(status, name, ID, _subnets, shared, up, ext ));
+		
 		nets[i] = new Network(status, name, ID, _subnets, shared, up, ext, tenantID );
 	    }
 	} catch(org.json.JSONException je) {
