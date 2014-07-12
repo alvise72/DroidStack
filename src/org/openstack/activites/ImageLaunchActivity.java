@@ -15,13 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ActivityInfo;
 
 import android.util.Log;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
 import android.view.View.OnClickListener;
@@ -133,32 +134,32 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView( org.openstack.R.layout.launchimage );
-    setTitle("Launch Nova Instance");
-    bundle = getIntent( ).getExtras( );
-    imageID = bundle.getString("IMAGEID");
-
-    progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-    progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
-    
-    //    spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
-    spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
-    spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
-
-    options = (LinearLayout)findViewById( R.id.secgroupsLayer );
-    networksL = (LinearLayout)findViewById( R.id.networksLayer );
-    
-    progressDialogWaitStop.show();
-    currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
-
-    selectedSecgroups = new HashSet();
-    selectedNetworks = new HashSet();
-
-    launchButton = (Button)findViewById( R.id.launchButton );
-
-    AsyncTaskGetOptions task = new AsyncTaskGetOptions();
-    task.execute( currentUser );
+      super.onCreate(savedInstanceState);
+      setContentView( org.openstack.R.layout.launchimage );
+      setTitle("Launch Nova Instance");
+      bundle = getIntent( ).getExtras( );
+      imageID = bundle.getString("IMAGEID");
+      
+      progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+      progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
+      
+      //    spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
+      spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
+      spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
+      
+      options = (LinearLayout)findViewById( R.id.secgroupsLayer );
+      networksL = (LinearLayout)findViewById( R.id.networksLayer );
+      
+      progressDialogWaitStop.show();
+      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+      
+      selectedSecgroups = new HashSet();
+      selectedNetworks = new HashSet();
+      
+      launchButton = (Button)findViewById( R.id.launchButton );
+      
+      AsyncTaskGetOptions task = new AsyncTaskGetOptions();
+      task.execute( currentUser );
   }
   
   
@@ -227,7 +228,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      *
      *
      *
-     *
+     * http://stackoverflow.com/questions/18799216/how-to-make-a-edittext-box-in-a-dialog
      *
      *
      *
@@ -239,45 +240,104 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */  
   public void launch( View v ) {
 
-      //int i = spinnerNetworks.getSelectedItemPosition( );
-      int j = spinnerFlavors.getSelectedItemPosition( );
-      int k = spinnerKeypairs.getSelectedItemPosition( );
-
-      String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
-      int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
-
-      progressDialogWaitStop.show();
-      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
-      AsyncTaskLaunch task = new AsyncTaskLaunch();
-
-      String fixedip = ((EditText)findViewById(R.id.fixedIPET)).getText( ).toString( );
-      if(fixedip.length()!=0) {
-	  if(!InetAddressUtils.isIPv4Address(fixedip)) {
-	      Utils.alert("The inserted IP address ["+fixedip+"] is invalid", this);
-	      return;
-	  }
-      } else fixedip=null;
-
-      String adminPass = null;
-      if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
-	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
-
       if(selectedNetworks.size()==0) {
 	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
 	  return;
       }
+
+      if(((EditText)findViewById(R.id.vmnameET)).getText().toString().length()==0) {
+	  Utils.alert(getString(R.string.MUSTSETNAME) , this);
+	  return;
+      }
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage( "Do you want to specify IP for the selected network(s) ?" );
+      builder.setCancelable(false);
       
-      task.execute( instanceName, 
-		    imageID,
-		    keypairs[k].getName(), 
-		    flavors[j].getID(),
-		    ""+count, 
-		    Utils.join( selectedSecgroups, "," ),
-		    Utils.join( selectedNetworks, "," ),
-		    fixedip,
-		    adminPass);
+      final View V = v;
+
+      DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+	      public void onClick(DialogInterface dialog, int id) {
+		  //deleteGlanceImage( ID );
+	      }
+	  };
+      
+      DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+	      public void onClick(DialogInterface dialog, int id) {
+		  //dialog.cancel( );
+		  
+		  _launch( V );
+		  // task.execute( instanceName, 
+		  // 		imageID,
+		  // 		keypairs[k].getName(), 
+		  // 		flavors[j].getID(),
+		  // 		""+count, 
+		  // 		Utils.join( selectedSecgroups, "," ),
+		  // 		Utils.join( selectedNetworks, "," ),
+		  // 		fixedip,
+		  // 		adminPass);
+	      }
+	  };
+      
+      builder.setPositiveButton("Yes", yesHandler );
+      builder.setNegativeButton("No", noHandler );
+      
+      AlertDialog alert = builder.create();
+      alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+				  WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+      alert.show();
+      
   }
-    
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */  
+    public void _launch( View v ) {
+	int j = spinnerFlavors.getSelectedItemPosition( );
+	int k = spinnerKeypairs.getSelectedItemPosition( );
+
+	String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
+	int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
+
+	progressDialogWaitStop.show();
+	currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+	AsyncTaskLaunch task = new AsyncTaskLaunch();
+
+	//	String fixedip = ((EditText)findViewById(R.id.fixedIPET)).getText( ).toString( );
+	// if(fixedip.length()!=0) {
+	//     if(!InetAddressUtils.isIPv4Address(fixedip)) {
+	// 	Utils.alert("The inserted IP address ["+fixedip+"] is invalid", this);
+	// 	return;
+	//     }
+	// } else fixedip=null;
+	
+	String adminPass = null;
+	if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
+	    adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
+
+	task.execute( instanceName, 
+			imageID,
+			keypairs[k].getName(), 
+			flavors[j].getID(),
+			""+count, 
+			Utils.join( selectedSecgroups, "," ),
+			Utils.join( selectedNetworks, "," ),
+			null,
+			adminPass);
+    }
+
     /**
      *
      *

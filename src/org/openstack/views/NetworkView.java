@@ -4,6 +4,7 @@ package org.openstack.views;
 import org.openstack.utils.Network;
 import android.widget.CheckBox;
 import android.content.Context;
+import android.graphics.Color;
 
 public class NetworkView extends CheckBox {
     
@@ -14,6 +15,8 @@ public class NetworkView extends CheckBox {
 	super(ctx);
 	setText( net.getName( ) );
 	this.net = net;
+	//setTextSize(20,1);
+	//setTextColor(Color.parseColor("#FFFFFF"));
     }
     
     public Network getNetwork( ) { return net; }

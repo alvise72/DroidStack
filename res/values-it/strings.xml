@@ -24,4 +24,5 @@
     <string name="MENUUPDATE">Aggiorna</string>
     <string name="TOUCHUSERTOSELECT">Tocca un utente per selezionarlo</string>
     <string name="MUSTSELECTNET">Non hai selezionato una rete: impossibile lanciare un\'istanza non collegata ad almeno una rete.</string>
+    <string name="MUSTSETNAME">Devi inserire un nome per l\'istanza.</string>
 </resources>

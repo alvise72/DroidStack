@@ -9,6 +9,7 @@ public class Network {
     private boolean up;
     private boolean ext;
     private String tenantID;
+    private String fixedIP;
     
     public Network( String status, String name, String ID, SubNetwork[] subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
 	this.status = status;
@@ -19,6 +20,7 @@ public class Network {
 	this.up = up;
 	this.ext = ext;
 	this.tenantID = tenantID;
+	fixedIP = "";
     }
 
     @Override
@@ -32,6 +34,8 @@ public class Network {
 	    + "}";
     }
 
+    public void setFixedIP( String IP ) { fixedIP = IP; }
+
     public String getName( ) { return name; }
     public String getID( ) { return ID; }
     public SubNetwork[] getSubNetworks( ) { return subnets; }
@@ -39,4 +43,5 @@ public class Network {
     public boolean isUp( ) { return up; }
     public boolean isExt( ) { return ext; }
     public String getTenantID() { return tenantID; }
+    public String getFixedIP( ) { return fixedIP; }
 }
