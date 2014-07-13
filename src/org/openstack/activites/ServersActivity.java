@@ -45,7 +45,6 @@ import java.io.File;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.comm.NotFoundException;
-//import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
@@ -219,6 +218,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    //listedServers.add( sv.getServer( ).getID( ) );
 	}
     }
+
 
 
 

@@ -30,6 +30,10 @@ import android.net.*;
 import android.net.NetworkInfo.*;
 import android.os.*;
 import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
+
 import android.view.*;
 
 import java.util.Calendar;
@@ -335,6 +339,49 @@ public class Utils {
 	AlertDialog alert = alertbox.create();
 	alert.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
 				   WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        alert.show();
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public static void alert2( ScrollView sv, Context ctx ) {
+	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
+        //alertbox.setMessage( message );
+	alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+ 
+                public void onClick(DialogInterface arg0, int arg1) {
+                }
+            });
+	AlertDialog alert = alertbox.create();
+	alert.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+				   WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+	LinearLayout.LayoutParams lp 
+	    = new LinearLayout.LayoutParams(
+					    LinearLayout.LayoutParams.FILL_PARENT,
+					    LinearLayout.LayoutParams.FILL_PARENT);
+	LinearLayout l = new LinearLayout(ctx);
+	l.setLayoutParams( lp );
+	//ScrollView sv = new ScrollView(ctx);
+	//sv.setLayoutParams( lp );
+	l.addView(sv);
+	// TextView tv1 = new TextView(ctx);
+	// tv1.setText("Image name:");
+	// TextView tv1 = new TextView(ctx);
+	// tv1.setText("Image name:");
+	// TextView tv1 = new TextView(ctx);
+	// tv1.setText("Image name:");
+	// TextView tv1 = new TextView(ctx);
+	// tv1.setText("Image name:");
+	// TextView tv1 = new TextView(ctx);
+	// tv1.setText("Image name:");
+	// TextView tv1 = new TextView(ctx);
+	// tv1.setText("Image name:");
+	alert.setView(l); 
         alert.show();
     }
 
