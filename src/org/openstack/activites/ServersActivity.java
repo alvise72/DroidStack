@@ -44,6 +44,7 @@ import java.util.Set;
 import java.io.File;
 
 import org.openstack.comm.RESTClient;
+import org.openstack.comm.NotFoundException;
 //import org.openstack.comm.RuntimeException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
@@ -71,11 +72,13 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import org.openstack.utils.CustomProgressDialog;
 
+import java.util.HashSet;
+
 public class ServersActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
-
+    //private HashSet listedServers = null;
 
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -87,6 +90,7 @@ public class ServersActivity extends Activity implements OnClickListener {
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
         menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+	menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
     
@@ -110,6 +114,27 @@ public class ServersActivity extends Activity implements OnClickListener {
 		return true;
 	    }
         }
+
+        if( id == Menu.FIRST+1 ) { 
+	    if(U==null) {
+		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+	    } else {
+		// progressDialogWaitStop.show();
+		// AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+		// task.execute( );
+		//serverIDs = Utils.join(listedServers,",");
+		progressDialogWaitStop.show();
+		AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
+		int numChilds = ((LinearLayout)findViewById(R.id.serverLayout)).getChildCount();
+		String[] listedServers = new String[numChilds];
+		for(int i = 0; i < numChilds; ++i) {
+		    ServerView sv = (ServerView)((LinearLayout)findViewById(R.id.serverLayout)).getChildAt(i);
+		    listedServers[i] = sv.getServer().getID();
+		}
+		task.execute( Utils.join(listedServers, ",") ) ;
+		return true;
+	    }
+        }
 	return super.onOptionsItemSelected( item );
     }
 
@@ -120,8 +145,11 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SERVER ) {
 		// Delete the server
 		String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
+		progressDialogWaitStop.show();
 		AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
-		task.execute( serverid) ;
+		String[] ids = new String[1];
+		ids[0] = serverid;
+		task.execute( ids ) ;
 		return;
 	    }
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_SNAP_SERVER ) {
@@ -137,6 +165,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	super.onCreate(savedInstanceState);
 	setContentView( R.layout.serverlist );
 	
+	//listedServers = new HashSet();
+
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
 	
@@ -180,7 +210,9 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    Flavor F = flavors.get( s.getFlavorID( ) );
 	    if( F != null)
 		s.setFlavor( F );
-	    ((LinearLayout)findViewById(R.id.serverLayout)).addView( new ServerView(s, this) );
+	    ServerView sv = new ServerView(s, this);
+	    ((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
+	    //listedServers.add( sv.getServer( ).getID( ) );
 	}
     }
 
@@ -284,12 +316,13 @@ public class ServersActivity extends Activity implements OnClickListener {
 	private  boolean  hasError         = false;
 	private  String   jsonBuf          = null;
 	private  String   jsonBufferFlavor = null;
-	private  String   serverid         = null;
+	private  String[] serverids        = null;
 	private  String   username         = null;
+	private  boolean  not_found        = false;
 	@Override
 	protected Void doInBackground(String... args ) 
 	{
-	    serverid = args[0];
+	    serverids = args[0].split(",");
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
 		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
@@ -313,12 +346,16 @@ public class ServersActivity extends Activity implements OnClickListener {
 		}
 	    }
 
-	    //username = U.getUserName();
-
 	    try {
-		RESTClient.deleteInstance( U.getEndpoint(), U.getToken(), U.getTenantID(), serverid );
-		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		for(int i = 0; i<serverids.length; ++i) {
+		    try {
+			RESTClient.deleteInstance( U.getEndpoint(), U.getToken(), U.getTenantID(), serverids[i] );
+		    } catch(NotFoundException nfe) {
+			not_found = true;
+		    }
+		}
+		// jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		// jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -331,22 +368,16 @@ public class ServersActivity extends Activity implements OnClickListener {
 	@Override
         protected void onPostExecute( Void v ) {
 	    super.onPostExecute(v);
-	    
- 	    if(hasError) {
- 		Utils.alert( errorMessage, ServersActivity.this );
- 		ServersActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
-	    
-	    try {
-		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, username );
-		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-		ServersActivity.this.refreshView( servers, flavors );
-	    } catch(ParseException pe) {
-		Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
-	    }
 	    ServersActivity.this.progressDialogWaitStop.dismiss( );
-	
+	    if(not_found) {
+		Utils.alert(ServersActivity.this.getString(R.string.SOMEDELETIONFAILED), ServersActivity.this );
+		return;
+	    }
+ 	    if(hasError)
+ 		Utils.alert( errorMessage, ServersActivity.this );
+ 	    else
+		Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
+	    
 	}
     }
 }

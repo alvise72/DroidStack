@@ -27,10 +27,10 @@ public class ServerView extends LinearLayout {
 
     private TextViewNamed Name = null;
     private TextViewNamed Flavor = null;
+    private TextViewNamed Status = null;
 
     private ImageButtonNamed snapServer = null;
     private ImageButtonNamed deleteServer = null;
-    private ImageViewNamed status = null;
 
     private Server S = null;
 
@@ -46,7 +46,7 @@ public class ServerView extends LinearLayout {
 	text = new LinearLayoutNamed( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 = 
-	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	text.setLayoutParams( params2 );
 
 	Name = new TextViewNamed( ctx, (ServerView)this );
@@ -59,21 +59,33 @@ public class ServerView extends LinearLayout {
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	Flavor = new TextViewNamed( ctx, (ServerView)this );
-	String flavName = S.getFlavor( ).getName();
-	if(flavName.length()>16)
-	    flavName = flavName.substring(0,14) + "..";
+	String flavName = S.getFlavor( ).getName() + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
+	if(flavName.length()>30)
+	    flavName = flavName.substring(0,28) + "..";
 	Flavor.setText( flavName );
 	Flavor.setOnClickListener( (OnClickListener)ctx );
-	Flavor.setTextColor( Color.parseColor("#BBBBBB"));
+	Flavor.setTextColor( Color.parseColor("#999999"));
 	
+	Status = new TextViewNamed( ctx, (ServerView)this );
+	Status.setText("Status: "+S.getStatus( ) );
+	if(S.getStatus( ).compareToIgnoreCase("active")==0)
+	    Status.setTextColor( Color.parseColor("#00AA00") );
+	if(S.getStatus( ).compareToIgnoreCase("error")==0)
+	    Status.setTextColor( Color.parseColor("#AA0000") );
+	if(S.getStatus( ).compareToIgnoreCase("build")==0) {
+	    Status.setText("Status: " + S.getStatus( ) +" (" + S.getTask( ) + ")");
+	    if(S.getTask( ).compareToIgnoreCase("deleting")==0) 
+		Status.setTextColor( Color.parseColor("#000000") );
+	}
+
 	text.addView(Name);
 	text.addView(Flavor);
+	text.addView(Status);
 	text.setOnClickListener( (OnClickListener)ctx );
 	addView(text);
 	setOnClickListener( (OnClickListener)ctx );
 
 	deleteServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SERVER );
-//	deleteServer.setImageResource(android.R.drawable.ic_menu_delete);
 	deleteServer.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
 	deleteServer.setOnClickListener( (OnClickListener)ctx );
 
@@ -81,9 +93,6 @@ public class ServerView extends LinearLayout {
 	snapServer.setImageResource(android.R.drawable.ic_menu_camera);
 	snapServer.setOnClickListener( (OnClickListener)ctx );
 
-	status = new ImageViewNamed( ctx, (ServerView)this );
-	status.setImageResource( R.drawable.btn_circle_pressed );
-	
 	info = new LinearLayoutNamed( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
@@ -92,7 +101,6 @@ public class ServerView extends LinearLayout {
 	info.setGravity( Gravity.RIGHT );
 	info.addView( snapServer );
 	info.addView( deleteServer );
-	info.addView( status );
 	
 	addView( info );
     }

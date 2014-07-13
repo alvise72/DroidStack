@@ -27,4 +27,7 @@
     <string name="MUSTSETNAME">Devi inserire un nome per l\'istanza.</string>
     <string name="FIXEDIPLIST">IP separati da virgola (opzionale):</string>
     <string name="NOTIMPLEMENTED">Funzionalit&#xe0; non ancora implementata</string>
+    <string name="MENUDELETEALL">Cancella tutte le istanze</string>
+    <string name="DELETEDINSTSANCES">Istanze cancellate con successo. Aggiorna la finestra.</string>
+    <string name="SOMEDELETIONFAILED">Qualche istanza non &#xe8; stata trovata nel server (forse era gi&#xe0; in fase di cancellazione)...\nLa cancellazione &#xe8; terminata, aggiorna la finestra.</string>
 </resources>
