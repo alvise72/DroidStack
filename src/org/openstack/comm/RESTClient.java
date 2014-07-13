@@ -313,7 +313,7 @@ public class RESTClient {
 	throws RuntimeException, NotFoundException
     {
 	try {
-	    Log.d("RESTCLIENT", "serverid=["+serverid+"]");
+	    //	    Log.d("RESTCLIENT", "serverid=["+serverid+"]");
 	    sendDELETERequest( "http://" + endpoint + ":8774/v2/" +tenantid​ + "/servers/"+serverid, 
 			       token );
 	} catch(NotAuthorizedException na) {
@@ -498,6 +498,7 @@ BAD:
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
+	    
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 
@@ -526,7 +527,7 @@ BAD:
 		bw.close();
 		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/userdata" ) + "\"";
 	    } catch(IOException ioe) {
-		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
+		//		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
 		userdata = "";
 	    }
 	}
@@ -554,11 +555,12 @@ BAD:
 	    obj.getJSONObject("server").put("networks", nets);// );
 	    
 	} catch(JSONException je) {
+	    
 	    throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
 	}
 	
 	String data = obj.toString( );
-	Log.d("RESTClient.requestInstanceCreation","data="+data);
+	//	Log.d("RESTClient.requestInstanceCreation","data="+data);
 	OutputStreamWriter out = null;
 	try {
 	    out = new OutputStreamWriter(conn.getOutputStream());
@@ -566,6 +568,7 @@ BAD:
 	    out.close();
 	} catch(java.io.IOException ioe) {
 	    ioe.printStackTrace( );
+	    
 	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
 	}
 
@@ -574,11 +577,12 @@ BAD:
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
 	} catch(IOException ioe) {
+	    //Log.d("RESTCLIENT", ioe.toString( ) );
 	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
 	}
 	if( status != HttpStatus.SC_OK && status !=HttpStatus.SC_ACCEPTED ) {
-	    if(status == HttpStatus.SC_BAD_REQUEST) 
-		throw new RuntimeException("Bad HTTP request" );
+	    // if(status == HttpStatus.SC_BAD_REQUEST) 
+	    // 	throw new RuntimeException("Bad HTTP request" );
 
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    if(in!=null) {
@@ -589,15 +593,17 @@ BAD:
 		    while (-1 != (len = in.read(buffer)))
 			buf += new String(buffer, 0, len);
 		    in.close();
+		    //Log.d("RESTCLIENT", "buf="+buf);
 		} catch(IOException ioe) {
 		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 		}
 	    
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
 		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
-		}
+		
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
 		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+
 		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	    }
 	}
@@ -615,6 +621,7 @@ BAD:
 	    ((HttpURLConnection)conn).disconnect( );
 	    return res; 
 	} catch(IOException ioe) {
+	    //	    Log.d("RESTCLIENT", ioe.toString( ) );
 	    throw new RuntimeException("InputStream.read/close: " + ioe.getMessage( ) );   
 	}
     } 
@@ -679,7 +686,7 @@ BAD:
 					  String token ) 
 	throws RuntimeException, NotFoundException, NotAuthorizedException
     {
-	Log.d("RESTCLIENT", "sURL="+sURL);
+	//	Log.d("RESTCLIENT", "sURL="+sURL);
 	URL url = null;
 	try {
 	    url = new URL(sURL);
@@ -711,7 +718,7 @@ BAD:
 	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
 	}
 
-	Log.d("RESTCLIENT", "status="+status);
+	//	Log.d("RESTCLIENT", "status="+status);
 	
 	if( status == HttpStatus.SC_NO_CONTENT) {
 	    return;
@@ -731,7 +738,7 @@ BAD:
 		    while (-1 != (len = in.read(buffer))) {
 			//bos.write(buffer, 0, len);
 			buf += new String(buffer, 0, len);
-			//Log.d("requestToken", new String(buffer, 0, len));
+			//			Log.d("RESTCLIENT", new String(buffer, 0, len));
 		    }
 		    in.close();
 		} catch(IOException ioe) {

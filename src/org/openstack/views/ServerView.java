@@ -40,8 +40,9 @@ public class ServerView extends LinearLayout {
 	
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 480, ctx)-4/*LayoutParams.FILL_PARENT*/, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 480, ctx)-8/*LayoutParams.FILL_PARENT*/, LayoutParams.FILL_PARENT);
 	setLayoutParams( params1 );
+	setBackgroundResource(R.drawable.rounded_corner_thin);
 
 	text = new LinearLayoutNamed( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );

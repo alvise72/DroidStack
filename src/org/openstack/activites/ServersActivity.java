@@ -128,8 +128,9 @@ public class ServersActivity extends Activity implements OnClickListener {
 		int numChilds = ((LinearLayout)findViewById(R.id.serverLayout)).getChildCount();
 		String[] listedServers = new String[numChilds];
 		for(int i = 0; i < numChilds; ++i) {
-		    ServerView sv = (ServerView)((LinearLayout)findViewById(R.id.serverLayout)).getChildAt(i);
-		    listedServers[i] = sv.getServer().getID();
+		    View sv = ((LinearLayout)findViewById(R.id.serverLayout)).getChildAt(i);
+		    if(sv instanceof ServerView)
+			listedServers[i] = ((ServerView)sv).getServer().getID();
 		}
 		task.execute( Utils.join(listedServers, ",") ) ;
 		return true;
@@ -212,6 +213,9 @@ public class ServersActivity extends Activity implements OnClickListener {
 		s.setFlavor( F );
 	    ServerView sv = new ServerView(s, this);
 	    ((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
+	    View space = new View( this );
+	    space.setMinimumHeight(10);
+	    ((LinearLayout)findViewById(R.id.serverLayout)).addView( space );
 	    //listedServers.add( sv.getServer( ).getID( ) );
 	}
     }

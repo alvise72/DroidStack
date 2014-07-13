@@ -488,6 +488,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      args[7],
 							      args[8]);
 	    } catch(Exception e) {
+		e.printStackTrace( );
 		errorMessage = e.getMessage();
 		hasError = true;
 		return null;
@@ -500,7 +501,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    protected void onPostExecute( Void v ) {
 	    super.onPostExecute( v );
 	    if(hasError) {
- 		Utils.alert( "Launch: "+errorMessage, ImageLaunchActivity.this );
+ 		Utils.alert( errorMessage, ImageLaunchActivity.this );
  		// ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
 		// ImageLaunchActivity.this.launchButton.setEnabled(true);
  		// return;

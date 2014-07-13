@@ -132,7 +132,27 @@ public class ParseUtils {
       //Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
       try {
         jsonObject = new JSONObject( jsonBuf );
-	errorMessage = (String)jsonObject.getJSONObject("error").get("message");
+	//JSONObject error = jsonObject.getJSONObject("error");
+
+	if(jsonObject.has("error"))
+	    errorMessage = jsonObject.getJSONObject("error").getString("message");
+
+	if(jsonObject.has("badRequest"))
+	    errorMessage = jsonObject.getJSONObject("badRequest").getString("message");
+
+	if(jsonObject.has("overLimit"))
+	    errorMessage = jsonObject.getJSONObject("overLimit").getString("message");
+
+	// JSONObject badRequest = jsonObject.getJSONObject("badRequest");
+	// Log.d("PARSEUTILS", "error is "+error);
+	// Log.d("PARSEUTILS", "badRequest is "+badRequest);
+	
+	// if(error!=null) {
+	//     errorMessage = error.getString("message");
+	// }
+	// if(badRequest!=null) {
+	//     errorMessage = badRequest.getString("message");
+	// }
       } catch(org.json.JSONException joe) {
         return "Cannot parse json error message from remote server";
       }

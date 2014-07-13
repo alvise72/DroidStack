@@ -189,15 +189,17 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 		alert.show();
 	    }
-	}
-
-	if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_LAUNCH_IMAGE ) {
+	    
+	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_LAUNCH_IMAGE ) {
 		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
 		Class<?> c = (Class<?>)ImageLaunchActivity.class;
 		Intent I = new Intent( OSImagesActivity.this, c );
 		I.putExtra( "IMAGEID", ID );
 		startActivity( I );
+	    }
 	}
+
+	
     }
 
     private  void deleteGlanceImage( String ID ) {
