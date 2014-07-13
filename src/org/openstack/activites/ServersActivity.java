@@ -106,7 +106,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    } else {
 		progressDialogWaitStop.show();
 		AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-		task.execute( U );
+		task.execute( );
 		return true;
 	    }
         }
@@ -119,6 +119,9 @@ public class ServersActivity extends Activity implements OnClickListener {
 	if(v instanceof ImageButtonNamed) {
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SERVER ) {
 		// Delete the server
+		String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
+		AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
+		task.execute( serverid) ;
 		return;
 	    }
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_SNAP_SERVER ) {
@@ -141,20 +144,19 @@ public class ServersActivity extends Activity implements OnClickListener {
 	try {
 	    U = User.fromFileID( selectedUser );
 	} catch(RuntimeException re) {
-	    Utils.alert("ServerssActivity: "+re.getMessage(), this );
+	    Utils.alert("ServersActivity.onCreate: "+re.getMessage(), this );
 	    return;
 	}
 
 	progressDialogWaitStop.show();
 	AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-	task.execute( U );
+	task.execute( );
     }
     
     //__________________________________________________________________________________
     @Override
     public void onResume( ) {
 	super.onResume( );
-	//refreshServerViews();
     }
  
     /**
@@ -207,18 +209,17 @@ public class ServersActivity extends Activity implements OnClickListener {
 
     
     //__________________________________________________________________________________
-    protected class AsyncTaskOSListServers extends AsyncTask<User, String, String>
+    protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
     {
-     	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
-	private  String   jsonBuf       = null;
+     	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+	private  String   jsonBuf          = null;
 	private  String   jsonBufferFlavor = null;
-	private  String   username      = null;
+	private  String   username         = null;
 
 	@Override
-	protected String doInBackground(User... u ) 
+	protected String doInBackground( Void... v ) 
 	{
-	    User U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
 		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
@@ -255,25 +256,16 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    return jsonBuf;
 	}
 	
-	// @Override
-	//     protected void onPreExecute() {
-	//     super.onPreExecute();
-	    
-	//     //downloading_image_list = true;
-	// }
-	
 	@Override
 	    protected void onPostExecute( String result ) {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
  		Utils.alert( errorMessage, ServersActivity.this );
- 		//downloading_server_list = false;
  		ServersActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }
 	    
-	    //downloading_server_list = false; // questo non va spostato da qui a
 	    try {
 		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, username );
 		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
@@ -282,6 +274,79 @@ public class ServersActivity extends Activity implements OnClickListener {
 		Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 	    }
 	    ServersActivity.this.progressDialogWaitStop.dismiss( );
+	}
+    }
+    
+    //__________________________________________________________________________________
+    protected class AsyncTaskDeleteServer extends AsyncTask<String, Void, Void>
+    {
+     	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+	private  String   jsonBuf          = null;
+	private  String   jsonBufferFlavor = null;
+	private  String   serverid         = null;
+	private  String   username         = null;
+	@Override
+	protected Void doInBackground(String... args ) 
+	{
+	    serverid = args[0];
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile();// to save new token + expiration
+		    username = U.getUserName();
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return null;
+		}
+	    }
+
+	    //username = U.getUserName();
+
+	    try {
+		RESTClient.deleteInstance( U.getEndpoint(), U.getToken(), U.getTenantID(), serverid );
+		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return null;
+	    }
+	    
+	    return null;
+	}
+	
+	@Override
+        protected void onPostExecute( Void v ) {
+	    super.onPostExecute(v);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, ServersActivity.this );
+ 		ServersActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    try {
+		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, username );
+		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
+		ServersActivity.this.refreshView( servers, flavors );
+	    } catch(ParseException pe) {
+		Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
+	    }
+	    ServersActivity.this.progressDialogWaitStop.dismiss( );
+	
 	}
     }
 }

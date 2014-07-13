@@ -129,6 +129,7 @@ public class ParseUtils {
     public static String getErrorMessage ( String jsonBuf ) {
       JSONObject jsonObject = null;
       String errorMessage = null;
+      //Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
       try {
         jsonObject = new JSONObject( jsonBuf );
 	errorMessage = (String)jsonObject.getJSONObject("error").get("message");

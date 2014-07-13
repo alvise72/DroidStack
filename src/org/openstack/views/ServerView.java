@@ -96,5 +96,7 @@ public class ServerView extends LinearLayout {
 	
 	addView( info );
     }
+
+    public Server getServer( ) { return S; }
     
 }

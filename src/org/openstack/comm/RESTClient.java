@@ -276,7 +276,7 @@ public class RESTClient {
 	Vector<Pair<String, String>> v = new Vector();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/flavors/detail",
-			       token, 
+			       token,
 			       v );
     }
 
@@ -294,10 +294,30 @@ public class RESTClient {
     {
 	try {
 	    sendDELETERequest( "http://" + endpoint + ":9292/v2/images/"+imageid, 
-			       token,
-			       null );
+			       token );
 	} catch(NotAuthorizedException na) {
 	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the image you're trying to delete is owned by you...");
+	}
+    }
+
+    /**
+     *
+     *
+     * curl -i -X GET -H "X-Auth-Token: $TOKEN"  -H 'Content-Type: application/octet-stream' http://90.147.77.40:9292/v2/images/$IMAGEID
+     * curl -i -X DELETE -H "X-Auth-Token: $TOKEN" -H 'Content-Type: application/octet-stream' http://90.147.77.40:9292/v2/images/$IMAGEID
+     *
+     *
+     *
+     */
+    public static void deleteInstance( String endpoint, String token, String tenantid, String serverid) 
+	throws RuntimeException, NotFoundException
+    {
+	try {
+	    Log.d("RESTCLIENT", "serverid=["+serverid+"]");
+	    sendDELETERequest( "http://" + endpoint + ":8774/v2/" +tenantid​ + "/servers/"+serverid, 
+			       token );
+	} catch(NotAuthorizedException na) {
+	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the instance you're trying to delete is owned by you...");
 	}
     }
 
@@ -656,10 +676,10 @@ BAD:
 
     //________________________________________________________________________________
     public static void sendDELETERequest( String sURL, 
-					  String token,
-					  Vector<Pair<String,String>> properties ) 
+					  String token ) 
 	throws RuntimeException, NotFoundException, NotAuthorizedException
     {
+	Log.d("RESTCLIENT", "sURL="+sURL);
 	URL url = null;
 	try {
 	    url = new URL(sURL);
@@ -691,9 +711,16 @@ BAD:
 	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
 	}
 
+	Log.d("RESTCLIENT", "status="+status);
+	
 	if( status == HttpStatus.SC_NO_CONTENT) {
 	    return;
 	}
+
+	if( status == HttpStatus.SC_NOT_FOUND ) {
+	    throw new NotFoundException( "Server responded with NOT_FOUND (HTTP 404)" );
+	}
+
 	if( status != HttpStatus.SC_OK ) {
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    if(in!=null) {
