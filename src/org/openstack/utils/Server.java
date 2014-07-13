@@ -20,7 +20,8 @@ public class Server implements Serializable {
     //    private String MAC;
     private String keyname;
     private String flavorID;
-    private String[] secgrpID;
+    private String[] secgrpIDs;
+    private String[] secgrpNames;
     private long creationTime;
     private Flavor flavor;
     
@@ -35,7 +36,8 @@ public class Server implements Serializable {
 		   //		   String _MAC,
 		   String _keyname,
 		   String _flavorID,
-		   String[] _secgrpID,
+		   String[] _secgrpIDs,
+		   String[] _secgrpNames,
 		   long _creationTime) {
 	name        = _name;
 	ID          = _ID;
@@ -48,8 +50,9 @@ public class Server implements Serializable {
 	//	MAC         = _MAC;
 	keyname     = _keyname;
 	flavorID    = _flavorID;
-	secgrpID    = _secgrpID;
+	secgrpIDs   = _secgrpIDs;
 	creationTime= _creationTime;
+	secgrpNames = _secgrpName;
     }
 
     public String getName() { return name; }
@@ -63,7 +66,9 @@ public class Server implements Serializable {
     //    public String getMACAddress() { return MAC; }
     public String getKeyName() { return keyname; }
     public String getFlavorID() { return flavorID; }
-    public String[] getSecurityGroupdID() { return secgrpID; }
+    public String[] getSecurityGroupdIDs() { return secgrpIDs; }
+    public String[] getSecurityGroupdNames() { return secgrpNames; }
+
     public long getCreationTime() { return creationTime; }
 
     public void setFlavor( Flavor f ) { flavor = f; }

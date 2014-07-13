@@ -3,8 +3,10 @@ package org.openstack.activities;
 import android.os.Bundle;
 import android.os.Environment;
 
-import android.widget.ProgressBar;
+
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.CheckBox;
@@ -77,8 +79,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
-    //private HashSet listedServers = null;
-
+    
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
         
@@ -156,6 +157,78 @@ public class ServersActivity extends Activity implements OnClickListener {
 		Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
 		return;
 	    }
+	}
+	
+	if(v instanceof TextViewNamed || v instanceof ServerView) {
+	    Server s = null;
+	    if( v instanceof TextViewNamed )
+		s = ((TextViewNamed)v).getServerView( ).getServer( );
+	    if( v instanceof ServerView )
+		s = ((ServerView)v).getServer( );
+
+	    TextView tv1 = new TextView(this);
+	    tv1.setText("Instance name:");
+	    tv1.setTypeface( null, Typeface.BOLD );
+	    TextView tv2 = new TextView(this);
+	    tv2.setText(s.getName());
+	    TextView tv3 = new TextView(this);
+	    tv3.setText("Status:");
+	    tv3.setTypeface( null, Typeface.BOLD );
+	    TextView tv4 = new TextView(this);
+	    tv4.setText(s.getStatus());
+	    TextView tv5 = new TextView(this);
+	    tv5.setText("Flavor: ");
+	    tv5.setTypeface( null, Typeface.BOLD );
+	    TextView tv6 = new TextView(this);
+	    tv6.setText( s.getFlavor( ).getName() + " (" + (int)(s.getFlavor( ).getDISK()) + "GB, " +s.getFlavor( ).getVCPU( )+ " cpu, " + s.getFlavor( ).getRAM( ) + " ram)" );
+	    TextView tv7 = new TextView(this);
+	    tv7.setText("Private IP:");
+	    tv7.setTypeface( null, Typeface.BOLD );
+	    TextView tv8 = new TextView(this);
+	    tv8.setText(s.getPrivateIP());
+	    TextView tv9 = new TextView(this);
+	    tv9.setText("Public IP:");
+	    tv9.setTypeface( null, Typeface.BOLD );
+	    TextView tv10 = new TextView(this);
+	    tv10.setText( (s.getPublicIP ( ) !=null && s.getPublicIP().length() != 0) ? s.getPublicIP( ) : "None");
+	    TextView tv11 = new TextView( this );
+	    tv11.setText("Key name:");
+	    tv11.setTypeface( null, Typeface.BOLD );
+	    TextView tv12 = new TextView( this );
+	    tv12.setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : "None" );
+	    TextView tv13 = new TextView( this );
+	    tv13.setText("Security groups:");
+	    tv13.setTypeface( null, Typeface.BOLD );
+	    TextView tv14 = new TextView( this );
+	    tv14.setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : "None" );
+	    
+	    ScrollView sv = new ScrollView(this);
+	    LinearLayout.LayoutParams lp 
+		= new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.FILL_PARENT,
+						LinearLayout.LayoutParams.FILL_PARENT);
+	    sv.setLayoutParams( lp );
+	    LinearLayout l = new LinearLayout(this);
+	    l.setLayoutParams( lp );
+	    l.setOrientation( LinearLayout.VERTICAL );
+	    l.addView( tv1 );
+	    l.addView( tv2 );
+	    l.addView( tv3 );
+	    l.addView( tv4 );
+	    l.addView( tv5 );
+	    l.addView( tv6 );
+	    l.addView( tv7 );
+	    l.addView( tv8 );
+	    l.addView( tv9 );
+	    l.addView( tv10 );
+	    l.addView( tv11 );
+	    l.addView( tv12 );
+	    
+	    //sv.setOrientation( LinearLayout.VERTICAL );
+	    sv.addView(l);
+	    
+	    Utils.alert2( sv, this );
+	    
 	}
     }
 
