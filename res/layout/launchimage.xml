@@ -95,11 +95,11 @@
 	    android:layout_height="wrap_content" />
 -->
 	</LinearLayout>
-
+<!--
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Fixed IP address (optional):"
+		android:text="@string/FIXEDIPLIST"
 		android:ems="10" />
 		
         <EditText
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:ems="10" />
-	
+-->	
 	<LinearLayout
 	    android:id="@+id/secgroupsLayer"
 	    android:orientation="vertical"

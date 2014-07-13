@@ -104,7 +104,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 		return;
 	    }
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_MODIFY_USER ) {
-		Utils.alert("Not implemented yet." , this);
+		Utils.alert( getString(R.string.NOTIMPLEMENTED) , this);
 		return;
 	    }
 	}
@@ -136,8 +136,8 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    
 	// TODO: should we filter here ?
 
-	LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
-	usersL.removeAllViews();
+	//LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
+	((LinearLayout)findViewById(R.id.userLayout)).removeAllViews();
 
 	for(int i = 0; i<users.length; ++i) {
 	    User U = null;
@@ -151,10 +151,10 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    }
 	    
 	    UserView uv = new UserView ( U, this );
-	    usersL.addView( uv );
+	    ((LinearLayout)findViewById(R.id.userLayout)).addView( uv );
 	    View space = new View( this );
 	    space.setMinimumHeight(10);
-	    usersL.addView( space );
+	    ((LinearLayout)findViewById(R.id.userLayout)).addView( space );
 	    
 	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
 		uv.setSelected( );

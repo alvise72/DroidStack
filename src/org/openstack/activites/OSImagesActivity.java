@@ -99,7 +99,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
         int id = item.getItemId();     
         
         if( id == Menu.FIRST-1 ) {
-            Utils.alert( "Not implemented yet" ,this );
+            Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
         }
         

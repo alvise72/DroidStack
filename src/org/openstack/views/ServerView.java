@@ -18,8 +18,6 @@ import org.openstack.R;
 
 import org.openstack.utils.*;
 
-//import android.R;
-
 public class ServerView extends LinearLayout {
     
     private Context ctx = null;
@@ -42,7 +40,7 @@ public class ServerView extends LinearLayout {
 	
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 480, ctx)-4/*LayoutParams.FILL_PARENT*/, LayoutParams.FILL_PARENT);
 	setLayoutParams( params1 );
 
 	text = new LinearLayoutNamed( ctx, (ServerView)this );

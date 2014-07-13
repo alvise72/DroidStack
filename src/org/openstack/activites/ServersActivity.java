@@ -76,11 +76,8 @@ public class ServersActivity extends Activity implements OnClickListener {
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
 
-    /**
-     *
-     *
-     *
-     */
+
+    //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
         
         super.onCreateOptionsMenu( menu );
@@ -93,12 +90,13 @@ public class ServersActivity extends Activity implements OnClickListener {
         return true;
     }
     
-     public boolean onOptionsItemSelected( MenuItem item ) {
+    //__________________________________________________________________________________
+    public boolean onOptionsItemSelected( MenuItem item ) {
 	 
         int id = item.getItemId();     
         
         if( id == Menu.FIRST-1 ) {
-            Utils.alert( "Not implemented yet" ,this );
+            Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
         }
         
@@ -113,6 +111,21 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    }
         }
 	return super.onOptionsItemSelected( item );
+    }
+
+    //__________________________________________________________________________________
+    @Override
+    public void onClick( View v ) {
+	if(v instanceof ImageButtonNamed) {
+	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SERVER ) {
+		// Delete the server
+		return;
+	    }
+	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_SNAP_SERVER ) {
+		Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+		return;
+	    }
+	}
     }
 
     //__________________________________________________________________________________
@@ -155,44 +168,6 @@ public class ServersActivity extends Activity implements OnClickListener {
 	super.onDestroy( );
 	progressDialogWaitStop.dismiss();
     }
-  
-  //__________________________________________________________________________________
-    public void onClick( View v ) { 
-// 	if(v instanceof ImageButtonNamed) {
-// 	    Log.d("LoginActivity2.onClick", "TYPE="+((ImageButtonNamed)v).getType( ));
-// 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
-// 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
-		
-// 		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+filenameToDelete)).delete();
-// 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
-// 		if(selectedUser.compareTo(filenameToDelete)==0)
-// 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
-		
-// 		refreshUserViews();
-// 		return;
-// 	    }
-// 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_MODIFY_USER ) {
-// 		Utils.alert("Not implemented yet." , this);
-// 		return;
-// 	    }
-// 	}
-
-// 	if(v instanceof TextViewNamed) {
-// 	    //String selectedUser = ((TextViewNamed)v).getUserView().getFilename();
-
-// 	    Utils.putStringPreference("SELECTEDUSER", ((TextViewNamed)v).getUserView().getFilename(), this);
-	    
-// 	    refreshUserViews();
-
-// 	    return;
-// 	}
-
-// 	if(v instanceof LinearLayoutNamed) {
-// 	    Utils.putStringPreference("SELECTEDUSER", ((LinearLayoutNamed)v).getUserView().getFilename(), this);
-// 	    refreshUserViews();
-// 	}
-	
-    }
 
     //__________________________________________________________________________________
     private void refreshView( Vector<Server> servers, Hashtable<String, Flavor> flavors ) {
@@ -207,21 +182,31 @@ public class ServersActivity extends Activity implements OnClickListener {
 	}
     }
 
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
+
+
+
+
+
+
+
+
+
+
+
+    //  ASYNC TASKS.....
+
+
+
+
+
+
+
+
+
+
+
+    
+    //__________________________________________________________________________________
     protected class AsyncTaskOSListServers extends AsyncTask<User, String, String>
     {
      	private  String   errorMessage  =  null;

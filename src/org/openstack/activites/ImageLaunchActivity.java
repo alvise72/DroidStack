@@ -240,103 +240,40 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */  
   public void launch( View v ) {
 
-      if(selectedNetworks.size()==0) {
-	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
-	  return;
-      }
-
       if(((EditText)findViewById(R.id.vmnameET)).getText().toString().length()==0) {
 	  Utils.alert(getString(R.string.MUSTSETNAME) , this);
 	  return;
       }
 
-      AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage( "Do you want to specify IP for the selected network(s) ?" );
-      builder.setCancelable(false);
-      
-      final View V = v;
+      if(selectedNetworks.size()==0) {
+	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
+	  return;
+      }
 
-      DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
-	      public void onClick(DialogInterface dialog, int id) {
-		  //deleteGlanceImage( ID );
-	      }
-	  };
+      int j = spinnerFlavors.getSelectedItemPosition( );
+      int k = spinnerKeypairs.getSelectedItemPosition( );
+
+      String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
+      int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
+
+      progressDialogWaitStop.show();
+      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+      AsyncTaskLaunch task = new AsyncTaskLaunch();
+
+      String adminPass = null;
+      if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
+	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
       
-      DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
-	      public void onClick(DialogInterface dialog, int id) {
-		  //dialog.cancel( );
-		  
-		  _launch( V );
-		  // task.execute( instanceName, 
-		  // 		imageID,
-		  // 		keypairs[k].getName(), 
-		  // 		flavors[j].getID(),
-		  // 		""+count, 
-		  // 		Utils.join( selectedSecgroups, "," ),
-		  // 		Utils.join( selectedNetworks, "," ),
-		  // 		fixedip,
-		  // 		adminPass);
-	      }
-	  };
-      
-      builder.setPositiveButton("Yes", yesHandler );
-      builder.setNegativeButton("No", noHandler );
-      
-      AlertDialog alert = builder.create();
-      alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-				  WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-      alert.show();
-      
+      task.execute( instanceName, 
+		    imageID,
+		    keypairs[k].getName(), 
+		    flavors[j].getID(),
+		    ""+count, 
+		    Utils.join( selectedSecgroups, "," ),
+		    Utils.join( selectedNetworks, "," ),
+		    null,
+		    adminPass);
   }
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */  
-    public void _launch( View v ) {
-	int j = spinnerFlavors.getSelectedItemPosition( );
-	int k = spinnerKeypairs.getSelectedItemPosition( );
-
-	String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
-	int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
-
-	progressDialogWaitStop.show();
-	currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
-	AsyncTaskLaunch task = new AsyncTaskLaunch();
-
-	//	String fixedip = ((EditText)findViewById(R.id.fixedIPET)).getText( ).toString( );
-	// if(fixedip.length()!=0) {
-	//     if(!InetAddressUtils.isIPv4Address(fixedip)) {
-	// 	Utils.alert("The inserted IP address ["+fixedip+"] is invalid", this);
-	// 	return;
-	//     }
-	// } else fixedip=null;
-	
-	String adminPass = null;
-	if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
-	    adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
-
-	task.execute( instanceName, 
-			imageID,
-			keypairs[k].getName(), 
-			flavors[j].getID(),
-			""+count, 
-			Utils.join( selectedSecgroups, "," ),
-			Utils.join( selectedNetworks, "," ),
-			null,
-			adminPass);
-    }
 
     /**
      *

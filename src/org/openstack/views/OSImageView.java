@@ -39,7 +39,7 @@ public class OSImageView extends LinearLayout {
 
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+	    = new LinearLayout.LayoutParams( /*LayoutParams.FILL_PARENT*/Utils.getIntegerPreference("SCREENW", 320, ctx)-8, LayoutParams.WRAP_CONTENT);
 	setLayoutParams( params1 );
 	setBackgroundResource(R.drawable.rounded_corner_thin);
 	

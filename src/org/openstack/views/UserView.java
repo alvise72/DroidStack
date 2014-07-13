@@ -38,7 +38,7 @@ public class UserView extends LinearLayout {
 
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 320, ctx)-8/*LayoutParams.FILL_PARENT*/, LayoutParams.FILL_PARENT);
 	setLayoutParams( params1 );
 	setBackgroundResource(R.drawable.rounded_corner_thin);
 	

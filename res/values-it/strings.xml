@@ -25,4 +25,6 @@
     <string name="TOUCHUSERTOSELECT">Tocca un utente per selezionarlo</string>
     <string name="MUSTSELECTNET">Non hai selezionato una rete: impossibile lanciare un\'istanza non collegata ad almeno una rete.</string>
     <string name="MUSTSETNAME">Devi inserire un nome per l\'istanza.</string>
+    <string name="FIXEDIPLIST">IP separati da virgola (opzionale):</string>
+    <string name="NOTIMPLEMENTED">Funzionalit&#xe0; non ancora implementata</string>
 </resources>

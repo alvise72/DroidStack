@@ -24,4 +24,6 @@
     <string name="TOUCHUSERTOSELECT">Touch a use to select it</string>
     <string name="MUSTSELECTNET">You haven\'t selected any network. Cannot start an instance without a network to attach.</string>
     <string name="MUSTSETNAME">You must put a name for the instance.</string>
+    <string name="FIXEDIPLIST">Comma separated Fixed IPs (optional):</string>
+    <string name="NOTIMPLEMENTED">Functionality not implemented yet</string>
 </resources>

@@ -93,6 +93,8 @@ public class MainActivity extends Activity
         Display d = wm.getDefaultDisplay();
         SCREENH = d.getHeight();
 	SCREENW = d.getWidth();
+	Utils.putIntegerPreference("SCREENH", SCREENH, this);
+	Utils.putIntegerPreference("SCREENW", SCREENW, this);
 	Utils.createDir( Environment.getExternalStorageDirectory() + "/AndroStack/users/" );
 
 	Button su = (Button)findViewById( R.id.LOGIN );

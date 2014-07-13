@@ -81,7 +81,7 @@ public class OverViewActivity extends Activity {
         int id = item.getItemId();     
         
         if( id == Menu.FIRST-1 ) {
-            Utils.alert( "Not implemented yet" ,this );
+            Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
         }
         

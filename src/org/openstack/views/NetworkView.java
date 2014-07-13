@@ -13,7 +13,7 @@ public class NetworkView extends CheckBox {
 
     public NetworkView( Network net, Context ctx ) {
 	super(ctx);
-	setText( net.getName( ) );
+	setText( net.getName( ) /*+ " (" + net.getFixedIP() + ")"*/ );
 	this.net = net;
 	//setTextSize(20,1);
 	//setTextColor(Color.parseColor("#FFFFFF"));
