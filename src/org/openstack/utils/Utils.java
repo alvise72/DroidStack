@@ -50,6 +50,16 @@ public class Utils {
      *
      *
      */
+    public static float getDisplayDensity( Context ctx ) {
+	return ctx.getResources().getDisplayMetrics().density;
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
     public static boolean createDir( String path ) {
       return (new File(path)).mkdirs();
     }

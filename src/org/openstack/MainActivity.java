@@ -95,7 +95,7 @@ public class MainActivity extends Activity
 	SCREENW = d.getWidth();
 	Utils.putIntegerPreference("SCREENH", SCREENH, this);
 	Utils.putIntegerPreference("SCREENW", SCREENW, this);
-	Utils.createDir( Environment.getExternalStorageDirectory() + "/AndroStack/users/" );
+	Utils.createDir( Environment.getExternalStorageDirectory() + "/DroidStack/users/" );
 
 	Button su = (Button)findViewById( R.id.LOGIN );
 	Button ov = (Button)findViewById( R.id.OVERVIEW );

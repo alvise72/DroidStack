@@ -65,8 +65,6 @@ public class UsersActivity extends Activity implements OnClickListener {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView( R.layout.users );
-    Toast t = Toast.makeText(this, getString(R.string.TOUCHUSERTOSELECT), Toast.LENGTH_SHORT) ;
-    t.show( );
   }
   
   //__________________________________________________________________________________
@@ -74,6 +72,10 @@ public class UsersActivity extends Activity implements OnClickListener {
   public void onResume( ) {
     super.onResume( );
     refreshUserViews();
+    if(Utils.getStringPreference("SELECTEDUSER","",this).length()==0) {
+	Toast t = Toast.makeText(this, getString(R.string.TOUCHUSERTOSELECT), Toast.LENGTH_SHORT) ;
+	t.show( );
+    }
   }
   
   //__________________________________________________________________________________
@@ -84,10 +86,10 @@ public class UsersActivity extends Activity implements OnClickListener {
   }
 
   //__________________________________________________________________________________
-  @Override
-    public void onPause( ) {
-      super.onPause( );
-    } 
+//   @Override
+//     public void onPause( ) {
+//       super.onPause( );
+//     } 
 
   //__________________________________________________________________________________
     public void onClick( View v ) { 
@@ -95,7 +97,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
 		
-		(new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/"+filenameToDelete)).delete();
+		(new File(Environment.getExternalStorageDirectory() + "/DroidStack/users/"+filenameToDelete)).delete();
 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 		if(selectedUser.compareTo(filenameToDelete)==0)
 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
@@ -128,9 +130,9 @@ public class UsersActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
-	File[] users = (new File(Environment.getExternalStorageDirectory() + "/AndroStack/users/")).listFiles();
+	File[] users = (new File(Environment.getExternalStorageDirectory() + "/DroidStack/users/")).listFiles();
 	if(users==null) {
-	    Utils.alert("UsersActivity.refreshUserViews: directory " + Environment.getExternalStorageDirectory() + "/AndroStack/users/" + " exists but it is not a file !", this);
+	    Utils.alert("UsersActivity.refreshUserViews: directory " + Environment.getExternalStorageDirectory() + "/DroidStack/users/" + " exists but it is not a file !", this);
 	    return;
 	}
 	    

@@ -74,7 +74,7 @@ public class User implements Serializable, Comparable<User> {
     }
 
     public static User fromFileID( String ID ) throws RuntimeException {
-	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + ID;
+	String filename = Environment.getExternalStorageDirectory() + "/DroidStack/users/" + ID;
 	if(false == (new File(filename)).exists())
 	    throw new RuntimeException( "File ["+filename+"] doesn't exist" );
 	try {
@@ -91,7 +91,7 @@ public class User implements Serializable, Comparable<User> {
     }
 
     public void toFile( ) throws RuntimeException {
-    	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + getUserID( ) + "." + getTenantID( );
+    	String filename = Environment.getExternalStorageDirectory() + "/DroidStack/users/" + getUserID( ) + "." + getTenantID( );
     	File f = new File( filename );
     	if(f.exists()) f.delete();
 	try {

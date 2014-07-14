@@ -17,10 +17,8 @@ public class Server implements Serializable {
     private String privIP;
     private String pubIP;
     private String computeNode;
-    //    private String MAC;
     private String keyname;
     private String flavorID;
-    private String[] secgrpIDs;
     private String[] secgrpNames;
     private long creationTime;
     private Flavor flavor;
@@ -33,26 +31,23 @@ public class Server implements Serializable {
 		   String _privIP,
 		   String _pubIP,
 		   String _computeNode,
-		   //		   String _MAC,
 		   String _keyname,
 		   String _flavorID,
-		   String[] _secgrpIDs,
-		   String[] _secgrpNames,
-		   long _creationTime) {
-	name        = _name;
-	ID          = _ID;
-	status      = _status;
-	task        = _task;
-	powerstate  = _power;
-	privIP      = _privIP;
-	pubIP       = _pubIP;
-	computeNode = _computeNode;
-	//	MAC         = _MAC;
-	keyname     = _keyname;
+		   long _creationTime,
+		   String[] secgroups ) 
+    {
+	name           = _name;
+	ID             = _ID;
+	status         = _status;
+	task           = _task;
+	powerstate     = _power;
+	privIP         = _privIP;
+	pubIP          = _pubIP;
+	computeNode    = _computeNode;
+	keyname        = _keyname;
 	flavorID    = _flavorID;
-	secgrpIDs   = _secgrpIDs;
-	creationTime= _creationTime;
-	secgrpNames = _secgrpName;
+	creationTime   = _creationTime;
+	secgrpNames    = secgroups;
     }
 
     public String getName() { return name; }
@@ -63,10 +58,8 @@ public class Server implements Serializable {
     public String getPrivateIP() { return privIP; }
     public String getPublicIP() { return pubIP; }
     public String getComputeNode() { return computeNode; }
-    //    public String getMACAddress() { return MAC; }
     public String getKeyName() { return keyname; }
-    public String getFlavorID() { return flavorID; }
-    public String[] getSecurityGroupdIDs() { return secgrpIDs; }
+    public String getFlavorID() { return flavor.getID();}//flavorID; }
     public String[] getSecurityGroupdNames() { return secgrpNames; }
 
     public long getCreationTime() { return creationTime; }

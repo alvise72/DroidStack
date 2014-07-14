@@ -87,13 +87,15 @@ public class ParseUtils {
         JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
       
         for(int i=0; i<images.length( ); ++i ) {
-          String name         = (String)images.getJSONObject(i).get("name");
-	  long   size         = (long)  images.getJSONObject(i).getLong("size");
-	  String format       = (String)images.getJSONObject(i).get("disk_format");
-	  String creationDate = (String)images.getJSONObject(i).get("created_at");
-	  String visibility   = (String)images.getJSONObject(i).get("visibility");
-	  String status       = (String)images.getJSONObject(i).get("status");
-	  String ID           = (String)images.getJSONObject(i).get("id");
+          String name         = images.getJSONObject(i).getString("name");
+	  long   size         = (long)images.getJSONObject(i).getLong("size");
+	  String format       = images.getJSONObject(i).getString("disk_format");
+	  String creationDate = images.getJSONObject(i).getString("created_at");
+	  String visibility   = images.getJSONObject(i).getString("visibility");
+	  String status       = images.getJSONObject(i).getString("status");
+	  String ID           = images.getJSONObject(i).getString("id");
+	  int    mindisk      = images.getJSONObject(i).getInt("min_disk");
+	  int    minram       = images.getJSONObject(i).getInt("min_ram");
 
 	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
           timeFormatter.setTimeZone( TimeZone.getDefault( ) );
@@ -107,7 +109,7 @@ public class ParseUtils {
           	  
 	  boolean pub = (visibility.compareTo("public")==0 ? true : false);
 	  
-	  OSImage osimg = new OSImage( name, ID, size, format, status, pub, cdate );
+	  OSImage osimg = new OSImage( name, ID, size, format, status, pub, cdate, mindisk,minram );
 	  
 	  if(format.compareToIgnoreCase("ari")!=0 && format.compareToIgnoreCase("aki") != 0)
 	    result.add( osimg );
@@ -142,6 +144,9 @@ public class ParseUtils {
 
 	if(jsonObject.has("overLimit"))
 	    errorMessage = jsonObject.getJSONObject("overLimit").getString("message");
+
+	if(jsonObject.has("itemNotFound"))
+	    errorMessage = jsonObject.getJSONObject("itemNotFound").getString("message");
 
 	// JSONObject badRequest = jsonObject.getJSONObject("badRequest");
 	// Log.d("PARSEUTILS", "error is "+error);
@@ -214,43 +219,7 @@ public class ParseUtils {
 	    throw new ParseException( je.getMessage( ) );
 	}
     }
-	       
-    /**
-     *
-     *
-     *
-     *
-     */    
-    // public static Quota parseQuota( String jsonBuf )  throws ParseException {
-    // 	try {
-    // 	    JSONObject jsonObject = new JSONObject( jsonBuf );
-    // 	    JSONObject limits     = (JSONObject)jsonObject.getJSONObject("limits");
-    // 	    JSONObject absolute   = (JSONObject)limits.getJSONObject("absolute");
-    // 	    int maxInstances      = absolute.getInt("maxTotalInstances");
-    // 	    int maxVirtCPU        = absolute.getInt("maxTotalCores");
-    // 	    int maxRAM            = absolute.getInt("maxTotalRAMSize");
-    // 	    int maxFIP            = absolute.getInt("maxTotalFloatingIps");
-    // 	    int maxSecGroups      = absolute.getInt("maxSecurityGroups");
-    // 	    int currentInstance   = absolute.getInt("totalInstancesUsed");
-    // 	    int currentVirtCPU    = absolute.getInt("totalCoresUsed");
-    // 	    int currentRAM        = absolute.getInt("totalRAMUsed");
-    // 	    int currentFIP        = absolute.getInt("totalFloatingIpsUsed");
-    // 	    int currentSECG       = absolute.getInt("totalSecurityGroupsUsed");
-    // 	    return new Quota(currentInstance, 
-    // 			     currentVirtCPU,
-    // 			     currentRAM,
-    // 			     currentFIP,
-    // 			     currentSECG,
-    // 			     maxInstances,
-    // 			     maxVirtCPU,
-    // 			     maxRAM,
-    // 			     maxFIP,
-    // 			     maxSecGroups );
-    // 	} catch(org.json.JSONException je) {
-    // 	    throw new ParseException( je.getMessage( ) );
-    // 	}
-    // }
-    
+
     /**
      *
      *
@@ -283,18 +252,19 @@ public class ParseUtils {
      */    
     public static Vector<Server> parseServers( String jsonBuf, String username )  throws ParseException {
 	Vector<Server> serverVector = new Vector();
-	String status = "N/A";
-	String keyname ="N/A";
-	String[] secgrps = null;
-	String flavorID = "N/A";
-	String ID = "N/A";
-	String computeNode= "N/A";
-	String name = "N/A";
-	String task = "N/A";
-	String privIP = "N/A";
-	String pubIP = "N/A";
-	long creationTime = 0;
-	int power = -1;
+	String status        = "N/A";
+	String keyname       ="N/A";
+	//	String[] secgrps     = null;
+	String[] secgrpNames = null;
+	String flavorID      = "N/A";
+	String ID            = "N/A";
+	String computeNode   = "N/A";
+	String name          = "N/A";
+	String task          = "N/A";
+	String privIP        = "N/A";
+	String pubIP         = "N/A";
+	long creationTime    = 0;
+	int power            = -1;
 	
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
@@ -306,10 +276,12 @@ public class ParseUtils {
 		try{keyname = (String)server.getString("key_name");} catch(JSONException je) {}
 		try{
 		    JSONArray secgarray  =  ((JSONArray)server.getJSONArray("security_groups"));
-		    secgrps = new String[secgarray.length()];
-		    for(int j=0; j<secgarray.length(); j++)
-			secgrps[j] = (String)((JSONObject)secgarray.getJSONObject(j)).getString("name");
-		} catch(JSONException je) {secgrps=null;}
+		    //secgrps = new String[secgarray.length()];
+		    secgrpNames = new String[secgarray.length()];
+		    for(int j=0; j<secgarray.length(); j++) 
+			secgrpNames[j] = secgarray.getJSONObject(j).getString("name");
+
+		} catch(JSONException je) { secgrpNames = null; }
 		flavorID = (String)((JSONObject)server.getJSONObject("flavor")).getString("id");
 		ID = (String)server.getString("id");
 
@@ -339,7 +311,7 @@ public class ParseUtils {
 
 		try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
 
-		Server S = new Server(name,ID,status,task,power,privIP,pubIP,computeNode,keyname,flavorID,secgrps,creationTime);
+		Server S = new Server(name,ID,status,task,power,privIP,pubIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
 		serverVector.add(S);
 	    }
  	} catch(org.json.JSONException je) {

@@ -511,7 +511,7 @@ BAD:
 	if(adminPass!=null) {
 	    try {
 		//String _userdata = "#!/bin/bash\npasswd -d root\necho \"alvise\" >/tmp/pwd\ncat /tmp/pwd | passwd --stdin root";
-		File f = new File(Environment.getExternalStorageDirectory() + "/AndroStack/userdata");
+		File f = new File(Environment.getExternalStorageDirectory() + "/DroidStack/userdata");
 		if( f.exists( ) ) f.delete();
 		BufferedWriter bw = new BufferedWriter( new FileWriter(f) );
 		bw.write("#!/bin/bash");
@@ -525,7 +525,7 @@ BAD:
 		bw.write("\rm -f /tmp/pwd");
 		bw.newLine();
 		bw.close();
-		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( Environment.getExternalStorageDirectory() + "/AndroStack/userdata" ) + "\"";
+		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( Environment.getExternalStorageDirectory() + "/DroidStack/userdata" ) + "\"";
 	    } catch(IOException ioe) {
 		//		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
 		userdata = "";

@@ -46,7 +46,6 @@ import java.util.Set;
 import java.io.File;
 
 import org.openstack.comm.RESTClient;
-//import org.openstack.comm.RuntimeException;
 import org.openstack.comm.NotFoundException;
 import org.openstack.comm.NotAuthorizedException;
 import org.openstack.parse.ParseUtils;
@@ -237,6 +236,16 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    tv11.setTypeface( null, Typeface.BOLD );
 	    TextView tv12 = new TextView( this );
 	    tv12.setText(osi.getID());
+	    TextView tv13 = new TextView( this );
+	    tv13.setText("Minimum Disk:");
+	    tv13.setTypeface( null, Typeface.BOLD );
+	    TextView tv14 = new TextView( this );
+	    tv14.setText(osi.getMinDISK( ) + " GB");
+	    TextView tv15 = new TextView( this );
+	    tv15.setText("Minimum RAM:");
+	    tv15.setTypeface( null, Typeface.BOLD );
+	    TextView tv16 = new TextView( this );
+	    tv16.setText(osi.getMinRAM( ) + " MB");
 	    ScrollView sv = new ScrollView(this);
 	    LinearLayout.LayoutParams lp 
 		= new LinearLayout.LayoutParams(
@@ -246,19 +255,34 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    LinearLayout l = new LinearLayout(this);
 	    l.setLayoutParams( lp );
 	    l.setOrientation( LinearLayout.VERTICAL );
+	    int paddingPixel = 8;
+	    float density = Utils.getDisplayDensity( this );
+	    int paddingDp = (int)(paddingPixel * density);
+	    l.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv1 );
+	    tv2.setPadding(2*paddingDp, 0, 0, 0);
 	    l.addView( tv2 );
 	    l.addView( tv3 );
+	    tv4.setPadding(2*paddingDp, 0, 0, 0);
 	    l.addView( tv4 );
 	    l.addView( tv5 );
+	    tv6.setPadding(2*paddingDp, 0, 0, 0);
 	    l.addView( tv6 );
 	    l.addView( tv7 );
+	    tv8.setPadding(2*paddingDp, 0, 0, 0);
 	    l.addView( tv8 );
 	    l.addView( tv9 );
+	    tv10.setPadding(2*paddingDp, 0, 0, 0);
 	    l.addView( tv10 );
 	    l.addView( tv11 );
+	    tv12.setPadding(2*paddingDp, 0, 0, 0);
 	    l.addView( tv12 );
-	    
+	    l.addView( tv13 );
+	    tv14.setPadding(2*paddingDp, 0, 0, 0);
+	    l.addView( tv14 );
+	    l.addView( tv15 );
+	    tv16.setPadding(2*paddingDp, 0, 0, 0);
+	    l.addView( tv16 );
 	    //sv.setOrientation( LinearLayout.VERTICAL );
 	    sv.addView(l);
 	    
