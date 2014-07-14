@@ -175,7 +175,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    tv3.setText("Status:");
 	    tv3.setTypeface( null, Typeface.BOLD );
 	    TextView tv4 = new TextView(this);
-	    tv4.setText(s.getStatus());
+	    tv4.setText(s.getStatus() + " ("+ (s.getTask()!=null && s.getTask().length()!=0 ? s.getTask() : "None") + ")");
 	    TextView tv5 = new TextView(this);
 	    tv5.setText("Flavor: ");
 	    tv5.setTypeface( null, Typeface.BOLD );
@@ -211,20 +211,29 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    LinearLayout l = new LinearLayout(this);
 	    l.setLayoutParams( lp );
 	    l.setOrientation( LinearLayout.VERTICAL );
+	    int paddingPixel = 8;
+	    float density = Utils.getDisplayDensity( this );
+	    int paddingDp = (int)(paddingPixel * density);
+	    l.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv1 );
 	    l.addView( tv2 );
+	    tv2.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv3 );
 	    l.addView( tv4 );
+	    tv4.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv5 );
 	    l.addView( tv6 );
+	    tv6.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv7 );
 	    l.addView( tv8 );
+	    tv8.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv9 );
 	    l.addView( tv10 );
+	    tv10.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv11 );
 	    l.addView( tv12 );
-	    
-	    //sv.setOrientation( LinearLayout.VERTICAL );
+	    tv12.setPadding(paddingDp, 0, 0, 0);
+
 	    sv.addView(l);
 	    
 	    Utils.alertInfo( sv, this );
