@@ -201,6 +201,12 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    tv13.setTypeface( null, Typeface.BOLD );
 	    TextView tv14 = new TextView( this );
 	    tv14.setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : "None" );
+	    TextView tv15 = new TextView( this );
+	    tv15.setText("Hosted by:");
+	    tv15.setTypeface( null, Typeface.BOLD );
+	    TextView tv16 = new TextView( this );
+	    tv16.setText( s.getComputeNode( ) );
+	    
 	    
 	    ScrollView sv = new ScrollView(this);
 	    LinearLayout.LayoutParams lp 
@@ -233,7 +239,12 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    l.addView( tv11 );
 	    l.addView( tv12 );
 	    tv12.setPadding(paddingDp, 0, 0, 0);
-
+	    l.addView( tv13 );
+	    tv14.setPadding(paddingDp, 0, 0, 0);
+	    l.addView( tv14 );
+	    l.addView( tv15 );
+	    tv16.setPadding(paddingDp, 0, 0, 0);
+	    l.addView( tv16 );
 	    sv.addView(l);
 	    
 	    Utils.alertInfo( sv, this );

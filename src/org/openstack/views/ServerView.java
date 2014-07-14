@@ -69,6 +69,8 @@ public class ServerView extends LinearLayout {
 	
 	Status = new TextViewNamed( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
+	Status.setOnClickListener( (OnClickListener)ctx );
+
 	if(S.getStatus( ).compareToIgnoreCase("active")==0)
 	    Status.setTextColor( Color.parseColor("#00AA00") );
 	if(S.getStatus( ).compareToIgnoreCase("error")==0)
