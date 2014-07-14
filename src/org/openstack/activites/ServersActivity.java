@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ActivityInfo;
+import android.content.DialogInterface;
 
 import android.net.Uri;
 
@@ -145,13 +145,33 @@ public class ServersActivity extends Activity implements OnClickListener {
 	if(v instanceof ImageButtonNamed) {
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SERVER ) {
 		// Delete the server
-		String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
-		progressDialogWaitStop.show();
-		AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
-		String[] ids = new String[1];
-		ids[0] = serverid;
-		task.execute( ids ) ;
-		return;
+		final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage( "Are you sure to delete this instance ?" );
+		builder.setCancelable(false);
+	    
+		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			    deleteNovaInstance( serverid );
+			}
+		    };
+
+		DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			    dialog.cancel( );
+			}
+		    };
+
+		builder.setPositiveButton("Yes", yesHandler );
+		builder.setNegativeButton("No", noHandler );
+            
+		AlertDialog alert = builder.create();
+		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+		alert.show();
+
+		
 	    }
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_SNAP_SERVER ) {
 		Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
@@ -250,6 +270,15 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    Utils.alertInfo( sv, this );
 	    
 	}
+    }
+
+    private void deleteNovaInstance( String serverid ) {
+	progressDialogWaitStop.show();
+	AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
+	String[] ids = new String[1];
+	ids[0] = serverid;
+	task.execute( ids ) ;
+	return;
     }
 
     //__________________________________________________________________________________

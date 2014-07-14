@@ -75,7 +75,6 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     private CustomProgressDialog progressDialogWaitStop = null;
     private String ID = null;
     User U = null;
-
     
     /**
      *
