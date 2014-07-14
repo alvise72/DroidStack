@@ -45,7 +45,7 @@ public class Server implements Serializable {
 	pubIP          = _pubIP;
 	computeNode    = _computeNode;
 	keyname        = _keyname;
-	flavorID    = _flavorID;
+	flavorID       = _flavorID;
 	creationTime   = _creationTime;
 	secgrpNames    = secgroups;
     }
@@ -59,7 +59,7 @@ public class Server implements Serializable {
     public String getPublicIP() { return pubIP; }
     public String getComputeNode() { return computeNode; }
     public String getKeyName() { return keyname; }
-    public String getFlavorID() { return flavor.getID();}//flavorID; }
+    public String getFlavorID() { return flavorID;}//flavorID; }
     public String[] getSecurityGroupdNames() { return secgrpNames; }
 
     public long getCreationTime() { return creationTime; }

@@ -227,7 +227,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    //sv.setOrientation( LinearLayout.VERTICAL );
 	    sv.addView(l);
 	    
-	    Utils.alert2( sv, this );
+	    Utils.alertInfo( sv, this );
 	    
 	}
     }
