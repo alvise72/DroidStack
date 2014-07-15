@@ -60,7 +60,7 @@ public class Server implements Serializable {
     public String getComputeNode() { return computeNode; }
     public String getKeyName() { return keyname; }
     public String getFlavorID() { return flavorID;}//flavorID; }
-    public String[] getSecurityGroupdNames() { return secgrpNames; }
+    public String[] getSecurityGroupNames() { return secgrpNames; }
 
     public long getCreationTime() { return creationTime; }
 

@@ -358,9 +358,9 @@ public class Utils {
      *
      *
      */
-    public static void alertInfo( ScrollView sv, Context ctx ) {
+    public static void alertInfo( ScrollView sv, String title, Context ctx ) {
 	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
-        //alertbox.setMessage( message );
+	alertbox.setTitle(title);
 	alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
  
                 public void onClick(DialogInterface arg0, int arg1) {

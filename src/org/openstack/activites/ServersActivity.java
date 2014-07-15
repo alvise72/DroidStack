@@ -186,6 +186,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    if( v instanceof ServerView )
 		s = ((ServerView)v).getServer( );
 
+	    String[] secgrps = s.getSecurityGroupNames( );
+
 	    TextView tv1 = new TextView(this);
 	    tv1.setText("Instance name:");
 	    tv1.setTypeface( null, Typeface.BOLD );
@@ -220,7 +222,10 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    tv13.setText("Security groups:");
 	    tv13.setTypeface( null, Typeface.BOLD );
 	    TextView tv14 = new TextView( this );
-	    tv14.setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : "None" );
+	    if(secgrps != null && secgrps.length!=0)
+		tv14.setText( Utils.join(s.getSecurityGroupNames(),", ") );
+	    else
+		tv14.setText( "None" );
 	    TextView tv15 = new TextView( this );
 	    tv15.setText("Hosted by:");
 	    tv15.setTypeface( null, Typeface.BOLD );
@@ -267,7 +272,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    l.addView( tv16 );
 	    sv.addView(l);
 	    
-	    Utils.alertInfo( sv, this );
+	    Utils.alertInfo( sv, "Instance information:"+s.getName(), this );
 	    
 	}
     }

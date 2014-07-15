@@ -285,7 +285,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    //sv.setOrientation( LinearLayout.VERTICAL );
 	    sv.addView(l);
 	    
-	    Utils.alertInfo( sv, this );
+	    Utils.alertInfo( sv, "Image information: "+osi.getName(), this );
 	    
 	}
 
