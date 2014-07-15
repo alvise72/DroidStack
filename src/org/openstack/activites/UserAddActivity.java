@@ -2,7 +2,7 @@ package org.openstack.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-import android.os.Environment;
+//import android.os.Environment;
 
 import android.widget.EditText;
 import android.widget.TextView;
@@ -224,7 +224,7 @@ public class UserAddActivity extends Activity {
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
 	    //Utils.userToFile( U );
-	    U.toFile( );
+	    U.toFile( Utils.getStringPreference("FILESDIR","",this) );
 	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage(), this);

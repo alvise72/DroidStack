@@ -2,7 +2,7 @@ package org.openstack.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
-import android.os.Environment;
+//import android.os.Environment;
 
 
 import android.widget.LinearLayout;
@@ -126,7 +126,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	//OS = (ArrayList<OSImage>)bundle.getSerializable("OSIMAGES");
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
-	    U = User.fromFileID( selectedUser );
+	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
 	} catch(RuntimeException re) {
 	    Utils.alert("OSImagesActivity: "+re.getMessage(), this );
 	    return;
@@ -369,7 +369,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		    U.setEndpoint( endpoint );
 		    U.setPassword( password );
 		    U.setSSL( usessl );
-		    U.toFile( ); // to save the new token+expiration
+		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) ); // to save the new token+expiration
 		    token = U.getToken();
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
@@ -461,7 +461,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
-		    U.toFile( ); 
+		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) ); 
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;

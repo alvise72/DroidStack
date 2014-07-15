@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
 
-import android.os.Environment;
+//import android.os.Environment;
 
 public class User implements Serializable, Comparable<User> {
 
@@ -73,8 +73,8 @@ public class User implements Serializable, Comparable<User> {
 	return 0;
     }
 
-    public static User fromFileID( String ID ) throws RuntimeException {
-	String filename = Environment.getExternalStorageDirectory() + "/DroidStack/users/" + ID;
+    public static User fromFileID( String ID, String filesDir ) throws RuntimeException {
+	String filename = filesDir + "/users/" + ID;
 	if(false == (new File(filename)).exists())
 	    throw new RuntimeException( "File ["+filename+"] doesn't exist" );
 	try {
@@ -90,8 +90,8 @@ public class User implements Serializable, Comparable<User> {
 	}
     }
 
-    public void toFile( ) throws RuntimeException {
-    	String filename = Environment.getExternalStorageDirectory() + "/DroidStack/users/" + getUserID( ) + "." + getTenantID( );
+    public void toFile( String filesDir ) throws RuntimeException {
+    	String filename = filesDir + "/users/" + getUserID( ) + "." + getTenantID( );
     	File f = new File( filename );
     	if(f.exists()) f.delete();
 	try {

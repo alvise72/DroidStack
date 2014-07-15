@@ -13,7 +13,7 @@ import android.util.Log;
 import android.net.Uri;
 import android.os.*;
 import android.app.*;
-import android.os.Environment;
+//import android.os.Environment;
 import android.view.View.OnClickListener;
 
 import org.openstack.R;

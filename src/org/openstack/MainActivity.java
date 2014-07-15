@@ -6,7 +6,7 @@ import android.app.AlertDialog;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
-import android.os.Environment;
+//import android.os.Environment;
 
 import android.content.Intent;
 import android.content.Context;
@@ -86,6 +86,9 @@ public class MainActivity extends Activity
 	
 	setContentView(R.layout.main);
 	
+	Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
+	Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
+
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
 
@@ -95,7 +98,7 @@ public class MainActivity extends Activity
 	SCREENW = d.getWidth();
 	Utils.putIntegerPreference("SCREENH", SCREENH, this);
 	Utils.putIntegerPreference("SCREENW", SCREENW, this);
-	Utils.createDir( Environment.getExternalStorageDirectory() + "/DroidStack/users/" );
+	//	Utils.createDir( Environment.getExternalStorageDirectory() + "/DroidStack/users/" );
 
 	Button su = (Button)findViewById( R.id.LOGIN );
 	Button ov = (Button)findViewById( R.id.OVERVIEW );
@@ -137,7 +140,7 @@ public class MainActivity extends Activity
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
 	  try {
-	      User u = User.fromFileID( selectedUser );
+	      User u = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
 	      Toast t = Toast.makeText(this, "Current user: "+u.getUserName() + " (" + u.getTenantName() + ")", Toast.LENGTH_SHORT);
 	      t.setGravity( Gravity.CENTER, 0, 0 );
 	      t.show();

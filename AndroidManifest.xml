@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0.0">
 
-    <uses-sdk android:minSdkVersion="14"/>
+    <uses-sdk android:minSdkVersion="16"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -20,7 +20,10 @@
                       android:largeScreens="true" 
                       android:anyDensity="true" />
 
-    <application android:label="DroidStack" android:icon="@drawable/openstack">
+    <application 
+	android:label="DroidStack" 
+	android:theme="@android:style/Theme.Holo.Light"
+	android:icon="@drawable/openstack">
 
         <activity android:launchMode="singleInstance" android:name="org.openstack.MainActivity"
                   android:label="DroidStack"
@@ -36,72 +39,57 @@
 	    android:name="org.openstack.activities.CAFileExploreActivity"
 	    android:launchMode="singleInstance"
 	    android:label="Select CA File"
-	    <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	    android:parentActivityName="org.openstack.MainActivity" 
 	   />
-
 	<activity
 	    android:name="org.openstack.activities.UsersActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Select OpenStack user" 
-	    <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	    android:parentActivityName="org.openstack.MainActivity"
 	  />
 
 	<activity 
 	    android:name="org.openstack.activities.OSImagesActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Manage Glance Images"
-	    <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	   android:parentActivityName="org.openstack.MainActivity"
 	    android:screenOrientation="portrait"
 	    android:configChanges="keyboardHidden|orientation"
-	   />
+	  />
 
         <activity
             android:name="org.openstack.activities.OverViewActivity" 
             android:launchMode="singleInstance" 
             android:label="Usage Overview"
             android:screenOrientation="portrait"
-	   <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	   android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-           />
+          />
 
         <activity
             android:name="org.openstack.activities.UserAddActivity" 
             android:launchMode="singleInstance" 
             android:label="Add new User"
             android:screenOrientation="portrait"
-	    <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-           />
+          />
 
        <activity
             android:name="org.openstack.activities.ServersActivity" 
             android:launchMode="singleInstance" 
             android:label="Manage Nova Instances"
             android:screenOrientation="portrait"
-	    <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-           />
+          />
 
        <activity
             android:name="org.openstack.activities.ImageLaunchActivity"
             android:launchMode="singleInstance"
             android:label="Manage Nova Instances"
             android:screenOrientation="portrait"
-	    <meta-data
-		android:name="MainActivity"
-		android:value="org.openstack.MainActivity" />
+	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
            />
     </application>

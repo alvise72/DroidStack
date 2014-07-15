@@ -1,7 +1,7 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
-import android.os.Environment;
+//import android.os.Environment;
 
 
 import android.widget.LinearLayout;
@@ -303,7 +303,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
-	    U = User.fromFileID( selectedUser );
+	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
 	} catch(RuntimeException re) {
 	    Utils.alert("ServersActivity.onCreate: "+re.getMessage(), this );
 	    return;
@@ -401,7 +401,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 		    U.setPassword( pwd );
 		    U.setEndpoint( edp );
 		    U.setSSL( ssl );
-		    U.toFile();// to save new token + expiration
+		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -472,7 +472,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 		    U.setPassword( pwd );
 		    U.setEndpoint( edp );
 		    U.setSSL( ssl );
-		    U.toFile();// to save new token + expiration
+		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
 		    username = U.getUserName();
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();

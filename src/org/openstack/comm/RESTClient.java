@@ -40,7 +40,7 @@ import org.json.JSONException;
 
 import android.util.Log;
 import android.util.Pair;
-import android.os.Environment;
+//import android.os.Environment;
 
 public class RESTClient {
 
@@ -470,7 +470,8 @@ BAD:
 						  String _secgrpIDs,
 						  String _networkIDs,
 						  String FixedIP,
-						  String adminPass ) 
+						  String adminPass,
+						  String filesDir ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
 	String sUrl = "http://" + endpoint + ":8774/v2/" + tenantid + "/servers";
@@ -510,8 +511,7 @@ BAD:
 	String userdata="";
 	if(adminPass!=null) {
 	    try {
-		//String _userdata = "#!/bin/bash\npasswd -d root\necho \"alvise\" >/tmp/pwd\ncat /tmp/pwd | passwd --stdin root";
-		File f = new File(Environment.getExternalStorageDirectory() + "/DroidStack/userdata");
+		File f = new File(filesDir + "/userdata");
 		if( f.exists( ) ) f.delete();
 		BufferedWriter bw = new BufferedWriter( new FileWriter(f) );
 		bw.write("#!/bin/bash");
@@ -525,7 +525,7 @@ BAD:
 		bw.write("\rm -f /tmp/pwd");
 		bw.newLine();
 		bw.close();
-		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( Environment.getExternalStorageDirectory() + "/DroidStack/userdata" ) + "\"";
+		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( filesDir + "/userdata" ) + "\"";
 	    } catch(IOException ioe) {
 		//		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
 		userdata = "";

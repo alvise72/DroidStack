@@ -2,7 +2,7 @@ package org.openstack.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-import android.os.Environment;
+//import android.os.Environment;
 
 import android.widget.LinearLayout;
 import android.widget.EditText;
@@ -151,7 +151,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       networksL = (LinearLayout)findViewById( R.id.networksLayer );
       
       progressDialogWaitStop.show();
-      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
       
       selectedSecgroups = new HashSet();
       selectedNetworks = new HashSet();
@@ -257,7 +257,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
       progressDialogWaitStop.show();
-      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this) );
+      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
       String adminPass = null;
@@ -321,7 +321,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
-		    U.toFile( ); // to save new token+expiration
+		    U.toFile( Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this) ); // to save new token+expiration
 
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
@@ -465,7 +465,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
-		    U.toFile( ); // to save new token+expiration
+		    U.toFile( Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this) ); // to save new token+expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -486,7 +486,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      args[5],
 							      args[6],
 							      args[7],
-							      args[8]);
+							      args[8],
+							      Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this));
 	    } catch(Exception e) {
 		e.printStackTrace( );
 		errorMessage = e.getMessage();

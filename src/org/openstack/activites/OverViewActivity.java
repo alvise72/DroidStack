@@ -106,7 +106,7 @@ public class OverViewActivity extends Activity {
 	String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
 	setTitle(getString(R.string.USAGEOVERVIEW));
 	try {
-	    U = User.fromFileID( selectedUserID );
+	    U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this) );
 	    setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
 	    progressDialogWaitStop.show();
 	    AsyncTaskQuota task = new AsyncTaskQuota();
@@ -202,7 +202,7 @@ public class OverViewActivity extends Activity {
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
 		    U = newUser;
-		    U.toFile( );//to save new token + expiration
+		    U.toFile( Utils.getStringPreference("FILESDIR","",OverViewActivity.this) );//to save new token + expiration
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;

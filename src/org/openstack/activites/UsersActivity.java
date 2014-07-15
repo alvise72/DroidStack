@@ -1,7 +1,7 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
-import android.os.Environment;
+//import android.os.Environment;
 
 
 import android.widget.LinearLayout;
@@ -97,7 +97,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
 		
-		(new File(Environment.getExternalStorageDirectory() + "/DroidStack/users/"+filenameToDelete)).delete();
+		(new File(Utils.getStringPreference("FILESDIR", "", this) + "/users/"+filenameToDelete)).delete();
 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 		if(selectedUser.compareTo(filenameToDelete)==0)
 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
@@ -130,9 +130,9 @@ public class UsersActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
-	File[] users = (new File(Environment.getExternalStorageDirectory() + "/DroidStack/users/")).listFiles();
+	File[] users = (new File(Utils.getStringPreference("FILESDIR", "", this) + "/users/")).listFiles();
 	if(users==null) {
-	    Utils.alert("UsersActivity.refreshUserViews: directory " + Environment.getExternalStorageDirectory() + "/DroidStack/users/" + " exists but it is not a file !", this);
+	    Utils.alert("UsersActivity.refreshUserViews: " + Utils.getStringPreference("FILESDIR", "", this) + "/users/" + " exists but it is not a directory !", this);
 	    return;
 	}
 	    
@@ -145,7 +145,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    User U = null;
 	    try {
 		
-		U = User.fromFileID( users[i].getName( ) );
+		U = User.fromFileID( users[i].getName( ), Utils.getStringPreference("FILESDIR","",this) );
 		
 	    } catch(Exception e) {
 		Utils.alert("ERROR: " + e.getMessage(), this);
