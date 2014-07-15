@@ -11,11 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.SET_ORIENTATION"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="com.android.vending.CHECK_LICENSE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+    />
 
     <supports-screens android:resizeable="true"
                       android:smallScreens="true" 
@@ -25,32 +22,41 @@
 
     <application android:label="DroidStack" android:icon="@drawable/openstack">
 
-        <activity android:launchMode="singleInstance" android:name="MainActivity"
+        <activity android:launchMode="singleInstance" android:name="org.openstack.MainActivity"
                   android:label="DroidStack"
-		  android:icon="@drawable/openstack" android:screenOrientation="portrait">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+		  android:icon="@drawable/openstack"
+		  android:screenOrientation="portrait">
+          <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
         </activity>
 
 	<activity 
 	    android:name="org.openstack.activities.CAFileExploreActivity"
 	    android:launchMode="singleInstance"
 	    android:label="Select CA File"
+	    <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
 	   />
 
 	<activity
 	    android:name="org.openstack.activities.UsersActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Select OpenStack user" 
+	    <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
 	  />
 
 	<activity 
 	    android:name="org.openstack.activities.OSImagesActivity" 
 	    android:launchMode="singleInstance" 
-	    android:label="Manage Glance Images" 
+	    android:label="Manage Glance Images"
+	    <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
 	    android:screenOrientation="portrait"
 	    android:configChanges="keyboardHidden|orientation"
 	   />
@@ -60,6 +66,9 @@
             android:launchMode="singleInstance" 
             android:label="Usage Overview"
             android:screenOrientation="portrait"
+	   <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
             android:configChanges="keyboardHidden|orientation"
            />
 
@@ -68,6 +77,9 @@
             android:launchMode="singleInstance" 
             android:label="Add new User"
             android:screenOrientation="portrait"
+	    <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
             android:configChanges="keyboardHidden|orientation"
            />
 
@@ -76,6 +88,9 @@
             android:launchMode="singleInstance" 
             android:label="Manage Nova Instances"
             android:screenOrientation="portrait"
+	    <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
             android:configChanges="keyboardHidden|orientation"
            />
 
@@ -84,6 +99,9 @@
             android:launchMode="singleInstance"
             android:label="Manage Nova Instances"
             android:screenOrientation="portrait"
+	    <meta-data
+		android:name="MainActivity"
+		android:value="org.openstack.MainActivity" />
             android:configChanges="keyboardHidden|orientation"
            />
     </application>

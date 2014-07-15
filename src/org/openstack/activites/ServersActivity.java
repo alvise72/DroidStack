@@ -271,8 +271,12 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    tv16.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv16 );
 	    sv.addView(l);
-	    
-	    Utils.alertInfo( sv, "Instance information:"+s.getName(), this );
+	    String name;
+	    if(s.getName().length()>=16)
+		name = s.getName().substring(0,14) + "..";
+	    else
+		name = s.getName();
+	    Utils.alertInfo( sv, "Instance information: "+name, this );
 	    
 	}
     }
