@@ -78,7 +78,8 @@ public class OSImageView extends LinearLayout {
 	params4.gravity=Gravity.RIGHT;
 	buttonsLayout.setLayoutParams( params4 );
 	buttonsLayout.setGravity( Gravity.RIGHT );
-	
+	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
+
 	launchImage = new ImageButtonNamed( ctx, (OSImageView)this, ImageButtonNamed.BUTTON_LAUNCH_IMAGE );
 	launchImage.setImageResource(R.drawable.ic_menu_play_clip );
 	launchImage.setOnClickListener( (OnClickListener)ctx );
