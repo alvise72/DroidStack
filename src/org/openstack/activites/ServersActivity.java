@@ -204,15 +204,23 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    TextView tv6 = new TextView(this);
 	    tv6.setText( s.getFlavor( ).getName() + " (" + (int)(s.getFlavor( ).getDISK()) + "GB, " +s.getFlavor( ).getVCPU( )+ " cpu, " + s.getFlavor( ).getRAM( ) + " ram)" );
 	    TextView tv7 = new TextView(this);
-	    tv7.setText("Private IP:");
+	    tv7.setText("Private IP(s):");
 	    tv7.setTypeface( null, Typeface.BOLD );
-	    TextView tv8 = new TextView(this);
-	    tv8.setText(s.getPrivateIP());
+	    TextView[] tv8_privip = new TextView[s.getPrivateIP().length];//(this);
+	    for(int i = 0; i<s.getPrivateIP().length; i++) {
+		tv8_privip[i] = new TextView(this);
+		tv8_privip[i].setText( s.getPrivateIP()[i] );
+	    }
+	    //	    tv8.setText(s.getPrivateIP());
 	    TextView tv9 = new TextView(this);
-	    tv9.setText("Public IP:");
+	    tv9.setText("Public IP(s):");
 	    tv9.setTypeface( null, Typeface.BOLD );
-	    TextView tv10 = new TextView(this);
-	    tv10.setText( (s.getPublicIP ( ) !=null && s.getPublicIP().length() != 0) ? s.getPublicIP( ) : "None");
+	    TextView[] tv10_pubip = new TextView[s.getPublicIP().length];//(this);
+	    //	    tv10.setText( (s.getPublicIP ( ) !=null && s.getPublicIP().length() != 0) ? s.getPublicIP( ) : "None");
+	    for(int i = 0; i<s.getPublicIP().length; i++) {
+		tv9_pubip[i] = new TextView(this);
+		tv9_pubip[i].setText( s.getPublicIP( )[i]  );
+	    }
 	    TextView tv11 = new TextView( this );
 	    tv11.setText("Key name:");
 	    tv11.setTypeface( null, Typeface.BOLD );
@@ -256,10 +264,17 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    l.addView( tv6 );
 	    tv6.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv7 );
-	    l.addView( tv8 );
-	    tv8.setPadding(paddingDp, 0, 0, 0);
+	    //l.addView( tv8 );
+	    for(int i = 0; i<tv8_privip.length; ++i) {
+		l.addView(tv8_privip[i]);
+		tv8_privip.setPadding(paddingDp, 0, 0, 0);
+	    }
 	    l.addView( tv9 );
-	    l.addView( tv10 );
+	    for(int i = 0; i<tv9_pubip.length; ++i) {
+		l.addView(tv9_pubip[i]);
+		tv9_pubip.setPadding(paddingDp, 0, 0, 0);
+	    }
+	    //l.addView( tv10 );
 	    tv10.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv11 );
 	    l.addView( tv12 );
@@ -409,7 +424,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 		}
 	    }
 
-	    username = U.getUserName();
+	    
 
 	    try {
 		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
@@ -434,7 +449,7 @@ public class ServersActivity extends Activity implements OnClickListener {
  	    }
 	    
 	    try {
-		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, username );
+		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, U.getUserName( ) );
 		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
 		ServersActivity.this.refreshView( servers, flavors );
 	    } catch(ParseException pe) {

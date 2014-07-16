@@ -240,7 +240,7 @@ public class RESTClient {
     /**
      *
      *
-     * curl -i http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers/details -X GET -H "X-Auth-Project-Id: admin" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     * curl -i http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers/detail -X GET -H "X-Auth-Project-Id: admin" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
      *
      *
      *

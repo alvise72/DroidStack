@@ -2,6 +2,8 @@ package org.openstack.utils;
 
 import java.io.Serializable;
 
+import java.util.Vector;
+
 public class Server implements Serializable {
     public final static int POWER_RUNNING = 1;
     public final static int POWER_NOSTATE = 0;
@@ -14,8 +16,8 @@ public class Server implements Serializable {
     private String status;
     private String task;
     private int powerstate;
-    private String privIP;
-    private String pubIP;
+    private Vector<String> privIP;
+    private Vector<String> pubIP;
     private String computeNode;
     private String keyname;
     private String flavorID;
@@ -28,8 +30,8 @@ public class Server implements Serializable {
 		   String _status,
 		   String _task,
 		   int _power,
-		   String _privIP,
-		   String _pubIP,
+		   Vector<String> _privIP,
+		   Vector<String> _pubIP,
 		   String _computeNode,
 		   String _keyname,
 		   String _flavorID,
@@ -55,8 +57,16 @@ public class Server implements Serializable {
     public String getStatus() { return status; }
     public String getTask() { return task; }
     public int    getPowerState() { return powerstate; }
-    public String getPrivateIP() { return privIP; }
-    public String getPublicIP() { return pubIP; }
+    public String[] getPrivateIP() { 
+	String[] ips = new String[privIP.size()];
+	privIP.toArray(ips);
+	return ips;
+    }
+    public String[] getPublicIP() { 
+	String[] ips = new String[pubIP.size()];
+	pubIP.toArray(ips);
+	return ips; 
+    }
     public String getComputeNode() { return computeNode; }
     public String getKeyName() { return keyname; }
     public String getFlavorID() { return flavorID;}//flavorID; }
