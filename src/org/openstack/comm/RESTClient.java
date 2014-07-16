@@ -111,7 +111,7 @@ public class RESTClient {
 	conn.setRequestProperty("Content-Type", "application/json");
 	conn.setRequestProperty("Accept", "application/json");
 	conn.setDoOutput(true);
-	((HttpsURLConnection)conn).setChunkedStreamingMode(0);
+	((HttpURLConnection)conn).setChunkedStreamingMode(0);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
@@ -128,7 +128,7 @@ public class RESTClient {
 	    out.flush( );
 	    out.close( );
 	} catch(java.io.IOException ioe) {
-	    ((HttpsURLConnection)conn).disconnect( );
+	    ((HttpURLConnection)conn).disconnect( );
 	    //ioe.printStackTrace( );
 	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage( ) );
 	}
@@ -137,12 +137,12 @@ public class RESTClient {
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
 	} catch(IOException ioe) {
-	    ((HttpsURLConnection)conn).disconnect( );
+	    ((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
 	}
 
 	if( status != HttpStatus.SC_OK ) {
-	    InputStream in = new BufferedInputStream( ((HttpsURLConnection)conn).getErrorStream( ) );
+	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
 	    if(in!=null) {
 		int len;
 		String buf = "";
@@ -179,7 +179,7 @@ public class RESTClient {
 	    ((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
 	}    
-	((HttpsURLConnection)conn).disconnect( );
+	((HttpURLConnection)conn).disconnect( );
 	return res;
     }
     

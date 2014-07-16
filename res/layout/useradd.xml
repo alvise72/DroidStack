@@ -89,9 +89,20 @@
   	    android:shadowDx="3"
      	    android:shadowDy="3"
      	    android:shadowRadius="3"
-     	    android:text="Add"
+     	    android:text="@string/ADD"
 	    android:onClick="add" />
-	    
+	              
+	  <Button
+   	    android:id="@+id/button2"
+   	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+   	    android:layout_gravity="center_horizontal"
+   	    android:fadingEdge="horizontal"
+  	    android:shadowDx="3"
+     	    android:shadowDy="3"
+     	    android:shadowRadius="3"
+     	    android:text="@string/RESETFIELDS"
+	    android:onClick="reset" />
         </LinearLayout></LinearLayout>
       </ScrollView>
     </LinearLayout></LinearLayout>

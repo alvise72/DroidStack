@@ -198,7 +198,19 @@ public class UserAddActivity extends Activity {
     task.execute(endpoint,tenant,username,password,""+usessl);
   }
 
-
+  public void reset( View v ) {
+    EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
+    EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
+    EditText usernameET = (EditText)findViewById(org.openstack.R.id.usernameET);
+    EditText passwordET = (EditText)findViewById(org.openstack.R.id.passwordET);
+    CheckBox usesslET   = (CheckBox)findViewById(org.openstack.R.id.usesslCB);
+    
+    endpointET.setText("");
+    tenantET.setText("");
+    usernameET.setText("");
+    passwordET.setText("");
+    usesslET.setChecked( false );
+  }
     /**
      *
      *
