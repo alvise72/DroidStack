@@ -253,7 +253,7 @@ public class ParseUtils {
      */    
     public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
 
-	Log.d("PARSEUTILS", "parseServers: tenantName=" + tenantName + " - jsonBuf="+jsonBuf);
+	Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
 
 	Vector<Server> serverVector = new Vector();
 	String status        = "N/A";
@@ -303,9 +303,9 @@ public class ParseUtils {
 		    while( keys.hasNext( ) ) {
 			String key = keys.next();
 			JSONArray arrayAddr = addresses.getJSONArray( key );
-			for(int i=0; i<arrayAddr.length(); ++i) {
-			    String ip = arrayAddr.getJSONObject(i).getString("addr");
-			    String type = arrayAddr.getJSONObject(i).getString("OS-EXT-IPS:type");
+			for(int j = 0; j < arrayAddr.length(); ++j) {
+			    String ip = arrayAddr.getJSONObject(j).getString("addr");
+			    String type = arrayAddr.getJSONObject(j).getString("OS-EXT-IPS:type");
 			    if(type.compareTo("fixed")==0)
 				fixedIP.add(ip);
 			    if(type.compareTo("floating")==0)

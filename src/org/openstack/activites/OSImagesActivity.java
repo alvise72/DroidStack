@@ -354,7 +354,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    String imagetodel = u[7];
 	    User newUser = null;
 	    String token = u[6];
-	    //Log.d("AsyncTaskOSDelete.doInBackground", "endpoint="+endpoint+", tenantname="+tenantname+", username="+username+", password="+password+", userssl="+usessl+", expire="+expire+", imagetodel="+imagetodel);
+	    
 	    if(expire <= Utils.now() + 5) {
 		try {
 		    jsonBuf = RESTClient.requestToken( endpoint,

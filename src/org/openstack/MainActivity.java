@@ -104,8 +104,14 @@ public class MainActivity extends Activity
 	Button ov = (Button)findViewById( R.id.OVERVIEW );
 	Button gl = (Button)findViewById( R.id.GLANCE );
 	Button no = (Button)findViewById( R.id.NOVA );
+	// View spaceL = findViewById(R.id.firstRowLeft);
+	// View spaceC = findViewById(R.id.firstRowCenter);
+	// View spaceR = findViewById(R.id.firstRowRight);
+	// spaceL.setMinimumWidth( 4 );
+	// spaceC.setMinimumWidth( 4 );
+	// spaceR.setMinimumWidth( 4 );
 
-	LayoutParams lp = new LinearLayout.LayoutParams((SCREENW-6)/2, (SCREENH-14)/6);
+	LayoutParams lp = new LinearLayout.LayoutParams((SCREENW-12)/2, (SCREENH-14)/6);
 	su.setLayoutParams( lp );
 	ov.setLayoutParams( lp );
 	gl.setLayoutParams( lp );

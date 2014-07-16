@@ -218,8 +218,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    TextView[] tv10_pubip = new TextView[s.getPublicIP().length];//(this);
 	    //	    tv10.setText( (s.getPublicIP ( ) !=null && s.getPublicIP().length() != 0) ? s.getPublicIP( ) : "None");
 	    for(int i = 0; i<s.getPublicIP().length; i++) {
-		tv9_pubip[i] = new TextView(this);
-		tv9_pubip[i].setText( s.getPublicIP( )[i]  );
+		tv10_pubip[i] = new TextView(this);
+		tv10_pubip[i].setText( s.getPublicIP( )[i]  );
 	    }
 	    TextView tv11 = new TextView( this );
 	    tv11.setText("Key name:");
@@ -267,15 +267,15 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    //l.addView( tv8 );
 	    for(int i = 0; i<tv8_privip.length; ++i) {
 		l.addView(tv8_privip[i]);
-		tv8_privip.setPadding(paddingDp, 0, 0, 0);
+		tv8_privip[i].setPadding(paddingDp, 0, 0, 0);
 	    }
 	    l.addView( tv9 );
-	    for(int i = 0; i<tv9_pubip.length; ++i) {
-		l.addView(tv9_pubip[i]);
-		tv9_pubip.setPadding(paddingDp, 0, 0, 0);
+	    for(int i = 0; i<tv10_pubip.length; ++i) {
+		l.addView(tv10_pubip[i]);
+		tv10_pubip[i].setPadding(paddingDp, 0, 0, 0);
 	    }
 	    //l.addView( tv10 );
-	    tv10.setPadding(paddingDp, 0, 0, 0);
+	    //tv10.setPadding(paddingDp, 0, 0, 0);
 	    l.addView( tv11 );
 	    l.addView( tv12 );
 	    tv12.setPadding(paddingDp, 0, 0, 0);
@@ -449,7 +449,7 @@ public class ServersActivity extends Activity implements OnClickListener {
  	    }
 	    
 	    try {
-		Vector<Server> servers = ParseUtils.parseServers( jsonBuf, U.getUserName( ) );
+		Vector<Server> servers = ParseUtils.parseServers( jsonBuf );
 		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
 		ServersActivity.this.refreshView( servers, flavors );
 	    } catch(ParseException pe) {

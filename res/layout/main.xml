@@ -10,7 +10,12 @@
     		android:id="@+id/buttonlayout"
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
+		
                 android:layout_height="wrap_content">
+    <View   
+	android:layout_width="4px"
+	android:layout_height="90dp"/> 
+
     <Button
         android:id="@+id/LOGIN"
         android:layout_width="200dp"
@@ -21,7 +26,9 @@
 	android:textSize="18dp"
 	android:drawableLeft="@drawable/users"
         android:onClick="login"/>
-    
+    <View   
+	android:layout_width="4px"
+	android:layout_height="90dp"/> 
     <Button
         android:id="@+id/OVERVIEW"
         android:layout_width="200dp"
@@ -32,6 +39,9 @@
 	android:textSize="18dp"
 	android:drawableLeft="@drawable/overview"
         android:onClick="overview"/>
+    <View   
+	android:layout_width="4px"
+	android:layout_height="90dp"/> 
   </LinearLayout>
 
   <LinearLayout 
@@ -40,7 +50,9 @@
       android:orientation="horizontal"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content">
-    
+        <View   
+	android:layout_width="4px"
+	android:layout_height="90dp"/> 
     <Button
         android:id="@+id/GLANCE"
         android:layout_width="200dp"
@@ -52,7 +64,9 @@
 	android:textSize="18dp"
 	
 	android:drawableLeft="@drawable/openstack"/>
-    
+        <View   
+	android:layout_width="4px"
+	android:layout_height="90dp"/> 
     <Button
         android:id="@+id/NOVA"
         android:layout_width="200dp"
@@ -63,6 +77,9 @@
 	android:textSize="18dp"
 	android:drawableLeft="@drawable/terminal"
         android:onClick="nova"/>
+    <View   
+	android:layout_width="4px"
+	android:layout_height="90dp"/> 
   </LinearLayout>  
 </LinearLayout>
 
