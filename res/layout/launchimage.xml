@@ -143,6 +143,7 @@
 	    android:onClick="launch" />
 	    
         </LinearLayout>
+      </LinearLayout>
+    </ScrollView>
+  </LinearLayout>
 </LinearLayout>
-      </ScrollView>
-    </LinearLayout></LinearLayout>

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.view.inputmethod.InputMethodManager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -180,6 +181,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */
   public void onResume( ) {
     super.onResume( );
+    //EditText myEditText = (EditText) findViewById(R.id.vmnameET);  
+    // InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+    // imm.hideSoftInputFromWindow(((EditText) findViewById(R.id.vmnameET)).getWindowToken(), 0);
+    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
   }
  
     /**
