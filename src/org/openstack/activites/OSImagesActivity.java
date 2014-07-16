@@ -201,11 +201,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	if(v instanceof OSImageView || v instanceof TextViewNamed || v instanceof LinearLayoutNamed ) {
 	    OSImage osi = null;
 	    if(v instanceof OSImageView) {
-		Utils.alert("Toccato OSImageView", this);
+		//		Utils.alert("Toccato OSImageView", this);
 		osi = ((OSImageView)v).getOSImage();
 	    }
 	    if(v instanceof TextViewNamed) {
-		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
+		//		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
 		osi = ((TextViewNamed)v).getOSImageView().getOSImage();
 	    }
 	    if(v instanceof LinearLayoutNamed) {
@@ -326,6 +326,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    View space = new View( this );
 	    space.setMinimumHeight(10);
 	    ((LinearLayout)findViewById(R.id.osimagesLayout)).addView( space );
+	    ((LinearLayout)findViewById( R.id.osimagesLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
 	}
     }
 

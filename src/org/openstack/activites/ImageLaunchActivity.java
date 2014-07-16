@@ -144,7 +144,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
       progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
       
-      //    spinnerNetworks = (Spinner) findViewById(R.id.networkSP);
       spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
       spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
       
@@ -181,9 +180,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */
   public void onResume( ) {
     super.onResume( );
-    //EditText myEditText = (EditText) findViewById(R.id.vmnameET);  
-    // InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-    // imm.hideSoftInputFromWindow(((EditText) findViewById(R.id.vmnameET)).getWindowToken(), 0);
     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
   }
  
@@ -309,7 +305,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	@Override
 	protected Void doInBackground( User... u ) 
 	{
-	    //	    ImageLaunchActivity.this.launchButton.setEnabled(false);
 	    U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
@@ -355,12 +350,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    super.onPostExecute( v );
 	    if(hasError) {
  		Utils.alert( errorMessage, ImageLaunchActivity.this );
- 		//downloading_image_list = false;
  		ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }
 	    
-	    //downloading_image_list = false; // questo non va spostato da qui a
 	    try {
 		networks = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
 		String[] netNames = new String[networks.length];
@@ -376,10 +369,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    nv.setOnClickListener( ImageLaunchActivity.this );
 		    networksL.addView( nv );
 		}
-
-		// spinnerNetworksArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item, netNames);
-		// spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// spinnerNetworks.setAdapter(spinnerNetworksArrayAdapter);
 
 		Hashtable<String, Flavor> flavorTable = ParseUtils.parseFlavors( jsonBufFlavor );
 		Collection<Flavor> collFlav = flavorTable.values();
@@ -415,7 +404,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);
 	    }
-	    //	    ImageLaunchActivity.this.launchButton.setEnabled(true);
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
 	}
     }
@@ -444,16 +432,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	@Override
 	protected Void doInBackground( String... args ) 
 	{
-	    //	    Log.d("DROIDSTACK", Utils.join(args,","));
-	    // Log.d("IMAGELAUNCH", "args.size="+args.length);
-	    // Log.d("IMAGELAUNCH", "args[0]="+args[0]);
-	    // Log.d("IMAGELAUNCH", "args[1]="+args[1]);
-	    // Log.d("IMAGELAUNCH", "args[2]="+args[2]);
-	    // Log.d("IMAGELAUNCH", "args[3]="+args[3]);
-	    // Log.d("IMAGELAUNCH", "args[4]="+args[4]);
-	    // Log.d("IMAGELAUNCH", "args[5]="+args[5]);
-	    // Log.d("IMAGELAUNCH", "args[6]="+args[6]);
-	    //ImageLaunchActivity.this.launchButton.setEnabled(false);
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
@@ -508,19 +486,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    super.onPostExecute( v );
 	    if(hasError) {
  		Utils.alert( errorMessage, ImageLaunchActivity.this );
- 		// ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
-		// ImageLaunchActivity.this.launchButton.setEnabled(true);
- 		// return;
  	    }
 	    
-	    //	    Log.d("DROIDSTACK", "onPostExecute, jsonBuf="+jsonBuf);
-		
-	    // } catch(ParseException pe) {
-	    // 	Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
-	    // 		    ImageLaunchActivity.this);
-	    // }
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
-	    //	    ImageLaunchActivity.this.launchButton.setEnabled(true);
 	}
     }
 }

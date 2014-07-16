@@ -211,12 +211,12 @@ public class ServersActivity extends Activity implements OnClickListener {
 		tv8_privip[i] = new TextView(this);
 		tv8_privip[i].setText( s.getPrivateIP()[i] );
 	    }
-	    //	    tv8.setText(s.getPrivateIP());
+
 	    TextView tv9 = new TextView(this);
 	    tv9.setText("Public IP(s):");
 	    tv9.setTypeface( null, Typeface.BOLD );
 	    TextView[] tv10_pubip = new TextView[s.getPublicIP().length];//(this);
-	    //	    tv10.setText( (s.getPublicIP ( ) !=null && s.getPublicIP().length() != 0) ? s.getPublicIP( ) : "None");
+
 	    for(int i = 0; i<s.getPublicIP().length; i++) {
 		tv10_pubip[i] = new TextView(this);
 		tv10_pubip[i].setText( s.getPublicIP( )[i]  );
@@ -358,10 +358,10 @@ public class ServersActivity extends Activity implements OnClickListener {
 		s.setFlavor( F );
 	    ServerView sv = new ServerView(s, this);
 	    ((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
+	    ((LinearLayout)findViewById( R.id.serverLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
 	    View space = new View( this );
 	    space.setMinimumHeight(10);
 	    ((LinearLayout)findViewById(R.id.serverLayout)).addView( space );
-	    //listedServers.add( sv.getServer( ).getID( ) );
 	}
     }
 
