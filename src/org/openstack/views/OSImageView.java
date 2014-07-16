@@ -26,7 +26,6 @@ public class OSImageView extends LinearLayout {
     private LinearLayoutNamed nameLayout    = null;
     private TextViewNamed     textImageName = null;
     private TextViewNamed     textSize    = null;
-    //    private TextViewNamed     textFormat    = null;
     private ImageButtonNamed  launchImage   = null;
     private ImageButtonNamed  deleteImage   = null;
     
@@ -39,10 +38,10 @@ public class OSImageView extends LinearLayout {
 
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( /*LayoutParams.FILL_PARENT*/Utils.getIntegerPreference("SCREENW", 320, ctx)-8, LayoutParams.WRAP_CONTENT);
+	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 320, ctx)-8, LayoutParams.WRAP_CONTENT);
 	setLayoutParams( params1 );
 	setBackgroundResource(R.drawable.rounded_corner_thin);
-	
+	setOnClickListener( (OnClickListener)ctx );
 
 	nameLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	nameLayout.setOrientation( LinearLayout.VERTICAL );
@@ -59,11 +58,6 @@ public class OSImageView extends LinearLayout {
 	textImageName.setTextColor( Color.parseColor("#333333") );
 	textImageName.setTypeface( null, Typeface.BOLD );
 	textImageName.setOnClickListener( (OnClickListener)ctx );
-// 	textPublic = new TextViewNamed( ctx, (OSImageView)this );
-// 	textPublic.setText("Public: " + (image.isPublic() ? "yes" : "no"));
-// 	textPublic.setTextColor( Color.parseColor("#333333") );
-// 	textPublic.setOnClickListener( (OnClickListener)ctx );
-// 	textPublic.setTextColor( Color.parseColor("#BBBBBB"));
 	
 	textSize = new TextViewNamed( ctx, (OSImageView)this );
 	textSize.setText( "Size: " + image.getSizeMB() + " MB" );

@@ -122,8 +122,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView( R.layout.osimagelist );
-	//bundle = getIntent().getExtras();
-	//OS = (ArrayList<OSImage>)bundle.getSerializable("OSIMAGES");
+	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
 	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
@@ -199,12 +198,20 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	}
 
 
-	if(v instanceof OSImageView || v instanceof TextViewNamed) {
+	if(v instanceof OSImageView || v instanceof TextViewNamed || v instanceof LinearLayoutNamed ) {
 	    OSImage osi = null;
-	    if(v instanceof OSImageView)
+	    if(v instanceof OSImageView) {
+		Utils.alert("Toccato OSImageView", this);
 		osi = ((OSImageView)v).getOSImage();
-	    if(v instanceof TextViewNamed)
+	    }
+	    if(v instanceof TextViewNamed) {
+		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
 		osi = ((TextViewNamed)v).getOSImageView().getOSImage();
+	    }
+	    if(v instanceof LinearLayoutNamed) {
+		//Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
+		osi = ((LinearLayoutNamed)v).getOSImageView().getOSImage();
+	    }
 	    TextView tv1 = new TextView(this);
 	    tv1.setText("Image name:");
 	    tv1.setTypeface( null, Typeface.BOLD );
