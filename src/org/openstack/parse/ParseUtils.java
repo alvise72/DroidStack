@@ -253,7 +253,7 @@ public class ParseUtils {
      */    
     public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
 
-	Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
+	//Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
 
 	Vector<Server> serverVector = new Vector();
 	String status        = "N/A";
@@ -267,8 +267,8 @@ public class ParseUtils {
 	String task          = "N/A";
 	//String privIP        = "N/A";
 	//String pubIP         = "N/A";
-	Vector<String> fixedIP = new Vector();
-	Vector<String> floatingIP = new Vector();
+	//Vector<String> fixedIP = new Vector();
+	//Vector<String> floatingIP = new Vector();
 	long creationTime    = 0;
 	int power            = -1;
 	
@@ -296,6 +296,8 @@ public class ParseUtils {
 		    computeNode = "N/A (admin privilege required)";
 		name = (String)server.getString("name");
 		task = (String)server.getString("OS-EXT-STS:task_state");
+		Vector<String> fixedIP = new Vector();//.clear();
+		Vector<String> floatingIP = new Vector();
 		try {
 		    JSONObject addresses = server.getJSONObject("addresses");
 
@@ -303,22 +305,25 @@ public class ParseUtils {
 		    while( keys.hasNext( ) ) {
 			String key = keys.next();
 			JSONArray arrayAddr = addresses.getJSONArray( key );
+			
+			floatingIP.clear();
 			for(int j = 0; j < arrayAddr.length(); ++j) {
+			    
 			    String ip = arrayAddr.getJSONObject(j).getString("addr");
 			    String type = arrayAddr.getJSONObject(j).getString("OS-EXT-IPS:type");
+
+			    Log.d("PARSEUTILS", "ip="+ip+" - type="+type);
+			    
 			    if(type.compareTo("fixed")==0)
 				fixedIP.add(ip);
 			    if(type.compareTo("floating")==0)
 				floatingIP.add(ip);
+			    // if(fixedIP.size()==0)
+			    // 	fixedIP.add("None");
+			    // if(floatingIP.size()==0)
+			    // 	floatingIP.add("None");
 			}
 		    }
-		    
-		    //	    privIP = (String)((JSONObject)user_addresses.getJSONObject(0)).getString("addr");
-		    //pubIP = null;
-		    //if(user_addresses.length()>1)
-		    //pubIP = (String)((JSONObject)user_addresses.getJSONObject(1)).getString("addr");
-
-		    
 
 		} catch(JSONException je) {}
 		try {
@@ -335,8 +340,9 @@ public class ParseUtils {
 		} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
 
 		try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
-
+		//Log.d("PARSEUTILS", fixedIP.toString());
 		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
+		//Log.d("PARSEUTILS", S.toString());
 		serverVector.add(S);
 	    }
  	} catch(org.json.JSONException je) {

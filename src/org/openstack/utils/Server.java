@@ -84,8 +84,8 @@ public class Server implements Serializable {
 	    ",status="+( getStatus() != null ? getStatus() : "N/A") + 
 	    ",task="+( getTask()!= null ? getStatus() : "N/A") +
 	    ",power=" + getPowerState() +
-	    ",private IP=" + ( getPrivateIP()!= null ? getPrivateIP() : "N/A") +
-	    ",public IP=" + ( getPublicIP()!= null ? getPublicIP() : "N/A") +
+	    ",private IP=" + ( getPrivateIP()!= null ? Utils.join(getPrivateIP(), ",") : "N/A") +
+	    ",public IP=" + ( getPublicIP()!= null ? Utils.join(getPublicIP(),",") : "N/A") +
 	    ",compute node=" + ( getComputeNode()!= null ? getComputeNode() : "N/A") +
 	    ",Key name=" + ( getKeyName()!= null ? getKeyName() : "N/A") +
 	    ",flavor=" + ( getFlavor()!= null ? getFlavor().getName() : "N/A") +

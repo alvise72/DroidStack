@@ -186,6 +186,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    if( v instanceof ServerView )
 		s = ((ServerView)v).getServer( );
 
+	    //Log.d("SERVERACTIVITY", s.toString());
+
 	    String[] secgrps = s.getSecurityGroupNames( );
 
 	    TextView tv1 = new TextView(this);
@@ -204,22 +206,35 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    TextView tv6 = new TextView(this);
 	    tv6.setText( s.getFlavor( ).getName() + " (" + (int)(s.getFlavor( ).getDISK()) + "GB, " +s.getFlavor( ).getVCPU( )+ " cpu, " + s.getFlavor( ).getRAM( ) + " ram)" );
 	    TextView tv7 = new TextView(this);
-	    tv7.setText("Private IP(s):");
+	    tv7.setText("Fixed IP(s):");
 	    tv7.setTypeface( null, Typeface.BOLD );
-	    TextView[] tv8_privip = new TextView[s.getPrivateIP().length];//(this);
-	    for(int i = 0; i<s.getPrivateIP().length; i++) {
-		tv8_privip[i] = new TextView(this);
-		tv8_privip[i].setText( s.getPrivateIP()[i] );
+	    TextView[] tv8_privip = null;
+	    if(s.getPrivateIP().length==0) {
+		tv8_privip = new TextView[1];
+		tv8_privip[0] = new TextView(this);
+		tv8_privip[0].setText( "None" );
+	    } else {
+		tv8_privip = new TextView[s.getPrivateIP().length];
+		for(int i = 0; i<s.getPrivateIP().length; i++) {
+		    tv8_privip[i] = new TextView(this);
+		    tv8_privip[i].setText( s.getPrivateIP()[i] );
+		}
 	    }
 
 	    TextView tv9 = new TextView(this);
-	    tv9.setText("Public IP(s):");
+	    tv9.setText("Floating IP(s):");
 	    tv9.setTypeface( null, Typeface.BOLD );
-	    TextView[] tv10_pubip = new TextView[s.getPublicIP().length];//(this);
-
-	    for(int i = 0; i<s.getPublicIP().length; i++) {
-		tv10_pubip[i] = new TextView(this);
-		tv10_pubip[i].setText( s.getPublicIP( )[i]  );
+	    TextView[] tv10_pubip = null;
+	    if(s.getPublicIP().length==0) {
+		tv10_pubip =new TextView[1];
+		tv10_pubip[0] = new TextView(this);
+		tv10_pubip[0].setText( "None" );
+	    } else {
+		tv10_pubip = new TextView[s.getPublicIP().length];
+		for(int i = 0; i<s.getPublicIP().length; i++) {
+		    tv10_pubip[i] = new TextView(this);
+		    tv10_pubip[i].setText( s.getPublicIP( )[i]  );
+		}
 	    }
 	    TextView tv11 = new TextView( this );
 	    tv11.setText("Key name:");
