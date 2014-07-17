@@ -7,6 +7,7 @@ import android.content.Context;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
+import org.openstack.views.NetworkView;
 
 public class ImageButtonNamed extends ImageButton implements Named {
 
@@ -20,6 +21,8 @@ public class ImageButtonNamed extends ImageButton implements Named {
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
+    private NetworkView relatedNetworkView = null;
+
     private int type;
 
     public ImageButtonNamed( Context ctx, UserView uv, int _type ) {
@@ -40,8 +43,15 @@ public class ImageButtonNamed extends ImageButton implements Named {
  	this.type = _type;
     }
 
+    public ImageButtonNamed( Context ctx, NetworkView iv, int _type ) {
+	super( ctx );
+	relatedNetworkView = iv;
+ 	this.type = _type;
+    }
+
     public UserView getUserView( ) { return relatedUserView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
+    public NetworkView getNetworkView( ) { return relatedNetworkView; }
     public int getType( ) { return type; }
 };

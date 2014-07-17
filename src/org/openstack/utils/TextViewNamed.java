@@ -7,13 +7,15 @@ import android.widget.ImageView;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
+import org.openstack.views.NetworkView;
 
 public class TextViewNamed extends TextView implements Named {
 
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
-    
+    private NetworkView relatedNetworkView = null;
+
     public TextViewNamed( Context ctx, UserView uv ) {
 	super( ctx );
 	relatedUserView = uv;
@@ -29,7 +31,13 @@ public class TextViewNamed extends TextView implements Named {
 	relatedOSImageView = sv;
     }
 
+    public TextViewNamed( Context ctx, NetworkView nv ) {
+	super( ctx );
+	relatedNetworkView = nv;
+    }
+
     public UserView getUserView( ) { return relatedUserView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
+    public NetworkView getNetworkView( ) { return relatedNetworkView; }
 };

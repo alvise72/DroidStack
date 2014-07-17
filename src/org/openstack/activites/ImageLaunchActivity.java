@@ -2,7 +2,6 @@ package org.openstack.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-//import android.os.Environment;
 
 import android.widget.LinearLayout;
 import android.widget.EditText;
@@ -41,8 +40,10 @@ import org.openstack.comm.RESTClient;
 
 import org.openstack.views.SecGroupView;
 import org.openstack.views.NetworkView;
+import org.openstack.views.UserView;
 
 import org.openstack.utils.CustomProgressDialog;
+import org.openstack.utils.EditTextNamed;
 import org.openstack.utils.SubNetwork;
 import org.openstack.utils.SecGroup;
 import org.openstack.utils.Network;
@@ -62,8 +63,6 @@ import java.util.concurrent.ExecutionException;
 import org.apache.http.conn.util.InetAddressUtils;
 
 import org.openstack.R;
-
-import org.openstack.views.UserView;
 
 public class ImageLaunchActivity extends Activity implements OnClickListener {
 
@@ -87,7 +86,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
 
     HashSet<String> selectedSecgroups = null;
-    HashSet<String> selectedNetworks = null;
+    //HashSet<String> selectedNetworks = null;
 
     private User currentUser = null;
 
@@ -96,6 +95,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private String imageID = null;
 
     private Button launchButton = null;
+
+    private Hashtable<String, EditTextNamed> mappingNetEditText = null;
+    //private Hashtable<String, String> mappingNetworkIP = null;
+    private Hashtable<String, String> selectedNetworks = null;
 
     @Override
     public void onClick( View v ) {
@@ -110,10 +113,19 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	
 	if(v instanceof NetworkView) {
 	    NetworkView nv = (NetworkView)v;
-	    if(nv.isChecked())
-		selectedNetworks.add( nv.getNetwork().getID() );
-	    else
-		selectedNetworks.remove(nv.getNetwork().getID());
+	    if(nv.isChecked()) {
+		String netID = nv.getNetwork().getID();
+		mappingNetEditText.get( netID ).setEnabled(true);
+		String netIP = mappingNetEditText.get( netID ).getText().toString();
+		selectedNetworks.put( netID, netIP );
+		
+		//mappingNetworkIP.put( netID, IP );
+	    }
+	    else {
+		String netID = nv.getNetwork().getID();
+		selectedNetworks.remove( netID );
+		//		mappingNetEditText.get( netID ).setEnabled(false);
+	    }
 	    return;
 	}
     }
@@ -154,10 +166,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
       
       selectedSecgroups = new HashSet();
-      selectedNetworks = new HashSet();
+      selectedNetworks = new Hashtable();
       
       launchButton = (Button)findViewById( R.id.launchButton );
-      
+      mappingNetEditText = new Hashtable();
+      selectedNetworks = new Hashtable();
+
       AsyncTaskGetOptions task = new AsyncTaskGetOptions();
       task.execute( currentUser );
   }
@@ -262,8 +276,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
       String adminPass = null;
-      if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
-	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
+//       if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
+// 	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
       
       task.execute( instanceName, 
 		    imageID,
@@ -271,8 +285,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    flavors[j].getID(),
 		    ""+count, 
 		    Utils.join( selectedSecgroups, "," ),
-		    Utils.join( selectedNetworks, "," ),
-		    null,
 		    adminPass);
   }
 
@@ -368,6 +380,13 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    NetworkView nv = new NetworkView( networks[i], ImageLaunchActivity.this );
 		    nv.setOnClickListener( ImageLaunchActivity.this );
 		    networksL.addView( nv );
+		    EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
+		    TextView tv = new TextView(  ImageLaunchActivity.this );
+		    tv.setText("Specify IP (optional)");
+		    networksL.addView( tv );
+		    networksL.addView( etIP );
+		    etIP.setEnabled(false);
+		    mappingNetEditText.put( nv.getNetwork().getID(), etIP );
 		}
 
 		Hashtable<String, Flavor> flavorTable = ParseUtils.parseFlavors( jsonBufFlavor );
@@ -425,9 +444,9 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      */
     protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
     {
-     	private  String   errorMessage  = null;
-	private  boolean  hasError      = false;
-	private  String jsonBuf         = null;
+     	private  String  errorMessage  = null;
+	private  boolean hasError      = false;
+	private  String  jsonBuf       = null;
 
 	@Override
 	protected Void doInBackground( String... args ) 
@@ -456,6 +475,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		}
 	    }
 
+	    
+
 	    try {
 		jsonBuf = RESTClient.requestInstanceCreation( U.getEndpoint(),
 							      U.getTenantID(),
@@ -468,8 +489,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      Integer.parseInt(args[4]),
 							      args[5],
 							      args[6],
-							      args[7],
-							      args[8],
+							      ImageLaunchActivity.this.selectedNetworks,
 							      Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this));
 	    } catch(Exception e) {
 		e.printStackTrace( );

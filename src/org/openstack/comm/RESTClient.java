@@ -27,6 +27,8 @@ import java.lang.Thread;
 import java.util.Date;
 import java.util.Vector;
 import java.util.Iterator;
+import java.util.Hashtable;
+
 
 import org.apache.http.HttpStatus;
 
@@ -400,7 +402,7 @@ public class RESTClient {
     /**
      *
      *
-     * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
+     * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"fixed_ip": "10.0.1.29", "uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
      *
      GOOD:
 {
@@ -468,9 +470,10 @@ BAD:
 						  String flavorID,
 						  int count, 
 						  String _secgrpIDs,
-						  String _networkIDs,
-						  String FixedIP,
 						  String adminPass,
+						  Hashtable<String, String> netID_fixedIP,
+						  // String _networkIDs,
+						  // String FixedIP,
 						  String filesDir ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
@@ -503,10 +506,10 @@ BAD:
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 
-	String fixedip="";
-	if(FixedIP != null) {
-	    fixedip = ",\"fixed_ip\": \"" + FixedIP + "\"";
-	}
+// 	String fixedip="";
+// 	if(FixedIP != null) {
+// 	    fixedip = ",\"fixed_ip\": \"" + FixedIP + "\"";
+// 	}
 
 	String userdata="";
 	if(adminPass!=null) {
@@ -537,20 +540,35 @@ BAD:
 	    "\", \"key_name\": \"" + key_name + 
 	    "\", \"flavorRef\": \"" + flavorID + 
 	    "\", \"max_count\": " + count + 
-	    ", \"min_count\": " + count + userdata + fixedip + "}}";
+	    ", \"min_count\": " + count + userdata + "}}";
 	// ", \"networks\": [{\"uuid\": \"" + netID + "\"" + fixedip + "}]}}";
 
 	JSONObject obj = null;
 	String[] secgrpIDs = _secgrpIDs.split(",");
-	String[] networkIDs = _networkIDs.split(",");
+	//String[] networkIDs = _networkIDs.split(",");
 	try {
 	    obj = new JSONObject( _data );
 	    JSONArray secgs = new JSONArray();
 	    JSONArray nets = new JSONArray();
 	    for(int i = 0; i<secgrpIDs.length; ++i)
 		secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
-	    for(int i = 0; i<networkIDs.length; ++i)
-		nets.put( new JSONObject("{\"uuid\": \"" + networkIDs[i] + "\"}") );
+
+
+
+	    {
+		Iterator<String> it = netID_fixedIP.keySet().iterator();
+		while( it.hasNext() ) {
+		    String netID = it.next( );
+		    String netIP = netID_fixedIP.get( netID );
+		    if( netIP != null && netIP.length()!=0) 
+			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
+		    else
+			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
+		}
+	    }
+
+
+
 	    obj.getJSONObject("server").put("security_groups", secgs);
 	    obj.getJSONObject("server").put("networks", nets);// );
 	    
@@ -560,7 +578,7 @@ BAD:
 	}
 	
 	String data = obj.toString( );
-	//	Log.d("RESTClient.requestInstanceCreation","data="+data);
+	Log.d("RESTClient.requestInstanceCreation","data="+data);
 	OutputStreamWriter out = null;
 	try {
 	    out = new OutputStreamWriter(conn.getOutputStream());
