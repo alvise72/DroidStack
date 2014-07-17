@@ -18,4 +18,5 @@ public class NetworkView extends CheckBox {
     }
     
     public Network getNetwork( ) { return net; }
+    
 }

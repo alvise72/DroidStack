@@ -9,8 +9,6 @@ public class Network {
     private boolean up;
     private boolean ext;
     private String tenantID;
-    // private String fixedIP;
-    //private String address;
     
     public Network( String status, String name, String ID, SubNetwork[] subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
 	this.status = status;
