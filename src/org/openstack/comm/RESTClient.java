@@ -404,62 +404,7 @@ public class RESTClient {
      *
      * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"fixed_ip": "10.0.1.29", "uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
      *
-     GOOD:
-{
-   "server":{
-      "name":"test",
-      "imageRef":"d327b4fd-42a3-45e7-9b39-311c4dafbfe7",
-      "flavorRef":"b639f517-c01f-483f-a8e2-c9ee3370ac36",
-      "user_data":"IyEvYmluL2Jhc2gKcGFzc3dkIC1kIHJvb3QKZWNobyAiYWx2aXNlIiA+L3RtcC9wd2QKY2F0IC90bXAvcHdkIHwgcGFzc3dkIC0tc3RkaW4gcm9vdAo=",
-      "max_count":1,
-      "min_count":1,
-      "networks":[
-         {
-            "uuid":"e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"
-         },
-         {
-            "uuid":"9876d8aa-cc3a-4eb5-b764-25dff6bfc375"
-         }
-      ],
-      "security_groups":[
-         {
-            "name":"cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"
-         },
-         {
-            "name":"848f1b29-c793-415c-8f3f-10836c1f99f7"
-         }
-      ]
-   }
-}
-BAD:
-{
-   "server":{
-      "networks":[
-         {
-            "uuid":"9876d8aa-cc3a-4eb5-b764-25dff6bfc375"
-         },
-         {
-            "uuid":"e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"
-         }
-      ],
-      "user_data":"IyEvYmluL2Jhc2gKcGFzc3dkIC1kIHJvb3QKZWNobyAiYWx2aXNlIiA+L3RtcC9wd2QKY2F0IC90bXAvcHdkIHwgcGFzc3dkIC0tc3RkaW4gcm9vdAoNbSAtZiAvdG1wL3B3ZAo=",
-      "key_name":"lxadorigo",
-      "imageRef":"e4ee5872-84fa-4678-8163-31bf3d2a9afb",
-      "name":"aaa",
-      "max_count":1,
-      "min_count":1,
-      "security_groups":[
-         {
-            "name":"848f1b29-c793-415c-8f3f-10836c1f99f7"
-         },
-         {
-            "name":"cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"
-         }
-      ],
-      "flavorRef":"b639f517-c01f-483f-a8e2-c9ee3370ac36"
-   }
-}
-     */
+
     public static String requestInstanceCreation( String endpoint, 
 						  String tenantid,
 						  String tenantname, 
