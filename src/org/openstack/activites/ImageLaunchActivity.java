@@ -116,14 +116,15 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    if(nv.isChecked()) {
 		String netID = nv.getNetwork().getID();
 		mappingNetEditText.get( netID ).setEnabled(true);
-		String netIP = mappingNetEditText.get( netID ).getText().toString();
-		selectedNetworks.put( netID, netIP );
+		//		String netIP = mappingNetEditText.get( netID ).getText().toString();
+		//		selectedNetworks.put( netID, netIP );
 		
 		//mappingNetworkIP.put( netID, IP );
 	    }
 	    else {
 		String netID = nv.getNetwork().getID();
-		selectedNetworks.remove( netID );
+		mappingNetEditText.get( netID ).setEnabled(false);
+		//		selectedNetworks.remove( netID );
 		//		mappingNetEditText.get( netID ).setEnabled(false);
 	    }
 	    return;
@@ -166,7 +167,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
       
       selectedSecgroups = new HashSet();
-      selectedNetworks = new Hashtable();
       
       launchButton = (Button)findViewById( R.id.launchButton );
       mappingNetEditText = new Hashtable();
@@ -260,7 +260,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	  return;
       }
 
-      if(selectedNetworks.size()==0) {
+      if(mappingNetEditText.size()==0) {
 	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
 	  return;
       }
@@ -271,7 +271,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
-      progressDialogWaitStop.show();
+     
       currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
@@ -279,6 +279,30 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 //       if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
 // 	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
       
+      
+      selectedNetworks.clear();
+      Iterator<String> it = mappingNetEditText.keySet().iterator();
+      while(it.hasNext()) {
+	  String netID = it.next();
+	  if(mappingNetEditText.get( netID ).isEnabled()==false)
+	      continue;
+	  String netIP = mappingNetEditText.get( netID ).getText().toString();
+	  selectedNetworks.put( netID, netIP );
+      }
+      it = mappingNetEditText.keySet().iterator();
+      while(it.hasNext()) {
+	  String netID = it.next();
+	  if(mappingNetEditText.get( netID ).isEnabled()==false)
+	      continue;
+	  String netIP = selectedNetworks.get( netID );
+	  Log.d("IMAGELAUNCH", "Checking netid="+netID+" - netIP="+netIP);
+	  String regex = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$";
+	  if( netIP != null && netIP.length()!= 0 && netIP.matches( regex ) == false) {
+	      Utils.alert("Specified IP [" + netIP + "] has incorrect format.", this);
+	      return;
+	  }
+      }
+      progressDialogWaitStop.show();
       task.execute( instanceName, 
 		    imageID,
 		    keypairs[k].getName(), 

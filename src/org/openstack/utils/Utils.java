@@ -376,21 +376,7 @@ public class Utils {
 					    LinearLayout.LayoutParams.FILL_PARENT);
 	LinearLayout l = new LinearLayout(ctx);
 	l.setLayoutParams( lp );
-	//ScrollView sv = new ScrollView(ctx);
-	//sv.setLayoutParams( lp );
 	l.addView(sv);
-	// TextView tv1 = new TextView(ctx);
-	// tv1.setText("Image name:");
-	// TextView tv1 = new TextView(ctx);
-	// tv1.setText("Image name:");
-	// TextView tv1 = new TextView(ctx);
-	// tv1.setText("Image name:");
-	// TextView tv1 = new TextView(ctx);
-	// tv1.setText("Image name:");
-	// TextView tv1 = new TextView(ctx);
-	// tv1.setText("Image name:");
-	// TextView tv1 = new TextView(ctx);
-	// tv1.setText("Image name:");
 	alert.setView(l); 
         alert.show();
     }
