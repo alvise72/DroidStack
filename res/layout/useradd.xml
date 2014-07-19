@@ -19,6 +19,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Endpoint (only hostname):"
+		android:textSize="14sp"
+		android:textStyle="bold"
 		android:ems="10" />
 		
         <EditText
@@ -26,6 +28,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text=""
+		    android:textSize="14sp"
                     android:ems="10" >
           <requestFocus />
         </EditText>
@@ -33,6 +36,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Tenant's name:"
+		android:textStyle="bold"
+		android:textSize="14sp"
 		android:ems="10" />
 		
         <EditText
@@ -40,28 +45,35 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text=""
+		    android:textSize="14sp"
                     android:ems="10" />
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Username:"
+		android:textStyle="bold"
+		android:textSize="14sp"
 		android:ems="10" />	    
         <EditText
                     android:id="@+id/usernameET"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text=""
+		    android:textSize="14sp"
                     android:ems="10" />
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Password:"
+		android:textStyle="bold"
+		android:textSize="14sp"
 		android:ems="10" />
         <EditText
                     android:id="@+id/passwordET"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+		    android:textSize="14sp"
                     android:text=""
                     android:inputType="textPassword" />
         <LinearLayout
@@ -72,6 +84,7 @@
                         android:id="@+id/usesslCB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+			android:textSize="14sp"
                         android:text="@string/USESSL" />
         </LinearLayout>
         <LinearLayout
@@ -89,6 +102,7 @@
   	    android:shadowDx="3"
      	    android:shadowDy="3"
      	    android:shadowRadius="3"
+	    android:textSize="14sp"
      	    android:text="@string/ADD"
 	    android:onClick="add" />
 	              
@@ -102,6 +116,7 @@
      	    android:shadowDy="3"
      	    android:shadowRadius="3"
      	    android:text="@string/RESETFIELDS"
+	    android:textSize="14sp"
 	    android:onClick="reset" />
         </LinearLayout></LinearLayout>
       </ScrollView>

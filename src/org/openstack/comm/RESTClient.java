@@ -618,11 +618,19 @@ public class RESTClient {
 		conn.setRequestProperty( pair.first, pair.second );
 	    }
 	}
-	
+	conn.setReadTimeout(10000 /* milliseconds */);
+        conn.setConnectTimeout(15000 /* milliseconds */);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
 	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
+	}
+
+	conn.setDoInput(true);
+	try {
+	    conn.connect( );
+	} catch(IOException ioe) {
+	    throw new RuntimeException("HttpURLConnection.connect: "+ioe.getMessage());
 	}
 
 	BufferedInputStream inStream = null;

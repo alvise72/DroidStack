@@ -24,6 +24,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Instance name:"
+		android:textSize="14sp"
+		android:textStyle="bold"
 		android:ems="10" />
 		
         <EditText
@@ -31,6 +33,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text=""
+		android:textSize="14sp"
                 android:ems="10" >
                 <requestFocus />
         </EditText>
@@ -38,6 +41,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Flavor:"
+		android:textSize="14sp"
+		android:textStyle="bold"
 		android:ems="10" />
 	<Spinner
 	    android:id="@+id/flavorSP"
@@ -47,12 +52,15 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Count:"
+		android:textStyle="bold"
+		android:textSize="14sp"
 		android:ems="10" />	    
         <EditText
                     android:id="@+id/countET"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="1"
+		    android:textSize="14sp"
                     android:inputType="number"
                     android:ems="10" />
 <!--
@@ -73,6 +81,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="KeyPair:"
+		android:textSize="14sp"
+		android:textStyle="bold"
 		android:ems="10" />
 	<Spinner
 	    android:id="@+id/keypairSP"
@@ -83,6 +93,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Network:"
+		android:textStyle="bold"
+		android:textSize="14sp"
 		android:ems="10" />
 
 	<LinearLayout
@@ -121,6 +133,8 @@
 	      android:layout_width="fill_parent"
 	      android:layout_height="wrap_content"
 	      android:text="Security groups:"
+	      android:textSize="14sp"
+	      android:textStyle="bold"
 	      android:ems="10" />       
 	</LinearLayout>
 	
@@ -142,6 +156,7 @@
      	    android:shadowDy="3"
      	    android:shadowRadius="3"
      	    android:text="Launch"
+	    android:textSize="14sp"
 	    android:onClick="launch" />
 	    
         </LinearLayout>

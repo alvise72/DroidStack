@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="Instances"
 		    android:textColor="#555555"
-                    android:textSize="16dip" />
+                    android:textSize="16sp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:text="Virtual CPU"
 		    android:textColor="#555555"
-                    android:textSize="16dip" />
+                    android:textSize="16sp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -186,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:text="Memory (MB)"
 		    android:textColor="#555555"
-                    android:textSize="16dip" />
+                    android:textSize="16sp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -251,7 +251,7 @@
                     android:layout_height="wrap_content"
                     android:text="Floating IP"
 		    android:textColor="#555555"
-                    android:textSize="16dip" />
+                    android:textSize="16sp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -302,7 +302,7 @@
             android:indeterminate="false"
             android:max="10"
             android:progress="8"
-            android:textSize="14dip"
+            android:textSize="14sp"
             android:progressDrawable="@drawable/progressbar" />
 
         <LinearLayout
@@ -316,7 +316,7 @@
                     android:layout_height="wrap_content"
                     android:text="Security Groups"
 		    android:textColor="#555555"
-		    android:textSize="16dip"
+		    android:textSize="16sp"
                     />
 
             <Space

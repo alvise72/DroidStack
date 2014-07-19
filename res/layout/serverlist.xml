@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Nova Instances:"
 	android:textColor="#333333"
+	android:textSize="12sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
   <ScrollView

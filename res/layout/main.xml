@@ -23,7 +23,7 @@
         android:text="@string/USERS"
         android:layout_gravity="center_vertical"
         android:padding="10dp"
-	android:textSize="18dp"
+	android:textSize="18sp"
 	android:drawableLeft="@drawable/users"
         android:onClick="login"/>
     <View   
@@ -36,7 +36,7 @@
         android:text="@string/OVERVIEW"
         android:layout_gravity="center_vertical"
         android:padding="10dp"
-	android:textSize="18dp"
+	android:textSize="18sp"
 	android:drawableLeft="@drawable/overview"
         android:onClick="overview"/>
     <View   
@@ -61,7 +61,7 @@
         android:layout_gravity="center_vertical"
         android:padding="10dp"
         android:onClick="glance"
-	android:textSize="18dp"
+	android:textSize="18sp"
 	
 	android:drawableLeft="@drawable/openstack"/>
         <View   
@@ -74,7 +74,7 @@
         android:text="@string/INSTANCES"
         android:layout_gravity="center_vertical"
         android:padding="10dp"
-	android:textSize="18dp"
+	android:textSize="18sp"
 	android:drawableLeft="@drawable/terminal"
         android:onClick="nova"/>
     <View   

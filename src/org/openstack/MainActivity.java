@@ -112,6 +112,11 @@ public class MainActivity extends Activity
 	// spaceR.setMinimumWidth( 4 );
 
 	LayoutParams lp = new LinearLayout.LayoutParams((SCREENW-12)/2, (SCREENH-14)/6);
+	
+	// gl.setTextSize(SCREENW/36);
+	// su.setTextSize(SCREENW/36);
+	// ov.setTextSize(SCREENW/36);
+	// no.setTextSize(SCREENW/36);
 	su.setLayoutParams( lp );
 	ov.setLayoutParams( lp );
 	gl.setLayoutParams( lp );
