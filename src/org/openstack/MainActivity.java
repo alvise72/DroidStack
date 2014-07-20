@@ -23,48 +23,47 @@ import android.view.ViewGroup.LayoutParams;
 import android.util.Log;
 
 import android.widget.LinearLayout;
-import android.widget.Button;
-import android.widget.TextView;
+//import android.widget.Button;
+//import android.widget.TextView;
 import android.widget.Toast;
 
-import android.content.res.Configuration;
+//import android.content.res.Configuration;
 
-import java.io.IOException;
-import java.io.File;
-import java.util.ArrayList;
+//import java.io.IOException;
+//import java.io.File;
+//import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.Set;
+//import java.util.Iterator;
+//import java.util.Vector;
+//import java.util.Set;
 
 import org.openstack.R;
 
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-import org.openstack.utils.Named;
-import org.openstack.utils.OSImage;
-import org.openstack.utils.UserException;
-import org.openstack.utils.CustomProgressDialog;
+//import org.openstack.utils.Named;
+//import org.openstack.utils.OSImage;
+//import org.openstack.utils.UserException;
+//import org.openstack.utils.CustomProgressDialog;
 
-import org.openstack.comm.*;
-import org.openstack.parse.ParseUtils;
-import org.openstack.parse.ParseException;
-import org.openstack.utils.Flavor;
-import org.openstack.utils.Server;
-//import org.openstack.utils.Quota;
+//import org.openstack.comm.*;
+//import org.openstack.parse.ParseUtils;
+//import org.openstack.parse.ParseException;
+//import org.openstack.utils.Flavor;
+//import org.openstack.utils.Server;
 
 import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesActivity;
 import org.openstack.activities.OverViewActivity;
-import org.openstack.utils.CustomProgressDialog;
+//import org.openstack.utils.CustomProgressDialog;
 
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity
 {
-    private Hashtable<String, OSImage> osimages = null;
-    private CustomProgressDialog progressDialogWaitStop = null;
+    //    private Hashtable<String, OSImage> osimages = null;
+    //    private CustomProgressDialog progressDialogWaitStop = null;
     private int SCREENH = 0;
     private int SCREENW = 0;
     private static boolean downloading_image_list = false;
@@ -89,8 +88,8 @@ public class MainActivity extends Activity
 	Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
 	Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
 
-	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+	//	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+	//        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
 
 	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
@@ -111,7 +110,7 @@ public class MainActivity extends Activity
     @Override
     public void onDestroy( ) {
       super.onDestroy( );
-      progressDialogWaitStop.dismiss();
+      //      progressDialogWaitStop.dismiss();
     }
 
     /**
@@ -211,63 +210,9 @@ public class MainActivity extends Activity
 	    return;
 	}
 
-	// progressDialogWaitStop.show();
-	// downloading_image_list = true;
-      
-	// User U = null;
-	// try {
-	//     U = User.fromFileID( selectedUser );
-	// } catch(Exception e) {
-	//     Utils.alert("ERROR: "+e.getMessage( ), this);
-	//     return;
-	// }
 	Class<?> c = (Class<?>)ServersActivity.class;
 	Intent I = new Intent( MainActivity.this, c );
 	startActivity(I);
 	
-	//	AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-	//task.execute(U);
-
     }
-
-    /**
-     *
-     *
-     *
-     *
-     */
-    // public void showServerList( String jsonBuffer, String jsonBufferFlavor, String username ) 
-    // {
-    // 	Vector<Server> servers = null;
-    // 	try {
-    // 	    servers = ParseUtils.parseServers( jsonBuffer, username );
-    // 	    Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-
-    // 	    Iterator<Server> it = servers.iterator();
-    // 	    while(it.hasNext()) {
-    // 		Server s = it.next();
-    // 		Flavor F = flavors.get( s.getFlavorID( ) );
-    // 		if( F != null)
-    // 		    s.setFlavor( F );
-    // 	    }
-
-    // 	} catch( ParseException pe ) {
-    // 	    Utils.alert("ERROR: "+pe.getMessage( ), this);
-    // 	}
-
-    // 	if(servers!=null) {
-    // 	    Class<?> c = (Class<?>)ServersActivity.class;
-    // 	    Intent I = new Intent( MainActivity.this, c );
-    // 	    I.putExtra("SERVERS", servers );//StringArrayListExtra("SERVERS", 
-    // 	    startActivity(I);
-    // 	} else {
-    // 	    Utils.alert("Vector<Server> servers is NULL !!", this );
-    // 	}
-    // }
-
-
-    
-
-
-
 }
