@@ -27,8 +27,7 @@
 
         <activity android:launchMode="singleInstance" android:name="org.openstack.MainActivity"
                   android:label="DroidStack"
-		  android:icon="@drawable/openstack"
-		  android:screenOrientation="portrait">
+		  android:icon="@drawable/openstack">
           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -52,8 +51,7 @@
 	    android:name="org.openstack.activities.OSImagesActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Manage Glance Images"
-	   android:parentActivityName="org.openstack.MainActivity"
-	    android:screenOrientation="portrait"
+	    android:parentActivityName="org.openstack.MainActivity"
 	    android:configChanges="keyboardHidden|orientation"
 	  />
 
@@ -61,7 +59,6 @@
             android:name="org.openstack.activities.OverViewActivity" 
             android:launchMode="singleInstance" 
             android:label="Usage Overview"
-            android:screenOrientation="portrait"
 	   android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
           />
@@ -70,7 +67,6 @@
             android:name="org.openstack.activities.UserAddActivity" 
             android:launchMode="singleInstance" 
             android:label="Add new User"
-            android:screenOrientation="portrait"
 	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
           />
@@ -79,7 +75,6 @@
             android:name="org.openstack.activities.ServersActivity" 
             android:launchMode="singleInstance" 
             android:label="Manage Nova Instances"
-            android:screenOrientation="portrait"
 	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
           />
@@ -88,7 +83,6 @@
             android:name="org.openstack.activities.ImageLaunchActivity"
             android:launchMode="singleInstance"
             android:label="Manage Nova Instances"
-            android:screenOrientation="portrait"
 	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="keyboardHidden|orientation"
            />

@@ -98,29 +98,8 @@ public class MainActivity extends Activity
 	SCREENW = d.getWidth();
 	Utils.putIntegerPreference("SCREENH", SCREENH, this);
 	Utils.putIntegerPreference("SCREENW", SCREENW, this);
-	//	Utils.createDir( Environment.getExternalStorageDirectory() + "/DroidStack/users/" );
 
-	Button su = (Button)findViewById( R.id.LOGIN );
-	Button ov = (Button)findViewById( R.id.OVERVIEW );
-	Button gl = (Button)findViewById( R.id.GLANCE );
-	Button no = (Button)findViewById( R.id.NOVA );
-	// View spaceL = findViewById(R.id.firstRowLeft);
-	// View spaceC = findViewById(R.id.firstRowCenter);
-	// View spaceR = findViewById(R.id.firstRowRight);
-	// spaceL.setMinimumWidth( 4 );
-	// spaceC.setMinimumWidth( 4 );
-	// spaceR.setMinimumWidth( 4 );
-
-	LayoutParams lp = new LinearLayout.LayoutParams((SCREENW-12)/2, (SCREENH-14)/6);
 	
-	// gl.setTextSize(SCREENW/36);
-	// su.setTextSize(SCREENW/36);
-	// ov.setTextSize(SCREENW/36);
-	// no.setTextSize(SCREENW/36);
-	su.setLayoutParams( lp );
-	ov.setLayoutParams( lp );
-	gl.setLayoutParams( lp );
-	no.setLayoutParams( lp );
     }
     
     /**
@@ -145,8 +124,22 @@ public class MainActivity extends Activity
     public void onResume( ) {
       super.onResume( );
       
+      LinearLayout first_left = (LinearLayout)findViewById( R.id.first_left );
+      LinearLayout first_right = (LinearLayout)findViewById( R.id.first_right );
+      LinearLayout second_left = (LinearLayout)findViewById( R.id.second_left );
+      LinearLayout second_right = (LinearLayout)findViewById( R.id.second_right );
+
+      LayoutParams lp = first_left.getLayoutParams();
+
+      lp.width = SCREENW/2;
+	
+      first_left.setLayoutParams( lp );
+      first_right.setLayoutParams( lp );
+      second_left.setLayoutParams( lp );
+      second_right.setLayoutParams( lp );
+	
       if( !Utils.internetOn( this ) )
-        Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
+	  Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
       
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
