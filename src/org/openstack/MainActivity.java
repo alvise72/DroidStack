@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 
 import android.content.Intent;
 import android.content.Context;
+import android.content.DialogInterface;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -137,8 +138,35 @@ public class MainActivity extends Activity
       second_left.setLayoutParams( lp );
       second_right.setLayoutParams( lp );
 	
-      if( !Utils.internetOn( this ) )
-	  Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
+      if( !Utils.internetOn( this ) ) {
+
+	  AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	  builder.setMessage( "The device is NOT connected to Internet. This App cannot work." );
+	  builder.setCancelable(false);
+	    
+	  DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int id) {
+		      finish( );
+		  }
+	      };
+
+		// DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+		// 	public void onClick(DialogInterface dialog, int id) {
+		// 	    dialog.cancel( );
+		// 	}
+		//     };
+
+	  builder.setPositiveButton("OK", yesHandler );
+	  //builder.setNegativeButton("No", noHandler );
+            
+	  AlertDialog alert = builder.create();
+	  alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+				      WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	  alert.show();
+
+	  //Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
+	  //finish( );
+      }
       
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       if(selectedUser.length()!=0) {
