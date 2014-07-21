@@ -193,6 +193,21 @@ public class RESTClient {
      *
      *
      */
+//     public static String requestServerInfo( String endpoint,
+// 					    String token,
+// 					    String serverID ) throws RuntimeException  
+//     {
+// 	return sendGETRequest( "http://" + endpoint + ":9292/v2/images", token, null );   	
+//     }
+
+    /**
+     *
+     *
+     * curl -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -H "Content-Type: application/json" http://cloud-areapd.pd.infn.it:9292/v2/images
+     *
+     *
+     *
+     */
     public static String requestImages( String endpoint,
 					String token ) throws RuntimeException  
     {
@@ -618,7 +633,7 @@ public class RESTClient {
 		conn.setRequestProperty( pair.first, pair.second );
 	    }
 	}
-	conn.setReadTimeout(10000 /* milliseconds */);
+	conn.setReadTimeout(20000 /* milliseconds */);
         conn.setConnectTimeout(15000 /* milliseconds */);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");

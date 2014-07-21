@@ -36,12 +36,17 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import java.util.Vector;
+import java.util.Iterator;
+import java.util.Hashtable;
+
 
 import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Quota;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Base64;
+import org.openstack.utils.Server;
+import org.openstack.utils.Flavor;
 import org.openstack.utils.SecGroup;
 import org.openstack.utils.CustomProgressDialog;
 
@@ -128,35 +133,53 @@ public class OverViewActivity extends Activity {
 	progressDialogWaitStop.dismiss();
     }
   
-    private void refreshView( Quota Q, Vector<Pair<String, String>> fips, SecGroup[] secgs ) {
+    private void refreshView( Quota Q,
+			      Vector<Server> servers, 
+			      Hashtable<String, Flavor> flavors,
+			      Vector<Pair<String, String>> fips, 
+			      SecGroup[] secgs ) 
+    {
 	
-	//Quota Q = ParseUtils.parseQuota( jsonBuf );
-	((TextView)findViewById(R.id.vmusageTV)).setText("" + Q.getCurrentInstances() );
+	Iterator<Server> it = servers.iterator();
+	int totMem = 0;
+	int totVCPU = 0;
+	//int totFIPs = 0;
+	int totInstances = 0;
+	//int totSecGroups = 0;
+	while( it.hasNext( ) ) {
+	    Server S = it.next( );
+	    Flavor F = flavors.get( S.getFlavorID( ) );
+	    totMem = F.getRAM( );
+	    totVCPU = F.getVCPU( );
+	    totInstances++;
+	    //totFIPs += (S.getPublicIP( )!=null ? S.getPublicIP( ).length : 0);
+	    // totSecGroups += (S.getSecurityGroupNames( )!=null ? S.getSecurityGroupNames( ).length : 0);
+	}
+
+	((TextView)findViewById(R.id.vmusageTV)).setText("" + totInstances );
 	((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
 	((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
-	((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( Q.getCurrentInstances() );
+	((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( totInstances);
 	
-	((TextView)findViewById(R.id.cpuusageTV)).setText("" + Q.getCurrentCPU() );
+	((TextView)findViewById(R.id.cpuusageTV)).setText("" + totVCPU );
 	((TextView)findViewById(R.id.cpuusageMAXTV)).setText("/" + Q.getMaxCPU() );
 	((ProgressBar)findViewById(R.id.cpuusagePB)).setMax( Q.getMaxCPU() );
-	((ProgressBar)findViewById(R.id.cpuusagePB)).setProgress( Q.getCurrentCPU() );
+	((ProgressBar)findViewById(R.id.cpuusagePB)).setProgress( totVCPU );
 	
-	((TextView)findViewById(R.id.ramusageTV)).setText("" + Q.getCurrentRAM( ) );
+	((TextView)findViewById(R.id.ramusageTV)).setText("" + totMem );
 	((TextView)findViewById(R.id.ramusageMAXTV)).setText("/" + Q.getMaxRAM( ) );
 	((ProgressBar)findViewById(R.id.ramusagePB)).setMax( Q.getMaxRAM( ) );
-	((ProgressBar)findViewById(R.id.ramusagePB)).setProgress( Q.getCurrentRAM( ) );
+	((ProgressBar)findViewById(R.id.ramusagePB)).setProgress( totMem );
 
-	
-
-	((TextView)findViewById(R.id.fipusageTV)).setText("" + fips.size() );
+	((TextView)findViewById(R.id.fipusageTV)).setText("" + (fips!=null ? fips.size() : 0) );
 	((TextView)findViewById(R.id.fipusageMAXTV)).setText("/" + Q.getMaxFloatingIP( ) );
 	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
-	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips.size() );
+	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips!=null ? fips.size() : 0 );
 	
-	((TextView)findViewById(R.id.segusageTV)).setText("" + secgs.length );
+	((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.length : 0) );
 	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
 	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs.length );
+	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.length : 0 );
     }
 
     /**
@@ -176,11 +199,13 @@ public class OverViewActivity extends Activity {
      */
     protected class AsyncTaskQuota extends AsyncTask<User, String, String>
     {
-     	private  String   errorMessage  = null;
-	private  boolean  hasError      = false;
-	private  String   jsonBuf       = null;
-	private  String   jsonBufFIPs   = null;
-	private  String   jsonBufSecgs  = null;
+     	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+	private  String   jsonBuf          = null;
+	private  String   jsonBufQuota     = null;
+	private  String   jsonBufFIPs      = null;
+	private  String   jsonBufSecgs     = null;
+	private  String   jsonBufferFlavor = null;
 	User U = null;
 
 	@Override
@@ -211,9 +236,16 @@ public class OverViewActivity extends Activity {
 	    }
 
 	    try {
-		jsonBuf = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBufQuota = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		//servers = parseServers( jsonBuf );
+		//Iterator<String> it = servers.iterator();
+		//while( it.hasNext( ) ) {
+		//    Flavor
+		//}
 		jsonBufFIPs = RESTClient.requestFloatingIPs( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 		jsonBufSecgs = RESTClient.requestSecGroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken() );
+		jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -241,9 +273,11 @@ public class OverViewActivity extends Activity {
 	    
 	    try {
 		
-		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBuf ), 
+		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
+						   ParseUtils.parseServers( jsonBuf ), 
+						   ParseUtils.parseFlavors( jsonBufferFlavor ),
 						   ParseUtils.parseFloatingIPs(jsonBufFIPs),
-						   ParseUtils.parseSecGroups(jsonBufSecgs  ) );
+						   ParseUtils.parseSecGroups(jsonBufSecgs ) );
 	    } catch(ParseException pe) {
 		Utils.alert( pe.getMessage( ), OverViewActivity.this );
 	    }

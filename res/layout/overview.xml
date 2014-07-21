@@ -38,7 +38,7 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="10"
-            android:progress="3"
+            android:progress="0"
             
             android:progressDrawable="@drawable/progressbar" />
 
@@ -106,7 +106,7 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="10"
-            android:progress="1"
+            android:progress="0"
             
             android:progressDrawable="@drawable/progressbar" />
 
@@ -171,7 +171,7 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="10"
-            android:progress="9"
+            android:progress="0"
             
             android:progressDrawable="@drawable/progressbar" />
 	   
@@ -236,7 +236,7 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="10"
-            android:progress="5"
+            android:progress="0"
             
             android:progressDrawable="@drawable/progressbar" />
 	   
@@ -301,7 +301,7 @@
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="10"
-            android:progress="8"
+            android:progress="0"
             android:textSize="14sp"
             android:progressDrawable="@drawable/progressbar" />
 
