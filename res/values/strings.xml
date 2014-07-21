@@ -30,4 +30,6 @@
     <string name="DELETEDINSTSANCES">Instances succesfully delete. Update window to refresh view.</string>
     <string name="SOMEDELETIONFAILED">Some instance hasn\'t been found in the server (probably was already in deleting state)...\nDeletion\'s finished, refresh the window.</string>
     <string name="RESETFIELDS">Reset fields</string>
+    <string name="SELECTEDUSER">Selected user</string>
+    <string name="NONE">None</string>
 </resources>
