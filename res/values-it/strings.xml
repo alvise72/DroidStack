@@ -33,4 +33,8 @@
     <string name="RESETFIELDS">Cancella campi</string>
     <string name="SELECTEDUSER">Utente selezionato</string>
     <string name="NONE">Nessuno</string>
+    <string name="MANAGENOVAINST">Gestisci istanze Nova</string>
+    <string name="MANAGEGLANCEIMG">Gestisci immagini Glance</string>
+    <string name="SELECTOSUSER">Seleziona un\'utente OpenStack</string>
+    <string name="LAUNCHIMAGE">Istanzia immagine Glance</string>
 </resources>

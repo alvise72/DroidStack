@@ -21,13 +21,13 @@ import org.openstack.utils.*;
 public class ServerView extends LinearLayout {
     
     private Context ctx = null;
-
+    
+    private LinearLayoutNamed row  = null;
     private LinearLayoutNamed text = null;
     private LinearLayoutNamed info = null;
-
-    private TextViewNamed Name = null;
-    private TextViewNamed Flavor = null;
-    private TextViewNamed Status = null;
+    private TextViewNamed Name     = null;
+    private TextViewNamed Flavor   = null;
+    private TextViewNamed Status   = null;
 
     private ImageButtonNamed snapServer = null;
     private ImageButtonNamed deleteServer = null;
@@ -40,9 +40,19 @@ public class ServerView extends LinearLayout {
 	
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 480, ctx)-8/*LayoutParams.FILL_PARENT*/, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	setLayoutParams( params1 );
-	setBackgroundResource(R.drawable.rounded_corner_thin);
+	//setBackgroundResource(R.drawable.rounded_corner_thin);
+	int padding = Utils.getDisplayPixel( ctx, 2 );
+	setPadding( padding, padding, padding, padding );
+	
+	row = new LinearLayoutNamed( ctx, this );
+	row.setOrientation( LinearLayout.HORIZONTAL );
+	LinearLayout.LayoutParams _params1
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+	row.setLayoutParams( _params1 );
+	row.setBackgroundResource(R.drawable.rounded_corner_thin);
+
 
 	text = new LinearLayoutNamed( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
@@ -85,7 +95,7 @@ public class ServerView extends LinearLayout {
 	text.addView(Flavor);
 	text.addView(Status);
 	text.setOnClickListener( (OnClickListener)ctx );
-	addView(text);
+	row.addView(text);
 	setOnClickListener( (OnClickListener)ctx );
 
 	deleteServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SERVER );
@@ -105,7 +115,8 @@ public class ServerView extends LinearLayout {
 	info.addView( snapServer );
 	info.addView( deleteServer );
 	
-	addView( info );
+	row.addView( info );
+	addView( row );
     }
 
     public Server getServer( ) { return S; }

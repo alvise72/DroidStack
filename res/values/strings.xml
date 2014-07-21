@@ -32,4 +32,8 @@
     <string name="RESETFIELDS">Reset fields</string>
     <string name="SELECTEDUSER">Selected user</string>
     <string name="NONE">None</string>
+    <string name="MANAGENOVAINST">Manage Nova instances</string>
+    <string name="MANAGEGLANCEIMG">Manage Glance images</string>
+    <string name="SELECTOSUSER">Select an OpenStack user</string>
+    <string name="LAUNCHIMAGE">Launch Glance image</string>
 </resources>
