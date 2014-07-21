@@ -22,6 +22,7 @@ public class OSImageView extends LinearLayout {
 
     private Context ctx = null;
 
+    private LinearLayoutNamed row           = null;
     private LinearLayoutNamed buttonsLayout = null;
     private LinearLayoutNamed nameLayout    = null;
     private TextViewNamed     textImageName = null;
@@ -38,10 +39,19 @@ public class OSImageView extends LinearLayout {
 
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 320, ctx)-8, LayoutParams.WRAP_CONTENT);
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	setLayoutParams( params1 );
-	setBackgroundResource(R.drawable.rounded_corner_thin);
+	//setBackgroundResource(R.drawable.rounded_corner_thin);
+	int padding = Utils.getDisplayPixel( ctx, 2 );
+	setPadding( padding, padding, padding, padding );
 	setOnClickListener( (OnClickListener)ctx );
+
+	row = new LinearLayoutNamed( ctx, this );
+	row.setOrientation( LinearLayout.HORIZONTAL );
+	LinearLayout.LayoutParams _params1
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+	row.setLayoutParams( _params1 );
+	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
 	nameLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	nameLayout.setOrientation( LinearLayout.VERTICAL );
@@ -68,7 +78,7 @@ public class OSImageView extends LinearLayout {
 	nameLayout.addView(textSize);
 	nameLayout.setOnClickListener( (OnClickListener)ctx );
 	
-	addView(nameLayout);
+	row.addView(nameLayout);
 	setOnClickListener( (OnClickListener)ctx );
 
 	buttonsLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
@@ -92,8 +102,8 @@ public class OSImageView extends LinearLayout {
 	buttonsLayout.addView( deleteImage );
 	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
 	
-	addView( buttonsLayout );
-	
+	row.addView( buttonsLayout );
+	addView( row );
     }
 
     public OSImage getOSImage( ) { return image; }

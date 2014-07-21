@@ -27,6 +27,7 @@
 
         <activity android:launchMode="singleInstance" android:name="org.openstack.MainActivity"
                   android:label="DroidStack"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
 		  android:icon="@drawable/openstack">
           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -38,13 +39,15 @@
 	    android:name="org.openstack.activities.CAFileExploreActivity"
 	    android:launchMode="singleInstance"
 	    android:label="Select CA File"
-	    android:parentActivityName="org.openstack.MainActivity" 
+	    android:parentActivityName="org.openstack.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
 	   />
 	<activity
 	    android:name="org.openstack.activities.UsersActivity" 
 	    android:launchMode="singleInstance" 
 	    android:label="Select OpenStack user" 
 	    android:parentActivityName="org.openstack.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
 	  />
 
 	<activity 
@@ -52,15 +55,15 @@
 	    android:launchMode="singleInstance" 
 	    android:label="Manage Glance Images"
 	    android:parentActivityName="org.openstack.MainActivity"
-	    android:configChanges="keyboardHidden|orientation"
+	    android:configChanges="orientation|keyboardHidden|screenSize"
 	  />
 
         <activity
             android:name="org.openstack.activities.OverViewActivity" 
             android:launchMode="singleInstance" 
             android:label="Usage Overview"
-	   android:parentActivityName="org.openstack.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
+	    android:parentActivityName="org.openstack.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
         <activity
@@ -68,7 +71,7 @@
             android:launchMode="singleInstance" 
             android:label="Add new User"
 	    android:parentActivityName="org.openstack.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
        <activity
@@ -76,7 +79,7 @@
             android:launchMode="singleInstance" 
             android:label="Manage Nova Instances"
 	    android:parentActivityName="org.openstack.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
        <activity
@@ -84,7 +87,7 @@
             android:launchMode="singleInstance"
             android:label="Manage Nova Instances"
 	    android:parentActivityName="org.openstack.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="orientation|keyboardHidden|screenSize"
            />
     </application>
 </manifest> 

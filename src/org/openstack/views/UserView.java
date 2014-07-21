@@ -22,6 +22,7 @@ public class UserView extends LinearLayout {
 
     private Context ctx = null;
 
+    private LinearLayoutNamed row           = null;
     private LinearLayoutNamed buttonsLayout = null;
     private LinearLayoutNamed userLayout    = null;
     private TextViewNamed     textUserName  = null;
@@ -38,10 +39,18 @@ public class UserView extends LinearLayout {
 
 	setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( Utils.getIntegerPreference("SCREENW", 320, ctx)-8/*LayoutParams.FILL_PARENT*/, LayoutParams.FILL_PARENT);
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	setLayoutParams( params1 );
-	setBackgroundResource(R.drawable.rounded_corner_thin);
-	
+	int padding = Utils.getDisplayPixel( ctx, 2 );
+	setPadding( padding, padding, padding, padding );
+	//	setBackgroundResource(R.drawable.rounded_corner_thin);
+
+	row = new LinearLayoutNamed( ctx, this );
+	row.setOrientation( LinearLayout.HORIZONTAL );
+	LinearLayout.LayoutParams _params1
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+	row.setLayoutParams( _params1 );
+	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
 	userLayout = new LinearLayoutNamed( ctx, this );
 	userLayout.setOrientation( LinearLayout.VERTICAL );
@@ -64,7 +73,7 @@ public class UserView extends LinearLayout {
 	userLayout.addView(textEndpoint);
 	userLayout.setOnClickListener( (OnClickListener)ctx );
 
-	addView(userLayout);
+	row.addView(userLayout);
 	setOnClickListener( (OnClickListener)ctx );
       
 	buttonsLayout = new LinearLayoutNamed( ctx, this );
@@ -86,7 +95,8 @@ public class UserView extends LinearLayout {
 	buttonsLayout.addView( deleteUser );
 	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
 	
-	addView( buttonsLayout );
+	row.addView( buttonsLayout );
+	addView( row );
     }
 
     public void setSelected( ) {

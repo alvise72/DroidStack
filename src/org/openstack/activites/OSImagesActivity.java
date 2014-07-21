@@ -2,8 +2,6 @@ package org.openstack.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
-//import android.os.Environment;
-
 
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -16,7 +14,7 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.DialogInterface;
-
+import android.content.res.Configuration;
 
 import android.net.Uri;
 
@@ -71,7 +69,8 @@ import android.graphics.Typeface;
 import android.graphics.Color;
 
 public class OSImagesActivity extends Activity implements OnClickListener {
-
+    
+    private Vector<OSImage> OS;
     private CustomProgressDialog progressDialogWaitStop = null;
     private String ID = null;
     User U = null;
@@ -121,6 +120,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+	Log.d("OSIMAGE.ONCREATE", "OSIMAGE.ONCREATE");
 	setContentView( R.layout.osimagelist );
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
@@ -137,13 +137,67 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	task.execute( U );
     }
     
-    //__________________________________________________________________________________
+    /**
+     *
+     *
+     *
+     *
+     */
     @Override
     public void onResume( ) {
 	super.onResume( );
+	Log.d("OSIMAGE.ONRESUME", "OSIMAGE.ONRESUME");
     }
  
+    /**
+     *
+     *
+     *
+     *
+     */
+    @Override
+    public void onStart( ) {
+	super.onStart( );
+	Log.d("OSIMAGE.ONSTART", "OSIMAGE.ONSTART");
+    }
+  
+    /**
+     *
+     *
+     *
+     *
+     */
+    @Override
+    public void onPause( ) {
+	super.onPause( );
+	Log.d("OSIMAGE.ONPAUSE", "OSIMAGE.ONPAUSE");
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    @Override
+    public void onRestart( ) {
+	super.onRestart( );
+	Log.d("OSIMAGE.ONRESTART", "OSIMAGE.ONRESTART");
+    }
+
  
+    /**
+     *
+     *
+     *
+     *
+     */
+    @Override
+    public void onStop( ) {
+	super.onStop( );
+	Log.d("OSIMAGE.ONSTOP", "OSIMAGE.ONSTOP");
+    }
+
     /**
      *
      *
@@ -153,10 +207,28 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onDestroy( ) {
       super.onDestroy( );
+	Log.d("OSIMAGE.ONDESTROY", "OSIMAGE.ONDESTROY");
       progressDialogWaitStop.dismiss();
     }
    
-  //__________________________________________________________________________________
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+	super.onConfigurationChanged(newConfig);
+	Log.d("OSIMAGE.ONCONFIGURATIONCHANGE", "OSIMAGE.ONCONFIGURATIONCHANGE");
+	//	setContentView(R.layout.osimagelist);
+	setContentView(R.layout.osimagelist);
+	this.refreshView( );
+    }
+
+
+    //__________________________________________________________________________________
     public void onClick( View v ) { 
 
 	if(v instanceof ImageButtonNamed) {
@@ -317,7 +389,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshView( Vector<OSImage> OS ) {
+    private void refreshView( /*Vector<OSImage> OS*/ ) {
 	Iterator<OSImage> sit = OS.iterator();
 	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
 	while( sit.hasNext( )) {
@@ -417,8 +489,8 @@ public class OSImagesActivity extends Activity implements OnClickListener {
  	    }
 	    
 	    try {
-		Vector<OSImage> OS = ParseUtils.parseImages(jsonBuf);
-		OSImagesActivity.this.refreshView( OS );
+		OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+		OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
 		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    OSImagesActivity.this);
@@ -508,12 +580,13 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    
 	    //downloading_image_list = false; // questo non va spostato da qui a
 	    try {
-		Vector<OSImage> OS = ParseUtils.parseImages(jsonBuf);
-		OSImagesActivity.this.refreshView( OS );
+		OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+		OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
 		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    OSImagesActivity.this);
 	    }
+	    //Utils.putLongPreference("LASTIMAGELIST_TIMESTAMP", Utils.now( ), OSImagesActivity.this );
 	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );
 	    //OSImagesActivity.this.refreshView( jsonBuf );
 	}

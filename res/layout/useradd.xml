@@ -15,12 +15,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical" >
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Endpoint (only hostname):"
 		android:textSize="14sp"
 		android:textStyle="bold"
+                android:paddingLeft="4dp"
 		android:ems="10" />
 		
         <EditText
@@ -38,6 +43,7 @@
 		android:text="Tenant's name:"
 		android:textStyle="bold"
 		android:textSize="14sp"
+                android:paddingLeft="4dp"
 		android:ems="10" />
 		
         <EditText
@@ -53,6 +59,7 @@
 		android:text="Username:"
 		android:textStyle="bold"
 		android:textSize="14sp"
+                android:paddingLeft="4dp"
 		android:ems="10" />	    
         <EditText
                     android:id="@+id/usernameET"
@@ -67,6 +74,7 @@
 		android:text="Password:"
 		android:textStyle="bold"
 		android:textSize="14sp"
+                android:paddingLeft="4dp"
 		android:ems="10" />
         <EditText
                     android:id="@+id/passwordET"
@@ -87,6 +95,19 @@
 			android:textSize="14sp"
                         android:text="@string/USESSL" />
         </LinearLayout>
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="2sp"
+          android:background="#FF909090"
+        />
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
         <LinearLayout
    	  android:layout_width="fill_parent"
     	  android:layout_height="wrap_content"

@@ -50,6 +50,17 @@ public class Utils {
      *
      *
      */
+    public static int getDisplayPixel( Context ctx, int absPixel ) {
+	
+	return (int)(absPixel*getDisplayDensity( ctx ) + 0.5f);
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
     public static float getDisplayDensity( Context ctx ) {
 	return ctx.getResources().getDisplayMetrics().density;
     }

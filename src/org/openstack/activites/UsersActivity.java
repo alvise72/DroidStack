@@ -26,7 +26,6 @@ import android.app.ActivityManager;
 import android.app.Activity;
 
 import android.view.View.OnClickListener;
-//import android.view.View.LayoutParams;
 import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
@@ -86,12 +85,6 @@ public class UsersActivity extends Activity implements OnClickListener {
   }
 
   //__________________________________________________________________________________
-//   @Override
-//     public void onPause( ) {
-//       super.onPause( );
-//     } 
-
-  //__________________________________________________________________________________
     public void onClick( View v ) { 
 	if(v instanceof ImageButtonNamed) {
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
@@ -132,13 +125,15 @@ public class UsersActivity extends Activity implements OnClickListener {
     private void refreshUserViews( ) {
 	File[] users = (new File(Utils.getStringPreference("FILESDIR", "", this) + "/users/")).listFiles();
 	if(users==null) {
-	    Utils.alert("UsersActivity.refreshUserViews: " + Utils.getStringPreference("FILESDIR", "", this) + "/users/" + " exists but it is not a directory !", this);
+	    Utils.alert("UsersActivity.refreshUserViews: " 
+			+ Utils.getStringPreference("FILESDIR", "", this) 
+			+ "/users/" 
+			+ " exists but it is not a directory !", this);
 	    return;
 	}
 	    
 	// TODO: should we filter here ?
 
-	//LinearLayout usersL = (LinearLayout)findViewById(R.id.userLayout);
 	((LinearLayout)findViewById(R.id.userLayout)).removeAllViews();
 
 	for(int i = 0; i<users.length; ++i) {
