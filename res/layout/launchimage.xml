@@ -19,6 +19,7 @@
                 android:id="@+id/optionLayer"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:paddingLeft="4dp"
                 android:orientation="vertical" >
 	<TextView
 		android:layout_width="fill_parent"
