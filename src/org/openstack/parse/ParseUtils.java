@@ -82,7 +82,7 @@ public class ParseUtils {
     public static Vector<OSImage> parseImages( String jsonString ) throws ParseException
     {
       try {
-        Vector<OSImage> result = new Vector();
+        Vector<OSImage> result = new Vector<OSImage>();
         
         JSONObject jsonObject = new JSONObject( jsonString );
         JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
@@ -231,12 +231,12 @@ public class ParseUtils {
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray fips = jsonObject.getJSONArray( "floating_ips" );
-	    Vector<Pair<String, String>> res = new Vector();
+	    Vector<Pair<String, String>> res = new Vector<Pair<String, String>>();
 	    for(int i = 0; i<fips.length(); ++i) {
 		JSONObject fip = fips.getJSONObject( i );
 		String id = fip.getString("id");
 		String ip = fip.getString("ip");
-		Pair<String, String> ip_info = new Pair(id, fip);
+		Pair<String, String> ip_info = new Pair<String, String>(id, ip);
 		res.add( ip_info );
 	    }
 	    return res;
@@ -255,7 +255,7 @@ public class ParseUtils {
 
 	//Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
 
-	Vector<Server> serverVector = new Vector();
+	Vector<Server> serverVector = new Vector<Server>();
 	String status        = "N/A";
 	String keyname       ="N/A";
 	//	String[] secgrps     = null;
@@ -296,8 +296,8 @@ public class ParseUtils {
 		    computeNode = "N/A (admin privilege required)";
 		name = (String)server.getString("name");
 		task = (String)server.getString("OS-EXT-STS:task_state");
-		Vector<String> fixedIP = new Vector();//.clear();
-		Vector<String> floatingIP = new Vector();
+		Vector<String> fixedIP = new Vector<String>();//.clear();
+		Vector<String> floatingIP = new Vector<String>();
 		try {
 		    JSONObject addresses = server.getJSONObject("addresses");
 
@@ -358,7 +358,7 @@ public class ParseUtils {
      *
      */    
     public static Hashtable<String, Flavor> parseFlavors( String jsonBuf )  throws ParseException {
-	Hashtable<String, Flavor> flavorTable = new Hashtable();
+	Hashtable<String, Flavor> flavorTable = new Hashtable<String, Flavor>();
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray flavors = (JSONArray)jsonObject.getJSONArray("flavors");
@@ -434,7 +434,7 @@ public class ParseUtils {
      *
      */    
     public static Hashtable<String, SubNetwork> parseSubNetworks( String jsonBuf )  throws ParseException  {
-	Hashtable<String, SubNetwork> result = new Hashtable();
+	Hashtable<String, SubNetwork> result = new Hashtable<String, SubNetwork>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray subnets = (JSONArray)jsonObject.getJSONArray("subnets");
@@ -456,7 +456,7 @@ public class ParseUtils {
 										    (String)allocpools.getJSONObject(j).getString("end") );
 		    pools[j] = pool;
 		}
-		SubNetwork sub = new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp );
+		//SubNetwork sub = new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp );
 		//		Log.d("parseSubNetworks", "SubNetwork="+sub.toString() );
 		result.put( ID, new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp ));
 	    }

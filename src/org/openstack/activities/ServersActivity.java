@@ -4,27 +4,27 @@ import android.os.Bundle;
 
 
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+//import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.CheckBox;
-import android.widget.Button;
-import android.widget.Toast;
+//import android.widget.CheckBox;
+//import android.widget.Button;
+//import android.widget.Toast;
 
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
+//import android.content.Intent;
+//import android.content.pm.ActivityInfo;
 import android.content.DialogInterface;
 
-import android.net.Uri;
+//import android.net.Uri;
 
-import android.util.Log;
-import android.util.DisplayMetrics;
+//import android.util.Log;
+//import android.util.DisplayMetrics;
 
-import android.app.ActivityManager.MemoryInfo;
+//import android.app.ActivityManager.MemoryInfo;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
-import android.app.ActivityManager;
+//import android.app.ActivityManager;
 import android.app.Activity;
 
 import android.view.MenuItem;
@@ -34,15 +34,15 @@ import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
 
-import java.io.IOException;
+//import java.io.IOException;
 
 import java.util.Hashtable;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.Set;
+//import java.util.Set;
 
-import java.io.File;
+//import java.io.File;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.comm.NotFoundException;
@@ -54,25 +54,25 @@ import org.openstack.parse.ParseException;
 import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-import org.openstack.utils.Named;
+//import org.openstack.utils.Named;
 import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
-import org.openstack.utils.Base64;
-import org.openstack.views.UserView;
+//import org.openstack.utils.Base64;
+//import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.utils.TextViewNamed;
-import org.openstack.utils.UserException;
-import org.openstack.utils.ImageViewNamed;
+//import org.openstack.utils.UserException;
+//import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.ImageButtonNamed;
-import org.openstack.utils.LinearLayoutNamed;
+//import org.openstack.utils.LinearLayoutNamed;
 
 import android.graphics.Typeface;
-import android.graphics.Color;
+//import android.graphics.Color;
 
 import android.os.AsyncTask;
 import org.openstack.utils.CustomProgressDialog;
 
-import java.util.HashSet;
+//import java.util.HashSet;
 
 public class ServersActivity extends Activity implements OnClickListener {
 
@@ -258,8 +258,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    ScrollView sv = new ScrollView(this);
 	    LinearLayout.LayoutParams lp 
 		= new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.FILL_PARENT,
-						LinearLayout.LayoutParams.FILL_PARENT);
+						LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.MATCH_PARENT);
 	    sv.setLayoutParams( lp );
 	    LinearLayout l = new LinearLayout(this);
 	    l.setLayoutParams( lp );
@@ -411,7 +411,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	private  boolean  hasError         = false;
 	private  String   jsonBuf          = null;
 	private  String   jsonBufferFlavor = null;
-	private  String   username         = null;
+	//private  String   username         = null;
 
 	@Override
 	protected String doInBackground( Void... v ) 
@@ -479,9 +479,9 @@ public class ServersActivity extends Activity implements OnClickListener {
      	private  String   errorMessage     = null;
 	private  boolean  hasError         = false;
 	private  String   jsonBuf          = null;
-	private  String   jsonBufferFlavor = null;
+	//private  String   jsonBufferFlavor = null;
 	private  String[] serverids        = null;
-	private  String   username         = null;
+	//private  String   username         = null;
 	private  boolean  not_found        = false;
 	@Override
 	protected Void doInBackground(String... args ) 
@@ -502,7 +502,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 		    U.setEndpoint( edp );
 		    U.setSSL( ssl );
 		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
-		    username = U.getUserName();
+		    //username = U.getUserName();
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;

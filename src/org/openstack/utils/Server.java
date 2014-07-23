@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class Server implements Serializable {
+	
+	private static final long serialVersionUID = 2087368867376448461L;
+	
     public final static int POWER_RUNNING = 1;
     public final static int POWER_NOSTATE = 0;
     public final static int POWER_SHUTDOWN = 4;

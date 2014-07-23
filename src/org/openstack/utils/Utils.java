@@ -2,7 +2,7 @@ package org.openstack.utils;
 
 import java.net.URL;
 import java.util.*;
-import java.security.MessageDigest;
+//import java.security.MessageDigest;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.MappedByteBuffer;
@@ -12,34 +12,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+//import java.io.FileOutputStream;
+//import java.io.ObjectInputStream;
+//import java.io.ObjectOutputStream;
 
-import android.content.DialogInterface.OnClickListener;
-import android.content.SharedPreferences.Editor;
+//import android.content.DialogInterface.OnClickListener;
+//import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Context;
 
 import android.app.*;
-import android.graphics.*;
-import android.util.Log;
+//import android.graphics.*;
+//import android.util.Log;
 import android.view.WindowManager;
 import android.net.*;
-import android.net.NetworkInfo.*;
+//import android.net.NetworkInfo.*;
 import android.os.*;
-import android.widget.TextView;
+//import android.widget.TextView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
+//import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 
-import android.view.*;
+//import android.view.*;
 
 import java.util.Calendar;
-import java.util.TimeZone;
-import java.text.SimpleDateFormat;
-import java.util.Set;
+//import java.util.TimeZone;
+//import java.text.SimpleDateFormat;
+//import java.util.Set;
 
 
 public class Utils {
@@ -146,7 +146,9 @@ public class Utils {
 			 Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
 			 Calendar.getInstance().get(Calendar.MINUTE),
 			 Calendar.getInstance().get(Calendar.SECOND));
-	return formatter.toString( );
+	String res = formatter.toString( );
+	formatter.close();
+	return res;
     }
     
     /**
@@ -161,8 +163,9 @@ public class Utils {
         formatter.format(Locale.US, "%04d%02d%02d", Calendar.getInstance().get(Calendar.YEAR) ,
                          Calendar.getInstance().get(Calendar.MONTH)+1, 
                          Calendar.getInstance().get(Calendar.DAY_OF_MONTH) );
-        
-        return formatter.toString( );
+        String res = formatter.toString( );
+        formatter.close( );
+        return res;
     }
 
     /**
@@ -297,9 +300,9 @@ public class Utils {
      *
      *
      */
-    public static String join(Vector s, String delimiter) {
+    public static String join(Vector<String> s, String delimiter) {
         StringBuffer buffer = new StringBuffer();
-        Iterator iter = s.iterator();
+        Iterator<String> iter = s.iterator();
         while (iter.hasNext()) {
             buffer.append(iter.next());
             if (iter.hasNext()) {
@@ -317,7 +320,7 @@ public class Utils {
      */
     public static String join(HashSet<String> s, String delimiter) {
         StringBuffer buffer = new StringBuffer();
-        Iterator iter = s.iterator();
+        Iterator<String> iter = s.iterator();
         while (iter.hasNext()) {
             buffer.append(iter.next());
             if (iter.hasNext()) {
@@ -383,8 +386,8 @@ public class Utils {
 
 	LinearLayout.LayoutParams lp 
 	    = new LinearLayout.LayoutParams(
-					    LinearLayout.LayoutParams.FILL_PARENT,
-					    LinearLayout.LayoutParams.FILL_PARENT);
+					    LinearLayout.LayoutParams.MATCH_PARENT,
+					    LinearLayout.LayoutParams.MATCH_PARENT);
 	LinearLayout l = new LinearLayout(ctx);
 	l.setLayoutParams( lp );
 	l.addView(sv);
@@ -414,8 +417,8 @@ public class Utils {
 	try {
 	    LineNumberReader reader  = new LineNumberReader(new FileReader(filename));
 	    int cnt = 0;
-	    String lineRead = "";
-	    while ((lineRead = reader.readLine()) != null) {}
+	    //String lineRead = new String( );
+	    while ((reader.readLine()) != null) {}
 	    
 	    cnt = reader.getLineNumber(); 
 	    reader.close();
@@ -489,13 +492,13 @@ public class Utils {
      *
      *
      */
-    public static int getBetterFontSize( Context ctx) {
+/*    public static int getBetterFontSize( Context ctx) {
       	int h = getIntegerPreference( "SCREENH", 320, ctx );
         int w = getIntegerPreference( "SCREENW", 240, ctx );
 	//Log.i("Utils.getBetterFonts", "W="+w);
 	if(w>240) return 22;
 	else return 16;
-    }
+    } */
     
     /**
      *
@@ -532,7 +535,8 @@ public class Utils {
 	    // Ensure all the bytes have been read in
 	    if (offset < bytes.length) {
 		//throw new IOException("Could not completely read file "+file.getName());
-		return null;
+	    	is.close();
+	    	return null;
 	    }
 	    
 	    // Close the input stream and return bytes

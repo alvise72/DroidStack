@@ -5,26 +5,26 @@ import android.os.AsyncTask;
 
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.CheckBox;
+/*import android.widget.CheckBox;
 import android.widget.Button;
 import android.widget.Toast;
-
+*/
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+//import android.content.pm.ActivityInfo;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 
-import android.net.Uri;
+//import android.net.Uri;
 
 import android.util.Log;
-import android.util.DisplayMetrics;
+//import android.util.DisplayMetrics;
 
-import android.app.ActivityManager.MemoryInfo;
+//import android.app.ActivityManager.MemoryInfo;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.ActivityManager;
+//import android.app.ActivityManager;
 import android.app.Activity;
 
 import android.view.View.OnClickListener;
@@ -34,18 +34,18 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 
-import java.io.IOException;
+//import java.io.IOException;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.Set;
+//import java.util.Set;
 
-import java.io.File;
+//import java.io.File;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.comm.NotFoundException;
-import org.openstack.comm.NotAuthorizedException;
+//import org.openstack.comm.NotAuthorizedException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.CustomProgressDialog;
@@ -53,20 +53,20 @@ import org.openstack.utils.CustomProgressDialog;
 import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-import org.openstack.utils.Named;
-import org.openstack.utils.Server;
+//import org.openstack.utils.Named;
+//import org.openstack.utils.Server;
 import org.openstack.utils.OSImage;
-import org.openstack.views.UserView;
-import org.openstack.views.ServerView;
+//import org.openstack.views.UserView;
+//import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
 import org.openstack.utils.TextViewNamed;
-import org.openstack.utils.UserException;
-import org.openstack.utils.ImageViewNamed;
+//import org.openstack.utils.UserException;
+//import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.LinearLayoutNamed;
 
 import android.graphics.Typeface;
-import android.graphics.Color;
+//import android.graphics.Color;
 
 public class OSImagesActivity extends Activity implements OnClickListener {
     
@@ -327,8 +327,8 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    ScrollView sv = new ScrollView(this);
 	    LinearLayout.LayoutParams lp 
 		= new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.FILL_PARENT,
-						LinearLayout.LayoutParams.FILL_PARENT);
+						LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.MATCH_PARENT);
 	    sv.setLayoutParams( lp );
 	    LinearLayout l = new LinearLayout(this);
 	    l.setLayoutParams( lp );
@@ -432,7 +432,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    boolean usessl    = Boolean.parseBoolean(u[4]);
 	    long   expire     = Integer.parseInt(u[5]);
 	    String imagetodel = u[7];
-	    User newUser = null;
+	    //User newUser = null;
 	    String token = u[6];
 	    
 	    if(expire <= Utils.now() + 5) {

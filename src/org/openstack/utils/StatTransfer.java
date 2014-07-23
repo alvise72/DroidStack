@@ -45,8 +45,10 @@ public class StatTransfer {
       formatter.format(Locale.US, "%.2f %s @%.2f %s/sec", gB, unit, rate, unit);
     else
       formatter.format(Locale.US, "%.2f %s", gB, unit );
-      
-    return formatter.toString( );
+    
+    String res = formatter.toString( );
+    formatter.close( );
+    return res;
   }
 
   
@@ -63,7 +65,9 @@ public class StatTransfer {
     StringBuilder sb = new StringBuilder();
     Formatter formatter = new Formatter(sb, Locale.US);
     formatter.format(Locale.US, "%.2f", f );
-    return formatter.toString();
+    String res = formatter.toString( );
+    formatter.close( );
+    return res;
   }
  
     /**
@@ -90,7 +94,9 @@ public class StatTransfer {
 	StringBuilder sb = new StringBuilder();
 	Formatter formatter = new Formatter(sb);
 	formatter.format(Locale.US, "%.2f %s/s", gB, unit);
-	return formatter.toString( );
+	String res = formatter.toString ();
+	formatter.close();
+	return res;
     }
 
     /**
@@ -117,7 +123,9 @@ public class StatTransfer {
 	StringBuilder sb = new StringBuilder();
 	Formatter formatter = new Formatter(sb);
 	formatter.format(Locale.US, "%.2f %s", gB, unit);
-	return formatter.toString( );
+	String res = formatter.toString( );
+	formatter.close();
+	return res;
     }
 
     
@@ -167,6 +175,8 @@ public class StatTransfer {
 	StringBuilder sb = new StringBuilder();
 	Formatter formatter = new Formatter(sb);
 	formatter.format(Locale.US, "%.2f %s",gB, unit);
-	return formatter.toString( );
+	String res = formatter.toString( );
+	formatter.close();
+	return res;
     }
 }

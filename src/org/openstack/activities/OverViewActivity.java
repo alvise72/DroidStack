@@ -3,37 +3,37 @@ package org.openstack.activities;
 import android.os.Bundle;
 
 import android.widget.ProgressBar;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.CheckBox;
+/*import android.widget.CheckBox;
 import android.widget.Button;
 import android.widget.Toast;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ActivityInfo;
+*/
+//import android.net.Uri;
 
-import android.net.Uri;
+//import android.util.Log;
+//import android.util.DisplayMetrics;
 
-import android.util.Log;
-import android.util.DisplayMetrics;
-
-import android.app.ActivityManager.MemoryInfo;
-import android.app.AlertDialog;
+//import android.app.ActivityManager.MemoryInfo;
+//import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.ActivityManager;
+//import android.app.ActivityManager;
 import android.app.Activity;
 
-import android.view.WindowManager;
+//import android.view.WindowManager;
 import android.view.MenuItem;
-import android.view.Gravity;
-import android.view.View;
+//import android.view.Gravity;
+//import android.view.View;
 import android.view.Menu;
 
 import android.os.AsyncTask;
 
 
-import java.io.IOException;
+//import java.io.IOException;
 
 import java.util.Vector;
 import java.util.Iterator;
@@ -44,7 +44,7 @@ import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Quota;
 import org.openstack.utils.Utils;
-import org.openstack.utils.Base64;
+//import org.openstack.utils.Base64;
 import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.SecGroup;

@@ -1,32 +1,32 @@
 package org.openstack;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+//import android.app.ProgressDialog;
 import android.app.AlertDialog;
 
 import android.os.Bundle;
-import android.os.AsyncTask;
+//import android.os.AsyncTask;
 
 import android.content.Intent;
 import android.content.Context;
 import android.content.DialogInterface;
 
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.LayoutInflater;
+//import android.view.View.OnClickListener;
+//import android.view.ViewGroup;
+//import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.Display;
-import android.view.Gravity;
+//import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
 
-import android.util.Log;
+//import android.util.Log;
 
 import android.widget.LinearLayout;
 import android.widget.TextView;
 //import android.widget.Toast;
 
-import java.util.Hashtable;
+//import java.util.Hashtable;
 
 import org.openstack.R;
 
@@ -38,15 +38,15 @@ import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesActivity;
 import org.openstack.activities.OverViewActivity;
 
-import java.util.concurrent.ExecutionException;
+//import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity
 {
-    private int SCREENH = 0;
+//    private int SCREENH = 0;
     private int SCREENW = 0;
-    private static boolean downloading_image_list = false;
-    private static boolean downloading_quota_list = false;
-    private static boolean downloading_server_list = false;
+//    private static boolean downloading_image_list = false;
+//    private static boolean downloading_quota_list = false;
+//    private static boolean downloading_server_list = false;
 
     private String selectedUser;
 
@@ -68,10 +68,10 @@ public class MainActivity extends Activity
 
 	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        SCREENH = d.getHeight();
+        //SCREENH = d.getHeight();
 	SCREENW = d.getWidth();
-	Utils.putIntegerPreference("SCREENH", SCREENH, this);
-	Utils.putIntegerPreference("SCREENW", SCREENW, this);
+	//Utils.putIntegerPreference("SCREENH", SCREENH, this);
+	//Utils.putIntegerPreference("SCREENW", SCREENW, this);
 
 	
     }

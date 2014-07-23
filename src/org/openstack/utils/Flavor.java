@@ -3,6 +3,10 @@ package org.openstack.utils;
 import java.io.Serializable;
 
 public class Flavor  implements Comparable<Flavor>, Serializable {
+	
+	private static final long serialVersionUID = 2087368867376448461L;
+
+	
     private String name = null;
     private String ID = null;
     private int ram = 0;

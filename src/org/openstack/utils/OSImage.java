@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class OSImage implements Serializable {
 
+	private static final long serialVersionUID = 2087368867376448461L;
+	
     private String   name      = null;
     private long     size      = 0;
     private String   format    = null;

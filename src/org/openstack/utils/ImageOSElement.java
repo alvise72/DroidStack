@@ -2,10 +2,10 @@ package org.openstack.utils;
 
 import android.widget.LinearLayout;
 import android.content.Context;
-import android.widget.Gallery.LayoutParams;
+//import android.widget.Gallery.LayoutParams;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.util.Log;
+//import android.util.Log;
 import org.openstack.views.UserView;
 
 public class ImageOSElement {
@@ -43,7 +43,7 @@ public class ImageOSElement {
 	
 	ViewGroup.LayoutParams params = view.getLayoutParams();
 	
-	params.width = ViewGroup.LayoutParams.FILL_PARENT;
+	params.width = ViewGroup.LayoutParams.MATCH_PARENT;
 	view.setLayoutParams( params );
     }
 };

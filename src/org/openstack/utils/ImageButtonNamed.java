@@ -1,7 +1,7 @@
 package org.openstack.utils;
 
 import android.widget.ImageButton;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 import android.content.Context;
 
 import org.openstack.views.UserView;

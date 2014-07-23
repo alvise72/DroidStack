@@ -5,46 +5,46 @@ import android.os.AsyncTask;
 //import android.os.Environment;
 
 import android.widget.EditText;
-import android.widget.TextView;
+//import android.widget.TextView;
 import android.widget.CheckBox;
-import android.widget.Button;
-import android.widget.Toast;
+//import android.widget.Button;
+//import android.widget.Toast;
 
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ActivityInfo;
+//import android.content.Intent;
+////import android.content.pm.ActivityInfo;
+//import android.content.pm.ActivityInfo;
 
-import android.util.Log;
+//import android.util.Log;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 
 import android.view.WindowManager;
-import android.view.Gravity;
+//import android.view.Gravity;
 import android.view.View;
 
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-import org.openstack.utils.Base64;
+//import org.openstack.utils.Base64;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.utils.CustomProgressDialog;
-import org.openstack.utils.User;
+//import org.openstack.utils.User;
 import org.openstack.parse.ParseUtils;
-import org.openstack.parse.ParseException;
+//import org.openstack.parse.ParseException;
 
-import java.util.Set;
+/*import java.util.Set;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
-
+*/
 import org.openstack.R;
 
-import org.openstack.views.UserView;
+//import org.openstack.views.UserView;
 
 public class UserAddActivity extends Activity {
 
-    private boolean requesting_token = false;
+    //private boolean requesting_token = false;
     private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
 
     /**
@@ -295,7 +295,7 @@ public class UserAddActivity extends Activity {
 	@Override
 	protected void onPreExecute() {
 	    super.onPreExecute();
-	    requesting_token = true;
+	    //requesting_token = true;
 	}
 	
 	@Override
@@ -305,13 +305,13 @@ public class UserAddActivity extends Activity {
  	    if(hasError) {	
 		UserAddActivity.this.progressDialogWaitStop.dismiss( );
  		Utils.alert( errorMessage, UserAddActivity.this );
- 		requesting_token = false;
+ 		//requesting_token = false;
  		//ACTIVITY.progressDialogWaitStop.dismiss( );
 		UserAddActivity.this.progressDialogWaitStop.dismiss( );
  		return;
  	    }
 	    
-	    requesting_token = false; // questo non va spostato da qui a
+	    //requesting_token = false; // questo non va spostato da qui a
 	    UserAddActivity.this.progressDialogWaitStop.dismiss( );
 	    UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
 	}

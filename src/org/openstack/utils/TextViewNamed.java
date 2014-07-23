@@ -2,7 +2,7 @@ package org.openstack.utils;
 
 import android.widget.TextView;
 import android.content.Context;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;

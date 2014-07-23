@@ -1,30 +1,30 @@
 package org.openstack.comm;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+//import java.io.BufferedReader;
+//import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.Proxy;
-import java.net.InetSocketAddress;
+//import java.net.Proxy;
+//import java.net.InetSocketAddress;
 import java.io.OutputStreamWriter;
 import javax.net.ssl.HttpsURLConnection;
 
-import javax.net.ssl.KeyManager;
+//import javax.net.ssl.KeyManager;
 
 import java.security.cert.X509Certificate;
-import java.security.KeyStore;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
+//import java.security.KeyStore;
+//import javax.net.ssl.HostnameVerifier;
+//import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
+//import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import java.io.*;
 import java.net.*;
-import java.lang.Thread;
+//import java.lang.Thread;
 
-import java.util.Date;
+//import java.util.Date;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Hashtable;
@@ -33,7 +33,7 @@ import java.util.Hashtable;
 import org.apache.http.HttpStatus;
 
 import org.openstack.parse.ParseUtils;
-import org.openstack.parse.ParseException;
+//import org.openstack.parse.ParseException;
 import org.openstack.utils.Base64;
 
 import org.json.JSONArray;
@@ -169,7 +169,7 @@ public class RESTClient {
 	}
 	String res = "";
 	try {
-	    String buf = "";
+	    //String buf = "";
 	    InputStream in = new BufferedInputStream( conn.getInputStream( ) );
 	    int len;
 	    byte[] buffer = new byte[4096];
@@ -227,8 +227,8 @@ public class RESTClient {
 				       String tenantid,
 				       String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/limits", token, v);
 	//Log.d("RESTClient.requestQuota", "RES="+res);
@@ -248,8 +248,8 @@ public class RESTClient {
 					     String tenantid,
 					     String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/os-floating-ips", token, v);
     }
@@ -267,8 +267,8 @@ public class RESTClient {
 					 String tenantid,
 					 String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/servers/detail",
 			    token, 
@@ -289,8 +289,8 @@ public class RESTClient {
 					 String tenantid,
 					 String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/flavors/detail",
 			       token,
@@ -331,7 +331,7 @@ public class RESTClient {
     {
 	try {
 	    //	    Log.d("RESTCLIENT", "serverid=["+serverid+"]");
-	    sendDELETERequest( "http://" + endpoint + ":8774/v2/" +tenantid​ + "/servers/"+serverid, 
+	    sendDELETERequest( "http://" + endpoint + ":8774/v2/" +tenantid+ "/servers/"+serverid, 
 			       token );
 	} catch(NotAuthorizedException na) {
 	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the instance you're trying to delete is owned by you...");
@@ -350,8 +350,8 @@ public class RESTClient {
 					  String token,
 					  String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":9696/v2.0/networks",
 			       token, 
@@ -370,8 +370,8 @@ public class RESTClient {
 					     String token,
 					     String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":9696/v2.0/subnets",
 			       token, 
@@ -388,8 +388,8 @@ public class RESTClient {
      */
     public static String requestKeypairs( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException 
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/" + tenantid + "/os-keypairs",
 			       token, 
@@ -406,8 +406,8 @@ public class RESTClient {
      */
     public static String requestSecGroups( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException 
     {
-	Pair<String, String> p = new Pair( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector();
+	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return sendGETRequest( "http://" + endpoint + ":8774/v2/" + tenantid + "/os-security-groups",
 			       token, 
@@ -587,7 +587,7 @@ public class RESTClient {
 	}
 
 	try {
-	    String buf = "";
+	    //String buf = "";
 	    InputStream in = conn.getInputStream( );
 	    int len;
 	    String res = "";
@@ -652,7 +652,7 @@ public class RESTClient {
 	String buf = "";
 	try {
 	    inStream = new BufferedInputStream( conn.getInputStream() );
-	    int read;
+	    //int read;
             
 	    byte[] b = new byte[ 2048 ];
 	    int res = 0;

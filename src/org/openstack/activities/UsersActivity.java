@@ -5,13 +5,14 @@ import android.os.Bundle;
 
 
 import android.widget.LinearLayout;
-import android.widget.EditText;
+/*import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.CheckBox;
-import android.widget.Button;
+import android.widget.Button; */
 import android.widget.Toast;
 
 import android.content.Intent;
+/*
 import android.content.pm.ActivityInfo;
 import android.content.pm.ActivityInfo;
 
@@ -23,39 +24,41 @@ import android.util.DisplayMetrics;
 import android.app.ActivityManager.MemoryInfo;
 import android.app.AlertDialog;
 import android.app.ActivityManager;
+*/
 import android.app.Activity;
 
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.view.Gravity;
+//import android.view.WindowManager;
+//import android.view.Gravity;
 import android.view.View;
 
-import java.io.IOException;
+//import java.io.IOException;
 
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.Set;
+//import java.util.Iterator;
+//import java.util.Vector;
+//import java.util.Set;
 
 import org.openstack.R;
 import org.openstack.utils.User;
-import org.openstack.utils.UserException;
+//import org.openstack.utils.UserException;
 import org.openstack.utils.Utils;
+/*
 import org.openstack.utils.Base64;
 import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
-
+*/
 import java.io.File;
 
 import org.openstack.views.UserView;
-import org.openstack.utils.Named;
-import org.openstack.utils.ImageViewNamed;
+//import org.openstack.utils.Named;
+//import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.TextViewNamed;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.LinearLayoutNamed;
 
-import android.graphics.Typeface;
-import android.graphics.Color;
+//import android.graphics.Typeface;
+//import android.graphics.Color;
 
 public class UsersActivity extends Activity implements OnClickListener {
 
