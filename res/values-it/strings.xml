@@ -14,8 +14,7 @@
     <string name="PASSWORD">Password</string>
     <string name="USESSL">Keystone/SSL</string>
     <string name="ADD">Aggiungi</string>
-    <string name="ADDSUCCESS">Successo !\nPuoi aggiungere un altro
-    utente o tornare indietro e selezionarne uno.</string>
+    <string name="ADDSUCCESS">Successo !\nPuoi aggiungere un altro utente o tornare indietro e selezionarne uno.</string>
     <string name="SELECTOSIMAGE">Seleziona un\'immagine OpenStack</string>
     <string name="NOUSERSELECTED">Non hai ancora selezionato un utente. Tocca il pulsante \'Utenti\'</string>
     <string name="USAGEOVERVIEW">Quote per l\'utente</string>
