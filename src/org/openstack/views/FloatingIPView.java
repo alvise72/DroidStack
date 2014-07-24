@@ -7,6 +7,7 @@ import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.Utils;
 
 import android.view.Gravity;
+
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;

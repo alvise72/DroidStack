@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.app.Activity;
 import android.view.View.OnClickListener;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.Hashtable;
@@ -20,7 +22,10 @@ import org.openstack.utils.FloatingIP;
 import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
+//import org.openstack.views.AsyncTaskDeleteServer;
+//import org.openstack.views.AsyncTaskOSListServers;
 import org.openstack.views.FloatingIPView;
+//import org.openstack.views.ServerView;
 
 import android.os.AsyncTask;
 
@@ -32,6 +37,43 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     //private Hashtable<String,String> mappingServerIDName = null;
     private User U = null;
     
+
+    //__________________________________________________________________________________
+    public boolean onCreateOptionsMenu( Menu menu ) {
+        
+        super.onCreateOptionsMenu( menu );
+        
+        int order = Menu.FIRST;
+        int GROUP = 0;
+                
+        menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
+        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+	    return true;
+    }
+    
+    //__________________________________________________________________________________
+    public boolean onOptionsItemSelected( MenuItem item ) {
+	 
+        int id = item.getItemId();     
+        
+        if( id == Menu.FIRST-1 ) {
+            Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
+            return true;
+        }
+        
+        if( id == Menu.FIRST ) { 
+	      if(U==null) {
+		    Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+	      } else {
+		    progressDialogWaitStop.show();
+		    AsyncTaskFIPList task = new AsyncTaskFIPList();
+	  	    task.execute( );
+		    return true;
+	      }
+        }
+		  
+  	    return super.onOptionsItemSelected( item );
+    }    
     
     //__________________________________________________________________________________
     @Override
