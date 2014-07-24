@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.SET_ORIENTATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     />
 
@@ -21,6 +20,7 @@
                       android:anyDensity="true" />
 
     <application 
+        android:allowBackup="false"
 	android:label="DroidStack" 
 	android:theme="@android:style/Theme.Holo.Light"
 	android:icon="@drawable/openstack">
