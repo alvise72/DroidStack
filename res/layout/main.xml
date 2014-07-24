@@ -126,6 +126,44 @@
             </LinearLayout>
 	    
           </LinearLayout>
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" >
+
+              <LinearLayout
+                  android:id="@+id/third_left"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:gravity="right"
+                  android:paddingLeft="4dp" >
+
+                  <Button
+                      android:id="@+id/fips_but"
+                      android:layout_width="match_parent"
+		  			  android:layout_height="match_parent"
+                      android:onClick="floatingip"
+                      android:text="Floating IP" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                  android:id="@+id/third_right"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:gravity="left"
+                  android:paddingRight="4dp" >
+
+                  <Button
+                      android:id="@+id/secg_but"
+                      android:layout_width="match_parent"
+		  			  android:layout_height="match_parent"
+		  			  android:onClick="secgroups"
+                      android:text="Security Groups" />
+
+              </LinearLayout>
+
+          </LinearLayout>
 	  
         </LinearLayout>
 	

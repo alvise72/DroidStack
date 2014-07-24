@@ -104,6 +104,8 @@ public class MainActivity extends Activity
       LinearLayout first_right = (LinearLayout)findViewById( R.id.first_right );
       LinearLayout second_left = (LinearLayout)findViewById( R.id.second_left );
       LinearLayout second_right = (LinearLayout)findViewById( R.id.second_right );
+      LinearLayout third_left = (LinearLayout)findViewById( R.id.third_left );
+      LinearLayout third_right = (LinearLayout)findViewById( R.id.third_right );
 
       LayoutParams lp = first_left.getLayoutParams();
 
@@ -113,6 +115,8 @@ public class MainActivity extends Activity
       first_right.setLayoutParams( lp );
       second_left.setLayoutParams( lp );
       second_right.setLayoutParams( lp );
+      third_left.setLayoutParams( lp );
+      third_right.setLayoutParams( lp );
 	
       if( !Utils.internetOn( this ) ) {
 
