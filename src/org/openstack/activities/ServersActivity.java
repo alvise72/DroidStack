@@ -418,7 +418,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	{
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
 						       U.getTenantName(),
 						       U.getUserName(),
 						       U.getPassword(),
@@ -426,7 +426,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( jsonBuf );
+		    U = ParseUtils.parseUser( _jsonBuf );
 		    U.setPassword( pwd );
 		    U.setEndpoint( edp );
 		    U.setSSL( ssl );

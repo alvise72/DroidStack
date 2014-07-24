@@ -2,6 +2,8 @@ package org.openstack.utils;
 
 import android.widget.ImageView;
 import android.content.Context;
+
+import org.openstack.views.FloatingIPView;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
@@ -13,7 +15,8 @@ public class ImageViewNamed extends ImageView implements Named {
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
-
+    private FloatingIPView relatedFloatingIPView = null;
+    
     public ImageViewNamed( Context ctx, UserView uv ) {
 	super( ctx );
 	relatedUserView = uv;
@@ -39,6 +42,7 @@ public class ImageViewNamed extends ImageView implements Named {
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
+    public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
 };
 
 

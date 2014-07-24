@@ -28,9 +28,11 @@ import android.widget.TextView;
 //import java.util.Hashtable;
 
 
+
 import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
+import org.openstack.activities.FloatingIPActivity;
 import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesActivity;
@@ -210,6 +212,23 @@ public class MainActivity extends Activity
 	Class<?> c = (Class<?>)OSImagesActivity.class;
  	Intent I = new Intent( MainActivity.this, c );
 	startActivity(I);
+    }
+    
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void floatingip( View v ) {
+    	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
+	    Class<?> c = (Class<?>)FloatingIPActivity.class;
+ 	    Intent I = new Intent( MainActivity.this, c );
+	    startActivity(I);
     }
     
     /**

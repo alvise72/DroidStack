@@ -2,6 +2,7 @@ package org.openstack.utils;
 
 //import android.widget.ImageView;
 
+import org.openstack.views.FloatingIPView;
 import org.openstack.views.NetworkView;
 import org.openstack.views.OSImageView;
 import org.openstack.views.ServerView;
@@ -12,4 +13,5 @@ public interface Named {
     public ServerView getServerView( );
     public OSImageView getOSImageView( );
     public NetworkView getNetworkView( );
+    public FloatingIPView getFloatingIPView( );
 };

@@ -4,6 +4,8 @@ import android.widget.EditText;
 import android.content.Context;
 //import android.widget.ImageView;
 
+
+import org.openstack.views.FloatingIPView;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
@@ -15,6 +17,7 @@ public class EditTextNamed extends EditText implements Named {
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
+    private FloatingIPView relatedFloatingIPView = null;
     
     public EditTextNamed( Context ctx, UserView uv ) {
 	super( ctx );
@@ -41,4 +44,6 @@ public class EditTextNamed extends EditText implements Named {
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
+    public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
+    
 };

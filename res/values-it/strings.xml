@@ -38,4 +38,5 @@
     <string name="LAUNCHIMAGE">Istanzia immagine Glance</string>
     <string name="NOCUSTOMIPWITHMOREVM">Non puoi specificare un indirizzo IP se lanci pi&#xf9; di un\'istanza</string>
     <string name="INCORRECTIPFORMAT">Formato IP non corretto</string>
+    <string name="FLOATINGIP">Floating IP</string>
 </resources>

@@ -1,7 +1,6 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
-
 import android.widget.ProgressBar;
 //import android.widget.EditText;
 import android.widget.TextView;
@@ -29,18 +28,18 @@ import android.view.MenuItem;
 //import android.view.Gravity;
 //import android.view.View;
 import android.view.Menu;
-
 import android.os.AsyncTask;
 
 
 //import java.io.IOException;
 
+
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Hashtable;
 
-
 import org.openstack.R;
+import org.openstack.utils.FloatingIP;
 import org.openstack.utils.User;
 import org.openstack.utils.Quota;
 import org.openstack.utils.Utils;
@@ -49,9 +48,7 @@ import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.SecGroup;
 import org.openstack.utils.CustomProgressDialog;
-
 import org.openstack.comm.*;
-
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 
@@ -136,7 +133,7 @@ public class OverViewActivity extends Activity {
     private void refreshView( Quota Q,
 			      Vector<Server> servers, 
 			      Hashtable<String, Flavor> flavors,
-			      Vector<Pair<String, String>> fips, 
+			      Vector<FloatingIP> fips, 
 			      SecGroup[] secgs ) 
     {
 	

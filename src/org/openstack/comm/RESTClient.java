@@ -184,21 +184,6 @@ public class RESTClient {
 	((HttpURLConnection)conn).disconnect( );
 	return res;
     }
-    
-    /**
-     *
-     *
-     * curl -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -H "Content-Type: application/json" http://cloud-areapd.pd.infn.it:9292/v2/images
-     *
-     *
-     *
-     */
-//     public static String requestServerInfo( String endpoint,
-// 					    String token,
-// 					    String serverID ) throws RuntimeException  
-//     {
-// 	return sendGETRequest( "http://" + endpoint + ":9292/v2/images", token, null );   	
-//     }
 
     /**
      *
@@ -211,7 +196,7 @@ public class RESTClient {
     public static String requestImages( String endpoint,
 					String token ) throws RuntimeException  
     {
-	return sendGETRequest( "http://" + endpoint + ":9292/v2/images", token, null );   
+	  return sendGETRequest( "http://" + endpoint + ":9292/v2/images", token, null );   
     }
     
     /**
@@ -248,10 +233,10 @@ public class RESTClient {
 					     String tenantid,
 					     String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/os-floating-ips", token, v);
+	  Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", tenantname );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  return sendGETRequest( "http://" + endpoint + ":8774/v2/"+tenantid+"/os-floating-ips", token, v);
     }
 
     /**

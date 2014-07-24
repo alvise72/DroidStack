@@ -89,5 +89,14 @@
 	    android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
+       
+       
+       <activity
+            android:name="org.openstack.activities.FloatingIPActivity"
+            android:launchMode="singleInstance"
+            android:label="@string/FLOATINGIP"
+	    android:parentActivityName="org.openstack.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+           />
     </application>
 </manifest> 

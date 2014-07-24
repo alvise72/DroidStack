@@ -38,4 +38,5 @@
     <string name="LAUNCHIMAGE">Launch Glance image</string>
     <string name="NOCUSTOMIPWITHMOREVM">You cannot specify custom IP address with more than one instance to launch.</string>
     <string name="INCORRECTIPFORMAT">Incorrect IP address format</string>
+    <string name="FLOATINGIP">Floating IP</string>
 </resources>
