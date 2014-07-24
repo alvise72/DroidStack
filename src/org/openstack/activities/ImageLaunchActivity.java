@@ -6,98 +6,52 @@ import android.os.AsyncTask;
 import android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.TextView;
-//import android.widget.CheckBox;
-//import android.widget.Button;
-//import android.widget.Toast;
-//import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-//import android.widget.AdapterView.OnItemSelectedListener;
-//import android.view.inputmethod.InputMethodManager;
-
-//import android.content.DialogInterface;
-//import android.content.Intent;
-//import android.content.pm.ActivityInfo;
-
-import android.util.Log;
-
 import android.app.Activity;
-//import android.app.AlertDialog;
 import android.app.ProgressDialog;
-
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-//import android.view.Gravity;
 import android.view.View;
 
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-//import org.openstack.utils.Base64;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.KeyPair;
-
 import org.openstack.comm.RESTClient;
-
 import org.openstack.views.SecGroupView;
 import org.openstack.views.NetworkView;
-//import org.openstack.views.UserView;
-
 import org.openstack.utils.CustomProgressDialog;
 import org.openstack.utils.EditTextNamed;
-//import org.openstack.utils.SubNetwork;
 import org.openstack.utils.SecGroup;
 import org.openstack.utils.Network;
-//import org.openstack.utils.User;
-
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
-
-//import java.util.Set;
-//import java.util.Vector;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.Collection;
-//import java.util.concurrent.ExecutionException;
-
 import org.apache.http.conn.util.InetAddressUtils;
-//org.apache.http.conn.util.InetAddressUtils
 import org.openstack.R;
 
 public class ImageLaunchActivity extends Activity implements OnClickListener {
 
-    //private boolean requesting_token = false;
     private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
-    //private Hashtable<String, Flavor> flavorTable = null;
-    //private ArrayAdapter<String> spinnerNetworksArrayAdapter = null;
     private ArrayAdapter<String> spinnerFlavorsArrayAdapter  = null;
     private ArrayAdapter<String> spinnerKeypairsArrayAdapter = null;
-    //private Spinner spinnerNetworks  = null;
     private Spinner spinnerFlavors   = null;
     private Spinner spinnerKeypairs  = null;
-
     private Network networks[] = null;
     private Flavor flavors[] = null;
     private KeyPair keypairs[] = null;
     private SecGroup secgroups[] = null;
-
     private LinearLayout options = null;
     private LinearLayout networksL = null;
-
-
     HashSet<String> selectedSecgroups = null;
-    //HashSet<String> selectedNetworks = null;
-
     private User currentUser = null;
-
     private Bundle bundle = null;
-    
     private String imageID = null;
-
-    //private Button launchButton = null;
-
     private Hashtable<String, EditTextNamed> mappingNetEditText = null;
-    //private Hashtable<String, String> mappingNetworkIP = null;
     private Hashtable<String, String> selectedNetworks = null;
 
     @Override
@@ -217,26 +171,26 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     super.onPause( );
   } 
   
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */    
-    @Override
-    public void onDestroy( ) {
+  /**
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   */    
+   @Override
+   public void onDestroy( ) {
       super.onDestroy( );
       progressDialogWaitStop.dismiss();
-    }
+   }
 
     /**
      *

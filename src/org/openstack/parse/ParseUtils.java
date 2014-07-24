@@ -6,7 +6,6 @@ import java.util.TimeZone;
 import java.util.Iterator;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -21,9 +20,7 @@ import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.Quota;
 import org.openstack.utils.User;
-
 import android.util.Log;
-import android.util.Pair;
 
 public class ParseUtils {
 
@@ -239,8 +236,7 @@ public class ParseUtils {
 		String fixip = fip.getString("fixed_ip");
 		String poolname = fip.getString("pool");
 		String server = fip.getString("instance_id");
-		//Pair<String, String> ip_info = new Pair<String, String>(id, ip);
-		//res.add( ip_info );
+		//Log.d("PARSEFIP","server=["+server+"]");
 		FloatingIP Fip = new FloatingIP(ip,fixip,id,server,poolname);
 		res.add( Fip );
 	    }

@@ -12,14 +12,15 @@ import org.openstack.views.NetworkView;
 
 public class ImageButtonNamed extends ImageButton implements Named {
 
-    public static int BUTTON_MODIFY_USER = 1;
-    public static int BUTTON_DELETE_USER = 2;
-    public static int BUTTON_DELETE_SERVER = 3;
-    public static int BUTTON_DELETE_IMAGE = 4;
-    public static int BUTTON_LAUNCH_IMAGE = 5;
-    public static int BUTTON_SNAP_SERVER = 6;
-    public static int BUTTON_RELEASE_IP = 7;
-
+    public static final int BUTTON_MODIFY_USER = 1;
+    public static final int BUTTON_DELETE_USER = 2;
+    public static final int BUTTON_DELETE_SERVER = 3;
+    public static final int BUTTON_DELETE_IMAGE = 4;
+    public static final int BUTTON_LAUNCH_IMAGE = 5;
+    public static final int BUTTON_SNAP_SERVER = 6;
+    public static final int BUTTON_RELEASE_IP = 7;
+    public static final int BUTTON_DISSOCIATE_IP = 8;
+	
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;

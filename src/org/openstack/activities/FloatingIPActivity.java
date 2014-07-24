@@ -2,45 +2,26 @@ package org.openstack.activities;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
-//import android.widget.ScrollView;
-//import android.widget.TextView;
-//import android.content.DialogInterface;
 import android.app.ProgressDialog;
-//import android.app.AlertDialog;
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-//import android.view.MenuItem;
-//import android.view.Menu;
-//import android.view.View.OnClickListener;
-//import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.view.Gravity;
 import android.view.View;
 
-
-
-//import java.util.Hashtable;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
 import org.openstack.comm.RESTClient;
-//import org.openstack.comm.NotFoundException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.R;
 import org.openstack.utils.FloatingIP;
+import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-//import org.openstack.utils.Server;
-//import org.openstack.utils.Flavor;
 import org.openstack.views.FloatingIPView;
-//import org.openstack.views.ServerView;
-//import org.openstack.utils.TextViewNamed;
-//import org.openstack.utils.ImageButtonNamed;
 
-
-
-//import android.graphics.Typeface;
 import android.os.AsyncTask;
 
 import org.openstack.utils.CustomProgressDialog;
@@ -48,6 +29,7 @@ import org.openstack.utils.CustomProgressDialog;
 public class FloatingIPActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
+    //private Hashtable<String,String> mappingServerIDName = null;
     private User U = null;
     
     
@@ -96,9 +78,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  ((LinearLayout)findViewById(R.id.fipLayout)).removeAllViews();
 	  Iterator<FloatingIP> it = fips.iterator();
 	  while(it.hasNext()) {
-		  FloatingIP fip = it.next();
-	      FloatingIPView fv = new FloatingIPView( fip, this);
-	    ((LinearLayout)findViewById( R.id.fipLayout) ).addView( fv );
+		FloatingIP fip = it.next();
+	    ((LinearLayout)findViewById( R.id.fipLayout) ).addView( new FloatingIPView( fip, this ) );
 	    ((LinearLayout)findViewById( R.id.fipLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
 	    View space = new View( this );
 	    space.setMinimumHeight(10);
@@ -137,8 +118,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
       private  String   errorMessage     = null;
   	  private  boolean  hasError         = false;
 	  private  String   jsonBuf          = null;
-	  //private  String   jsonBufferFlavor = null;
-	//private  String   username         = null;
+	  private  String   jsonBufServers	 = null;
 
 	@Override
 	protected String doInBackground( Void... v ) 
@@ -168,8 +148,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
 
 	    try {
-		  jsonBuf = RESTClient.requestFloatingIPs(U.getEndpoint(), U.getToken(),U.getTenantID(),U.getTenantName());
-		  //jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		  jsonBuf = RESTClient.requestFloatingIPs( U.getEndpoint(), U.getToken(),U.getTenantID(),U.getTenantName() );
+		  jsonBufServers = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -191,10 +171,18 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
 	    try {
 	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIPs(jsonBuf);
-	    	
-		  //Vector<Server> servers = ParseUtils.parseServers( jsonBuf );
-		  //Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-		  //FloatingIPActivity.this.refreshView( servers, flavors );
+	    	Vector<Server> servers = ParseUtils.parseServers( jsonBufServers );
+	    	Iterator<Server> it = servers.iterator();
+	    	Hashtable<String,String> mappingServerIDName = new Hashtable<String,String>();
+	    	while( it.hasNext( ) ) {
+	    	  Server S = it.next();
+	    	  mappingServerIDName.put( S.getID(), S.getName() );
+	    	}
+	    	Iterator<FloatingIP> fipit = fips.iterator();
+	    	while( fipit.hasNext() ) {
+	    		FloatingIP fip = fipit.next();
+	    	    fip.setServerName( mappingServerIDName.get(fip.getServerName()) );	
+	    	}
 	    	FloatingIPActivity.this.refreshView(fips);
 	    } catch(ParseException pe) {
 		  Utils.alert("FloatingIPActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
@@ -214,9 +202,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 
-
 	@Override
-	public void onClick(DialogInterface dialog, int which) {
+	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		
 	}

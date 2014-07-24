@@ -4,8 +4,6 @@ package org.openstack.views;
 import org.openstack.R;
 import org.openstack.utils.FloatingIP;
 import org.openstack.utils.ImageButtonNamed;
-//port org.openstack.utils.LinearLayoutNamed;
-//port org.openstack.utils.TextViewNamed;
 import org.openstack.utils.Utils;
 
 import android.view.Gravity;
@@ -17,14 +15,16 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 
 public class FloatingIPView extends LinearLayout {
-    private FloatingIP fip = null;
-    private LinearLayout row           = null;
-    private LinearLayout buttonsLayout = null;
-    private LinearLayout nameLayout    = null;
-    private TextView     textIP = null;
-    private TextView     textPool    = null;
-    private TextView     textServer    = null;
-    private ImageButtonNamed  releaseFIP   = null;
+	
+    private FloatingIP fip                  = null;
+    private LinearLayout row                = null;
+    private LinearLayout buttonsLayout      = null;
+    private LinearLayout nameLayout         = null;
+    private TextView     textIP             = null;
+    private TextView     textPool           = null;
+    private TextView     textServer         = null;
+    private ImageButtonNamed  releaseFIP    = null;
+    private ImageButtonNamed  dissociateFIP = null;
     
     public FloatingIPView( FloatingIP fip, Context ctx ) {
 	    super(ctx);
@@ -54,17 +54,17 @@ public class FloatingIPView extends LinearLayout {
 		
 		
 		textIP = new TextView( ctx );
-		textIP.setText( fip.getIP() );
+		textIP.setText( "IPv4: "+fip.getIP() );
 		textIP.setTextColor( Color.parseColor("#333333") );
 		textIP.setTypeface( null, Typeface.BOLD );
 		
 		textPool = new TextView( ctx );
-		textPool.setText( fip.getPoolName() );
+		textPool.setText( "Pool: "+fip.getPoolName() );
 		textPool.setTextColor( Color.parseColor("#333333") );
 		textPool.setTypeface( null, Typeface.BOLD );
 		
 		textServer = new TextView( ctx );
-		textServer.setText( fip.getInstance() );
+		textServer.setText( "Server: "+(fip.getServerName()!=null && fip.getServerName().length()!=0 ? fip.getServerName() : "None") ); 
 		textServer.setTextColor( Color.parseColor("#333333") );
 		textServer.setTypeface( null, Typeface.BOLD );
 		
@@ -83,9 +83,17 @@ public class FloatingIPView extends LinearLayout {
 		buttonsLayout.setGravity( Gravity.RIGHT );
 		
 		releaseFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_RELEASE_IP);
-		releaseFIP.setImageResource(R.drawable.ic_menu_play_clip );
+		//releaseFIP.setImageResource(android.R.drawable.ic_menu_close_clear_cancel );
+		releaseFIP.setImageResource(android.R.drawable.ic_menu_delete );
+		
 		releaseFIP.setOnClickListener( (OnClickListener)ctx );
 		
+		dissociateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_DISSOCIATE_IP);
+		dissociateFIP.setImageResource(android.R.drawable.ic_delete );
+		dissociateFIP.setOnClickListener( (OnClickListener)ctx );
+		
+		
+		buttonsLayout.addView( dissociateFIP );
 		buttonsLayout.addView( releaseFIP );
 		row.addView( buttonsLayout );
 		addView( row );

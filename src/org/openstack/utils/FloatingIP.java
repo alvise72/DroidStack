@@ -6,15 +6,13 @@ public class FloatingIP {
     private String ID;
     private String attachedTo;
     private String poolName;
-    //private String poolID;
     
-    public FloatingIP( String IP, String fixedIP, String ID, String instance, String poolName ) {
+    public FloatingIP( String IP, String fixedIP, String ID, String instanceID, String poolName ) {
 	  this.IP = IP;
 	  this.fixedIP = fixedIP;
-  	  this.attachedTo = instance;
+  	  this.attachedTo = instanceID;
 	  this.ID   = ID;
 	  this.poolName = poolName;
-	  //this.poolID = poolID;
     }
 
     @Override
@@ -27,9 +25,15 @@ public class FloatingIP {
     }
 
     public String getPoolName( ) { return poolName; }
-    //public String getPoolID( ) { return poolID; }
     public String getID( ) { return ID; }
     public String getIP( ) { return IP; }
     public String getFixedIP( ) { return fixedIP; }
-    public String getInstance( ) { return attachedTo; }
+    public String getServerName( ) { return attachedTo; }
+    public void setServerName( String name ) { attachedTo=name; }
+    public boolean isAssociated( ) {
+      if(attachedTo==null || attachedTo.length()==0 || attachedTo.compareTo("null")==0)	
+        return true;
+      else
+    	 return false;
+    }
 }
