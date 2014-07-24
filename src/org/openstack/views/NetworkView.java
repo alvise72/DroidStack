@@ -4,11 +4,11 @@ package org.openstack.views;
 import org.openstack.utils.Network;
 import android.widget.CheckBox;
 import android.content.Context;
-import android.graphics.Color;
+//import android.graphics.Color;
 
 public class NetworkView extends CheckBox {
     
-    private Context ctx = null;
+    //private Context ctx = null;
     Network net = null;
 
     public NetworkView( Network net, Context ctx ) {

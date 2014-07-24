@@ -1,16 +1,16 @@
 package org.openstack.views;
 
-import android.widget.LinearLayout.LayoutParams;
+//import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+//import android.widget.ImageButton;
+//import android.widget.ImageView;
+//import android.widget.TextView;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
 
 import android.view.Gravity;
-import android.view.View;
+//import android.view.View;
 
 import android.content.Context;
 
@@ -20,7 +20,7 @@ import org.openstack.utils.*;
 
 public class UserView extends LinearLayout {
 
-    private Context ctx = null;
+    //private Context ctx = null;
 
     private LinearLayoutNamed row            = null;
     private LinearLayoutNamed buttonsLayout  = null;

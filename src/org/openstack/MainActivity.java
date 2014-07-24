@@ -3,20 +3,19 @@ package org.openstack;
 import android.app.Activity;
 //import android.app.ProgressDialog;
 import android.app.AlertDialog;
-
 import android.os.Bundle;
 //import android.os.AsyncTask;
 
 import android.content.Intent;
-import android.content.Context;
+//import android.content.Context;
 import android.content.DialogInterface;
-
+import android.util.DisplayMetrics;
 import android.view.View;
 //import android.view.View.OnClickListener;
 //import android.view.ViewGroup;
 //import android.view.LayoutInflater;
 import android.view.WindowManager;
-import android.view.Display;
+//import android.view.Display;
 //import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
 
@@ -28,11 +27,10 @@ import android.widget.TextView;
 
 //import java.util.Hashtable;
 
-import org.openstack.R;
 
+import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-
 import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesActivity;
@@ -66,10 +64,14 @@ public class MainActivity extends Activity
 	Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
 	Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
 
-	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
+/*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         //SCREENH = d.getHeight();
 	SCREENW = d.getWidth();
+	*/
+	DisplayMetrics dm = new DisplayMetrics();
+	getWindowManager().getDefaultDisplay().getMetrics(dm);
+	SCREENW = dm.widthPixels;
 	//Utils.putIntegerPreference("SCREENH", SCREENH, this);
 	//Utils.putIntegerPreference("SCREENW", SCREENW, this);
 

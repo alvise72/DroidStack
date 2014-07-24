@@ -1,16 +1,16 @@
 package org.openstack.views;
 
-import android.widget.LinearLayout.LayoutParams;
+//import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+//import android.widget.ImageButton;
+//import android.widget.ImageView;
+//import android.widget.TextView;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
 
 import android.view.Gravity;
-import android.view.View;
+//import android.view.View;
 
 import android.content.Context;
 
@@ -20,7 +20,7 @@ import org.openstack.utils.*;
 
 public class OSImageView extends LinearLayout {
 
-    private Context ctx = null;
+    //private Context ctx = null;
 
     private LinearLayoutNamed row           = null;
     private LinearLayoutNamed buttonsLayout = null;
@@ -84,7 +84,7 @@ public class OSImageView extends LinearLayout {
 	buttonsLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params4 
-	    = new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT );
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
 	params4.gravity=Gravity.RIGHT;
 	buttonsLayout.setLayoutParams( params4 );
 	buttonsLayout.setGravity( Gravity.RIGHT );

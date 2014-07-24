@@ -1,16 +1,16 @@
 package org.openstack.views;
 
-import android.widget.LinearLayout.LayoutParams;
+//import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+//import android.widget.ImageButton;
+//import android.widget.ImageView;
+//import android.widget.TextView;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
 
 import android.view.Gravity;
-import android.view.View;
+//import android.view.View;
 
 import android.content.Context;
 
@@ -20,7 +20,7 @@ import org.openstack.utils.*;
 
 public class ServerView extends LinearLayout {
     
-    private Context ctx = null;
+//    private Context ctx = null;
     
     private LinearLayoutNamed row  = null;
     private LinearLayoutNamed text = null;
@@ -109,7 +109,7 @@ public class ServerView extends LinearLayout {
 	info = new LinearLayoutNamed( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
-	    new LinearLayout.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	info.setLayoutParams( params3 );
 	info.setGravity( Gravity.RIGHT );
 	info.addView( snapServer );

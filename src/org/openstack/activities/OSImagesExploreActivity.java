@@ -1,7 +1,7 @@
 package org.openstack.activities;
 
-import java.io.File;
-import java.io.FilenameFilter;
+//import java.io.File;
+//import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -10,8 +10,8 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.Context;
+//import android.content.Intent;
+//import android.content.Context;
 
 import android.os.Bundle;
 
@@ -33,7 +33,7 @@ public class OSImagesExploreActivity extends Activity {
     ArrayList<String> str = new ArrayList<String>();
     ArrayList<String> osimages = null;
     // Check if the first level of the directory structure is the one showing
-    private Boolean firstLvl = true;
+    //private Boolean firstLvl = true;
     
     private static final String TAG = "F_IMAGES"; 
     

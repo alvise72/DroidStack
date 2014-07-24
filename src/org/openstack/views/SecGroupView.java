@@ -7,7 +7,7 @@ import android.content.Context;
 
 public class SecGroupView extends CheckBox {
     
-    private Context ctx = null;
+    //private Context ctx = null;
     SecGroup sg = null;
 
     public SecGroupView( SecGroup sg, Context ctx ) {

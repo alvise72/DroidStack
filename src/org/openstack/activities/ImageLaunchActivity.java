@@ -60,8 +60,8 @@ import java.util.Hashtable;
 import java.util.Collection;
 //import java.util.concurrent.ExecutionException;
 
-//import org.apache.http.conn.util.InetAddressUtils;
-
+import org.apache.http.conn.util.InetAddressUtils;
+//org.apache.http.conn.util.InetAddressUtils
 import org.openstack.R;
 
 public class ImageLaunchActivity extends Activity implements OnClickListener {
@@ -276,32 +276,32 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
       String adminPass = null;
-//       if( ((EditText)findViewById(R.id.passwordET)).getText().toString().length()!= 0)
-// 	  adminPass = ((EditText)findViewById(R.id.passwordET)).getText().toString();
-      
-      
+     
       selectedNetworks.clear();
       Iterator<String> it = mappingNetEditText.keySet().iterator();
-      while(it.hasNext()) {
-	  String netID = it.next();
-	  if(mappingNetEditText.get( netID ).isEnabled()==false)
-	      continue;
-	  String netIP = mappingNetEditText.get( netID ).getText().toString();
-	  selectedNetworks.put( netID, netIP );
+      if(it.hasNext() && count > 1) {
+    	  Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
+    	  return;
       }
+      while(it.hasNext()) {
+	    String netID = it.next();
+	    if(mappingNetEditText.get( netID ).isEnabled()==false)
+	      continue;
+	    String netIP = mappingNetEditText.get( netID ).getText().toString();
+	    selectedNetworks.put( netID, netIP );
+      }
+      
       it = mappingNetEditText.keySet().iterator();
       while(it.hasNext()) {
-	  String netID = it.next();
-	  if(mappingNetEditText.get( netID ).isEnabled()==false)
+	    String netID = it.next();
+	    if(mappingNetEditText.get( netID ).isEnabled()==false)
 	      continue;
-	  String netIP = selectedNetworks.get( netID );
-	  Log.d("IMAGELAUNCH", "Checking netid="+netID+" - netIP="+netIP);
-	  String regex = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$";
-	  if( netIP != null && netIP.length()!= 0 && netIP.matches( regex ) == false) {
-	      Utils.alert("Specified IP [" + netIP + "] has incorrect format.", this);
-	      return;
+	    String netIP = selectedNetworks.get( netID );
+	    if(netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
+		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
+		    return;
+	    }
 	  }
-      }
       progressDialogWaitStop.show();
       task.execute( instanceName, 
 		    imageID,
@@ -469,8 +469,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
     {
      	private  String  errorMessage  = null;
-	private  boolean hasError      = false;
-	private  String  jsonBuf       = null;
+	    private  boolean hasError      = false;
+	    //private  String  jsonBuf       = null;
 
 	@Override
 	protected Void doInBackground( String... args ) 
@@ -478,7 +478,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    String jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
 							      U.getTenantName(),
 							      U.getUserName(),
 							      U.getPassword(),
@@ -486,7 +486,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    User newUser = ParseUtils.parseUser( _jsonBuf );
 		    newUser.setPassword( pwd );
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
@@ -502,7 +502,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    
 
 	    try {
-		jsonBuf = RESTClient.requestInstanceCreation( U.getEndpoint(),
+		   RESTClient.requestInstanceCreation( U.getEndpoint(),
 							      U.getTenantID(),
 							      U.getTenantName(),
 							      U.getToken(),
@@ -516,17 +516,17 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 							      ImageLaunchActivity.this.selectedNetworks,
 							      Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this));
 	    } catch(Exception e) {
-		e.printStackTrace( );
-		errorMessage = e.getMessage();
-		hasError = true;
-		return null;
+		   e.printStackTrace( );
+		   errorMessage = e.getMessage();
+		   hasError = true;
+		   return null;
 	    }
 	    
 	    return null;//jsonBuf;
 	}
 	
 	@Override
-	    protected void onPostExecute( Void v ) {
+	protected void onPostExecute( Void v ) {
 	    super.onPostExecute( v );
 	    if(hasError) {
  		Utils.alert( errorMessage, ImageLaunchActivity.this );
