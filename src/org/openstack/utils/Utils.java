@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.MappedByteBuffer;
 import java.nio.charset.Charset;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,12 +15,12 @@ import java.io.FileInputStream;
 //import java.io.ObjectInputStream;
 //import java.io.ObjectOutputStream;
 
+
 //import android.content.DialogInterface.OnClickListener;
 //import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Context;
-
 import android.app.*;
 //import android.graphics.*;
 //import android.util.Log;
@@ -35,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 //import android.view.*;
+
 
 import java.util.Calendar;
 //import java.util.TimeZone;
@@ -485,20 +485,6 @@ public class Utils {
 
         alert.show();
     } 
-
-    /**
-     *
-     *
-     *
-     *
-     */
-/*    public static int getBetterFontSize( Context ctx) {
-      	int h = getIntegerPreference( "SCREENH", 320, ctx );
-        int w = getIntegerPreference( "SCREENW", 240, ctx );
-	//Log.i("Utils.getBetterFonts", "W="+w);
-	if(w>240) return 22;
-	else return 16;
-    } */
     
     /**
      *
@@ -617,6 +603,20 @@ public class Utils {
     public static long now( ) {
       return Calendar.getInstance( ).getTimeInMillis()/1000;
     }
+
+	public static String join(List<String> list, String delimiter) {
+		// TODO Auto-generated method stub
+		StringBuffer buffer = new StringBuffer();
+		Iterator<String> it = list.iterator();
+		while (it.hasNext()) {
+            buffer.append(it.next());
+            if (it.hasNext()) {
+                buffer.append(delimiter);
+            }
+        }
+        return buffer.toString();
+		//return null;
+	}
     
     /**
      *

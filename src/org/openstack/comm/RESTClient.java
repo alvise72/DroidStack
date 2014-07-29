@@ -13,7 +13,15 @@ import javax.net.ssl.HttpsURLConnection;
 //import javax.net.ssl.KeyManager;
 
 
+
+
+
+
 import java.security.cert.X509Certificate;
+
+
+
+
 
 //import java.security.KeyStore;
 //import javax.net.ssl.HostnameVerifier;
@@ -25,6 +33,9 @@ import javax.net.ssl.X509TrustManager;
 
 import java.io.*;
 import java.net.*;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Set;
 //import java.util.Date;
 import java.util.Vector;
 import java.util.Iterator;
@@ -35,6 +46,7 @@ import org.openstack.parse.ParseUtils;
 //import org.openstack.parse.ParseException;
 import org.openstack.utils.Base64;
 import org.openstack.utils.User;
+//import org.openstack.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -129,7 +141,10 @@ public class RESTClient {
 	    out.flush( );
 	    out.close( );
 	} catch(java.io.IOException ioe) {
-	    ((HttpURLConnection)conn).disconnect( );
+		if(usessl)
+	      ((HttpsURLConnection)conn).disconnect( );
+		else
+			((HttpURLConnection)conn).disconnect( );
 	    //ioe.printStackTrace( );
 	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage( ) );
 	}
@@ -153,7 +168,7 @@ public class RESTClient {
 			buf += new String(buffer, 0, len);
 		    in.close();
 		} catch(IOException ioe) {
-		    ((HttpsURLConnection)conn).disconnect( );
+		    ((HttpURLConnection)conn).disconnect( );
 		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 		}
 	    
@@ -685,6 +700,8 @@ public class RESTClient {
 	}
 	URLConnection conn = null;
 	
+	
+	
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
@@ -693,6 +710,7 @@ public class RESTClient {
 	
 	conn.setRequestProperty("Accept", "application/json");
 	conn.setRequestProperty("X-Auth-Token", token);
+	conn.setRequestProperty("Content-Type", "application/json");
 	
 	if( properties!=null ) {
 	    Iterator<Pair<String,String>> it = properties.iterator();
@@ -721,6 +739,19 @@ public class RESTClient {
 	
 	String data = "{\"removeFloatingIp\": {\"address\": \"" + floatingip + "\"}}";
 
+/*	Log.d("RESTClient", ""+conn.getURL());
+	Map<String, List<String>> tmp = conn.getRequestProperties();
+	Set<String> _keys = tmp.keySet();
+	Iterator<String> it=_keys.iterator();
+	while(it.hasNext()) {
+		String k = it.next();
+	    Log.d("RESTClient", "" + k +": " + Utils.join(tmp.get(k), " ") );
+	}
+	HttpURLConnection _conn = (HttpURLConnection)conn;
+	Log.d("RESTClient", "data=["+data+"]");
+	Log.d("RESTClient", _conn.getRequestMethod());
+*/	
+	
 	OutputStream out = null;
 	try {
 	    out = new BufferedOutputStream( conn.getOutputStream() );
@@ -751,7 +782,7 @@ public class RESTClient {
 			buf += new String(buffer, 0, len);
 		    in.close();
 		} catch(IOException ioe) {
-		    ((HttpsURLConnection)conn).disconnect( );
+		    ((HttpURLConnection)conn).disconnect( );
 		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 		}
 	    
