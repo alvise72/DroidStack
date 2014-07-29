@@ -108,26 +108,28 @@ public class RESTClient {
 	    }
 	    
 	    try {
-		conn = (HttpsURLConnection)url.openConnection();
+		  conn = (HttpsURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {
 		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
 	    }
 	} else {
 	
 	    try {
-		conn = (HttpURLConnection)url.openConnection();
+		  conn = (HttpURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {
-		throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
+		  throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
 	    }
 	}
 	
 	conn.setRequestProperty("Content-Type", "application/json");
 	conn.setRequestProperty("Accept", "application/json");
 	conn.setDoOutput(true);
+	conn.setDoInput(true);
 	((HttpURLConnection)conn).setChunkedStreamingMode(0);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 	
@@ -172,6 +174,8 @@ public class RESTClient {
 		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 		}
 	    
+		((HttpURLConnection)conn).disconnect( );
+		
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
 		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
 		}
@@ -181,6 +185,7 @@ public class RESTClient {
 		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	    }
 	}
+	
 	String res = "";
 	try {
 	    //String buf = "";
@@ -368,12 +373,12 @@ public class RESTClient {
 					  String token,
 					  String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return sendGETRequest( "http://" + endpoint + ":9696/v2.0/networks",
-			       token, 
-			       v );
+	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  return sendGETRequest( "http://" + endpoint + ":9696/v2.0/networks",
+			                 token, 
+			                 v );
     }
 
     /**
@@ -388,12 +393,12 @@ public class RESTClient {
 					     String token,
 					     String tenantname ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return sendGETRequest( "http://" + endpoint + ":9696/v2.0/subnets",
-			       token, 
-			       v );
+	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  return sendGETRequest( "http://" + endpoint + ":9696/v2.0/subnets",
+			                 token, 
+			                 v );
     }
 
     /**
@@ -406,12 +411,12 @@ public class RESTClient {
      */
     public static String requestKeypairs( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException 
     {
-	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return sendGETRequest( "http://" + endpoint + ":8774/v2/" + tenantid + "/os-keypairs",
-			       token, 
-			       v );
+	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  return sendGETRequest( "http://" + endpoint + ":8774/v2/" + tenantid + "/os-keypairs",
+			                 token, 
+			                 v );
     }
 
     /**
@@ -424,12 +429,12 @@ public class RESTClient {
      */
     public static String requestSecGroups( String endpoint, String tenantid, String tenantname, String token ) throws RuntimeException 
     {
-	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return sendGETRequest( "http://" + endpoint + ":8774/v2/" + tenantid + "/os-security-groups",
-			       token, 
-			       v );
+	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", tenantname );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  return sendGETRequest( "http://" + endpoint + ":8774/v2/" + tenantid + "/os-security-groups",
+			                 token, 
+			                 v );
     }
 
     /**
@@ -480,14 +485,9 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
-	    
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
-
-// 	String fixedip="";
-// 	if(FixedIP != null) {
-// 	    fixedip = ",\"fixed_ip\": \"" + FixedIP + "\"";
-// 	}
 
 	String userdata="";
 	if(adminPass!=null) {
@@ -508,8 +508,8 @@ public class RESTClient {
 		bw.close();
 		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( filesDir + "/userdata" ) + "\"";
 	    } catch(IOException ioe) {
-		//		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
-		userdata = "";
+		  //		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
+		  userdata = "";
 	    }
 	}
 
@@ -531,8 +531,6 @@ public class RESTClient {
 	    for(int i = 0; i<secgrpIDs.length; ++i)
 		secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
 
-
-
 	    {
 		Iterator<String> it = netID_fixedIP.keySet().iterator();
 		while( it.hasNext() ) {
@@ -551,7 +549,7 @@ public class RESTClient {
 	    obj.getJSONObject("server").put("networks", nets);// );
 	    
 	} catch(JSONException je) {
-	    
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
 	}
 	
@@ -564,7 +562,7 @@ public class RESTClient {
 	    out.close();
 	} catch(java.io.IOException ioe) {
 	    ioe.printStackTrace( );
-	    
+	    ((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
 	}
 
@@ -574,6 +572,7 @@ public class RESTClient {
 	    status = ((HttpURLConnection)conn).getResponseCode();
 	} catch(IOException ioe) {
 	    //Log.d("RESTCLIENT", ioe.toString( ) );
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
 	}
 	if( status != HttpStatus.SC_OK && status !=HttpStatus.SC_ACCEPTED ) {
@@ -591,9 +590,10 @@ public class RESTClient {
 		    in.close();
 		    //Log.d("RESTCLIENT", "buf="+buf);
 		} catch(IOException ioe) {
+			((HttpURLConnection)conn).disconnect( );
 		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
 		}
-	    
+		((HttpURLConnection)conn).disconnect( );
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
 		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
 		
@@ -603,7 +603,7 @@ public class RESTClient {
 		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	    }
 	}
-
+	((HttpURLConnection)conn).disconnect( );
 /*	try {
 	    //String buf = "";
 	    InputStream in = conn.getInputStream( );
@@ -624,8 +624,8 @@ public class RESTClient {
 
     //________________________________________________________________________________
     public static String sendGETRequest( String sURL, 
-					 String token,
-					 Vector<Pair<String,String>> properties ) throws RuntimeException 
+					 				     String token,
+					 				     Vector<Pair<String,String>> properties ) throws RuntimeException 
     {
 	URL url = null;
 	try {
@@ -656,15 +656,12 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
 	}
 
 	conn.setDoInput(true);
-	try {
-	    conn.connect( );
-	} catch(IOException ioe) {
-	    throw new RuntimeException("HttpURLConnection.connect: "+ioe.getMessage());
-	}
+	conn.setDoOutput(false);
 
 	BufferedInputStream inStream = null;
 	String buf = "";
@@ -679,9 +676,10 @@ public class RESTClient {
 		if( res>0 )
 		    buf += new String( b, 0, res );
 	} catch(java.io.IOException ioe) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
 	}
-	
+	((HttpURLConnection)conn).disconnect( );
 	return buf.toString( );    	
     } 
     
@@ -724,16 +722,18 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 
-	conn.setDoInput(false);
+	conn.setDoInput(true);
 	conn.setDoOutput(true);
 	
 	((HttpURLConnection)conn).setChunkedStreamingMode(0);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 	
@@ -766,26 +766,28 @@ public class RESTClient {
 	int status = HttpStatus.SC_OK;
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
+	    Log.d("RESTClient", "status="+status);
 	} catch(IOException ioe) {
 	    ((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
 	}
 
-	if( status != HttpStatus.SC_OK ) {
+	if( status != HttpStatus.SC_OK && status != HttpStatus.SC_ACCEPTED ) {
 	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
 	    if(in!=null) {
 		int len;
 		String buf = "";
 		byte[] buffer = new byte[4096];
 		try {
-		    while (-1 != (len = in.read(buffer)))
-			buf += new String(buffer, 0, len);
+		    while(-1 != (len = in.read(buffer))) {
+			  buf += new String(buffer, 0, len);
+		    }
 		    in.close();
 		} catch(IOException ioe) {
 		    ((HttpURLConnection)conn).disconnect( );
-		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
+		    throw new RuntimeException("PIPPO - InputStream.write/close: "+ioe.getMessage( ) );
 		}
-	    
+		((HttpURLConnection)conn).disconnect( );
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
 		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
 		}
@@ -794,7 +796,8 @@ public class RESTClient {
 
 		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
 	    }
-	}   	
+	}
+	((HttpURLConnection)conn).disconnect( );
     } 
     //________________________________________________________________________________
     public static void sendDELETERequest( String sURL, 
@@ -822,14 +825,18 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("DELETE");
 	} catch(java.net.ProtocolException pe ) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
 	}
 	
+	conn.setDoInput(false);
+	conn.setDoOutput(false);
 
 	int status = HttpStatus.SC_OK;
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
 	} catch(IOException ioe) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
 	}
 
@@ -840,6 +847,7 @@ public class RESTClient {
 	}
 
 	if( status == HttpStatus.SC_NOT_FOUND ) {
+		((HttpURLConnection)conn).disconnect( );
 	    throw new NotFoundException( "Server responded with NOT_FOUND (HTTP 404)" );
 	}
 
@@ -857,8 +865,10 @@ public class RESTClient {
 		    }
 		    in.close();
 		} catch(IOException ioe) {
+			((HttpURLConnection)conn).disconnect( );
 		    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
 		}
+		((HttpURLConnection)conn).disconnect( );
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
 		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf ) );//+"\n\nPlease check your credentials or that the image you're trying to delete is owned by you..." );
 		
@@ -867,7 +877,8 @@ public class RESTClient {
 		
 		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
 	    }
-	}	
+	}
+	((HttpURLConnection)conn).disconnect( );
     }
 }
 

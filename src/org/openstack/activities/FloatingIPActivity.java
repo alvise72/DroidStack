@@ -319,6 +319,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
 				String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
 				String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+				progressDialogWaitStop.show();
 				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
 				task.execute( fip, serverid );
 			}
