@@ -159,6 +159,8 @@
                       android:layout_width="match_parent"
 		  			  android:layout_height="match_parent"
 		  			  android:onClick="secgroups"
+		  			  android:drawableLeft="@drawable/secgroup"
+		  			  android:padding="10dp"
                       android:text="Security Groups" />
 
               </LinearLayout>

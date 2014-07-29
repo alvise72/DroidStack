@@ -19,6 +19,7 @@ import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.R;
 import org.openstack.utils.FloatingIP;
+import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
@@ -26,6 +27,7 @@ import org.openstack.utils.Utils;
 //import org.openstack.views.AsyncTaskOSListServers;
 import org.openstack.views.FloatingIPView;
 //import org.openstack.views.ServerView;
+
 
 import android.os.AsyncTask;
 
@@ -212,7 +214,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
  	    }
 	    
 	    try {
-	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIPs(jsonBuf);
+	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIP(jsonBuf);
 	    	Vector<Server> servers = ParseUtils.parseServers( jsonBufServers );
 	    	Iterator<Server> it = servers.iterator();
 	    	Hashtable<String,String> mappingServerIDName = new Hashtable<String,String>();
@@ -223,7 +225,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    	Iterator<FloatingIP> fipit = fips.iterator();
 	    	while( fipit.hasNext() ) {
 	    		FloatingIP fip = fipit.next();
-	    	    fip.setServerName( mappingServerIDName.get(fip.getServerName()) );	
+	    	    fip.setServerName( mappingServerIDName.get(fip.getServerID()) );	
 	    	}
 	    	FloatingIPActivity.this.refreshView(fips);
 	    } catch(ParseException pe) {
@@ -239,6 +241,72 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 
+    
+    //__________________________________________________________________________________
+    protected class AsyncTaskFIPRelease extends AsyncTask<String, String, String>
+    {
+      private  String   errorMessage     = null;
+  	  private  boolean  hasError         = false;
+      private  String   floatingip       = null;
+      private  String   serverid         = null;
+      
+	@Override
+	protected String doInBackground( String... ip_serverid ) 
+	{
+		floatingip = ip_serverid[0];
+		serverid   = ip_serverid[1];
+		
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		  try {
+		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+						       U.getTenantName(),
+						       U.getUserName(),
+						       U.getPassword(),
+						       U.useSSL() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( _jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
+		  } catch(Exception e) {
+		     errorMessage = e.getMessage();
+		     hasError = true;
+		     return "";
+		  }
+	    }
+
+	    
+
+	    try {
+		  RESTClient.requestReleaseFloatingIP(U, floatingip, serverid );	    
+		} catch(Exception e) {
+		  errorMessage = e.getMessage();
+		  hasError = true;
+	  	  return "";
+	    }
+	    return "";
+	}
+	
+	  @Override
+	  protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		  Utils.alert( errorMessage, FloatingIPActivity.this );
+ 		  FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+ 		  return;
+ 	    }
+	    
+	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	  }
+    }
+    
+    
+    
+    
 
 
 
@@ -247,7 +315,17 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		if(v instanceof ImageButtonNamed) {
+			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
+				String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
+				String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+				task.execute( fip, serverid );
+			}
 		
+	        if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
+				
+			}
+		}
 	}
-    
 }

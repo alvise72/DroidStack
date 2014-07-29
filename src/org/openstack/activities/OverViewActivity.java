@@ -239,7 +239,7 @@ public class OverViewActivity extends Activity {
 		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
 						   ParseUtils.parseServers( jsonBuf ), 
 						   ParseUtils.parseFlavors( jsonBufferFlavor ),
-						   ParseUtils.parseFloatingIPs(jsonBufFIPs),
+						   ParseUtils.parseFloatingIP(jsonBufFIPs),
 						   ParseUtils.parseSecGroups(jsonBufSecgs ) );
 	    } catch(ParseException pe) {
 		Utils.alert( pe.getMessage( ), OverViewActivity.this );

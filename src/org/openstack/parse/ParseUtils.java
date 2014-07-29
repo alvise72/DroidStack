@@ -223,11 +223,11 @@ public class ParseUtils {
      *
      *
      */    
-    public static Vector<FloatingIP> parseFloatingIPs( String jsonBuf ) throws ParseException {
-	try {
+    public static Vector<FloatingIP> parseFloatingIP( String jsonBuf ) throws ParseException {
+	  try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray fips = jsonObject.getJSONArray( "floating_ips" );
-	    //Vector<Pair<String, String>> res = new Vector<Pair<String, String>>();
+	    
 	    Vector<FloatingIP> res = new Vector<FloatingIP>();
 	    for(int i = 0; i<fips.length(); ++i) {
 		JSONObject fip = fips.getJSONObject( i );
@@ -236,14 +236,14 @@ public class ParseUtils {
 		String fixip = fip.getString("fixed_ip");
 		String poolname = fip.getString("pool");
 		String server = fip.getString("instance_id");
-		//Log.d("PARSEFIP","server=["+server+"]");
+		
 		FloatingIP Fip = new FloatingIP(ip,fixip,id,server,poolname);
 		res.add( Fip );
 	    }
 	    return res;
-	} catch(org.json.JSONException je) {
+      } catch(org.json.JSONException je) {
 	    throw new ParseException( je.getMessage( ) );
-	}
+  	  }
     }
     
     /**

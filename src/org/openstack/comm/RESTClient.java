@@ -7,11 +7,14 @@ import java.net.URL;
 //import java.net.Proxy;
 //import java.net.InetSocketAddress;
 import java.io.OutputStreamWriter;
+
 import javax.net.ssl.HttpsURLConnection;
 
 //import javax.net.ssl.KeyManager;
 
+
 import java.security.cert.X509Certificate;
+
 //import java.security.KeyStore;
 //import javax.net.ssl.HostnameVerifier;
 //import javax.net.ssl.HttpsURLConnection;
@@ -22,20 +25,16 @@ import javax.net.ssl.X509TrustManager;
 
 import java.io.*;
 import java.net.*;
-//import java.lang.Thread;
-
 //import java.util.Date;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Hashtable;
 
-
 import org.apache.http.HttpStatus;
-
 import org.openstack.parse.ParseUtils;
 //import org.openstack.parse.ParseException;
 import org.openstack.utils.Base64;
-
+import org.openstack.utils.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -184,7 +183,26 @@ public class RESTClient {
 	((HttpURLConnection)conn).disconnect( );
 	return res;
     }
-
+    /**
+    *
+    *
+    * curl -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -H "Content-Type: application/json" http://cloud-areapd.pd.infn.it:9292/v2/images
+    *
+    *
+    *
+    */
+   public static void requestReleaseFloatingIP( User U, String floatingip, String serverid ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+   {
+	   Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+	   Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+	   vp.add( p );
+	   //Log.d("RESTClient", "floatingip="+floatingip+" serverid="+serverid);
+	   sendPOSTRequest( "http://" + U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
+			            U.getToken(), 
+			            floatingip, 
+			            vp );
+   }
+   
     /**
      *
      *
@@ -651,10 +669,105 @@ public class RESTClient {
 	
 	return buf.toString( );    	
     } 
+    
+  //________________________________________________________________________________
+    public static void sendPOSTRequest( String sURL, 
+					 					String token,
+					 					String floatingip,
+					 					Vector<Pair<String,String>> properties ) 
+	  throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+    {
+	URL url = null;
+	try {
+	    url = new URL(sURL);
+	} catch(java.net.MalformedURLException mfu) {
+	    throw new RuntimeException("Malformed URL: " + mfu.toString( ) );
+	}
+	URLConnection conn = null;
+	
+	try {
+	    conn = (HttpURLConnection)url.openConnection();
+	} catch(java.io.IOException ioe) {
+	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	}
+	
+	conn.setRequestProperty("Accept", "application/json");
+	conn.setRequestProperty("X-Auth-Token", token);
+	
+	if( properties!=null ) {
+	    Iterator<Pair<String,String>> it = properties.iterator();
+	    while( it.hasNext( ) ) {
+		Pair<String, String> pair = it.next( );
+		conn.setRequestProperty( pair.first, pair.second );
+	    }
+	}
+	conn.setReadTimeout(20000 /* milliseconds */);
+    conn.setConnectTimeout(15000 /* milliseconds */);
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("POST");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
+	}
 
+	conn.setDoInput(false);
+	conn.setDoOutput(true);
+	
+	((HttpURLConnection)conn).setChunkedStreamingMode(0);
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("POST");
+	} catch(java.net.ProtocolException pe ) {
+	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
+	}
+	
+	String data = "{\"removeFloatingIp\": {\"address\": \"" + floatingip + "\"}}";
+
+	OutputStream out = null;
+	try {
+	    out = new BufferedOutputStream( conn.getOutputStream() );
+	    out.write( data.getBytes( ) );
+	    out.flush( );
+	    out.close( );
+	} catch(java.io.IOException ioe) {
+	    ((HttpURLConnection)conn).disconnect( );
+	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage( ) );
+	}
+	
+	int status = HttpStatus.SC_OK;
+	try {
+	    status = ((HttpURLConnection)conn).getResponseCode();
+	} catch(IOException ioe) {
+	    ((HttpURLConnection)conn).disconnect( );
+	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
+	}
+
+	if( status != HttpStatus.SC_OK ) {
+	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
+	    if(in!=null) {
+		int len;
+		String buf = "";
+		byte[] buffer = new byte[4096];
+		try {
+		    while (-1 != (len = in.read(buffer)))
+			buf += new String(buffer, 0, len);
+		    in.close();
+		} catch(IOException ioe) {
+		    ((HttpsURLConnection)conn).disconnect( );
+		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
+		}
+	    
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
+		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+		}
+		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
+		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
+
+		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
+	    }
+	}   	
+    } 
     //________________________________________________________________________________
     public static void sendDELETERequest( String sURL, 
-					  String token ) 
+					  					  String token ) 
 	throws RuntimeException, NotFoundException, NotAuthorizedException
     {
 	//	Log.d("RESTCLIENT", "sURL="+sURL);
