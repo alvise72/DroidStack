@@ -40,4 +40,5 @@
     <string name="INCORRECTIPFORMAT">Incorrect IP address format</string>
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.</string>
 </resources>

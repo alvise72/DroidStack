@@ -317,21 +317,29 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		if(v instanceof ImageButtonNamed) {
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
-				String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
-				String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-				Log.d("FIPACTIVITY", "serverid="+serverid);
-				if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-				    Log.d("FIPACTIVITY", "serverid is null or zero");
-				  Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
-				  return;
-				}
-				progressDialogWaitStop.show();
-				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
-				task.execute( fip, serverid );
+			    String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
+			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+			    //Log.d("FIPACTIVITY", "serverid="+serverid);
+			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+				//Log.d("FIPACTIVITY", "serverid is null or zero");
+				Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
+				return;
+			    }
+			    progressDialogWaitStop.show();
+			    AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+			    task.execute( fip, serverid );
 			}
 		
-	        if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
-				
+			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
+			    String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
+			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+			    //Log.d("FIPACTIVITY", "serverid="+serverid);
+			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+				// TODO: delete
+			    } else {
+				Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
+				return;
+			    }
 			}
 		}
 	}
