@@ -28,7 +28,7 @@
     <string name="NOTIMPLEMENTED">Funzionalit&#xe0; non ancora implementata</string>
     <string name="MENUDELETEALL">Cancella tutte le istanze</string>
     <string name="DELETEDINSTSANCES">Istanze cancellate con successo. Aggiorna la finestra.</string>
-    <string name="SOMEDELETIONFAILED">Qualche istanza non &#xe8; stata trovata nel server (forse era gi&#xe0; in fase di cancellazione)...\nLa cancellazione &#xe8; terminata, aggiorna la finestra.</string>
+    <string name="SOMEDELETIONFAILED">Qualche istanza non &#xe8; stata trovata nel server (forse era gi&#xe0; in fase di cancellazione)&#8230;\nLa cancellazione &#xe8; terminata, aggiorna la finestra.</string>
     <string name="RESETFIELDS">Cancella campi</string>
     <string name="SELECTEDUSER">Utente selezionato</string>
     <string name="NONE">Nessuno</string>
@@ -39,4 +39,5 @@
     <string name="NOCUSTOMIPWITHMOREVM">Non puoi specificare un indirizzo IP se lanci pi&#xf9; di un\'istanza</string>
     <string name="INCORRECTIPFORMAT">Formato IP non corretto</string>
     <string name="FLOATINGIP">Floating IP</string>
+    <string name="FIPNOTASSOCIATED">Questo floating IP non &#xe8; associato ad alcun server.</string>
 </resources>

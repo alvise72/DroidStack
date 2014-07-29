@@ -6,12 +6,12 @@ public class FloatingIP {
     private String IP;
     private String fixedIP;
     private String ID;
-    private String attachedTo;
+    private String attachedTo = null;
     private String poolName;
     private String serverName = null;
     //private String serverID;
     
-    public FloatingIP( String IP, String fixedIP, String ID, /*String instanceID,*/ String instanceID, String poolName) {
+    public FloatingIP( String IP, String fixedIP, String ID, String instanceID, String poolName) {
 	  this.IP = IP;
 	  this.fixedIP = fixedIP;
   	  this.attachedTo = instanceID;

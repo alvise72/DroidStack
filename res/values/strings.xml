@@ -39,4 +39,5 @@
     <string name="NOCUSTOMIPWITHMOREVM">You cannot specify custom IP address with more than one instance to launch.</string>
     <string name="INCORRECTIPFORMAT">Incorrect IP address format</string>
     <string name="FLOATINGIP">Floating IP</string>
+    <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
 </resources>

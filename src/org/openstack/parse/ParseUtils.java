@@ -145,20 +145,9 @@ public class ParseUtils {
 	if(jsonObject.has("itemNotFound"))
 	    errorMessage = jsonObject.getJSONObject("itemNotFound").getString("message");
 
-	// JSONObject badRequest = jsonObject.getJSONObject("badRequest");
-	// Log.d("PARSEUTILS", "error is "+error);
-	// Log.d("PARSEUTILS", "badRequest is "+badRequest);
-	
-	// if(error!=null) {
-	//     errorMessage = error.getString("message");
-	// }
-	// if(badRequest!=null) {
-	//     errorMessage = badRequest.getString("message");
-	// }
       } catch(org.json.JSONException joe) {
         return "Cannot parse json error message from remote server";
       }
-      //      Log.d("ParseUtils.getErrorCodeMessage", "Returning: "+errorMessage);
       return errorMessage;
     }
        
@@ -177,7 +166,6 @@ public class ParseUtils {
       } catch(org.json.JSONException joe) {
         return -1;
       }
-      //      Log.d("ParseUtils.getErrorCode", "Returning: "+errorCode);
       return errorCode;
     }
            
@@ -235,7 +223,9 @@ public class ParseUtils {
 		String ip = fip.getString("ip");
 		String fixip = fip.getString("fixed_ip");
 		String poolname = fip.getString("pool");
-		String server = fip.getString("instance_id");
+		String server = null;
+		if(fip.has("instance_id")== true)
+		  server = fip.getString("instance_id");
 		
 		FloatingIP Fip = new FloatingIP(ip,fixip,id,server,poolname);
 		res.add( Fip );
@@ -259,17 +249,12 @@ public class ParseUtils {
 	Vector<Server> serverVector = new Vector<Server>();
 	String status        = "N/A";
 	String keyname       ="N/A";
-	//	String[] secgrps     = null;
 	String[] secgrpNames = null;
 	String flavorID      = "N/A";
 	String ID            = "N/A";
 	String computeNode   = "N/A";
 	String name          = "N/A";
 	String task          = "N/A";
-	//String privIP        = "N/A";
-	//String pubIP         = "N/A";
-	//Vector<String> fixedIP = new Vector();
-	//Vector<String> floatingIP = new Vector();
 	long creationTime    = 0;
 	int power            = -1;
 	
@@ -283,7 +268,6 @@ public class ParseUtils {
 		try{keyname = (String)server.getString("key_name");} catch(JSONException je) {}
 		try{
 		    JSONArray secgarray  =  ((JSONArray)server.getJSONArray("security_groups"));
-		    //secgrps = new String[secgarray.length()];
 		    secgrpNames = new String[secgarray.length()];
 		    for(int j=0; j<secgarray.length(); j++) 
 			secgrpNames[j] = secgarray.getJSONObject(j).getString("name");
@@ -319,10 +303,6 @@ public class ParseUtils {
 				fixedIP.add(ip);
 			    if(type.compareTo("floating")==0)
 				floatingIP.add(ip);
-			    // if(fixedIP.size()==0)
-			    // 	fixedIP.add("None");
-			    // if(floatingIP.size()==0)
-			    // 	floatingIP.add("None");
 			}
 		    }
 
@@ -341,9 +321,7 @@ public class ParseUtils {
 		} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
 
 		try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
-		//Log.d("PARSEUTILS", fixedIP.toString());
 		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
-		//Log.d("PARSEUTILS", S.toString());
 		serverVector.add(S);
 	    }
  	} catch(org.json.JSONException je) {
