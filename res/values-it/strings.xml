@@ -41,4 +41,6 @@
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">Questo floating IP non &#xe8; associato ad alcun server.</string>
     <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.</string>
+    <string name="NOINSTANCEAVAIL">Non hai creato alcuna istanza.</string>
+    <string name="NOIMAGEAAVAIL">Non hai caricato alcuna immagine.</string>
 </resources>

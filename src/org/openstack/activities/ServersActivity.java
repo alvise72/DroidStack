@@ -364,7 +364,12 @@ public class ServersActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     private void refreshView( Vector<Server> servers, Hashtable<String, Flavor> flavors ) {
 	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
+	if(servers.size()==0) {
+	  Utils.alert(getString(R.string.NOINSTANCEAVAIL), this);	
+	  return;
+	}
 	Iterator<Server> it = servers.iterator();
+	
 	while(it.hasNext()) {
 	    Server s = it.next();
 	    Flavor F = flavors.get( s.getFlavorID( ) );

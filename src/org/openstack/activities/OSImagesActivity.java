@@ -381,7 +381,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshView( /*Vector<OSImage> OS*/ ) {
+    private void refreshView( ) {
+    if(OS.size()==0) {
+    	Utils.alert(getString(R.string.NOIMAGEAAVAIL), this);
+    	return;
+    }
 	Iterator<OSImage> sit = OS.iterator();
 	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
 	while( sit.hasNext( )) {
