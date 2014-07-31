@@ -2,45 +2,21 @@ package org.openstack.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-//import android.os.Environment;
-
 import android.widget.EditText;
-//import android.widget.TextView;
 import android.widget.CheckBox;
-//import android.widget.Button;
-//import android.widget.Toast;
-
-//import android.content.Intent;
-////import android.content.pm.ActivityInfo;
-//import android.content.pm.ActivityInfo;
-
-//import android.util.Log;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
-
 import android.view.WindowManager;
-//import android.view.Gravity;
 import android.view.View;
 
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-//import org.openstack.utils.Base64;
 
 import org.openstack.comm.RESTClient;
 import org.openstack.utils.CustomProgressDialog;
-//import org.openstack.utils.User;
 import org.openstack.parse.ParseUtils;
-//import org.openstack.parse.ParseException;
 
-/*import java.util.Set;
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
-*/
 import org.openstack.R;
-
-//import org.openstack.views.UserView;
 
 public class UserAddActivity extends Activity {
 
@@ -236,7 +212,6 @@ public class UserAddActivity extends Activity {
 	    U.setPassword(password);
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
-	    //Utils.userToFile( U );
 	    U.toFile( Utils.getStringPreference("FILESDIR","",this) );
 	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
 	} catch(Exception e) {
@@ -281,7 +256,7 @@ public class UserAddActivity extends Activity {
 	    usessl = Boolean.parseBoolean( s_usessl );
 	    
 	    try {
-		jsonBuf = RESTClient.requestToken( endpoint, tenant, username, password, usessl );
+		jsonBuf = RESTClient.requestToken( usessl, endpoint, tenant, username, password );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;

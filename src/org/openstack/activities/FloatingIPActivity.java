@@ -23,11 +23,7 @@ import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-//import org.openstack.views.AsyncTaskDeleteServer;
-//import org.openstack.views.AsyncTaskOSListServers;
 import org.openstack.views.FloatingIPView;
-//import org.openstack.views.ServerView;
-import android.util.Log;
 
 import android.os.AsyncTask;
 
@@ -36,7 +32,6 @@ import org.openstack.utils.CustomProgressDialog;
 public class FloatingIPActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
-    //private Hashtable<String,String> mappingServerIDName = null;
     private User U = null;
     
 
@@ -169,11 +164,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	{
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL(), U.getEndpoint(),
 						       U.getTenantName(),
 						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
+						       U.getPassword()
+						        );
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
@@ -192,8 +187,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
 
 	    try {
-		  jsonBuf = RESTClient.requestFloatingIPs( U.getEndpoint(), U.getToken(),U.getTenantID(),U.getTenantName() );
-		  jsonBufServers = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		  jsonBuf = RESTClient.requestFloatingIPs( U );
+		  jsonBufServers = RESTClient.requestServers( U );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -258,11 +253,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		  try {
-		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    										   U.getEndpoint(),
+						       						   U.getTenantName(),
+						       						   U.getUserName(),
+						       						   U.getPassword());
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();

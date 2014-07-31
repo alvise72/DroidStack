@@ -1,33 +1,35 @@
 package org.openstack.activities;
 
-import android.os.Bundle;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.app.ProgressDialog;
-import android.app.Activity;
-import android.view.MenuItem;
-import android.view.Menu;
-import android.os.AsyncTask;
-import java.util.Vector;
-import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+
 import org.openstack.R;
-import org.openstack.utils.FloatingIP;
-import org.openstack.utils.User;
-import org.openstack.utils.Quota;
-import org.openstack.utils.Utils;
-import org.openstack.utils.Server;
-import org.openstack.utils.Flavor;
-import org.openstack.utils.SecGroup;
-import org.openstack.utils.CustomProgressDialog;
-import org.openstack.comm.*;
+import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
-//import android.util.Pair;
+import org.openstack.utils.CustomProgressDialog;
+import org.openstack.utils.Flavor;
+import org.openstack.utils.FloatingIP;
+import org.openstack.utils.Quota;
+import org.openstack.utils.SecGroup;
+import org.openstack.utils.Server;
+import org.openstack.utils.User;
+import org.openstack.utils.Utils;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+//import android.net.ParseException;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class OverViewActivity extends Activity {
 
-    //    Bundle bundle = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
     
@@ -42,7 +44,6 @@ public class OverViewActivity extends Activity {
         
         int order = Menu.FIRST;
         int GROUP = 0;
-                
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
         menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         return true;
@@ -58,7 +59,10 @@ public class OverViewActivity extends Activity {
         }
         
         if( id == Menu.FIRST ) { 
-	    //            Utils.customAlert(  );
+        	if(U==null) {
+        	  Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+        	  return true;
+        	}
 	    progressDialogWaitStop.show();
 	    AsyncTaskQuota task = new AsyncTaskQuota();
 	    task.execute(U);
@@ -118,7 +122,7 @@ public class OverViewActivity extends Activity {
 	    totVCPU = F.getVCPU( );
 	    totInstances++;
 	}
-
+    
 	((TextView)findViewById(R.id.vmusageTV)).setText("" + totInstances );
 	((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
 	((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
@@ -177,18 +181,15 @@ public class OverViewActivity extends Activity {
 	    U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
+		    jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    								   U.getEndpoint(),
+		    								   U.getTenantName(),
+		    								   U.getUserName(),
+		    								   U.getPassword() );
 		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
+		    newUser.setPassword( U.getPassword() );
+		    newUser.setEndpoint( U.getEndpoint() );
+		    newUser.setSSL( U.useSSL() );
 		    U = newUser;
 		    U.toFile( Utils.getStringPreference("FILESDIR","",OverViewActivity.this) );//to save new token + expiration
 		} catch(Exception e) {
@@ -199,16 +200,16 @@ public class OverViewActivity extends Activity {
 	    }
 
 	    try {
-		jsonBufQuota = RESTClient.requestQuota( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		//servers = parseServers( jsonBuf );
-		//Iterator<String> it = servers.iterator();
-		//while( it.hasNext( ) ) {
-		//    Flavor
-		//}
-		jsonBufFIPs = RESTClient.requestFloatingIPs( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		jsonBufSecgs = RESTClient.requestSecGroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken() );
-		jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+	    Log.d("OVERVIEW", "requestQuota...");
+		jsonBufQuota = RESTClient.requestQuota( U );
+	    Log.d("OVERVIEW", "requestServers...");
+		jsonBuf = RESTClient.requestServers( U );
+	    Log.d("OVERVIEW", "requestFIP...");
+		jsonBufFIPs = RESTClient.requestFloatingIPs( U );
+	    Log.d("OVERVIEW", "requestSECG...");
+		jsonBufSecgs = RESTClient.requestSecGroups( U );
+	    Log.d("OVERVIEW", "requestFlavors...");
+		jsonBufferFlavor = RESTClient.requestFlavors( U );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -237,12 +238,12 @@ public class OverViewActivity extends Activity {
 	    try {
 		
 		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
-						   ParseUtils.parseServers( jsonBuf ), 
-						   ParseUtils.parseFlavors( jsonBufferFlavor ),
-						   ParseUtils.parseFloatingIP(jsonBufFIPs),
-						   ParseUtils.parseSecGroups(jsonBufSecgs ) );
+						   				   ParseUtils.parseServers( jsonBuf ), 
+						   				   ParseUtils.parseFlavors( jsonBufferFlavor ),
+						   				   ParseUtils.parseFloatingIP(jsonBufFIPs),
+						   				   ParseUtils.parseSecGroups(jsonBufSecgs ) );
 	    } catch(ParseException pe) {
-		Utils.alert( pe.getMessage( ), OverViewActivity.this );
+		  Utils.alert( pe.getMessage( ), OverViewActivity.this );
 	    }
 	    OverViewActivity.this.progressDialogWaitStop.dismiss( );
 	}

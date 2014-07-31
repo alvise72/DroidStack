@@ -66,7 +66,6 @@ import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.LinearLayoutNamed;
 
 import android.graphics.Typeface;
-//import android.graphics.Color;
 
 public class OSImagesActivity extends Activity implements OnClickListener {
     
@@ -378,14 +377,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     private  void deleteGlanceImage( String ID ) {
 	progressDialogWaitStop.show();
 	AsyncTaskOSDelete task = new AsyncTaskOSDelete();
-	task.execute(U.getEndpoint(), 
-		     U.getTenantName(), 
-		     U.getUserName(), 
-		     U.getPassword(), 
-		     ""+U.useSSL(), 
-		     ""+U.getTokenExpireTime(), 
-		     U.getToken(), 
-		     ID );
+	task.execute( ID );
     }
 
     //__________________________________________________________________________________
@@ -419,63 +411,45 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      */
     protected class AsyncTaskOSDelete extends AsyncTask<String, String, String>
     {
-     	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
-	private  String   jsonBuf       = null;
+      private  String   errorMessage  =  null;
+	  private  boolean  hasError      =  false;
+	  private  String   jsonBuf       = null;
 	
-	protected String doInBackground(String... u ) 
-	{
-	    String endpoint   = u[0];
-	    String tenantname = u[1];
-	    String username   = u[2];
-	    String password   = u[3];
-	    boolean usessl    = Boolean.parseBoolean(u[4]);
-	    long   expire     = Integer.parseInt(u[5]);
-	    String imagetodel = u[7];
-	    //User newUser = null;
-	    String token = u[6];
+	  protected String doInBackground(String... u ) 
+	  {
+	    String imagetodel = u[0];
 	    
-	    if(expire <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( endpoint,
-						       tenantname,
-						       username,
-						       password,
-						       usessl );
-		    // String  pwd = U.getPassword();
-		    // String  edp = U.getEndpoint();
-		    // boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( jsonBuf );
-		    U.setEndpoint( endpoint );
-		    U.setPassword( password );
-		    U.setSSL( usessl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) ); // to save the new token+expiration
-		    token = U.getToken();
-		} catch(Exception e) {
+	    if( U.getTokenExpireTime() <= Utils.now() + 5) {
+		  try {
+		    jsonBuf = RESTClient.requestToken( U.useSSL(), 
+		    								   U.getEndpoint(),
+		    								   U.getTenantName(),
+		    								   U.getTenantID(),
+		    								   U.getPassword() );
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setEndpoint(U.getEndpoint());
+		    newUser.setPassword(U.getPassword());
+		    newUser.setSSL(U.useSSL());
+		    U = newUser;
+		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) );
+		  } catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
-		    return "";
-		}
+		  }
+		  return "";
 	    }
 
 	    try {
-		RESTClient.deleteGlanceImage( endpoint, token, imagetodel );
-		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
+		  RESTClient.deleteGlanceImage( U, imagetodel );
+		  jsonBuf = RESTClient.requestImages( U );
 	    } catch(RuntimeException e) {
-		errorMessage = "Runtime: " + e.getMessage();
-		hasError = true;
-		return "";
+		  errorMessage = "Runtime: " + e.getMessage();
+		  hasError = true;
 	    } catch(NotFoundException nfe) {
-		errorMessage = "NotFound: " + nfe.getMessage();
-		hasError = true;
-		return "";
-	    } // catch(NotAuthorizedException nfe) {
-	    // 	errorMessage = "NotAuthorized: " + nfe.getMessage();
-	    // 	hasError = true;
-	    // 	return "";
-	    // }
-	    
-	    return jsonBuf;
+		  errorMessage = "NotFound: " + nfe.getMessage();
+		  hasError = true;
+	    }
+	    return "";
 	}
 	
 	@Override
@@ -528,18 +502,16 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    User U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
+		    jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    								   U.getEndpoint(),
+		    								   U.getTenantName(),
+		    								   U.getUserName(),
+		    								   U.getPassword() );
+		    
 		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
+		    newUser.setPassword( U.getPassword() );
+		    newUser.setEndpoint( U.getEndpoint() );
+		    newUser.setSSL( U.useSSL() );
 		    U = newUser;
 		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) ); 
 		} catch(Exception e) {
@@ -550,11 +522,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    }
 
 	    try {
-		jsonBuf = RESTClient.requestImages( U.getEndpoint(), U.getToken() );
+	  	  jsonBuf = RESTClient.requestImages( U );
 	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
+		  errorMessage = e.getMessage();
+		  hasError = true;
+		  return "";
 	    }
 	    
 	    return jsonBuf;
@@ -568,7 +540,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	}
 	
 	@Override
-	    protected void onPostExecute( String result ) {
+	protected void onPostExecute( String result ) {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
@@ -580,11 +552,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    
 	    //downloading_image_list = false; // questo non va spostato da qui a
 	    try {
-		OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
-		OSImagesActivity.this.refreshView( );
+		  OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+		  OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
-		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
-			    OSImagesActivity.this);
+		  Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+			          OSImagesActivity.this);
 	    }
 	    //Utils.putLongPreference("LASTIMAGELIST_TIMESTAMP", Utils.now( ), OSImagesActivity.this );
 	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );

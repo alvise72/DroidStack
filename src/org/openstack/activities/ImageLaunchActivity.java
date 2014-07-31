@@ -298,11 +298,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    U = u[0];
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    String jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-							      U.getTenantName(),
-							      U.getUserName(),
-							      U.getPassword(),
-							      U.useSSL() );
+		    String jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    										  U.getEndpoint(),
+		    										  U.getTenantName(),
+		    										  U.getUserName(),
+		    										  U.getPassword());
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
@@ -321,11 +321,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    }
 
 	    try {
-		jsonBufFlavor    = RESTClient.requestFlavors( U.getEndpoint( ), U.getToken( ), U.getTenantID( ), U.getTenantName( ) );
-		jsonBufNetwork   = RESTClient.requestNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
-		jsonBufSubnet    = RESTClient.requestSubNetworks( U.getEndpoint( ), U.getToken(), U.getTenantName( ) );
-		jsonBufKeypairs  = RESTClient.requestKeypairs( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
-		jsonBufSecgroups = RESTClient.requestSecGroups( U.getEndpoint(), U.getTenantID(), U.getTenantName(), U.getToken( ) );
+		jsonBufFlavor    = RESTClient.requestFlavors( U );
+		jsonBufNetwork   = RESTClient.requestNetworks( U );
+		jsonBufSubnet    = RESTClient.requestSubNetworks( U );
+		jsonBufKeypairs  = RESTClient.requestKeypairs( U );
+		jsonBufSecgroups = RESTClient.requestSecGroups( U );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -432,11 +432,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    User U = ImageLaunchActivity.this.currentUser;
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-							      U.getTenantName(),
-							      U.getUserName(),
-							      U.getPassword(),
-							      U.useSSL() );
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    										   U.getEndpoint(),
+		    										   U.getTenantName(),
+		    										   U.getUserName(),
+		    										   U.getPassword() );
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
@@ -456,10 +456,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    
 
 	    try {
-		   RESTClient.requestInstanceCreation( U.getEndpoint(),
-							      U.getTenantID(),
-							      U.getTenantName(),
-							      U.getToken(),
+		   RESTClient.requestInstanceCreation( U,
 							      args[0],
 							      args[1],
 							      args[2],

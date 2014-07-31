@@ -418,11 +418,11 @@ public class ServersActivity extends Activity implements OnClickListener {
 	{
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    String _jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
+		    										   U.getEndpoint(),
+		    										   U.getTenantName(),
+		    										   U.getUserName(),
+		    										   U.getPassword() );
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
@@ -441,8 +441,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    
 
 	    try {
-		jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
+		jsonBuf = RESTClient.requestServers( U );
+		jsonBufferFlavor = RESTClient.requestFlavors( U );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
 		hasError = true;
@@ -489,18 +489,15 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    serverids = args[0].split(",");
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
-		    jsonBuf = RESTClient.requestToken( U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword(),
-						       U.useSSL() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
+		    jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    								   U.getEndpoint(),
+		    								   U.getTenantName(),
+		    								   U.getUserName(),
+		    								   U.getPassword() );
 		    U = ParseUtils.parseUser( jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
+		    U.setPassword( U.getPassword() );
+		    U.setEndpoint( U.getEndpoint() );
+		    U.setSSL( U.useSSL() );
 		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
 		    //username = U.getUserName();
 		} catch(Exception e) {
@@ -513,7 +510,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    try {
 		for(int i = 0; i<serverids.length; ++i) {
 		    try {
-			RESTClient.deleteInstance( U.getEndpoint(), U.getToken(), U.getTenantID(), serverids[i] );
+			RESTClient.deleteInstance( U, serverids[i] );
 		    } catch(NotFoundException nfe) {
 			not_found = true;
 		    }

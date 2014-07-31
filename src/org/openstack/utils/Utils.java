@@ -2,7 +2,6 @@ package org.openstack.utils;
 
 import java.net.URL;
 import java.util.*;
-//import java.security.MessageDigest;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.MappedByteBuffer;
@@ -11,36 +10,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
-//import java.io.FileOutputStream;
-//import java.io.ObjectInputStream;
-//import java.io.ObjectOutputStream;
 
-
-//import android.content.DialogInterface.OnClickListener;
-//import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.app.*;
-//import android.graphics.*;
-//import android.util.Log;
 import android.view.WindowManager;
 import android.net.*;
-//import android.net.NetworkInfo.*;
 import android.os.*;
-//import android.widget.TextView;
 import android.widget.LinearLayout;
-//import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
-
-//import android.view.*;
-
-
-import java.util.Calendar;
-//import java.util.TimeZone;
-//import java.text.SimpleDateFormat;
-//import java.util.Set;
-
 
 public class Utils {
 
@@ -82,7 +61,23 @@ public class Utils {
      *
      */
     public static String getFileSize( File file ) {
-	return StatTransfer.getBytesString( file.length() );
+	  long bytes = file.length();
+      String unit = "";
+      double gB = 0.0;
+    	if(bytes > 1024*1024 ) {
+    	    gB = (double)(((double)bytes)/1048576);
+    	    unit = "MB";
+    	}
+    	else {
+    	    gB = (double)(((double)bytes)/1024);
+    	    unit = "kB";
+    	}
+    	StringBuilder sb = new StringBuilder();
+    	Formatter formatter = new Formatter(sb);
+    	formatter.format(Locale.US, "%.2f %s",gB, unit);
+    	String res = formatter.toString( );
+    	formatter.close();
+    	return res;
     }
 
     /**

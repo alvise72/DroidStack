@@ -12,7 +12,7 @@
     <string name="PROJECTNAME">Nome progetto</string>
     <string name="USERNAME">Username</string>
     <string name="PASSWORD">Password</string>
-    <string name="USESSL">Keystone/SSL</string>
+    <string name="USESSL">Usa SSL</string>
     <string name="ADD">Aggiungi</string>
     <string name="ADDSUCCESS">Successo !\nPuoi aggiungere un altro utente o tornare indietro e selezionarne uno.</string>
     <string name="SELECTOSIMAGE">Seleziona un\'immagine OpenStack</string>
