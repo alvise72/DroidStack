@@ -108,7 +108,7 @@ public class OverViewActivity extends Activity {
 			      Vector<Server> servers, 
 			      Hashtable<String, Flavor> flavors,
 			      Vector<FloatingIP> fips, 
-			      SecGroup[] secgs ) 
+			      Vector<SecGroup> secgs ) 
     {
 	
 	Iterator<Server> it = servers.iterator();
@@ -143,10 +143,10 @@ public class OverViewActivity extends Activity {
 	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
 	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips!=null ? fips.size() : 0 );
 	
-	((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.length : 0) );
+	((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.size() : 0) );
 	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
 	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.length : 0 );
+	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.size() : 0 );
     }
 
     /**

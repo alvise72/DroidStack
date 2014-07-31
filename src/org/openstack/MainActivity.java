@@ -29,10 +29,12 @@ import android.widget.TextView;
 
 
 
+
 import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.activities.FloatingIPActivity;
+import org.openstack.activities.SecGrpActivity;
 import org.openstack.activities.UsersActivity;
 import org.openstack.activities.ServersActivity;
 import org.openstack.activities.OSImagesActivity;
@@ -132,22 +134,13 @@ public class MainActivity extends Activity
 		  }
 	      };
 
-		// DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
-		// 	public void onClick(DialogInterface dialog, int id) {
-		// 	    dialog.cancel( );
-		// 	}
-		//     };
-
 	  builder.setPositiveButton("OK", yesHandler );
-	  //builder.setNegativeButton("No", noHandler );
-            
+	        
 	  AlertDialog alert = builder.create();
 	  alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
 				      WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 	  alert.show();
 
-	  //Utils.alert( "The device is NOT connected to Internet. This App cannot work.", this );
-	  //finish( );
       }
       
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
@@ -157,9 +150,7 @@ public class MainActivity extends Activity
 
 	  try {
 	      User u = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
-	      //Toast t = Toast.makeText(this, "Current user: "+u.getUserName() + " (" + u.getTenantName() + ")", Toast.LENGTH_SHORT);
-	      //t.setGravity( Gravity.CENTER, 0, 0 );
-	      //t.show();
+	      
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+u.getUserName() + " (" + u.getTenantName() + ")"); 
 	  } catch(Exception e) {
 	      Utils.alert("ERROR: "+e.getMessage(), this );
@@ -247,5 +238,22 @@ public class MainActivity extends Activity
 	Intent I = new Intent( MainActivity.this, c );
 	startActivity(I);
 	
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void secgroups( View v ) {
+	  //Utils.alert("NOTIMPLEMENTED", this);
+    	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
+    	Class<?> c = (Class<?>)SecGrpActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity(I);
     }
 }

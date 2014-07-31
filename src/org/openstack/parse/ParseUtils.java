@@ -476,21 +476,22 @@ public class ParseUtils {
      *
      *
      */    
-    public static SecGroup[] parseSecGroups( String jsonBuf ) throws ParseException  {
-	SecGroup secg[] = null;
+    public static Vector<SecGroup> parseSecGroups( String jsonBuf ) throws ParseException  {
+	//SecGroup secg[] = null;
+    	Vector<SecGroup> secg = new Vector<SecGroup>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray secgroups = (JSONArray)jsonObject.getJSONArray("security_groups");
-	    secg = new SecGroup[secgroups.length()];
+	    
 	    for(int i =0; i<secgroups.length(); ++i) {
-		JSONObject secgrp = secgroups.getJSONObject(i);
-		String id   = secgrp.getString("id");
-		String name = secgrp.getString("name");
-		secg[i] = new SecGroup( name, id );
+		  JSONObject secgrp = secgroups.getJSONObject(i);
+		  String id   = secgrp.getString("id");
+		  String name = secgrp.getString("name");
+		  secg.add( new SecGroup( name, id ) );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
  	}
-	return secg;
+	  return secg;
     }
 }

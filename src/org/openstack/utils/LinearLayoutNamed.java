@@ -4,6 +4,7 @@ import android.widget.LinearLayout;
 import android.content.Context;
 
 import org.openstack.views.FloatingIPView;
+import org.openstack.views.ListSecGroupView;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
@@ -15,6 +16,7 @@ public class LinearLayoutNamed extends LinearLayout implements Named {
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
+    private ListSecGroupView relatedListSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
 
     public LinearLayoutNamed( Context ctx, UserView uv ) {
@@ -43,9 +45,16 @@ public class LinearLayoutNamed extends LinearLayout implements Named {
      }   
         
 
+     public LinearLayoutNamed( Context ctx, ListSecGroupView nv ) {
+   	    super( ctx );
+     	relatedListSecGroupView = nv;
+     }
+     
     public UserView getUserView( ) { return relatedUserView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
+    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView; }
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
+    
 };

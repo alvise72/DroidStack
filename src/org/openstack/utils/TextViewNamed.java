@@ -5,7 +5,11 @@ import android.content.Context;
 //import android.widget.ImageView;
 
 
+
+
 import org.openstack.views.FloatingIPView;
+import org.openstack.views.ListSecGroupView;
+import org.openstack.views.SecGroupView;
 import org.openstack.views.UserView;
 import org.openstack.views.ServerView;
 import org.openstack.views.OSImageView;
@@ -17,6 +21,7 @@ public class TextViewNamed extends TextView implements Named {
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
+    private ListSecGroupView relatedListSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
 
     public TextViewNamed( Context ctx, UserView uv ) {
@@ -38,10 +43,14 @@ public class TextViewNamed extends TextView implements Named {
 	super( ctx );
 	relatedNetworkView = nv;
     }
-
+    public TextViewNamed( Context ctx, ListSecGroupView nv ) {
+    	super( ctx );
+    	relatedListSecGroupView = nv;
+        }
     public UserView getUserView( ) { return relatedUserView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
+    public ListSecGroupView getSecGroupView( ) { return relatedListSecGroupView;}
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
 };

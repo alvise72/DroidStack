@@ -2,7 +2,6 @@ package org.openstack.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-
 import android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,10 +26,13 @@ import org.openstack.utils.SecGroup;
 import org.openstack.utils.Network;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.Collection;
+import java.util.Vector;
+
 import org.apache.http.conn.util.InetAddressUtils;
 import org.openstack.R;
 
@@ -44,7 +46,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private Network networks[] = null;
     private Flavor flavors[] = null;
     private KeyPair keypairs[] = null;
-    private SecGroup secgroups[] = null;
+    private Vector<SecGroup> secgroups = null;
     private LinearLayout options = null;
     private LinearLayout networksL = null;
     HashSet<String> selectedSecgroups = null;
@@ -390,12 +392,20 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		secgroups = ParseUtils.parseSecGroups( jsonBufSecgroups );
 		//String[] secgroupNames = new String[secgroups.length];
 		
-		for(int i =0; i< secgroups.length; ++i) {
-		    SecGroupView sgv = new SecGroupView( secgroups[i], ImageLaunchActivity.this );
-		    sgv.setOnClickListener( ImageLaunchActivity.this );
-		    options.addView( sgv );
-		    if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
+		Iterator<SecGroup> sit = secgroups.iterator();
+		while(sit.hasNext()) {
+			SecGroupView sgv = new SecGroupView( sit.next(), ImageLaunchActivity.this );
+			sgv.setOnClickListener( ImageLaunchActivity.this );
+			options.addView( sgv );
+			if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
 		}
+		
+//		for(int i =0; i< secgroups.length; ++i) {
+//		    SecGroupView sgv = new SecGroupView( secgroups[i], ImageLaunchActivity.this );
+//		    sgv.setOnClickListener( ImageLaunchActivity.this );
+//		    options.addView( sgv );
+//		    if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
+//		}
 
 	    } catch(ParseException pe) {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 

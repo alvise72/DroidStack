@@ -411,7 +411,7 @@ public class RESTClient {
 	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	  v.add(p);
 	  return sendGETRequest( U.useSSL(), 
-			  				  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups",
+			  				 U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups",
 			  				 U.getToken(), 
 			                 v );
     }

@@ -43,4 +43,6 @@
     <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.</string>
     <string name="NOINSTANCEAVAIL">Non hai creato alcuna istanza.</string>
     <string name="NOIMAGEAAVAIL">Non hai caricato alcuna immagine.</string>
+    <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
+    <string name="SECGROUP">Gestisci Security Groups.</string>
 </resources>
