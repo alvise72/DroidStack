@@ -111,7 +111,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       imageID = bundle.getString("IMAGEID");
       
       progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-      progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
+      progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
       
       spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
       spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);

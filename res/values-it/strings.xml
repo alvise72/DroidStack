@@ -45,4 +45,9 @@
     <string name="NOIMAGEAAVAIL">Non hai caricato alcuna immagine.</string>
     <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
     <string name="SECGROUP">Gestisci Security Groups.</string>
+    <string name="NOTFIPAVAIL">Non hai ancora allocato alcun floating IP.</string>
+    <string name="NOTSECGAVAIL">Non hai ancora creato alcun security group.</string>
+    <string name="PLEASEWAITCONNECTING">Attendere prego: connessione al server remoto&#8230;</string>
+    <string name="AREYOUSURETODELETEVM">Sei sicuro di cancellare questa istanza ?</string>
+    <string name="YES">Si</string>
 </resources>

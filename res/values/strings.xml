@@ -27,8 +27,8 @@
     <string name="FIXEDIPLIST">Comma separated Fixed IPs (optional):</string>
     <string name="NOTIMPLEMENTED">Functionality not implemented yet</string>
     <string name="MENUDELETEALL">Delete all instances</string>
-    <string name="DELETEDINSTSANCES">Instances succesfully delete. Update window to refresh view.</string>
-    <string name="SOMEDELETIONFAILED">Some instance hasn\'t been found in the server (probably was already in deleting state)...\nDeletion\'s finished, refresh the window.</string>
+    <string name="DELETEDINSTSANCES">Instances successfully delete. Update window to refresh view.</string>
+    <string name="SOMEDELETIONFAILED">Some instance hasn\'t been found in the server (probably was already in deleting state)&#8230;\nDeletion\'s finished, refresh the window.</string>
     <string name="RESETFIELDS">Reset fields</string>
     <string name="SELECTEDUSER">Selected user</string>
     <string name="NONE">None</string>
@@ -45,4 +45,11 @@
     <string name="NOIMAGEAAVAIL">You haven\'t uploaded any image yet.</string>
     <string name="NOSECGRPSAVAIL">There\'re no security groups.</string>
     <string name="SECGROUP">Manage Security Groups.</string>
+    <string name="NOTFIPAVAIL">You haven\'t allocated any floating IP yet.</string>
+    <string name="NOTSECGAVAIL">You haven\'t created any security group yet.</string>
+    <string name="PLEASEWAITCONNECTING">Please wait: connecting to remote server&#8230;</string>
+    <string name="AREYOUSURETODELETEVM">Are you sure to delete this instance ?</string>
+    <string name="YES">Yes</string>
+    <string name="NO">No</string>
+    
 </resources>

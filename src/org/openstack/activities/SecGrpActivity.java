@@ -101,7 +101,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     public boolean onOptionsItemSelected( MenuItem item ) {
 	 
-        int id = item.getItemId();     
+        //int id = item.getItemId();     
         /*
         if( id == Menu.FIRST-1 ) {
             Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
@@ -333,7 +333,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	  setContentView( R.layout.secgrplist );
 	
 	  progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-      progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+      progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {

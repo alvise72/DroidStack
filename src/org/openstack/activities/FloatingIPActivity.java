@@ -79,7 +79,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  setContentView( R.layout.floatingip );
 	
 	  progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-      progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+      progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {
@@ -115,6 +115,10 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     private void refreshView( Vector<FloatingIP> fips ) {
 	  ((LinearLayout)findViewById(R.id.fipLayout)).removeAllViews();
+	  if(fips.size()==0) {
+		  Utils.alert(getString(R.string.NOTFIPAVAIL),this);
+		  return;
+	  }
 	  Iterator<FloatingIP> it = fips.iterator();
 	  while(it.hasNext()) {
 		FloatingIP fip = it.next();

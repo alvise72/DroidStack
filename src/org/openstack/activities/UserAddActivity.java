@@ -43,7 +43,7 @@ public class UserAddActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView( org.openstack.R.layout.useradd );
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-    progressDialogWaitStop.setMessage( "Please wait. Connecting to remote server..." );
+    progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
     
     String last_endpoint = Utils.getStringPreference("LAST_ENDPOINT", "", this);
     String last_tenant   = Utils.getStringPreference("LAST_TENANT", "", this);

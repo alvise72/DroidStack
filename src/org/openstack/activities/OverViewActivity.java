@@ -78,7 +78,7 @@ public class OverViewActivity extends Activity {
 	setContentView( R.layout.overview );
 
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+        progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
 	setTitle(getString(R.string.USAGEOVERVIEW));
 	try {

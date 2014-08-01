@@ -130,7 +130,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    return;
 	}
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+        progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	progressDialogWaitStop.show();
 	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
 	task.execute( U );

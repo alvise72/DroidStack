@@ -147,7 +147,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 		final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage( "Are you sure to delete this instance ?" );
+		builder.setMessage( getString(R.string.AREYOUSURETODELETEVM));
 		builder.setCancelable(false);
 	    
 		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
@@ -162,8 +162,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 			}
 		    };
 
-		builder.setPositiveButton("Yes", yesHandler );
-		builder.setNegativeButton("No", noHandler );
+		builder.setPositiveButton(getString(R.string.YES), yesHandler );
+		builder.setNegativeButton(getString(R.string.NO), noHandler );
             
 		AlertDialog alert = builder.create();
 		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
@@ -328,7 +328,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	//listedServers = new HashSet();
 
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-        progressDialogWaitStop.setMessage( "Please wait: connecting to remote server..." );
+        progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
