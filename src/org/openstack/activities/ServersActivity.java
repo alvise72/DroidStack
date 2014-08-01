@@ -1,8 +1,6 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
-
-
 import android.widget.LinearLayout;
 //import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -26,7 +24,7 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog;
 //import android.app.ActivityManager;
 import android.app.Activity;
-
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View.OnClickListener;
@@ -36,6 +34,7 @@ import android.view.View;
 
 //import java.io.IOException;
 
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,6 +42,7 @@ import java.util.Vector;
 //import java.util.Set;
 
 //import java.io.File;
+
 
 import org.openstack.comm.RESTClient;
 import org.openstack.comm.NotFoundException;
@@ -66,10 +66,12 @@ import org.openstack.utils.TextViewNamed;
 import org.openstack.utils.ImageButtonNamed;
 //import org.openstack.utils.LinearLayoutNamed;
 
+
 import android.graphics.Typeface;
 //import android.graphics.Color;
 
 import android.os.AsyncTask;
+
 import org.openstack.utils.CustomProgressDialog;
 
 //import java.util.HashSet;
@@ -534,11 +536,13 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    }
 
 	    try {
+	    	not_found = false;
 		for(int i = 0; i<serverids.length; ++i) {
 		    try {
-			RESTClient.deleteInstance( U, serverids[i] );
+			  RESTClient.deleteInstance( U, serverids[i] );
 		    } catch(NotFoundException nfe) {
-			not_found = true;
+		    	Log.d("SERVERSACT",nfe.getMessage());
+			  not_found = true;
 		    }
 		}
 		// jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
