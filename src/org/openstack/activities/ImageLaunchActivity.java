@@ -236,17 +236,24 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      
       selectedNetworks.clear();
       Iterator<String> it = mappingNetEditText.keySet().iterator();
-      if(it.hasNext() && count > 1) {
+      /*if(it.hasNext() && count > 1) {
+    	  Log.d("IMAGELAUNCH",it.next());
     	  Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
     	  return;
-      }
+      }*/
       while(it.hasNext()) {
 	    String netID = it.next();
 	    if(mappingNetEditText.get( netID ).isEnabled()==false)
 	      continue;
 	    String netIP = mappingNetEditText.get( netID ).getText().toString();
+	    //Log.d("IMAGELAUNCH", "netIP="+netIP);
+	    if(netIP!=null && netIP.length()!=0 && count>1) {
+	    	Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
+	    	return;
+	    }
 	    selectedNetworks.put( netID, netIP );
       }
+      
       
       it = mappingNetEditText.keySet().iterator();
       while(it.hasNext()) {

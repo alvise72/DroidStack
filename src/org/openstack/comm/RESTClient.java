@@ -589,6 +589,7 @@ public class RESTClient {
 	
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
+	    Log.d("RESTClient", "Status="+status);
 	} catch(IOException ioe) {
 	    //Log.d("RESTCLIENT", ioe.toString( ) );
 		if(usessl)
