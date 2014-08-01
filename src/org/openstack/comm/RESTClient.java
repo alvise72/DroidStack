@@ -334,9 +334,10 @@ public class RESTClient {
     public static void deleteInstance( User U, String serverid) 
 	throws RuntimeException, NotFoundException
     {
+    	//Log.d("RESTClient", U.toString());
 	try {
 	    //	    Log.d("RESTCLIENT", "serverid=["+serverid+"]");
-	    sendDELETERequest( U.useSSL(),"http://" + U.getEndpoint() + ":8774/v2/" +U.getTenantID()+ "/servers/"+serverid, 
+	    sendDELETERequest( U.useSSL(), U.getEndpoint() + ":8774/v2/" +U.getTenantID()+ "/servers/"+serverid, 
 			       U.getToken() );
 	} catch(NotAuthorizedException na) {
 	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the instance you're trying to delete is owned by you...");

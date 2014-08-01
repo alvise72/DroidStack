@@ -41,14 +41,14 @@
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
     <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.</string>
-    <string name="NOINSTANCEAVAIL">You haven\'t created any instance.</string>
-    <string name="NOIMAGEAAVAIL">You haven\'t uploaded any image yet.</string>
-    <string name="NOSECGRPSAVAIL">There\'re no security groups.</string>
+    <string name="NOINSTANCEAVAIL">There aren\'t instances.</string>
+    <string name="NOIMAGEAAVAIL">There aren\'t images.</string>
+    <string name="NOSECGRPSAVAIL">There aren\'t security groups.</string>
     <string name="SECGROUP">Manage Security Groups.</string>
-    <string name="NOTFIPAVAIL">You haven\'t allocated any floating IP yet.</string>
-    <string name="NOTSECGAVAIL">You haven\'t created any security group yet.</string>
+    <string name="NOTFIPAVAIL">There aren\'t allocated floating IP.</string>
     <string name="PLEASEWAITCONNECTING">Please wait: connecting to remote server&#8230;</string>
     <string name="AREYOUSURETODELETEVM">Are you sure to delete this instance ?</string>
+    <string name="AREYOUSURETODELETEVMS">Are you sure to delete all instances ?</string>
     <string name="YES">Yes</string>
     <string name="NO">No</string>
     

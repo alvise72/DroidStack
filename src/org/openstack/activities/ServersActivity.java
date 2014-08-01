@@ -115,23 +115,45 @@ public class ServersActivity extends Activity implements OnClickListener {
         }
 
         if( id == Menu.FIRST+1 ) { 
-	    if(U==null) {
-		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
-	    } else {
-		// progressDialogWaitStop.show();
-		// AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-		// task.execute( );
-		//serverIDs = Utils.join(listedServers,",");
-		progressDialogWaitStop.show();
-		AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
-		int numChilds = ((LinearLayout)findViewById(R.id.serverLayout)).getChildCount();
-		String[] listedServers = new String[numChilds];
-		for(int i = 0; i < numChilds; ++i) {
-		    View sv = ((LinearLayout)findViewById(R.id.serverLayout)).getChildAt(i);
-		    if(sv instanceof ServerView)
-			listedServers[i] = ((ServerView)sv).getServer().getID();
-		}
-		task.execute( Utils.join(listedServers, ",") ) ;
+	      if(U==null) {
+		    Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+	      } else {
+	      
+	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	  		builder.setMessage( getString(R.string.AREYOUSURETODELETEVMS));
+	  		builder.setCancelable(false);
+	  	    
+	  		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+	  			public void onClick(DialogInterface dialog, int id) {
+	  				progressDialogWaitStop.show();
+	  				AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
+	  				int numChilds = ((LinearLayout)findViewById(R.id.serverLayout)).getChildCount();
+	  				String[] listedServers = new String[numChilds];
+	  				for(int i = 0; i < numChilds; ++i) {
+	  				    View sv = ((LinearLayout)findViewById(R.id.serverLayout)).getChildAt(i);
+	  				    if(sv instanceof ServerView)
+	  					listedServers[i] = ((ServerView)sv).getServer().getID();
+	  				}
+	  				task.execute( Utils.join(listedServers, ",") ) ;
+	  			}
+	  		    };
+
+	  		DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+	  			public void onClick(DialogInterface dialog, int id) {
+	  			    dialog.cancel( );
+	  			}
+	  		    };
+
+	  		builder.setPositiveButton(getString(R.string.YES), yesHandler );
+	  		builder.setNegativeButton(getString(R.string.NO), noHandler );
+	              
+	  		AlertDialog alert = builder.create();
+	  		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+	  					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	  		alert.show();
+	    	
+	    	
+		
 		return true;
 	    }
         }
@@ -184,8 +206,6 @@ public class ServersActivity extends Activity implements OnClickListener {
 		s = ((TextViewNamed)v).getServerView( ).getServer( );
 	    if( v instanceof ServerView )
 		s = ((ServerView)v).getServer( );
-
-	    //Log.d("SERVERACTIVITY", s.toString());
 
 	    String[] secgrps = s.getSecurityGroupNames( );
 
@@ -499,12 +519,13 @@ public class ServersActivity extends Activity implements OnClickListener {
 		    								   U.getTenantName(),
 		    								   U.getUserName(),
 		    								   U.getPassword() );
-		    U = ParseUtils.parseUser( jsonBuf );
-		    U.setPassword( U.getPassword() );
-		    U.setEndpoint( U.getEndpoint() );
-		    U.setSSL( U.useSSL() );
+		    
+		    User newUser = ParseUtils.parseUser( jsonBuf );
+		    newUser.setPassword( U.getPassword() );
+		    newUser.setEndpoint( U.getEndpoint() );
+		    newUser.setSSL( U.useSSL() );
+		    U = newUser;
 		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
-		    //username = U.getUserName();
 		} catch(Exception e) {
 		    errorMessage = e.getMessage();
 		    hasError = true;
@@ -535,11 +556,11 @@ public class ServersActivity extends Activity implements OnClickListener {
         protected void onPostExecute( Void v ) {
 	    super.onPostExecute(v);
 	    ServersActivity.this.progressDialogWaitStop.dismiss( );
-	    if(not_found) {
+	    if(not_found==true) {
 		Utils.alert(ServersActivity.this.getString(R.string.SOMEDELETIONFAILED), ServersActivity.this );
 		return;
 	    }
- 	    if(hasError)
+ 	    if(hasError==true)
  		Utils.alert( errorMessage, ServersActivity.this );
  	    else
 		Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
