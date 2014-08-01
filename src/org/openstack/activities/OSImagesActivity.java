@@ -119,7 +119,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d("OSIMAGE.ONCREATE", "OSIMAGE.ONCREATE");
+	//	Log.d("OSIMAGE.ONCREATE", "OSIMAGE.ONCREATE");
 	setContentView( R.layout.osimagelist );
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
@@ -145,7 +145,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onResume( ) {
 	super.onResume( );
-	Log.d("OSIMAGE.ONRESUME", "OSIMAGE.ONRESUME");
+	//	Log.d("OSIMAGE.ONRESUME", "OSIMAGE.ONRESUME");
     }
  
     /**
@@ -157,7 +157,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onStart( ) {
 	super.onStart( );
-	Log.d("OSIMAGE.ONSTART", "OSIMAGE.ONSTART");
+	//	Log.d("OSIMAGE.ONSTART", "OSIMAGE.ONSTART");
     }
   
     /**
@@ -169,7 +169,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onPause( ) {
 	super.onPause( );
-	Log.d("OSIMAGE.ONPAUSE", "OSIMAGE.ONPAUSE");
+	//	Log.d("OSIMAGE.ONPAUSE", "OSIMAGE.ONPAUSE");
     }
 
     /**
@@ -181,7 +181,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onRestart( ) {
 	super.onRestart( );
-	Log.d("OSIMAGE.ONRESTART", "OSIMAGE.ONRESTART");
+	//	Log.d("OSIMAGE.ONRESTART", "OSIMAGE.ONRESTART");
     }
 
  
@@ -194,7 +194,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onStop( ) {
 	super.onStop( );
-	Log.d("OSIMAGE.ONSTOP", "OSIMAGE.ONSTOP");
+	//	Log.d("OSIMAGE.ONSTOP", "OSIMAGE.ONSTOP");
     }
 
     /**
@@ -206,7 +206,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onDestroy( ) {
       super.onDestroy( );
-	Log.d("OSIMAGE.ONDESTROY", "OSIMAGE.ONDESTROY");
+      //	Log.d("OSIMAGE.ONDESTROY", "OSIMAGE.ONDESTROY");
       progressDialogWaitStop.dismiss();
     }
    
@@ -220,7 +220,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 	super.onConfigurationChanged(newConfig);
-	Log.d("OSIMAGE.ONCONFIGURATIONCHANGE", "OSIMAGE.ONCONFIGURATIONCHANGE");
+	//	Log.d("OSIMAGE.ONCONFIGURATIONCHANGE", "OSIMAGE.ONCONFIGURATIONCHANGE");
 	//	setContentView(R.layout.osimagelist);
 	setContentView(R.layout.osimagelist);
 	this.refreshView( );

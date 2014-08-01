@@ -424,27 +424,26 @@ public class RESTClient {
      */
 
     public static void requestInstanceCreation( User U,
-    										    String instanceName, 
-    											String glanceImageID,
-    											String key_name, 
-    											String flavorID,
-    											int count, 
-    											String _secgrpIDs,
-    											String adminPass,
-    											Hashtable<String, String> netID_fixedIP,
-    											String filesDir ) 
+						String instanceName, 
+						String glanceImageID,
+						String key_name, 
+						String flavorID,
+						int count, 
+						String _secgrpIDs,
+						String adminPass,
+						Hashtable<String, String> netID_fixedIP,
+						String filesDir ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
     	boolean usessl = U.useSSL();
     	String proto = "http";
     	if(usessl)
-    		proto = "https";
+	    proto = "https";
 	String sUrl = proto + "://" + U.getEndpoint( ) + ":8774/v2/" + U.getTenantID( ) + "/servers";
 	URL url = null;
 	try {
 	    url = new URL(sUrl);
 	} catch(java.net.MalformedURLException mfu) {
-	    //	    Log.d("RESTClient", "EXCEPTION 1");
 	    throw new RuntimeException("new URL: " + mfu.toString( ) );
 	}
 	URLConnection conn = null;
@@ -531,17 +530,19 @@ public class RESTClient {
 	    "\", \"flavorRef\": \"" + flavorID + 
 	    "\", \"max_count\": " + count + 
 	    ", \"min_count\": " + count + userdata + "}}";
-	// ", \"networks\": [{\"uuid\": \"" + netID + "\"" + fixedip + "}]}}";
 
 	JSONObject obj = null;
+	//Log.d("RESTClient", "_secgrpIDs=["+_secgrpIDs+"]");
 	String[] secgrpIDs = _secgrpIDs.split(",");
 	//String[] networkIDs = _networkIDs.split(",");
 	try {
 	    obj = new JSONObject( _data );
 	    JSONArray secgs = new JSONArray();
 	    JSONArray nets = new JSONArray();
-	    for(int i = 0; i<secgrpIDs.length; ++i)
-		secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
+	    if(_secgrpIDs.length()!=0) 
+		for(int i = 0; i<secgrpIDs.length; ++i)
+		    secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
+
 
 	    {
 		Iterator<String> it = netID_fixedIP.keySet().iterator();
@@ -648,7 +649,7 @@ public class RESTClient {
     	else
     		Url = "http://"+Url;
     	
-    	Log.d("RESTClient", "sendGETRequest - URL="+Url);
+	//    	Log.d("RESTClient", "sendGETRequest - URL="+Url);
 	URL url = null;
 	try {
 	    url = new URL(Url);
@@ -680,7 +681,7 @@ public class RESTClient {
 	    }
 	    
 	    try {
-	      Log.d("RESTClient", "1 Connecting...");
+		//	      Log.d("RESTClient", "1 Connecting...");
 		  conn = (HttpsURLConnection)url.openConnection( );
 	    } catch(java.io.IOException ioe) {
 		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
@@ -688,7 +689,7 @@ public class RESTClient {
 	} else {
 	
 	    try {
-	    	Log.d("RESTClient", "2 Connecting...");
+		//	    	Log.d("RESTClient", "2 Connecting...");
 		  conn = (HttpURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {
 		  throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
@@ -710,7 +711,7 @@ public class RESTClient {
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
-		Log.d("RESTClient", "1 Disconnecting...");
+	    //		Log.d("RESTClient", "1 Disconnecting...");
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
@@ -733,14 +734,14 @@ public class RESTClient {
 		if( res>0 )
 		    buf += new String( b, 0, res );
 	} catch(java.io.IOException ioe) {
-		Log.d("RESTClient", "2 Disconnecting...");
+	    //		Log.d("RESTClient", "2 Disconnecting...");
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
 	}
-	Log.d("RESTClient", "3 Disconnecting...");
+	//	Log.d("RESTClient", "3 Disconnecting...");
 	if(usessl)
 		  ((HttpsURLConnection)conn).disconnect( );
 		else
@@ -875,7 +876,7 @@ public class RESTClient {
 	int status = HttpStatus.SC_OK;
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
-	    Log.d("RESTClient", "status="+status);
+	    //	    Log.d("RESTClient", "status="+status);
 	} catch(IOException ioe) {
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );

@@ -12,6 +12,7 @@ import android.app.ProgressDialog;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
+import android.util.Log;
 
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
@@ -259,13 +260,18 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    }
 	  }
       progressDialogWaitStop.show();
+      //Log.d("IMAGELAUNCH", "instanceName="+instanceName+" k="+k+" groups="+Utils.join( selectedSecgroups, ",") );
+      String keyP = "";
+      if(k!=-1)
+	  keyP = keypairs[k].getName();
       task.execute( instanceName, 
 		    imageID,
-		    keypairs[k].getName(), 
+		    keyP, 
 		    flavors[j].getID(),
 		    ""+count, 
 		    Utils.join( selectedSecgroups, "," ),
 		    adminPass);
+      progressDialogWaitStop.dismiss();
   }
 
     /**
@@ -400,13 +406,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 			if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
 		}
 		
-//		for(int i =0; i< secgroups.length; ++i) {
-//		    SecGroupView sgv = new SecGroupView( secgroups[i], ImageLaunchActivity.this );
-//		    sgv.setOnClickListener( ImageLaunchActivity.this );
-//		    options.addView( sgv );
-//		    if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
-//		}
-
 	    } catch(ParseException pe) {
 		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
 			    ImageLaunchActivity.this);
@@ -434,7 +433,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     {
      	private  String  errorMessage  = null;
 	    private  boolean hasError      = false;
-	    //private  String  jsonBuf       = null;
 
 	@Override
 	protected Void doInBackground( String... args ) 
@@ -443,10 +441,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
 		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
+							       U.getEndpoint(),
+							       U.getTenantName(),
+							       U.getUserName(),
+							       U.getPassword() );
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
@@ -467,15 +465,15 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 
 	    try {
 		   RESTClient.requestInstanceCreation( U,
-							      args[0],
-							      args[1],
-							      args[2],
-							      args[3],
-							      Integer.parseInt(args[4]),
-							      args[5],
-							      args[6],
-							      ImageLaunchActivity.this.selectedNetworks,
-							      Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this));
+						       args[0],
+						       args[1],
+						       args[2],
+						       args[3],
+						       Integer.parseInt(args[4]),
+						       args[5],
+						       args[6],
+						       ImageLaunchActivity.this.selectedNetworks,
+						       Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this));
 	    } catch(Exception e) {
 		   e.printStackTrace( );
 		   errorMessage = e.getMessage();
