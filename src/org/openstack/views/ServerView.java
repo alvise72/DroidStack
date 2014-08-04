@@ -31,6 +31,7 @@ public class ServerView extends LinearLayout {
 
     private ImageButtonNamed snapServer = null;
     private ImageButtonNamed deleteServer = null;
+    private ButtonNamed consoleLog = null;
 
     private Server S = null;
 
@@ -91,9 +92,17 @@ public class ServerView extends LinearLayout {
 		Status.setTextColor( Color.parseColor("#000000") );
 	}
 
+	LinearLayout.LayoutParams params5 = 
+		    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	consoleLog = new ButtonNamed(ctx, this, -1);
+	consoleLog.setText("Console Log");
+	consoleLog.setOnClickListener( (OnClickListener)ctx );
+	consoleLog.setLayoutParams(params5);
+	
 	text.addView(Name);
 	text.addView(Flavor);
 	text.addView(Status);
+	text.addView(consoleLog);
 	text.setOnClickListener( (OnClickListener)ctx );
 	row.addView(text);
 	setOnClickListener( (OnClickListener)ctx );
@@ -108,10 +117,11 @@ public class ServerView extends LinearLayout {
 
 	info = new LinearLayoutNamed( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
+	//info.setGravity(Gravity.CENTER_VERTICAL);
 	LinearLayout.LayoutParams params3 = 
-	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	info.setLayoutParams( params3 );
-	info.setGravity( Gravity.RIGHT );
+	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 	info.addView( snapServer );
 	info.addView( deleteServer );
 	
