@@ -54,6 +54,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private User currentUser = null;
     private Bundle bundle = null;
     private String imageID = null;
+    private String imageNAME = null;
     private Hashtable<String, EditTextNamed> mappingNetEditText = null;
     private Hashtable<String, String> selectedNetworks = null;
 
@@ -107,9 +108,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
   public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView( org.openstack.R.layout.launchimage );
-      setTitle("Launch Nova Instance");
+      
       bundle = getIntent( ).getExtras( );
       imageID = bundle.getString("IMAGEID");
+      imageNAME = bundle.getString("IMAGENAME");
+      setTitle(getString(R.string.LAUNCHIMAGE)+ " "+imageNAME);
       
       progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
       progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );

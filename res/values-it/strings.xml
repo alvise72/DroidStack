@@ -35,7 +35,6 @@
     <string name="MANAGENOVAINST">Gestisci istanze Nova</string>
     <string name="MANAGEGLANCEIMG">Gestisci immagini Glance</string>
     <string name="SELECTOSUSER">Seleziona un\'utente OpenStack</string>
-    <string name="LAUNCHIMAGE">Istanzia immagine Glance</string>
     <string name="NOCUSTOMIPWITHMOREVM">Non puoi specificare un indirizzo IP se lanci pi&#xf9; di un\'istanza</string>
     <string name="INCORRECTIPFORMAT">Formato IP non corretto</string>
     <string name="FLOATINGIP">Floating IP</string>
@@ -50,4 +49,5 @@
     <string name="AREYOUSURETODELETEVM">Sei sicuro di cancellare questa istanza ?</string>
     <string name="AREYOUSURETODELETEVMS">Sei sicuro di cancellare tutte le istanze ?</string>
     <string name="YES">Si</string>
+    <string name="LAUNCHIMAGE">Lancia immagine</string>
 </resources>

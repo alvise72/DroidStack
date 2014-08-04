@@ -72,6 +72,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     private Vector<OSImage> OS;
     private CustomProgressDialog progressDialogWaitStop = null;
     private String ID = null;
+    private String NAME = null;
     User U = null;
     
     /**
@@ -261,9 +262,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_LAUNCH_IMAGE ) {
 		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
+		NAME = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getName();
 		Class<?> c = (Class<?>)ImageLaunchActivity.class;
 		Intent I = new Intent( OSImagesActivity.this, c );
 		I.putExtra( "IMAGEID", ID );
+	    I.putExtra("IMAGENAME", NAME);
 		startActivity( I );
 	    }
 	}

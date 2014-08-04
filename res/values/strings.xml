@@ -35,7 +35,6 @@
     <string name="MANAGENOVAINST">Manage Nova instances</string>
     <string name="MANAGEGLANCEIMG">Manage Glance images</string>
     <string name="SELECTOSUSER">Select an OpenStack user</string>
-    <string name="LAUNCHIMAGE">Launch Glance image</string>
     <string name="NOCUSTOMIPWITHMOREVM">You cannot specify custom IP address with more than one instance to launch.</string>
     <string name="INCORRECTIPFORMAT">Incorrect IP address format</string>
     <string name="FLOATINGIP">Floating IP</string>
@@ -51,5 +50,6 @@
     <string name="AREYOUSURETODELETEVMS">Are you sure to delete all instances ?</string>
     <string name="YES">Yes</string>
     <string name="NO">No</string>
+    <string name="LAUNCHIMAGE">Launch image</string>
     
 </resources>

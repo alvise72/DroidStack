@@ -12,9 +12,9 @@ public class NetworkView extends CheckBox {
     Network net = null;
 
     public NetworkView( Network net, Context ctx ) {
-	super(ctx);
-	setText( net.getName( ) );
-	this.net = net;
+	  super(ctx);
+	  setText( net.getName( )+" ("+net.getSubNetworks()[0].getAddress()+")" );
+	  this.net = net;
     }
     
     public Network getNetwork( ) { return net; }
