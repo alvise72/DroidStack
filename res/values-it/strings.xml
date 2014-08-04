@@ -50,4 +50,5 @@
     <string name="AREYOUSURETODELETEVMS">Sei sicuro di cancellare tutte le istanze ?</string>
     <string name="YES">Si</string>
     <string name="LAUNCHIMAGE">Lancia immagine</string>
+    <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
 </resources>

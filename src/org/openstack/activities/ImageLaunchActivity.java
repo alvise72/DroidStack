@@ -274,6 +274,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       String keyP = "";
       if(k!=-1)
 	  keyP = keypairs[k].getName();
+      //progressDialogWaitStop.show();
       task.execute( instanceName, 
 		    imageID,
 		    keyP, 
@@ -281,7 +282,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    ""+count, 
 		    Utils.join( selectedSecgroups, "," ),
 		    adminPass);
-      progressDialogWaitStop.dismiss();
+      //progressDialogWaitStop.dismiss();
   }
 
     /**
@@ -497,11 +498,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPostExecute( Void v ) {
 	    super.onPostExecute( v );
-	    if(hasError) {
- 		Utils.alert( errorMessage, ImageLaunchActivity.this );
- 	    }
+	      if(hasError) {
+ 		    Utils.alert( errorMessage, ImageLaunchActivity.this );
+ 	      } else Utils.alert(getString(R.string.IMAGELAUNCHED), ImageLaunchActivity.this);
 	    
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+	    
 	}
     }
 }

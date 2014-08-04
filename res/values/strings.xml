@@ -51,5 +51,6 @@
     <string name="YES">Yes</string>
     <string name="NO">No</string>
     <string name="LAUNCHIMAGE">Launch image</string>
+    <string name="IMAGELAUNCHED">Image has been launched. Go to Instances to see it.</string>
     
 </resources>

@@ -330,7 +330,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 			}
 		
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
-			    String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
+			    //String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
 			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
 			    //Log.d("FIPACTIVITY", "serverid="+serverid);
 			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
