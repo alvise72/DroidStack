@@ -340,8 +340,8 @@ public class ParseUtils {
      *
      *
      */    
-    public static Hashtable<String, Flavor> parseFlavors( String jsonBuf )  throws ParseException {
-	Hashtable<String, Flavor> flavorTable = new Hashtable<String, Flavor>();
+    public static Vector<Flavor> parseFlavors( String jsonBuf )  throws ParseException {
+	Vector<Flavor> flavorTable = new Vector<Flavor>();
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray flavors = (JSONArray)jsonObject.getJSONArray("flavors");
@@ -358,7 +358,7 @@ public class ParseUtils {
 		int disk = flavor.getInt("disk");
 		String ID = (String)flavor.getString("id");
 		Flavor F = new Flavor(name, ID, ram, cpus, swap, ephemeral, disk);
-		flavorTable.put(F.getID(), F);
+		flavorTable.add( F );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
@@ -456,18 +456,18 @@ public class ParseUtils {
      *
      *
      */    
-    public static KeyPair[] parseKeyPairs( String jsonBuf ) throws ParseException  {
-	KeyPair kpairs[] = null;
+    public static Vector<KeyPair> parseKeyPairs( String jsonBuf ) throws ParseException  {
+	Vector<KeyPair> kpairs = new Vector<KeyPair>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray keypairs = (JSONArray)jsonObject.getJSONArray("keypairs");
-	    kpairs = new KeyPair[keypairs.length()];
+	    //kpairs = new KeyPair[keypairs.length()];
 	    for(int i =0; i<keypairs.length(); ++i) {
 		JSONObject keypair = keypairs.getJSONObject(i).getJSONObject("keypair");
 		String key  = keypair.getString("public_key");
 		String fp   = keypair.getString("fingerprint");
 		String name = keypair.getString("name");
-		kpairs[i] = new KeyPair( name, key, fp );
+		kpairs.add( new KeyPair( name, key, fp ) );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );

@@ -35,6 +35,7 @@ import android.view.View;
 //import java.io.IOException;
 
 
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,6 +43,7 @@ import java.util.Vector;
 //import java.util.Set;
 
 //import java.io.File;
+
 
 
 import org.openstack.comm.RESTClient;
@@ -65,6 +67,7 @@ import org.openstack.utils.TextViewNamed;
 //import org.openstack.utils.ImageViewNamed;
 import org.openstack.utils.ImageButtonNamed;
 //import org.openstack.utils.LinearLayoutNamed;
+
 
 
 import android.graphics.Typeface;
@@ -388,17 +391,25 @@ public class ServersActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshView( Vector<Server> servers, Hashtable<String, Flavor> flavors ) {
+    private void refreshView( Vector<Server> servers, Vector<Flavor> flavors ) {
 	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
 	if(servers.size()==0) {
 	  Utils.alert(getString(R.string.NOINSTANCEAVAIL), this);	
 	  return;
 	}
+	
+	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
+	Iterator<Flavor> fit = flavors.iterator();
+	while( fit.hasNext( ) ) {
+		Flavor f = fit.next();
+		flavHash.put( f.getID(), f );
+	}
+	
 	Iterator<Server> it = servers.iterator();
 	
 	while(it.hasNext()) {
 	    Server s = it.next();
-	    Flavor F = flavors.get( s.getFlavorID( ) );
+	    Flavor F = flavHash.get( s.getFlavorID( ) );
 	    if( F != null)
 		s.setFlavor( F );
 	    ServerView sv = new ServerView(s, this);
@@ -495,8 +506,8 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    
 	    try {
 		Vector<Server> servers = ParseUtils.parseServers( jsonBuf );
-		Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-		ServersActivity.this.refreshView( servers, flavors );
+		//Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
+		ServersActivity.this.refreshView( servers, ParseUtils.parseFlavors( jsonBufferFlavor ) );
 	    } catch(ParseException pe) {
 		Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 	    }

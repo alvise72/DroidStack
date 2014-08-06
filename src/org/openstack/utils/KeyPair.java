@@ -17,6 +17,6 @@ public class KeyPair {
     
     @Override
 	public String toString() {
-	return "KeyPair{name=" + name + ", fingerprint="+fingerprint+"}";
+	  return name;
     }
 }

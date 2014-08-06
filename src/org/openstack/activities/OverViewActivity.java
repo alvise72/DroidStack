@@ -111,7 +111,7 @@ public class OverViewActivity extends Activity {
   
     private void refreshView( Quota Q,
 			      Vector<Server> servers, 
-			      Hashtable<String, Flavor> flavors,
+			      Vector<Flavor> flavors,
 			      Vector<FloatingIP> fips, 
 			      Vector<SecGroup> secgs ) 
     {
@@ -120,11 +120,18 @@ public class OverViewActivity extends Activity {
 	int totMem = 0;
 	int totVCPU = 0;
 	int totInstances = 0;
+	
+	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
+	Iterator<Flavor> fit = flavors.iterator();
+	while( fit.hasNext( ) ) {
+		Flavor f = fit.next();
+		flavHash.put( f.getID(), f );
+	}
 	while( it.hasNext( ) ) {
 	    Server S = it.next( );
-	    Flavor F = flavors.get( S.getFlavorID( ) );
-	    totMem = F.getRAM( );
-	    totVCPU = F.getVCPU( );
+	    Flavor F = flavHash.get( S.getFlavorID( ) );
+	    totMem += F.getRAM( );
+	    totVCPU += F.getVCPU( );
 	    totInstances++;
 	}
     
