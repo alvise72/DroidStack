@@ -67,7 +67,7 @@ public class MainActivity extends Activity
 	
 	Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
 	Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
-
+	
 /*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         //SCREENH = d.getHeight();
