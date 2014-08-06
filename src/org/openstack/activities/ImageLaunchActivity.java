@@ -226,7 +226,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	  return;
       }
 
-      int j = spinnerFlavors.getSelectedItemPosition( );
+      //int j = spinnerFlavors.getSelectedItemPosition( );
       //int k = spinnerKeypairs.getSelectedItemPosition( );
 
       String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
@@ -276,13 +276,14 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       //if(k!=-1)
 	  //keyP = keypairs[k].getName();
       
-      KeyPair kp = (KeyPair)this.spinnerKeypairs.getSelectedItem();
+      KeyPair kp = (KeyPair)spinnerKeypairs.getSelectedItem();
+      Flavor flv = (Flavor)this.spinnerFlavors.getSelectedItem();
       
       //progressDialogWaitStop.show();
       task.execute( instanceName, 
 		    imageID,
 		    kp.getName(), 
-		    flavors[j].getID(),
+		    flv.getID(),
 		    ""+count, 
 		    Utils.join( selectedSecgroups, "," ),
 		    adminPass);
