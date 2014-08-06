@@ -46,7 +46,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private Spinner spinnerFlavors   = null;
     private Spinner spinnerKeypairs  = null;
     private Vector<Network> networks = null;
-    private Flavor flavors[] = null;
+    //private Flavor flavors[] = null;
     private Vector<KeyPair> keypairs = null;
     private Vector<SecGroup> secgroups = null;
     private LinearLayout options = null;
@@ -226,9 +226,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	  return;
       }
 
-      //int j = spinnerFlavors.getSelectedItemPosition( );
-      //int k = spinnerKeypairs.getSelectedItemPosition( );
-
       String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
@@ -240,11 +237,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      
       selectedNetworks.clear();
       Iterator<String> it = mappingNetEditText.keySet().iterator();
-      /*if(it.hasNext() && count > 1) {
-    	  Log.d("IMAGELAUNCH",it.next());
-    	  Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
-    	  return;
-      }*/
+      
       while(it.hasNext()) {
 	    String netID = it.next();
 	    if(mappingNetEditText.get( netID ).isEnabled()==false)
@@ -271,15 +264,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    }
 	  }
       progressDialogWaitStop.show();
-      //Log.d("IMAGELAUNCH", "instanceName="+instanceName+" k="+k+" groups="+Utils.join( selectedSecgroups, ",") );
-      //String keyP = "";
-      //if(k!=-1)
-	  //keyP = keypairs[k].getName();
       
       KeyPair kp = (KeyPair)spinnerKeypairs.getSelectedItem();
       Flavor flv = (Flavor)this.spinnerFlavors.getSelectedItem();
       
-      //progressDialogWaitStop.show();
       task.execute( instanceName, 
 		    imageID,
 		    kp.getName(), 
@@ -287,7 +275,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    ""+count, 
 		    Utils.join( selectedSecgroups, "," ),
 		    adminPass);
-      //progressDialogWaitStop.dismiss();
   }
 
     /**

@@ -36,6 +36,8 @@ import android.view.View;
 
 
 
+
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,6 +45,8 @@ import java.util.Vector;
 //import java.util.Set;
 
 //import java.io.File;
+
+
 
 
 
@@ -54,6 +58,7 @@ import org.openstack.parse.ParseException;
 
 
 import org.openstack.R;
+import org.openstack.utils.ButtonNamed;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 //import org.openstack.utils.Named;
@@ -70,6 +75,8 @@ import org.openstack.utils.ImageButtonNamed;
 
 
 
+
+
 import android.graphics.Typeface;
 //import android.graphics.Color;
 
@@ -83,6 +90,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
+	public String serverID;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -332,6 +340,14 @@ public class ServersActivity extends Activity implements OnClickListener {
 		name = s.getName();
 	    Utils.alertInfo( sv, "Instance information: "+name, this );
 	    
+	}
+	if(v instanceof ButtonNamed ) {
+		serverID = ((ButtonNamed)v).getServerView().getServer().getID();
+		//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+		progressDialogWaitStop.show();
+		ServersActivity.AsyncTaskOSLogServer task = new ServersActivity.AsyncTaskOSLogServer();
+		task.execute( );
+		//return;
 	}
     }
 
@@ -584,6 +600,72 @@ public class ServersActivity extends Activity implements OnClickListener {
  	    else
 		Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
 	    
+	}
+    }
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskOSLogServer extends AsyncTask<Void, String, String>
+    {
+     	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+	private  String   jsonBuf          = null;
+	//private  String   jsonBufferFlavor = null;
+	//private  String   username         = null;
+
+	@Override
+	protected String doInBackground( Void... v ) 
+	{
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
+		    										   U.getEndpoint(),
+		    										   U.getTenantName(),
+		    										   U.getUserName(),
+		    										   U.getPassword() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( _jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile( Utils.getStringPreference("FILESDIR", "", ServersActivity.this) );// to save new token + expiration
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    
+
+	    try {
+		  jsonBuf = RESTClient.requestServerLog( U, ServersActivity.this.serverID );
+	    } catch(Exception e) {
+		  errorMessage = e.getMessage();
+		  hasError = true;
+		  return "";
+	    }
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		  Utils.alert( "LOGSERVER: "+errorMessage, ServersActivity.this );
+ 		  ServersActivity.this.progressDialogWaitStop.dismiss( );
+ 		  return;
+ 	    }
+	    
+	    try {
+		  String consoleLog = ParseUtils.parseServerConsoleLog( jsonBuf );
+		  Utils.alert(consoleLog, ServersActivity.this);
+	    } catch(ParseException pe) {
+		  Utils.alert("ServersActivity.AsyncTaskOSLogServer.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
+	    }
+	    ServersActivity.this.progressDialogWaitStop.dismiss( );
 	}
     }
 }

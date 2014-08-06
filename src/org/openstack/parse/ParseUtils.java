@@ -499,4 +499,23 @@ public class ParseUtils {
  	}
 	  return secg;
     }
+
+    /**
+     *
+     *
+     *
+     *
+     */  
+	public static String parseServerConsoleLog(String jsonBuf)  throws ParseException  {
+		// TODO Auto-generated method stub
+		String consoleLog = null;
+		try{
+		    JSONObject jsonObject = new JSONObject( jsonBuf );
+		    consoleLog = jsonObject.getString("output");
+		    
+		} catch(org.json.JSONException je) {
+	 	    throw new ParseException( je.getMessage( ) );
+	 	}
+		return consoleLog;
+	}
 }
