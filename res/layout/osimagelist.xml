@@ -9,28 +9,47 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical" >
-    <!--
-    <TextView
-	android:id="@+id/osimages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Glance images:"
-	android:textColor="#333333"
-        android:paddingLeft="4sp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    -->
+    
+    
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />	  
+          <TextView
+              android:id="@+id/selected_user"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              android:text="@string/SELECTEDUSER"
+          />
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
+        <View   
+          android:layout_width="fill_parent"
+          android:layout_height="3dp"
+          android:background="#FF909090" />  
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
+        
   <ScrollView
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical" >
     
+    
     <LinearLayout
         android:id="@+id/osimagesLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-	android:layout_gravity="center_horizontal"
-	android:orientation="vertical" >
+	    android:layout_gravity="center_horizontal"
+	    android:orientation="vertical" >
       
+        
+        
     </LinearLayout>
   </ScrollView>
   </LinearLayout>

@@ -4,6 +4,7 @@
     <string name="OVERVIEW">Quotas</string>
     <string name="IMAGES">Images</string>
     <string name="INSTANCES">Instances</string>
+    <string name="MEMORY">Memory (MB)</string>
     <string name="CURRENTUSER">Current user</string>
     <string name="AVAILUSERS">Added users</string>
     <string name="ADDNEWUSER">Add new user</string>

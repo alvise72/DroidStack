@@ -13,6 +13,29 @@
       android:layout_height="fill_parent"
       android:background="#f2f2f2"
       android:orientation="vertical" >
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />	  
+          <TextView
+              android:id="@+id/selected_user"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              android:text="@string/SELECTEDUSER"
+          />
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
+        <View   
+          android:layout_width="fill_parent"
+          android:layout_height="3dp"
+          android:background="#FF909090" />  
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+        />
     <!--
     <TextView
 	android:id="@+id/floatingips"

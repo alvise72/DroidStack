@@ -66,7 +66,7 @@ public class MainActivity extends Activity
 	setContentView(R.layout.main);
 	
 	Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
-	Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
+    Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
 	
 /*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();

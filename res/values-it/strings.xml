@@ -4,6 +4,7 @@
     <string name="OVERVIEW">Quote</string>
     <string name="IMAGES">Immagini</string>
     <string name="INSTANCES">Istanze</string>
+    <string name="MEMORY">Memoria (MB)</string>
     <string name="CURRENTUSER">Utente corrente</string>
     <string name="AVAILUSERS">Aggiungi utenti</string>
     <string name="ADDNEWUSER">Add new user</string>
