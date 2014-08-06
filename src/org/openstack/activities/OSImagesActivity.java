@@ -2,7 +2,6 @@ package org.openstack.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
-
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 //import android.widget.EditText;
@@ -26,7 +25,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 //import android.app.ActivityManager;
 import android.app.Activity;
-
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.MenuItem;
@@ -36,6 +34,7 @@ import android.view.Menu;
 
 //import java.io.IOException;
 
+
 //import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -43,13 +42,13 @@ import java.util.Vector;
 
 //import java.io.File;
 
+
 import org.openstack.comm.RESTClient;
 import org.openstack.comm.NotFoundException;
 //import org.openstack.comm.NotAuthorizedException;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.utils.CustomProgressDialog;
-
 import org.openstack.R;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
@@ -130,6 +129,12 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    Utils.alert("OSImagesActivity: "+re.getMessage(), this );
 	    return;
 	}
+	
+	if(selectedUser.length()!=0)
+	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+	else
+      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+	   
 	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	progressDialogWaitStop.show();

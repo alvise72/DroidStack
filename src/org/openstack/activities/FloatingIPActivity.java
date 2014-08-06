@@ -2,6 +2,7 @@ package org.openstack.activities;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.view.View.OnClickListener;
@@ -88,7 +89,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    Utils.alert("FloatingIPActivity.onCreate: "+re.getMessage(), this );
 	    return;
 	  }
-
+	  if(selectedUser.length()!=0)
+		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+		else
+	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+		
 	  progressDialogWaitStop.show();
 	  AsyncTaskFIPList task = new AsyncTaskFIPList();
   	  task.execute( );

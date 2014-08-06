@@ -90,16 +90,11 @@ public class OverViewActivity extends Activity {
 	}  catch(RuntimeException re) {
 	    Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
 	}
-	if(selectedUserID.length()!=0) {
-	try {
-	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
-	  } catch(Exception e) {
-	      Utils.alert("ERROR: "+e.getMessage(), this );
-	      return;
-	  }
-    } else {
-	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-    }
+	if(selectedUserID.length()!=0)
+		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+		else
+	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+		
     }
  
     /**
