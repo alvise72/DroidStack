@@ -1,10 +1,16 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.app.ActionBar.LayoutParams;
 import android.app.ProgressDialog;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,6 +27,7 @@ import org.openstack.parse.ParseException;
 import org.openstack.R;
 import org.openstack.utils.FloatingIP;
 import org.openstack.utils.ImageButtonNamed;
+import org.openstack.utils.Network;
 import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
@@ -34,8 +41,10 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
+    private Vector<Network> networks = null;
+    private ArrayAdapter<Network> spinnerNetworksArrayAdapter  = null;
+	private Spinner spinnerNetworks;
     
-
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
         
@@ -78,7 +87,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
 	  setContentView( R.layout.floatingip );
-	
+	  
 	  progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
       progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
 	
@@ -93,7 +102,9 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
 		else
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-		
+      
+	  spinnerNetworks = (Spinner)findViewById(R.id.extnetSP);
+	  
 	  progressDialogWaitStop.show();
 	  AsyncTaskFIPList task = new AsyncTaskFIPList();
   	  task.execute( );
@@ -118,24 +129,35 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshView( Vector<FloatingIP> fips ) {
+    private void refreshView( Vector<FloatingIP> fips, Vector<Network> nets ) {
+      spinnerNetworksArrayAdapter = new ArrayAdapter<Network>(FloatingIPActivity.this, android.R.layout.simple_spinner_item, nets.subList(0, nets.size()));
+  	  spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+  	  spinnerNetworks.setAdapter(spinnerNetworksArrayAdapter);
+  	  
 	  ((LinearLayout)findViewById(R.id.fipLayout)).removeAllViews();
 	  if(fips.size()==0) {
 		  Utils.alert(getString(R.string.NOTFIPAVAIL),this);
-		  return;
+	  } else {
+	    Iterator<FloatingIP> it = fips.iterator();
+	    while(it.hasNext()) {
+		  FloatingIP fip = it.next();
+	      //Log.d("FIPACTIVITY","Adding fip "+fip.getIP());
+	      ((LinearLayout)findViewById( R.id.fipLayout) ).addView( new FloatingIPView( fip, this ) );
+	      ((LinearLayout)findViewById( R.id.fipLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+	      View space = new View( this );
+	      space.setMinimumHeight(10);
+	      ((LinearLayout)findViewById(R.id.fipLayout)).addView( space );
+	    }
 	  }
-	  Iterator<FloatingIP> it = fips.iterator();
-	  while(it.hasNext()) {
-		FloatingIP fip = it.next();
-	    ((LinearLayout)findViewById( R.id.fipLayout) ).addView( new FloatingIPView( fip, this ) );
-	    ((LinearLayout)findViewById( R.id.fipLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
-	    View space = new View( this );
-	    space.setMinimumHeight(10);
-	    ((LinearLayout)findViewById(R.id.fipLayout)).addView( space );
-	  }
+	  
+	  
     }
 
-
+    //__________________________________________________________________________________
+    public void allocateFIP( View v ) {
+    	Network selectedNet = (Network)spinnerNetworks.getSelectedItem();
+    	Utils.alert("Adding FIP from "+selectedNet, this);
+    }
 
 
 
@@ -167,6 +189,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
   	  private  boolean  hasError         = false;
 	  private  String   jsonBuf          = null;
 	  private  String   jsonBufServers	 = null;
+	  private  String   jsonBufNetworks  = null;
+	  private  String   jsonBufSubNets   = null;
 
 	@Override
 	protected String doInBackground( Void... v ) 
@@ -196,8 +220,10 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
 
 	    try {
-		  jsonBuf = RESTClient.requestFloatingIPs( U );
-		  jsonBufServers = RESTClient.requestServers( U );
+		  jsonBuf         = RESTClient.requestFloatingIPs( U );
+		  jsonBufServers  = RESTClient.requestServers( U );
+		  jsonBufNetworks = RESTClient.requestNetworks( U );
+		  jsonBufSubNets  = RESTClient.requestSubNetworks(U);
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -220,6 +246,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    try {
 	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIP(jsonBuf);
 	    	Vector<Server> servers = ParseUtils.parseServers( jsonBufServers );
+	    	networks = ParseUtils.parseNetworks( jsonBufNetworks, jsonBufSubNets );
 	    	Iterator<Server> it = servers.iterator();
 	    	Hashtable<String,String> mappingServerIDName = new Hashtable<String,String>();
 	    	while( it.hasNext( ) ) {
@@ -231,7 +258,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    		FloatingIP fip = fipit.next();
 	    	    fip.setServerName( mappingServerIDName.get(fip.getServerID()) );	
 	    	}
-	    	FloatingIPActivity.this.refreshView(fips);
+	    	FloatingIPActivity.this.refreshView(fips, networks);
 	    } catch(ParseException pe) {
 		  Utils.alert("FloatingIPActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
 	    }
@@ -323,9 +350,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
 			    String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
 			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-			    //Log.d("FIPACTIVITY", "serverid="+serverid);
 			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-				//Log.d("FIPACTIVITY", "serverid is null or zero");
 				Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
 				return;
 			    }
@@ -335,9 +360,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 			}
 		
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
-			    //String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
 			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-			    //Log.d("FIPACTIVITY", "serverid="+serverid);
 			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
 				// TODO: delete
 			    } else {

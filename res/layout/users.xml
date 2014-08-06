@@ -8,26 +8,18 @@
   <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-	    android:layout_gravity="right|center_vertical"
-	    android:orientation="horizontal"
+	        android:layout_gravity="right|center_vertical"
+	        android:orientation="horizontal"
             android:paddingRight="20dp"
-	    android:paddingTop="4dp"
-	    android:paddingBottom="4dp"
+	        android:paddingTop="4dp"
+	        android:paddingBottom="4dp"
             android:gravity="right" >
-    <!--
-  <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Touch image to add user"
-	android:textColor="#333333"
-        android:textSize="8sp" />
--->
+    
     <ImageButton
                     android:id="@+id/addUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/newuser"
-                    android:text="Press on image to add new user"
 		    android:background="#f2f2f2"
 		    android:onClick="addUser" />
     

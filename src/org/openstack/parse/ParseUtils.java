@@ -2,10 +2,13 @@ package org.openstack.parse;
 
 import java.util.Hashtable;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.Iterator;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -20,6 +23,7 @@ import org.openstack.utils.Server;
 import org.openstack.utils.Flavor;
 import org.openstack.utils.Quota;
 import org.openstack.utils.User;
+
 import android.util.Log;
 
 public class ParseUtils {
@@ -368,16 +372,16 @@ public class ParseUtils {
      *
      *
      */    
-    public static Network[] parseNetworks( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
+    public static Vector<Network> parseNetworks( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
 
 	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
 	//	Vector<Network> nets = null;
-	Network nets[] = null;
+	Vector<Network> nets = new Vector<Network>();
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
 	    //	    nets = new Vector();
-	    nets = new Network[networks.length()];
+	    //nets = new Network[networks.length()];
 	    for(int i =0; i<networks.length(); ++i) {
 		JSONObject network = networks.getJSONObject(i);
 		String status = (String)network.getString("status");
@@ -397,8 +401,9 @@ public class ParseUtils {
 		for(int j = 0; j< arraySubnetID.length; j++)
 		    if(subnetsTable.containsKey(arraySubnetID[j]) == true) 
 			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
-		
-		nets[i] = new Network(status, name, ID, _subnets, shared, up, ext, tenantID );
+	    Log.d("PARSENETWORK","NetName="+name);	
+		//nets[i] = new Network(status, name, ID, _subnets, shared, up, ext, tenantID );
+		nets.add( new Network(status, name, ID, _subnets, shared, up, ext, tenantID ) );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );

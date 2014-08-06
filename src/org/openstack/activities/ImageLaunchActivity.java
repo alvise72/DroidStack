@@ -44,7 +44,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private ArrayAdapter<String> spinnerKeypairsArrayAdapter = null;
     private Spinner spinnerFlavors   = null;
     private Spinner spinnerKeypairs  = null;
-    private Network networks[] = null;
+    private Vector<Network> networks = null;
     private Flavor flavors[] = null;
     private KeyPair keypairs[] = null;
     private Vector<SecGroup> secgroups = null;
@@ -365,8 +365,32 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    
 	    try {
 		networks = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
-		String[] netNames = new String[networks.length];
-		for(int i = 0; i<networks.length; ++i) {
+		String[] netNames = new String[networks.size()];
+		
+		Iterator<Network> netit = networks.iterator();
+		int i = 0;
+		while(netit.hasNext()) {
+			Network net = netit.next( );
+			netNames[i] = net.getName( );
+			if(U.getTenantID().compareTo( net.getTenantID() )!=0) {
+				if(net.isShared()==false)
+				    continue;
+			    }
+			    
+			    NetworkView nv = new NetworkView( net, ImageLaunchActivity.this );
+			    nv.setOnClickListener( ImageLaunchActivity.this );
+			    networksL.addView( nv );
+			    EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
+			    TextView tv = new TextView(  ImageLaunchActivity.this );
+			    tv.setText(getString(R.string.SPECIFYOPTIP));
+			    networksL.addView( tv );
+			    networksL.addView( etIP );
+			    etIP.setEnabled(false);
+			    mappingNetEditText.put( nv.getNetwork().getID(), etIP );
+			    i++;
+		}
+		
+/*		for(int i = 0; i<networks.length; ++i) {
 		    netNames[i] = networks[i].getName();
 
 		    if(U.getTenantID().compareTo( networks[i].getTenantID() )!=0) {
@@ -384,23 +408,23 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    networksL.addView( etIP );
 		    etIP.setEnabled(false);
 		    mappingNetEditText.put( nv.getNetwork().getID(), etIP );
-		}
+		}*/
 
 		Hashtable<String, Flavor> flavorTable = ParseUtils.parseFlavors( jsonBufFlavor );
 		Collection<Flavor> collFlav = flavorTable.values();
 		flavors = new Flavor[collFlav.size()];
 		collFlav.toArray(flavors);
 		String flavorNames[] = new String[flavors.length];
-		for(int i = 0; i<flavors.length; ++i)
-		    flavorNames[i] = flavors[i].getName();
+		for(int j = 0; j<flavors.length; ++j)
+		    flavorNames[j] = flavors[j].getName();
 		spinnerFlavorsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,flavorNames );
 		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
 
 		keypairs = ParseUtils.parseKeyPairs( jsonBufKeypairs );
 		String [] keypairNames = new String[keypairs.length];
-		for(int i =0; i< keypairs.length; ++i)
-		    keypairNames[i] = keypairs[i].getName();
+		for(int j =0; j< keypairs.length; ++j)
+		    keypairNames[j] = keypairs[j].getName();
 
 		spinnerKeypairsArrayAdapter = new ArrayAdapter<String>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,keypairNames );
 		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

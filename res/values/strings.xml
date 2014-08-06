@@ -53,5 +53,5 @@
     <string name="NO">No</string>
     <string name="LAUNCHIMAGE">Launch image</string>
     <string name="IMAGELAUNCHED">Image has been launched. Go to Instances to see it.</string>
-    
+    <string name="SPECIFYOPTIP">Specify IP (optional)</string>    
 </resources>

@@ -52,4 +52,5 @@
     <string name="YES">Si</string>
     <string name="LAUNCHIMAGE">Lancia immagine</string>
     <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
+    <string name="SPECIFYOPTIP">Specifica IP (opzionale)</string>
 </resources>
