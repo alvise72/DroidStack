@@ -10,28 +10,24 @@
         
       <View
           android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />	  
+          android:layout_height="3sp"/>	 
+ 
           <TextView
               android:id="@+id/selected_user"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:paddingLeft="10dp"
-              android:text="@string/SELECTEDUSER"
-
-          />
+              android:text="@string/SELECTEDUSER"/>
         <View
           android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
+          android:layout_height="3sp"/>
         <View   
           android:layout_width="fill_parent"
           android:layout_height="3dp"
-          android:background="#FF909090" />  
+          android:background="#FF909090"/>  
         <View
           android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
+          android:layout_height="3sp"/>
         
       <ScrollView
           android:id="@+id/scrollView1"
@@ -44,59 +40,49 @@
             android:orientation="vertical" >
         
 	      <LinearLayout
+              android:layout_weight="1"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
               android:orientation="horizontal">
 	    
-            <LinearLayout
-			    android:id="@+id/first_left"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-			    android:paddingLeft="4dp"
-                android:gravity="right" >
-              <Button
-				  android:id="@+id/LOGIN"
-				  android:layout_width="match_parent"
-				  android:layout_height="match_parent"
-				  android:drawableLeft="@drawable/users"
-				  android:padding="10dp"
-				  android:onClick="login"
-				  android:text="@string/USERS" />
+                
 
-            </LinearLayout>
+                    <Button
+			android:id="@+id/LOGIN"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:drawableLeft="@drawable/users"
+			android:padding="10dp"
+			android:onClick="login"
+                        android:layout_weight="1"
+			android:text="@string/USERS"/>
+
 	    
-            <LinearLayout
-		android:id="@+id/first_right"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-		android:paddingRight="4dp"
-                android:gravity="left" >
+            
 
-              <Button
+                     <Button
 		  android:id="@+id/OVERVIEW"
 		  android:layout_width="match_parent"
 		  android:layout_height="match_parent"
 		  android:drawableLeft="@drawable/overview"
 		  android:padding="10dp"
 		  android:onClick="overview"
+                  android:layout_weight="1"
 		  android:text="@string/OVERVIEW" />
 	      
-            </LinearLayout>
 	    
           </LinearLayout>
 
           <LinearLayout
+              android:layout_weight="1"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal" >
 	    
-            <LinearLayout
-		android:id="@+id/second_left"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-		android:paddingLeft="4dp"
-                android:gravity="right" >
-	      
               <Button
                   android:id="@+id/GLANCE"
                   android:layout_width="match_parent"
@@ -104,16 +90,8 @@
 		  android:onClick="glance"
 		  android:drawableLeft="@drawable/openstack"
 		  android:padding="10dp"
+                  android:layout_weight="1"
                   android:text="@string/IMAGES" />
-
-            </LinearLayout>
-	    
-            <LinearLayout
-		android:id="@+id/second_right"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-		android:paddingRight="4dp"
-                android:gravity="left" >
 
               <Button
                 android:id="@+id/NOVA"
@@ -122,38 +100,28 @@
 		android:drawableLeft="@drawable/terminal"
 		android:padding="10dp"
 		android:onClick="nova"
+                android:layout_weight="1"
                 android:text="@string/INSTANCES" />
 	      
-            </LinearLayout>
-	    
           </LinearLayout>
 
           <LinearLayout
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:layout_weight="1"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content" >
-
-              <LinearLayout
-                  android:id="@+id/third_left"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:gravity="right"
-                  android:paddingLeft="4dp" >
+              android:layout_height="match_parent" >
 
                   <Button
                       android:id="@+id/fips_but"
                       android:layout_width="match_parent"
-		  			  android:layout_height="match_parent"
+		      android:layout_height="match_parent"
                       android:onClick="floatingip"
+                      android:layout_weight="1"
                       android:text="Floating IP" />
 
-              </LinearLayout>
 
-              <LinearLayout
-                  android:id="@+id/third_right"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:gravity="left"
-                  android:paddingRight="4dp" >
+              
 
                   <Button
                       android:id="@+id/secg_but"
@@ -162,10 +130,10 @@
 		  			  android:onClick="secgroups"
 		  			  android:drawableLeft="@drawable/secgroup"
 		  			  android:padding="10dp"
+                      android:layout_weight="1"
                       android:text="Security Groups" />
 
-              </LinearLayout>
-
+             
           </LinearLayout>
 	  
         </LinearLayout>

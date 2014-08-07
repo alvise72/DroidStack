@@ -11,7 +11,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.util.Log;
-import android.view.View.OnClickListener;
+import android.view.View.OnClickListener; 
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +43,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     private User U = null;
     private Vector<Network> networks = null;
     private ArrayAdapter<Network> spinnerNetworksArrayAdapter  = null;
-	private Spinner spinnerNetworks;
+    private Spinner spinnerNetworks;
+    private String pool = null;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -152,11 +153,19 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     public void allocateFIP( View v ) {
     	Network selectedNet = (Network)spinnerNetworks.getSelectedItem();
+	if(selectedNet == null) {
+	   Utils.alert(getString(R.string.NONETSELECTED), this);
+	   return; 
+	}
     	if(selectedNet.isExt()==false) {
-    		Utils.alert(getString(R.string.FIPONLYFROMEXTERNAL), this);
-    		return;
+	    Utils.alert(getString(R.string.FIPONLYFROMEXTERNAL), this);
+	    return;
     	}
-    	Utils.alert("Adding FIP from "+selectedNet, this);
+	pool = selectedNet.getID();
+	progressDialogWaitStop.show();
+	AsyncTaskFIPAllocate task = new AsyncTaskFIPAllocate();
+	task.execute();
+	//    	Utils.alert("Adding FIP from "+selectedNet, this);
     }
 
 
@@ -343,31 +352,97 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 
+
+    //__________________________________________________________________________________
+    protected class AsyncTaskFIPAllocate extends AsyncTask<String, String, String>
+    {
+	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+      
 	@Override
-	public void onClick(View v) {
-		
-		if(v instanceof ImageButtonNamed) {
-			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
-			    String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
-			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-				Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
-				return;
-			    }
-			    progressDialogWaitStop.show();
-			    AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
-			    task.execute( fip, serverid );
-			}
-		
-			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
-			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-				  Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
-			    } else {
-				  Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
-				return;
-			    }
-			}
+	protected String doInBackground( String... ip_serverid ) 
+	{
+	    
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
+							       U.getEndpoint(),
+							       U.getTenantName(),
+							       U.getUserName(),
+							       U.getPassword());
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( _jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
+		  } catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
 		}
+	    }
+
+	    
+
+	    try {
+		RESTClient.requestFloatingIPAllocation(U, pool );	    
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    return "";
 	}
+	
+	@Override
+	protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+		Utils.alert( errorMessage, FloatingIPActivity.this );
+		FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+		return;
+ 	    }
+ 	    Utils.alert( getString(R.string.FIPALLOCATED), FloatingIPActivity.this );
+	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	}
+    }
+    
+    
+    
+    
+
+
+
+
+    @Override
+    public void onClick(View v) {
+	
+	if(v instanceof ImageButtonNamed) {
+	    if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
+		String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
+		String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+		if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+		    Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
+		    return;
+		}
+		progressDialogWaitStop.show();
+		AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+		task.execute( fip, serverid );
+	    }
+	    
+	    if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
+		String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+		if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+		    Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+		} else {
+		    Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
+		    return;
+		}
+	    }
+	}
+    }
 }
