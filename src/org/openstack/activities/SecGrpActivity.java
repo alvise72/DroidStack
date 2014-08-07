@@ -147,10 +147,13 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     @Override
     public void onClick( View v ) {
-	/*if(v instanceof ImageButtonNamed) {
-	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SERVER ) {
-		
-	    final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
+	if(v instanceof ImageButtonNamed) {
+	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SECGRP ) {
+	    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+	    	return;
+	    }
+	}
+	/*    final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage( "Are you sure to delete this instance ?" );

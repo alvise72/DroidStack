@@ -221,7 +221,7 @@ public class RESTClient {
 	   
 	   String extradata = "{\"removeFloatingIp\": {\"address\": \"" + floatingip + "\"}}";
 	   
-	   sendPOSTRequest( U.useSSL(),"http://" + U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
+	   sendPOSTRequest( U.useSSL(), U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
 			            U.getToken(), 
 			            extradata, 
 			            vp );
@@ -791,9 +791,9 @@ public class RESTClient {
     {
     	String Url = sURL;
     	if(usessl)
-    		Url = "https://"+Url;
+    		Url = "https://" + Url;
     	else
-    		Url = "http://"+Url;
+    		Url = "http://" + Url;
     	
 	URL url = null;
 	try {
@@ -801,8 +801,6 @@ public class RESTClient {
 	} catch(java.net.MalformedURLException mfu) {
 	    throw new RuntimeException("Malformed URL: " + mfu.toString( ) );
 	}
-	
-	//Log.d("RESTCLIENT","URL="+Url);
 	
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;

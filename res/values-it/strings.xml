@@ -40,7 +40,7 @@
     <string name="INCORRECTIPFORMAT">Formato IP non corretto</string>
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">Questo floating IP non &#xe8; associato ad alcun server.</string>
-    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna</string>
     <string name="NOINSTANCEAVAIL">Non ci sono istanze.</string>
     <string name="NOIMAGEAAVAIL">Non ci sono immagini.</string>
     <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
@@ -53,4 +53,5 @@
     <string name="LAUNCHIMAGE">Lancia immagine</string>
     <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
     <string name="SPECIFYOPTIP">Specifica IP (opzionale)</string>
+    <string name="FIPDISSOCIATED">Il floating IP &#xe8; stato dissociato dal server. Premi Menu-&gt;Aggiorna per ricaricare le informazioni.</string>
 </resources>

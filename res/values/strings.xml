@@ -40,7 +40,7 @@
     <string name="INCORRECTIPFORMAT">Incorrect IP address format</string>
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
-    <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window pressing Menu-&gt;Update.</string>
     <string name="NOINSTANCEAVAIL">There aren\'t instances.</string>
     <string name="NOIMAGEAAVAIL">There aren\'t images.</string>
     <string name="NOSECGRPSAVAIL">There aren\'t security groups.</string>
@@ -53,5 +53,6 @@
     <string name="NO">No</string>
     <string name="LAUNCHIMAGE">Launch image</string>
     <string name="IMAGELAUNCHED">Image has been launched. Go to Instances to see it.</string>
-    <string name="SPECIFYOPTIP">Specify IP (optional)</string>    
+    <string name="SPECIFYOPTIP">Specify IP (optional)</string>
+    <string name="FIPDISSOCIATED">Floating IP has been dissociated from the server. Press on Menu-&gt;Update to refresh view.</string>    
 </resources>

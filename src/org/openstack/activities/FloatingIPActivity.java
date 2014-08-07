@@ -47,12 +47,9 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
-        
         super.onCreateOptionsMenu( menu );
-        
         int order = Menu.FIRST;
         int GROUP = 0;
-                
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
         menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
 	    return true;
@@ -113,7 +110,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     @Override
     public void onResume( ) {
-	super.onResume( );
+	  super.onResume( );
     }
  
     /**
@@ -141,7 +138,6 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    Iterator<FloatingIP> it = fips.iterator();
 	    while(it.hasNext()) {
 		  FloatingIP fip = it.next();
-	      //Log.d("FIPACTIVITY","Adding fip "+fip.getIP());
 	      ((LinearLayout)findViewById( R.id.fipLayout) ).addView( new FloatingIPView( fip, this ) );
 	      ((LinearLayout)findViewById( R.id.fipLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
 	      View space = new View( this );
@@ -330,7 +326,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
  		  FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
  		  return;
  	    }
-	    
+ 	    Utils.alert( getString(R.string.FIPDISSOCIATED), FloatingIPActivity.this );
 	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
 	  }
     }
@@ -345,7 +341,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
+		
 		if(v instanceof ImageButtonNamed) {
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
 			    String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
@@ -362,9 +358,9 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 			if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
 			    String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
 			    if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-				// TODO: delete
+				  Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
 			    } else {
-				Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
+				  Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
 				return;
 			    }
 			}

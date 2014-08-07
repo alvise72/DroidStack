@@ -50,7 +50,7 @@ public class FloatingIPView extends LinearLayout {
 		nameLayout = new LinearLayout( ctx );
 		nameLayout.setOrientation( LinearLayout.VERTICAL );
 		LinearLayout.LayoutParams params2 
-		    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
 		nameLayout.setLayoutParams( params2 );
 		
 		
@@ -62,12 +62,15 @@ public class FloatingIPView extends LinearLayout {
 		textPool = new TextView( ctx );
 		textPool.setText( "Pool: "+fip.getPoolName() );
 		textPool.setTextColor( Color.parseColor("#333333") );
-		textPool.setTypeface( null, Typeface.BOLD );
+		//textPool.setTypeface( null, Typeface.BOLD );
 		
 		textServer = new TextView( ctx );
-		textServer.setText( "Server: "+(fip.getServerName()!=null && fip.getServerName().length()!=0 ? fip.getServerName() : "None") ); 
+		String serverText = "Server: "+(fip.getServerName()!=null && fip.getServerName().length()!=0 ? fip.getServerName() : "None");
+		if( serverText.length() >30 )
+			serverText = serverText.substring(0,27) + "...";
+		textServer.setText( serverText ); 
+		
 		textServer.setTextColor( Color.parseColor("#333333") );
-		textServer.setTypeface( null, Typeface.BOLD );
 		
 		nameLayout.addView(textIP);
 		nameLayout.addView(textPool);
@@ -78,7 +81,7 @@ public class FloatingIPView extends LinearLayout {
 		buttonsLayout = new LinearLayout( ctx );
 		buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 		LinearLayout.LayoutParams params4 
-		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
+		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 2.0f );
 		params4.gravity=Gravity.RIGHT;
 		buttonsLayout.setLayoutParams( params4 );
 		buttonsLayout.setGravity( Gravity.RIGHT );
