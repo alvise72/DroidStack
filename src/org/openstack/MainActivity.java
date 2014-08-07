@@ -76,9 +76,9 @@ public class MainActivity extends Activity
 	DisplayMetrics dm = new DisplayMetrics();
 	getWindowManager().getDefaultDisplay().getMetrics(dm);
 	SCREENW = dm.widthPixels;
+	int density = (int)this.getResources().getDisplayMetrics().density;
 	//Utils.putIntegerPreference("SCREENH", SCREENH, this);
-	//Utils.putIntegerPreference("SCREENW", SCREENW, this);
-
+	Utils.putIntegerPreference("DISPLAYDENSITY", density, this);
 	
     }
     

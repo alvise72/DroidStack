@@ -8,14 +8,13 @@ import android.widget.LinearLayout;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
-
+import android.util.Log;
 import android.view.Gravity;
 //import android.view.View;
 
 import android.content.Context;
 
 import org.openstack.R;
-
 import org.openstack.utils.*;
 
 public class ServerView extends LinearLayout {
@@ -58,7 +57,7 @@ public class ServerView extends LinearLayout {
 	text = new LinearLayoutNamed( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 = 
-	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 	text.setLayoutParams( params2 );
 
 	Name = new TextViewNamed( ctx, (ServerView)this );
@@ -77,7 +76,7 @@ public class ServerView extends LinearLayout {
 	Flavor.setText( flavName );
 	Flavor.setOnClickListener( (OnClickListener)ctx );
 	Flavor.setTextColor( Color.parseColor("#999999"));
-	
+	Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
 	Status = new TextViewNamed( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
 	Status.setOnClickListener( (OnClickListener)ctx );
@@ -93,9 +92,12 @@ public class ServerView extends LinearLayout {
 	}
 
 	LinearLayout.LayoutParams params5 = 
-		    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	consoleLog = new ButtonNamed(ctx, this, -1);
 	consoleLog.setText("Console Log");
+	consoleLog.setTextSize(10.0f);
+	int density = Utils.getIntegerPreference("DISPLAYDENSITY", 200, ctx);
+	consoleLog.setPadding(10 * density, 2 * density, 10 * density, 2 * density);
 	consoleLog.setOnClickListener( (OnClickListener)ctx );
 	consoleLog.setLayoutParams(params5);
 	
@@ -119,7 +121,7 @@ public class ServerView extends LinearLayout {
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	//info.setGravity(Gravity.CENTER_VERTICAL);
 	LinearLayout.LayoutParams params3 = 
-	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
 	info.setLayoutParams( params3 );
 	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 	info.addView( snapServer );
