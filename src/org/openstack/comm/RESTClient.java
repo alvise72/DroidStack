@@ -331,13 +331,13 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
      */
     public static String requestServers( User U ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return sendGETRequest( U.useSSL(),
-						    U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/detail",
-						   U.getToken(), 
-						   v );
+	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  return sendGETRequest( U.useSSL(),
+						     U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/detail?all_tenants=1",
+						     U.getToken(), 
+						     v );
     }
 
 

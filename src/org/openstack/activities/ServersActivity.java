@@ -654,7 +654,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
- 		  Utils.alert( "LOGSERVER: "+errorMessage, ServersActivity.this );
+ 		  Utils.alert( errorMessage, ServersActivity.this );
  		  ServersActivity.this.progressDialogWaitStop.dismiss( );
  		  return;
  	    }
