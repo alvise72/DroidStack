@@ -58,4 +58,5 @@
     <string name="FIPONLYFROMEXTERNAL">The selected network is not of external type. You can get Floating IP only from External networks.\nSelect a different network (if any).</string>  
     <string name="NONETSELECTED">You haven\'t selected any external network (or you cannot access to any one).</string>
     <string name="FIPALLOCATED">Floating IP allocated. Press on Menu-&gt;Update to refresh window.</string>
+    <string name="FIPRELEASED">Floating IP released. Press on Menu-&gt;Update to refresh window.</string>
 </resources>

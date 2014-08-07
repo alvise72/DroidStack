@@ -45,6 +45,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     private ArrayAdapter<Network> spinnerNetworksArrayAdapter  = null;
     private Spinner spinnerNetworks;
     private String pool = null;
+	private String fip_to_release_ID = null;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -283,7 +284,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
     
     //__________________________________________________________________________________
-    protected class AsyncTaskFIPRelease extends AsyncTask<String, String, String>
+    protected class AsyncTaskFIPDeassociate extends AsyncTask<String, String, String>
     {
       private  String   errorMessage     = null;
   	  private  boolean  hasError         = false;
@@ -414,6 +415,83 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskFIPRelease extends AsyncTask<String, String, String>
+    {
+	private  String   errorMessage     = null;
+	private  boolean  hasError         = false;
+      
+	@Override
+	protected String doInBackground( String... ip_serverid ) 
+	{
+	    
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
+							       U.getEndpoint(),
+							       U.getTenantName(),
+							       U.getUserName(),
+							       U.getPassword());
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( _jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
+		  } catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    
+
+	    try {
+		  RESTClient.requestFloatingIPRelease(U, fip_to_release_ID );	    
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    return "";
+	}
+	
+	@Override
+	protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+		Utils.alert( errorMessage, FloatingIPActivity.this );
+		FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+		return;
+ 	    }
+ 	    Utils.alert( getString(R.string.FIPRELEASED), FloatingIPActivity.this );
+	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -430,14 +508,18 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		    return;
 		}
 		progressDialogWaitStop.show();
-		AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+		AsyncTaskFIPDeassociate task = new AsyncTaskFIPDeassociate();
 		task.execute( fip, serverid );
 	    }
 	    
 	    if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
 		String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
 		if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-		    Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+			fip_to_release_ID  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getID();
+			progressDialogWaitStop.show();
+		    AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+		    task.execute();
+		    
 		} else {
 		    Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
 		    return;
