@@ -1,23 +1,14 @@
 <LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="462dp"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
-      
-      <ScrollView
-          android:id="@+id/scrollView1"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" >
-	
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        <View
+        
+      <View
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />	  
@@ -41,26 +32,36 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
-	  <LinearLayout
+        
+      <ScrollView
+          android:id="@+id/scrollView1"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" >
+	
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        
+	      <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="horizontal" >
+              android:orientation="horizontal">
 	    
             <LinearLayout
-		android:id="@+id/first_left"
+			    android:id="@+id/first_left"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-		android:paddingLeft="4dp"
+			    android:paddingLeft="4dp"
                 android:gravity="right" >
-
               <Button
-		  android:id="@+id/LOGIN"
-		  android:layout_width="match_parent"
-		  android:layout_height="match_parent"
-		  android:drawableLeft="@drawable/users"
-		  android:padding="10dp"
-		  android:onClick="login"
-		  android:text="@string/USERS" />
+				  android:id="@+id/LOGIN"
+				  android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:drawableLeft="@drawable/users"
+				  android:padding="10dp"
+				  android:onClick="login"
+				  android:text="@string/USERS" />
 
             </LinearLayout>
 	    
