@@ -54,5 +54,6 @@
     <string name="LAUNCHIMAGE">Launch image</string>
     <string name="IMAGELAUNCHED">Image has been launched. Go to Instances to see it.</string>
     <string name="SPECIFYOPTIP">Specify IP (optional)</string>
-    <string name="FIPDISSOCIATED">Floating IP has been dissociated from the server. Press on Menu-&gt;Update to refresh view.</string>    
+    <string name="FIPDISSOCIATED">Floating IP has been dissociated from the server. Press on Menu-&gt;Update to refresh view.</string>
+    <string name="FIPONLYFROMEXTERNAL">The selected network is not of external type. You can get Floating IP only from External networks.\nSelect a different network (if any).</string>    
 </resources>

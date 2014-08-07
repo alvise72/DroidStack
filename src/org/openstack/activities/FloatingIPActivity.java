@@ -152,6 +152,10 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     public void allocateFIP( View v ) {
     	Network selectedNet = (Network)spinnerNetworks.getSelectedItem();
+    	if(selectedNet.isExt()==false) {
+    		Utils.alert(getString(R.string.FIPONLYFROMEXTERNAL), this);
+    		return;
+    	}
     	Utils.alert("Adding FIP from "+selectedNet, this);
     }
 
