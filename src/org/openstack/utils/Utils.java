@@ -20,6 +20,7 @@ import android.net.*;
 import android.os.*;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 public class Utils {
 
@@ -361,6 +362,27 @@ public class Utils {
         alert.show();
     }
 
+    /**
+     *
+     *
+     *
+     *
+     */
+    public static void alertCustom( String message, String title, float fontsize, Context ctx ) {
+	  AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
+      alertbox.setMessage( message );
+	  alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface arg0, int arg1) {
+        }
+      });
+	  AlertDialog alert = alertbox.create();
+	  alert.getWindow().setFlags( WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+				                  WindowManager.LayoutParams.FLAG_DIM_BEHIND );
+	  alert.setTitle(title);
+      alert.show();
+      TextView msgTxt = (TextView)alert.findViewById(android.R.id.message);
+      msgTxt.setTextSize(fontsize);
+    }
     /**
      *
      *
