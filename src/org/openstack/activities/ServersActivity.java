@@ -236,7 +236,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    tv5.setText("Flavor: ");
 	    tv5.setTypeface( null, Typeface.BOLD );
 	    TextView tv6 = new TextView(this);
-	    tv6.setText( s.getFlavor( ).getName() + " (" + (int)(s.getFlavor( ).getDISK()) + "GB, " +s.getFlavor( ).getVCPU( )+ " cpu, " + s.getFlavor( ).getRAM( ) + " ram)" );
+	    tv6.setText( s.getFlavor( ).getFullInfo() );//.getName() + " (" + (int)(s.getFlavor( ).getDISK()) + "GB, " +s.getFlavor( ).getVCPU( )+ " CPU, " + s.getFlavor( ).getRAM( ) + "MB RAM)" );
 	    TextView tv7 = new TextView(this);
 	    tv7.setText("Fixed IP(s):");
 	    tv7.setTypeface( null, Typeface.BOLD );

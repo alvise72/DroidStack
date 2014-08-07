@@ -70,13 +70,13 @@ public class ServerView extends LinearLayout {
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	Flavor = new TextViewNamed( ctx, (ServerView)this );
-	String flavName = S.getFlavor( ).getName() + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
+	String flavName = S.getFlavor( ).getName();// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
 	if(flavName.length()>30)
 	    flavName = flavName.substring(0,28) + "..";
 	Flavor.setText( flavName );
 	Flavor.setOnClickListener( (OnClickListener)ctx );
 	Flavor.setTextColor( Color.parseColor("#999999"));
-	Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
+	//Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
 	Status = new TextViewNamed( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
 	Status.setOnClickListener( (OnClickListener)ctx );
@@ -129,6 +129,31 @@ public class ServerView extends LinearLayout {
 	
 	row.addView( info );
 	addView( row );
+	
+/*    int textLayoutWidth = text.getLayoutParams()..width;
+    int nameWidth       = Name.getLayoutParams().width;
+    int flavorWidth     = Flavor.getLayoutParams().width;
+    int statusWidth     = Status.getLayoutParams().width;
+    Log.d("SERVERVIEW", "textLayoutWidth="+textLayoutWidth+" - nameWidth="+nameWidth);
+    if( nameWidth >= textLayoutWidth ) {
+    	String origText = Name.getText().toString();
+    	origText = origText.substring(0, origText.length()-7);
+    	origText = origText + "...";
+    	Name.setText(origText);
+    }
+    if( flavorWidth >= textLayoutWidth ) {
+    	String origText = Flavor.getText().toString();
+    	origText = origText.substring(0, origText.length()-7);
+    	origText = origText + "...";
+    	Flavor.setText(origText);
+    }
+    if( statusWidth >= textLayoutWidth ) {
+    	String origText = Status.getText().toString();
+    	origText = origText.substring(0, origText.length()-7);
+    	origText = origText + "...";
+    	Status.setText(origText);
+    } */
+    		
     }
 
     public Server getServer( ) { return S; }

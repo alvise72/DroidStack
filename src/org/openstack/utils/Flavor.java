@@ -54,4 +54,8 @@ public class Flavor  implements Comparable<Flavor>, Serializable {
 	public String toString( ) {
 	  return name;
     }
+    
+    public String getFullInfo( ) {
+    	return name + " (" + disk + "GB, " + vcpus + " CPU, " + ram + "MB RAM)"; 
+    }
 }
