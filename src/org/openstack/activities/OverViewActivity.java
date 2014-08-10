@@ -125,13 +125,19 @@ public class OverViewActivity extends Activity {
 	Iterator<Flavor> fit = flavors.iterator();
 	while( fit.hasNext( ) ) {
 		Flavor f = fit.next();
+		Log.d("OVERVIEW","Putting "+f.getID( ) + " -> "+f.toString());
 		flavHash.put( f.getID(), f );
 	}
 	while( it.hasNext( ) ) {
 	    Server S = it.next( );
+	    Log.d("OVERVIEW", "FlavorID for Server " + S.getName( ) + " = "+S.getFlavorID( ) );
 	    Flavor F = flavHash.get( S.getFlavorID( ) );
+	    if(F!=null) {
 	    totMem += F.getRAM( );
 	    totVCPU += F.getVCPU( );
+	    } else {
+	    	Utils.alert("FlavorID Mismatch! The instance ["+S.getID()+"] has a FlavorID ["+S.getFlavorID( )+"] which is not present in the flavor list", this);
+        }
 	    totInstances++;
 	}
     
@@ -212,15 +218,15 @@ public class OverViewActivity extends Activity {
 	    }
 
 	    try {
-	    Log.d("OVERVIEW", "requestQuota...");
+	    //Log.d("OVERVIEW", "requestQuota...");
 		jsonBufQuota = RESTClient.requestQuota( U );
-	    Log.d("OVERVIEW", "requestServers...");
+	    //Log.d("OVERVIEW", "requestServers...");
 		jsonBuf = RESTClient.requestServers( U );
-	    Log.d("OVERVIEW", "requestFIP...");
+	    //Log.d("OVERVIEW", "requestFIP...");
 		jsonBufFIPs = RESTClient.requestFloatingIPs( U );
-	    Log.d("OVERVIEW", "requestSECG...");
+	    //Log.d("OVERVIEW", "requestSECG...");
 		jsonBufSecgs = RESTClient.requestSecGroups( U );
-	    Log.d("OVERVIEW", "requestFlavors...");
+	    //Log.d("OVERVIEW", "requestFlavors...");
 		jsonBufferFlavor = RESTClient.requestFlavors( U );
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();

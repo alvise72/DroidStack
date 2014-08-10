@@ -247,10 +247,16 @@ public class ParseUtils {
      *
      */    
     public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
-
-	//Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
-
-	Vector<Server> serverVector = new Vector<Server>();
+    
+/*    int start = 0;
+    int end   = 511;
+    while(end<=jsonBuf.length()) {
+      Log.d("PARSEUTILS", jsonBuf.substring(start, end));
+      start+=512;
+      end+=512;
+    }*/
+    //Log.d("PARSEUTILS",jsonBuf.substring(start, jsonBuf.length()-1));
+    Vector<Server> serverVector = new Vector<Server>();
 	String status        = "N/A";
 	String keyname       ="N/A";
 	String[] secgrpNames = null;
@@ -277,7 +283,8 @@ public class ParseUtils {
 			secgrpNames[j] = secgarray.getJSONObject(j).getString("name");
 
 		} catch(JSONException je) { secgrpNames = null; }
-		flavorID = (String)((JSONObject)server.getJSONObject("flavor")).getString("id");
+		JSONObject flavObj = server.getJSONObject("flavor");
+		flavorID = flavObj.getString("id");
 		ID = (String)server.getString("id");
 		if(server.has("OS-EXT-SRV-ATTR:hypervisor_hostname"))
 		    computeNode = server.getString("OS-EXT-SRV-ATTR:hypervisor_hostname");
