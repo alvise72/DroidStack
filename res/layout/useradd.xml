@@ -51,7 +51,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text=""
-		    android:textSize="14sp"
+		    		android:textSize="14sp"
                     android:ems="10" />
 	<TextView
 		android:layout_width="fill_parent"
@@ -66,7 +66,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text=""
-		    android:textSize="14sp"
+		    		android:textSize="14sp"
                     android:ems="10" />
 	<TextView
 		android:layout_width="fill_parent"
@@ -74,16 +74,31 @@
 		android:text="Password:"
 		android:textStyle="bold"
 		android:textSize="14sp"
-                android:paddingLeft="4dp"
+        android:paddingLeft="4dp"
 		android:ems="10" />
+	    <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
         <EditText
                     android:id="@+id/passwordET"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-		    android:textSize="14sp"
+		    		android:textSize="14sp"
                     android:text=""
+                    android:layout_weight="1"
                     android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/checkBoxPWD"
+            android:onClick="showPWD"
+            android:layout_weight="3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SHOWPWD" />
+
+        </LinearLayout>
         <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

@@ -58,4 +58,5 @@
     <string name="NONETSELECTED">Non hai selezionato una rete esterna (o non hai accesso ad alcuna)).</string>
     <string name="FIPALLOCATED">Floating IP allocato. Premi su on Menu-&gt;Aggiorna per ricaricare le informazioni.</string>
     <string name="FIPRELEASED">Floating IP rilasciato. Premi su Menu-&gt;Aggiorna per ricaricare le informazioni.</string>
+    <string name="SHOWPWD">Mostra</string>
 </resources>

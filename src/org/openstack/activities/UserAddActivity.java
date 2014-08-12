@@ -6,16 +6,15 @@ import android.widget.EditText;
 import android.widget.CheckBox;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.text.InputType;
 import android.view.WindowManager;
 import android.view.View;
 
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
-
 import org.openstack.comm.RESTClient;
 import org.openstack.utils.CustomProgressDialog;
 import org.openstack.parse.ParseUtils;
-
 import org.openstack.R;
 
 public class UserAddActivity extends Activity {
@@ -50,11 +49,22 @@ public class UserAddActivity extends Activity {
     String last_username = Utils.getStringPreference("LAST_USERNAME", "", this);
     String last_password = Utils.getStringPreference("LAST_PASSWORD", "", this);
     boolean usessl       = Utils.getBoolPreference("LAST_USESSL", false, this);
+    boolean showPWD      = Utils.getBoolPreference("LAST_SHOWPWD", false, this);
     ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
     ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
     ((EditText)findViewById(R.id.usernameET)).setText( last_username );
     ((EditText)findViewById(R.id.passwordET)).setText( last_password );
     ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
+    ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
+    
+    EditText pwd = (EditText)this.findViewById(R.id.passwordET);
+    CheckBox showpwd = (CheckBox)this.findViewById(R.id.checkBoxPWD);
+    if(showpwd.isChecked() == false) {
+    	pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+		pwd.setSelection(pwd.getText().length());
+    }
+    else
+    	pwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
   }
   
   
@@ -101,6 +111,7 @@ public class UserAddActivity extends Activity {
       Utils.putStringPreference("LAST_USERNAME", ((EditText)findViewById(R.id.usernameET)).getText().toString().trim(), this);
       Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);     
       Utils.putBoolPreference("LAST_USESSL", ((CheckBox)findViewById(R.id.usesslCB)).isChecked( ), this);
+      Utils.putBoolPreference("LAST_SHOWPWD", ((CheckBox)findViewById(R.id.checkBoxPWD)).isChecked(), this);
   } 
   
     /**
@@ -175,6 +186,47 @@ public class UserAddActivity extends Activity {
     task.execute(endpoint,tenant,username,password,""+usessl);
   }
 
+  /**
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   */  
+  public void showPWD( View v ) {
+	CheckBox showpwd = (CheckBox)v;
+	EditText pwd = (EditText)this.findViewById(R.id.passwordET);
+	if(showpwd.isChecked()==false) {
+		pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+		pwd.setSelection(pwd.getText().length());
+	} else {
+		pwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+	}
+  }
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */ 
   public void reset( View v ) {
     EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
     EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
