@@ -39,7 +39,7 @@ public class FloatingIP {
     //public String getServerID( ) { return serverID; }
     public void setServerName( String name ) { serverName=name; }
     public boolean isAssociated( ) {
-      if(attachedTo==null || attachedTo.length()==0 || attachedTo.compareTo("null")==0)	
+      if(attachedTo!=null && attachedTo.length()!=0 || attachedTo.compareTo("null")!=0)	
         return true;
       else
     	 return false;

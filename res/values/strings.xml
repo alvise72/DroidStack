@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="CONFIRM">Confirm</string>
+    <string name="CONTINUE">Continue</string>
     <string name="USERS">Users</string>
     <string name="OVERVIEW">Quotas</string>
     <string name="IMAGES">Images</string>
@@ -42,6 +43,9 @@
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
     <string name="PICKASERVERTOASSOCIATEFIP">Pick a server to which associate the floating IP</string>
+    <string name="ALREADYASSOCIATEDWARN">This floating IP is already associated to a server. If you continue, the association will be moved to the choosen server.</string>
+    <string name="ALREADYASSOCIATED">Floating IP already associated to this server.</string>
+
     <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window pressing Menu-&gt;Update.</string>
     <string name="NOINSTANCEAVAIL">There aren\'t instances.</string>
     <string name="NOIMAGEAAVAIL">There aren\'t images.</string>
@@ -53,6 +57,7 @@
     <string name="AREYOUSURETODELETEVMS">Are you sure to delete all instances ?</string>
     <string name="YES">Yes</string>
     <string name="NO">No</string>
+    <string name="CANCEL">Cancel</string>
     <string name="LAUNCHIMAGE">Launch image</string>
     <string name="IMAGELAUNCHED">Image has been launched. Go to Instances window to see it.</string>
     <string name="SPECIFYOPTIP">Specify IP (optional)</string>

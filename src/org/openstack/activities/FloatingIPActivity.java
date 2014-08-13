@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View.OnClickListener; 
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -51,6 +53,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	private Spinner serverSpinner = null;
 	private AlertDialog alertDialogSelectServer = null;
 	private String fipToAssociate = null;
+	private FloatingIP selectedFIPObj = null;
 	
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -607,24 +610,60 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     		}
 	    
     		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_ASSOCIATE_IP) {
-    			//Utils.alertSpinner("TEST", "TITLE", this);
-    			fipToAssociate = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
-    			this.progressDialogWaitStop.show( );
-    			AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-    			task.execute();
+    			selectedFIPObj  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
+    			if(selectedFIPObj.isAssociated()) {
+    				final String fip = selectedFIPObj.getIP();
+    				
+    				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    				builder.setMessage( getString(R.string.ALREADYASSOCIATEDWARN));
+    				builder.setCancelable(false);
+    			    
+    				DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+    					public void onClick(DialogInterface dialog, int id) {
+    						associateFIP(fip);
+    					}
+    				    };
+
+    				DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+    					public void onClick(DialogInterface dialog, int id) {
+    					    dialog.cancel( );
+    					}
+    				    };
+
+    				builder.setPositiveButton(getString(R.string.CONTINUE), yesHandler );
+    				builder.setNegativeButton(getString(R.string.CANCEL), noHandler );
+    		            
+    				AlertDialog alert = builder.create();
+    				alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+    							    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    				alert.show();
+    				
+    			}
     		}
     	}
     	
     	if(v instanceof Button) {
     		Server S = (Server)serverSpinner.getSelectedItem();
+    		if(this.selectedFIPObj.getServerID().compareTo(S.getID())==0) {
+    			Utils.alert(getString(R.string.ALREADYASSOCIATED), this);
+    			alertDialogSelectServer.dismiss();
+    			return;
+    		}
     		//Utils.alert("Selected server "+S.getName( ), this);
     		alertDialogSelectServer.dismiss();
     		this.progressDialogWaitStop.show();
+    		
     		AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
     		task.execute(fipToAssociate, S.getID());
     	}
   	 }	
     
+    private void associateFIP( String fip ) {
+    	fipToAssociate = fip;
+		this.progressDialogWaitStop.show( );
+		AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+		task.execute();
+    }
   //__________________________________________________________________________________
     protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
     {
@@ -731,7 +770,7 @@ public void pickAServerToAssociateFIP() {
     serverSpinner = (Spinner) promptsView.findViewById(R.id.mySpinner);
     serverSpinner.setAdapter(spinnerServersArrayAdapter);
     final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
-
+	//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
     mButton.setOnClickListener(this);
     //mButton.setOnItemSelectedListener( this );
     // show it

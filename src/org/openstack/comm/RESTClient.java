@@ -1000,7 +1000,7 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
 			throw new NotFoundException( "SC_NOT_FOUND: "+ParseUtils.getErrorMessage( buf ) );
 		}
 		if( status==HttpStatus.SC_BAD_REQUEST) {
-			throw new NotAuthorizedException(  "Server said 'Bad Request': "+ParseUtils.getErrorMessage( buf ) );
+			throw new NotAuthorizedException(  "Bad Request: "+ParseUtils.getErrorMessage( buf ) + " - " );
 		}
 		//Log.d("RESTCLIENT","GENERIC !");
 		throw new GenericException( "Generic error: "+ParseUtils.getErrorMessage( buf ) );
