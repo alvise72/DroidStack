@@ -59,4 +59,5 @@
     <string name="FIPALLOCATED">Floating IP allocato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra.</string>
     <string name="FIPRELEASED">Floating IP rilasciato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra.</string>
     <string name="SHOWPWD">Mostra</string>
+    <string name="NOSERVERTOASSOCIATEFIP">Non c\'&#xe8; alcuna istanza cui associare questo floating IP.</string>
 </resources>

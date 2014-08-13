@@ -82,16 +82,6 @@ public class Server implements Serializable {
 
     @Override
     public String toString( ) {
-	return "Server{Name=" + (getName() != null ? getName() : "N/A") + 
-	    ",ID="+(getID() != null ? getID() : "N/A") +
-	    ",status="+( getStatus() != null ? getStatus() : "N/A") + 
-	    ",task="+( getTask()!= null ? getStatus() : "N/A") +
-	    ",power=" + getPowerState() +
-	    ",private IP=" + ( getPrivateIP()!= null ? Utils.join(getPrivateIP(), ",") : "N/A") +
-	    ",public IP=" + ( getPublicIP()!= null ? Utils.join(getPublicIP(),",") : "N/A") +
-	    ",compute node=" + ( getComputeNode()!= null ? getComputeNode() : "N/A") +
-	    ",Key name=" + ( getKeyName()!= null ? getKeyName() : "N/A") +
-	    ",flavor=" + ( getFlavor()!= null ? getFlavor().getName() : "N/A") +
-	    ",creation time=" + getCreationTime();
+	return name;
     }
 }

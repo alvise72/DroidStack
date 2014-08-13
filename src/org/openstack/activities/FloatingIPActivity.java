@@ -28,6 +28,7 @@ import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.R;
+import org.openstack.utils.Flavor;
 import org.openstack.utils.FloatingIP;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.Network;
@@ -51,7 +52,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     private String pool = null;
 	private String fip_to_release_ID = null;
 	private Vector<Server> servers = null;
-    
+	private ArrayAdapter<Server> spinnerServersArrayAdapter  = null;
+	
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
         super.onCreateOptionsMenu( menu );
@@ -532,6 +534,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
     		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_ASSOCIATE_IP) {
     			//Utils.alertSpinner("TEST", "TITLE", this);
+    			this.progressDialogWaitStop.show( );
     			AsyncTaskOSListServers task = new AsyncTaskOSListServers();
     			task.execute();
     		}
@@ -545,7 +548,6 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
      	private  boolean  hasError         = false;
      	private  String   jsonBuf          = null;
      	private  String   jsonBufferFlavor = null;
-     	//private  String   username         = null;
 
 	@Override
 	protected String doInBackground( Void... v ) 
@@ -598,8 +600,6 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
 	    try {
 	    	FloatingIPActivity.this.servers = ParseUtils.parseServers( jsonBuf );
-	    	//Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-	    	//FloatingIPActivity.this.refreshView( servers, ParseUtils.parseFlavors( jsonBufferFlavor ) );
 	    	FloatingIPActivity.this.pickAServerToAssociateFIP();
 	    } catch(ParseException pe) {
 	    	Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
@@ -622,6 +622,15 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 public void pickAServerToAssociateFIP() {
 	// TODO Auto-generated method stub
 	//Utils.alertSpinnerServers("MESSAGE", "TITLE", servers, this);
+	Log.d("FLOATING","server count="+servers.size());
+	if(servers.size()==0) {
+		Utils.alert(getString(R.string.NOSERVERTOASSOCIATEFIP), this);
+		return;
+	}
+	spinnerServersArrayAdapter = new ArrayAdapter<Server>(FloatingIPActivity.this, android.R.layout.simple_spinner_item,servers.subList(0,servers.size()) );
+	spinnerServersArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	
+	
 	LayoutInflater li = LayoutInflater.from(this);
 
     View promptsView = li.inflate(R.layout.my_dialog_layout, null);
@@ -639,7 +648,7 @@ public void pickAServerToAssociateFIP() {
 
     final Spinner mSpinner= (Spinner) promptsView
             .findViewById(R.id.mySpinner);
-    
+    mSpinner.setAdapter(spinnerServersArrayAdapter);
     final Button mButton = (Button) promptsView
             .findViewById(R.id.myButton);
 
