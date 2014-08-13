@@ -585,12 +585,14 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	
     	if(v instanceof ImageButtonNamed) {
     		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
-    			String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
-    			String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-    			if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+    			FloatingIP FIP = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
+    			String fip = FIP.getIP();
+    			if(FIP.isAssociated()==false) {
     				Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
     				return;
     			}
+    			String serverid= FIP.getServerID();
+    			
     			progressDialogWaitStop.show();
     			AsyncTaskFIPDeassociate task = new AsyncTaskFIPDeassociate();
     			task.execute( fip, serverid );
@@ -638,7 +640,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     							    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     				alert.show();
     				
-    			}
+    			} else associateFIP(selectedFIPObj.getIP());
     		}
     	}
     	
