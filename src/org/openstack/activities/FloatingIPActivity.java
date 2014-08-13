@@ -1,6 +1,8 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -8,6 +10,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -53,6 +56,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	private String fip_to_release_ID = null;
 	private Vector<Server> servers = null;
 	private ArrayAdapter<Server> spinnerServersArrayAdapter  = null;
+	private Spinner serverSpinner = null;
+	private AlertDialog alertDialogSelectServer = null;
 	
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -539,6 +544,12 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     			task.execute();
     		}
     	}
+    	
+    	if(v instanceof Button) {
+    		Server S = (Server)serverSpinner.getSelectedItem();
+    		Utils.alert("Selected server "+S.getName( ), this);
+    		alertDialogSelectServer.dismiss();
+    	}
   	 }	
     
   //__________________________________________________________________________________
@@ -620,8 +631,6 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 public void pickAServerToAssociateFIP() {
-	// TODO Auto-generated method stub
-	//Utils.alertSpinnerServers("MESSAGE", "TITLE", servers, this);
 	Log.d("FLOATING","server count="+servers.size());
 	if(servers.size()==0) {
 		Utils.alert(getString(R.string.NOSERVERTOASSOCIATEFIP), this);
@@ -644,21 +653,30 @@ public void pickAServerToAssociateFIP() {
     alertDialogBuilder.setTitle("TITLE");
     //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
     // create alert dialog
-    final AlertDialog alertDialog = alertDialogBuilder.create();
+    alertDialogSelectServer = alertDialogBuilder.create();
 
-    final Spinner mSpinner= (Spinner) promptsView
-            .findViewById(R.id.mySpinner);
-    mSpinner.setAdapter(spinnerServersArrayAdapter);
-    final Button mButton = (Button) promptsView
-            .findViewById(R.id.myButton);
+    serverSpinner = (Spinner) promptsView.findViewById(R.id.mySpinner);
+    serverSpinner.setAdapter(spinnerServersArrayAdapter);
+    final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
 
-    // reference UI elements from my_dialog_layout in similar fashion
-
-    mSpinner.setOnItemSelectedListener(new OnSpinnerItemClicked());
-
+    mButton.setOnClickListener(this);
+    //mButton.setOnItemSelectedListener( this );
     // show it
-    alertDialog.show();
-    alertDialog.setCanceledOnTouchOutside(false);
+    alertDialogSelectServer.show();
+    alertDialogSelectServer.setCanceledOnTouchOutside(false);
 }
 
+//	@Override
+//	public void onItemSelected(AdapterView<?> parent,View view, int pos, long id) {
+/*		Toast.makeText(parent.getContext(), "Clicked : " +
+					   parent.getItemAtPosition(pos).toString(), 
+					   Toast.LENGTH_LONG).show();*/
+//		Server S = (Server)this.serverSpinner.getItemAtPosition(pos);
+//		Utils.alert("Selected "+S.getName(), this);
+//	}
+
+/*    @Override
+    public void onNothingSelected(AdapterView parent) {
+        // Do nothing.
+    }*/
 }
