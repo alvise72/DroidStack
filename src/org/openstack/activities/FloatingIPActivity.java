@@ -499,32 +499,35 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
 	
-	if(v instanceof ImageButtonNamed) {
-	    if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
-		String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
-		String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-		if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-		    Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
-		    return;
-		}
-		progressDialogWaitStop.show();
-		AsyncTaskFIPDeassociate task = new AsyncTaskFIPDeassociate();
-		task.execute( fip, serverid );
-	    }
+    	if(v instanceof ImageButtonNamed) {
+    		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
+    			String fip = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
+    			String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+    			if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+    				Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
+    				return;
+    			}
+    			progressDialogWaitStop.show();
+    			AsyncTaskFIPDeassociate task = new AsyncTaskFIPDeassociate();
+    			task.execute( fip, serverid );
+    		}
 	    
-	    if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
-		String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-		if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-			fip_to_release_ID  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getID();
-			progressDialogWaitStop.show();
-		    AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
-		    task.execute();
-		    
-		} else {
-		    Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
-		    return;
-		}
-	    }
-	}
-    }
+    		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
+    			String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+    			if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+    				fip_to_release_ID  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getID();
+    				progressDialogWaitStop.show();
+    				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+    				task.execute();	    
+    			} else {
+    				Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
+    				return;
+    			}
+    		}
+	    
+    		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_ASSOCIATE_IP) {
+    			Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    		}
+    	}
+  	 }	
 }

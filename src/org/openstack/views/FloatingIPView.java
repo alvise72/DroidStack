@@ -82,13 +82,15 @@ public class FloatingIPView extends LinearLayout {
 		buttonsLayout = new LinearLayout( ctx );
 		buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 		LinearLayout.LayoutParams params4 
-		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 2.0f );
+		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f );
 		params4.gravity=Gravity.RIGHT;
 		buttonsLayout.setLayoutParams( params4 );
-		buttonsLayout.setGravity( Gravity.RIGHT );
+		buttonsLayout.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL );
 		
 		associateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_ASSOCIATE_IP);
-		associateFIP.setImageResource(android.R.drawable.ic_menu_attachment);
+		associateFIP.setImageResource(R.drawable.ipassociate);
+		associateFIP.setOnClickListener( (OnClickListener)ctx );
+		
 		releaseFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_RELEASE_IP);
 		//releaseFIP.setImageResource(android.R.drawable.ic_menu_close_clear_cancel );
 		releaseFIP.setImageResource(android.R.drawable.ic_menu_delete );
@@ -99,7 +101,7 @@ public class FloatingIPView extends LinearLayout {
 		dissociateFIP.setImageResource(android.R.drawable.ic_delete );
 		dissociateFIP.setOnClickListener( (OnClickListener)ctx );
 		
-		
+		buttonsLayout.addView( associateFIP );
 		buttonsLayout.addView( dissociateFIP );
 		buttonsLayout.addView( releaseFIP );
 		row.addView( buttonsLayout );
