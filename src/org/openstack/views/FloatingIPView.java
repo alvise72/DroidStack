@@ -24,6 +24,7 @@ public class FloatingIPView extends LinearLayout {
     private TextView     textIP             = null;
     private TextView     textPool           = null;
     private TextView     textServer         = null;
+    private ImageButtonNamed  associateFIP    = null;
     private ImageButtonNamed  releaseFIP    = null;
     private ImageButtonNamed  dissociateFIP = null;
     
@@ -86,6 +87,8 @@ public class FloatingIPView extends LinearLayout {
 		buttonsLayout.setLayoutParams( params4 );
 		buttonsLayout.setGravity( Gravity.RIGHT );
 		
+		associateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_ASSOCIATE_IP);
+		associateFIP.setImageResource(android.R.drawable.ic_menu_attachment);
 		releaseFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_RELEASE_IP);
 		//releaseFIP.setImageResource(android.R.drawable.ic_menu_close_clear_cancel );
 		releaseFIP.setImageResource(android.R.drawable.ic_menu_delete );

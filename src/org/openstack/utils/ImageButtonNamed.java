@@ -23,13 +23,15 @@ public class ImageButtonNamed extends ImageButton implements Named {
     public static final int BUTTON_DISSOCIATE_IP = 8;
     public static final int BUTTON_DELETE_SECGRP = 9;
     public static final int BUTTON_CONSOLE_LOG   = 10;
+    public static final int BUTTON_ASSOCIATE_IP  = 11;
 	
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
-    private ListSecGroupView relatedListSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
+    private ListSecGroupView relatedListSecGroupView = null;
+    
     
 
     private int type;
