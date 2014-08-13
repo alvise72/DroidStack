@@ -11,15 +11,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 
+import org.openstack.R;
+
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.app.*;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 import android.net.*;
 import android.os.*;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Utils {
@@ -368,7 +374,7 @@ public class Utils {
      *
      *
      */
-    public static void alertCustom( String message, String title, float fontsize, Context ctx ) {
+    public static void alertTitle( String message, String title, float fontsize, Context ctx ) {
 	  AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
       alertbox.setMessage( message );
 	  alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
@@ -383,6 +389,18 @@ public class Utils {
       TextView msgTxt = (TextView)alert.findViewById(android.R.id.message);
       msgTxt.setTextSize(fontsize);
     }
+    
+
+    /**
+     *
+     *
+     *
+     *
+     */
+/*    public static void alertSpinner( String message, String title, Context ctx ) {
+    	
+    }*/
+
     /**
      *
      *

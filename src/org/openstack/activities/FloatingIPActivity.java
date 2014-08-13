@@ -2,17 +2,20 @@ package org.openstack.activities;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.app.ActionBar.LayoutParams;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View.OnClickListener; 
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +31,7 @@ import org.openstack.R;
 import org.openstack.utils.FloatingIP;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.Network;
+import org.openstack.utils.OnSpinnerItemClicked;
 import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
@@ -46,6 +50,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     private Spinner spinnerNetworks;
     private String pool = null;
 	private String fip_to_release_ID = null;
+	private Vector<Server> servers = null;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -526,8 +531,125 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     		}
 	    
     		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_ASSOCIATE_IP) {
-    			Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    			//Utils.alertSpinner("TEST", "TITLE", this);
+    			AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+    			task.execute();
     		}
     	}
   	 }	
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
+    {
+     	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	private  String   jsonBuf          = null;
+     	private  String   jsonBufferFlavor = null;
+     	//private  String   username         = null;
+
+	@Override
+	protected String doInBackground( Void... v ) 
+	{
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		try {
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
+		    										   U.getEndpoint(),
+		    										   U.getTenantName(),
+		    										   U.getUserName(),
+		    										   U.getPassword() );
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( _jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
+		} catch(Exception e) {
+		    errorMessage = e.getMessage();
+		    hasError = true;
+		    return "";
+		}
+	    }
+
+	    
+
+	    try {
+		jsonBuf = RESTClient.requestServers( U );
+		jsonBufferFlavor = RESTClient.requestFlavors( U );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return jsonBuf;
+	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		Utils.alert( errorMessage, FloatingIPActivity.this );
+ 		FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+ 		return;
+ 	    }
+	    
+	    try {
+	    	FloatingIPActivity.this.servers = ParseUtils.parseServers( jsonBuf );
+	    	//Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
+	    	//FloatingIPActivity.this.refreshView( servers, ParseUtils.parseFlavors( jsonBufferFlavor ) );
+	    	FloatingIPActivity.this.pickAServerToAssociateFIP();
+	    } catch(ParseException pe) {
+	    	Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
+	    }
+	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	}
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+public void pickAServerToAssociateFIP() {
+	// TODO Auto-generated method stub
+	//Utils.alertSpinnerServers("MESSAGE", "TITLE", servers, this);
+	LayoutInflater li = LayoutInflater.from(this);
+
+    View promptsView = li.inflate(R.layout.my_dialog_layout, null);
+
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+    alertDialogBuilder.setView(promptsView);
+
+    // set dialog message
+
+    alertDialogBuilder.setTitle("TITLE");
+    //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
+    // create alert dialog
+    final AlertDialog alertDialog = alertDialogBuilder.create();
+
+    final Spinner mSpinner= (Spinner) promptsView
+            .findViewById(R.id.mySpinner);
+    
+    final Button mButton = (Button) promptsView
+            .findViewById(R.id.myButton);
+
+    // reference UI elements from my_dialog_layout in similar fashion
+
+    mSpinner.setOnItemSelectedListener(new OnSpinnerItemClicked());
+
+    // show it
+    alertDialog.show();
+    alertDialog.setCanceledOnTouchOutside(false);
+}
+
 }

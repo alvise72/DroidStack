@@ -661,7 +661,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	    
 	    try {
 		  String consoleLog = ParseUtils.parseServerConsoleLog( jsonBuf );
-		  Utils.alertCustom(consoleLog,"Console Log", 8.0f, ServersActivity.this);
+		  Utils.alertTitle(consoleLog,"Console Log", 8.0f, ServersActivity.this);
 	    } catch(ParseException pe) {
 		  Utils.alert("ServersActivity.AsyncTaskOSLogServer.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 	    }
