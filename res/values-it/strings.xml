@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="CONFIRM">Conferma</string>
     <string name="USERS">Utenti</string>
     <string name="OVERVIEW">Quote</string>
     <string name="IMAGES">Immagini</string>
@@ -40,6 +41,7 @@
     <string name="INCORRECTIPFORMAT">Formato indirizzo IPv4 non corretto</string>
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">Questo floating IP non &#xe8; associato ad alcun server.</string>
+    <string name="PICKASERVERTOASSOCIATEFIP">Scegli un server a cui associare il floating IP</string>
     <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP è ancora associato ad un server e non può essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna.</string>
     <string name="NOINSTANCEAVAIL">Non ci sono istanze.</string>
     <string name="NOIMAGEAAVAIL">Non ci sono immagini.</string>
@@ -53,8 +55,9 @@
     <string name="LAUNCHIMAGE">Lancia immagine</string>
     <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
     <string name="SPECIFYOPTIP">Specifica IP (opzionale)</string>
-    <string name="FIPDISSOCIATED">Il floating IP è stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra.</string>
-    <string name="FIPONLYFROMEXTERNAL">La rete selezionata non è di tipo External. Puoi allocarti un floating IP solo da una rete External.\nSeleziona un\'altra rete (se disponibile).</string>
+    <string name="FIPDISSOCIATED">Il floating IP &#xe8; stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra.</string>
+    <string name="FIPASSOCIATED">Il floating IP &#xe8; stato associato al server. Premi Menu-&gt;Aggiorna per aggiornare la finestra.</string>
+    <string name="FIPONLYFROMEXTERNAL">La rete selezionata non &#xe8; di tipo External. Puoi allocarti un floating IP solo da una rete External.\nSeleziona un\'altra rete (se disponibile).</string>
     <string name="NONETSELECTED">Non hai selezionato una rete esterna (o non hai accesso ad alcuna)).</string>
     <string name="FIPALLOCATED">Floating IP allocato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra.</string>
     <string name="FIPRELEASED">Floating IP rilasciato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra.</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="CONFIRM">Confirm</string>
     <string name="USERS">Users</string>
     <string name="OVERVIEW">Quotas</string>
     <string name="IMAGES">Images</string>
@@ -40,6 +41,7 @@
     <string name="INCORRECTIPFORMAT">Incorrect IPv4 address format</string>
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
+    <string name="PICKASERVERTOASSOCIATEFIP">Pick a server to which associate the floating IP</string>
     <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window pressing Menu-&gt;Update.</string>
     <string name="NOINSTANCEAVAIL">There aren\'t instances.</string>
     <string name="NOIMAGEAAVAIL">There aren\'t images.</string>
@@ -55,6 +57,7 @@
     <string name="IMAGELAUNCHED">Image has been launched. Go to Instances window to see it.</string>
     <string name="SPECIFYOPTIP">Specify IP (optional)</string>
     <string name="FIPDISSOCIATED">Floating IP has been dissociated from the server. Press on Menu-&gt;Update to refresh window.</string>
+    <string name="FIPASSOCIATED">Floating IP has been associated to the server. Press on Menu-&gt;Update to refresh window.</string>
     <string name="FIPONLYFROMEXTERNAL">The selected network is not of external type. You can get Floating IP only from External networks.\nSelect a different network (if any).</string>  
     <string name="NONETSELECTED">You haven\'t selected any external network (or you cannot access to any one).</string>
     <string name="FIPALLOCATED">Floating IP allocated. Press on Menu-&gt;Update to refresh window.</string>

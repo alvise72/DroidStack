@@ -1,17 +1,11 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
@@ -31,11 +25,9 @@ import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
 import org.openstack.R;
-import org.openstack.utils.Flavor;
 import org.openstack.utils.FloatingIP;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.Network;
-import org.openstack.utils.OnSpinnerItemClicked;
 import org.openstack.utils.Server;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
@@ -58,6 +50,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	private ArrayAdapter<Server> spinnerServersArrayAdapter  = null;
 	private Spinner serverSpinner = null;
 	private AlertDialog alertDialogSelectServer = null;
+	private String fipToAssociate = null;
 	
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -360,6 +353,82 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     
     
+    
+    
+    
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskFIPAssociate extends AsyncTask<String, String, String>
+    {
+      private  String   errorMessage     = null;
+  	  private  boolean  hasError         = false;
+      private  String   floatingip       = null;
+      private  String   serverid         = null;
+      
+	@Override
+	protected String doInBackground( String... ip_serverid ) 
+	{
+		floatingip = ip_serverid[0];
+		serverid   = ip_serverid[1];
+		
+	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		  try {
+		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
+		    										   U.getEndpoint(),
+						       						   U.getTenantName(),
+						       						   U.getUserName(),
+						       						   U.getPassword());
+		    String  pwd = U.getPassword();
+		    String  edp = U.getEndpoint();
+		    boolean ssl = U.useSSL();
+		    U = ParseUtils.parseUser( _jsonBuf );
+		    U.setPassword( pwd );
+		    U.setEndpoint( edp );
+		    U.setSSL( ssl );
+		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
+		  } catch(Exception e) {
+		     errorMessage = e.getMessage();
+		     hasError = true;
+		     return "";
+		  }
+	    }
+
+	    
+
+	    try {
+		  RESTClient.requestFloatingIPAssociate(U, floatingip, serverid);	    
+		} catch(Exception e) {
+		  errorMessage = e.getMessage();
+		  hasError = true;
+	  	  return "";
+	    }
+	    return "";
+	}
+	
+	  @Override
+	  protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		  Utils.alert( errorMessage, FloatingIPActivity.this );
+ 		  FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+ 		  return;
+ 	    }
+ 	    Utils.alert( getString(R.string.FIPASSOCIATED), FloatingIPActivity.this );
+	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	  }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -539,6 +608,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    
     		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_ASSOCIATE_IP) {
     			//Utils.alertSpinner("TEST", "TITLE", this);
+    			fipToAssociate = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getIP();
     			this.progressDialogWaitStop.show( );
     			AsyncTaskOSListServers task = new AsyncTaskOSListServers();
     			task.execute();
@@ -547,8 +617,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     	
     	if(v instanceof Button) {
     		Server S = (Server)serverSpinner.getSelectedItem();
-    		Utils.alert("Selected server "+S.getName( ), this);
+    		//Utils.alert("Selected server "+S.getName( ), this);
     		alertDialogSelectServer.dismiss();
+    		this.progressDialogWaitStop.show();
+    		AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
+    		task.execute(fipToAssociate, S.getID());
     	}
   	 }	
     
@@ -631,7 +704,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 public void pickAServerToAssociateFIP() {
-	Log.d("FLOATING","server count="+servers.size());
+	//Log.d("FLOATING","server count="+servers.size());
 	if(servers.size()==0) {
 		Utils.alert(getString(R.string.NOSERVERTOASSOCIATEFIP), this);
 		return;
@@ -650,7 +723,7 @@ public void pickAServerToAssociateFIP() {
 
     // set dialog message
 
-    alertDialogBuilder.setTitle("TITLE");
+    alertDialogBuilder.setTitle(getString(R.string.PICKASERVERTOASSOCIATEFIP) + " "+this.fipToAssociate);
     //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
     // create alert dialog
     alertDialogSelectServer = alertDialogBuilder.create();
