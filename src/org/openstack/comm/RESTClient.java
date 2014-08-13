@@ -499,94 +499,94 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     	String proto = "http";
     	if(usessl)
 	    proto = "https";
-	String sUrl = proto + "://" + U.getEndpoint( ) + ":8774/v2/" + U.getTenantID( ) + "/servers";
-	URL url = null;
-	try {
-	    url = new URL(sUrl);
-	} catch(java.net.MalformedURLException mfu) {
-	    throw new RuntimeException("new URL: " + mfu.toString( ) );
-	}
-	URLConnection conn = null;
-	TrustManager[] trustAllCerts = null;
-	if(usessl) {
-	    trustAllCerts = new TrustManager[] {
-		new X509TrustManager() {
-		    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-			return null;
-		    }
+    	String sUrl = proto + "://" + U.getEndpoint( ) + ":8774/v2/" + U.getTenantID( ) + "/servers";
+    	URL url = null;
+    	try {
+    		url = new URL(sUrl);
+    	} catch(java.net.MalformedURLException mfu) {
+    		throw new RuntimeException("new URL: " + mfu.toString( ) );
+    	}
+    	URLConnection conn = null;
+    	TrustManager[] trustAllCerts = null;
+    	if(usessl) {
+    		trustAllCerts = new TrustManager[] {
+    				new X509TrustManager() {
+    					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+    						return null;
+    					}
 		    
-		    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+    					public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
 		    
-		    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+    					public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
 		    
-		}
-	    };
+    				}
+    		};
 	    
-	    try {
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-	    } catch(java.security.NoSuchAlgorithmException e) {
-	    } catch(java.security.KeyManagementException e) {
-	    }
+    		try {
+    			SSLContext sc = SSLContext.getInstance("SSL");
+    			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+    			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    		} catch(java.security.NoSuchAlgorithmException e) {
+    		} catch(java.security.KeyManagementException e) {
+    		}
 	    
-	    try {
-		  conn = (HttpsURLConnection)url.openConnection( );
-	    } catch(java.io.IOException ioe) {
-		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
-	    }
-	} else {
+    		try {
+    			conn = (HttpsURLConnection)url.openConnection( );
+    		} catch(java.io.IOException ioe) {
+    			throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
+    		}
+    	} else {
 	
-	    try {
-		  conn = (HttpURLConnection)url.openConnection();
-	    } catch(java.io.IOException ioe) {
-		  throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
-	    }
-	}
+    		try {
+    			conn = (HttpURLConnection)url.openConnection();
+    		} catch(java.io.IOException ioe) {
+    			throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
+    		}
+    	}
     
-	conn.setRequestProperty("X-Auth-Project-Id", U.getTenantName( ) );
-	conn.setRequestProperty("Accept", "application/json");
-	conn.setRequestProperty("Content-Type", "application/json");
-	conn.setRequestProperty("X-Auth-Token", U.getToken() );
-	conn.setDoOutput(true);
+    	conn.setRequestProperty("X-Auth-Project-Id", U.getTenantName( ) );
+    	conn.setRequestProperty("Accept", "application/json");
+    	conn.setRequestProperty("Content-Type", "application/json");
+    	conn.setRequestProperty("X-Auth-Token", U.getToken() );
+    	conn.setDoOutput(true);
 
-	try {
-	    ((HttpURLConnection)conn).setRequestMethod("POST");
-	} catch(java.net.ProtocolException pe ) {
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
-	}
+    	try {
+    		((HttpURLConnection)conn).setRequestMethod("POST");
+    	} catch(java.net.ProtocolException pe ) {
+    		if(usessl)
+    			((HttpsURLConnection)conn).disconnect( );
+    		else
+    			((HttpURLConnection)conn).disconnect( );
+    		throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
+    	}
 
-	String userdata="";
-	if(adminPass!=null) {
-	    try {
-		File f = new File(filesDir + "/userdata");
-		if( f.exists( ) ) f.delete();
-		BufferedWriter bw = new BufferedWriter( new FileWriter(f) );
-		bw.write("#!/bin/bash");
-		bw.newLine();
-		bw.write("passwd -d root");
-		bw.newLine();
-		bw.write("echo \"alvise\" >/tmp/pwd");
-		bw.newLine();
-		bw.write("cat /tmp/pwd | passwd --stdin root");
-		bw.newLine();
-		bw.write("\rm -f /tmp/pwd");
-		bw.newLine();
-		bw.close();
-		userdata = ", \"user_data\": \"" + Base64.encodeFromFile( filesDir + "/userdata" ) + "\"";
-	    } catch(IOException ioe) {
-		  //		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
-		  userdata = "";
-	    }
-	}
+    	String userdata="";
+    	if(adminPass!=null) {
+    		try {
+    			File f = new File(filesDir + "/userdata");
+    			if( f.exists( ) ) f.delete();
+    			BufferedWriter bw = new BufferedWriter( new FileWriter(f) );
+    			bw.write("#!/bin/bash");
+    			bw.newLine();
+    			bw.write("passwd -d root");
+    			bw.newLine();
+    			bw.write("echo \"alvise\" >/tmp/pwd");
+    			bw.newLine();
+    			bw.write("cat /tmp/pwd | passwd --stdin root");
+    			bw.newLine();
+    			bw.write("\rm -f /tmp/pwd");
+    			bw.newLine();
+    			bw.close();
+    			userdata = ", \"user_data\": \"" + Base64.encodeFromFile( filesDir + "/userdata" ) + "\"";
+    		} catch(IOException ioe) {
+    			//		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
+    			userdata = "";
+    		}
+    	}
 
 	String _data = "{\"server\": {\"name\": \"" + instanceName + 
 	    "\", \"imageRef\": \"" + glanceImageID + 
-	    "\", \"key_name\": \"" + key_name + 
+	    "\", " + (key_name != null ? "\"key_name\": \"" + key_name : "") + 
 	    "\", \"flavorRef\": \"" + flavorID + 
 	    "\", \"max_count\": " + count + 
 	    ", \"min_count\": " + count + userdata + "}}";

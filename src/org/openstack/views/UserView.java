@@ -28,6 +28,7 @@ public class UserView extends LinearLayout {
     private TextViewNamed     textUserName   = null;
     private TextViewNamed     textTenantName = null;
     private TextViewNamed     textEndpoint   = null;
+    private TextViewNamed	  textSSL        = null;
     // private ImageButtonNamed  modifyUser     = null;
     private ImageButtonNamed  deleteUser     = null;
     
@@ -76,11 +77,22 @@ public class UserView extends LinearLayout {
 	textEndpoint.setOnClickListener( (OnClickListener)ctx );
 	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
 
-	
+	textSSL = new TextViewNamed( ctx, (UserView)this );
+	textSSL.setText("SSL: ");
+	if(U.useSSL()==true) {
+		textSSL.setTextColor(Color.parseColor("#FF0000"));
+		textSSL.setText("ssl: yes");
+		textSSL.setTypeface( null, Typeface.BOLD );
+	} else {
+		textSSL.setTextColor( Color.parseColor("#BBBBBB"));
+		textSSL.setText("ssl: no");
+		textSSL.setTypeface( null, Typeface.NORMAL );
+	}
 
 	userLayout.addView(textUserName);
 	userLayout.addView(textTenantName);
 	userLayout.addView(textEndpoint);
+	userLayout.addView(textSSL);
 	userLayout.setOnClickListener( (OnClickListener)ctx );
 
 	row.addView(userLayout);

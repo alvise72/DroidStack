@@ -12,8 +12,11 @@ import android.app.ProgressDialog;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 
+import org.openstack.utils.IPAddressKeyListener;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.utils.Flavor;
@@ -75,16 +78,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    if(nv.isChecked()) {
 		String netID = nv.getNetwork().getID();
 		mappingNetEditText.get( netID ).setEnabled(true);
-		//		String netIP = mappingNetEditText.get( netID ).getText().toString();
-		//		selectedNetworks.put( netID, netIP );
-		
-		//mappingNetworkIP.put( netID, IP );
 	    }
 	    else {
 		String netID = nv.getNetwork().getID();
 		mappingNetEditText.get( netID ).setEnabled(false);
-		//		selectedNetworks.remove( netID );
-		//		mappingNetEditText.get( netID ).setEnabled(false);
 	    }
 	    return;
 	}
@@ -129,7 +126,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       
       selectedSecgroups = new HashSet<String>();
       
-      //launchButton = (Button)findViewById( R.id.launchButton );
       mappingNetEditText = new Hashtable<String, EditTextNamed>();
       selectedNetworks = new Hashtable<String, String>();
 
@@ -266,15 +262,17 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       progressDialogWaitStop.show();
       
       KeyPair kp = (KeyPair)spinnerKeypairs.getSelectedItem();
+      String kpName = "";
+      if(kp!=null)
+    	  kpName = kp.getName();
       Flavor flv = (Flavor)this.spinnerFlavors.getSelectedItem();
-      
-      task.execute( instanceName, 
-		    imageID,
-		    kp.getName(), 
-		    flv.getID(),
-		    ""+count, 
-		    Utils.join( selectedSecgroups, "," ),
-		    adminPass);
+      Log.d("IMAGELAUNCH","instanceName="+instanceName);
+      Log.d("IMAGELAUNCH","kp="+kpName);
+      Log.d("IMAGELAUNCH","flavor="+flv.getID());
+      Log.d("IMAGELAUNCH", "count="+count);
+      Log.d("IMAGELAUNCH", "groups="+Utils.join( selectedSecgroups, "," ));
+      Log.d("IMAGELAUNCH","adminPass="+adminPass);
+      task.execute( instanceName, imageID, kpName, flv.getID(), ""+count, Utils.join( selectedSecgroups, "," ), adminPass);
   }
 
     /**
@@ -373,6 +371,12 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 			    nv.setOnClickListener( ImageLaunchActivity.this );
 			    networksL.addView( nv );
 			    EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
+			    //etIP.setInputType(InputType.TYPE_NUMBER_VARIATION_NORMAL);
+			    etIP.setKeyListener(IPAddressKeyListener.getInstance());
+			    //etIP.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			    //etIP.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
+			    //etIP.setInputType(InputType.TYPE_CLASS_TEXT);
+			    
 			    TextView tv = new TextView(  ImageLaunchActivity.this );
 			    tv.setText(getString(R.string.SPECIFYOPTIP));
 			    networksL.addView( tv );
@@ -382,29 +386,19 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 			    i++;
 		}
 
-		//Hashtable<String, Flavor> flavorTable = ParseUtils.parseFlavors( jsonBufFlavor );
-	    Vector<Flavor> flavors = ParseUtils.parseFlavors( jsonBufFlavor );
-		//List<Flavor> listFlav = flavors.subList(0,flavors.size());
-		//flavors = new Flavor[collFlav.size()];
-		//listFlav.toArray(flavors);
-		//String flavorNames[] = new String[flavors.length];
-		//for(int j = 0; j<flavors.length; ++j)
-		//    flavorNames[j] = flavors[j].getName();
+		Vector<Flavor> flavors = ParseUtils.parseFlavors( jsonBufFlavor );
+		
 		spinnerFlavorsArrayAdapter = new ArrayAdapter<Flavor>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,flavors.subList(0,flavors.size()) );
 		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
 
 		keypairs = ParseUtils.parseKeyPairs( jsonBufKeypairs );
-		/*String [] keypairNames = new String[keypairs.length];
-		for(int j =0; j< keypairs.length; ++j)
-		    keypairNames[j] = keypairs[j].getName();
-	    */
+		
 		spinnerKeypairsArrayAdapter = new ArrayAdapter<KeyPair>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,keypairs.subList(0, keypairs.size()) );
 		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerKeypairs.setAdapter(spinnerKeypairsArrayAdapter);
 
 		secgroups = ParseUtils.parseSecGroups( jsonBufSecgroups );
-		//String[] secgroupNames = new String[secgroups.length];
 		
 		Iterator<SecGroup> sit = secgroups.iterator();
 		while(sit.hasNext()) {
@@ -449,10 +443,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
 		try {
 		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-							       U.getEndpoint(),
-							       U.getTenantName(),
-							       U.getUserName(),
-							       U.getPassword() );
+		    											U.getEndpoint(),
+		    											U.getTenantName(),
+		    											U.getUserName(),
+		    											U.getPassword() );
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
