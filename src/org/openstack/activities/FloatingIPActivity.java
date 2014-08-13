@@ -111,10 +111,14 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
       
 	  spinnerNetworks = (Spinner)findViewById(R.id.extnetSP);
-	  
 	  progressDialogWaitStop.show();
-	  AsyncTaskFIPList task = new AsyncTaskFIPList();
-  	  task.execute( );
+	  loadFIP();
+    }
+    
+    private void loadFIP() {
+    	
+    	AsyncTaskFIPList task = new AsyncTaskFIPList();
+    	task.execute( );
     }
     
     //__________________________________________________________________________________
@@ -162,19 +166,19 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     public void allocateFIP( View v ) {
     	Network selectedNet = (Network)spinnerNetworks.getSelectedItem();
-	if(selectedNet == null) {
-	   Utils.alert(getString(R.string.NONETSELECTED), this);
-	   return; 
-	}
+    	if(selectedNet == null) {
+    		Utils.alert(getString(R.string.NONETSELECTED), this);
+    		return; 
+    	}
     	if(selectedNet.isExt()==false) {
 	    Utils.alert(getString(R.string.FIPONLYFROMEXTERNAL), this);
 	    return;
     	}
-	pool = selectedNet.getID();
-	progressDialogWaitStop.show();
-	AsyncTaskFIPAllocate task = new AsyncTaskFIPAllocate();
-	task.execute();
-	//    	Utils.alert("Adding FIP from "+selectedNet, this);
+    	pool = selectedNet.getID();
+    	progressDialogWaitStop.show();
+    	AsyncTaskFIPAllocate task = new AsyncTaskFIPAllocate();
+    	task.execute();
+    	//    	Utils.alert("Adding FIP from "+selectedNet, this);
     }
 
 
@@ -349,7 +353,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
  		  return;
  	    }
  	    Utils.alert( getString(R.string.FIPDISSOCIATED), FloatingIPActivity.this );
-	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    FloatingIPActivity.this.loadFIP();
 	  }
     }
     
@@ -418,7 +423,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
  		  return;
  	    }
  	    Utils.alert( getString(R.string.FIPASSOCIATED), FloatingIPActivity.this );
-	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+ 	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    FloatingIPActivity.this.loadFIP();
 	  }
     }
     
@@ -492,7 +498,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		return;
  	    }
  	    Utils.alert( getString(R.string.FIPALLOCATED), FloatingIPActivity.this );
-	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    FloatingIPActivity.this.loadFIP();
 	}
     }
     
@@ -565,7 +572,8 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		return;
  	    }
  	    Utils.alert( getString(R.string.FIPRELEASED), FloatingIPActivity.this );
-	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	    FloatingIPActivity.this.loadFIP();
 	}
     }
     

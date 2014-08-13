@@ -59,12 +59,12 @@
     <string name="LAUNCHIMAGE">Lancia immagine</string>
     <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
     <string name="SPECIFYOPTIP">Specifica IP (opzionale)</string>
-    <string name="FIPDISSOCIATED">Il floating IP &#xe8; stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra.</string>
-    <string name="FIPASSOCIATED">Il floating IP &#xe8; stato associato al server. Premi Menu-&gt;Aggiorna per aggiornare la finestra.</string>
+    <string name="FIPDISSOCIATED">Il floating IP è stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se continui a vedere il nome del server.</string>
+    <string name="FIPASSOCIATED">Il floating IP è stato associato al server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se ancora non vedi il nome del server.</string>
     <string name="FIPONLYFROMEXTERNAL">La rete selezionata non &#xe8; di tipo External. Puoi allocarti un floating IP solo da una rete External.\nSeleziona un\'altra rete (se disponibile).</string>
-    <string name="NONETSELECTED">Non hai selezionato una rete esterna (o non hai accesso ad alcuna)).</string>
-    <string name="FIPALLOCATED">Floating IP allocato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra.</string>
-    <string name="FIPRELEASED">Floating IP rilasciato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra.</string>
+    <string name="NONETSELECTED">Non hai selezionato una rete esterna (o non hai accesso ad alcuna).</string>
+    <string name="FIPALLOCATED">Floating IP allocato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra se ancora non lo vedi.</string>
+    <string name="FIPRELEASED">Floating IP rilasciato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra se continui a vederlo.</string>
     <string name="SHOWPWD">Mostra</string>
     <string name="NOSERVERTOASSOCIATEFIP">Non c\'&#xe8; alcuna istanza cui associare questo floating IP.</string>
 </resources>

@@ -61,12 +61,12 @@
     <string name="LAUNCHIMAGE">Launch image</string>
     <string name="IMAGELAUNCHED">Image has been launched. Go to Instances window to see it.</string>
     <string name="SPECIFYOPTIP">Specify IP (optional)</string>
-    <string name="FIPDISSOCIATED">Floating IP has been dissociated from the server. Press on Menu-&gt;Update to refresh window.</string>
-    <string name="FIPASSOCIATED">Floating IP has been associated to the server. Press on Menu-&gt;Update to refresh window.</string>
+    <string name="FIPDISSOCIATED">Floating IP has been dissociated from the server. Press on Menu-&gt;Update to refresh window if you still see the server name.</string>
+    <string name="FIPASSOCIATED">Floating IP has been associated to the server. Press on Menu-&gt;Update to refresh window if you do not see the server name yet.</string>
     <string name="FIPONLYFROMEXTERNAL">The selected network is not of external type. You can get Floating IP only from External networks.\nSelect a different network (if any).</string>  
     <string name="NONETSELECTED">You haven\'t selected any external network (or you cannot access to any one).</string>
-    <string name="FIPALLOCATED">Floating IP allocated. Press on Menu-&gt;Update to refresh window.</string>
-    <string name="FIPRELEASED">Floating IP released. Press on Menu-&gt;Update to refresh window.</string>
+    <string name="FIPALLOCATED">Floating IP allocated. Press on Menu-&gt;Update to refresh window if you do not see it yet.</string>
+    <string name="FIPRELEASED">Floating IP released. Press on Menu-&gt;Update to refresh window if you still see it.</string>
     <string name="SHOWPWD">Show</string>
     <string name="NOSERVERTOASSOCIATEFIP">There\'re no instance to associate this floating IP.</string>
 </resources>
