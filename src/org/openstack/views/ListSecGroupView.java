@@ -31,7 +31,8 @@ public class ListSecGroupView extends LinearLayout {
 
 //    private ImageButtonNamed edit = null;
     private ImageButtonNamed deleteSecGroup = null;
-
+    private ImageButtonNamed editSecGroup = null;
+    
     private SecGroup S = null;
 
     public ListSecGroupView( SecGroup s, Context ctx ) {
@@ -59,6 +60,7 @@ public class ListSecGroupView extends LinearLayout {
 	LinearLayout.LayoutParams params2 = 
 	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	text.setLayoutParams( params2 );
+	text.setGravity( Gravity.CENTER_VERTICAL);
 
 	Name = new TextViewNamed( ctx, (ListSecGroupView)this );
 	String servName = S.getName();
@@ -82,13 +84,19 @@ public class ListSecGroupView extends LinearLayout {
 	deleteSecGroup.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
 	deleteSecGroup.setOnClickListener( (OnClickListener)ctx );
 
+	editSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_EDIT_SECGRP );
+	editSecGroup.setImageResource(android.R.drawable.ic_menu_edit);
+	editSecGroup.setOnClickListener( (OnClickListener)ctx );
+	
 	info = new LinearLayoutNamed( ctx, (ListSecGroupView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
 	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	info.setLayoutParams( params3 );
-	info.setGravity( Gravity.RIGHT );
+	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+	info.addView( editSecGroup );
 	info.addView( deleteSecGroup );
+	
 	
 	row.addView( info );
 	addView( row );

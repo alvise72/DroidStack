@@ -22,8 +22,9 @@ public class ImageButtonNamed extends ImageButton implements Named {
     public static final int BUTTON_RELEASE_IP    = 7;
     public static final int BUTTON_DISSOCIATE_IP = 8;
     public static final int BUTTON_DELETE_SECGRP = 9;
-    public static final int BUTTON_CONSOLE_LOG   = 10;
-    public static final int BUTTON_ASSOCIATE_IP  = 11;
+    public static final int BUTTON_EDIT_SECGRP   = 10;
+    public static final int BUTTON_CONSOLE_LOG   = 11;
+    public static final int BUTTON_ASSOCIATE_IP  = 12;
 	
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;

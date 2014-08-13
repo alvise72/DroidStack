@@ -144,6 +144,10 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         return super.onOptionsItemSelected( item );
     }
 
+    public void createSecGroup( View v ) {
+    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    }
+    
     //__________________________________________________________________________________
     @Override
     public void onClick( View v ) {
@@ -152,6 +156,12 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
 	    	return;
 	    }
+	    
+	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_EDIT_SECGRP ) {
+	    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+	    	return;
+	    }
+	    
 	}
 	/*    final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
 
