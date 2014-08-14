@@ -69,4 +69,5 @@
     <string name="FIPRELEASED">Floating IP released. Press on Menu-&gt;Update to refresh window if you still see it.</string>
     <string name="SHOWPWD">Show</string>
     <string name="NOSERVERTOASSOCIATEFIP">There\'re no instance to associate this floating IP.</string>
+    <string name="AREYOUSURETODELETESECGRP">Are you sure to delete this Security Group ?</string>
 </resources>

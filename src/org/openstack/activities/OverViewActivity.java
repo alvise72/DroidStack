@@ -31,8 +31,8 @@ import android.widget.TextView;
 public class OverViewActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop = null;
-    private User U = null;
-    
+    private User 				 U 						= null;
+ 
     /**
      *
      *
@@ -48,9 +48,14 @@ public class OverViewActivity extends Activity {
         menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         return true;
     }
-    
-     public boolean onOptionsItemSelected( MenuItem item ) {
-	 
+
+    /**
+     *
+     *
+     *
+     */
+    public boolean onOptionsItemSelected( MenuItem item ) {
+    	
         int id = item.getItemId();     
         
         if( id == Menu.FIRST-1 ) {
@@ -63,37 +68,42 @@ public class OverViewActivity extends Activity {
         	  Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
         	  return true;
         	}
-	    progressDialogWaitStop.show();
-	    AsyncTaskQuota task = new AsyncTaskQuota();
-	    task.execute(U);
+        	//disableMenu( );
+        	progressDialogWaitStop.show();
+        	AsyncTaskQuota task = new AsyncTaskQuota();
+        	task.execute(U);
             return true;
         }
-	return super.onOptionsItemSelected( item );
+        return super.onOptionsItemSelected( item );
     }
 
-    //__________________________________________________________________________________
+    /**
+     *
+     *
+     *
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView( R.layout.overview );
+    	super.onCreate(savedInstanceState);
+    	setContentView( R.layout.overview );
 
-	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+    	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
-	String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
-	setTitle(getString(R.string.USAGEOVERVIEW));
-	try {
-	    U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this) );
-	    setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
-	    progressDialogWaitStop.show();
-	    AsyncTaskQuota task = new AsyncTaskQuota();
-	    task.execute(U);
-	}  catch(RuntimeException re) {
-	    Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
-	}
-	if(selectedUserID.length()!=0)
-		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+        String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
+        setTitle(getString(R.string.USAGEOVERVIEW));
+        try {
+        	U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this) );
+        	setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
+        	progressDialogWaitStop.show();
+        	AsyncTaskQuota task = new AsyncTaskQuota();
+        	task.execute(U);
+        }  catch(RuntimeException re) {
+        	Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
+        }
+        if(selectedUserID.length()!=0)
+        	((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
 		else
-	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
     }
  
@@ -105,8 +115,8 @@ public class OverViewActivity extends Activity {
      */
     @Override
     public void onDestroy( ) {
-	super.onDestroy( );
-	progressDialogWaitStop.dismiss();
+    	super.onDestroy( );
+    	progressDialogWaitStop.dismiss();
     }
   
     private void refreshView( Quota Q,
@@ -247,9 +257,9 @@ public class OverViewActivity extends Activity {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
- 		Utils.alert( errorMessage, OverViewActivity.this );
- 		OverViewActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
+ 	    	Utils.alert( errorMessage, OverViewActivity.this );
+ 	    	OverViewActivity.this.progressDialogWaitStop.dismiss( );
+ 	    	return;
  	    }
 	    
 	    

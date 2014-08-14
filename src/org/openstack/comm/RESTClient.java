@@ -260,12 +260,13 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     */
     public static void requestFloatingIPRelease( User U, String fip ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
     {
-	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
-	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	vp.add( p );
-	//String extradata = "{\"pool\": \"" + external_net_ID + "\"}";
-	sendDELETERequest( U.useSSL(), U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-floating-ips/" + fip, 
-			 U.getToken() );
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	
+    	sendDELETERequest( U.useSSL(), 
+    					   U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-floating-ips/" + fip, 
+    					   U.getToken(), vp );
     }
     
     /**
@@ -403,16 +404,16 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
      *
      *
      */
-    public static void deleteGlanceImage( User U, String imageid) 
-	throws RuntimeException, NotFoundException
+    public static void deleteGlanceImage( User U, String imageid) throws RuntimeException, NotFoundException
     {
-	try {
-	    sendDELETERequest( U.useSSL(),
-	    				   "http://" + U.getEndpoint() + ":9292/v2/images/"+imageid, 
-			       		   U.getToken( ) );
-	} catch(NotAuthorizedException na) {
-	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the image you're trying to delete is owned by you...");
-	}
+    	try {
+    		sendDELETERequest(  U.useSSL(),
+    							"http://" + U.getEndpoint() + ":9292/v2/images/"+imageid, 
+    							U.getToken( ),
+    							null );
+    	} catch(NotAuthorizedException na) {
+    		throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the image you're trying to delete is owned by you...");
+    	}
     }
 
     /**
@@ -424,17 +425,16 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
      *
      *
      */
-    public static void deleteInstance( User U, String serverid) 
-	throws RuntimeException, NotFoundException
+    public static void deleteInstance( User U, String serverid) throws RuntimeException, NotFoundException
     {
-    	//Log.d("RESTClient", U.toString());
-	try {
-	    //	    Log.d("RESTCLIENT", "serverid=["+serverid+"]");
-	    sendDELETERequest( U.useSSL(), U.getEndpoint() + ":8774/v2/" +U.getTenantID()+ "/servers/"+serverid, 
-			       U.getToken() );
-	} catch(NotAuthorizedException na) {
-	    throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the instance you're trying to delete is owned by you...");
-	}
+    	try {
+    		sendDELETERequest( U.useSSL(), 
+    						   U.getEndpoint() + ":8774/v2/" +U.getTenantID()+ "/servers/"+serverid, 
+    						   U.getToken(),
+    						   null );
+    	} catch(NotAuthorizedException na) {
+    		throw new RuntimeException(na.getMessage() + "\n\nPlease check your credentials or that the instance you're trying to delete is owned by you...");
+    	}
     }
 
     /**
@@ -510,6 +510,26 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
 			                 v );
     }
 
+
+    /**
+     *
+     *
+     *
+     * curl -i 'http://90.147.77.40:8774/v2/$TENANT_ID/os-security-groups/SecGrpID' -X DELETE -H "X-Auth-Project-Id: admin" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN"
+     *
+     *
+     */
+    public static void deleteSecGroup( User U, String secgrpID ) throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+    {
+	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+	  v.add(p);
+	  sendDELETERequest( U.useSSL(), 
+			  			 U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups/" + secgrpID,
+			  			 U.getToken(),
+			  			 v );
+    }    
+    
     /**
      *
      *
@@ -1039,7 +1059,8 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     //________________________________________________________________________________
     public static void sendDELETERequest( boolean usessl,
     									  String sURL, 
-					  					  String token ) 
+					  					  String token,
+					  					  Vector<Pair<String,String>> properties ) 
 	throws RuntimeException, NotFoundException, NotAuthorizedException
     {
     	String Url = sURL;
@@ -1074,6 +1095,14 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
 			else
 			  ((HttpURLConnection)conn).disconnect( );
 	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
+	}
+	
+	if( properties!=null ) {
+	    Iterator<Pair<String,String>> it = properties.iterator();
+	    while( it.hasNext( ) ) {
+		Pair<String, String> pair = it.next( );
+		conn.setRequestProperty( pair.first, pair.second );
+	    }
 	}
 	
 	conn.setDoInput(false);

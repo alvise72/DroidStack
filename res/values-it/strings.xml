@@ -67,4 +67,5 @@
     <string name="FIPRELEASED">Floating IP rilasciato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra se continui a vederlo.</string>
     <string name="SHOWPWD">Mostra</string>
     <string name="NOSERVERTOASSOCIATEFIP">Non c\'&#xe8; alcuna istanza cui associare questo floating IP.</string>
+    <string name="AREYOUSURETODELETESECGRP">Sei sicuro di cancellare questo Security Group ?</string>
 </resources>
