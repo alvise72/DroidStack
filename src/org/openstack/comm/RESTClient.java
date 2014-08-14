@@ -206,6 +206,24 @@ public class RESTClient {
     }
     
     /**
+     * 
+     * @param U
+     * @param serverid
+     * @param snapname
+     */
+    public static void createInstanceSnapshot( User U, String serverid, String snapname )  throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException {
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"createImage\": {\"name\": \"" + snapname + "\", \"metadata\": {}}}";
+    	sendPOSTRequest( U.useSSL(), 
+				 		 U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
+				 		 U.getToken(), 
+				 		 extradata, 
+				 		 vp );
+    }
+    
+    /**
      * *
      * 
      * 

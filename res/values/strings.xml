@@ -70,4 +70,6 @@
     <string name="SHOWPWD">Show</string>
     <string name="NOSERVERTOASSOCIATEFIP">There\'re no instance to associate this floating IP.</string>
     <string name="AREYOUSURETODELETESECGRP">Are you sure to delete this Security Group ?</string>
+    <string name="INPUTSNAPNAME">Insert the snapshot\'s name</string>
+    <string name="SNAPCREATED">Snapshot created. Go to \'Images\' window to see it.</string>
 </resources>

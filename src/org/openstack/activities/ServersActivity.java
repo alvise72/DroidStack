@@ -1,6 +1,7 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 //import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -38,6 +39,8 @@ import android.view.View;
 
 
 
+
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,6 +48,8 @@ import java.util.Vector;
 //import java.util.Set;
 
 //import java.io.File;
+
+
 
 
 
@@ -77,6 +82,8 @@ import org.openstack.utils.ImageButtonNamed;
 
 
 
+
+
 import android.graphics.Typeface;
 //import android.graphics.Color;
 
@@ -89,8 +96,9 @@ import org.openstack.utils.CustomProgressDialog;
 public class ServersActivity extends Activity implements OnClickListener {
 
     private CustomProgressDialog progressDialogWaitStop = null;
-    private User U = null;
-	public String serverID;
+    private User 				 U 						= null;
+	public 	String 				 serverID 				= null;
+	private String 				 serverid 				= null;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -102,7 +110,7 @@ public class ServersActivity extends Activity implements OnClickListener {
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
         menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
-	menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
+        menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
     
@@ -208,8 +216,31 @@ public class ServersActivity extends Activity implements OnClickListener {
 		
 	    }
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_SNAP_SERVER ) {
-		Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
-		return;
+	    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+	    	
+	    	serverid  = ((ImageButtonNamed)v).getServerView().getServer().getID();
+	    	
+	    	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setMessage(getString(R.string.INPUTSNAPNAME));
+            final EditText input = new EditText(this);
+            alert.setView(input);
+            alert.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,
+                                int whichButton) {
+                            String snapname = input.getText().toString();
+                            //button.setText(newCateg);
+                            ServersActivity.this.progressDialogWaitStop.show();
+                            (new AsyncTaskCreateSnapshot( )).execute(serverid, snapname);
+                        }
+                    });
+            AlertDialog build = alert.create();
+            build.show();
+	    	
+	    	
+	    	
+	    	
+	    	return;
 	    }
 	}
 	
@@ -452,8 +483,66 @@ public class ServersActivity extends Activity implements OnClickListener {
     //  ASYNC TASKS.....
 
 
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskCreateSnapshot extends AsyncTask<String, String, String>
+    {
+     	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	
+     	@Override
+     	protected String doInBackground( String... v ) 
+     	{
+     		String serverid = v[0];
+     		String snapname = v[1];
+     		if(U.getTokenExpireTime() <= Utils.now() + 5) {
+     			try {
+     				String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
+     														   U.getEndpoint(),
+     														   U.getTenantName(),
+     														   U.getUserName(),
+     														   U.getPassword() );
+     				String  pwd = U.getPassword();
+     				String  edp = U.getEndpoint();
+     				boolean ssl = U.useSSL();
+     				U = ParseUtils.parseUser( _jsonBuf );
+     				U.setPassword( pwd );
+     				U.setEndpoint( edp );
+     				U.setSSL( ssl );
+     				U.toFile( Utils.getStringPreference( "FILESDIR", "", ServersActivity.this ) ); // to save new token + expiration
+     			} catch(Exception e) {
+     				errorMessage = e.getMessage();
+     				hasError = true;
+     				return "";
+     			}
+     		}
 
+	    
 
+     		try {
+     			RESTClient.createInstanceSnapshot( U, serverid, snapname );
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return "";
+     		}
+	    
+     		return "";
+     	}
+	
+	@Override
+	    protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 	    	Utils.alert( errorMessage, ServersActivity.this );
+ 	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
+ 	    	return;
+ 	    }
+		ServersActivity.this.progressDialogWaitStop.dismiss( );
+		Utils.alert(ServersActivity.this.getString(R.string.SNAPCREATED), ServersActivity.this);
+	}
+    }
 
 
 
