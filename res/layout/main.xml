@@ -136,6 +136,26 @@
              
           </LinearLayout>
 	  
+          <LinearLayout
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:layout_weight="1"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" >
+
+                  <Button
+                      android:id="@+id/volumes_but"
+                      android:layout_width="match_parent"
+		      android:layout_height="match_parent"
+                      android:onClick="volumes"
+                      android:layout_weight="1"
+		      android:drawableLeft="@drawable/secgroup"
+                      android:text="@string/VOLUMES" />
+
+             
+          </LinearLayout>
+
+
         </LinearLayout>
 	
       </ScrollView>
