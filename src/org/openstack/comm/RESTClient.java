@@ -408,7 +408,7 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     {
     	try {
     		sendDELETERequest(  U.useSSL(),
-    							"http://" + U.getEndpoint() + ":9292/v2/images/"+imageid, 
+    							U.getEndpoint() + ":9292/v2/images/"+imageid, 
     							U.getToken( ),
     							null );
     	} catch(NotAuthorizedException na) {

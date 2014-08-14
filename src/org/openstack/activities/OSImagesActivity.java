@@ -118,28 +118,36 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     @Override
     public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	//	Log.d("OSIMAGE.ONCREATE", "OSIMAGE.ONCREATE");
-	setContentView( R.layout.osimagelist );
+    	super.onCreate(savedInstanceState);
+    	setContentView( R.layout.osimagelist );
 	
-	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
-	try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
-	} catch(RuntimeException re) {
-	    Utils.alert("OSImagesActivity: "+re.getMessage(), this );
-	    return;
-	}
+    	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+    	try {
+    		U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+    	} catch(RuntimeException re) {
+    		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
+    		return;
+    	}
 	
-	if(selectedUser.length()!=0)
-	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
-	else
-      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+    	if(selectedUser.length()!=0)
+    		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+    	else
+    		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 	   
-	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+    	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
-	progressDialogWaitStop.show();
-	AsyncTaskOSListImages task = new AsyncTaskOSListImages();
-	task.execute( U );
+        this.update( );
+    }
+    
+    /**
+    *
+    *
+    *
+    *
+    */
+    private void update( ) {
+    	progressDialogWaitStop.show();
+    	(new AsyncTaskOSListImages()).execute( U );
     }
     
     /**
@@ -148,11 +156,10 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-    @Override
+/*    @Override
     public void onResume( ) {
-	super.onResume( );
-	//	Log.d("OSIMAGE.ONRESUME", "OSIMAGE.ONRESUME");
-    }
+    	super.onResume( );
+	}*/
  
     /**
      *
@@ -160,11 +167,10 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-    @Override
+/*    @Override
     public void onStart( ) {
-	super.onStart( );
-	//	Log.d("OSIMAGE.ONSTART", "OSIMAGE.ONSTART");
-    }
+    	super.onStart( );
+    }*/
   
     /**
      *
@@ -172,11 +178,10 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-    @Override
+ /*   @Override
     public void onPause( ) {
-	super.onPause( );
-	//	Log.d("OSIMAGE.ONPAUSE", "OSIMAGE.ONPAUSE");
-    }
+    	super.onPause( );
+    }*/
 
     /**
      *
@@ -184,11 +189,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-    @Override
+/*    @Override
     public void onRestart( ) {
 	super.onRestart( );
 	//	Log.d("OSIMAGE.ONRESTART", "OSIMAGE.ONRESTART");
-    }
+    }*/
 
  
     /**
@@ -197,11 +202,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-    @Override
+ /*   @Override
     public void onStop( ) {
 	super.onStop( );
 	//	Log.d("OSIMAGE.ONSTOP", "OSIMAGE.ONSTOP");
-    }
+    }*/
 
     /**
      *
@@ -225,11 +230,9 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-	super.onConfigurationChanged(newConfig);
-	//	Log.d("OSIMAGE.ONCONFIGURATIONCHANGE", "OSIMAGE.ONCONFIGURATIONCHANGE");
-	//	setContentView(R.layout.osimagelist);
-	setContentView(R.layout.osimagelist);
-	this.refreshView( );
+    	super.onConfigurationChanged(newConfig);
+    	setContentView(R.layout.osimagelist);
+    	this.refreshView( );
     }
 
 
@@ -383,9 +386,9 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     }
 
     private  void deleteGlanceImage( String ID ) {
-	progressDialogWaitStop.show();
-	AsyncTaskOSDelete task = new AsyncTaskOSDelete();
-	task.execute( ID );
+    	progressDialogWaitStop.show();
+    	AsyncTaskOSDelete task = new AsyncTaskOSDelete();
+    	task.execute( ID );
     }
 
     //__________________________________________________________________________________
@@ -482,8 +485,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 			    OSImagesActivity.this);
 	    }
 
-	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );
-	    //OSImagesActivity.this.refreshView( jsonBuf );
+	    OSImagesActivity.this.update( );
 	}
     }
 
