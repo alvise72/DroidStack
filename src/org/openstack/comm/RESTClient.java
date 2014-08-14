@@ -245,6 +245,27 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     }
     
     /**
+     * *
+     * *
+     * 
+     * *
+     * 
+     * 
+     */
+    public static void createSecGroup( User U, String secgrpName, String desc)  throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+    {
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"security_group\": {\"name\": \"" + secgrpName + "\", \"description\": \"" + desc + "\"}}";
+    	sendPOSTRequest( U.useSSL(), 
+    					 U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups", 
+    					 U.getToken(), 
+    					 extradata, 
+    					 vp );
+    }
+    
+    /**
      * 
      * 
 	 *

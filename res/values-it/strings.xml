@@ -70,4 +70,5 @@
     <string name="AREYOUSURETODELETESECGRP">Sei sicuro di cancellare questo Security Group ?</string>
     <string name="INPUTSNAPNAME">Inserisci il nome dello snapshot</string>
     <string name="SNAPCREATED">Snapshot creato. Attiva la finestra \'Immagini\' per vederlo.</string>
+    <string name="INPUTSSECNAME">Inserisci il nome del Security Group</string>
 </resources>

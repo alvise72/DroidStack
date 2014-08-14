@@ -1,6 +1,7 @@
 package org.openstack.activities;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.openstack.activities.ServersActivity.AsyncTaskCreateSnapshot;
 import org.openstack.comm.RESTClient;
 import org.openstack.parse.ParseUtils;
 import org.openstack.parse.ParseException;
@@ -29,6 +31,7 @@ import org.openstack.utils.SecGroup;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.views.ListSecGroupView;
+
 
 
 
@@ -81,7 +84,26 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     }
 
     public void createSecGroup( View v ) {
-    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(getString(R.string.INPUTSSECNAME));
+        final EditText input = new EditText(this);
+        
+        alert.setView(input);
+        alert.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                            int whichButton) {
+                        String secgrpName = input.getText().toString();
+                        //button.setText(newCateg);
+                        SecGrpActivity.this.progressDialogWaitStop.show();
+                        (new AsyncTaskCreateSecGroup()).execute(secgrpName, "...");
+                    }
+                });
+        AlertDialog build = alert.create();
+        build.show();
+        
+    	
     }
     
     //__________________________________________________________________________________
@@ -207,8 +229,67 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 
 
     //  ASYNC TASKS.....
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskCreateSecGroup extends AsyncTask<String, String, String>
+    {
+     	private  String   errorMessage     = null;
+	    private  boolean  hasError         = false;
+	    //private  String   jsonBuf          = null;
+	    //private  String   jsonBufferFlavor = null;
+	
+	    @Override
+	    protected String doInBackground( String... v ) 
+	    {
+	      String secgrpName = v[0];
+	      String desc       = v[1];
+	      if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		    try {
+		      String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
+		    										   U.getEndpoint(),
+		    										   U.getTenantName(),
+		    										   U.getUserName(),
+		    										   U.getPassword() );
+		      String  pwd = U.getPassword();
+		      String  edp = U.getEndpoint();
+		      boolean ssl = U.useSSL();
+		      U = ParseUtils.parseUser( _jsonBuf );
+		      U.setPassword( pwd );
+		      U.setEndpoint( edp );
+		      U.setSSL( ssl );
+		      U.toFile( Utils.getStringPreference("FILESDIR","",SecGrpActivity.this) );// to save new token + expiration
+		    } catch(Exception e) {
+		      errorMessage = e.getMessage();
+		      hasError = true;
+		      return "";
+		    }
+	      }
 
+	    
 
+	    try {
+		  RESTClient.createSecGroup(U, secgrpName, desc);
+	    } catch(Exception e) {
+	    	errorMessage = e.getMessage();
+	    	hasError = true;
+	    	return "";
+	    }
+	    return "";
+	}
+	
+	@Override
+	protected void onPostExecute( String result ) {
+	    super.onPostExecute(result);
+	    
+ 	    if(hasError) {
+ 		  Utils.alert( errorMessage, SecGrpActivity.this );
+ 		  SecGrpActivity.this.progressDialogWaitStop.dismiss( );
+ 		  return;
+ 	    }
+ 	    SecGrpActivity.this.update( );
+//	    SecGrpActivity.this.progressDialogWaitStop.dismiss( );
+	  }
+    }
 
 
 
