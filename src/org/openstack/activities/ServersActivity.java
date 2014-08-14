@@ -91,7 +91,6 @@ import android.os.AsyncTask;
 
 import org.openstack.utils.CustomProgressDialog;
 
-//import java.util.HashSet;
 
 public class ServersActivity extends Activity implements OnClickListener {
 

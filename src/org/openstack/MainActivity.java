@@ -104,24 +104,6 @@ public class MainActivity extends Activity
     public void onResume( ) {
       super.onResume( );
       
-      //LinearLayout first_left = (LinearLayout)findViewById( R.id.first_left );
-      //LinearLayout first_right = (LinearLayout)findViewById( R.id.first_right );
-      //LinearLayout second_left = (LinearLayout)findViewById( R.id.second_left );
-      //LinearLayout second_right = (LinearLayout)findViewById( R.id.second_right );
-      //LinearLayout third_left = (LinearLayout)findViewById( R.id.third_left );
-      //LinearLayout third_right = (LinearLayout)findViewById( R.id.third_right );
-
-      //LayoutParams lp = second_left.getLayoutParams();
-
-      //lp.width = SCREENW/2;
-	
-      //first_left.setLayoutParams( lp );
-      //first_right.setLayoutParams( lp );
-      //second_left.setLayoutParams( lp );
-      //second_right.setLayoutParams( lp );
-      //third_left.setLayoutParams( lp );
-      //third_right.setLayoutParams( lp );
-	
       if( !Utils.internetOn( this ) ) {
 
 	  AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -255,5 +237,25 @@ public class MainActivity extends Activity
     	Class<?> c = (Class<?>)SecGrpActivity.class;
     	Intent I = new Intent( MainActivity.this, c );
     	startActivity(I);
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void volumes( View v ) {
+    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void neutron( View v ) {
+    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
     }
 }

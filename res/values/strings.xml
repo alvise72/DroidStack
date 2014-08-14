@@ -73,4 +73,6 @@
     <string name="INPUTSNAPNAME">Insert the snapshot\'s name</string>
     <string name="SNAPCREATED">Snapshot created. Go to \'Images\' window to see it.</string>
     <string name="INPUTSSECNAME">Insert Security Group\'s name</string>
+    <string name="VOLUMES">Volumes</string>
+    <string name="NETWORKS">Networks</string>
 </resources>

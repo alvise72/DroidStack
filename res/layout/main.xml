@@ -146,11 +146,21 @@
                   <Button
                       android:id="@+id/volumes_but"
                       android:layout_width="match_parent"
-		      android:layout_height="match_parent"
+		      		  android:layout_height="match_parent"
                       android:onClick="volumes"
                       android:layout_weight="1"
-		      android:drawableLeft="@drawable/secgroup"
+		      		  android:drawableLeft="@drawable/hd"
                       android:text="@string/VOLUMES" />
+
+             
+                  <Button
+                      android:id="@+id/neutron_but"
+                      android:layout_width="match_parent"
+		      		  android:layout_height="match_parent"
+                      android:onClick="neutron"
+                      android:layout_weight="1"
+		      		  android:drawableLeft="@drawable/lan"
+                      android:text="@string/NETWORKS" />
 
              
           </LinearLayout>
