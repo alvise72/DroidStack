@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.WindowManager;
@@ -25,12 +26,14 @@ import org.openstack.parse.ParseException;
 
 
 
+import org.openstack.MainActivity;
 import org.openstack.R;
 import org.openstack.utils.ImageButtonNamed;
 import org.openstack.utils.SecGroup;
 import org.openstack.utils.User;
 import org.openstack.utils.Utils;
 import org.openstack.views.ListSecGroupView;
+
 
 
 
@@ -144,6 +147,14 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_EDIT_SECGRP ) {
 	    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
 	    	return;
+	    	/*Class<?> c = (Class<?>)EditSecGroupActivity.class;
+	        Intent I = new Intent( SecGrpActivity.this, c );
+	        SecGroup sv = ((ImageButtonNamed)v).getSecGroupView().getSecGroup();
+	        I.putExtra( "SECGRPNAME", sv.getName());
+	        I.putExtra( "SECGRPDESC", sv.getDescription());
+	        I.putExtra( "SECGRPID", sv.getID());
+	        startActivity( I );
+	    	return;*/
 	    }
 	    
 	}

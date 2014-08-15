@@ -540,13 +540,13 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
      */
     public static String requestSecGroups( User U ) throws RuntimeException 
     {
-	  Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+	  /*Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	  Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	  v.add(p);
+	  v.add(p);*/
 	  return sendGETRequest( U.useSSL(), 
-			  				 U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups",
+			  				 U.getEndpoint() + ":9696/v2.0/security-groups.json",
 			  				 U.getToken(), 
-			                 v );
+			                 null );
     }
 
 

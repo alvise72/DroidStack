@@ -28,7 +28,7 @@
     <string name="MUSTSELECTNET">You haven\'t selected any network. Cannot start an instance without a network to attach.</string>
     <string name="MUSTSETNAME">You must put a name for the instance.</string>
     <string name="FIXEDIPLIST">Comma separated Fixed IPs (optional):</string>
-    <string name="NOTIMPLEMENTED">Functionality not implemented yet</string>
+    <string name="NOTIMPLEMENTED">Functionality not implemented yet, work in progress... coming soon.</string>
     <string name="MENUDELETEALL">Delete all instances</string>
     <string name="DELETEDINSTSANCES">Instances successfully delete. Update window to refresh view.</string>
     <string name="SOMEDELETIONFAILED">Some instance hasn\'t been found in the server (probably was already in deleting state)&#8230;\nDeletion\'s finished, refresh the window.</string>
@@ -75,4 +75,6 @@
     <string name="INPUTSSECNAME">Insert Security Group\'s name</string>
     <string name="VOLUMES">Volumes</string>
     <string name="NETWORKS">Networks</string>
+    <string name="EDITSECGROUP">Edit Security Group</string>
+    <string name="ADDRULES">Add rules</string>
 </resources>

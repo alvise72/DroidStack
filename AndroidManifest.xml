@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.openstack"
       android:versionCode="1"
-      android:versionName="1.0.0">
+      android:versionName="0.1.0 alpha">
 
     <uses-sdk android:minSdkVersion="16"/>
 
@@ -28,7 +28,7 @@
         <activity android:launchMode="singleInstance" android:name="org.openstack.MainActivity"
                   android:label="DroidStack"
                   android:configChanges="orientation|keyboardHidden|screenSize"
-		  android:icon="@drawable/openstack">
+		  		  android:icon="@drawable/openstack">
           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -62,7 +62,7 @@
             android:name="org.openstack.activities.OverViewActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/USAGEOVERVIEW"
-	    android:parentActivityName="org.openstack.MainActivity"
+	   		android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
@@ -70,7 +70,7 @@
             android:name="org.openstack.activities.UserAddActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/ADDNEWUSER"
-	    android:parentActivityName="org.openstack.MainActivity"
+	   		android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
@@ -78,7 +78,7 @@
             android:name="org.openstack.activities.ServersActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/MANAGENOVAINST"
-	    android:parentActivityName="org.openstack.MainActivity"
+	    	android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
@@ -86,19 +86,17 @@
             android:name="org.openstack.activities.ImageLaunchActivity"
             android:launchMode="singleInstance"
             android:label="@string/LAUNCHIMAGE"
-	    android:parentActivityName="org.openstack.MainActivity"
+	    	android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
-       
        
        <activity
             android:name="org.openstack.activities.FloatingIPActivity"
             android:launchMode="singleInstance"
             android:label="@string/FLOATINGIP"
-	    android:parentActivityName="org.openstack.MainActivity"
+	    	android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
-       
        
        <activity
             android:name="org.openstack.activities.SecGrpActivity"
@@ -107,5 +105,14 @@
 	        android:parentActivityName="org.openstack.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
+       
+       <activity
+            android:name="org.openstack.activities.EditSecGroupActivity"
+            android:launchMode="singleInstance"
+            android:label="@string/EDITSECGROUP"            
+	        android:parentActivityName="org.openstack.SecGrpActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+           />
+       
     </application>
 </manifest> 

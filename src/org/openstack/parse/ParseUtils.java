@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.openstack.utils.AllocationPool;
 import org.openstack.utils.FloatingIP;
+import org.openstack.utils.Rule;
 import org.openstack.utils.SubNetwork;
 import org.openstack.utils.SecGroup;
 import org.openstack.utils.Network;
@@ -493,19 +494,30 @@ public class ParseUtils {
     	Vector<SecGroup> secg = new Vector<SecGroup>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
-	    JSONArray secgroups = (JSONArray)jsonObject.getJSONArray("security_groups");
+	    JSONArray secgroups = jsonObject.getJSONArray("security_groups");
 	    
 	    for(int i =0; i<secgroups.length(); ++i) {
 		  JSONObject secgrp = secgroups.getJSONObject(i);
 		  String id   = secgrp.getString("id");
 		  String name = secgrp.getString("name");
-		  secg.add( new SecGroup( name, id ) );
+		  String desc = secgrp.getString("description");
+		  if(desc == null) desc ="";
+		  //Vector<Rule> rules = parseRules( secgrp.getJSONArray("security_group_rules"));
+		  secg.add( new SecGroup( name, id, desc, null ) );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
  	}
 	  return secg;
     }
+    
+    /*private static Vector<Rule> parseRules( JSONArray ruleArray ) {
+    	Vector<Rule> rules = new Vector<Rule>( );
+    	for(int i =0; i<ruleArray.length(); ++i) {
+    		JSONObject secgrp = ruleArray.getJSONObject(i);
+    		
+    	}
+    }*/
 
     /**
      *

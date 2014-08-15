@@ -14,30 +14,41 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
-
+			<Space
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+			
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/secgrpName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
 
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/secgrpDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="description"
                 android:ems="10" >
-
                 <requestFocus />
+                
             </EditText>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+            
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Rules" />
-
+                android:text="@string/ADDRULES" />
+            
+			<Space
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+			
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,41 +63,45 @@
 		
                   <Spinner
                     android:id="@+id/spinnerRuleI"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 		
-		         <ImageButton
-                    android:id="@+id/addruleI"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_add"
-                    android:background="#f2f2f2"
-		            android:layout_weight="3"
-                    android:onClick="addRuleI" />
+		       	  <ImageButton
+                   	 android:id="@+id/addruleI"
+                  	  android:layout_width="match_parent"
+                  	  android:layout_height="wrap_content"
+                  	  android:src="@android:drawable/ic_menu_add"
+                  	  android:background="#f2f2f2"
+		          	  android:layout_weight="3"
+                  	  android:onClick="addRuleI" />
+		       	  
 	             </LinearLayout>
 
+	            <Space
+               	 android:layout_width="wrap_content"
+               	 android:layout_height="5dip" />
       
 	            <LinearLayout
-		          android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:orientation="horizontal" >
+		        	  android:layout_width="match_parent"
+                	  android:layout_height="wrap_content"
+                	  android:gravity="center_horizontal"
+                	  android:orientation="horizontal" >
 		
 		             <Spinner
                          android:id="@+id/spinnerRuleE"
-                         android:layout_width="wrap_content"
+                         android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                          android:layout_weight="1" />
 		
 		             <ImageButton
-                      android:id="@+id/addruleE"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:src="@android:drawable/ic_menu_add"
-                     android:background="#f2f2f2"
-		             android:layout_weight="3"
-                     android:onClick="addRuleE" />
+                     	 android:id="@+id/addruleE"
+                    	 android:layout_width="match_parent"
+                    	 android:layout_height="wrap_content"
+                    	 android:src="@android:drawable/ic_menu_add"
+                    	 android:background="#f2f2f2"
+		            	 android:layout_weight="3"
+                    	 android:onClick="addRuleE" />
 		
 	             </LinearLayout>
 

@@ -1,34 +1,18 @@
 package org.openstack;
 
 import android.app.Activity;
-//import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.os.Bundle;
-//import android.os.AsyncTask;
-
 import android.content.Intent;
-//import android.content.Context;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
 import android.view.View;
-//import android.view.View.OnClickListener;
-//import android.view.ViewGroup;
-//import android.view.LayoutInflater;
 import android.view.WindowManager;
-//import android.view.Display;
-//import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
-
-//import android.util.Log;
-
 import android.widget.LinearLayout;
 import android.widget.TextView;
-//import android.widget.Toast;
-
-//import java.util.Hashtable;
-
-
-
 
 import org.openstack.R;
 import org.openstack.utils.User;
@@ -62,23 +46,30 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        String versionName = null;
+        try {
+        	versionName = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName;
+        } catch(NameNotFoundException e) {
+        	versionName="N/A";
+        }
+        
+        Utils.putStringPreference( "VERSIONNAME", versionName, this );
+        setContentView(R.layout.main);
+        this.setTitle("DroidStack v "+versionName);
+        Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
+        Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
 	
-	setContentView(R.layout.main);
-	
-	Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
-    Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
-	
-/*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
+        /*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         //SCREENH = d.getHeight();
-	SCREENW = d.getWidth();
-	*/
-	DisplayMetrics dm = new DisplayMetrics();
-	getWindowManager().getDefaultDisplay().getMetrics(dm);
-	SCREENW = dm.widthPixels;
-	int density = (int)this.getResources().getDisplayMetrics().density;
-	//Utils.putIntegerPreference("SCREENH", SCREENH, this);
-	Utils.putIntegerPreference("DISPLAYDENSITY", density, this);
+		SCREENW = d.getWidth();
+         */
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        SCREENW = dm.widthPixels;
+        int density = (int)this.getResources().getDisplayMetrics().density;
+        //Utils.putIntegerPreference("SCREENH", SCREENH, this);
+        Utils.putIntegerPreference("DISPLAYDENSITY", density, this);
 	
     }
     
