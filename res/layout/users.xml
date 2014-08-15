@@ -40,7 +40,7 @@
 	android:id="@+id/users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available Users:"
+        android:text="@string/AVAILUSERS"
         android:paddingLeft="4dp"
 	android:textColor="#333333"
         android:textAppearance="?android:attr/textAppearanceLarge" />

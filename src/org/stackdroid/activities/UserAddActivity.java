@@ -265,7 +265,7 @@ public class UserAddActivity extends Activity {
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
 	    U.toFile( Utils.getStringPreference("FILESDIR","",this) );
-	    Utils.alert("SUCCESS !\nYou can add another user or go back to the list of users", this);
+	    Utils.alert(getString(R.string.ADDSUCCESS), this);
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage(), this);
 	} 	

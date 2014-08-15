@@ -8,10 +8,9 @@
     <string name="INSTANCES">Instances</string>
     <string name="MEMORY">Memory (MB)</string>
     <string name="CURRENTUSER">Current user</string>
-    <string name="AVAILUSERS">Added users</string>
     <string name="ADDNEWUSER">Add new user</string>
     <string name="ENDPOINT">Endpoint</string>
-    <string name="ONLYHOSTNAME">only hostname</string>
+    <string name="ONLYHOSTNAME">Endpoint (only hostname)</string>
     <string name="PROJECTNAME">Project\'s name</string>
     <string name="USERNAME">Username</string>
     <string name="PASSWORD">Password</string>
@@ -77,4 +76,6 @@
     <string name="NETWORKS">Networks</string>
     <string name="EDITSECGROUP">Edit Security Group</string>
     <string name="ADDRULES">Add rules</string>
+    <string name="TENANTNAME">Tenant\'s name</string>
+    <string name="AVAILUSERS">Available users:</string>
 </resources>
