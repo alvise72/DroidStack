@@ -1,4 +1,4 @@
-AndroStack
+DroidStack
 ==========
 
 Free Android OpenStack Client
