@@ -41,23 +41,59 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
-
-                <Button
-                    android:id="@+id/button1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+	      
+	            <LinearLayout
+		          android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_horizontal"
+                  android:orientation="horizontal" >
+		
+                  <Spinner
+                    android:id="@+id/spinnerRuleI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ingress" />
-
-                <Button
-                    android:id="@+id/button2"
+                    android:layout_weight="1" />
+		
+		         <ImageButton
+                    android:id="@+id/addruleI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Egress" />
+                    android:src="@android:drawable/ic_menu_add"
+                    android:background="#f2f2f2"
+		            android:layout_weight="3"
+                    android:onClick="addRuleI" />
+	             </LinearLayout>
 
-            </LinearLayout>
+      
+	            <LinearLayout
+		          android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_horizontal"
+                  android:orientation="horizontal" >
+		
+		             <Spinner
+                         android:id="@+id/spinnerRuleE"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1" />
+		
+		             <ImageButton
+                      android:id="@+id/addruleE"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:src="@android:drawable/ic_menu_add"
+                     android:background="#f2f2f2"
+		             android:layout_weight="3"
+                     android:onClick="addRuleE" />
+		
+	             </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
+             </LinearLayout>
+
+         </LinearLayout>
+
+     </ScrollView>
 
 </LinearLayout>
