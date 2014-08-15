@@ -1,4 +1,4 @@
-package org.droidstack.activities;
+package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -19,20 +19,20 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.droidstack.activities.ServersActivity.AsyncTaskCreateSnapshot;
-import org.droidstack.comm.RESTClient;
-import org.droidstack.parse.ParseUtils;
-import org.droidstack.parse.ParseException;
+import org.stackdroid.activities.ServersActivity.AsyncTaskCreateSnapshot;
+import org.stackdroid.comm.RESTClient;
+import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.parse.ParseException;
 
 
 
-import org.droidstack.MainActivity;
-import org.droidstack.R;
-import org.droidstack.utils.ImageButtonNamed;
-import org.droidstack.utils.SecGroup;
-import org.droidstack.utils.User;
-import org.droidstack.utils.Utils;
-import org.droidstack.views.ListSecGroupView;
+import org.stackdroid.MainActivity;
+import org.stackdroid.R;
+import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.SecGroup;
+import org.stackdroid.utils.User;
+import org.stackdroid.utils.Utils;
+import org.stackdroid.views.ListSecGroupView;
 
 
 
@@ -43,7 +43,7 @@ import org.droidstack.views.ListSecGroupView;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 
-import org.droidstack.utils.CustomProgressDialog;
+import org.stackdroid.utils.CustomProgressDialog;
 
 
 public class SecGrpActivity extends Activity implements OnClickListener {

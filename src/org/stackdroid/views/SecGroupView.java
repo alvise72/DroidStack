@@ -1,7 +1,7 @@
-package org.droidstack.views;
+package org.stackdroid.views;
 
 
-import org.droidstack.utils.SecGroup;
+import org.stackdroid.utils.SecGroup;
 import android.widget.CheckBox;
 import android.content.Context;
 

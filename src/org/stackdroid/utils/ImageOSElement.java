@@ -1,4 +1,4 @@
-package org.droidstack.utils;
+package org.stackdroid.utils;
 
 import android.widget.LinearLayout;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.ViewGroup;
 //import android.util.Log;
-import org.droidstack.views.UserView;
+import org.stackdroid.views.UserView;
 
 public class ImageOSElement {
 

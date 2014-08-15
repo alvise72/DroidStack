@@ -1,4 +1,4 @@
-package org.droidstack.utils;
+package org.stackdroid.utils;
 
 import java.net.URL;
 import java.util.*;
@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 
-import org.droidstack.R;
+import org.stackdroid.R;
 
 import android.content.SharedPreferences;
 import android.content.DialogInterface;

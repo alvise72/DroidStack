@@ -1,4 +1,4 @@
-package org.droidstack.utils;
+package org.stackdroid.utils;
 
 public class TenantQuota {
     private int maxSecGroups;

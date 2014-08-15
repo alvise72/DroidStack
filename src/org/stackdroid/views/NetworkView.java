@@ -1,7 +1,7 @@
-package org.droidstack.views;
+package org.stackdroid.views;
 
 
-import org.droidstack.utils.Network;
+import org.stackdroid.utils.Network;
 import android.widget.CheckBox;
 import android.content.Context;
 //import android.graphics.Color;

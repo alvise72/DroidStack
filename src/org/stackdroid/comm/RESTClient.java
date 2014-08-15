@@ -1,4 +1,4 @@
-package org.droidstack.comm;
+package org.stackdroid.comm;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,10 +19,10 @@ import java.util.Iterator;
 import java.util.Hashtable;
 
 import org.apache.http.HttpStatus;
-import org.droidstack.parse.ParseUtils;
-//import org.droidstack.parse.ParseUtils;
-import org.droidstack.utils.Base64;
-import org.droidstack.utils.User;
+import org.stackdroid.parse.ParseUtils;
+//import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.utils.Base64;
+import org.stackdroid.utils.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package org.droidstack.utils;
+package org.stackdroid.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +16,7 @@ import android.app.*;
 //import android.os.Environment;
 import android.view.View.OnClickListener;
 */
-import org.droidstack.R;
+import org.stackdroid.R;
 
 public class ProgressBarDialog extends Dialog {
 

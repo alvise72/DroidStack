@@ -1,4 +1,4 @@
-package org.droidstack.utils;
+package org.stackdroid.utils;
 
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;

@@ -1,4 +1,4 @@
-package org.droidstack;
+package org.stackdroid;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,15 +14,15 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.droidstack.R;
-import org.droidstack.utils.User;
-import org.droidstack.utils.Utils;
-import org.droidstack.activities.FloatingIPActivity;
-import org.droidstack.activities.SecGrpActivity;
-import org.droidstack.activities.UsersActivity;
-import org.droidstack.activities.ServersActivity;
-import org.droidstack.activities.OSImagesActivity;
-import org.droidstack.activities.OverViewActivity;
+import org.stackdroid.R;
+import org.stackdroid.utils.User;
+import org.stackdroid.utils.Utils;
+import org.stackdroid.activities.FloatingIPActivity;
+import org.stackdroid.activities.SecGrpActivity;
+import org.stackdroid.activities.UsersActivity;
+import org.stackdroid.activities.ServersActivity;
+import org.stackdroid.activities.OSImagesActivity;
+import org.stackdroid.activities.OverViewActivity;
 
 //import java.util.concurrent.ExecutionException;
 

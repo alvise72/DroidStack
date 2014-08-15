@@ -1,4 +1,4 @@
-package org.droidstack.utils;
+package org.stackdroid.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;

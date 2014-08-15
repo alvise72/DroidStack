@@ -1,4 +1,4 @@
-package org.droidstack.activities;
+package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -55,28 +55,28 @@ import java.util.Vector;
 
 
 
-import org.droidstack.comm.RESTClient;
-import org.droidstack.comm.NotFoundException;
-import org.droidstack.parse.ParseUtils;
-import org.droidstack.parse.ParseException;
+import org.stackdroid.comm.RESTClient;
+import org.stackdroid.comm.NotFoundException;
+import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.parse.ParseException;
 
 
 
-import org.droidstack.R;
-import org.droidstack.utils.ButtonNamed;
-import org.droidstack.utils.User;
-import org.droidstack.utils.Utils;
-//import org.droidstack.utils.Named;
-import org.droidstack.utils.Server;
-import org.droidstack.utils.Flavor;
-//import org.droidstack.utils.Base64;
-//import org.droidstack.views.UserView;
-import org.droidstack.views.ServerView;
-import org.droidstack.utils.TextViewNamed;
-//import org.droidstack.utils.UserException;
-//import org.droidstack.utils.ImageViewNamed;
-import org.droidstack.utils.ImageButtonNamed;
-//import org.droidstack.utils.LinearLayoutNamed;
+import org.stackdroid.R;
+import org.stackdroid.utils.ButtonNamed;
+import org.stackdroid.utils.User;
+import org.stackdroid.utils.Utils;
+//import org.stackdroid.utils.Named;
+import org.stackdroid.utils.Server;
+import org.stackdroid.utils.Flavor;
+//import org.stackdroid.utils.Base64;
+//import org.stackdroid.views.UserView;
+import org.stackdroid.views.ServerView;
+import org.stackdroid.utils.TextViewNamed;
+//import org.stackdroid.utils.UserException;
+//import org.stackdroid.utils.ImageViewNamed;
+import org.stackdroid.utils.ImageButtonNamed;
+//import org.stackdroid.utils.LinearLayoutNamed;
 
 
 
@@ -89,7 +89,7 @@ import android.graphics.Typeface;
 
 import android.os.AsyncTask;
 
-import org.droidstack.utils.CustomProgressDialog;
+import org.stackdroid.utils.CustomProgressDialog;
 
 
 public class ServersActivity extends Activity implements OnClickListener {

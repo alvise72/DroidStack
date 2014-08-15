@@ -1,4 +1,4 @@
-package org.droidstack.activities;
+package org.stackdroid.activities;
 
 import android.os.Bundle;
 //import android.os.Environment;
@@ -38,24 +38,24 @@ import android.view.View;
 //import java.util.Vector;
 //import java.util.Set;
 
-import org.droidstack.R;
-import org.droidstack.utils.User;
-//import org.droidstack.utils.UserException;
-import org.droidstack.utils.Utils;
+import org.stackdroid.R;
+import org.stackdroid.utils.User;
+//import org.stackdroid.utils.UserException;
+import org.stackdroid.utils.Utils;
 /*
-import org.droidstack.utils.Base64;
-import org.droidstack.comm.RESTClient;
-import org.droidstack.parse.ParseUtils;
-import org.droidstack.parse.ParseException;
+import org.stackdroid.utils.Base64;
+import org.stackdroid.comm.RESTClient;
+import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.parse.ParseException;
 */
 import java.io.File;
 
-import org.droidstack.views.UserView;
-//import org.droidstack.utils.Named;
-//import org.droidstack.utils.ImageViewNamed;
-import org.droidstack.utils.TextViewNamed;
-import org.droidstack.utils.ImageButtonNamed;
-import org.droidstack.utils.LinearLayoutNamed;
+import org.stackdroid.views.UserView;
+//import org.stackdroid.utils.Named;
+//import org.stackdroid.utils.ImageViewNamed;
+import org.stackdroid.utils.TextViewNamed;
+import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.LinearLayoutNamed;
 
 //import android.graphics.Typeface;
 //import android.graphics.Color;

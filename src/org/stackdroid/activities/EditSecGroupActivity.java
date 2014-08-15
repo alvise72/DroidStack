@@ -1,6 +1,6 @@
-package org.droidstack.activities;
+package org.stackdroid.activities;
 
-import org.droidstack.R;
+import org.stackdroid.R;
 
 import android.app.Activity;
 import android.os.Bundle;

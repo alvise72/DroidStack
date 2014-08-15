@@ -1,4 +1,4 @@
-package org.droidstack.activities;
+package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -43,26 +43,26 @@ import java.util.Vector;
 //import java.io.File;
 
 
-import org.droidstack.comm.RESTClient;
-import org.droidstack.comm.NotFoundException;
-//import org.droidstack.comm.NotAuthorizedException;
-import org.droidstack.parse.ParseUtils;
-import org.droidstack.parse.ParseException;
-import org.droidstack.utils.CustomProgressDialog;
-import org.droidstack.R;
-import org.droidstack.utils.User;
-import org.droidstack.utils.Utils;
-//import org.droidstack.utils.Named;
-//import org.droidstack.utils.Server;
-import org.droidstack.utils.OSImage;
-//import org.droidstack.views.UserView;
-//import org.droidstack.views.ServerView;
-import org.droidstack.views.OSImageView;
-import org.droidstack.utils.TextViewNamed;
-//import org.droidstack.utils.UserException;
-//import org.droidstack.utils.ImageViewNamed;
-import org.droidstack.utils.ImageButtonNamed;
-import org.droidstack.utils.LinearLayoutNamed;
+import org.stackdroid.comm.RESTClient;
+import org.stackdroid.comm.NotFoundException;
+//import org.stackdroid.comm.NotAuthorizedException;
+import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.parse.ParseException;
+import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.R;
+import org.stackdroid.utils.User;
+import org.stackdroid.utils.Utils;
+//import org.stackdroid.utils.Named;
+//import org.stackdroid.utils.Server;
+import org.stackdroid.utils.OSImage;
+//import org.stackdroid.views.UserView;
+//import org.stackdroid.views.ServerView;
+import org.stackdroid.views.OSImageView;
+import org.stackdroid.utils.TextViewNamed;
+//import org.stackdroid.utils.UserException;
+//import org.stackdroid.utils.ImageViewNamed;
+import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.LinearLayoutNamed;
 
 import android.graphics.Typeface;
 

@@ -1,4 +1,4 @@
-package org.droidstack.activities;
+package org.stackdroid.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
@@ -16,20 +16,20 @@ import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
 
-import org.droidstack.utils.IPAddressKeyListener;
-import org.droidstack.utils.User;
-import org.droidstack.utils.Utils;
-import org.droidstack.utils.Flavor;
-import org.droidstack.utils.KeyPair;
-import org.droidstack.comm.RESTClient;
-import org.droidstack.views.SecGroupView;
-import org.droidstack.views.NetworkView;
-import org.droidstack.utils.CustomProgressDialog;
-import org.droidstack.utils.EditTextNamed;
-import org.droidstack.utils.SecGroup;
-import org.droidstack.utils.Network;
-import org.droidstack.parse.ParseUtils;
-import org.droidstack.parse.ParseException;
+import org.stackdroid.utils.IPAddressKeyListener;
+import org.stackdroid.utils.User;
+import org.stackdroid.utils.Utils;
+import org.stackdroid.utils.Flavor;
+import org.stackdroid.utils.KeyPair;
+import org.stackdroid.comm.RESTClient;
+import org.stackdroid.views.SecGroupView;
+import org.stackdroid.views.NetworkView;
+import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.utils.EditTextNamed;
+import org.stackdroid.utils.SecGroup;
+import org.stackdroid.utils.Network;
+import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.parse.ParseException;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,11 +39,11 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
-import org.droidstack.R;
+import org.stackdroid.R;
 
 public class ImageLaunchActivity extends Activity implements OnClickListener {
 
-    private org.droidstack.utils.CustomProgressDialog progressDialogWaitStop = null;
+    private org.stackdroid.utils.CustomProgressDialog progressDialogWaitStop = null;
     private ArrayAdapter<Flavor> spinnerFlavorsArrayAdapter  = null;
     private ArrayAdapter<KeyPair> spinnerKeypairsArrayAdapter = null;
     private Spinner spinnerFlavors   = null;
@@ -105,7 +105,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
   @Override
   public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView( org.droidstack.R.layout.launchimage );
+      setContentView( org.stackdroid.R.layout.launchimage );
       
       bundle = getIntent( ).getExtras( );
       imageID = bundle.getString("IMAGEID");
