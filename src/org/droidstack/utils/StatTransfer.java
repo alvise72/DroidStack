@@ -1,4 +1,4 @@
-package org.openstack.utils;
+package org.droidstack.utils;
 
 import java.util.Formatter;
 import java.util.Locale;

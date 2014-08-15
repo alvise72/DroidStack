@@ -1,6 +1,6 @@
-package org.openstack.activities;
+package org.droidstack.activities;
 
-import org.openstack.R;
+import org.droidstack.R;
 
 import android.app.Activity;
 import android.os.Bundle;

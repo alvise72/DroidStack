@@ -1,4 +1,4 @@
-package org.openstack.activities;
+package org.droidstack.activities;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
@@ -10,17 +10,17 @@ import android.text.InputType;
 import android.view.WindowManager;
 import android.view.View;
 
-import org.openstack.utils.User;
-import org.openstack.utils.Utils;
-import org.openstack.comm.RESTClient;
-import org.openstack.utils.CustomProgressDialog;
-import org.openstack.parse.ParseUtils;
-import org.openstack.R;
+import org.droidstack.utils.User;
+import org.droidstack.utils.Utils;
+import org.droidstack.comm.RESTClient;
+import org.droidstack.utils.CustomProgressDialog;
+import org.droidstack.parse.ParseUtils;
+import org.droidstack.R;
 
 public class UserAddActivity extends Activity {
 
     //private boolean requesting_token = false;
-    private org.openstack.utils.CustomProgressDialog progressDialogWaitStop = null;
+    private org.droidstack.utils.CustomProgressDialog progressDialogWaitStop = null;
 
     /**
      *
@@ -40,7 +40,7 @@ public class UserAddActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView( org.openstack.R.layout.useradd );
+    setContentView( org.droidstack.R.layout.useradd );
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
     
@@ -151,11 +151,11 @@ public class UserAddActivity extends Activity {
      *
      */  
   public void add( View v ) {
-    EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
-    EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
-    EditText usernameET = (EditText)findViewById(org.openstack.R.id.usernameET);
-    EditText passwordET = (EditText)findViewById(org.openstack.R.id.passwordET);
-    CheckBox usesslET   = (CheckBox)findViewById(org.openstack.R.id.usesslCB);
+    EditText endpointET = (EditText)findViewById(org.droidstack.R.id.endpointET);
+    EditText tenantET   = (EditText)findViewById(org.droidstack.R.id.tenantnameET);
+    EditText usernameET = (EditText)findViewById(org.droidstack.R.id.usernameET);
+    EditText passwordET = (EditText)findViewById(org.droidstack.R.id.passwordET);
+    CheckBox usesslET   = (CheckBox)findViewById(org.droidstack.R.id.usesslCB);
     
     String  endpoint = endpointET.getText().toString().trim();
     String  tenant   = tenantET.getText().toString().trim();
@@ -228,11 +228,11 @@ public class UserAddActivity extends Activity {
  *
  */ 
   public void reset( View v ) {
-    EditText endpointET = (EditText)findViewById(org.openstack.R.id.endpointET);
-    EditText tenantET   = (EditText)findViewById(org.openstack.R.id.tenantnameET);
-    EditText usernameET = (EditText)findViewById(org.openstack.R.id.usernameET);
-    EditText passwordET = (EditText)findViewById(org.openstack.R.id.passwordET);
-    CheckBox usesslET   = (CheckBox)findViewById(org.openstack.R.id.usesslCB);
+    EditText endpointET = (EditText)findViewById(org.droidstack.R.id.endpointET);
+    EditText tenantET   = (EditText)findViewById(org.droidstack.R.id.tenantnameET);
+    EditText usernameET = (EditText)findViewById(org.droidstack.R.id.usernameET);
+    EditText passwordET = (EditText)findViewById(org.droidstack.R.id.passwordET);
+    CheckBox usesslET   = (CheckBox)findViewById(org.droidstack.R.id.usesslCB);
     
     endpointET.setText("");
     tenantET.setText("");

@@ -1,4 +1,4 @@
-package org.openstack.utils;
+package org.droidstack.utils;
 
 import java.net.URL;
 import java.util.*;
@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 
-import org.openstack.R;
+import org.droidstack.R;
 
 import android.content.SharedPreferences;
 import android.content.DialogInterface;

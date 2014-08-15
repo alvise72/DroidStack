@@ -1,4 +1,4 @@
-package org.openstack.utils;
+package org.droidstack.utils;
 
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>

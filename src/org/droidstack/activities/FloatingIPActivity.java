@@ -1,4 +1,4 @@
-package org.openstack.activities;
+package org.droidstack.activities;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -23,21 +23,21 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.openstack.comm.RESTClient;
-import org.openstack.parse.ParseUtils;
-import org.openstack.parse.ParseException;
-import org.openstack.R;
-import org.openstack.utils.FloatingIP;
-import org.openstack.utils.ImageButtonNamed;
-import org.openstack.utils.Network;
-import org.openstack.utils.Server;
-import org.openstack.utils.User;
-import org.openstack.utils.Utils;
-import org.openstack.views.FloatingIPView;
+import org.droidstack.comm.RESTClient;
+import org.droidstack.parse.ParseUtils;
+import org.droidstack.parse.ParseException;
+import org.droidstack.R;
+import org.droidstack.utils.FloatingIP;
+import org.droidstack.utils.ImageButtonNamed;
+import org.droidstack.utils.Network;
+import org.droidstack.utils.Server;
+import org.droidstack.utils.User;
+import org.droidstack.utils.Utils;
+import org.droidstack.views.FloatingIPView;
 
 import android.os.AsyncTask;
 
-import org.openstack.utils.CustomProgressDialog;
+import org.droidstack.utils.CustomProgressDialog;
 
 public class FloatingIPActivity extends Activity implements OnClickListener {
 

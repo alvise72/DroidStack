@@ -2,7 +2,7 @@
  * CODE by: Kostya Vasilyev (http://goo.gl/8XLGsj)
  */
 
-package org.openstack.utils;
+package org.droidstack.utils;
 
 import android.text.InputType;
 import android.text.SpannableStringBuilder;

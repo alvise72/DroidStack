@@ -1,4 +1,4 @@
-package org.openstack.parse;
+package org.droidstack.parse;
 
 import java.util.Hashtable;
 import java.util.Calendar;
@@ -12,18 +12,18 @@ import java.text.SimpleDateFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
-import org.openstack.utils.AllocationPool;
-import org.openstack.utils.FloatingIP;
-import org.openstack.utils.Rule;
-import org.openstack.utils.SubNetwork;
-import org.openstack.utils.SecGroup;
-import org.openstack.utils.Network;
-import org.openstack.utils.KeyPair;
-import org.openstack.utils.OSImage;
-import org.openstack.utils.Server;
-import org.openstack.utils.Flavor;
-import org.openstack.utils.Quota;
-import org.openstack.utils.User;
+import org.droidstack.utils.AllocationPool;
+import org.droidstack.utils.FloatingIP;
+import org.droidstack.utils.Rule;
+import org.droidstack.utils.SubNetwork;
+import org.droidstack.utils.SecGroup;
+import org.droidstack.utils.Network;
+import org.droidstack.utils.KeyPair;
+import org.droidstack.utils.OSImage;
+import org.droidstack.utils.Server;
+import org.droidstack.utils.Flavor;
+import org.droidstack.utils.Quota;
+import org.droidstack.utils.User;
 
 import android.util.Log;
 

@@ -1,10 +1,10 @@
-package org.openstack.views;
+package org.droidstack.views;
 
 
-import org.openstack.R;
-import org.openstack.utils.FloatingIP;
-import org.openstack.utils.ImageButtonNamed;
-import org.openstack.utils.Utils;
+import org.droidstack.R;
+import org.droidstack.utils.FloatingIP;
+import org.droidstack.utils.ImageButtonNamed;
+import org.droidstack.utils.Utils;
 
 import android.view.Gravity;
 

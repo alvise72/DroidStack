@@ -1,21 +1,21 @@
-package org.openstack.activities;
+package org.droidstack.activities;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.openstack.R;
-import org.openstack.comm.RESTClient;
-import org.openstack.parse.ParseUtils;
-import org.openstack.parse.ParseException;
-import org.openstack.utils.CustomProgressDialog;
-import org.openstack.utils.Flavor;
-import org.openstack.utils.FloatingIP;
-import org.openstack.utils.Quota;
-import org.openstack.utils.SecGroup;
-import org.openstack.utils.Server;
-import org.openstack.utils.User;
-import org.openstack.utils.Utils;
+import org.droidstack.R;
+import org.droidstack.comm.RESTClient;
+import org.droidstack.parse.ParseUtils;
+import org.droidstack.parse.ParseException;
+import org.droidstack.utils.CustomProgressDialog;
+import org.droidstack.utils.Flavor;
+import org.droidstack.utils.FloatingIP;
+import org.droidstack.utils.Quota;
+import org.droidstack.utils.SecGroup;
+import org.droidstack.utils.Server;
+import org.droidstack.utils.User;
+import org.droidstack.utils.Utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

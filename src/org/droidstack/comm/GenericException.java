@@ -1,4 +1,4 @@
-package org.openstack.comm;
+package org.droidstack.comm;
 
 public class GenericException extends Exception {
 	private static final long serialVersionUID = 2087368867376448461L;

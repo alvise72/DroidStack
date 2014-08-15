@@ -1,7 +1,7 @@
-package org.openstack.views;
+package org.droidstack.views;
 
 
-import org.openstack.utils.SecGroup;
+import org.droidstack.utils.SecGroup;
 import android.widget.CheckBox;
 import android.content.Context;
 

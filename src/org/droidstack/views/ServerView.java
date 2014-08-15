@@ -1,4 +1,4 @@
-package org.openstack.views;
+package org.droidstack.views;
 
 //import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
@@ -14,8 +14,8 @@ import android.view.Gravity;
 
 import android.content.Context;
 
-import org.openstack.R;
-import org.openstack.utils.*;
+import org.droidstack.R;
+import org.droidstack.utils.*;
 
 public class ServerView extends LinearLayout {
     

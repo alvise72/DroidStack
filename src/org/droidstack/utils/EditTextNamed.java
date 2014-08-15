@@ -1,15 +1,15 @@
-package org.openstack.utils;
+package org.droidstack.utils;
 
 import android.widget.EditText;
 import android.content.Context;
 //import android.widget.ImageView;
 
 
-import org.openstack.views.FloatingIPView;
-import org.openstack.views.UserView;
-import org.openstack.views.ServerView;
-import org.openstack.views.OSImageView;
-import org.openstack.views.NetworkView;
+import org.droidstack.views.FloatingIPView;
+import org.droidstack.views.UserView;
+import org.droidstack.views.ServerView;
+import org.droidstack.views.OSImageView;
+import org.droidstack.views.NetworkView;
 
 public class EditTextNamed extends EditText implements Named {
 

@@ -1,13 +1,13 @@
-package org.openstack.utils;
+package org.droidstack.utils;
 
 import android.widget.ImageView;
 import android.content.Context;
 
-import org.openstack.views.FloatingIPView;
-import org.openstack.views.UserView;
-import org.openstack.views.ServerView;
-import org.openstack.views.OSImageView;
-import org.openstack.views.NetworkView;
+import org.droidstack.views.FloatingIPView;
+import org.droidstack.views.UserView;
+import org.droidstack.views.ServerView;
+import org.droidstack.views.OSImageView;
+import org.droidstack.views.NetworkView;
 
 public class ImageViewNamed extends ImageView implements Named {
 
