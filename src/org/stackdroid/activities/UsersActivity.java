@@ -138,16 +138,16 @@ public class UsersActivity extends Activity implements OnClickListener {
 	// TODO: should we filter here ?
 
 	((LinearLayout)findViewById(R.id.userLayout)).removeAllViews();
-
+	UserView lastUV = null;
 	for(int i = 0; i<users.length; ++i) {
 	    User U = null;
 	    try {
 		
-		U = User.fromFileID( users[i].getName( ), Utils.getStringPreference("FILESDIR","",this) );
+	    	U = User.fromFileID( users[i].getName( ), Utils.getStringPreference("FILESDIR","",this) );
 		
 	    } catch(Exception e) {
-		Utils.alert("ERROR: " + e.getMessage(), this);
-		continue;
+	    	Utils.alert("ERROR: " + e.getMessage(), this);
+	    	continue;
 	    }
 	    
 	    UserView uv = new UserView ( U, this );
@@ -157,9 +157,15 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    ((LinearLayout)findViewById(R.id.userLayout)).addView( space );
 	    
 	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
-		uv.setSelected( );
+	    	uv.setSelected( );
 	    else
-		uv.setUnselected( );
+	    	uv.setUnselected( );
+	    lastUV = uv;
 	}
+	if(users.length==1) {
+		lastUV.setSelected( );
+		Utils.putStringPreference("SELECTEDUSER",lastUV.getFilename(),this);
+	}
+	
     }
 }
