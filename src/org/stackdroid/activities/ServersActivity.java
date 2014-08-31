@@ -228,9 +228,14 @@ public class ServersActivity extends Activity implements OnClickListener {
                         public void onClick(DialogInterface dialog,
                                 int whichButton) {
                             String snapname = input.getText().toString();
-                            //button.setText(newCateg);
-                            ServersActivity.this.progressDialogWaitStop.show();
-                            (new AsyncTaskCreateSnapshot( )).execute(serverid, snapname);
+                            snapname = snapname.trim();
+                            if(snapname==null || snapname.length()==0) {
+                            	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
+                            } else {
+                              //button.setText(newCateg);
+                              ServersActivity.this.progressDialogWaitStop.show();
+                              (new AsyncTaskCreateSnapshot( )).execute(serverid, snapname);
+                            }
                         }
                     });
             AlertDialog build = alert.create();

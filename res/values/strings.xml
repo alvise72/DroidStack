@@ -78,4 +78,5 @@
     <string name="ADDRULES">Add rules</string>
     <string name="TENANTNAME">Tenant\'s name</string>
     <string name="AVAILUSERS">Available users:</string>
+    <string name="NOEMPTYNAME">Cannot use an empty name.</string>
 </resources>

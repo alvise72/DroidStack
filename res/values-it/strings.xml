@@ -44,7 +44,7 @@
     <string name="PICKASERVERTOASSOCIATEFIP">Scegli un server a cui associare il floating IP</string>
     <string name="ALREADYASSOCIATEDWARN">Questo floating IP &#xe8; gi&#xe0; associato ad un server. Se continui, l\'associazione verr&#xe0; spostata al nuovo server che sceglierai.</string>
     <string name="ALREADYASSOCIATED">Floating IP gi&#xe0; associato a questo server.</string>
-    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP è ancora associato ad un server e non può essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP è ancora associato ad un server e non pu&#xf2; essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna.</string>
     <string name="NOINSTANCEAVAIL">Non ci sono istanze.</string>
     <string name="NOIMAGEAAVAIL">Non ci sono immagini.</string>
     <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
@@ -76,4 +76,5 @@
     <string name="ADDRULES">Aggiungi regole</string>
     <string name="TENANTNAME">Nome del tenant</string>
     <string name="AVAILUSERS">Utenti disponibili:</string>
+    <string name="NOEMPTYNAME">Non si pu&#xf2; usare un nome vuoto.</string>
 </resources>

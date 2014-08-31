@@ -129,30 +129,6 @@ public class ServerView extends LinearLayout {
 	
 	row.addView( info );
 	addView( row );
-	
-/*    int textLayoutWidth = text.getLayoutParams()..width;
-    int nameWidth       = Name.getLayoutParams().width;
-    int flavorWidth     = Flavor.getLayoutParams().width;
-    int statusWidth     = Status.getLayoutParams().width;
-    Log.d("SERVERVIEW", "textLayoutWidth="+textLayoutWidth+" - nameWidth="+nameWidth);
-    if( nameWidth >= textLayoutWidth ) {
-    	String origText = Name.getText().toString();
-    	origText = origText.substring(0, origText.length()-7);
-    	origText = origText + "...";
-    	Name.setText(origText);
-    }
-    if( flavorWidth >= textLayoutWidth ) {
-    	String origText = Flavor.getText().toString();
-    	origText = origText.substring(0, origText.length()-7);
-    	origText = origText + "...";
-    	Flavor.setText(origText);
-    }
-    if( statusWidth >= textLayoutWidth ) {
-    	String origText = Status.getText().toString();
-    	origText = origText.substring(0, origText.length()-7);
-    	origText = origText + "...";
-    	Status.setText(origText);
-    } */
     		
     }
 
