@@ -39,36 +39,36 @@ public class ParseUtils {
     public static User parseUser( String jsonString ) throws ParseException
     {
       try {
-	  JSONObject jsonObject = null;
+    	  JSONObject jsonObject = null;
        
-	  jsonObject = new JSONObject( jsonString );
+    	  jsonObject = new JSONObject( jsonString );
 	  
-	  JSONObject access = (JSONObject)jsonObject.get("access");
-	  JSONObject token = (JSONObject)access.get("token");
-	  String stoken = (String)token.get("id");
-	  String expires = (String)token.get("expires");
-	  JSONObject tenant = (JSONObject)token.get("tenant");
-	  String tenantid = (String)tenant.get("id");
-	  String tenantname = (String)tenant.get("name");
-	  String username = (String)((JSONObject)access.get("user")).get("username");
-	  String userID = (String)((JSONObject)access.get("user")).get("id");
-	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
-	  boolean role_admin = false;
-	  for(int i = 0; i<roleArray.length(); ++i)
-	      if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
+    	  JSONObject access = (JSONObject)jsonObject.get("access");
+    	  JSONObject token = (JSONObject)access.get("token");
+    	  String stoken = (String)token.get("id");
+    	  String expires = (String)token.get("expires");
+    	  JSONObject tenant = (JSONObject)token.get("tenant");
+    	  String tenantid = (String)tenant.get("id");
+    	  String tenantname = (String)tenant.get("name");
+    	  String username = (String)((JSONObject)access.get("user")).get("username");
+    	  String userID = (String)((JSONObject)access.get("user")).get("id");
+    	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
+    	  boolean role_admin = false;
+    	  for(int i = 0; i<roleArray.length(); ++i)
+    		  if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
 		  role_admin = true;
 	  
-	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
-	  Calendar calendar = Calendar.getInstance();
-	  try {
-	      calendar.setTime(timeFormatter.parse(expires));
-	  } catch(java.text.ParseException pe) {
-	      throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
-	  }
-	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin );
-	  return U;
+    	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
+    	  Calendar calendar = Calendar.getInstance();
+    	  try {
+    		  calendar.setTime(timeFormatter.parse(expires));
+    	  } catch(java.text.ParseException pe) {
+    		  throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
+    	  }
+    	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
+    	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin );
+    	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );
       }
@@ -540,9 +540,12 @@ public class ParseUtils {
 				JSONObject metadata = volume.getJSONObject("metadata");
 				boolean readonly = false;
 				String attachmode = "rw";
+				Log.d("PARSEVOLUME", "metadata="+metadata.toString());
 				if(metadata!=null) {
-				  attachmode = metadata.getString("attached_mode");
-				  readonly = metadata.getBoolean("readonly");
+				  if(metadata.has("attached_mode"))
+					  attachmode = metadata.getString("attached_mode");
+				  if(metadata.has("readonly"))
+					  readonly = metadata.getBoolean("readonly");
 				}
 				String ID = volume.getString("id");
 				int size = volume.getInt("size");

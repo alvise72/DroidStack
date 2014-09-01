@@ -135,14 +135,15 @@ public class VolumesActivity extends Activity implements OnClickListener {
         }
         
         if( id == Menu.FIRST ) { 
-	    if(U==null) {
-		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
-	    } else {
-		progressDialogWaitStop.show();
-		//AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-		//task.execute( );
-		return true;
-	    }
+        	if(U==null) {
+        		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+        	} else {
+        		progressDialogWaitStop.show();
+        		(new AsyncTaskListVolumes()).execute( );
+        		//AsyncTaskOSListServers task = new AsyncTaskOSListServers();
+        		//task.execute( );
+        		return true;
+        	}
         }
 
         if( id == Menu.FIRST+1 ) { 
