@@ -23,6 +23,7 @@ import org.stackdroid.activities.UsersActivity;
 import org.stackdroid.activities.ServersActivity;
 import org.stackdroid.activities.OSImagesActivity;
 import org.stackdroid.activities.OverViewActivity;
+import org.stackdroid.activities.VolumesActivity;
 
 //import java.util.concurrent.ExecutionException;
 
@@ -237,7 +238,14 @@ public class MainActivity extends Activity
      *
      */
     public void volumes( View v ) {
-    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
+    	Class<?> c = (Class<?>)VolumesActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity(I);
     }
 
     /**

@@ -114,5 +114,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        
+       <activity
+            android:name="org.stackdroid.activities.VolumesActivity"
+            android:launchMode="singleInstance"
+            android:label="@string/VOLUMES"            
+	        android:parentActivityName="org.stackdroid.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+           />
+       
     </application>
 </manifest> 
