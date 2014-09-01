@@ -245,10 +245,10 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     }
     
     /**
-     * *
-     * *
+     *
+     *
      * 
-     * *
+     *
      * 
      * 
      */
@@ -268,8 +268,22 @@ curl -i 'http://90.147.77.39:8774/v2/4f531aab49c849279b9bb6f3b6df5189/os-floatin
     /**
      * 
      * 
+     * curl -i 'https://cloud-areapd.pd.infn.it:8776/v1/fb310b4d52f14fbbaf337d803576c7e0/volumes/detail' -X GET -H "X-Auth-Project-Id: admin" -H "User-Agent: python-novaclient" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" 
+     * 
+     * 
+     * 
+     */
+    public static void requestVolumes( User U ) {
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add( p );
+		sendGETRequest( U.useSSL(), U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes/detail", U.getToken( ), vp );
+    }
+    /**
+     * 
+     * 
 	 *
-curl -i https://cloud-areapd.pd.infn.it:8774/v2/e4a9d116b61c4609a92e701ffc3b36bc/servers/15006200-7063-4f89-8ab9-385c99ad995c/action 
+curl -i https://cloud-areapd.pd.infn.it:8774/v1/e4a9d116b61c4609a92e701ffc3b36bc/servers/15006200-7063-4f89-8ab9-385c99ad995c/action 
 -X POST -H "X-Auth-Project-Id: Large" -H "User-Agent: python-novaclient" 
 -H "Content-Type: application/json" -H "Accept: application/json" 
 -H "X-Auth-Token: $TOKEN" -d '{"addFloatingIp": {"address": "90.147.77.212"}}'
