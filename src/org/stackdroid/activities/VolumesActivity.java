@@ -431,8 +431,7 @@ public class VolumesActivity extends Activity implements OnClickListener {
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
 	progressDialogWaitStop.show();
-	//AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-	//task.execute( );
+	(new AsyncTaskListVolumes()).execute( );
     }
     
     //__________________________________________________________________________________
@@ -550,13 +549,14 @@ public class VolumesActivity extends Activity implements OnClickListener {
      			VolumesActivity.this.progressDialogWaitStop.dismiss( );
      			return;
      		}
-	    /*
+	    
      		try {
      			Vector<Volume> volumes = ParseUtils.parseVolumes( jsonBufVols, jsonBufServers );
      			VolumesActivity.this.refreshView( volumes );
      		} catch(ParseException pe) {
-     			Utils.alert("VolumesActivity.AsyncTaskListVolumes.onPostExecute: "+pe.getMessage( ), VolumesActivity.this );
-     		} */
+     			Log.e("VOLUMES", jsonBufVols);
+     			Utils.alert("VolumesActivity.AsyncTaskListVolumes.onPostExecute - Error parsing json: "+pe.getMessage( ), VolumesActivity.this );
+     		} 
      		VolumesActivity.this.progressDialogWaitStop.dismiss( );
      	}
     }

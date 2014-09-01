@@ -537,8 +537,13 @@ public class ParseUtils {
 				String name = volume.getString("display_name");
 				String status = volume.getString("status");
 				boolean bootable = volume.getBoolean("bootable");
-				boolean readonly = volume.getJSONObject("metadata").getBoolean("readonly");
-				String attachmode = volume.getJSONObject("metadata").getString("attached_mode");
+				JSONObject metadata = volume.getJSONObject("metadata");
+				boolean readonly = false;
+				String attachmode = "rw";
+				if(metadata!=null) {
+				  attachmode = metadata.getString("attached_mode");
+				  readonly = metadata.getBoolean("readonly");
+				}
 				String ID = volume.getString("id");
 				int size = volume.getInt("size");
 				JSONArray attaches = volume.getJSONArray("attachments");
