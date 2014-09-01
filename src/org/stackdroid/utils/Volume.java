@@ -2,26 +2,25 @@ package org.stackdroid.utils;
 
 import java.io.Serializable;
 
-
 public class Volume implements Serializable {
 	
 	private static final long serialVersionUID = 2087368867376448461L;
 	
-    public final static int AVAILABLE = 0;
-    public final static int IN_USE = 1;
+    //public final static int AVAILABLE = 0;
+    //public final static int IN_USE = 1;
     
-    public final static int RW = 0;
-    public final static int RO = 1;
+    //public final static int RW = 0;
+    //public final static int RO = 1;
 
-    public final static String[] status_str = {"Available", "In use"};
-    public final static String[] attachmode_str = {"Read/Write", "Read Only"};
+   // public final static String[] status_str = {"Available", "In use"};
+    //public final static String[] attachmode_str = {"Read/Write", "Read Only"};
     
     private String name;
     private String ID;
-    private int status;
+    private String status;
     private boolean bootable;
     private boolean readonly;
-    private int attachmode;
+    private String attachmode;
     private int gigabyte;
     
     private String attachedto_serverid;
@@ -30,10 +29,10 @@ public class Volume implements Serializable {
     
     public Volume( String _name,
     			   String _ID,
-    			   int _status,
+    			   String _status,
     			   boolean _bootable,
     			   boolean _readonly,
-    			   int _attachmode,
+    			   String _attachmode,
     			   int _gigabyte,
     			   String _servid,
     			   String _servname,
@@ -54,10 +53,10 @@ public class Volume implements Serializable {
 
     public String getName() { return name; }
     public String getID() { return ID; }
-    public int getStatus() { return status; }
+    public String getStatus() { return status; }
     public boolean isBootable( ) { return bootable; }
     public boolean isReadOnly( ) { return readonly; }
-    public int getAttachMod( ) { return attachmode; }
+    public String getAttachMod( ) { return attachmode; }
     public int getSize( ) { return gigabyte; }
     public String getAttachedServerID( ) { return attachedto_serverid; }
     public String getAttachedServerName( ) { return attachedto_servername; }

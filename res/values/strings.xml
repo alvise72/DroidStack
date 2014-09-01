@@ -79,4 +79,5 @@
     <string name="TENANTNAME">Tenant\'s name</string>
     <string name="AVAILUSERS">Available users:</string>
     <string name="NOEMPTYNAME">Cannot use an empty name.</string>
+    <string name="NOVOLUMEAVAIL">No volume available</string>
 </resources>

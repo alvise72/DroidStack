@@ -41,6 +41,9 @@ import android.view.View;
 
 
 
+
+
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,6 +51,9 @@ import java.util.Vector;
 //import java.util.Set;
 
 //import java.io.File;
+
+
+
 
 
 
@@ -69,14 +75,19 @@ import org.stackdroid.utils.Utils;
 //import org.stackdroid.utils.Named;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.Flavor;
+import org.stackdroid.utils.Volume;
 //import org.stackdroid.utils.Base64;
 //import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
+import org.stackdroid.views.VolumeView;
 import org.stackdroid.utils.TextViewNamed;
 //import org.stackdroid.utils.UserException;
 //import org.stackdroid.utils.ImageViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 //import org.stackdroid.utils.LinearLayoutNamed;
+
+
+
 
 
 
@@ -443,13 +454,23 @@ public class VolumesActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
-    private void refreshView( Vector<Server> servers, Vector<Flavor> flavors ) {
-    	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
-    	if(servers.size()==0) {
-    		Utils.alert(getString(R.string.NOINSTANCEAVAIL), this);	
+    private void refreshView( Vector<Volume> volumes ) {
+    	((LinearLayout)findViewById(R.id.volumeLayout)).removeAllViews();
+    	if(volumes.size()==0) {
+    		Utils.alert(getString(R.string.NOVOLUMEAVAIL), this);	
     		return;
     	}
-	
+    	Iterator<Volume> vit = volumes.iterator();
+    	while(vit.hasNext()) {
+    		Volume v = vit.next();
+    		VolumeView vv = new VolumeView(v, this);
+    		((LinearLayout)findViewById( R.id.volumeLayout) ).addView( vv );
+    		((LinearLayout)findViewById( R.id.volumeLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+    		View space = new View( this );
+    		space.setMinimumHeight(10);
+    		((LinearLayout)findViewById(R.id.volumeLayout)).addView( space );
+    	}
+	    /*
     	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
     	Iterator<Flavor> fit = flavors.iterator();
     	while( fit.hasNext( ) ) {
@@ -470,12 +491,74 @@ public class VolumesActivity extends Activity implements OnClickListener {
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.serverLayout)).addView( space );
-    	}
+    	}*/
     }
 
 
     //  ASYNC TASKS.....
 
 
+  //__________________________________________________________________________________
+    protected class AsyncTaskListVolumes extends AsyncTask< Void, Void, Void >
+    {
+     	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	private  String   jsonBufVols      = null;
+     	private  String   jsonBufServers   = null;
+     	
+     	@Override
+     	protected Void doInBackground( Void ... v ) 
+     	{
+     		if(U.getTokenExpireTime() <= Utils.now() + 5) {
+     			try {
+     				String _jsonBuf = RESTClient.requestToken( 	U.useSSL() ,
+     															U.getEndpoint(),
+     															U.getTenantName(),
+     															U.getUserName(),
+     															U.getPassword() );
+     				String  pwd = U.getPassword();
+     				String  edp = U.getEndpoint();
+     				boolean ssl = U.useSSL();
+     				U = ParseUtils.parseUser( _jsonBuf );
+     				U.setPassword( pwd );
+     				U.setEndpoint( edp );
+     				U.setSSL( ssl );
+     				U.toFile( Utils.getStringPreference("FILESDIR","",VolumesActivity.this) );// to save new token + expiration
+     			} catch(Exception e) {
+     				errorMessage = e.getMessage();
+     				hasError = true;
+     				return null;
+     			}
+     		}
+
+     		try {
+     			jsonBufVols		= RESTClient.requestVolumes( U );
+     			jsonBufServers	= RESTClient.requestServers( U );
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     		}
+			return null;
+     	}
+	
+     	@Override
+	    protected void onPostExecute( Void v ) {
+     		super.onPostExecute( v );
+	    
+     		if(hasError) {
+     			Utils.alert( errorMessage, VolumesActivity.this );
+     			VolumesActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
+	    /*
+     		try {
+     			Vector<Volume> volumes = ParseUtils.parseVolumes( jsonBufVols, jsonBufServers );
+     			VolumesActivity.this.refreshView( volumes );
+     		} catch(ParseException pe) {
+     			Utils.alert("VolumesActivity.AsyncTaskListVolumes.onPostExecute: "+pe.getMessage( ), VolumesActivity.this );
+     		} */
+     		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+     	}
+    }
     
 }

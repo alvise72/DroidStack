@@ -24,6 +24,7 @@ import org.stackdroid.utils.Server;
 import org.stackdroid.utils.Flavor;
 import org.stackdroid.utils.Quota;
 import org.stackdroid.utils.User;
+import org.stackdroid.utils.Volume;
 
 import android.util.Log;
 
@@ -51,7 +52,6 @@ public class ParseUtils {
 	  String tenantname = (String)tenant.get("name");
 	  String username = (String)((JSONObject)access.get("user")).get("username");
 	  String userID = (String)((JSONObject)access.get("user")).get("id");
-	  //boolean is_admin = access.getJSONObject("metadata").getInt("is_admin") == 0 ? true : false;
 	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
 	  boolean role_admin = false;
 	  for(int i = 0; i<roleArray.length(); ++i)
@@ -133,10 +133,8 @@ public class ParseUtils {
     public static String getErrorMessage ( String jsonBuf ) {
       JSONObject jsonObject = null;
       String errorMessage = null;
-      //Log.d("PARSEUTILS", "jsonBuf="+jsonBuf);
       try {
         jsonObject = new JSONObject( jsonBuf );
-	//JSONObject error = jsonObject.getJSONObject("error");
 
 	if(jsonObject.has("error"))
 	    errorMessage = jsonObject.getJSONObject("error").getString("message");
@@ -249,14 +247,6 @@ public class ParseUtils {
      */    
     public static Vector<Server> parseServers( String jsonBuf )  throws ParseException {
     
-/*    int start = 0;
-    int end   = 511;
-    while(end<=jsonBuf.length()) {
-      Log.d("PARSEUTILS", jsonBuf.substring(start, end));
-      start+=512;
-      end+=512;
-    }*/
-    //Log.d("PARSEUTILS",jsonBuf.substring(start, jsonBuf.length()-1));
     Vector<Server> serverVector = new Vector<Server>();
 	String status        = "N/A";
 	String keyname       ="N/A";
@@ -383,13 +373,10 @@ public class ParseUtils {
     public static Vector<Network> parseNetworks( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
 
 	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
-	//	Vector<Network> nets = null;
 	Vector<Network> nets = new Vector<Network>();
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
-	    //	    nets = new Vector();
-	    //nets = new Network[networks.length()];
 	    for(int i =0; i<networks.length(); ++i) {
 		JSONObject network = networks.getJSONObject(i);
 		String status = (String)network.getString("status");
@@ -448,8 +435,6 @@ public class ParseUtils {
 										    (String)allocpools.getJSONObject(j).getString("end") );
 		    pools[j] = pool;
 		}
-		//SubNetwork sub = new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp );
-		//		Log.d("parseSubNetworks", "SubNetwork="+sub.toString() );
 		result.put( ID, new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp ));
 	    }
 	} catch(org.json.JSONException je) {
@@ -510,14 +495,6 @@ public class ParseUtils {
  	}
 	  return secg;
     }
-    
-    /*private static Vector<Rule> parseRules( JSONArray ruleArray ) {
-    	Vector<Rule> rules = new Vector<Rule>( );
-    	for(int i =0; i<ruleArray.length(); ++i) {
-    		JSONObject secgrp = ruleArray.getJSONObject(i);
-    		
-    	}
-    }*/
 
     /**
      *
@@ -537,4 +514,51 @@ public class ParseUtils {
 	 	}
 		return consoleLog;
 	}
+
+    /**
+     *
+     *
+     *
+     *
+     */
+	public static Vector<Volume> parseVolumes( String volumesJson, String serversJson)  throws ParseException  {
+		Vector<Server> servs = parseServers( serversJson );
+		Hashtable<String, String> server_id_to_name_mapping = new Hashtable<String, String>();
+		Iterator<Server> sit = servs.iterator();
+		while(sit.hasNext()) {
+			Server S = sit.next();
+			server_id_to_name_mapping.put( S.getID(), S.getName() );
+		}
+		Vector<Volume> vols = new Vector<Volume>();
+		try {
+			JSONArray volArray = (new JSONObject( volumesJson )).getJSONArray("volumes");
+			for(int i = 0; i<volArray.length(); i++) {
+				JSONObject volume = volArray.getJSONObject(i);
+				String name = volume.getString("display_name");
+				String status = volume.getString("status");
+				boolean bootable = volume.getBoolean("bootable");
+				boolean readonly = volume.getJSONObject("metadata").getBoolean("readonly");
+				String attachmode = volume.getJSONObject("metadata").getString("attached_mode");
+				String ID = volume.getString("id");
+				int size = volume.getInt("size");
+				JSONArray attaches = volume.getJSONArray("attachments");
+				String attached_serverid = null;
+				String attached_servername = null;
+				String attached_device = null;
+				if(attaches.length()>0) {
+					attached_serverid = attaches.getJSONObject(0).getString("server_id");
+					attached_servername = server_id_to_name_mapping.get(attached_serverid);
+					attached_device   = attaches.getJSONObject(0).getString("device");
+				}
+				Volume vol = new Volume(name, ID, status,
+										bootable, readonly, attachmode,
+										size, attached_serverid, attached_servername, attached_device );
+				vols.add(vol);
+			}
+		} catch(org.json.JSONException je) {
+			throw new ParseException( je.getMessage( ) );
+		}
+		return vols;
+	}
+	
 }

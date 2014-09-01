@@ -25,7 +25,6 @@ public class VolumeView extends LinearLayout {
 
     private ImageButtonNamed detach = null;
     private ImageButtonNamed delete = null;
-    //private ButtonNamed consoleLog = null;
 
     private Volume V = null;
 
@@ -60,12 +59,12 @@ public class VolumeView extends LinearLayout {
 		Name.setTypeface( null, Typeface.BOLD );
 	
 		Status_and_Size = new TextViewNamed( ctx, (VolumeView)this );
-		Status_and_Size.setText( V.getSize() + "GB (" + Volume.status_str[V.getStatus()]+")" );
+		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatus()+")" );
 //		Name.setTextColor( Color.parseColor("#333333") );
 		Status_and_Size.setOnClickListener( (OnClickListener)ctx );
 //		Name.setTypeface( null, Typeface.BOLD );
 
-		LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		//LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	
 	
 		text.addView(Name);

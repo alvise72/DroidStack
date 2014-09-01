@@ -77,4 +77,5 @@
     <string name="TENANTNAME">Nome del tenant</string>
     <string name="AVAILUSERS">Utenti disponibili:</string>
     <string name="NOEMPTYNAME">Non si pu&#xf2; usare un nome vuoto.</string>
+    <string name="NOVOLUMEAVAIL">Nessun volume disponibile</string>
 </resources>
