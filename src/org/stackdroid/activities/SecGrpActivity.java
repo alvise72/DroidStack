@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.WindowManager;
@@ -19,15 +18,12 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.stackdroid.activities.ServersActivity.AsyncTaskCreateSnapshot;
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 
 
 
-import org.stackdroid.MainActivity;
 import org.stackdroid.R;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.SecGroup;

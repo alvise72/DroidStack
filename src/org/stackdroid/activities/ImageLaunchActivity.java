@@ -9,12 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
-import android.util.Log;
 
 import org.stackdroid.utils.IPAddressKeyListener;
 import org.stackdroid.utils.User;
@@ -22,7 +20,6 @@ import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Flavor;
 import org.stackdroid.utils.KeyPair;
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.NetworkView;
 import org.stackdroid.utils.CustomProgressDialog;
@@ -35,8 +32,6 @@ import org.stackdroid.parse.ParseException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Hashtable;
-import java.util.Collection;
-import java.util.List;
 import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
@@ -56,14 +51,14 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private LinearLayout options = null;
     private LinearLayout networksL = null;
     HashSet<String> selectedSecgroups = null;
-    private User currentUser = null;
+    private User U = null;
     private Bundle bundle = null;
     private String imageID = null;
     private String imageNAME = null;
     private Hashtable<String, EditTextNamed> mappingNetEditText = null;
     private Hashtable<String, String> selectedNetworks = null;
 
-    private User U = null;
+    //private User U = null;
     
     @Override
     public void onClick( View v ) {
@@ -128,14 +123,17 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       try {
   	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
   	  } catch(RuntimeException re) {
-  	    Utils.alert("FloatingIPActivity.onCreate: "+re.getMessage(), this );
+  	    Utils.alert("ImageLaunchActivity.onCreate: "+re.getMessage(), this );
   	    return;
   	  }
-  	  if(selectedUser.length()!=0)
+      
+      Log.d("IMAGELAUNCH", "User="+U);
+      
+  	  /*if(selectedUser.length()!=0)
   		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
   		else
   	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-        
+        */
       
       progressDialogWaitStop.show();
       
@@ -240,10 +238,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
      
-      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this), this );
-      AsyncTaskLaunch task = new AsyncTaskLaunch();
+      //currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this), this );
+      
 
-      String adminPass = null;
+      //String adminPass = null;
      
       selectedNetworks.clear();
       Iterator<String> it = mappingNetEditText.keySet().iterator();
@@ -280,13 +278,18 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       if(kp!=null)
     	  kpName = kp.getName();
       Flavor flv = (Flavor)this.spinnerFlavors.getSelectedItem();
-      Log.d("IMAGELAUNCH","instanceName="+instanceName);
+      /*Log.d("IMAGELAUNCH","instanceName="+instanceName);
       Log.d("IMAGELAUNCH","kp="+kpName);
       Log.d("IMAGELAUNCH","flavor="+flv.getID());
       Log.d("IMAGELAUNCH", "count="+count);
       Log.d("IMAGELAUNCH", "groups="+Utils.join( selectedSecgroups, "," ));
-      Log.d("IMAGELAUNCH","adminPass="+adminPass);
-      task.execute( instanceName, imageID, kpName, flv.getID(), ""+count, Utils.join( selectedSecgroups, "," ), adminPass);
+      Log.d("IMAGELAUNCH","adminPass="+adminPass);*/
+      (new AsyncTaskLaunch()).execute( instanceName, 
+    		  						   imageID, 
+    		  						   kpName, 
+    		  						   flv.getID(), 
+    		  						   "" + count, 
+    		  						   Utils.join( selectedSecgroups, "," ) );
   }
 
     /**
@@ -432,43 +435,18 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	@Override
 	protected Void doInBackground( String... args ) 
 	{
-	    User U = ImageLaunchActivity.this.currentUser;
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    											U.getEndpoint(),
-		    											U.getTenantName(),
-		    											U.getUserName(),
-		    											U.getPassword() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( _jsonBuf,ImageLaunchActivity.this );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
-		    U = newUser;
-		    U.toFile( Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this) ); // to save new token+expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return null;
-		}
-	    }
+	    OSClient osc = OSClient.getInstance( U );
 
 	    
 
 	    try {
-		   RESTClient.requestInstanceCreation( U,
-						       args[0],
-						       args[1],
-						       args[2],
-						       args[3],
-						       Integer.parseInt(args[4]),
-						       args[5],
-						       args[6],
-						       ImageLaunchActivity.this.selectedNetworks,
-						       Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this));
+		   osc.requestInstanceCreation( args[0],
+				   						args[1],
+				   						args[2],
+				   						args[3],
+				   						Integer.parseInt(args[4]),
+				   						args[5],
+				   						ImageLaunchActivity.this.selectedNetworks );
 	    } catch(Exception e) {
 		   e.printStackTrace( );
 		   errorMessage = e.getMessage();

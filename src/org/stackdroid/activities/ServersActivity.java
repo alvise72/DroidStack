@@ -3,27 +3,12 @@ package org.stackdroid.activities;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-//import android.widget.ProgressBar;
 import android.widget.ScrollView;
-//import android.widget.EditText;
 import android.widget.TextView;
-//import android.widget.CheckBox;
-//import android.widget.Button;
-//import android.widget.Toast;
-
-//import android.content.Intent;
-//import android.content.pm.ActivityInfo;
 import android.content.DialogInterface;
 
-//import android.net.Uri;
-
-//import android.util.Log;
-//import android.util.DisplayMetrics;
-
-//import android.app.ActivityManager.MemoryInfo;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
-//import android.app.ActivityManager;
 import android.app.Activity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,63 +18,26 @@ import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
 
-//import java.io.IOException;
-
-
-
-
-
-
-
-
 import java.util.Hashtable;
-//import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-//import java.util.Set;
-
-//import java.io.File;
-
-
-
-
-
-
-
 
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
-
-
 
 import org.stackdroid.R;
 import org.stackdroid.utils.ButtonNamed;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
-//import org.stackdroid.utils.Named;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.Flavor;
-//import org.stackdroid.utils.Base64;
-//import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
 import org.stackdroid.utils.TextViewNamed;
-//import org.stackdroid.utils.UserException;
-//import org.stackdroid.utils.ImageViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
-//import org.stackdroid.utils.LinearLayoutNamed;
-
-
-
-
-
-
-
 
 import android.graphics.Typeface;
-//import android.graphics.Color;
 
 import android.os.AsyncTask;
 

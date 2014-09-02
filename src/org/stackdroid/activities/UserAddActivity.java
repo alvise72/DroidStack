@@ -12,14 +12,13 @@ import android.view.View;
 
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.R;
 
 public class UserAddActivity extends Activity {
 
-    //private boolean requesting_token = false;
     private org.stackdroid.utils.CustomProgressDialog progressDialogWaitStop = null;
 
     /**

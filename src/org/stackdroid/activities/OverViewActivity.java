@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import org.stackdroid.R;
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.CustomProgressDialog;

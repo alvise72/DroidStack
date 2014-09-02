@@ -1,8 +1,15 @@
 package org.stackdroid.comm;
 
+import java.net.HttpURLConnection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
+import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.stackdroid.R;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.User;
@@ -241,11 +248,11 @@ public class OSClient {
 	   Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	   vp.add( p );
 	    
-	  return RESTClient.sendPOSTRequest( U.useSSL(), 
-			  							 U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/servers/"+serverid+"/action",
-			  							 U.getToken(), 
-			  							 "{\"os-getConsoleOutput\": {\"length\": null}}", 
-			  							 vp );   
+	   return RESTClient.sendPOSTRequest( U.useSSL(), 
+			  							  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/servers/"+serverid+"/action",
+			  							  U.getToken(), 
+			  							  "{\"os-getConsoleOutput\": {\"length\": null}}", 
+			  							  vp );   
    }
 
     /**
@@ -457,4 +464,71 @@ public class OSClient {
 			  						U.getToken(),
 			  						v );
     }    
+
+    /**
+     *
+     *
+     *
+     * 
+     *
+     */
+    public void requestInstanceCreation( String instanceName, 
+    									 String imageID,
+    									 String key_name,
+    									 String flavorID,
+    									 int count,
+    									 String securityGroupID,
+    									 Hashtable<String, String> netID_to_netIP )
+    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+    {
+    	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName( ) );
+    	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+    	v.add(p);
+    	String data = "{\"server\": {\"name\": \"" + instanceName + 
+    		    "\", \"imageRef\": \"" + imageID + 
+    		    "\", " + (key_name != null ? "\"key_name\": \"" + key_name : "") + 
+    		    "\", \"flavorRef\": \"" + flavorID + 
+    		    "\", \"max_count\": " + count + 
+    		    ", \"min_count\": " + count + "}}";
+    	JSONObject obj = null;
+    	//Log.d("RESTClient", "_secgrpIDs=["+_secgrpIDs+"]");
+    	String[] secgrpIDs = securityGroupID.split(",");
+    	//String[] networkIDs = _networkIDs.split(",");
+    	try {
+    	    obj = new JSONObject( data );
+    	    JSONArray secgs = new JSONArray();
+    	    JSONArray nets = new JSONArray();
+    	    if(securityGroupID.length()!=0) 
+    		for(int i = 0; i<secgrpIDs.length; ++i)
+    		    secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
+
+
+    	    {
+    		Iterator<String> it = netID_to_netIP.keySet().iterator();
+    		while( it.hasNext() ) {
+    		    String netID = it.next( );
+    		    String netIP = netID_to_netIP.get( netID );
+    		    if( netIP != null && netIP.length()!=0) 
+    			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
+    		    else
+    			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
+    		}
+    	    }
+
+
+
+    	    obj.getJSONObject("server").put("security_groups", secgs);
+    	    obj.getJSONObject("server").put("networks", nets);
+    	    
+    	} catch(JSONException je) {
+    		throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
+    	}
+    	
+    	data = obj.toString( );
+    	 RESTClient.sendPOSTRequest( U.useSSL(), 
+		     						 U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/servers",
+				  					 U.getToken(), 
+				  					 data, 
+				  					 v );
+    }
 }

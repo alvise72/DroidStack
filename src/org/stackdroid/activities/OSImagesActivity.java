@@ -4,26 +4,13 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-//import android.widget.EditText;
 import android.widget.TextView;
-/*import android.widget.CheckBox;
-import android.widget.Button;
-import android.widget.Toast;
-*/
 import android.content.Intent;
-//import android.content.pm.ActivityInfo;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 
-//import android.net.Uri;
-
-import android.util.Log;
-//import android.util.DisplayMetrics;
-
-//import android.app.ActivityManager.MemoryInfo;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-//import android.app.ActivityManager;
 import android.app.Activity;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -31,39 +18,19 @@ import android.view.MenuItem;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
-
-//import java.io.IOException;
-
-
-
-//import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-//import java.util.Set;
-
-//import java.io.File;
-
-
-
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.comm.NotFoundException;
-//import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.R;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
-//import org.stackdroid.utils.Named;
-//import org.stackdroid.utils.Server;
 import org.stackdroid.utils.OSImage;
-//import org.stackdroid.views.UserView;
-//import org.stackdroid.views.ServerView;
 import org.stackdroid.views.OSImageView;
 import org.stackdroid.utils.TextViewNamed;
-//import org.stackdroid.utils.UserException;
-//import org.stackdroid.utils.ImageViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.LinearLayoutNamed;
 

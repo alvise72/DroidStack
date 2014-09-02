@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View.OnClickListener; 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
