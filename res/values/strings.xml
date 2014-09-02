@@ -27,7 +27,7 @@
     <string name="MUSTSELECTNET">You haven\'t selected any network. Cannot start an instance without a network to attach.</string>
     <string name="MUSTSETNAME">You must put a name for the instance.</string>
     <string name="FIXEDIPLIST">Comma separated Fixed IPs (optional):</string>
-    <string name="NOTIMPLEMENTED">Functionality not implemented yet, work in progress... coming soon.</string>
+    <string name="NOTIMPLEMENTED">Functionality not implemented yet, work in progress&#8230; coming soon.</string>
     <string name="MENUDELETEALL">Delete all instances</string>
     <string name="DELETEDINSTSANCES">Instances successfully delete. Update window to refresh view.</string>
     <string name="SOMEDELETIONFAILED">Some instance hasn\'t been found in the server (probably was already in deleting state)&#8230;\nDeletion\'s finished, refresh the window.</string>
@@ -42,7 +42,7 @@
     <string name="FLOATINGIP">Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
     <string name="PICKASERVERTOASSOCIATEFIP">Pick a server to which associate the floating IP</string>
-    <string name="ALREADYASSOCIATEDWARN">This floating IP is already associated to a server. If you continue, the association will be moved to the choosen server.</string>
+    <string name="ALREADYASSOCIATEDWARN">This floating IP is already associated to a server. If you continue, the association will be moved to the chosen server.</string>
     <string name="ALREADYASSOCIATED">Floating IP already associated to this server.</string>
 
     <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window pressing Menu-&gt;Update.</string>
@@ -80,4 +80,6 @@
     <string name="AVAILUSERS">Available users:</string>
     <string name="NOEMPTYNAME">Cannot use an empty name.</string>
     <string name="NOVOLUMEAVAIL">No volume available</string>
+    <string name="PLEASECHECKCREDSFORIMAGE">Please check your credentials or that the image you\'re trying to delete is owned by you&#8230;</string>
+    <string name="PLEASECHECKCREDSFORINSTANCE">Please check your credentials or that the instance you\'re trying to delete is owned by you&#8230;</string>
 </resources>

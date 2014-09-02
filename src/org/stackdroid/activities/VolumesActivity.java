@@ -44,6 +44,7 @@ import android.view.View;
 
 
 
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,6 +62,8 @@ import java.util.Vector;
 
 
 
+
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
@@ -85,6 +88,7 @@ import org.stackdroid.utils.TextViewNamed;
 //import org.stackdroid.utils.ImageViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 //import org.stackdroid.utils.LinearLayoutNamed;
+
 
 
 
@@ -196,6 +200,17 @@ public class VolumesActivity extends Activity implements OnClickListener {
     @Override
     public void onClick( View v ) {
 	if(v instanceof ImageButtonNamed) {
+		ImageButtonNamed bt = (ImageButtonNamed)v;
+		
+		if(bt.getType() == ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME) {
+			Volume V = bt.getVolumeView().getVolume();
+			if(V.isAttached()) {
+				// DETACH
+				return;
+			}
+			// ATTACH
+			
+		}
 /*	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SERVER ) {
 		// Delete the server
 		final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
@@ -421,7 +436,7 @@ public class VolumesActivity extends Activity implements OnClickListener {
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
 	} catch(RuntimeException re) {
 	    Utils.alert("VolumesActivity.onCreate: "+re.getMessage(), this );
 	    return;
@@ -470,35 +485,13 @@ public class VolumesActivity extends Activity implements OnClickListener {
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.volumeLayout)).addView( space );
     	}
-	    /*
-    	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
-    	Iterator<Flavor> fit = flavors.iterator();
-    	while( fit.hasNext( ) ) {
-    		Flavor f = fit.next();
-    		flavHash.put( f.getID(), f );
-    	}
-	
-    	Iterator<Server> it = servers.iterator();
-	
-    	while(it.hasNext()) {
-    		Server s = it.next();
-    		Flavor F = flavHash.get( s.getFlavorID( ) );
-    		if( F != null)
-    			s.setFlavor( F );
-    		ServerView sv = new ServerView(s, this);
-    		((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
-    		((LinearLayout)findViewById( R.id.serverLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
-    		View space = new View( this );
-    		space.setMinimumHeight(10);
-    		((LinearLayout)findViewById(R.id.serverLayout)).addView( space );
-    	}*/
     }
 
 
     //  ASYNC TASKS.....
 
 
-  //__________________________________________________________________________________
+    //__________________________________________________________________________________
     protected class AsyncTaskListVolumes extends AsyncTask< Void, Void, Void >
     {
      	private  String   errorMessage     = null;
@@ -509,31 +502,11 @@ public class VolumesActivity extends Activity implements OnClickListener {
      	@Override
      	protected Void doInBackground( Void ... v ) 
      	{
-     		if(U.getTokenExpireTime() <= Utils.now() + 5) {
-     			try {
-     				String _jsonBuf = RESTClient.requestToken( 	U.useSSL() ,
-     															U.getEndpoint(),
-     															U.getTenantName(),
-     															U.getUserName(),
-     															U.getPassword() );
-     				String  pwd = U.getPassword();
-     				String  edp = U.getEndpoint();
-     				boolean ssl = U.useSSL();
-     				U = ParseUtils.parseUser( _jsonBuf );
-     				U.setPassword( pwd );
-     				U.setEndpoint( edp );
-     				U.setSSL( ssl );
-     				U.toFile( Utils.getStringPreference("FILESDIR","",VolumesActivity.this) );// to save new token + expiration
-     			} catch(Exception e) {
-     				errorMessage = e.getMessage();
-     				hasError = true;
-     				return null;
-     			}
-     		}
+  	      OSClient osc = OSClient.getInstance( U );
 
      		try {
-     			jsonBufVols		= RESTClient.requestVolumes( U );
-     			jsonBufServers	= RESTClient.requestServers( U );
+     			jsonBufVols		= osc.requestVolumes( );
+     			jsonBufServers	= osc.requestServers( );
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;
@@ -561,5 +534,5 @@ public class VolumesActivity extends Activity implements OnClickListener {
      		VolumesActivity.this.progressDialogWaitStop.dismiss( );
      	}
     }
-    
+
 }

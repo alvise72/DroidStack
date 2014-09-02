@@ -5,9 +5,7 @@ import android.widget.LinearLayout;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
-//import android.view.View;
 
 import android.content.Context;
 
@@ -21,7 +19,7 @@ public class VolumeView extends LinearLayout {
     private LinearLayoutNamed info 			= null;
     private TextViewNamed Name     		    = null;
     private TextViewNamed Status_and_Size   = null;
-    private TextViewNamed Attach   			= null;
+    //private TextViewNamed Attach   			= null;
 
     private ImageButtonNamed detach = null;
     private ImageButtonNamed delete = null;
@@ -60,17 +58,10 @@ public class VolumeView extends LinearLayout {
 	
 		Status_and_Size = new TextViewNamed( ctx, (VolumeView)this );
 		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatus()+")" );
-//		Name.setTextColor( Color.parseColor("#333333") );
 		Status_and_Size.setOnClickListener( (OnClickListener)ctx );
-//		Name.setTypeface( null, Typeface.BOLD );
-
-		//LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-	
 	
 		text.addView(Name);
 		text.addView(Status_and_Size);
-		//text.addView(Status);
-		//text.addView(consoleLog);
 		text.setOnClickListener( (OnClickListener)ctx );
 		row.addView(text);
 		setOnClickListener( (OnClickListener)ctx );
@@ -85,7 +76,6 @@ public class VolumeView extends LinearLayout {
 
 		info = new LinearLayoutNamed( ctx, (VolumeView)this );
 		info.setOrientation( LinearLayout.HORIZONTAL );
-		//info.setGravity(Gravity.CENTER_VERTICAL);
 		LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
 		info.setLayoutParams( params3 );
 		info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -98,5 +88,4 @@ public class VolumeView extends LinearLayout {
     }
 
     public Volume getVolume( ) { return V; }
-    
 }

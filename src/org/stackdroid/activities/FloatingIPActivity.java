@@ -23,6 +23,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -80,8 +81,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		    Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
 	      } else {
 		    progressDialogWaitStop.show();
-		    AsyncTaskFIPList task = new AsyncTaskFIPList();
-	  	    task.execute( );
+		    (new AsyncTaskFIPList()).execute( );
 		    return true;
 	      }
         }
@@ -100,7 +100,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
 	  } catch(RuntimeException re) {
 	    Utils.alert("FloatingIPActivity.onCreate: "+re.getMessage(), this );
 	    return;
@@ -117,8 +117,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     private void loadFIP() {
     	
-    	AsyncTaskFIPList task = new AsyncTaskFIPList();
-    	task.execute( );
+    	(new AsyncTaskFIPList()).execute();
     }
     
     //__________________________________________________________________________________
@@ -176,36 +175,12 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     	}
     	pool = selectedNet.getID();
     	progressDialogWaitStop.show();
-    	AsyncTaskFIPAllocate task = new AsyncTaskFIPAllocate();
-    	task.execute();
-    	//    	Utils.alert("Adding FIP from "+selectedNet, this);
+    	(new AsyncTaskFIPAllocate()).execute();
     }
-
-
-
-
-
-
-
-
-
-
-
-    //  ASYNC TASKS.....
-
-
-
-
-
-
-
-
-
-
 
     
     //__________________________________________________________________________________
-    protected class AsyncTaskFIPList extends AsyncTask<Void, String, String>
+    protected class AsyncTaskFIPList extends AsyncTask<Void, Void, Void>
     {
       private  String   errorMessage     = null;
   	  private  boolean  hasError         = false;
@@ -215,49 +190,28 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  private  String   jsonBufSubNets   = null;
 
 	@Override
-	protected String doInBackground( Void... v ) 
+	protected Void doInBackground( Void ... v ) 
 	{
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL(), U.getEndpoint(),
-						       U.getTenantName(),
-						       U.getUserName(),
-						       U.getPassword()
-						        );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
-
-	    
+	    OSClient osc = OSClient.getInstance(U);
 
 	    try {
-		  jsonBuf         = RESTClient.requestFloatingIPs( U );
-		  jsonBufServers  = RESTClient.requestServers( U );
-		  jsonBufNetworks = RESTClient.requestNetworks( U );
-		  jsonBufSubNets  = RESTClient.requestSubNetworks(U);
+		  jsonBuf         = osc.requestFloatingIPs( );
+		  jsonBufServers  = osc.requestServers( );
+		  jsonBufNetworks = osc.requestNetworks( );
+		  jsonBufSubNets  = osc.requestSubNetworks( );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
-	  	  return "";
+	  	  //return "";
 	    }
+		return null;
 	    
-	    return jsonBuf;
+	    //return jsonBuf;
 	}
 	
 	  @Override
-	  protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	  protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
 	    
  	    if(hasError) {
  		  Utils.alert( errorMessage, FloatingIPActivity.this );
@@ -296,7 +250,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
     
     //__________________________________________________________________________________
-    protected class AsyncTaskFIPDeassociate extends AsyncTask<String, String, String>
+    protected class AsyncTaskFIPDeassociate extends AsyncTask<String, Void, Void>
     {
       private  String   errorMessage     = null;
   	  private  boolean  hasError         = false;
@@ -304,48 +258,26 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
       private  String   serverid         = null;
       
 	@Override
-	protected String doInBackground( String... ip_serverid ) 
+	protected Void doInBackground( String ... ip_serverid ) 
 	{
 		floatingip = ip_serverid[0];
 		serverid   = ip_serverid[1];
+		OSClient osc = OSClient.getInstance(U);
 		
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		  try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    										   U.getEndpoint(),
-						       						   U.getTenantName(),
-						       						   U.getUserName(),
-						       						   U.getPassword());
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
-		  } catch(Exception e) {
-		     errorMessage = e.getMessage();
-		     hasError = true;
-		     return "";
-		  }
-	    }
-
-	    
-
-	    try {
-		  RESTClient.requestReleaseFloatingIP(U, floatingip, serverid );	    
+		try {
+		  osc.requestReleaseFloatingIP( floatingip, serverid );	    
 		} catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
-	  	  return "";
+	  	  //return "";
 	    }
-	    return "";
+	    //return "";
+		return null;
 	}
 	
 	  @Override
-	  protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	  protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
 	    
  	    if(hasError) {
  		  Utils.alert( errorMessage, FloatingIPActivity.this );
@@ -366,7 +298,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     
   //__________________________________________________________________________________
-    protected class AsyncTaskFIPAssociate extends AsyncTask<String, String, String>
+    protected class AsyncTaskFIPAssociate extends AsyncTask<String, Void, Void>
     {
       private  String   errorMessage     = null;
   	  private  boolean  hasError         = false;
@@ -374,48 +306,27 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
       private  String   serverid         = null;
       
 	@Override
-	protected String doInBackground( String... ip_serverid ) 
+	protected Void doInBackground( String... ip_serverid ) 
 	{
 		floatingip = ip_serverid[0];
 		serverid   = ip_serverid[1];
+		OSClient osc = OSClient.getInstance(U);
 		
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		  try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    										   U.getEndpoint(),
-						       						   U.getTenantName(),
-						       						   U.getUserName(),
-						       						   U.getPassword());
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
-		  } catch(Exception e) {
-		     errorMessage = e.getMessage();
-		     hasError = true;
-		     return "";
-		  }
-	    }
-
 	    
-
 	    try {
-		  RESTClient.requestFloatingIPAssociate(U, floatingip, serverid);	    
+		  osc.requestFloatingIPAssociate(floatingip, serverid);	    
 		} catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
-	  	  return "";
+	  	  //return "";
 	    }
-	    return "";
+	    //return "";
+		return null;
 	}
 	
 	  @Override
-	  protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	  protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
 	    
  	    if(hasError) {
  		  Utils.alert( errorMessage, FloatingIPActivity.this );
@@ -453,37 +364,14 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	@Override
 	protected String doInBackground( String... ip_serverid ) 
 	{
-	    
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
+		OSClient osc = OSClient.getInstance(U);
+		
 		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-							       U.getEndpoint(),
-							       U.getTenantName(),
-							       U.getUserName(),
-							       U.getPassword());
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
-		  } catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
-
-	    
-
-	    try {
-		RESTClient.requestFloatingIPAllocation(U, pool );	    
+			osc.requestFloatingIPAllocation( pool );	    
 	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
+	    	errorMessage = e.getMessage();
+	    	hasError = true;
+	    	return "";
 	    }
 	    return "";
 	}
@@ -527,37 +415,14 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	@Override
 	protected String doInBackground( String... ip_serverid ) 
 	{
-	    
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL(),
-							       U.getEndpoint(),
-							       U.getTenantName(),
-							       U.getUserName(),
-							       U.getPassword());
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
-		  } catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
-
-	    
+		OSClient osc = OSClient.getInstance(U);
 
 	    try {
-		  RESTClient.requestFloatingIPRelease(U, fip_to_release_ID );	    
+	    	osc.requestFloatingIPRelease( fip_to_release_ID );	    
 	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
+	    	errorMessage = e.getMessage();
+	    	hasError = true;
+	    	return "";
 	    }
 	    return "";
 	}
@@ -650,29 +515,14 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     				
     			} else associateFIP(selectedFIPObj.getIP());
     		}
-    	}
-    	
-    	if(v instanceof Button) {
-    		Server S = (Server)serverSpinner.getSelectedItem();
-    		if(this.selectedFIPObj.getServerID().compareTo(S.getID())==0) {
-    			Utils.alert(getString(R.string.ALREADYASSOCIATED), this);
-    			alertDialogSelectServer.dismiss();
-    			return;
-    		}
-    		//Utils.alert("Selected server "+S.getName( ), this);
-    		alertDialogSelectServer.dismiss();
-    		this.progressDialogWaitStop.show();
     		
-    		AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
-    		task.execute(fipToAssociate, S.getID());
     	}
   	 }	
     
     private void associateFIP( String fip ) {
     	fipToAssociate = fip;
 		this.progressDialogWaitStop.show( );
-		AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-		task.execute();
+		(new AsyncTaskOSListServers()).execute( );
     }
   //__________________________________________________________________________________
     protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
@@ -685,37 +535,15 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	@Override
 	protected String doInBackground( Void... v ) 
 	{
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",FloatingIPActivity.this) );// to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
-
-	    
-
+		OSClient osc = OSClient.getInstance(U);
+		
 	    try {
-		jsonBuf = RESTClient.requestServers( U );
-		jsonBufferFlavor = RESTClient.requestFlavors( U );
+	    	jsonBuf 		 = osc.requestServers( );
+	    	jsonBufferFlavor = osc.requestFlavors( );
 	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
+	    	errorMessage = e.getMessage();
+	    	hasError = true;
+	    	return "";
 	    }
 	    
 	    return jsonBuf;

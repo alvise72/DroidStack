@@ -260,7 +260,7 @@ public class UserAddActivity extends Activity {
 	    return;
 	}
 	try {
-	    User U = ParseUtils.parseUser( jsonResponse );
+	    User U = ParseUtils.parseUser( jsonResponse, this );
 	    U.setPassword(password);
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );

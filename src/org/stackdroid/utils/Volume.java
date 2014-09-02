@@ -6,15 +6,6 @@ public class Volume implements Serializable {
 	
 	private static final long serialVersionUID = 2087368867376448461L;
 	
-    //public final static int AVAILABLE = 0;
-    //public final static int IN_USE = 1;
-    
-    //public final static int RW = 0;
-    //public final static int RO = 1;
-
-   // public final static String[] status_str = {"Available", "In use"};
-    //public final static String[] attachmode_str = {"Read/Write", "Read Only"};
-    
     private String name;
     private String ID;
     private String status;
@@ -66,4 +57,6 @@ public class Volume implements Serializable {
     public String toString( ) {
     	return name;
     }
+    
+    public boolean isAttached( ) { return ( attachedto_serverid!=null && attachedto_serverid.length()!=0 ); }
 }

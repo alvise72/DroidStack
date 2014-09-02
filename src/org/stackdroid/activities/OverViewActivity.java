@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.R;
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -68,10 +69,9 @@ public class OverViewActivity extends Activity {
         	  Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
         	  return true;
         	}
-        	//disableMenu( );
+        	
         	progressDialogWaitStop.show();
-        	AsyncTaskQuota task = new AsyncTaskQuota();
-        	task.execute(U);
+        	(new AsyncTaskQuota()).execute( );
             return true;
         }
         return super.onOptionsItemSelected( item );
@@ -92,11 +92,11 @@ public class OverViewActivity extends Activity {
         String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
         setTitle(getString(R.string.USAGEOVERVIEW));
         try {
-        	U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this) );
+        	U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this), this );
         	setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
+        	//Log.d("OVERVIEW", "USER="+U);
         	progressDialogWaitStop.show();
-        	AsyncTaskQuota task = new AsyncTaskQuota();
-        	task.execute(U);
+        	(new AsyncTaskQuota()).execute( );
         }  catch(RuntimeException re) {
         	Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
         }
@@ -118,12 +118,18 @@ public class OverViewActivity extends Activity {
     	super.onDestroy( );
     	progressDialogWaitStop.dismiss();
     }
-  
+
+    /**
+     *
+     *
+     *
+     *
+     */
     private void refreshView( Quota Q,
-			      Vector<Server> servers, 
-			      Vector<Flavor> flavors,
-			      Vector<FloatingIP> fips, 
-			      Vector<SecGroup> secgs ) 
+    						  Vector<Server> servers, 
+    						  Vector<Flavor> flavors,
+    						  Vector<FloatingIP> fips, 
+    						  Vector<SecGroup> secgs ) 
     {
 	
 	Iterator<Server> it = servers.iterator();
@@ -192,88 +198,64 @@ public class OverViewActivity extends Activity {
      *
      *
      */
-    protected class AsyncTaskQuota extends AsyncTask<User, String, String>
+    protected class AsyncTaskQuota extends AsyncTask<Void, String, String>
     {
      	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
-	private  String   jsonBuf          = null;
-	private  String   jsonBufQuota     = null;
-	private  String   jsonBufFIPs      = null;
-	private  String   jsonBufSecgs     = null;
-	private  String   jsonBufferFlavor = null;
-	User U = null;
-
-	@Override
-	protected String doInBackground(User... u ) 
-	{
-	    U = u[0];
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    								   U.getEndpoint(),
-		    								   U.getTenantName(),
-		    								   U.getUserName(),
-		    								   U.getPassword() );
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( U.getPassword() );
-		    newUser.setEndpoint( U.getEndpoint() );
-		    newUser.setSSL( U.useSSL() );
-		    U = newUser;
-		    U.toFile( Utils.getStringPreference("FILESDIR","",OverViewActivity.this) );//to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
-
-	    try {
-	    //Log.d("OVERVIEW", "requestQuota...");
-		jsonBufQuota = RESTClient.requestQuota( U );
-	    //Log.d("OVERVIEW", "requestServers...");
-		jsonBuf = RESTClient.requestServers( U );
-	    //Log.d("OVERVIEW", "requestFIP...");
-		jsonBufFIPs = RESTClient.requestFloatingIPs( U );
-	    //Log.d("OVERVIEW", "requestSECG...");
-		jsonBufSecgs = RESTClient.requestSecGroups( U );
-	    //Log.d("OVERVIEW", "requestFlavors...");
-		jsonBufferFlavor = RESTClient.requestFlavors( U );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
-	    }
-	    
-	    return jsonBuf;
-	}
+     	private  boolean  hasError         = false;
+     	private  String   jsonBuf          = null;
+     	private  String   jsonBufQuota     = null;
+     	private  String   jsonBufFIPs      = null;
+     	private  String   jsonBufSecgs     = null;
+     	private  String   jsonBufferFlavor = null;
 	
-	@Override
-	    protected void onPreExecute() {
-	    super.onPreExecute();
-	}
+     	@Override
+     	protected String doInBackground(Void... u ) 
+     	{
+     		OSClient osc = OSClient.getInstance(U);
+
+     		try {
+     			jsonBufQuota 	 = osc.requestQuota( );
+     			jsonBuf 	 	 = osc.requestServers( );
+     			jsonBufFIPs 	 = osc.requestFloatingIPs( );
+     			jsonBufSecgs 	 = osc.requestSecGroups( );
+     			jsonBufferFlavor = osc.requestFlavors( );
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return "";
+     		}
+	    
+     		return jsonBuf;
+     	}
 	
-	@Override
-	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+     	@Override
+     	protected void onPreExecute() {
+     		super.onPreExecute();
+     	}
+	
+     	@Override
+     	protected void onPostExecute( String result ) {
+     		super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 	    	Utils.alert( errorMessage, OverViewActivity.this );
- 	    	OverViewActivity.this.progressDialogWaitStop.dismiss( );
- 	    	return;
- 	    }
+     		if(hasError) {
+     			Utils.alert( errorMessage, OverViewActivity.this );
+     			OverViewActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
 	    
 	    
-	    try {
-		
-		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
-						   				   ParseUtils.parseServers( jsonBuf ), 
-						   				   ParseUtils.parseFlavors( jsonBufferFlavor ),
-						   				   ParseUtils.parseFloatingIP(jsonBufFIPs),
-						   				   ParseUtils.parseSecGroups(jsonBufSecgs ) );
-	    } catch(ParseException pe) {
-		  Utils.alert( pe.getMessage( ), OverViewActivity.this );
-	    }
-	    OverViewActivity.this.progressDialogWaitStop.dismiss( );
-	}
+     		try {
+     			Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
+     			OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
+     											   ParseUtils.parseServers( jsonBuf ), 
+     											   ParseUtils.parseFlavors( jsonBufferFlavor ),
+     											   ParseUtils.parseFloatingIP( jsonBufFIPs ),
+     											   ParseUtils.parseSecGroups( jsonBufSecgs ) 
+     											 );
+     		} catch(ParseException pe) {
+     			Utils.alert( pe.getMessage( ), OverViewActivity.this );
+     		}
+     			OverViewActivity.this.progressDialogWaitStop.dismiss( );
+     		}
     }
 }

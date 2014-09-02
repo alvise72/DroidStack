@@ -143,7 +143,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    User U = null;
 	    try {
 		
-	    	U = User.fromFileID( users[i].getName( ), Utils.getStringPreference("FILESDIR","",this) );
+	    	U = User.fromFileID( users[i].getName( ), Utils.getStringPreference("FILESDIR","",this), this );
 		
 	    } catch(Exception e) {
 	    	Utils.alert("ERROR: " + e.getMessage(), this);
@@ -163,8 +163,10 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    lastUV = uv;
 	}
 	if(users.length==1) {
-		lastUV.setSelected( );
-		Utils.putStringPreference("SELECTEDUSER",lastUV.getFilename(),this);
+		if(lastUV!=null) {
+			lastUV.setSelected( );
+			Utils.putStringPreference("SELECTEDUSER",lastUV.getFilename(),this);
+		}
 	}
 	
     }

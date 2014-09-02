@@ -123,7 +123,7 @@ public class MainActivity extends Activity
 	  
 
 	  try {
-	      User u = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+	      User u = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
 	      
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+u.getUserName() + " (" + u.getTenantName() + ")"); 
 	  } catch(Exception e) {

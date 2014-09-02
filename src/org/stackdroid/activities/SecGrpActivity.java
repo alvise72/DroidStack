@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.activities.ServersActivity.AsyncTaskCreateSnapshot;
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -33,6 +34,7 @@ import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.views.ListSecGroupView;
+
 
 
 
@@ -171,7 +173,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
 	  } catch(RuntimeException re) {
 	    Utils.alert("ServersActivity.onCreate: " + re.getMessage(), this );
 	    return;
@@ -254,51 +256,28 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	    {
 	      String secgrpName = v[0];
 	      String desc       = v[1];
-	      if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		    try {
-		      String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
-		      String  pwd = U.getPassword();
-		      String  edp = U.getEndpoint();
-		      boolean ssl = U.useSSL();
-		      U = ParseUtils.parseUser( _jsonBuf );
-		      U.setPassword( pwd );
-		      U.setEndpoint( edp );
-		      U.setSSL( ssl );
-		      U.toFile( Utils.getStringPreference("FILESDIR","",SecGrpActivity.this) );// to save new token + expiration
-		    } catch(Exception e) {
-		      errorMessage = e.getMessage();
-		      hasError = true;
-		      return "";
-		    }
-	      }
-
-	    
-
-	    try {
-		  RESTClient.createSecGroup(U, secgrpName, desc);
-	    } catch(Exception e) {
+	      OSClient osc = OSClient.getInstance(U);
+	      
+	      try {
+	    	  osc.createSecGroup( secgrpName, desc);
+	      } catch(Exception e) {
 	    	errorMessage = e.getMessage();
 	    	hasError = true;
 	    	return "";
+	      }
+	      return "";
 	    }
-	    return "";
-	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	    @Override
+	    protected void onPostExecute( String result ) {
+	    	super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 		  Utils.alert( errorMessage, SecGrpActivity.this );
- 		  SecGrpActivity.this.progressDialogWaitStop.dismiss( );
- 		  return;
- 	    }
- 	    SecGrpActivity.this.update( );
-//	    SecGrpActivity.this.progressDialogWaitStop.dismiss( );
+	    	if(hasError) {
+	    		Utils.alert( errorMessage, SecGrpActivity.this );
+	    		SecGrpActivity.this.progressDialogWaitStop.dismiss( );
+	    		return;
+	    	}
+	    	SecGrpActivity.this.update( );
 	  }
     }
 
@@ -322,59 +301,37 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	    @Override
 	    protected String doInBackground( Void... v ) 
 	    {
-	      if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		    try {
-		      String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
-		      String  pwd = U.getPassword();
-		      String  edp = U.getEndpoint();
-		      boolean ssl = U.useSSL();
-		      U = ParseUtils.parseUser( _jsonBuf );
-		      U.setPassword( pwd );
-		      U.setEndpoint( edp );
-		      U.setSSL( ssl );
-		      U.toFile( Utils.getStringPreference("FILESDIR","",SecGrpActivity.this) );// to save new token + expiration
-		    } catch(Exception e) {
-		      errorMessage = e.getMessage();
-		      hasError = true;
-		      return "";
-		    }
-	      }
+	    	
+		      OSClient osc = OSClient.getInstance( U );
 
-	    
-
-	    try {
-		  jsonBuf = RESTClient.requestSecGroups( U );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
+		      try {
+		    	  jsonBuf = osc.requestSecGroups( );
+		      } catch(Exception e) {
+		    	  errorMessage = e.getMessage();
+		    	  hasError = true;
+		    	  return "";
+		      }
+		      return jsonBuf;
 	    }
-	    return jsonBuf;
-	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	    @Override
+	    protected void onPostExecute( String result ) {
+	    	super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 		  Utils.alert( errorMessage, SecGrpActivity.this );
- 		  SecGrpActivity.this.progressDialogWaitStop.dismiss( );
- 		  return;
- 	    }
+	    	if(hasError) {
+	    		Utils.alert( errorMessage, SecGrpActivity.this );
+	    		SecGrpActivity.this.progressDialogWaitStop.dismiss( );
+	    		return;
+	    	}
 	    
-	    try {
-		  Vector<SecGroup> secgrps = ParseUtils.parseSecGroups( jsonBuf );
-		  //Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-		  SecGrpActivity.this.refreshView( secgrps );
-	    } catch(ParseException pe) {
-		  Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), SecGrpActivity.this );
+	    	try {
+	    		Vector<SecGroup> secgrps = ParseUtils.parseSecGroups( jsonBuf );
+	    		SecGrpActivity.this.refreshView( secgrps );
+	  	 } catch(ParseException pe) {
+	  		 Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: " + pe.getMessage( ), SecGrpActivity.this );
+	  	 }
+	    	SecGrpActivity.this.progressDialogWaitStop.dismiss( );
 	    }
-	    SecGrpActivity.this.progressDialogWaitStop.dismiss( );
-	  }
     }
     
     
@@ -388,57 +345,33 @@ public class SecGrpActivity extends Activity implements OnClickListener {
      	private  String   errorMessage     = null;
 	    private  boolean  hasError         = false;
 	    private  String   jsonBuf          = null;
-	    //private  String   jsonBufferFlavor = null;
 	
 	    @Override
 	    protected String doInBackground( String... v ) 
 	    {
 	      String secgrpID = v[0];
-	      if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		    try {
-		      String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
-		      String  pwd = U.getPassword();
-		      String  edp = U.getEndpoint();
-		      boolean ssl = U.useSSL();
-		      U = ParseUtils.parseUser( _jsonBuf );
-		      U.setPassword( pwd );
-		      U.setEndpoint( edp );
-		      U.setSSL( ssl );
-		      U.toFile( Utils.getStringPreference("FILESDIR","",SecGrpActivity.this) );// to save new token + expiration
-		    } catch(Exception e) {
-		      errorMessage = e.getMessage();
-		      hasError = true;
-		      return "";
-		    }
+	      OSClient osc = OSClient.getInstance( U );
+
+	      try {
+	    	  osc.deleteSecGroup( secgrpID );
+	      } catch(Exception e) {
+	    	  errorMessage = e.getMessage();
+	    	  hasError = true;
+	    	  return "";
 	      }
-
-	    
-
-	    try {
-		  RESTClient.deleteSecGroup(U, secgrpID);
-	    } catch(Exception e) {
-	    	errorMessage = e.getMessage();
-	    	hasError = true;
-	    	return "";
+	      return jsonBuf;
 	    }
-	    return jsonBuf;
-	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	    @Override
+	    protected void onPostExecute( String result ) {
+	    	super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 		  Utils.alert( errorMessage, SecGrpActivity.this );
- 		  SecGrpActivity.this.progressDialogWaitStop.dismiss( );
- 		  return;
- 	    }
- 	    SecGrpActivity.this.update( );
-//	    SecGrpActivity.this.progressDialogWaitStop.dismiss( );
-	  }
-    }
+	    	if(hasError) {
+	    		Utils.alert( errorMessage, SecGrpActivity.this );
+	    		SecGrpActivity.this.progressDialogWaitStop.dismiss( );
+	    		return;
+	    	}
+	    	SecGrpActivity.this.update( );
+	    }
+    }	
 }

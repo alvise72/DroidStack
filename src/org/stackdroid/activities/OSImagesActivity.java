@@ -35,6 +35,7 @@ import android.view.Menu;
 //import java.io.IOException;
 
 
+
 //import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -43,6 +44,8 @@ import java.util.Vector;
 //import java.io.File;
 
 
+
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.comm.NotFoundException;
 //import org.stackdroid.comm.NotAuthorizedException;
@@ -106,8 +109,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
 	    } else {
 		progressDialogWaitStop.show();
-		AsyncTaskOSListImages task = new AsyncTaskOSListImages();
-		task.execute( U );
+		(new AsyncTaskOSListImages()).execute( );
 		return true;
 	    }
         }
@@ -123,7 +125,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	
     	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
-    		U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+    		U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
     	} catch(RuntimeException re) {
     		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
     		return;
@@ -147,7 +149,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     */
     private void update( ) {
     	progressDialogWaitStop.show();
-    	(new AsyncTaskOSListImages()).execute( U );
+    	(new AsyncTaskOSListImages()).execute( );
     }
     
     /**
@@ -433,30 +435,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	  protected String doInBackground(String... u ) 
 	  {
 	    String imagetodel = u[0];
+	    OSClient osc = OSClient.getInstance(U);
 	    
-	    if( U.getTokenExpireTime() <= Utils.now() + 5) {
-		  try {
-		    jsonBuf = RESTClient.requestToken( U.useSSL(), 
-		    								   U.getEndpoint(),
-		    								   U.getTenantName(),
-		    								   U.getTenantID(),
-		    								   U.getPassword() );
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setEndpoint(U.getEndpoint());
-		    newUser.setPassword(U.getPassword());
-		    newUser.setSSL(U.useSSL());
-		    U = newUser;
-		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) );
-		  } catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		  }
-		  return "";
-	    }
-
 	    try {
-		  RESTClient.deleteGlanceImage( U, imagetodel );
-		  jsonBuf = RESTClient.requestImages( U );
+		  osc.deleteGlanceImage( imagetodel );
+		  jsonBuf = osc.requestImages( );
 	    } catch(RuntimeException e) {
 		  errorMessage = "Runtime: " + e.getMessage();
 		  hasError = true;
@@ -482,7 +465,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
 		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
-			    OSImagesActivity.this);
+			    	OSImagesActivity.this);
 	    }
 
 	    OSImagesActivity.this.update( );
@@ -504,39 +487,19 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-    protected class AsyncTaskOSListImages extends AsyncTask<User, String, String>
+    protected class AsyncTaskOSListImages extends AsyncTask<Void, String, String>
     {
      	private  String   errorMessage  =  null;
 	private  boolean  hasError      =  false;
 	private  String   jsonBuf       = null;
 
 	@Override
-	protected String doInBackground(User... u ) 
+	protected String doInBackground(Void ... voids ) 
 	{
-	    User U = u[0];
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    								   U.getEndpoint(),
-		    								   U.getTenantName(),
-		    								   U.getUserName(),
-		    								   U.getPassword() );
-		    
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( U.getPassword() );
-		    newUser.setEndpoint( U.getEndpoint() );
-		    newUser.setSSL( U.useSSL() );
-		    U = newUser;
-		    U.toFile( Utils.getStringPreference("FILESDIR","",OSImagesActivity.this) ); 
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
+	    OSClient osc = OSClient.getInstance(U);
 
 	    try {
-	  	  jsonBuf = RESTClient.requestImages( U );
+	  	  jsonBuf = osc.requestImages( );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;

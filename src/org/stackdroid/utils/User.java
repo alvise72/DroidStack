@@ -10,32 +10,43 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
 
+import android.content.Context;
+
 //import android.os.Environment;
 
 public class User implements Serializable, Comparable<User> {
 
     private static final long serialVersionUID = 2087368867376448461L;
 
-    private String endpoint;
-    private String userName;
-    private String userID;
-    private String tenantName;
-    private String tenantId;
-    private String token;
-    private long   tokenExpireTime;
-    private String password;
+    private String  endpoint;
+    private String  userName;
+    private String  userID;
+    private String  tenantName;
+    private String  tenantId;
+    private String  token;
+    private long    tokenExpireTime;
+    private String  password;
     private boolean usessl;
     private boolean role_admin;
+    private transient Context context;
     
-    public User( String _userName, String _userID, String _tenantName, String _tenantId, String _token, long _tokenExpireTime, boolean roleadmin  ) {
+    public User( String _userName, 
+    			 String _userID, 
+    			 String _tenantName, 
+    			 String _tenantId, 
+    			 String _token, 
+    			 long _tokenExpireTime, 
+    			 boolean _role_admin,
+    			 Context _context ) {
         userName        = _userName;
-	userID          = _userID;
-	tenantName      = _tenantName;
-	tenantId        = _tenantId;
-	token           = _token;
-	tokenExpireTime = _tokenExpireTime;
-	password        = "";
-	role_admin      = roleadmin;
+        userID          = _userID;
+        tenantName      = _tenantName;
+        tenantId        = _tenantId;
+        token           = _token;
+        tokenExpireTime = _tokenExpireTime;
+        password        = "";
+        role_admin      = _role_admin;
+        context         = _context;
     }
     
     public void setPassword( String _password ) { password = _password ;} 
@@ -52,55 +63,85 @@ public class User implements Serializable, Comparable<User> {
     public String getPassword( ) { return password; }
     public boolean useSSL( ) { return usessl; }
     public boolean isRoleAdmin( ) { return role_admin; }
-
+    public Context getContext( ) { return context; }
+    public void setContext( Context ctx ) { context = ctx; }
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     @Override
     public String toString( ) {
-	return "User{endpoint="+endpoint+
+    	return "User{endpoint="+endpoint+
 	    ",userName="+userName+
 	    ",userID="+userID+
 	    ",tenantName="+tenantName+
 	    ",tenantId="+tenantId+
 	    ",tokenExpireTime="+tokenExpireTime+
 	    ",password="+password+
-	    ",usessl"+usessl+
-	    ",role_admin"+role_admin+
+	    ",usessl="+usessl+
+	    ",role_admin="+role_admin+
 	    "}";
     }
 
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public int compareTo( User u ) {
-	if(u.getUserID()!=this.getUserID())
-	    return 1;
-	return 0;
+    	if(u.getUserID()!=this.getUserID())
+    		return 1;
+    	return 0;
     }
 
-    public static User fromFileID( String ID, String filesDir ) throws RuntimeException {
-	String filename = filesDir + "/users/" + ID;
-	if(false == (new File(filename)).exists())
-	    throw new RuntimeException( "File ["+filename+"] doesn't exist" );
-	try {
-	    InputStream is = new FileInputStream( filename );
-	    ObjectInputStream ois = new ObjectInputStream( is );
-	    User U = (User)ois.readObject( );
-	    ois.close( );
-	    return U;
-	} catch(IOException ioe) {
-	    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
-	} catch(ClassNotFoundException cnfe) {
-	    throw new RuntimeException( "ObjectInputStream.readObject: " + cnfe.getMessage( ) );
-	}
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public static User fromFileID( String ID, String filesDir, Context ctx ) throws RuntimeException {
+    	String filename = filesDir + "/users/" + ID;
+    	if(false == (new File(filename)).exists())
+    		throw new RuntimeException( "File ["+filename+"] doesn't exist" );
+    	try {
+    		InputStream is = new FileInputStream( filename );
+    		ObjectInputStream ois = new ObjectInputStream( is );
+    		User U = (User)ois.readObject( );
+    		ois.close( );
+    		U.setContext( ctx );
+    		return U;
+    	} catch(IOException ioe) {
+    		throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+    	} catch(ClassNotFoundException cnfe) {
+    		throw new RuntimeException( "ObjectInputStream.readObject: " + cnfe.getMessage( ) );
+    	}
     }
-
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public void toFile( String filesDir ) throws RuntimeException {
     	String filename = filesDir + "/users/" + getUserID( ) + "." + getTenantID( );
     	File f = new File( filename );
     	if(f.exists()) f.delete();
-	try {
-	    OutputStream os = new FileOutputStream( filename );
-	    ObjectOutputStream oos = new ObjectOutputStream( os );
-	    oos.writeObject( this );
-	    oos.close( );
-	} catch(IOException ioe) {
-	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage() );
-	}
+    	try {
+    		OutputStream os = new FileOutputStream( filename );
+    		ObjectOutputStream oos = new ObjectOutputStream( os );
+    		oos.writeObject( this );
+    		oos.close( );
+    	} catch(IOException ioe) {
+	    		throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage() );
+		}
     }
 }

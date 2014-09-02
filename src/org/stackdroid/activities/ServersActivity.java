@@ -41,6 +41,7 @@ import android.view.View;
 
 
 
+
 import java.util.Hashtable;
 //import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,6 +56,8 @@ import java.util.Vector;
 
 
 
+
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
@@ -77,6 +80,7 @@ import org.stackdroid.utils.TextViewNamed;
 //import org.stackdroid.utils.ImageViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 //import org.stackdroid.utils.LinearLayoutNamed;
+
 
 
 
@@ -408,7 +412,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this) );
+	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
 	} catch(RuntimeException re) {
 	    Utils.alert("ServersActivity.onCreate: "+re.getMessage(), this );
 	    return;
@@ -499,32 +503,10 @@ public class ServersActivity extends Activity implements OnClickListener {
      	{
      		String serverid = v[0];
      		String snapname = v[1];
-     		if(U.getTokenExpireTime() <= Utils.now() + 5) {
-     			try {
-     				String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-     														   U.getEndpoint(),
-     														   U.getTenantName(),
-     														   U.getUserName(),
-     														   U.getPassword() );
-     				String  pwd = U.getPassword();
-     				String  edp = U.getEndpoint();
-     				boolean ssl = U.useSSL();
-     				U = ParseUtils.parseUser( _jsonBuf );
-     				U.setPassword( pwd );
-     				U.setEndpoint( edp );
-     				U.setSSL( ssl );
-     				U.toFile( Utils.getStringPreference( "FILESDIR", "", ServersActivity.this ) ); // to save new token + expiration
-     			} catch(Exception e) {
-     				errorMessage = e.getMessage();
-     				hasError = true;
-     				return "";
-     			}
-     		}
-
-	    
+		    OSClient osc = OSClient.getInstance( U );
 
      		try {
-     			RESTClient.createInstanceSnapshot( U, serverid, snapname );
+     			osc.createInstanceSnapshot( serverid, snapname );
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;
@@ -567,61 +549,40 @@ public class ServersActivity extends Activity implements OnClickListener {
 	@Override
 	protected String doInBackground( Void... v ) 
 	{
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
+	      OSClient osc = OSClient.getInstance( U );
 
 	    
 
-	    try {
-		jsonBuf = RESTClient.requestServers( U );
-		jsonBufferFlavor = RESTClient.requestFlavors( U );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
-	    }
+	      try {
+	    	  jsonBuf 			= osc.requestServers( );
+	    	  jsonBufferFlavor  = osc.requestFlavors( );
+	      } catch(Exception e) {
+	    	  errorMessage = e.getMessage();
+	    	  hasError = true;
+	    	  return "";
+	      }
 	    
-	    return jsonBuf;
+	      return jsonBuf;
 	}
 	
-	@Override
+		@Override
 	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+			super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 		Utils.alert( errorMessage, ServersActivity.this );
- 		ServersActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
+			if(hasError) {
+				Utils.alert( errorMessage, ServersActivity.this );
+				ServersActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
 	    
-	    try {
-		Vector<Server> servers = ParseUtils.parseServers( jsonBuf );
-		//Hashtable<String, Flavor> flavors = ParseUtils.parseFlavors( jsonBufferFlavor );
-		ServersActivity.this.refreshView( servers, ParseUtils.parseFlavors( jsonBufferFlavor ) );
-	    } catch(ParseException pe) {
-		Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
-	    }
-	    ServersActivity.this.progressDialogWaitStop.dismiss( );
-	}
+			try {
+				Vector<Server> servers = ParseUtils.parseServers( jsonBuf );
+				ServersActivity.this.refreshView( servers, ParseUtils.parseFlavors( jsonBufferFlavor ) );
+			} catch(ParseException pe) {
+				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
+			}
+			ServersActivity.this.progressDialogWaitStop.dismiss( );
+		}
     }
     
     //__________________________________________________________________________________
@@ -638,32 +599,14 @@ public class ServersActivity extends Activity implements OnClickListener {
 	protected Void doInBackground(String... args ) 
 	{
 	    serverids = args[0].split(",");
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    								   U.getEndpoint(),
-		    								   U.getTenantName(),
-		    								   U.getUserName(),
-		    								   U.getPassword() );
-		    
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( U.getPassword() );
-		    newUser.setEndpoint( U.getEndpoint() );
-		    newUser.setSSL( U.useSSL() );
-		    U = newUser;
-		    U.toFile( Utils.getStringPreference("FILESDIR","",ServersActivity.this) );// to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return null;
-		}
-	    }
+	    OSClient osc = OSClient.getInstance( U );
+
 
 	    try {
 	    	not_found = false;
 		for(int i = 0; i<serverids.length; ++i) {
 		    try {
-			  RESTClient.deleteInstance( U, serverids[i] );
+			  osc.deleteInstance( serverids[i] );
 		    } catch(NotFoundException nfe) {
 		    	Log.d("SERVERSACT",nfe.getMessage());
 			  not_found = true;
@@ -672,9 +615,9 @@ public class ServersActivity extends Activity implements OnClickListener {
 		// jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 		// jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
 	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return null;
+	    	errorMessage = e.getMessage();
+	    	hasError = true;
+	    	return null;
 	    }
 	    
 	    return null;
@@ -697,54 +640,31 @@ public class ServersActivity extends Activity implements OnClickListener {
     }
     
   //__________________________________________________________________________________
-    protected class AsyncTaskOSLogServer extends AsyncTask<Void, String, String>
+    protected class AsyncTaskOSLogServer extends AsyncTask<Void, Void, Void>
     {
      	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
-	private  String   jsonBuf          = null;
-	//private  String   jsonBufferFlavor = null;
-	//private  String   username         = null;
+     	private  boolean  hasError         = false;
+     	private  String   jsonBuf          = null;
 
 	@Override
-	protected String doInBackground( Void... v ) 
+	protected Void doInBackground( Void... v ) 
 	{
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String _jsonBuf = RESTClient.requestToken( U.useSSL() ,
-		    										   U.getEndpoint(),
-		    										   U.getTenantName(),
-		    										   U.getUserName(),
-		    										   U.getPassword() );
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    U = ParseUtils.parseUser( _jsonBuf );
-		    U.setPassword( pwd );
-		    U.setEndpoint( edp );
-		    U.setSSL( ssl );
-		    U.toFile( Utils.getStringPreference("FILESDIR", "", ServersActivity.this) );// to save new token + expiration
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return "";
-		}
-	    }
-
-	    
+	    OSClient osc = OSClient.getInstance( U );
 
 	    try {
-		  jsonBuf = RESTClient.requestServerLog( U, ServersActivity.this.serverID );
+		  jsonBuf = osc.requestServerLog( ServersActivity.this.serverID );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
-		  return "";
+		  //return;
 	    }
-	    return jsonBuf;
+	    //return jsonBuf;
+		return null;
 	}
 	
 	@Override
-	    protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	    protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
 	    
  	    if(hasError) {
  		  Utils.alert( errorMessage, ServersActivity.this );

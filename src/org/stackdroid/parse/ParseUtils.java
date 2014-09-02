@@ -26,6 +26,7 @@ import org.stackdroid.utils.Quota;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Volume;
 
+import android.content.Context;
 import android.util.Log;
 
 public class ParseUtils {
@@ -36,7 +37,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static User parseUser( String jsonString ) throws ParseException
+    public static User parseUser( String jsonString, Context ctx ) throws ParseException
     {
       try {
     	  JSONObject jsonObject = null;
@@ -67,7 +68,7 @@ public class ParseUtils {
     		  throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
     	  }
     	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-    	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin );
+    	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin, ctx );
     	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );
@@ -537,15 +538,14 @@ public class ParseUtils {
 				String name = volume.getString("display_name");
 				String status = volume.getString("status");
 				boolean bootable = volume.getBoolean("bootable");
-				JSONObject metadata = volume.getJSONObject("metadata");
 				boolean readonly = false;
 				String attachmode = "rw";
-				Log.d("PARSEVOLUME", "metadata="+metadata.toString());
-				if(metadata!=null) {
-				  if(metadata.has("attached_mode"))
-					  attachmode = metadata.getString("attached_mode");
-				  if(metadata.has("readonly"))
-					  readonly = metadata.getBoolean("readonly");
+				if(volume.has("metadata")) {
+					JSONObject metadata = volume.getJSONObject("metadata");
+					if(metadata.has("attached_mode"))
+						attachmode = metadata.getString("attached_mode");
+					if(metadata.has("readonly"))
+					    readonly = metadata.getBoolean("readonly");
 				}
 				String ID = volume.getString("id");
 				int size = volume.getInt("size");

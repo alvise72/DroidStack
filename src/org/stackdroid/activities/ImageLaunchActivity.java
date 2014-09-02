@@ -21,6 +21,7 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Flavor;
 import org.stackdroid.utils.KeyPair;
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.RESTClient;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.NetworkView;
@@ -62,6 +63,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private Hashtable<String, EditTextNamed> mappingNetEditText = null;
     private Hashtable<String, String> selectedNetworks = null;
 
+    private User U = null;
+    
     @Override
     public void onClick( View v ) {
 	if(v instanceof SecGroupView) {
@@ -121,16 +124,27 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       options = (LinearLayout)findViewById( R.id.secgroupsLayer );
       networksL = (LinearLayout)findViewById( R.id.networksLayer );
       
+      String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+      try {
+  	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+  	  } catch(RuntimeException re) {
+  	    Utils.alert("FloatingIPActivity.onCreate: "+re.getMessage(), this );
+  	    return;
+  	  }
+  	  if(selectedUser.length()!=0)
+  		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+  		else
+  	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+        
+      
       progressDialogWaitStop.show();
-      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
       
       selectedSecgroups = new HashSet<String>();
       
       mappingNetEditText = new Hashtable<String, EditTextNamed>();
       selectedNetworks = new Hashtable<String, String>();
 
-      AsyncTaskGetOptions task = new AsyncTaskGetOptions();
-      task.execute( currentUser );
+      (new AsyncTaskGetOptions()).execute( );
   }
   
   
@@ -226,7 +240,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
      
-      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this) );
+      currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this), this );
       AsyncTaskLaunch task = new AsyncTaskLaunch();
 
       String adminPass = null;
@@ -290,58 +304,37 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      *
      *
      */
-    protected class AsyncTaskGetOptions extends AsyncTask<User, Void, Void>
+    protected class AsyncTaskGetOptions extends AsyncTask<Void, Void, Void>
     {
      	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
-	private  String   jsonBufFlavor    = null;
-	private  String   jsonBufNetwork   = null;
-	private  String   jsonBufSubnet    = null;
-	private  String   jsonBufKeypairs  = null;
-	private  String   jsonBufSecgroups = null;
-	User U = null;
+     	private  boolean  hasError         = false;
+     	private  String   jsonBufFlavor    = null;
+     	private  String   jsonBufNetwork   = null;
+     	private  String   jsonBufSubnet    = null;
+     	private  String   jsonBufKeypairs  = null;
+     	private  String   jsonBufSecgroups = null;
+     	//User U = null;
 
-	@Override
-	protected Void doInBackground( User... u ) 
-	{
-	    U = u[0];
-	    if(U.getTokenExpireTime() <= Utils.now() + 5) {
-		try {
-		    String jsonBuf = RESTClient.requestToken( U.useSSL(),
-		    										  U.getEndpoint(),
-		    										  U.getTenantName(),
-		    										  U.getUserName(),
-		    										  U.getPassword());
-		    String  pwd = U.getPassword();
-		    String  edp = U.getEndpoint();
-		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( jsonBuf );
-		    newUser.setPassword( pwd );
-		    newUser.setEndpoint( edp );
-		    newUser.setSSL( ssl );
-		    U = newUser;
-		    U.toFile( Utils.getStringPreference("FILESDIR","",ImageLaunchActivity.this) ); // to save new token+expiration
-
-		} catch(Exception e) {
-		    errorMessage = e.getMessage();
-		    hasError = true;
-		    return null;
-		}
-	    }
+     	@Override
+     	protected Void doInBackground( Void ... v ) 
+     	{
+     		//U = u[0];
+     		OSClient osc = OSClient.getInstance(U);
+     		
 
 	    try {
-		jsonBufFlavor    = RESTClient.requestFlavors( U );
-		jsonBufNetwork   = RESTClient.requestNetworks( U );
-		jsonBufSubnet    = RESTClient.requestSubNetworks( U );
-		jsonBufKeypairs  = RESTClient.requestKeypairs( U );
-		jsonBufSecgroups = RESTClient.requestSecGroups( U );
+	    	jsonBufFlavor    = osc.requestFlavors( );
+	    	jsonBufNetwork   = osc.requestNetworks( );
+	    	jsonBufSubnet    = osc.requestSubNetworks( );
+	    	jsonBufKeypairs  = osc.requestKeypairs( );
+	    	jsonBufSecgroups = osc.requestSecGroups( );
 	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return null;
+	    	errorMessage = e.getMessage();
+	    	hasError = true;
+	    	return null;
 	    }
 	    
-	    return null;//jsonBuf;
+	    return null;
 	}
 	
 	@Override
@@ -450,7 +443,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    String  pwd = U.getPassword();
 		    String  edp = U.getEndpoint();
 		    boolean ssl = U.useSSL();
-		    User newUser = ParseUtils.parseUser( _jsonBuf );
+		    User newUser = ParseUtils.parseUser( _jsonBuf,ImageLaunchActivity.this );
 		    newUser.setPassword( pwd );
 		    newUser.setEndpoint( edp );
 		    newUser.setSSL( ssl );
