@@ -22,7 +22,7 @@ import android.app.ProgressDialog;
 //import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
@@ -91,19 +91,18 @@ public class OverViewActivity extends Activity {
         String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
         setTitle(getString(R.string.USAGEOVERVIEW));
         try {
-        	U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this), this );
-        	setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
-        	//Log.d("OVERVIEW", "USER="+U);
-        	progressDialogWaitStop.show();
-        	(new AsyncTaskQuota()).execute( );
+	    U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this), this );
+	    setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
+	    //Log.d("OVERVIEW", "USER="+U);
+	    progressDialogWaitStop.show();
+	    (new AsyncTaskQuota()).execute( );
         }  catch(RuntimeException re) {
-        	Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
+	    Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
         }
         if(selectedUserID.length()!=0)
-        	((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
-		else
-			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-		
+	    ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+	else
+	    ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 	
     }
  
     /**
@@ -125,10 +124,10 @@ public class OverViewActivity extends Activity {
      *
      */
     private void refreshView( Quota Q,
-    						  Vector<Server> servers, 
-    						  Vector<Flavor> flavors,
-    						  Vector<FloatingIP> fips, 
-    						  Vector<SecGroup> secgs ) 
+			      Vector<Server> servers, 
+			      Vector<Flavor> flavors,
+			      Vector<FloatingIP> fips, 
+			      Vector<SecGroup> secgs ) 
     {
 	
 	Iterator<Server> it = servers.iterator();
@@ -140,19 +139,19 @@ public class OverViewActivity extends Activity {
 	Iterator<Flavor> fit = flavors.iterator();
 	while( fit.hasNext( ) ) {
 		Flavor f = fit.next();
-		Log.d("OVERVIEW","Putting "+f.getID( ) + " -> "+f.toString());
+		//		Log.d("OVERVIEW","Putting "+f.getID( ) + " -> "+f.toString());
 		flavHash.put( f.getID(), f );
 	}
 	while( it.hasNext( ) ) {
 	    Server S = it.next( );
-	    Log.d("OVERVIEW", "FlavorID for Server " + S.getName( ) + " = "+S.getFlavorID( ) );
+	    //	    Log.d("OVERVIEW", "FlavorID for Server " + S.getName( ) + " = "+S.getFlavorID( ) + " - MEM=" + flavHash.get( S.getFlavorID( ) ).getRAM( ) );
 	    Flavor F = flavHash.get( S.getFlavorID( ) );
 	    if(F!=null) {
 	    totMem += F.getRAM( );
 	    totVCPU += F.getVCPU( );
 	    } else {
 	    	Utils.alert("FlavorID Mismatch! The instance ["+S.getID()+"] has a FlavorID ["+S.getFlavorID( )+"] which is not present in the flavor list", this);
-        }
+	    }
 	    totInstances++;
 	}
     
@@ -210,51 +209,51 @@ public class OverViewActivity extends Activity {
      	@Override
      	protected String doInBackground(Void... u ) 
      	{
-     		OSClient osc = OSClient.getInstance(U);
-
-     		try {
-     			jsonBufQuota 	 = osc.requestQuota( );
-     			jsonBuf 	 	 = osc.requestServers( );
-     			jsonBufFIPs 	 = osc.requestFloatingIPs( );
-     			jsonBufSecgs 	 = osc.requestSecGroups( );
-     			jsonBufferFlavor = osc.requestFlavors( );
-     		} catch(Exception e) {
-     			errorMessage = e.getMessage();
-     			hasError = true;
-     			return "";
-     		}
+	    OSClient osc = OSClient.getInstance(U);
 	    
-     		return jsonBuf;
+	    try {
+		jsonBufQuota 	 = osc.requestQuota( );
+		jsonBuf 	 = osc.requestServers( );
+		jsonBufFIPs 	 = osc.requestFloatingIPs( );
+		jsonBufSecgs 	 = osc.requestSecGroups( );
+		jsonBufferFlavor = osc.requestFlavors( );
+	    } catch(Exception e) {
+		errorMessage = e.getMessage();
+		hasError = true;
+		return "";
+	    }
+	    
+	    return jsonBuf;
      	}
 	
      	@Override
      	protected void onPreExecute() {
-     		super.onPreExecute();
+	    super.onPreExecute();
      	}
 	
      	@Override
      	protected void onPostExecute( String result ) {
-     		super.onPostExecute(result);
+	    super.onPostExecute(result);
 	    
-     		if(hasError) {
-     			Utils.alert( errorMessage, OverViewActivity.this );
-     			OverViewActivity.this.progressDialogWaitStop.dismiss( );
-     			return;
-     		}
+	    if(hasError) {
+		Utils.alert( errorMessage, OverViewActivity.this );
+		OverViewActivity.this.progressDialogWaitStop.dismiss( );
+		return;
+	    }
 	    
-	    
-     		try {
-     			Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
-     			OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
-     											   ParseUtils.parseServers( jsonBuf ), 
-     											   ParseUtils.parseFlavors( jsonBufferFlavor ),
-     											   ParseUtils.parseFloatingIP( jsonBufFIPs ),
-     											   ParseUtils.parseSecGroups( jsonBufSecgs ) 
-     											 );
-     		} catch(ParseException pe) {
-     			Utils.alert( pe.getMessage( ), OverViewActivity.this );
-     		}
-     			OverViewActivity.this.progressDialogWaitStop.dismiss( );
-     		}
+	    try {
+		//		Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
+		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
+						   ParseUtils.parseServers( jsonBuf ), 
+						   ParseUtils.parseFlavors( jsonBufferFlavor ),
+						   ParseUtils.parseFloatingIP( jsonBufFIPs ),
+						   ParseUtils.parseSecGroups( jsonBufSecgs ) 
+						   );
+	    } catch(ParseException pe) {
+		Utils.alert( pe.getMessage( ), OverViewActivity.this );
+	    }
+
+	    OverViewActivity.this.progressDialogWaitStop.dismiss( );
+	}
     }
 }

@@ -429,15 +429,15 @@ public class RESTClient {
 
     //________________________________________________________________________________
     public static String sendGETRequest( boolean usessl,
-    									 String sURL, 
-					 				     String token,
-					 				     Vector<Pair<String,String>> properties ) throws RuntimeException 
+					 String sURL, 
+					 String token,
+					 Vector<Pair<String,String>> properties ) throws RuntimeException 
     {
     	String Url = sURL;
     	if(usessl)
-    		Url = "https://"+Url;
+	    Url = "https://"+Url;
     	else
-    		Url = "http://"+Url;
+	    Url = "http://"+Url;
     	
 	//    	Log.d("RESTClient", "sendGETRequest - URL="+Url);
 	URL url = null;
