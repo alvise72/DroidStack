@@ -172,7 +172,7 @@ public class RESTClient {
 			  ((HttpURLConnection)conn).disconnect( );
 		
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
-		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf ) );//+"\n\n".Please check your credentials and try again..." );
 		}
 		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
 		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
@@ -196,7 +196,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
+	    throw new RuntimeException("BufferedInputStream.read1: " + ioe.getMessage( ) );
 	}    
 	if(usessl)
 	      ((HttpsURLConnection)conn).disconnect( );
@@ -529,7 +529,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
+	    throw new RuntimeException("BufferedInputStream.read2: " + ioe.getMessage( ) );
 	}
 	//	Log.d("RESTClient", "3 Disconnecting...");
 	if(usessl)
@@ -719,7 +719,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("BufferedInputStream.read: " + ioe.getMessage( ) );
+	    throw new RuntimeException("BufferedInputStream.read3: " + ioe.getMessage( ) );
 	}
 	//	Log.d("RESTClient", "3 Disconnecting...");
 	if(usessl)

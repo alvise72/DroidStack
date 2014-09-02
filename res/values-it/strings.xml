@@ -78,6 +78,7 @@
     <string name="AVAILUSERS">Utenti disponibili:</string>
     <string name="NOEMPTYNAME">Non si pu&#xf2; usare un nome vuoto.</string>
     <string name="NOVOLUMEAVAIL">Nessun volume disponibile</string>
+    <string name="PLEASECHECKCREDS">Per favore controlla le tue credenziali&#8230;</string>
     <string name="PLEASECHECKCREDSFORIMAGE">Per favore controlla le tue credenziali o che l\'immagine che stai cercando di cancellare appartiene a te&#8230;</string>
     <string name="PLEASECHECKCREDSFORINSTANCE">Per favore controlla le tue credenziali o che l\'istanza che stai cercando di cancellare appartiene a te&#8230;</string>
 </resources>

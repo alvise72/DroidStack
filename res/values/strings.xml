@@ -79,7 +79,8 @@
     <string name="TENANTNAME">Tenant\'s name</string>
     <string name="AVAILUSERS">Available users:</string>
     <string name="NOEMPTYNAME">Cannot use an empty name.</string>
-    <string name="NOVOLUMEAVAIL">No volume available</string>
+    <string name="NOVOLUMEAVAIL">No volume available</string>    
+    <string name="PLEASECHECKCREDS">Please check your credentials&#8230;</string>
     <string name="PLEASECHECKCREDSFORIMAGE">Please check your credentials or that the image you\'re trying to delete is owned by you&#8230;</string>
     <string name="PLEASECHECKCREDSFORINSTANCE">Please check your credentials or that the instance you\'re trying to delete is owned by you&#8230;</string>
 </resources>
