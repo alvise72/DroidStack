@@ -505,8 +505,7 @@ public class ParseUtils {
     *
     */    
    public static Vector<SimpleSecGroupRule> parseSecGroupRules( String jsonBuf ) throws ParseException  {
-	//SecGroup secg[] = null;
-   	Vector<SimpleSecGroupRule> rulesV = new Vector<SimpleSecGroupRule>();
+	Vector<SimpleSecGroupRule> rulesV = new Vector<SimpleSecGroupRule>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray rules = jsonObject.getJSONObject("security_group").getJSONArray("rules");
@@ -519,6 +518,7 @@ public class ParseUtils {
 		  int fromport = rule.getInt("from_port");
 		  int toport = rule.getInt("to_port");
 		  rulesV.add(new SimpleSecGroupRule(id, fromport, toport, proto, iprange) );
+		  Log.d("PARSE", "Rule="+id);
 	    }
 	} catch(org.json.JSONException je) {
 	    throw new ParseException( je.getMessage( ) );

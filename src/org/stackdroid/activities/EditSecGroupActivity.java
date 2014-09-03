@@ -1,5 +1,6 @@
 package org.stackdroid.activities;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.R;
@@ -10,6 +11,7 @@ import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
+import org.stackdroid.views.RuleView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -68,6 +71,8 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     	else
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 	   
+    	this.progressDialogWaitStop.show( );
+    	(new AsyncTaskListRules()).execute( secgrpID );
     }
 
     /*
@@ -101,10 +106,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
         ruleSpinner = (Spinner) promptsView.findViewById(R.id.mySpinner);
         ruleSpinner.setAdapter(spinnerRulesAdapter);
         final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
-    	//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
         mButton.setOnClickListener(this);
-        //mButton.setOnItemSelectedListener( this );
-        // show it
         alertDialogSelectRule.show();
         alertDialogSelectRule.setCanceledOnTouchOutside(false);
     }
@@ -129,7 +131,13 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
      * 
      */
     private void update( Vector<SimpleSecGroupRule> rules ) {
-    	
+    	((LinearLayout)findViewById(R.id.objectsL)).removeAllViews();
+    	Iterator<SimpleSecGroupRule> rit = rules.iterator();
+    	while(rit.hasNext()) {
+    		SimpleSecGroupRule rl = rit.next( );
+    		RuleView rv = new RuleView( rl, this );
+    		((LinearLayout)findViewById(R.id.objectsL)).addView( rv );
+    	}
     }
     /*
      * 
@@ -156,7 +164,6 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
 	    	  hasError = true;
-	    	  //return "";
 	      }
 	      return null;
 	    }
@@ -176,6 +183,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
 	    	} catch(ParseException pe) {
 	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
 	    	}
+	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }
     }	
 }

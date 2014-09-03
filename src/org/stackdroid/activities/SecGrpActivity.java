@@ -32,15 +32,6 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.views.ListSecGroupView;
 
-
-
-
-
-
-
-
-
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 
 import org.stackdroid.utils.CustomProgressDialog;
@@ -113,9 +104,12 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     @Override
     public void onClick( View v ) {
 	if(v instanceof ImageButtonNamed) {
-	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_DELETE_SECGRP ) {
+		
+		ImageButtonNamed bt = (ImageButtonNamed)v;
+		
+	    if( bt.getType() == ImageButtonNamed.BUTTON_DELETE_SECGRP ) {
 	    	
-	    	final String secgrpID = ((ImageButtonNamed)v).getSecGroupView().getSecGroup().getID();
+	    	final String secgrpID = bt.getSecGroupView().getSecGroup().getID();
 	    	
 	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage( getString(R.string.AREYOUSURETODELETESECGRP));
@@ -144,12 +138,10 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	    	
 	    }
 	    
-	    if( ((ImageButtonNamed)v).getType() == ImageButtonNamed.BUTTON_EDIT_SECGRP ) {
-	    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
-	    	//return;
+	    if( bt.getType() == ImageButtonNamed.BUTTON_EDIT_SECGRP ) {
 	    	Class<?> c = (Class<?>)EditSecGroupActivity.class;
 	        Intent I = new Intent( SecGrpActivity.this, c );
-	        SecGroup sv = ((ImageButtonNamed)v).getSecGroupView().getSecGroup();
+	        SecGroup sv = bt.getListSecGroupView().getSecGroup();
 	        I.putExtra( "SECGRPNAME", sv.getName());
 	        I.putExtra( "SECGRPDESC", sv.getDescription());
 	        I.putExtra( "SECGRPID", sv.getID());
@@ -192,7 +184,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     //__________________________________________________________________________________
     @Override
     public void onResume( ) {
-	super.onResume( );
+    	super.onResume( );
     }
  
     /**
@@ -209,22 +201,23 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshView( Vector<SecGroup> secgrps ) {
-	((LinearLayout)findViewById(R.id.secgrpLayout)).removeAllViews();
-	if(secgrps.size()==0) {
-	  Utils.alert(getString(R.string.NOSECGRPSAVAIL), this);	
-	  return;
-	}
-	Iterator<SecGroup> it = secgrps.iterator();
+    	((LinearLayout)findViewById(R.id.secgrpLayout)).removeAllViews();
+    	if(secgrps.size()==0) {
+    		Utils.alert(getString(R.string.NOSECGRPSAVAIL), this);	
+    		return;
+    	}
+    	
+    	Iterator<SecGroup> it = secgrps.iterator();
 	
-	while(it.hasNext()) {
-		SecGroup s = it.next();
-	    ListSecGroupView sgv = new ListSecGroupView(s, this);
-	    ((LinearLayout)findViewById( R.id.secgrpLayout) ).addView( sgv );
-	    ((LinearLayout)findViewById( R.id.secgrpLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
-	    View space = new View( this );
-	    space.setMinimumHeight(10);
-	    ((LinearLayout)findViewById(R.id.secgrpLayout)).addView( space );
-	}
+    	while(it.hasNext()) {
+    		SecGroup s = it.next();
+    		ListSecGroupView sgv = new ListSecGroupView(s, this);
+    		((LinearLayout)findViewById( R.id.secgrpLayout) ).addView( sgv );
+    		((LinearLayout)findViewById( R.id.secgrpLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+    		View space = new View( this );
+    		space.setMinimumHeight(10);
+    		((LinearLayout)findViewById(R.id.secgrpLayout)).addView( space );
+    	}
     }
 
 

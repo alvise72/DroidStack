@@ -31,7 +31,6 @@ public class RuleView extends LinearLayout {
     	setOrientation( LinearLayout.HORIZONTAL );
     	LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     	setLayoutParams( params1 );
-    	//setBackgroundResource(R.drawable.rounded_corner_thin);
     	int padding = Utils.getDisplayPixel( ctx, 2 );
     	setPadding( padding, padding, padding, padding );
 	
@@ -40,7 +39,6 @@ public class RuleView extends LinearLayout {
     	LinearLayout.LayoutParams _params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     	row.setLayoutParams( _params1 );
     	row.setBackgroundResource( R.drawable.rounded_corner_thin );
-
 
     	text = new LinearLayoutNamed( ctx, this );
     	text.setOrientation( LinearLayout.VERTICAL );
