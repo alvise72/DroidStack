@@ -1,16 +1,17 @@
 package org.stackdroid.views;
 
 import android.widget.LinearLayout;
-
 import android.graphics.Typeface;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
-
 import android.content.Context;
 
 import org.stackdroid.R;
-import org.stackdroid.utils.*;
+import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.LinearLayoutNamed;
+import org.stackdroid.utils.SimpleSecGroupRule;
+import org.stackdroid.utils.TextViewNamed;
+import org.stackdroid.utils.Utils;
 
 public class RuleView extends LinearLayout {
     
@@ -21,11 +22,11 @@ public class RuleView extends LinearLayout {
 
     private ImageButtonNamed deleteRule = null;
     
-    private SimpleSecGroupRule R = null;
+    private SimpleSecGroupRule Rl = null;
 
     public RuleView( SimpleSecGroupRule r, Context ctx ) {
     	super(ctx);
-    	R = r;
+    	Rl = r;
 	
     	setOrientation( LinearLayout.HORIZONTAL );
     	LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -38,7 +39,7 @@ public class RuleView extends LinearLayout {
     	row.setOrientation( LinearLayout.HORIZONTAL );
     	LinearLayout.LayoutParams _params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     	row.setLayoutParams( _params1 );
-    	row.setBackgroundResource(R.drawable.rounded_corner_thin);
+    	row.setBackgroundResource( R.drawable.rounded_corner_thin );
 
 
     	text = new LinearLayoutNamed( ctx, this );
@@ -63,7 +64,6 @@ public class RuleView extends LinearLayout {
 
     	info = new LinearLayoutNamed( ctx, this );
     	info.setOrientation( LinearLayout.HORIZONTAL );
-		//info.setGravity(Gravity.CENTER_VERTICAL);
 		LinearLayout.LayoutParams params3 = 
 	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
 		info.setLayoutParams( params3 );
@@ -76,6 +76,6 @@ public class RuleView extends LinearLayout {
     		
     }
 
-    public SimpleSecGroupRule getServer( ) { return R; }
+    public SimpleSecGroupRule getServer( ) { return Rl; }
     
 }

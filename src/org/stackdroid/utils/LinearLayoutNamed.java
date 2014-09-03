@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.RuleView;
+import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
 import org.stackdroid.views.OSImageView;
@@ -22,6 +23,7 @@ public class LinearLayoutNamed extends LinearLayout implements Named {
     private NetworkView relatedNetworkView = null;
     private ListSecGroupView relatedListSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
+	private SecGroupView relatedSecGroupView;
 
     public LinearLayoutNamed( Context ctx, UserView uv ) {
 	super( ctx );
@@ -72,4 +74,5 @@ public class LinearLayoutNamed extends LinearLayout implements Named {
     public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView; }
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
     public VolumeView getVolumeView( ) { return relatedVolumeView; }
+    public SecGroupView getSecGroupView( ) { return relatedSecGroupView; }
 };

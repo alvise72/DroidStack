@@ -1,16 +1,17 @@
 package org.stackdroid.views;
 
 import android.widget.LinearLayout;
-
-
 import android.graphics.Typeface;
 import android.graphics.Color;
 import android.view.Gravity;
-
 import android.content.Context;
 
 import org.stackdroid.R;
-import org.stackdroid.utils.*;
+import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.LinearLayoutNamed;
+import org.stackdroid.utils.TextViewNamed;
+import org.stackdroid.utils.Utils;
+import org.stackdroid.utils.Volume;
 
 public class VolumeView extends LinearLayout {
     
@@ -19,8 +20,7 @@ public class VolumeView extends LinearLayout {
     private LinearLayoutNamed info 			= null;
     private TextViewNamed Name     		    = null;
     private TextViewNamed Status_and_Size   = null;
-    //private TextViewNamed Attach   			= null;
-
+    
     private ImageButtonNamed detach = null;
     private ImageButtonNamed delete = null;
 

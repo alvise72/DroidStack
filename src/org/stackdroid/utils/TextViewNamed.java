@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.RuleView;
+import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
 import org.stackdroid.views.OSImageView;
@@ -22,6 +23,7 @@ public class TextViewNamed extends TextView implements Named {
     private NetworkView relatedNetworkView = null;
     private ListSecGroupView relatedListSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
+	private SecGroupView relatedSecGroupView;
     
     public TextViewNamed( Context ctx, UserView uv ) {
 	super( ctx );
@@ -62,8 +64,8 @@ public class TextViewNamed extends TextView implements Named {
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
-    public ListSecGroupView getSecGroupView( ) { return relatedListSecGroupView;}
+    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView;}
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
     public VolumeView getVolumeView( ) { return relatedVolumeView; }
-    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView; }
+    public SecGroupView getSecGroupView( ) { return relatedSecGroupView; }
 };
