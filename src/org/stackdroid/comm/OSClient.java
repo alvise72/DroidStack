@@ -1,11 +1,9 @@
 package org.stackdroid.comm;
 
-import java.net.HttpURLConnection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +13,7 @@ import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 
-import android.util.Log;
+//import android.util.Log;
 import android.util.Pair;
 
 public class OSClient {
@@ -33,14 +31,14 @@ public class OSClient {
      * 
      */
     synchronized public static OSClient getInstance( User U ) {
-	if(instanceArray==null) instanceArray = new Hashtable<String, OSClient>( );
-	Log.d("OSCLIENT", "User="+U+" - ID="+U.getUserID( ));
-	if(instanceArray.containsKey(U.getUserID()))
-	    return instanceArray.get( U.getUserID() );
+    	if(instanceArray==null) instanceArray = new Hashtable<String, OSClient>( );
+    	
+    	if(instanceArray.containsKey(U.getUserID()))
+    		return instanceArray.get( U.getUserID() );
 	
-	OSClient osc = new OSClient(U);
-	instanceArray.put(U.getUserID( ), osc );
-	return osc;
+    	OSClient osc = new OSClient(U);
+    	instanceArray.put(U.getUserID( ), osc );
+    	return osc;
     }
     
     /*
@@ -52,7 +50,7 @@ public class OSClient {
      * 
      */
     private OSClient( User U ) {
-	this.U = U;
+    	this.U = U;
     }
     
     /*
@@ -446,8 +444,25 @@ public class OSClient {
 						U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/os-security-groups",
 						U.getToken(), 
 						null );
-	Log.d("OSCLIENT", "buf="+buf);
+	//Log.d("OSCLIENT", "buf="+buf);
 	return buf;
+    }
+
+    /**
+     *
+     *
+     *
+     * 
+     *
+     */
+    public String requestSecGroupListRules( String secgrpID ) throws RuntimeException 
+    {
+    	String buf = RESTClient.sendGETRequest( U.useSSL(), 
+											U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/os-security-groups/" + secgrpID,
+											U.getToken(), 
+											null );
+		//Log.d("OSCLIENT", "buf="+buf);
+		return buf;
     }
 
     /**

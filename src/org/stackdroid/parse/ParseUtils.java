@@ -14,7 +14,8 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.stackdroid.utils.AllocationPool;
 import org.stackdroid.utils.FloatingIP;
-import org.stackdroid.utils.Rule;
+import org.stackdroid.utils.SimpleSecGroupRule;
+//import org.stackdroid.utils.Rule;
 import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.Network;
@@ -489,7 +490,7 @@ public class ParseUtils {
 		  String desc = secgrp.getString("description");
 		  if(desc == null) desc ="";
 		  //Vector<Rule> rules = parseRules( secgrp.getJSONArray("security_group_rules"));
-		  secg.add( new SecGroup( name, id, desc, null ) );
+		  secg.add( new SecGroup( name, id, desc/*, null*/ ) );
 	    }
 	} catch(org.json.JSONException je) {
  	    throw new ParseException( je.getMessage( ) );
@@ -497,6 +498,34 @@ public class ParseUtils {
 	  return secg;
     }
 
+    /**
+    *
+    *
+    *
+    *
+    */    
+   public static Vector<SimpleSecGroupRule> parseSecGroupRules( String jsonBuf ) throws ParseException  {
+	//SecGroup secg[] = null;
+   	Vector<SimpleSecGroupRule> rulesV = new Vector<SimpleSecGroupRule>();
+	try{
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray rules = jsonObject.getJSONObject("security_group").getJSONArray("rules");
+	    
+	    for(int i =0; i<rules.length(); ++i) {
+		  JSONObject rule = rules.getJSONObject(i);
+		  String id = rule.getString("id");
+		  String iprange = rule.getJSONObject("ip_range").getString("cidr");
+		  String proto = rule.getString("ip_protocol");
+		  int fromport = rule.getInt("from_port");
+		  int toport = rule.getInt("to_port");
+		  rulesV.add(new SimpleSecGroupRule(id, fromport, toport, proto, iprange) );
+	    }
+	} catch(org.json.JSONException je) {
+	    throw new ParseException( je.getMessage( ) );
+	}
+	  return rulesV;
+   }
+    
     /**
      *
      *

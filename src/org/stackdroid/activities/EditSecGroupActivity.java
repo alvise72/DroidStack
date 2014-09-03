@@ -12,37 +12,24 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class EditSecGroupActivity extends Activity {
+public class EditSecGroupActivity extends Activity  implements OnClickListener {
 
     private String secgrpID   = null;
 	private String secgrpName = null;
 	private String secgrpDesc = null;
     private User   U          = null;
-    private ArrayAdapter<String> spinnerRules  = null;
+    private ArrayAdapter<String> spinnerRulesAdapter  = null;
+    private Spinner ruleSpinner = null;
     private Vector<String> predefinedRules = null;
+    private AlertDialog alertDialogSelectRule = null;
     
-    /*
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
-    public EditSecGroupActivity( ) {
-    	predefinedRules = new Vector<String>();
-    	predefinedRules.add("SSH");
-    	predefinedRules.add("HTTP");
-    	predefinedRules.add("PING");
-    	predefinedRules.add("MYSQL");
-    }
-
     /*
      * 
      * 
@@ -87,8 +74,8 @@ public class EditSecGroupActivity extends Activity {
      */
     public void addRule( View v ) { 
     	
-    	spinnerRules = new ArrayAdapter<String>(EditSecGroupActivity.this, android.R.layout.simple_spinner_item, predefinedRules.subList(0,predefinedRules.size()) );
-    	spinnerRules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    	spinnerRulesAdapter = new ArrayAdapter<String>(EditSecGroupActivity.this, android.R.layout.simple_spinner_item, predefinedRules.subList(0,predefinedRules.size()) );
+    	spinnerRulesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
     	
     	LayoutInflater li = LayoutInflater.from(this);
@@ -101,20 +88,29 @@ public class EditSecGroupActivity extends Activity {
 
         // set dialog message
 
-        alertDialogBuilder.setTitle(getString(R.string.PICKASERVERTOASSOCIATEFIP) + " "+this.fipToAssociate);
-        //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
-        // create alert dialog
-        alertDialogSelectServer = alertDialogBuilder.create();
+        alertDialogBuilder.setTitle(getString(R.string.ADDRULE) );
 
-        serverSpinner = (Spinner) promptsView.findViewById(R.id.mySpinner);
-        serverSpinner.setAdapter(spinnerServersArrayAdapter);
+        alertDialogSelectRule = alertDialogBuilder.create();
+
+        ruleSpinner = (Spinner) promptsView.findViewById(R.id.mySpinner);
+        ruleSpinner.setAdapter(spinnerRulesAdapter);
         final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
     	//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
         mButton.setOnClickListener(this);
         //mButton.setOnItemSelectedListener( this );
         // show it
-        alertDialogSelectServer.show();
-        alertDialogSelectServer.setCanceledOnTouchOutside(false);
+        alertDialogSelectRule.show();
+        alertDialogSelectRule.setCanceledOnTouchOutside(false);
     }
 
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    @Override
+    public void onClick(View v) { }
 }

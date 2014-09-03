@@ -2,7 +2,6 @@ package org.stackdroid.comm;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.OutputStreamWriter;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -16,16 +15,9 @@ import java.io.*;
 import java.net.*;
 import java.util.Vector;
 import java.util.Iterator;
-import java.util.Hashtable;
 
 import org.apache.http.HttpStatus;
 import org.stackdroid.parse.ParseUtils;
-//import org.stackdroid.parse.ParseUtils;
-import org.stackdroid.utils.Base64;
-import org.stackdroid.utils.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
 
 import android.util.Log;
 import android.util.Pair;
