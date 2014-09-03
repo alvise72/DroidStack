@@ -73,7 +73,7 @@
     <string name="VOLUMES">Volumi</string>
     <string name="NETWORKS">Reti</string>
     <string name="EDITSECGROUP">Modifica Security Group</string>
-    <string name="ADDRULES">Aggiungi regole</string>
+    <string name="ADDRULE">Aggiungi regola</string>
     <string name="TENANTNAME">Nome del tenant</string>
     <string name="AVAILUSERS">Utenti disponibili:</string>
     <string name="NOEMPTYNAME">Non si pu&#xf2; usare un nome vuoto.</string>
@@ -81,4 +81,7 @@
     <string name="PLEASECHECKCREDS">Per favore controlla le tue credenziali&#8230;</string>
     <string name="PLEASECHECKCREDSFORIMAGE">Per favore controlla le tue credenziali o che l\'immagine che stai cercando di cancellare appartiene a te&#8230;</string>
     <string name="PLEASECHECKCREDSFORINSTANCE">Per favore controlla le tue credenziali o che l\'istanza che stai cercando di cancellare appartiene a te&#8230;</string>
+    <string name="SECGRPNAME">Nome</string>
+    <string name="SECGRPDESC">Description (optional)</string>
+    <string name="RULES">Regole:</string>
 </resources>

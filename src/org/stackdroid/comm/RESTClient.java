@@ -212,6 +212,7 @@ public class RESTClient {
      *
      *
      */
+    /*
     public static void requestInstanceCreation( User U,
 												String instanceName, 
 												String glanceImageID,
@@ -426,6 +427,8 @@ public class RESTClient {
 	else
 		((HttpURLConnection)conn).disconnect( );
     } 
+
+    */
 
     //________________________________________________________________________________
     public static String sendGETRequest( boolean usessl,

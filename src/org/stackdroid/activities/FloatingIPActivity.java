@@ -590,7 +590,7 @@ public void pickAServerToAssociateFIP() {
 	
 	LayoutInflater li = LayoutInflater.from(this);
 
-    View promptsView = li.inflate(R.layout.my_dialog_layout, null);
+    View promptsView = li.inflate(R.layout.my_dialog_layout_fipassociate, null);
 
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -613,18 +613,4 @@ public void pickAServerToAssociateFIP() {
     alertDialogSelectServer.show();
     alertDialogSelectServer.setCanceledOnTouchOutside(false);
 }
-
-//	@Override
-//	public void onItemSelected(AdapterView<?> parent,View view, int pos, long id) {
-/*		Toast.makeText(parent.getContext(), "Clicked : " +
-					   parent.getItemAtPosition(pos).toString(), 
-					   Toast.LENGTH_LONG).show();*/
-//		Server S = (Server)this.serverSpinner.getItemAtPosition(pos);
-//		Utils.alert("Selected "+S.getName(), this);
-//	}
-
-/*    @Override
-    public void onNothingSelected(AdapterView parent) {
-        // Do nothing.
-    }*/
 }

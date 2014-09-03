@@ -75,7 +75,7 @@
     <string name="VOLUMES">Volumes</string>
     <string name="NETWORKS">Networks</string>
     <string name="EDITSECGROUP">Edit Security Group</string>
-    <string name="ADDRULES">Add rules</string>
+    <string name="ADDRULE">Add rule</string>
     <string name="TENANTNAME">Tenant\'s name</string>
     <string name="AVAILUSERS">Available users:</string>
     <string name="NOEMPTYNAME">Cannot use an empty name.</string>
@@ -83,4 +83,7 @@
     <string name="PLEASECHECKCREDS">Please check your credentials&#8230;</string>
     <string name="PLEASECHECKCREDSFORIMAGE">Please check your credentials or that the image you\'re trying to delete is owned by you&#8230;</string>
     <string name="PLEASECHECKCREDSFORINSTANCE">Please check your credentials or that the instance you\'re trying to delete is owned by you&#8230;</string>
+    <string name="SECGRPNAME">Name</string>
+	<string name="SECGRPDESC">Descrizione (opzionale)</string>
+	<string name="RULES">Rules:</string>
 </resources>

@@ -3,10 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-  <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
     <ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="fill_parent"
@@ -34,7 +30,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-		android:textSize="14sp"
+				android:textSize="14sp"
+				android:inputType="textNoSuggestions"
                 android:ems="10" >
                 <requestFocus />
         </EditText>
@@ -64,20 +61,7 @@
 		    android:textSize="14sp"
                     android:inputType="number"
                     android:ems="10" />
-<!--
-	<TextView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="Admin\'s Password (optional):"
-		android:ems="10" />
-        <EditText
-                    android:id="@+id/passwordET"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:text=""
-                    android:inputType="textPassword" />
--->
+
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -103,27 +87,9 @@
 	    android:orientation="vertical"
    	    android:layout_width="fill_parent"
     	    android:layout_height="wrap_content">
-<!--
-	<Spinner
-	    android:id="@+id/networkSP"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" />
--->
+
 	</LinearLayout>
-<!--
-	<TextView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/FIXEDIPLIST"
-		android:ems="10" />
-		
-        <EditText
-                android:id="@+id/fixedIPET"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:ems="10" />
--->	
+
 	<LinearLayout
 	    android:id="@+id/secgroupsLayer"
 	    android:orientation="vertical"
@@ -163,5 +129,4 @@
         </LinearLayout>
       </LinearLayout>
     </ScrollView>
-  </LinearLayout>
 </LinearLayout>

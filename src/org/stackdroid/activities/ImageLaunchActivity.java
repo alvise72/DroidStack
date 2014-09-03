@@ -454,7 +454,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		   return null;
 	    }
 	    
-	    return null;//jsonBuf;
+	    return null;
 	}
 	
 	@Override
