@@ -3,12 +3,17 @@ package org.stackdroid.activities;
 import java.util.Vector;
 
 import org.stackdroid.R;
-import org.stackdroid.utils.Server;
+import org.stackdroid.comm.OSClient;
+import org.stackdroid.parse.ParseException;
+import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +34,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     private Spinner ruleSpinner = null;
     private Vector<String> predefinedRules = null;
     private AlertDialog alertDialogSelectRule = null;
+    private CustomProgressDialog progressDialogWaitStop = null;
     
     /*
      * 
@@ -113,4 +119,63 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
      */
     @Override
     public void onClick(View v) { }
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    private void update( Vector<SimpleSecGroupRule> rules ) {
+    	
+    }
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */   
+    protected class AsyncTaskListRules extends AsyncTask<String, Void, Void>
+    {
+     	private  String   errorMessage     = null;
+	    private  boolean  hasError         = false;
+	    private  String   jsonBuf          = null;
+	
+	    @Override
+	    protected Void doInBackground( String... args ) 
+	    {
+	      String secgrpID = args[0];
+	      OSClient osc = OSClient.getInstance( U );
+
+	      try {
+	    	  jsonBuf = osc.requestSecGroupListRules(secgrpID);
+	      } catch(Exception e) {
+	    	  errorMessage = e.getMessage();
+	    	  hasError = true;
+	    	  //return "";
+	      }
+	      return null;
+	    }
+	
+	    @Override
+	    protected void onPostExecute( Void v ) {
+	    	super.onPostExecute(v);
+	    
+	    	if(hasError) {
+	    		Utils.alert( errorMessage, EditSecGroupActivity.this );
+	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    		return;
+	    	}
+	    	try {
+	    		Vector<SimpleSecGroupRule> rules = ParseUtils.parseSecGroupRules(jsonBuf);
+	    		EditSecGroupActivity.this.update( rules );
+	    	} catch(ParseException pe) {
+	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
+	    	}
+	    }
+    }	
 }

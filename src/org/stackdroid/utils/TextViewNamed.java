@@ -2,15 +2,10 @@ package org.stackdroid.utils;
 
 import android.widget.TextView;
 import android.content.Context;
-//import android.widget.ImageView;
-
-
-
-
 
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
-import org.stackdroid.views.SecGroupView;
+import org.stackdroid.views.RuleView;
 import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
 import org.stackdroid.views.OSImageView;
@@ -19,6 +14,7 @@ import org.stackdroid.views.VolumeView;
 
 public class TextViewNamed extends TextView implements Named {
 
+	private RuleView relatedRuleView = null;
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
     private VolumeView relatedVolumeView = null;
@@ -26,7 +22,7 @@ public class TextViewNamed extends TextView implements Named {
     private NetworkView relatedNetworkView = null;
     private ListSecGroupView relatedListSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
-
+    
     public TextViewNamed( Context ctx, UserView uv ) {
 	super( ctx );
 	relatedUserView = uv;
@@ -56,7 +52,12 @@ public class TextViewNamed extends TextView implements Named {
    	    relatedVolumeView = vv;
      }
     
+    public TextViewNamed( Context ctx, RuleView rv ) {
+   	    super( ctx );
+   	    relatedRuleView = rv;
+     }
     
+    public RuleView getRuleView( ) { return relatedRuleView; }
     public UserView getUserView( ) { return relatedUserView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
@@ -64,4 +65,5 @@ public class TextViewNamed extends TextView implements Named {
     public ListSecGroupView getSecGroupView( ) { return relatedListSecGroupView;}
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
     public VolumeView getVolumeView( ) { return relatedVolumeView; }
+    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView; }
 };

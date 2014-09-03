@@ -5,6 +5,7 @@ import android.content.Context;
 
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
+import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
@@ -27,7 +28,9 @@ public class ImageButtonNamed extends ImageButton implements Named {
     public static final int BUTTON_CONSOLE_LOG   	   = 11;
     public static final int BUTTON_ASSOCIATE_IP  	   = 12;
     public static final int BUTTON_ATTACHDETACH_VOlUME = 13;
+    public static final int BUTTON_DELETE_RULE  	   = 14;
 	
+    private RuleView relatedRuleView = null;
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
     private VolumeView relatedVolumeView = null;
@@ -39,6 +42,7 @@ public class ImageButtonNamed extends ImageButton implements Named {
     
 
     private int type;
+	private SecGroupView relatedSecGroupView = null;
 
     public ImageButtonNamed( Context ctx, UserView uv, int _type ) {
 	super( ctx );
@@ -82,12 +86,21 @@ public class ImageButtonNamed extends ImageButton implements Named {
    	    this.type = type;
      }
     
+    public ImageButtonNamed( Context ctx, RuleView rv, int type ) {
+   	    super( ctx );
+   	    relatedRuleView = rv;
+   	    this.type = type;
+     }
+    
+    public RuleView getRuleView( ) { return relatedRuleView; }
     public UserView getUserView( ) { return relatedUserView; }
+    public VolumeView getVolumeView( ) { return relatedVolumeView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
-    public ListSecGroupView getSecGroupView( ) { return relatedListSecGroupView; }
+    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView; }
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
+    public SecGroupView getSecGroupView( ) { return relatedSecGroupView ; }
     public int getType( ) { return type; }
-    public VolumeView getVolumeView( ) { return relatedVolumeView; }
+    
 };

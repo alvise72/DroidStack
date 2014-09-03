@@ -5,23 +5,28 @@ import android.content.Context;
 
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
+import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
 import org.stackdroid.views.ServerView;
 import org.stackdroid.views.OSImageView;
 import org.stackdroid.views.NetworkView;
+import org.stackdroid.views.VolumeView;
 
 public class ButtonNamed extends Button implements Named {
 
     public static final int BUTTON_CONSOLE_LOG   = 1;
     
-	
+	private RuleView relatedRuleView = null;
     private UserView relatedUserView = null;
     private ServerView relatedServerView = null;
+    private VolumeView relatedVolumeView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
-    private ListSecGroupView relatedListSecGroupView = null;
+    private SecGroupView relatedSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
+    private ListSecGroupView relatedListSecGroupView = null;
+    
     
 
     private int type;
@@ -63,10 +68,13 @@ public class ButtonNamed extends Button implements Named {
         }
     
     public UserView getUserView( ) { return relatedUserView; }
+    public RuleView getRuleView( ) { return relatedRuleView; }
     public ServerView getServerView( ) { return relatedServerView; }
     public OSImageView getOSImageView( ) { return relatedOSImageView; }
     public NetworkView getNetworkView( ) { return relatedNetworkView; }
-    public ListSecGroupView getSecGroupView( ) { return relatedListSecGroupView; }
+    public SecGroupView getSecGroupView( ) { return relatedSecGroupView; }
+    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView; }
     public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
+    public VolumeView getVolumeView( ) { return relatedVolumeView; }
     public int getType( ) { return type; }
 };
