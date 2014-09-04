@@ -1,22 +1,22 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
-
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import android.content.Intent;
 import android.app.Activity;
-
 import android.view.View.OnClickListener;
 import android.view.View;
 
 import org.stackdroid.R;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
+
 import java.io.File;
 
 import org.stackdroid.views.UserView;
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.LinearLayoutNamed;
@@ -54,7 +54,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
 		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
 		
-		(new File(Utils.getStringPreference("FILESDIR", "", this) + "/users/"+filenameToDelete)).delete();
+		(new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/"+filenameToDelete)).delete();
 		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 		if(selectedUser.compareTo(filenameToDelete)==0)
 		    Utils.putStringPreference( "SELECTEDUSER", "", this);
@@ -87,10 +87,10 @@ public class UsersActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
-	File[] users = (new File(Utils.getStringPreference("FILESDIR", "", this) + "/users/")).listFiles();
+	File[] users = (new File( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/")).listFiles();
 	if(users==null) {
 	    Utils.alert("UsersActivity.refreshUserViews: " 
-			+ Utils.getStringPreference("FILESDIR", "", this) 
+			+ Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) 
 			+ "/users/" 
 			+ " exists but it is not a directory !", this);
 	    return;
@@ -104,7 +104,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    User U = null;
 	    try {
 		
-	    	U = User.fromFileID( users[i].getName( ), Utils.getStringPreference("FILESDIR","",this), this );
+	    	U = User.fromFileID( users[i].getName( ), Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 		
 	    } catch(Exception e) {
 	    	Utils.alert("ERROR: " + e.getMessage(), this);

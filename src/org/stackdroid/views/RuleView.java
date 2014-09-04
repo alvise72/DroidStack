@@ -15,11 +15,14 @@ import org.stackdroid.utils.Utils;
 
 public class RuleView extends LinearLayout {
     
-    private LinearLayoutNamed row  = null;
-    private LinearLayoutNamed text = null;
-    private LinearLayoutNamed info = null;
-    private TextViewNamed ruleInfo     = null;
-
+    private LinearLayoutNamed row       = null;
+    private LinearLayoutNamed text      = null;
+    private LinearLayoutNamed info      = null;
+    private TextViewNamed ruleInfo      = null;
+    private TextViewNamed ruleInfo2     = null;
+    private TextViewNamed ruleInfo3     = null;
+    
+    
     private ImageButtonNamed deleteRule = null;
     
     private SimpleSecGroupRule Rl = null;
@@ -46,15 +49,32 @@ public class RuleView extends LinearLayout {
     	text.setLayoutParams( params2 );
 
     	ruleInfo = new TextViewNamed( ctx, this );
-    	
+    	ruleInfo.setText("IPv4 Proto: " + Rl.getProtocol( ).toUpperCase() );
     	ruleInfo.setTextColor( Color.parseColor("#333333") );
-    	ruleInfo.setOnClickListener( (OnClickListener)ctx );
+    	//ruleInfo.setOnClickListener( (OnClickListener)ctx );
     	ruleInfo.setTypeface( null, Typeface.BOLD );
-	
+    	
+
+    	ruleInfo2 = new TextViewNamed( ctx, this );
+    	ruleInfo2.setText("IP Range: " + Rl.getIPRange( ) );
+    	ruleInfo2.setTextColor( Color.parseColor("#333333") );
+    	//ruleInfo2.setOnClickListener( (OnClickListener)ctx );
+    	//ruleInfo2.setTypeface( null, Typeface.BOLD );
+    	
+
+    	ruleInfo3 = new TextViewNamed( ctx, this );
+    	ruleInfo3.setText("Port range: " + Rl.getFromPort()+"-"+Rl.getToPort() + (Rl.getProtoName().length()!=0 ? " ("+Rl.getProtoName()+")" : "") );
+    	ruleInfo3.setTextColor( Color.parseColor("#333333") );
+    	//ruleInfo3.setOnClickListener( (OnClickListener)ctx );
+    	//ruleInfo3.setTypeface( null, Typeface.BOLD );
+    	
     	text.addView(ruleInfo);
-    	text.setOnClickListener( (OnClickListener)ctx );
+    	text.addView(ruleInfo2);
+    	text.addView(ruleInfo3);
+    	
+    	//text.setOnClickListener( (OnClickListener)ctx );
     	row.addView(text);
-    	setOnClickListener( (OnClickListener)ctx );
+    	//setOnClickListener( (OnClickListener)ctx );
 
     	deleteRule = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_RULE );
     	deleteRule.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);

@@ -10,6 +10,8 @@ import android.text.InputType;
 import android.view.WindowManager;
 import android.view.View;
 
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.CustomProgressDialog;
@@ -259,11 +261,11 @@ public class UserAddActivity extends Activity {
 	    return;
 	}
 	try {
-	    User U = ParseUtils.parseUser( jsonResponse, this );
+	    User U = ParseUtils.parseUser( jsonResponse );
 	    U.setPassword(password);
 	    U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
-	    U.toFile( Utils.getStringPreference("FILESDIR","",this) );
+	    U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	    Utils.alert(getString(R.string.ADDSUCCESS), this);
 	} catch(Exception e) {
 	    Utils.alert("ERROR: "+e.getMessage(), this);

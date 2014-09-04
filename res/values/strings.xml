@@ -84,6 +84,6 @@
     <string name="PLEASECHECKCREDSFORIMAGE">Please check your credentials or that the image you\'re trying to delete is owned by you&#8230;</string>
     <string name="PLEASECHECKCREDSFORINSTANCE">Please check your credentials or that the instance you\'re trying to delete is owned by you&#8230;</string>
     <string name="SECGRPNAME">Name</string>
-	<string name="SECGRPDESC">Descrizione (opzionale)</string>
-	<string name="RULES">Rules:</string>
+	<string name="SECGRPDESC">Description (optional)</string>
+	<string name="AVAILRULES">Available rules:</string>
 </resources>

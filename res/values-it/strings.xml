@@ -82,6 +82,6 @@
     <string name="PLEASECHECKCREDSFORIMAGE">Per favore controlla le tue credenziali o che l\'immagine che stai cercando di cancellare appartiene a te&#8230;</string>
     <string name="PLEASECHECKCREDSFORINSTANCE">Per favore controlla le tue credenziali o che l\'istanza che stai cercando di cancellare appartiene a te&#8230;</string>
     <string name="SECGRPNAME">Nome</string>
-    <string name="SECGRPDESC">Description (optional)</string>
-    <string name="RULES">Regole:</string>
+    <string name="SECGRPDESC">Descrizione (opzionale)</string>
+    <string name="AVAILRULES">Regole disponibili:</string>
 </resources>

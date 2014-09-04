@@ -14,6 +14,8 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
 
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.IPAddressKeyListener;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -121,7 +123,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       
       String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       try {
-  	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+  	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
   	  } catch(RuntimeException re) {
   	    Utils.alert("ImageLaunchActivity.onCreate: "+re.getMessage(), this );
   	    return;
@@ -237,12 +239,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
-     
-      //currentUser = User.fromFileID( Utils.getStringPreference("SELECTEDUSER", "", this), Utils.getStringPreference("FILESDIR","",this), this );
-      
-
-      //String adminPass = null;
-     
       selectedNetworks.clear();
       Iterator<String> it = mappingNetEditText.keySet().iterator();
       

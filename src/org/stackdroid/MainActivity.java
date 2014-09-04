@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.stackdroid.R;
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.activities.FloatingIPActivity;
@@ -58,8 +60,9 @@ public class MainActivity extends Activity
         setContentView(R.layout.main);
         this.setTitle("DroidStack v "+versionName);
         Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
-        Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
-	
+        //Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
+        Configuration.getInstance().setValue( "FILESDIR", getFilesDir( ) + "/DroidStack" );
+        
         /*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         //SCREENH = d.getHeight();
@@ -70,8 +73,8 @@ public class MainActivity extends Activity
         SCREENW = dm.widthPixels;
         int density = (int)this.getResources().getDisplayMetrics().density;
         //Utils.putIntegerPreference("SCREENH", SCREENH, this);
-        Utils.putIntegerPreference("DISPLAYDENSITY", density, this);
-	
+//        Utils.putIntegerPreference("DISPLAYDENSITY", density, this);
+        Configuration.getInstance().setValue( "DISPLAYDENSITY", ""+density );
     }
     
     /**
@@ -123,7 +126,7 @@ public class MainActivity extends Activity
 	  
 
 	  try {
-	      User u = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+	      User u = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	      
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+u.getUserName() + " (" + u.getTenantName() + ")"); 
 	  } catch(Exception e) {

@@ -26,6 +26,8 @@ import org.stackdroid.parse.ParseException;
 
 
 import org.stackdroid.R;
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.User;
@@ -163,7 +165,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	  } catch(RuntimeException re) {
 	    Utils.alert("ServersActivity.onCreate: " + re.getMessage(), this );
 	    return;

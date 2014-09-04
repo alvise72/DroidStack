@@ -6,7 +6,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.content.DialogInterface;
-
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
@@ -26,9 +25,10 @@ import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
-
 import org.stackdroid.R;
 import org.stackdroid.utils.ButtonNamed;
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Server;
@@ -38,7 +38,6 @@ import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 
 import android.graphics.Typeface;
-
 import android.os.AsyncTask;
 
 import org.stackdroid.utils.CustomProgressDialog;
@@ -360,7 +359,7 @@ public class ServersActivity extends Activity implements OnClickListener {
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	} catch(RuntimeException re) {
 	    Utils.alert("ServersActivity.onCreate: "+re.getMessage(), this );
 	    return;

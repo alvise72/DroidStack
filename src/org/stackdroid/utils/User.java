@@ -12,8 +12,6 @@ import java.io.File;
 
 import android.content.Context;
 
-//import android.os.Environment;
-
 public class User implements Serializable, Comparable<User> {
 
     private static final long serialVersionUID = 2087368867376448461L;
@@ -28,7 +26,7 @@ public class User implements Serializable, Comparable<User> {
     private String  password;
     private boolean usessl;
     private boolean role_admin;
-    private transient Context context;
+    //private transient Context context;
     
     public User( String _userName, 
     			 String _userID, 
@@ -36,8 +34,9 @@ public class User implements Serializable, Comparable<User> {
     			 String _tenantId, 
     			 String _token, 
     			 long _tokenExpireTime, 
-    			 boolean _role_admin,
-    			 Context _context ) {
+    			 boolean _role_admin ) /*,
+    			 Context _context ) {*/
+    {
         userName        = _userName;
         userID          = _userID;
         tenantName      = _tenantName;
@@ -46,7 +45,7 @@ public class User implements Serializable, Comparable<User> {
         tokenExpireTime = _tokenExpireTime;
         password        = "";
         role_admin      = _role_admin;
-        context         = _context;
+        //context         = _context;
     }
     
     public void setPassword( String _password ) { password = _password ;} 
@@ -63,8 +62,8 @@ public class User implements Serializable, Comparable<User> {
     public String getPassword( ) { return password; }
     public boolean useSSL( ) { return usessl; }
     public boolean isRoleAdmin( ) { return role_admin; }
-    public Context getContext( ) { return context; }
-    public void setContext( Context ctx ) { context = ctx; }
+    //public Context getContext( ) { return context; }
+    //public void setContext( Context ctx ) { context = ctx; }
     /*
      * 
      * 
@@ -106,7 +105,7 @@ public class User implements Serializable, Comparable<User> {
      * 
      * 
      */
-    public static User fromFileID( String ID, String filesDir, Context ctx ) throws RuntimeException {
+    public static User fromFileID( String ID, String filesDir ) throws RuntimeException {
     	String filename = filesDir + "/users/" + ID;
     	if(false == (new File(filename)).exists())
     		throw new RuntimeException( "File ["+filename+"] doesn't exist" );
@@ -115,7 +114,7 @@ public class User implements Serializable, Comparable<User> {
     		ObjectInputStream ois = new ObjectInputStream( is );
     		User U = (User)ois.readObject( );
     		ois.close( );
-    		U.setContext( ctx );
+    		//U.setContext( ctx );
     		return U;
     	} catch(IOException ioe) {
     		throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );

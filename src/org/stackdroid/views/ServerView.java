@@ -96,7 +96,10 @@ public class ServerView extends LinearLayout {
 	consoleLog = new ButtonNamed(ctx, this, -1);
 	consoleLog.setText("Console Log");
 	consoleLog.setTextSize(10.0f);
-	int density = Utils.getIntegerPreference("DISPLAYDENSITY", 200, ctx);
+	int density = 200;
+	String dispDensity = Configuration.getInstance().getValue("DISPLAYDENSITY", "200");
+	if(dispDensity!=null)
+		density = Integer.parseInt(dispDensity);
 	consoleLog.setPadding(10 * density, 2 * density, 10 * density, 2 * density);
 	consoleLog.setOnClickListener( (OnClickListener)ctx );
 	consoleLog.setLayoutParams(params5);

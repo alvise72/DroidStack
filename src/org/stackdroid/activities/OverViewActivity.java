@@ -8,7 +8,9 @@ import org.stackdroid.R;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
+import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.Flavor;
 import org.stackdroid.utils.FloatingIP;
 import org.stackdroid.utils.Quota;
@@ -91,7 +93,7 @@ public class OverViewActivity extends Activity {
         String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
         setTitle(getString(R.string.USAGEOVERVIEW));
         try {
-	    U = User.fromFileID( selectedUserID, Utils.getStringPreference("FILESDIR","",this), this );
+	    U = User.fromFileID( selectedUserID, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	    setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
 	    //Log.d("OVERVIEW", "USER="+U);
 	    progressDialogWaitStop.show();

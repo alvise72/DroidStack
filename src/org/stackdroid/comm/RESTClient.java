@@ -424,9 +424,9 @@ public class RESTClient {
 
     //________________________________________________________________________________
     public static String sendGETRequest( boolean usessl,
-					 String sURL, 
-					 String token,
-					 Vector<Pair<String,String>> properties ) throws RuntimeException 
+					 					 String sURL, 
+					 					 String token,
+					 					 Vector<Pair<String,String>> properties ) throws RuntimeException 
     {
     	String Url = sURL;
     	if(usessl)
@@ -509,6 +509,7 @@ public class RESTClient {
 
 	BufferedInputStream inStream = null;
 	String buf = "";
+	Log.d("REST", "usessl="+usessl+" - sUrl="+sURL);
 	try {
 	    inStream = new BufferedInputStream( conn.getInputStream() );
 	        
@@ -524,6 +525,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
+		
 	    throw new RuntimeException("BufferedInputStream.read2: " + ioe.getMessage( ) );
 	}
 	//	Log.d("RESTClient", "3 Disconnecting...");

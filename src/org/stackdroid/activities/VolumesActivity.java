@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.view.Gravity;
 import android.view.View;
 
-
 import java.util.Iterator;
 import java.util.Vector;
+
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -22,6 +22,8 @@ import org.stackdroid.parse.ParseException;
 
 
 import org.stackdroid.R;
+import org.stackdroid.utils.Configuration;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Volume;
@@ -361,7 +363,7 @@ public class VolumesActivity extends Activity implements OnClickListener {
 	
 	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	try {
-	    U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	} catch(RuntimeException re) {
 	    Utils.alert("VolumesActivity.onCreate: "+re.getMessage(), this );
 	    return;

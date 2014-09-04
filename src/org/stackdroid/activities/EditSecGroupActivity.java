@@ -7,7 +7,9 @@ import org.stackdroid.R;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.parse.ParseUtils;
+import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -15,6 +17,7 @@ import org.stackdroid.views.RuleView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -60,7 +63,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
         
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
-    		U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+    		U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
     	} catch(RuntimeException re) {
     		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
     		return;
@@ -70,7 +73,10 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
     	else
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-	   
+    	
+    	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
+        progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
+        
     	this.progressDialogWaitStop.show( );
     	(new AsyncTaskListRules()).execute( secgrpID );
     }
@@ -131,12 +137,12 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
      * 
      */
     private void update( Vector<SimpleSecGroupRule> rules ) {
-    	((LinearLayout)findViewById(R.id.objectsL)).removeAllViews();
+    	((LinearLayout)findViewById(R.id.layoutRuleList)).removeAllViews();
     	Iterator<SimpleSecGroupRule> rit = rules.iterator();
     	while(rit.hasNext()) {
     		SimpleSecGroupRule rl = rit.next( );
     		RuleView rv = new RuleView( rl, this );
-    		((LinearLayout)findViewById(R.id.objectsL)).addView( rv );
+    		((LinearLayout)findViewById(R.id.layoutRuleList)).addView( rv );
     	}
     }
     /*

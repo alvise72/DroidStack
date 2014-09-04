@@ -38,7 +38,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static User parseUser( String jsonString, Context ctx ) throws ParseException
+    public static User parseUser( String jsonString ) throws ParseException
     {
       try {
     	  JSONObject jsonObject = null;
@@ -69,7 +69,7 @@ public class ParseUtils {
     		  throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
     	  }
     	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-    	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin, ctx );
+    	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin );
     	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );

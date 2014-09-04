@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
@@ -18,14 +17,18 @@ import android.view.MenuItem;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
+
 import java.util.Iterator;
 import java.util.Vector;
+
+import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.R;
+import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.OSImage;
@@ -33,6 +36,7 @@ import org.stackdroid.views.OSImageView;
 import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.LinearLayoutNamed;
+//import org.stackdroid.utils.Configuration;
 
 import android.graphics.Typeface;
 
@@ -92,7 +96,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	
     	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
-    		U = User.fromFileID( selectedUser, Utils.getStringPreference("FILESDIR","",this), this );
+    		U = User.fromFileID( selectedUser, org.stackdroid.utils.Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
     	} catch(RuntimeException re) {
     		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
     		return;
@@ -405,14 +409,17 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    OSClient osc = OSClient.getInstance(U);
 	    
 	    try {
-		  osc.deleteGlanceImage( imagetodel );
-		  jsonBuf = osc.requestImages( );
+	    	osc.deleteGlanceImage( imagetodel );
+	    	jsonBuf = osc.requestImages( );
 	    } catch(RuntimeException e) {
-		  errorMessage = "Runtime: " + e.getMessage();
-		  hasError = true;
+	    	errorMessage = "Runtime: " + e.getMessage();
+	    	hasError = true;
 	    } catch(NotFoundException nfe) {
-		  errorMessage = "NotFound: " + nfe.getMessage();
-		  hasError = true;
+	    	errorMessage = "Not Found: " + nfe.getMessage();
+	    	hasError = true;
+	    } catch(NotAuthorizedException ne) {
+	    	errorMessage = "Not Authorized: " + ne.getMessage() + "\n\n" + getString(R.string.PLEASECHECKCREDSFORIMAGE);
+	    	hasError = true;
 	    }
 	    return "";
 	}
