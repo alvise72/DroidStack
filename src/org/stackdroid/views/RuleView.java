@@ -94,6 +94,6 @@ public class RuleView extends LinearLayout {
     		
     }
 
-    public SimpleSecGroupRule getServer( ) { return Rl; }
+    public SimpleSecGroupRule getRule( ) { return Rl; }
     
 }

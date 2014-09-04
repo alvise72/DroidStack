@@ -357,6 +357,24 @@ public class OSClient {
 					   				  null );
     }
 
+
+    /**
+     *
+     *
+     * 
+     * 
+     *
+     *
+     */
+    public void deleteRule( String ruleID ) 
+    	throws RuntimeException, NotFoundException, NotAuthorizedException
+    {
+    	RESTClient.sendDELETERequest( U.useSSL(),
+					   				  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-group-rules/" + ruleID, 
+					   				  U.getToken( ),
+					   				  null );
+    }
+
     /**
      *
      *

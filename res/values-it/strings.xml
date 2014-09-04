@@ -84,4 +84,10 @@
     <string name="SECGRPNAME">Nome</string>
     <string name="SECGRPDESC">Descrizione (opzionale)</string>
     <string name="AVAILRULES">Regole disponibili:</string>
+    <string name="LAUNCH">Lancia</string>
+    <string name="NETWORKS2">Reti:</string>
+    <string name="NUMOFINSTANCES">Numero di istance:</string>
+    <string name="INSTANCENAME">Nome dell\'istanza:</string>
+    <string name="FROMPORT">Da porta</string>
+    <string name="TOPORT">A porta</string>
 </resources>

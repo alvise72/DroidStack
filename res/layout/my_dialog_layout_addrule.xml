@@ -4,34 +4,57 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
-<Space
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
+    
+	<Space
+        android:layout_width="wrap_content"
+        android:layout_height="5dip" />
+	
     <Spinner
         android:id="@+id/mySpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-	android:textSize="14sp"
+		android:textSize="14sp"
         android:gravity="center_horizontal" />
-<Space
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="horizontal" >
-    <Button
-        android:id="@+id/myButton"
+    
+    <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="@string/FROMPORT" />
+    <EditText
+             android:id="@+id/fromPortET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="0"
+             android:inputType="number"
+             android:ems="10" />
+    
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="@string/TOPORT" />
+    <EditText
+             android:id="@+id/toPortET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="0"
+             android:inputType="number"
+             android:ems="10" />
+       
+	<Space
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/CONFIRM" />
-<!--
-    <Button
-        android:id="@+id/myButtonCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/CANCEL" />
--->
-</LinearLayout>
+        android:layout_height="5dip" />
+	
+	<LinearLayout
+  		android:layout_width="match_parent"
+   		android:layout_height="wrap_content"
+   	 	android:gravity="center_horizontal"
+   	 	android:orientation="horizontal" >
+    
+   		 <Button
+      	  android:id="@+id/myButton"
+      	  android:layout_width="wrap_content"
+      	  android:layout_height="wrap_content"
+      	  android:text="@string/CONFIRM" />
+
+	</LinearLayout>
 </LinearLayout>

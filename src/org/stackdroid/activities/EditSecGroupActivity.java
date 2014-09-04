@@ -10,6 +10,7 @@ import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +44,18 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     private AlertDialog alertDialogSelectRule = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     
+    public EditSecGroupActivity( ) {
+    	predefinedRules = new Vector<String>( );
+    	predefinedRules.add("SSH");
+    	predefinedRules.add("HTTP(80)");
+    	predefinedRules.add("HTTP(8080)");
+    	predefinedRules.add("HTTPS(443)");
+    	predefinedRules.add("HTTPS(8443)");
+    	predefinedRules.add("FTP(21)");
+    	predefinedRules.add("PING");
+    	predefinedRules.add("Custom port range");
+    }
+    
     /*
      * 
      * 
@@ -60,6 +74,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
         secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
         ((EditText)findViewById(R.id.secgrpName)).setText(secgrpName);
         ((EditText)findViewById(R.id.secgrpDesc)).setText(secgrpDesc);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
@@ -126,7 +141,17 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
      * 
      */
     @Override
-    public void onClick(View v) { }
+    public void onClick(View v) { 
+    	if(v instanceof ImageButtonNamed) {
+    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		if(bt.getType() == ImageButtonNamed.BUTTON_DELETE_RULE) {
+    			SimpleSecGroupRule r = bt.getRuleView().getRule( );
+    			this.progressDialogWaitStop.show( );
+    			(new AsyncTaskDeleteRule( )).execute( r.getID());
+    		}
+    	}
+    	
+    }
 
     /*
      * 
@@ -145,6 +170,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     		((LinearLayout)findViewById(R.id.layoutRuleList)).addView( rv );
     	}
     }
+    
     /*
      * 
      * 
@@ -166,6 +192,54 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
 	      OSClient osc = OSClient.getInstance( U );
 
 	      try {
+	    	  jsonBuf = osc.requestSecGroupListRules(secgrpID);
+	      } catch(Exception e) {
+	    	  errorMessage = e.getMessage();
+	    	  hasError = true;
+	      }
+	      return null;
+	    }
+	
+	    @Override
+	    protected void onPostExecute( Void v ) {
+	    	super.onPostExecute(v);
+	    
+	    	if(hasError) {
+	    		Utils.alert( errorMessage, EditSecGroupActivity.this );
+	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    		return;
+	    	}
+	    	try {
+	    		Vector<SimpleSecGroupRule> rules = ParseUtils.parseSecGroupRules(jsonBuf);
+	    		EditSecGroupActivity.this.update( rules );
+	    	} catch(ParseException pe) {
+	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
+	    	}
+	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    }
+    }	
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */   
+    protected class AsyncTaskDeleteRule extends AsyncTask<String, Void, Void>
+    {
+     	private  String   errorMessage     = null;
+	    private  boolean  hasError         = false;
+	    private  String   jsonBuf          = null;
+	    @Override
+	    protected Void doInBackground( String... args ) 
+	    {
+	      String ruleid = args[0];
+	      OSClient osc = OSClient.getInstance( U );
+
+	      try {
+	    	  osc.deleteRule( ruleid );
 	    	  jsonBuf = osc.requestSecGroupListRules(secgrpID);
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
