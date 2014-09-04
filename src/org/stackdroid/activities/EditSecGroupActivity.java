@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.R;
+import org.stackdroid.activities.FloatingIPActivity.AsyncTaskFIPAssociate;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.parse.ParseUtils;
@@ -11,6 +12,7 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.Server;
 import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -19,12 +21,20 @@ import org.stackdroid.views.RuleView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class EditSecGroupActivity extends Activity  implements OnClickListener {
+public class EditSecGroupActivity extends Activity  implements OnClickListener, OnItemSelectedListener {
 
     private String secgrpID   = null;
 	private String secgrpName = null;
@@ -44,6 +54,44 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     private AlertDialog alertDialogSelectRule = null;
     private CustomProgressDialog progressDialogWaitStop = null;
     
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */    
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+		String selected  = (String)parent.getSelectedItem();
+		Log.d("EDITSEC", "selected="+selected);
+	}
+	
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */    
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+		
+	}	
+	
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */    
     public EditSecGroupActivity( ) {
     	predefinedRules = new Vector<String>( );
     	predefinedRules.add("SSH");
@@ -128,6 +176,11 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
         ruleSpinner.setAdapter(spinnerRulesAdapter);
         final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
         mButton.setOnClickListener(this);
+        
+        //ruleSpinner.setOnTouchListener(this);
+        ruleSpinner.setOnItemSelectedListener((OnItemSelectedListener)this);
+        //ruleSpinner.setOnKeyListener((OnKeyListener)this);
+        
         alertDialogSelectRule.show();
         alertDialogSelectRule.setCanceledOnTouchOutside(false);
     }
@@ -149,6 +202,14 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
     			this.progressDialogWaitStop.show( );
     			(new AsyncTaskDeleteRule( )).execute( r.getID());
     		}
+    	}
+    	
+    	if(v instanceof Button) {
+    		String S = (String)this.ruleSpinner.getSelectedItem();
+            
+    		alertDialogSelectRule.dismiss();
+            this.progressDialogWaitStop.show();
+            
     	}
     	
     }
@@ -265,5 +326,6 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener {
 	    	}
 	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }
-    }	
+    }
+    
 }
