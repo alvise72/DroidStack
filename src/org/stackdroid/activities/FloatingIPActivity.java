@@ -517,6 +517,22 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     		}
     		
     	}
+    	
+    	// this is when the confirm button is pressed for server selection to associate the FIP
+    	if(v instanceof Button) {
+            Server S = (Server)serverSpinner.getSelectedItem();
+            if(this.selectedFIPObj.getServerID().compareTo(S.getID())==0) {
+                    Utils.alert(getString(R.string.ALREADYASSOCIATED), this);
+                    alertDialogSelectServer.dismiss();
+                    return;
+            }
+            //Utils.alert("Selected server "+S.getName( ), this);
+            alertDialogSelectServer.dismiss();
+            this.progressDialogWaitStop.show();
+            
+            AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
+            task.execute(fipToAssociate, S.getID());
+    	}
   	 }	
     
     private void associateFIP( String fip ) {
