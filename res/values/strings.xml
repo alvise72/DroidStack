@@ -92,4 +92,6 @@
     <string name="INSTANCENAME">Instance\'s name:</string>
     <string name="FROMPORT">From port</string>
     <string name="TOPORT">A porta</string>
+    <string name="NOEXTSTORAGEWRITABLE">External storage is not writable ! This App cannot work.</string>
+    <string name="NOINTERNETCONNECTION">This device is NOT connected to Internet. This App cannot work.</string>
 </resources>

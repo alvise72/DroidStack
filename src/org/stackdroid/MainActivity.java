@@ -1,8 +1,11 @@
 package org.stackdroid;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.content.Intent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,21 +62,14 @@ public class MainActivity extends Activity
         Utils.putStringPreference( "VERSIONNAME", versionName, this );
         setContentView(R.layout.main);
         this.setTitle("DroidStack v "+versionName);
-        Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
-        //Utils.putStringPreference( "FILESDIR", getFilesDir( ) + "/DroidStack", this );
-        Configuration.getInstance().setValue( "FILESDIR", getFilesDir( ) + "/DroidStack" );
         
-        /*	WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay();
-        //SCREENH = d.getHeight();
-		SCREENW = d.getWidth();
-         */
+        //Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
+        
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         SCREENW = dm.widthPixels;
         int density = (int)this.getResources().getDisplayMetrics().density;
-        //Utils.putIntegerPreference("SCREENH", SCREENH, this);
-//        Utils.putIntegerPreference("DISPLAYDENSITY", density, this);
+        
         Configuration.getInstance().setValue( "DISPLAYDENSITY", ""+density );
     }
     
@@ -86,7 +82,6 @@ public class MainActivity extends Activity
     @Override
     public void onDestroy( ) {
       super.onDestroy( );
-      //      progressDialogWaitStop.dismiss();
     }
 
     /**
@@ -99,42 +94,63 @@ public class MainActivity extends Activity
     public void onResume( ) {
       super.onResume( );
       
-      if( !Utils.internetOn( this ) ) {
+      if( !this.isExternalStorageWritable() ) {
 
-	  AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	  builder.setMessage( "The device is NOT connected to Internet. This App cannot work." );
-	  builder.setCancelable(false);
+    	  AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	  builder.setMessage( getString(R.string.NOEXTSTORAGEWRITABLE));//"External storage is not writable ! This App cannot work." );
+    	  builder.setCancelable(false);
 	    
-	  DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int id) {
-		      finish( );
-		  }
+    	  DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+    		  public void onClick(DialogInterface dialog, int id) {
+    			  finish( );
+    		  }
 	      };
 
-	  builder.setPositiveButton("OK", yesHandler );
+	      builder.setPositiveButton("OK", yesHandler );
 	        
-	  AlertDialog alert = builder.create();
-	  alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-				      WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-	  alert.show();
-
+	      AlertDialog alert = builder.create();
+	      alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	      alert.show();
+	      return;
       }
       
-      selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
-      if(selectedUser.length()!=0) {
+      if( !Utils.internetOn( this ) ) {
 
-	  
+    	  AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	  builder.setMessage( getString(R.string.NOINTERNETCONNECTION) );
+    	  builder.setCancelable(false);
+	    
+    	  DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+    		  public void onClick(DialogInterface dialog, int id) {
+    			  finish( );
+    		  }
+	      };
 
-	  try {
-	      User u = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	      
-	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+u.getUserName() + " (" + u.getTenantName() + ")"); 
-	  } catch(Exception e) {
-	      Utils.alert("ERROR: "+e.getMessage(), this );
+	      builder.setPositiveButton("OK", yesHandler );
+	        
+	      AlertDialog alert = builder.create();
+	      alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	      alert.show();
 	      return;
-	  }
+      }
+      
+      File file = new File(Environment.getExternalStorageDirectory() + "/DroidStack" );
+      file.mkdirs( );
+      Configuration.getInstance().setValue( "FILESDIR", file.getPath() );
+      (new File(Environment.getExternalStorageDirectory() + "/DroidStack/users" )).mkdirs( );
+      selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+      if(selectedUser.length()!=0) {  
+
+    	  try {
+    		  User u = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+	      
+    		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+u.getUserName() + " (" + u.getTenantName() + ")"); 
+    	  } catch(Exception e) {
+    		  Utils.alert("ERROR: "+e.getMessage(), this );
+    		  return;
+    	  }
       } else {
-	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+    	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
       }
     }
     
@@ -259,5 +275,20 @@ public class MainActivity extends Activity
      */
     public void neutron( View v ) {
     	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }

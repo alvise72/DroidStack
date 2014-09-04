@@ -509,7 +509,7 @@ public class RESTClient {
 
 	BufferedInputStream inStream = null;
 	String buf = "";
-	Log.d("REST", "usessl="+usessl+" - sUrl="+sURL);
+	Log.d("REST", "usessl="+usessl+" - Url="+url);
 	try {
 	    inStream = new BufferedInputStream( conn.getInputStream() );
 	        
