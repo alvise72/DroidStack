@@ -189,11 +189,14 @@ public class ServersActivity extends Activity implements OnClickListener {
                             }
                         }
                     });
-            AlertDialog build = alert.create();
-            build.show();
-	    	
-	    	
-	    	
+            alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    
+                }
+            });
+            alert.setCancelable(false);
+            //alert.setCanceledOnTouchOutside(false);
+            alert.create().show( );
 	    	
 	    	return;
 	    }

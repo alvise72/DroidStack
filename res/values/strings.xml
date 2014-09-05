@@ -74,7 +74,7 @@
     <string name="INPUTSSECNAME">Insert Security Group\'s name</string>
     <string name="VOLUMES">Volumes</string>
     <string name="NETWORKS">Networks</string>
-    <string name="EDITSECGROUP">Edit Security Group</string>
+    <string name="EDITSECGROUP">Edit Rules for</string>
     <string name="ADDRULE">Add rule</string>
     <string name="TENANTNAME">Tenant\'s name</string>
     <string name="AVAILUSERS">Available users:</string>

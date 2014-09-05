@@ -39,54 +39,12 @@
 		  <Space
              android:layout_width="wrap_content"
              android:layout_height="5dip" />
-		  
-		  <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="@string/SECGRPNAME" />
-		  
-		  <Space
-             android:layout_width="wrap_content"
-             android:layout_height="5dip" />
-		  
-          <EditText
-             android:id="@+id/secgrpName"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:inputType="textNoSuggestions"
-             android:ems="10" />
-          
-		  <Space
-             android:layout_width="wrap_content"
-             android:layout_height="5dip" />
-		  
-		  <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="@string/SECGRPDESC" />
-		  
-		  <Space
-             android:layout_width="wrap_content"
-             android:layout_height="5dip" />
-
-          <EditText
-             android:id="@+id/secgrpDesc"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text=""
-             android:inputType="text"
-             android:ems="10" />
-
-          <Space
-             android:layout_width="wrap_content"
-             android:layout_height="5dip" />
-            
-		  <Button
+		    
+		  <ImageButton
              android:id="@+id/addrule"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:drawableLeft="@android:drawable/ic_menu_add"
-		     android:text="@string/ADDRULE"
+             android:src="@android:drawable/ic_menu_add"
              android:onClick="addRule" />
 		  <Space
              android:layout_width="wrap_content"

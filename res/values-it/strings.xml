@@ -72,7 +72,7 @@
     <string name="INPUTSSECNAME">Inserisci il nome del Security Group</string>
     <string name="VOLUMES">Volumi</string>
     <string name="NETWORKS">Reti</string>
-    <string name="EDITSECGROUP">Modifica Security Group</string>
+    <string name="EDITSECGROUP">Modifica Regole per</string>
     <string name="ADDRULE">Aggiungi regola</string>
     <string name="TENANTNAME">Nome del tenant</string>
     <string name="AVAILUSERS">Utenti disponibili:</string>

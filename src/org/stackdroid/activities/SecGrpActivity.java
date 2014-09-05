@@ -124,6 +124,13 @@ public class SecGrpActivity extends Activity implements OnClickListener {
                         (new AsyncTaskCreateSecGroup()).execute(secgrpName, "");
                     }
                 });
+        alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        
+                    }
+                });
+        alert.setCancelable(false);
+        //alert.setCanceledOnTouchOutside(false);
         alert.create().show();
     }
     

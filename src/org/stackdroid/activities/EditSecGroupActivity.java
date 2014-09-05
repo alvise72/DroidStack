@@ -176,12 +176,14 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.editsecgroup );
+        
 
         secgrpID   = this.getIntent().getStringExtra("SECGRPID");
         secgrpName = this.getIntent().getStringExtra("SECGRPNAME");
+        setTitle(getString(R.string.EDITSECGROUP) + " " + secgrpName);
         secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
-        ((EditText)findViewById(R.id.secgrpName)).setText(secgrpName);
-        ((EditText)findViewById(R.id.secgrpDesc)).setText(secgrpDesc);
+        //((EditText)findViewById(R.id.secgrpName)).setText(secgrpName);
+        //((EditText)findViewById(R.id.secgrpDesc)).setText(secgrpDesc);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);

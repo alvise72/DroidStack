@@ -56,7 +56,48 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	private String fipToAssociate = null;
 	private FloatingIP selectedFIPObj = null;
 	
-    //__________________________________________________________________________________
+	/**
+	 * 
+	 * 
+	 *
+	 */
+	protected class ConfirmButtonHandler implements OnClickListener {
+		@Override
+	    public void onClick(View v) {
+			if(v instanceof Button) {
+	            Server S = (Server)serverSpinner.getSelectedItem();
+	            if(FloatingIPActivity.this.selectedFIPObj.getServerID().compareTo(S.getID())==0) {
+	                    Utils.alert(getString(R.string.ALREADYASSOCIATED), FloatingIPActivity.this);
+	                    alertDialogSelectServer.dismiss();
+	                    return;
+	            }
+	            //Utils.alert("Selected server "+S.getName( ), this);
+	            alertDialogSelectServer.dismiss();
+	            FloatingIPActivity.this.progressDialogWaitStop.show();
+	            
+	            AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
+	            task.execute(fipToAssociate, S.getID());
+	    	}
+	  	 }	
+	}
+	
+	/**
+	 * 
+	 * 
+	 *
+	 */
+	protected class CancelButtonHandler implements OnClickListener {
+		@Override
+	    public void onClick(View v) {
+			alertDialogSelectServer.dismiss();
+	  	}	
+	}
+	
+	/**
+	 * 
+	 * 
+	 *
+	 */
     public boolean onCreateOptionsMenu( Menu menu ) {
         super.onCreateOptionsMenu( menu );
         int order = Menu.FIRST;
@@ -66,7 +107,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    return true;
     }
     
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     public boolean onOptionsItemSelected( MenuItem item ) {
 	 
         int id = item.getItemId();     
@@ -89,7 +134,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
   	    return super.onOptionsItemSelected( item );
     }    
     
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
@@ -115,30 +164,41 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  loadFIP();
     }
     
+    /**
+	 * 
+	 * 
+	 *
+	 */
     private void loadFIP() {
-    	
     	(new AsyncTaskFIPList()).execute();
     }
     
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     @Override
     public void onResume( ) {
 	  super.onResume( );
     }
  
     /**
-     *
-     *
-     *
-     *
-     */
+	 * 
+	 * 
+	 *
+	 */
     @Override
     public void onDestroy( ) {
 	  super.onDestroy( );
 	  progressDialogWaitStop.dismiss();
     }
 
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     private void refreshView( Vector<FloatingIP> fips, Vector<Network> nets ) {
       spinnerNetworksArrayAdapter = new ArrayAdapter<Network>(FloatingIPActivity.this, android.R.layout.simple_spinner_item, nets.subList(0, nets.size()));
   	  spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -162,7 +222,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  
     }
 
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     public void allocateFIP( View v ) {
     	Network selectedNet = (Network)spinnerNetworks.getSelectedItem();
     	if(selectedNet == null) {
@@ -179,7 +243,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     }
 
     
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     protected class AsyncTaskFIPList extends AsyncTask<Void, Void, Void>
     {
       private  String   errorMessage     = null;
@@ -188,10 +256,10 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  private  String   jsonBufServers	 = null;
 	  private  String   jsonBufNetworks  = null;
 	  private  String   jsonBufSubNets   = null;
-
-	@Override
-	protected Void doInBackground( Void ... v ) 
-	{
+	 
+	  @Override
+	  protected Void doInBackground( Void ... v ) 
+	  {
 	    OSClient osc = OSClient.getInstance(U);
 
 	    try {
@@ -207,7 +275,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 		return null;
 	    
 	    //return jsonBuf;
-	}
+	  }
 	
 	  @Override
 	  protected void onPostExecute( Void v ) {
@@ -249,7 +317,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
     
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     protected class AsyncTaskFIPDeassociate extends AsyncTask<String, Void, Void>
     {
       private  String   errorMessage     = null;
@@ -257,9 +329,9 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
       private  String   floatingip       = null;
       private  String   serverid         = null;
       
-	@Override
-	protected Void doInBackground( String ... ip_serverid ) 
-	{
+      @Override
+      protected Void doInBackground( String ... ip_serverid ) 
+      {
 		floatingip = ip_serverid[0];
 		serverid   = ip_serverid[1];
 		OSClient osc = OSClient.getInstance(U);
@@ -273,7 +345,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    }
 	    //return "";
 		return null;
-	}
+      }
 	
 	  @Override
 	  protected void onPostExecute( Void v ) {
@@ -297,7 +369,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     
     
-  //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     protected class AsyncTaskFIPAssociate extends AsyncTask<String, Void, Void>
     {
       private  String   errorMessage     = null;
@@ -305,9 +381,9 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
       private  String   floatingip       = null;
       private  String   serverid         = null;
       
-	@Override
-	protected Void doInBackground( String... ip_serverid ) 
-	{
+      @Override
+      protected Void doInBackground( String... ip_serverid ) 
+      {
 		floatingip = ip_serverid[0];
 		serverid   = ip_serverid[1];
 		OSClient osc = OSClient.getInstance(U);
@@ -322,7 +398,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    }
 	    //return "";
 		return null;
-	}
+      }
 	
 	  @Override
 	  protected void onPostExecute( Void v ) {
@@ -355,40 +431,44 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 
-    //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     protected class AsyncTaskFIPAllocate extends AsyncTask<String, String, String>
     {
-	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
+    	private  String   errorMessage     = null;
+    	private  boolean  hasError         = false;
       
-	@Override
-	protected String doInBackground( String... ip_serverid ) 
-	{
-		OSClient osc = OSClient.getInstance(U);
+    	@Override
+    	protected String doInBackground( String... ip_serverid ) 
+    	{
+    		OSClient osc = OSClient.getInstance(U);
 		
-		try {
-			osc.requestFloatingIPAllocation( pool );	    
-	    } catch(Exception e) {
-	    	errorMessage = e.getMessage();
-	    	hasError = true;
-	    	return "";
-	    }
-	    return "";
-	}
+    		try {
+    			osc.requestFloatingIPAllocation( pool );	    
+    		} catch(Exception e) {
+    			errorMessage = e.getMessage();
+    			hasError = true;
+    			return "";
+    		}
+    		return "";
+    	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+    	@Override
+    	protected void onPostExecute( String result ) {
+    		super.onPostExecute(result);
 	    
- 	    if(hasError) {
-		Utils.alert( errorMessage, FloatingIPActivity.this );
-		FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
-		return;
- 	    }
- 	    Utils.alert( getString(R.string.FIPALLOCATED), FloatingIPActivity.this );
-	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
-	    FloatingIPActivity.this.loadFIP();
-	}
+    		if(hasError) {
+    			Utils.alert( errorMessage, FloatingIPActivity.this );
+    			FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+    			return;
+    		}
+    		Utils.alert( getString(R.string.FIPALLOCATED), FloatingIPActivity.this );
+    		//FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+    		FloatingIPActivity.this.loadFIP();
+    	}
     }
     
     
@@ -406,15 +486,19 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     
     
     
-  //__________________________________________________________________________________
+    /**
+	 * 
+	 * 
+	 *
+	 */
     protected class AsyncTaskFIPRelease extends AsyncTask<String, String, String>
     {
-	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
+    	private  String   errorMessage     = null;
+    	private  boolean  hasError         = false;
       
-	@Override
-	protected String doInBackground( String... ip_serverid ) 
-	{
+    	@Override
+    	protected String doInBackground( String... ip_serverid ) 
+    	{
 		OSClient osc = OSClient.getInstance(U);
 
 	    try {
@@ -425,10 +509,10 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    	return "";
 	    }
 	    return "";
-	}
+    	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
+    	@Override
+    	protected void onPostExecute( String result ) {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
@@ -439,7 +523,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
  	    Utils.alert( getString(R.string.FIPRELEASED), FloatingIPActivity.this );
 	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
 	    FloatingIPActivity.this.loadFIP();
-	}
+    	}
     }
     
     
@@ -452,7 +536,11 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 
 
 
-
+    /**
+	 * 
+	 * 
+	 *
+	 */
     @Override
     public void onClick(View v) {
 	
@@ -519,6 +607,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     	}
     	
     	// this is when the confirm button is pressed for server selection to associate the FIP
+    	/*
     	if(v instanceof Button) {
             Server S = (Server)serverSpinner.getSelectedItem();
             if(this.selectedFIPObj.getServerID().compareTo(S.getID())==0) {
@@ -533,14 +622,25 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
             AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
             task.execute(fipToAssociate, S.getID());
     	}
+    	*/
   	 }	
     
+    /**
+	 * 
+	 * 
+	 *
+	 */
     private void associateFIP( String fip ) {
     	fipToAssociate = fip;
 		this.progressDialogWaitStop.show( );
 		(new AsyncTaskOSListServers()).execute( );
     }
-  //__________________________________________________________________________________
+    
+    /**
+	 * 
+	 * 
+	 *
+	 */
     protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
     {
      	private  String   errorMessage     = null;
@@ -624,11 +724,13 @@ public void pickAServerToAssociateFIP() {
     serverSpinner = (Spinner) promptsView.findViewById(R.id.mySpinner);
     serverSpinner.setAdapter(spinnerServersArrayAdapter);
     final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
+    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
 	//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
-    mButton.setOnClickListener(this);
-    //mButton.setOnItemSelectedListener( this );
-    // show it
-    alertDialogSelectServer.show();
+    mButton.setOnClickListener(new FloatingIPActivity.ConfirmButtonHandler());
+    mButtonCancel.setOnClickListener(new FloatingIPActivity.CancelButtonHandler());
     alertDialogSelectServer.setCanceledOnTouchOutside(false);
+    alertDialogSelectServer.setCancelable(false);
+    alertDialogSelectServer.show();
+    
 }
 }
