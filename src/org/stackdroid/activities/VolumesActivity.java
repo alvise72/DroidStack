@@ -395,7 +395,12 @@ public class VolumesActivity extends Activity implements OnClickListener {
     	progressDialogWaitStop.dismiss();
     }
 
-    //__________________________________________________________________________________
+    /**
+     *
+     *
+     *
+     *
+     */
     private void refreshView( Vector<Volume> volumes ) {
     	((LinearLayout)findViewById(R.id.volumeLayout)).removeAllViews();
     	if(volumes.size()==0) {
@@ -418,7 +423,12 @@ public class VolumesActivity extends Activity implements OnClickListener {
     //  ASYNC TASKS.....
 
 
-    //__________________________________________________________________________________
+    /**
+     *
+     *
+     *
+     *
+     */
     protected class AsyncTaskListVolumes extends AsyncTask< Void, Void, Void >
     {
      	private  String   errorMessage     = null;

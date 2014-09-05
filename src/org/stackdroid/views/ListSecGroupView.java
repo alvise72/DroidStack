@@ -71,15 +71,8 @@ public class ListSecGroupView extends LinearLayout {
 	//Name.setOnClickListener( (OnClickListener)ctx );
 	Name.setTypeface( null, Typeface.BOLD );
 	
-	
-
-	
-
 	text.addView(Name);
-	//text.setOnClickListener( (OnClickListener)ctx );
 	row.addView(text);
-	//setOnClickListener( (OnClickListener)ctx );
-	
 	
 	if(S.getName( ).compareTo("default") != 0) {
 		editSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_EDIT_SECGRP );
