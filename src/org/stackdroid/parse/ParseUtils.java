@@ -2,8 +2,6 @@ package org.stackdroid.parse;
 
 import java.util.Hashtable;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.Iterator;
 import java.util.Vector;
@@ -27,8 +25,6 @@ import org.stackdroid.utils.Quota;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Volume;
 
-import android.content.Context;
-import android.util.Log;
 
 public class ParseUtils {
 
@@ -301,7 +297,7 @@ public class ParseUtils {
 			    String ip = arrayAddr.getJSONObject(j).getString("addr");
 			    String type = arrayAddr.getJSONObject(j).getString("OS-EXT-IPS:type");
 
-			    Log.d("PARSEUTILS", "ip="+ip+" - type="+type);
+			    //Log.d("PARSEUTILS", "ip="+ip+" - type="+type);
 			    
 			    if(type.compareTo("fixed")==0)
 				fixedIP.add(ip);
@@ -398,7 +394,7 @@ public class ParseUtils {
 		for(int j = 0; j< arraySubnetID.length; j++)
 		    if(subnetsTable.containsKey(arraySubnetID[j]) == true) 
 			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
-	    Log.d("PARSENETWORK","NetName="+name);	
+	    //Log.d("PARSENETWORK","NetName="+name);	
 		//nets[i] = new Network(status, name, ID, _subnets, shared, up, ext, tenantID );
 		nets.add( new Network(status, name, ID, _subnets, shared, up, ext, tenantID ) );
 	    }
@@ -518,7 +514,7 @@ public class ParseUtils {
 		  int fromport = rule.getInt("from_port");
 		  int toport = rule.getInt("to_port");
 		  rulesV.add(new SimpleSecGroupRule(id, fromport, toport, proto, iprange) );
-		  Log.d("PARSE", "Rule="+id);
+		  //Log.d("PARSE", "Rule="+id);
 	    }
 	} catch(org.json.JSONException je) {
 	    throw new ParseException( je.getMessage( ) );

@@ -17,9 +17,11 @@ import org.stackdroid.utils.Utils;
 
 
 
+
 import android.util.Log;
 //import android.util.Log;
 import android.util.Pair;
+import android.widget.EditText;
 
 public class OSClient {
     
@@ -609,4 +611,20 @@ public class OSClient {
 				  					 data, 
 				  					 v );
     }
+
+	public void createRule(String secgrpID, int fromPort, int toPort, String protocol, String cidr) 
+			throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+	{
+		checkToken( );
+		
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"security_group_rule\": {\"from_port\": " + fromPort + ", \"ip_protocol\": \"" + protocol + "\", \"to_port\": " + toPort + ", \"parent_group_id\": \"" + secgrpID + "\", \"cidr\": \"" + cidr + "\", \"group_id\": null}}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-group-rules", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+	}
 }

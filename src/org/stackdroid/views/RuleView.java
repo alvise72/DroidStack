@@ -3,6 +3,7 @@ package org.stackdroid.views;
 import android.widget.LinearLayout;
 import android.graphics.Typeface;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.content.Context;
 
@@ -63,7 +64,8 @@ public class RuleView extends LinearLayout {
     	
 
     	ruleInfo3 = new TextViewNamed( ctx, this );
-    	ruleInfo3.setText("Port range: " + Rl.getFromPort()+"-"+Rl.getToPort() + (Rl.getProtoName().length()!=0 ? " ("+Rl.getProtoName()+")" : "") );
+    	//Log.d("RULEVIEW", "Rl="+Rl.to_string());
+    	ruleInfo3.setText("Port range: " + Rl.getFromPort()+"/"+Rl.getToPort() + (Rl.getProtoName()!=null && Rl.getProtoName().length()!=0 ? " ("+Rl.getProtoName()+")" : "") );
     	ruleInfo3.setTextColor( Color.parseColor("#333333") );
     	//ruleInfo3.setOnClickListener( (OnClickListener)ctx );
     	//ruleInfo3.setTypeface( null, Typeface.BOLD );

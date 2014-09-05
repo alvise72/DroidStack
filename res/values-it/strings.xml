@@ -92,4 +92,5 @@
     <string name="TOPORT">A porta</string>
     <string name="NOEXTSTORAGEWRITABLE">Lo storage esterno non &#xe8; scrivibile. L\'App non pu&#xf2; funzionare.</string>
     <string name="NOINTERNETCONNECTION">Questo dispositivo non &#xe8; connesso a Internet. L\'App non pu&#xf2; funzionare.</string>
+    <string name="PROTOCOL">Protocollo</string>
 </resources>

@@ -40,4 +40,13 @@ public class SimpleSecGroupRule {
 	  if(fromPort != toPort) return "";
 	  return PROTO.get( new Integer(fromPort) );
   }
+  
+  @Override
+  public String toString( ) {
+	  return ID;
+  }
+  
+  public String to_string( ) {
+	  return "SimpleSecGroupRule{ID="+ID + ", FromPort="+fromPort+", ToPort="+toPort+", Protocol="+protocol+", IP Range="+IPRange+"}";
+  }
 }
