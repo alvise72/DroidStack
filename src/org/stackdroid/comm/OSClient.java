@@ -16,6 +16,8 @@ import org.stackdroid.utils.Utils;
 
 
 
+
+import android.util.Log;
 //import android.util.Log;
 import android.util.Pair;
 
@@ -65,25 +67,27 @@ public class OSClient {
      * 
      */
     private void checkToken( ) throws RuntimeException {
-	if(U.getTokenExpireTime() <= Utils.now() + 5) {
-	    try {
-	    	String jsonBuffer = RESTClient.requestToken( U.useSSL() ,
+    	Log.d("OSC", "expiration="+U.getTokenExpireTime() + " - now="+Utils.now() + 5);
+    	if(U.getTokenExpireTime() <= Utils.now() + 5) {
+    		
+    		try {
+    			String jsonBuffer = RESTClient.requestToken( U.useSSL() ,
 	    												 U.getEndpoint(),
 	    												 U.getTenantName(),
 	    												 U.getUserName(),
 	    												 U.getPassword() );
-	    	String  pwd = U.getPassword();
-	    	String  edp = U.getEndpoint();
-	    	boolean ssl = U.useSSL();
-	    	U = ParseUtils.parseUser( jsonBuffer );
-	    	U.setPassword( pwd );
-	    	U.setEndpoint( edp );
-	    	U.setSSL( ssl );
-	    	
-		    U.toFile( Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
-		} catch(Exception e) {
-		throw new RuntimeException( e.getMessage( ) );			}
-	}
+    			String  pwd = U.getPassword();
+    			String  edp = U.getEndpoint();
+    			boolean ssl = U.useSSL();
+    			U = ParseUtils.parseUser( jsonBuffer );
+    			U.setPassword( pwd );
+    			U.setEndpoint( edp );
+    			U.setSSL( ssl );
+    			U.toFile( Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+    		} catch(Exception e) {
+    			throw new RuntimeException( e.getMessage( ) );			
+    		}
+		}
     }
     
     /*
@@ -97,9 +101,9 @@ public class OSClient {
     public void createInstanceSnapshot( String serverID, String snapshotName ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
     {
-	checkToken( );
+    	checkToken( );
 	
-	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	String extradata = "{\"createImage\": {\"name\": \"" + snapshotName + "\", \"metadata\": {}}}";
@@ -121,7 +125,7 @@ public class OSClient {
     public void requestFloatingIPAllocation( String externalNetworkID ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
     {
-	checkToken( );
+    	checkToken( );
 	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
@@ -146,6 +150,8 @@ public class OSClient {
     public void createSecGroup( String secgrpName, String desc)  
     		throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
     {
+    	checkToken( );
+    	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
@@ -166,10 +172,12 @@ public class OSClient {
      */
     public String requestVolumes( ) throws RuntimeException 
     {
+    	checkToken( );
+    	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
-	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	vp.add( p );
-	return RESTClient.sendGETRequest( U.useSSL(), U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes/detail", U.getToken( ), vp );
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	return RESTClient.sendGETRequest( U.useSSL(), U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes/detail", U.getToken( ), vp );
     }
 
     /**
@@ -182,6 +190,8 @@ public class OSClient {
     public void requestFloatingIPAssociate( String fip, String serverid ) 
 	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
     {
+    	checkToken( );
+    	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
@@ -203,6 +213,8 @@ public class OSClient {
     public void requestFloatingIPRelease( String fip ) 
     	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
     {
+    	checkToken( );
+    	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
@@ -223,6 +235,8 @@ public class OSClient {
    public void requestReleaseFloatingIP( String floatingip, String serverid )
       throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
    {
+	   checkToken( );
+	
        Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
        Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
        vp.add( p );
@@ -230,10 +244,10 @@ public class OSClient {
        String extradata = "{\"removeFloatingIp\": {\"address\": \"" + floatingip + "\"}}";
        
        RESTClient.sendPOSTRequest( U.useSSL(), 
-				   U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
-				   U.getToken(), 
-				   extradata, 
-				   vp );
+    		   					   U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
+    		   					   U.getToken(), 
+    		   					   extradata, 
+    		   					   vp );
    }
 
    /**
@@ -247,15 +261,17 @@ public class OSClient {
    public String requestServerLog( String serverid )
        throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException  
     {
-	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
-	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	vp.add( p );
+	   checkToken( );
 	
-	return RESTClient.sendPOSTRequest( U.useSSL(), 
-					   U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/servers/"+serverid+"/action",
-					   U.getToken(), 
-					   "{\"os-getConsoleOutput\": {\"length\": null}}", 
-					   vp );   
+	   Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+	   Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+	   vp.add( p );
+	
+	   return RESTClient.sendPOSTRequest( U.useSSL(), 
+			   							  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/servers/"+serverid+"/action",
+			   							  U.getToken(), 
+			   							  "{\"os-getConsoleOutput\": {\"length\": null}}", 
+			   							  vp );   
     }
 
     /**
@@ -267,7 +283,9 @@ public class OSClient {
      */
     public String requestImages( ) throws RuntimeException  
     {
-	return RESTClient.sendGETRequest( U.useSSL(), U.getEndpoint() + ":9292/v2/images", U.getToken(), null );   
+ 	   checkToken( );
+ 		
+       return RESTClient.sendGETRequest( U.useSSL(), U.getEndpoint() + ":9292/v2/images", U.getToken(), null );   
     }
     
     /**
@@ -279,10 +297,12 @@ public class OSClient {
      */
     public String requestQuota( ) throws RuntimeException
     {
-    	Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
-    	Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
-    	v.add(p);
-    	return RESTClient.sendGETRequest( U.useSSL(),  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/limits", U.getToken(), v);
+ 	   checkToken( );
+ 		
+ 	   Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
+ 	   Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
+ 	   v.add(p);
+ 	   return RESTClient.sendGETRequest( U.useSSL(),  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/limits", U.getToken(), v);
     }
 
     /**
@@ -294,13 +314,15 @@ public class OSClient {
      */
     public String requestFloatingIPs( ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return RESTClient.sendGETRequest( U.useSSL(), 
-					  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/os-floating-ips", 
-					  U.getToken(), 
-					  v );
+ 	   checkToken( );
+ 		
+ 	   Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
+ 	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+ 	   v.add(p);
+ 	   return RESTClient.sendGETRequest( U.useSSL(), 
+    									  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/os-floating-ips", 
+    									  U.getToken(), 
+    									  v );
     }
 
     /**
@@ -312,13 +334,15 @@ public class OSClient {
      */
     public String requestServers( ) throws RuntimeException
     {
-	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-	v.add(p);
-	return RESTClient.sendGETRequest( U.useSSL(),
-					  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/detail", //?all_tenants=1",
-					  U.getToken(), 
-					  v );
+ 	   checkToken( );
+ 		
+ 	   Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+ 	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+ 	   v.add(p);
+ 	   return RESTClient.sendGETRequest( U.useSSL(),
+    									  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/detail", //?all_tenants=1",
+    									  U.getToken(), 
+    									  v );
     }
 
 
@@ -331,13 +355,15 @@ public class OSClient {
      */
     public String requestFlavors( ) throws RuntimeException
     {
-    	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-    	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
-    	v.add(p);
-    	return RESTClient.sendGETRequest( U.useSSL(),
-					  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/flavors/detail",
-					  U.getToken(),
-					  v );
+ 	   checkToken( );
+ 		
+ 	   Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+ 	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+ 	   v.add(p);
+ 	   return RESTClient.sendGETRequest( U.useSSL(),
+    									  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/flavors/detail",
+    									  U.getToken(),
+    									  v );
     }
 
     /**
@@ -351,7 +377,9 @@ public class OSClient {
     public void deleteGlanceImage( String imageID ) 
     	throws RuntimeException, NotFoundException, NotAuthorizedException
     {
-    	RESTClient.sendDELETERequest( U.useSSL(),
+ 	   checkToken( );
+ 		
+ 	   RESTClient.sendDELETERequest( U.useSSL(),
 					   				  U.getEndpoint() + ":9292/v2/images/" + imageID, 
 					   				  U.getToken( ),
 					   				  null );
@@ -369,6 +397,8 @@ public class OSClient {
     public void deleteRule( String ruleID ) 
     	throws RuntimeException, NotFoundException, NotAuthorizedException
     {
+ 	   checkToken( );
+ 		
     	RESTClient.sendDELETERequest( U.useSSL(),
 					   				  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-group-rules/" + ruleID, 
 					   				  U.getToken( ),
@@ -385,6 +415,8 @@ public class OSClient {
      */
     public void deleteInstance( String serverID ) throws RuntimeException, NotFoundException, NotAuthorizedException
     {
+ 	   checkToken( );
+ 		
     	RESTClient.sendDELETERequest( U.useSSL(), 
 					  U.getEndpoint() + ":8774/v2/" + U.getTenantID()+ "/servers/" + serverID, 
 					  U.getToken(),
@@ -400,6 +432,8 @@ public class OSClient {
      */
     public String requestNetworks( ) throws RuntimeException
     {
+ 	   checkToken( );
+ 		
     	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
@@ -418,6 +452,8 @@ public class OSClient {
      */
     public String requestSubNetworks( ) throws RuntimeException
     {
+ 	   checkToken( );
+ 		
     	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
@@ -436,6 +472,8 @@ public class OSClient {
      */
     public String requestKeypairs( ) throws RuntimeException 
     {
+ 	   checkToken( );
+ 		
     	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
@@ -454,6 +492,8 @@ public class OSClient {
      */
     public String requestSecGroups( ) throws RuntimeException 
     {
+ 	   checkToken( );
+ 		
     	String buf = RESTClient.sendGETRequest( U.useSSL(), 
 											    U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/os-security-groups",
 											    U.getToken(), 
@@ -470,6 +510,8 @@ public class OSClient {
      */
     public String requestSecGroupListRules( String secgrpID ) throws RuntimeException 
     {
+ 	   checkToken( );
+ 		
     	String buf = RESTClient.sendGETRequest( U.useSSL(), 
     											U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/os-security-groups/" + secgrpID,
     											U.getToken(), 
@@ -488,6 +530,8 @@ public class OSClient {
     public void deleteSecGroup( String secgrpID ) 
     	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
+ 	   checkToken( );
+ 		
     	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName( ) );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
@@ -513,6 +557,8 @@ public class OSClient {
     									 Hashtable<String, String> netID_to_netIP )
     	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
     {
+ 	   checkToken( );
+ 		
     	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName( ) );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);

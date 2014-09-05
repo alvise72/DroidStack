@@ -129,64 +129,6 @@ public class OSImagesActivity extends Activity implements OnClickListener {
      *
      *
      */
-/*    @Override
-    public void onResume( ) {
-    	super.onResume( );
-	}*/
- 
-    /**
-     *
-     *
-     *
-     *
-     */
-/*    @Override
-    public void onStart( ) {
-    	super.onStart( );
-    }*/
-  
-    /**
-     *
-     *
-     *
-     *
-     */
- /*   @Override
-    public void onPause( ) {
-    	super.onPause( );
-    }*/
-
-    /**
-     *
-     *
-     *
-     *
-     */
-/*    @Override
-    public void onRestart( ) {
-	super.onRestart( );
-	//	Log.d("OSIMAGE.ONRESTART", "OSIMAGE.ONRESTART");
-    }*/
-
- 
-    /**
-     *
-     *
-     *
-     *
-     */
- /*   @Override
-    public void onStop( ) {
-	super.onStop( );
-	//	Log.d("OSIMAGE.ONSTOP", "OSIMAGE.ONSTOP");
-    }*/
-
-    /**
-     *
-     *
-     *
-     *
-     */
     @Override
     public void onDestroy( ) {
       super.onDestroy( );
@@ -366,20 +308,20 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 
     //__________________________________________________________________________________
     private void refreshView( ) {
-    if(OS.size()==0) {
-    	Utils.alert(getString(R.string.NOIMAGEAAVAIL), this);
-    	return;
-    }
-	Iterator<OSImage> sit = OS.iterator();
-	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
-	while( sit.hasNext( )) {
-	    OSImage os = sit.next();
-	    ((LinearLayout)findViewById(R.id.osimagesLayout)).addView( new OSImageView(os, this) );
-	    View space = new View( this );
-	    space.setMinimumHeight(10);
-	    ((LinearLayout)findViewById(R.id.osimagesLayout)).addView( space );
-	    ((LinearLayout)findViewById( R.id.osimagesLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
-	}
+    	if(OS.size()==0) {
+    		Utils.alert(getString(R.string.NOIMAGEAAVAIL), this);
+    		return;
+    	}
+    	Iterator<OSImage> sit = OS.iterator();
+    	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
+    	while( sit.hasNext( )) {
+    		OSImage os = sit.next();
+    		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( new OSImageView(os, this) );
+    		View space = new View( this );
+    		space.setMinimumHeight(10);
+    		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( space );
+    		((LinearLayout)findViewById( R.id.osimagesLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+    	}
     }
 
     /**
@@ -423,23 +365,35 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    }
 	    return "";
 	}
-	
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	*/	
 	@Override
-	    protected void onPostExecute( String result ) {
+	protected void onPostExecute( String result ) {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
- 		Utils.alert( errorMessage, OSImagesActivity.this );
-		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
+ 	    	Utils.alert( errorMessage, OSImagesActivity.this );
+ 	    	OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+ 	    	return;
  	    }
 	    
 	    try {
-		OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
-		OSImagesActivity.this.refreshView( );
+	    	OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+	    	OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
-		Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
-			    	OSImagesActivity.this);
+	    	Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+	    				OSImagesActivity.this);
 	    }
 
 	    OSImagesActivity.this.update( );
