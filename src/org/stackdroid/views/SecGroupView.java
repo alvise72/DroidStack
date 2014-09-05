@@ -11,14 +11,14 @@ public class SecGroupView extends CheckBox {
     SecGroup sg = null;
 
     public SecGroupView( SecGroup sg, Context ctx ) {
-	super(ctx);
-	setText( sg.getName( ) );
-	if(sg.getName().compareTo("default")==0)
-	    setChecked(true);
-	else 
-	    setChecked(false);
+    	super(ctx);
+    	setText( sg.getName( ) );
+    	if(sg.getName().compareTo("default")==0)
+    		setChecked(true);
+    	else 
+    		setChecked(false);
 	    
-	this.sg = sg;
+    	this.sg = sg;
     }
     
     public SecGroup getSecGroup( ) { return sg; }

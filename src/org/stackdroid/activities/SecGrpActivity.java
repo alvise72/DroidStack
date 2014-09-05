@@ -44,7 +44,15 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
     
-    //__________________________________________________________________________________
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public boolean onCreateOptionsMenu( Menu menu ) {
         
         super.onCreateOptionsMenu( menu );
@@ -57,7 +65,15 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         return true;
     }
     
-    //__________________________________________________________________________________
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public boolean onOptionsItemSelected( MenuItem item ) {
 	 
         int id = item.getItemId();     
@@ -79,6 +95,15 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         return super.onOptionsItemSelected( item );
     }
 
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public void createSecGroup( View v ) {
     	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
     	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -88,21 +113,29 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         alert.setView(input);
         alert.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                            int whichButton) {
+                    public void onClick(DialogInterface dialog, int whichButton) {
                         String secgrpName = input.getText().toString();
-                        //button.setText(newCateg);
+                        secgrpName = secgrpName.trim();
+                        if(secgrpName.length()==0) {
+                        	Utils.alert(getString(R.string.NOEMPTYNAME), SecGrpActivity.this);
+                        	return;
+                        }
                         SecGrpActivity.this.progressDialogWaitStop.show();
-                        (new AsyncTaskCreateSecGroup()).execute(secgrpName, "...");
+                        (new AsyncTaskCreateSecGroup()).execute(secgrpName, "");
                     }
                 });
-        AlertDialog build = alert.create();
-        build.show();
-        
-    	
+        alert.create().show();
     }
     
-    //__________________________________________________________________________________
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     @Override
     public void onClick( View v ) {
 	if(v instanceof ImageButtonNamed) {
@@ -111,7 +144,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 		
 	    if( bt.getType() == ImageButtonNamed.BUTTON_DELETE_SECGRP ) {
 	    	
-	    	final String secgrpID = bt.getSecGroupView().getSecGroup().getID();
+	    	final String secgrpID = bt.getListSecGroupView().getSecGroup().getID();
 	    	
 	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage( getString(R.string.AREYOUSURETODELETESECGRP));
@@ -154,7 +187,15 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	}
     }
 
-    //__________________________________________________________________________________
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
@@ -182,18 +223,15 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     	progressDialogWaitStop.show();
   	  	(new AsyncTaskSecGroups()).execute( );
     }
-    
-    //__________________________________________________________________________________
-    @Override
-    public void onResume( ) {
-    	super.onResume( );
-    }
  
     /**
-     *
-     *
-     *
-     *
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
      */
     @Override
     public void onDestroy( ) {
@@ -201,7 +239,15 @@ public class SecGrpActivity extends Activity implements OnClickListener {
     	progressDialogWaitStop.dismiss();
     }
 
-    //__________________________________________________________________________________
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     private void refreshView( Vector<SecGroup> secgrps ) {
     	((LinearLayout)findViewById(R.id.secgrpLayout)).removeAllViews();
     	if(secgrps.size()==0) {
