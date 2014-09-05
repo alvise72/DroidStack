@@ -68,7 +68,7 @@ public class ListSecGroupView extends LinearLayout {
 	    servName = servName.substring(0,14) + "..";
 	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
-	Name.setOnClickListener( (OnClickListener)ctx );
+	//Name.setOnClickListener( (OnClickListener)ctx );
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	
@@ -76,27 +76,30 @@ public class ListSecGroupView extends LinearLayout {
 	
 
 	text.addView(Name);
-	text.setOnClickListener( (OnClickListener)ctx );
+	//text.setOnClickListener( (OnClickListener)ctx );
 	row.addView(text);
-	setOnClickListener( (OnClickListener)ctx );
-
-	deleteSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SECGRP );
-	deleteSecGroup.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-	deleteSecGroup.setOnClickListener( (OnClickListener)ctx );
-
-	editSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_EDIT_SECGRP );
-	editSecGroup.setImageResource(android.R.drawable.ic_menu_edit);
-	editSecGroup.setOnClickListener( (OnClickListener)ctx );
+	//setOnClickListener( (OnClickListener)ctx );
 	
+	
+	if(S.getName( ).compareTo("default") != 0) {
+		editSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_EDIT_SECGRP );
+		editSecGroup.setImageResource(android.R.drawable.ic_menu_edit);
+		editSecGroup.setOnClickListener( (OnClickListener)ctx );
+		deleteSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SECGRP );
+		deleteSecGroup.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+		deleteSecGroup.setOnClickListener( (OnClickListener)ctx );
+	}
 	info = new LinearLayoutNamed( ctx, (ListSecGroupView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
 	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	info.setLayoutParams( params3 );
 	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-	info.addView( editSecGroup );
-	info.addView( deleteSecGroup );
 	
+	if(S.getName( ).compareTo("default") != 0) {
+		info.addView( editSecGroup );
+		info.addView( deleteSecGroup );
+	}
 	
 	row.addView( info );
 	addView( row );

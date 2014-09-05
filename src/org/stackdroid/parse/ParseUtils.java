@@ -25,6 +25,8 @@ import org.stackdroid.utils.Quota;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Volume;
 
+import android.util.Log;
+
 
 public class ParseUtils {
 
@@ -502,6 +504,7 @@ public class ParseUtils {
     */    
    public static Vector<SimpleSecGroupRule> parseSecGroupRules( String jsonBuf ) throws ParseException  {
 	Vector<SimpleSecGroupRule> rulesV = new Vector<SimpleSecGroupRule>();
+	Log.d("PARSE", "jsonBuf="+jsonBuf);
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray rules = jsonObject.getJSONObject("security_group").getJSONArray("rules");
@@ -509,7 +512,9 @@ public class ParseUtils {
 	    for(int i =0; i<rules.length(); ++i) {
 		  JSONObject rule = rules.getJSONObject(i);
 		  String id = rule.getString("id");
-		  String iprange = rule.getJSONObject("ip_range").getString("cidr");
+		  String iprange = "";
+		  if(rule.getJSONObject("ip_range").has("cidr"))
+			  iprange = rule.getJSONObject("ip_range").getString("cidr");
 		  String proto = rule.getString("ip_protocol");
 		  int fromport = rule.getInt("from_port");
 		  int toport = rule.getInt("to_port");
