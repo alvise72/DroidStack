@@ -80,7 +80,6 @@ public class RESTClient {
 		throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+ioe.getMessage( ) );
 	    }
 	} else {
-	
 	    try {
 		  conn = (HttpURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {

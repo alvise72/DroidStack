@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
 
-import android.content.Context;
-
 public class User implements Serializable, Comparable<User> {
 
     private static final long serialVersionUID = 2087368867376448461L;
@@ -105,7 +103,7 @@ public class User implements Serializable, Comparable<User> {
      * 
      * 
      */
-    public static User fromFileID( String ID, String filesDir ) throws RuntimeException {
+    public static User fromFileID( String ID, String filesDir ) throws IOException, ClassNotFoundException {
     	String filename = filesDir + "/users/" + ID;
     	if(false == (new File(filename)).exists())
     		throw new RuntimeException( "File ["+filename+"] doesn't exist" );
@@ -117,9 +115,9 @@ public class User implements Serializable, Comparable<User> {
     		//U.setContext( ctx );
     		return U;
     	} catch(IOException ioe) {
-    		throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+    		throw new IOException( "User.fromFileID.InputStream.read/close: " + ioe.getMessage( ) );
     	} catch(ClassNotFoundException cnfe) {
-    		throw new RuntimeException( "ObjectInputStream.readObject: " + cnfe.getMessage( ) );
+    		throw new ClassNotFoundException( "User.fromFileID.ObjectInputStream.readObject: " + cnfe.getMessage( ) );
     	}
     }
     
@@ -130,7 +128,7 @@ public class User implements Serializable, Comparable<User> {
      * 
      * 
      */
-    public void toFile( String filesDir ) throws RuntimeException {
+    public void toFile( String filesDir ) throws IOException {
     	String filename = filesDir + "/users/" + getUserID( ) + "." + getTenantID( );
     	File f = new File( filename );
     	if(f.exists()) f.delete();
@@ -140,7 +138,7 @@ public class User implements Serializable, Comparable<User> {
     		oos.writeObject( this );
     		oos.close( );
     	} catch(IOException ioe) {
-	    		throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage() );
+	    		throw new IOException("User.toFile.OutputStream.write/close: "+ioe.getMessage() );
 		}
     }
 }

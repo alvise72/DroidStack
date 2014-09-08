@@ -150,7 +150,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {
 	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	  } catch(RuntimeException re) {
+	  } catch(Exception re) {
 	    Utils.alert("FloatingIPActivity.onCreate: "+re.getMessage(), this );
 	    return;
 	  }

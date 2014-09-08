@@ -1,5 +1,6 @@
 package org.stackdroid.activities;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -136,8 +137,6 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
      */    
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-		
 	}	
 	
     /*
@@ -189,10 +188,10 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
     		U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-    	} catch(RuntimeException re) {
-    		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
+    	} catch(Exception re) {
+    		Utils.alert("OSImagesActivity.onCreate: "+re.getMessage(), this );
     		return;
-    	}
+    	} 
 	
     	if(selectedUser.length()!=0)
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 

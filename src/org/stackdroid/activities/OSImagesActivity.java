@@ -18,13 +18,17 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.stackdroid.comm.GenericException;
 import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
-import org.stackdroid.comm.ServiceUnAvailable;
+import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.CustomProgressDialog;
@@ -38,6 +42,8 @@ import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.LinearLayoutNamed;
 //import org.stackdroid.utils.Configuration;
+
+
 
 
 import android.graphics.Typeface;
@@ -99,7 +105,7 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
     		U = User.fromFileID( selectedUser, org.stackdroid.utils.Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-    	} catch(RuntimeException re) {
+    	} catch(Exception re) {
     		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
     		return;
     	}
@@ -355,19 +361,21 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    try {
 	    	osc.deleteGlanceImage( imagetodel );
 	    	jsonBuf = osc.requestImages( );
-	    } catch(RuntimeException e) {
-	    	errorMessage = "Runtime: " + e.getMessage();
-	    	hasError = true;
 	    } catch(NotFoundException nfe) {
-	    	errorMessage = "Not Found: " + nfe.getMessage();
+	    	errorMessage = getString(R.string.NOTFOUND)+": " + nfe.getMessage();
 	    	hasError = true;
 	    } catch(NotAuthorizedException ne) {
-	    	errorMessage = "Not Authorized: " + ne.getMessage() + "\n\n" + getString(R.string.PLEASECHECKCREDSFORIMAGE);
+	    	errorMessage = getString(R.string.NOTAUTHORIZED)+ ": " + ne.getMessage() + "\n\n" + getString(R.string.PLEASECHECKCREDSFORIMAGE);
 	    	hasError = true;
-	    } catch(ServiceUnAvailable se) {
+	    } catch(ServiceUnAvailableOrInternalError se) {
 	    	errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
 	    	hasError = true;
-	    }
+	    } catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+	    	errorMessage = e.getMessage( );
+	    	hasError = true;
+		} 
 	    return "";
 	}
 
@@ -423,62 +431,58 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     protected class AsyncTaskOSListImages extends AsyncTask<Void, String, String>
     {
      	private  String   errorMessage  =  null;
-	private  boolean  hasError      =  false;
-	private  String   jsonBuf       = null;
+     	private  boolean  hasError      =  false;
+     	private  String   jsonBuf       = null;
 
-	@Override
-	protected String doInBackground(Void ... voids ) 
-	{
-	    OSClient osc = OSClient.getInstance(U);
+     	@Override
+     	protected String doInBackground(Void ... voids ) 
+     	{
+     		OSClient osc = OSClient.getInstance(U);
 
-	    try {
-	  	  jsonBuf = osc.requestImages( );
-	    } catch(RuntimeException e) {
-	    	errorMessage = "Runtime: " + e.getMessage();
-	    	hasError = true;
-	    } catch(NotFoundException nfe) {
-	    	errorMessage = "Not Found: " + nfe.getMessage();
-	    	hasError = true;
-	    } catch(NotAuthorizedException ne) {
-	    	errorMessage = "Not Authorized: " + ne.getMessage() + "\n\n" + getString(R.string.PLEASECHECKCREDSFORIMAGE);
-	    	hasError = true;
-	    } catch(ServiceUnAvailable se) {
-	    	errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
-	    	hasError = true;
-	    } 
+     		try {
+     			jsonBuf = osc.requestImages( );
+     		} catch(ServiceUnAvailableOrInternalError se) {
+     			errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
+     			hasError = true;
+     		} catch (Exception e) {
+     			// TODO Auto-generated catch block
+     			//e.printStackTrace();
+     			errorMessage = e.getMessage( );
+     			hasError = true;
+     		} 
 	    
 	    return jsonBuf;
-	}
+     	}		
 	
-	@Override
-	    protected void onPreExecute() {
-	    super.onPreExecute();
+     	@Override
+     	protected void onPreExecute() {
+     		super.onPreExecute();
 	    
-	    //downloading_image_list = true;
-	}
+     		//downloading_image_list = true;
+     	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+     	@Override
+     	protected void onPostExecute( String result ) {
+     		super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 		Utils.alert( errorMessage, OSImagesActivity.this );
- 		//downloading_image_list = false;
- 		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
+     		if(hasError) {
+     			Utils.alert( errorMessage, OSImagesActivity.this );
+     			//downloading_image_list = false;
+     			OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
 	    
-	    //downloading_image_list = false; // questo non va spostato da qui a
-	    try {
-		  OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
-		  OSImagesActivity.this.refreshView( );
-	    } catch(ParseException pe) {
-		  Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
-			          OSImagesActivity.this);
-	    }
-	    //Utils.putLongPreference("LASTIMAGELIST_TIMESTAMP", Utils.now( ), OSImagesActivity.this );
-	    OSImagesActivity.this.progressDialogWaitStop.dismiss( );
-	    //OSImagesActivity.this.refreshView( jsonBuf );
-	}
+     		//downloading_image_list = false; // questo non va spostato da qui a
+     		try {
+     			OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+     			OSImagesActivity.this.refreshView( );
+     		} catch(ParseException pe) {
+     			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+     					    OSImagesActivity.this);
+     		}
+     		//Utils.putLongPreference("LASTIMAGELIST_TIMESTAMP", Utils.now( ), OSImagesActivity.this );
+     		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+     		//OSImagesActivity.this.refreshView( jsonBuf );
+     	}
     }
 }

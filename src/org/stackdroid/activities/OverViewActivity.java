@@ -93,13 +93,13 @@ public class OverViewActivity extends Activity {
         String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
         setTitle(getString(R.string.USAGEOVERVIEW));
         try {
-	    U = User.fromFileID( selectedUserID, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	    setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
-	    //Log.d("OVERVIEW", "USER="+U);
-	    progressDialogWaitStop.show();
-	    (new AsyncTaskQuota()).execute( );
-        }  catch(RuntimeException re) {
-	    Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
+        	U = User.fromFileID( selectedUserID, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+        	setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
+        	//Log.d("OVERVIEW", "USER="+U);
+        	progressDialogWaitStop.show();
+        	(new AsyncTaskQuota()).execute( );
+        }  catch(Exception re) {
+        	Utils.alert("OverViewActivity.onCreate: " + re.getMessage(), this );
         }
         if(selectedUserID.length()!=0)
 	    ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 

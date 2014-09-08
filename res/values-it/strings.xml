@@ -94,4 +94,6 @@
     <string name="NOINTERNETCONNECTION">Questo dispositivo non &#xe8; connesso a Internet. L\'App non pu&#xf2; funzionare.</string>
     <string name="PROTOCOL">Protocollo</string>
     <string name="SERVICEUNAVAILABLE">Il servizio remoto non risponde; controllare che sia in funzione...</string>
+    <string name="NOTFOUND">Risorsa o URI non trovata</string>
+    <string name="NOTAUTHORIZED">Non autorizzato ad accedere alla risorsa o all\'URI</string>
 </resources>
