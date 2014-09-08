@@ -94,7 +94,7 @@ public class OverViewActivity extends Activity {
         setTitle(getString(R.string.USAGEOVERVIEW));
         try {
         	U = User.fromFileID( selectedUserID, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-        	setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
+        	//setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
         	//Log.d("OVERVIEW", "USER="+U);
         	progressDialogWaitStop.show();
         	(new AsyncTaskQuota()).execute( );

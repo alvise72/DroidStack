@@ -11,21 +11,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 
-import org.stackdroid.R;
+//import org.stackdroid.R;
 
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.app.*;
-import android.view.LayoutInflater;
-import android.view.View;
+//import android.view.LayoutInflater;
+//import android.view.View;
 import android.view.WindowManager;
 import android.net.*;
 import android.os.*;
-import android.widget.Button;
+//import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
+//import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Utils {
@@ -355,16 +355,16 @@ public class Utils {
      *
      */
     public static void alert( String message, Context ctx ) {
-	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
+    	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
         alertbox.setMessage( message );
-	alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
- 
+        alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                 }
             });
-	AlertDialog alert = alertbox.create();
-	alert.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-				   WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        AlertDialog alert = alertbox.create();
+        alert.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        alert.setCanceledOnTouchOutside(false);
+        alert.setCancelable(false);
         alert.show();
     }
 
@@ -385,6 +385,8 @@ public class Utils {
 	  alert.getWindow().setFlags( WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
 				                  WindowManager.LayoutParams.FLAG_DIM_BEHIND );
 	  alert.setTitle(title);
+	  alert.setCanceledOnTouchOutside(false);
+	  alert.setCancelable(false);
       alert.show();
       TextView msgTxt = (TextView)alert.findViewById(android.R.id.message);
       msgTxt.setTextSize(fontsize);

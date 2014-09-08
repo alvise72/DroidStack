@@ -19,7 +19,7 @@
     <string name="ADDSUCCESS">Successo !\nPuoi aggiungere un altro utente o tornare indietro e selezionarne uno.</string>
     <string name="SELECTOSIMAGE">Seleziona un\'immagine OpenStack</string>
     <string name="NOUSERSELECTED">Non hai ancora selezionato un utente. Tocca il pulsante \'Utenti\'</string>
-    <string name="USAGEOVERVIEW">Quote per l\'utente</string>
+    <string name="USAGEOVERVIEW">Quote</string>
     <string name="MENUABOUT">Informazioni</string>
     <string name="MENUHELP">Aiuto</string>
     <string name="MENUUPDATE">Aggiorna</string>
