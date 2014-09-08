@@ -131,6 +131,9 @@ public class ParseUtils {
      *
      */
     public static String getErrorMessage ( String jsonBuf ) {
+    	
+    	//Log.d("PARSE.getErrorMessage", "jsonBuf="+jsonBuf);
+    	
       JSONObject jsonObject = null;
       String errorMessage = null;
       try {
@@ -504,7 +507,7 @@ public class ParseUtils {
     */    
    public static Vector<SimpleSecGroupRule> parseSecGroupRules( String jsonBuf ) throws ParseException  {
 	Vector<SimpleSecGroupRule> rulesV = new Vector<SimpleSecGroupRule>();
-	Log.d("PARSE", "jsonBuf="+jsonBuf);
+	//Log.d("PARSE", "jsonBuf="+jsonBuf);
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray rules = jsonObject.getJSONObject("security_group").getJSONArray("rules");

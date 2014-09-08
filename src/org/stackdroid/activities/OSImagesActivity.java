@@ -24,6 +24,7 @@ import java.util.Vector;
 import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
+import org.stackdroid.comm.ServiceUnAvailable;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.CustomProgressDialog;
@@ -37,6 +38,7 @@ import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.LinearLayoutNamed;
 //import org.stackdroid.utils.Configuration;
+
 
 import android.graphics.Typeface;
 
@@ -362,6 +364,9 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	    } catch(NotAuthorizedException ne) {
 	    	errorMessage = "Not Authorized: " + ne.getMessage() + "\n\n" + getString(R.string.PLEASECHECKCREDSFORIMAGE);
 	    	hasError = true;
+	    } catch(ServiceUnAvailable se) {
+	    	errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
+	    	hasError = true;
 	    }
 	    return "";
 	}
@@ -428,11 +433,19 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 
 	    try {
 	  	  jsonBuf = osc.requestImages( );
-	    } catch(Exception e) {
-		  errorMessage = e.getMessage();
-		  hasError = true;
-		  return "";
-	    }
+	    } catch(RuntimeException e) {
+	    	errorMessage = "Runtime: " + e.getMessage();
+	    	hasError = true;
+	    } catch(NotFoundException nfe) {
+	    	errorMessage = "Not Found: " + nfe.getMessage();
+	    	hasError = true;
+	    } catch(NotAuthorizedException ne) {
+	    	errorMessage = "Not Authorized: " + ne.getMessage() + "\n\n" + getString(R.string.PLEASECHECKCREDSFORIMAGE);
+	    	hasError = true;
+	    } catch(ServiceUnAvailable se) {
+	    	errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
+	    	hasError = true;
+	    } 
 	    
 	    return jsonBuf;
 	}

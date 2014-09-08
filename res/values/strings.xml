@@ -95,4 +95,5 @@
     <string name="NOEXTSTORAGEWRITABLE">External storage is not writable ! This App cannot work.</string>
     <string name="NOINTERNETCONNECTION">This device is NOT connected to Internet. This App cannot work.</string>
     <string name="PROTOCOL">Protocol</string>
+    <string name="SERVICEUNAVAILABLE">Remote service is not responding; please check that it\'s working...</string>
 </resources>

@@ -27,7 +27,7 @@ public class RESTClient {
     /**
      *
      *
-     * curl --cacert $HOME/Dropbox/INFN-CA-2006.pem -i 'https://cloud-areapd.pd.infn.it:5000/v2.0/tokens' -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{"auth": {"tenantName": "admin", "passwordCredentials": {"username": "admin", "password": "ADMIN_PASS"}}}'
+     * 
      *
      *
      *
@@ -37,7 +37,10 @@ public class RESTClient {
     								   String tenantName, 
     								   String username, 
     								   String password )
-      throws RuntimeException, GenericException, NotFoundException, NotAuthorizedException
+      throws IOException, GenericException, 
+      		 NotFoundException, NotAuthorizedException, 
+      		 ServiceUnAvailableOrInternalError, MalformedURLException,
+      		 ProtocolException
     {
 	String proto = "http://";
 	if(usessl)
@@ -45,11 +48,8 @@ public class RESTClient {
 	
 	String sUrl = proto + endpoint + ":5000/v2.0/tokens";
 	URL url = null;
-	try {
-	    url = new URL(sUrl);
-	} catch(java.net.MalformedURLException mfu) {
-	    throw new RuntimeException( "Malformed URL: "+mfu.toString( ) );
-	}
+	url = new URL(sUrl);
+	
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
 	if(usessl) {
@@ -77,14 +77,14 @@ public class RESTClient {
 	    try {
 		  conn = (HttpsURLConnection)url.openConnection( );
 	    } catch(java.io.IOException ioe) {
-		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
+		throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+ioe.getMessage( ) );
 	    }
 	} else {
 	
 	    try {
 		  conn = (HttpURLConnection)url.openConnection();
 	    } catch(java.io.IOException ioe) {
-		  throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
+		  throw new IOException("RESTClient.requestToken.URL.openConnection http: "+ioe.getMessage());
 	    }
 	}
 	
@@ -100,7 +100,7 @@ public class RESTClient {
 		  ((HttpsURLConnection)conn).disconnect( );
 		else
 		  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
+	    throw new ProtocolException( "RESTClient.requestToken.setRequestMethod(POST): " + pe.getMessage( ) );
 	}
 	
 	String data = "{\"auth\": {\"tenantName\": \"" 
@@ -120,7 +120,7 @@ public class RESTClient {
 	      ((HttpsURLConnection)conn).disconnect( );
 		else
 		  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage( ) );
+	    throw new IOException("RESTClient.requestToken.OutputStream.write/close: "+ioe.getMessage( ) );
 	}
 	
 	int status = HttpStatus.SC_OK;
@@ -133,14 +133,37 @@ public class RESTClient {
 			else
 			  ((HttpURLConnection)conn).disconnect( );
 		if(mex==null || mex.length()==0 || mex.compareTo("null")==0) {
-			mex = "getResponseCode: Unable to get server's error message. Probably the endpoint is listening on SSL";
+			mex = "RESTClient.requestToken.getResponseCode: Unable to get server's error message. Probably the endpoint is listening on SSL";
 			
 		} else
-			mex = "getResponseCode: " + mex;
-	    throw new RuntimeException( mex );
+			mex = "RESTClient.requestToken.getResponseCode: " + mex;
+	    throw new IOException( mex );
 	}
-
-	if( status != HttpStatus.SC_OK ) {
+	
+	/**
+	 * Handling of 5xx HTTP error codes
+	 * Note: HttpStatus does not provide 506 error code (W3 stops at 505)
+	 * status == HttpStatus.SC_SERVICE_UNAVAILABLE || // 503
+	   status == HttpStatus.SC_BAD_GATEWAY || // 502
+	   status == HttpStatus.SC_GATEWAY_TIMEOUT || // 504
+	   status == HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED || // 505
+	   status == HttpStatus.SC_INSUFFICIENT_STORAGE || // 507
+	   status == HttpStatus.SC_INTERNAL_SERVER_ERROR || // 500
+	   status == HttpStatus.SC_NOT_IMPLEMENTED ) // 501
+	 */
+	if( status >= 500 )
+		throw(new ServiceUnAvailableOrInternalError());
+	
+	/**
+	 * Any 4xx HTTP error from the Server
+	 */
+	if( status >= 400 ) {
+		
+		if(status == HttpStatus.SC_UNAUTHORIZED)
+			throw new NotAuthorizedException( "RESTClient.requestToken: Not Authorized" );
+		if(status == HttpStatus.SC_NOT_FOUND)
+			throw new NotFoundException( "RESTClient.requestToken: Not Found" );
+		
 	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
 	    if(in!=null) {
 		int len;
@@ -155,7 +178,7 @@ public class RESTClient {
 			      ((HttpsURLConnection)conn).disconnect( );
 				else
 				  ((HttpURLConnection)conn).disconnect( );
-		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
+		    throw new IOException("RESTClient.requestToken.InputStream.write/close: "+ioe.getMessage( ) );
 		}
 	    
 		if(usessl)
@@ -163,15 +186,16 @@ public class RESTClient {
 			else
 			  ((HttpURLConnection)conn).disconnect( );
 		
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) {
-		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf ) );//+"\n\n".Please check your credentials and try again..." );
-		}
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
-		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
-
-		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
+		throw new GenericException( "RESTClient.requestToken: " + ParseUtils.getErrorMessage( buf ) );
 	    }
 	}
+	
+	/**
+	 * Any other code:
+	 * 1xx can be ignore for now
+	 * 2xx are all for OK
+	 * 3xx redirection (we assume that the cloud doesn't have this feature)
+	 */
 	
 	String res = "";
 	try {
@@ -188,7 +212,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("BufferedInputStream.read1: " + ioe.getMessage( ) );
+	    throw new IOException("RESTClient.requestToken.BufferedInputStream.read: " + ioe.getMessage( ) );
 	}    
 	if(usessl)
 	      ((HttpsURLConnection)conn).disconnect( );
@@ -196,38 +220,30 @@ public class RESTClient {
 		  ((HttpURLConnection)conn).disconnect( );
 	return res;
     }
-    
+
     /**
      *
      *
-     * curl -i 'http://90.147.77.40:8774/v2/467d2e5792b74af282169a26c97ac610/servers' -X POST -H "X-Auth-Project-Id: admin" -H "Content-Type: application/json" -H "Accept: application/json" -H "X-Auth-Token: $TOKEN" -d '{"server": {"name": "BLAHBLAHBLAH", "imageRef": "4988f1ee-5cfc-4505-aed1-6d812442a56d", "key_name": "lxadorigo", "flavorRef": "b639f517-c01f-483f-a8e2-c9ee3370ac36", "max_count": 1, "min_count": 1, "networks": [{"fixed_ip": "10.0.1.29", "uuid": "e93ad35f-aac5-4fa7-bfc9-1e3c45d58fc1"}], "security_groups": [{"name": "848f1b29-c793-415c-8f3f-10836c1f99f7"}, {"name": "cf5b187b-1e1c-4ca2-87a9-54b5dce244bc"}]}}'
+     * 
+     *
      *
      *
      */
-    /*
-    public static void requestInstanceCreation( User U,
-												String instanceName, 
-												String glanceImageID,
-												String key_name, 
-												String flavorID,
-												int count, 
-												String _secgrpIDs,
-												String adminPass,
-												Hashtable<String, String> netID_fixedIP,
-												String filesDir ) 
-	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+    public static String sendGETRequest( boolean usessl,
+					 					 String sURL, 
+					 					 String token,
+					 					 Vector<Pair<String,String>> properties ) 
+		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
     {
-    	boolean usessl = U.useSSL();
-    	String proto = "http";
+    	String Url = sURL;
     	if(usessl)
-	    proto = "https";
-    	String sUrl = proto + "://" + U.getEndpoint( ) + ":8774/v2/" + U.getTenantID( ) + "/servers";
+	    Url = "https://"+Url;
+    	else
+	    Url = "http://"+Url;
+    	
     	URL url = null;
-    	try {
-    		url = new URL(sUrl);
-    	} catch(java.net.MalformedURLException mfu) {
-    		throw new RuntimeException("new URL: " + mfu.toString( ) );
-    	}
+    	url = new URL(Url);
+    	
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -255,23 +271,152 @@ public class RESTClient {
     		try {
     			conn = (HttpsURLConnection)url.openConnection( );
     		} catch(java.io.IOException ioe) {
-    			throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
+    			throw  new IOException("RESTClient.sendGETRequest.URL.openConnection https: "+ioe.getMessage( ) );
+    		}
+    	} else {
+	
+    		try {
+    			//	    	Log.d("RESTClient", "2 Connecting...");
+    			conn = (HttpURLConnection)url.openConnection();
+    		} catch(java.io.IOException ioe) {
+	    			throw new IOException("RESTClient.sendGETRequest.URL.openConnection http: "+ioe.getMessage());
+		    }
+    	}
+	
+    	conn.setRequestProperty("Accept", "application/json");
+		conn.setRequestProperty("X-Auth-Token", token);
+		
+		if( properties!=null ) {
+		    Iterator<Pair<String,String>> it = properties.iterator();
+		    while( it.hasNext( ) ) {
+		    	Pair<String, String> pair = it.next( );
+		    	conn.setRequestProperty( pair.first, pair.second );
+		    }
+		}
+		conn.setReadTimeout(20000 /* milliseconds */);
+	    conn.setConnectTimeout(15000 /* milliseconds */);
+		try {
+		    ((HttpURLConnection)conn).setRequestMethod("GET");
+		} catch(java.net.ProtocolException pe ) {
+		    
+			if(usessl)
+			      ((HttpsURLConnection)conn).disconnect( );
+				else
+				  ((HttpURLConnection)conn).disconnect( );
+		    throw new ProtocolException( "RESTClient.sendGETRequest.setRequestMethod(GET): " + pe.getMessage( ) );
+		}
+	
+		conn.setDoInput(true);
+		conn.setDoOutput(false);
+	
+		BufferedInputStream inStream = null;
+		String buf = "";
+		
+		try {
+		    inStream = new BufferedInputStream( conn.getInputStream() );
+		        
+		    byte[] b = new byte[ 2048 ];
+		    int res = 0;
+		    
+		    while( (res = inStream.read( b, 0, 2048 )) != -1 )
+			if( res>0 )
+			    buf += new String( b, 0, res );
+		} catch(java.io.IOException ioe) {
+		    
+			if(usessl)
+			      ((HttpsURLConnection)conn).disconnect( );
+				else
+				  ((HttpURLConnection)conn).disconnect( );
+			
+		    throw new IOException("RESTClient.sendGETRequest.BufferedInputStream.read: " + ioe.getMessage( ) );
+		}
+		
+		if(usessl)
+			  ((HttpsURLConnection)conn).disconnect( );
+			else
+			  ((HttpURLConnection)conn).disconnect( );
+		return buf.toString( );    	
+    } 
+    
+
+    /**
+     *
+     *
+     * 
+     *
+     *
+     *
+     */
+    public static String sendPOSTRequest( boolean usessl,
+    								      String sURL, 
+					 					  String token,
+					 					  String extradata,
+					 					  Vector<Pair<String,String>> properties ) 
+	  throws NotAuthorizedException, NotFoundException, 
+	  		 GenericException, ServiceUnAvailableOrInternalError, 
+	  		 MalformedURLException, IOException, ProtocolException
+    {
+    	String Url = sURL;
+    	if(usessl)
+    		Url = "https://" + Url;
+    	else
+    		Url = "http://" + Url;
+    
+    	URL url = null;
+    	url = new URL(Url);
+	
+    	URLConnection conn = null;
+    	TrustManager[] trustAllCerts = null;
+    	if(usessl) {
+    		trustAllCerts = new TrustManager[] {
+    				new X509TrustManager() {
+    					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+    						return null;
+    					}
+		    
+    					public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+		    
+    					public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+		    
+    				}
+    		};
+	    
+    		try {
+    			SSLContext sc = SSLContext.getInstance("SSL");
+    			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+    			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    		} catch(java.security.NoSuchAlgorithmException e) {
+    		} catch(java.security.KeyManagementException e) {
+    		}
+	    
+    		try {
+    			conn = (HttpsURLConnection)url.openConnection( );
+    		} catch(java.io.IOException ioe) {
+    			throw  new IOException("RESTClient.sendPOSTRequest.URL.openConnection https: "+ioe.getMessage( ) );
     		}
     	} else {
 	
     		try {
     			conn = (HttpURLConnection)url.openConnection();
     		} catch(java.io.IOException ioe) {
-    			throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
+    			throw new IOException("RESTClient.sendPOSTRequest.URL.openConnection http: "+ioe.getMessage());
     		}
     	}
-    
-    	conn.setRequestProperty("X-Auth-Project-Id", U.getTenantName( ) );
+	
     	conn.setRequestProperty("Accept", "application/json");
+    	conn.setRequestProperty("X-Auth-Token", token);
     	conn.setRequestProperty("Content-Type", "application/json");
-    	conn.setRequestProperty("X-Auth-Token", U.getToken() );
-    	conn.setDoOutput(true);
-
+	
+    	if( properties!=null ) {
+    		Iterator<Pair<String,String>> it = properties.iterator();
+		   while( it.hasNext( ) ) {
+			   Pair<String, String> pair = it.next( );
+			   conn.setRequestProperty( pair.first, pair.second );
+		   }
+    	}
+    	conn.setReadTimeout( 20000 );
+    	conn.setConnectTimeout( 15000 );
+    	((HttpURLConnection)conn).setChunkedStreamingMode(0);
     	try {
     		((HttpURLConnection)conn).setRequestMethod("POST");
     	} catch(java.net.ProtocolException pe ) {
@@ -279,389 +424,63 @@ public class RESTClient {
     			((HttpsURLConnection)conn).disconnect( );
     		else
     			((HttpURLConnection)conn).disconnect( );
-    		throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
+    		throw new ProtocolException( "RESTClient.sendPOSTRequest.setRequestMethod(POST): " + pe.getMessage( ) );
     	}
 
-    	String userdata="";
-    	if(adminPass!=null) {
-    		try {
-    			File f = new File(filesDir + "/userdata");
-    			if( f.exists( ) ) f.delete();
-    			BufferedWriter bw = new BufferedWriter( new FileWriter(f) );
-    			bw.write("#!/bin/bash");
-    			bw.newLine();
-    			bw.write("passwd -d root");
-    			bw.newLine();
-    			bw.write("echo \"alvise\" >/tmp/pwd");
-    			bw.newLine();
-    			bw.write("cat /tmp/pwd | passwd --stdin root");
-    			bw.newLine();
-    			bw.write("\rm -f /tmp/pwd");
-    			bw.newLine();
-    			bw.close();
-    			userdata = ", \"user_data\": \"" + Base64.encodeFromFile( filesDir + "/userdata" ) + "\"";
-    		} catch(IOException ioe) {
-    			//		Log.d("RESTClient.requestInstanceCreation", "ERROR ENCODING USERDATA: " + ioe.getMessage( ) );
-    			userdata = "";
-    		}
+    	conn.setDoInput(true);
+    	conn.setDoOutput(true);
+	
+    	OutputStream out = null;
+    	try {
+    		out = new BufferedOutputStream( conn.getOutputStream() );
+    		out.write( extradata.getBytes( ) );
+    		out.flush( );
+    		out.close( );
+    	} catch(java.io.IOException ioe) {
+    		if(usessl)
+    			((HttpsURLConnection)conn).disconnect( );
+    		else
+    			((HttpURLConnection)conn).disconnect( );
+    		throw new IOException("RESTClient.sendPOSTRequest.OutputStream.write/close: "+ioe.getMessage( ) );
     	}
-
-	String _data = "{\"server\": {\"name\": \"" + instanceName + 
-	    "\", \"imageRef\": \"" + glanceImageID + 
-	    "\", " + (key_name != null ? "\"key_name\": \"" + key_name : "") + 
-	    "\", \"flavorRef\": \"" + flavorID + 
-	    "\", \"max_count\": " + count + 
-	    ", \"min_count\": " + count + userdata + "}}";
-
-	JSONObject obj = null;
-	//Log.d("RESTClient", "_secgrpIDs=["+_secgrpIDs+"]");
-	String[] secgrpIDs = _secgrpIDs.split(",");
-	//String[] networkIDs = _networkIDs.split(",");
-	try {
-	    obj = new JSONObject( _data );
-	    JSONArray secgs = new JSONArray();
-	    JSONArray nets = new JSONArray();
-	    if(_secgrpIDs.length()!=0) 
-		for(int i = 0; i<secgrpIDs.length; ++i)
-		    secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
-
-
-	    {
-		Iterator<String> it = netID_fixedIP.keySet().iterator();
-		while( it.hasNext() ) {
-		    String netID = it.next( );
-		    String netIP = netID_fixedIP.get( netID );
-		    if( netIP != null && netIP.length()!=0) 
-			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
-		    else
-			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
-		}
-	    }
-
-
-
-	    obj.getJSONObject("server").put("security_groups", secgs);
-	    obj.getJSONObject("server").put("networks", nets);// );
-	    
-	} catch(JSONException je) {
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
-	}
 	
-	String data = obj.toString( );
-	//Log.d("RESTClient.requestInstanceCreation","data="+data);
-	OutputStreamWriter out = null;
-	try {
-	    out = new OutputStreamWriter(conn.getOutputStream());
-	    out.write(data);
-	    out.close();
-	} catch(java.io.IOException ioe) {
-	    ioe.printStackTrace( );
-	    if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("OutputStreamWriter.write/close: "+ioe.getMessage( ) );
-	}
-
-	int status = HttpStatus.SC_OK;
+    	int status = HttpStatus.SC_OK;
+    	try {
+    		status = ((HttpURLConnection)conn).getResponseCode();
+    		//Log.d("RESTCLIENT","status="+status);
+    	} catch(IOException ioe) {
+    		if(usessl)
+    			((HttpsURLConnection)conn).disconnect( );
+    		else
+    			((HttpURLConnection)conn).disconnect( );
+    		throw new IOException("RESTClient.sendPOSTRequest.getResponseCode: "+ioe.getMessage( ) );
+    	}
 	
-	try {
-	    status = ((HttpURLConnection)conn).getResponseCode();
-	    //Log.d("RESTClient", "Status="+status);
-	} catch(IOException ioe) {
-	    //Log.d("RESTCLIENT", ioe.toString( ) );
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
-	}
-	if( status != HttpStatus.SC_OK && status !=HttpStatus.SC_ACCEPTED ) {
-	    // if(status == HttpStatus.SC_BAD_REQUEST) 
-	    // 	throw new RuntimeException("Bad HTTP request" );
-
-	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
-	    if(in!=null) {
-		int len;
-		String buf = "";
-		byte[] buffer = new byte[4096];
-		try {
-		    while (-1 != (len = in.read(buffer)))
-			buf += new String(buffer, 0, len);
-		    in.close();
-		    //Log.d("RESTCLIENT", "buf="+buf);
-		} catch(IOException ioe) {
-			if(usessl)
-			      ((HttpsURLConnection)conn).disconnect( );
-				else
-				  ((HttpURLConnection)conn).disconnect( );
-		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
-		}
-		if(usessl)
-			  ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_UNAUTHORIZED ) 
-		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
+    	/**
+    	 * Handling of 5xx HTTP error codes
+    	 * Note: HttpStatus does not provide 506 error code (W3 stops at 505)
+    	 * status == HttpStatus.SC_SERVICE_UNAVAILABLE || // 503
+	       status == HttpStatus.SC_BAD_GATEWAY || // 502
+	       status == HttpStatus.SC_GATEWAY_TIMEOUT || // 504
+	       status == HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED || // 505
+	       status == HttpStatus.SC_INSUFFICIENT_STORAGE || // 507
+	       status == HttpStatus.SC_INTERNAL_SERVER_ERROR || // 500
+	       status == HttpStatus.SC_NOT_IMPLEMENTED ) // 501
+	     */
+    	if( status >= 500 )
+    		throw(new ServiceUnAvailableOrInternalError());
+	
+	
+	
+	if( status >= 400 ) {
 		
-		if( ParseUtils.getErrorCode(buf)==HttpStatus.SC_NOT_FOUND ) 
-		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
 
-		throw new GenericException( ParseUtils.getErrorMessage( buf ) );
-	    }
-	}
-	if(usessl)
-	  ((HttpsURLConnection)conn).disconnect( );
-	else
-		((HttpURLConnection)conn).disconnect( );
-    } 
-
-    */
-
-    //________________________________________________________________________________
-    public static String sendGETRequest( boolean usessl,
-					 					 String sURL, 
-					 					 String token,
-					 					 Vector<Pair<String,String>> properties ) throws RuntimeException 
-    {
-    	String Url = sURL;
-    	if(usessl)
-	    Url = "https://"+Url;
-    	else
-	    Url = "http://"+Url;
-    	
-	//    	Log.d("RESTClient", "sendGETRequest - URL="+Url);
-	URL url = null;
-	try {
-	    url = new URL(Url);
-	} catch(java.net.MalformedURLException mfu) {
-	    throw new RuntimeException("Malformed URL: " + mfu.toString( ) );
-	}
-	URLConnection conn = null;
-	TrustManager[] trustAllCerts = null;
-	if(usessl) {
-	    trustAllCerts = new TrustManager[] {
-		new X509TrustManager() {
-		    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-			return null;
-		    }
-		    
-		    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
-		    
-		    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
-		    
-		}
-	    };
-	    
-	    try {
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-	    } catch(java.security.NoSuchAlgorithmException e) {
-	    } catch(java.security.KeyManagementException e) {
-	    }
-	    
-	    try {
-		//	      Log.d("RESTClient", "1 Connecting...");
-		  conn = (HttpsURLConnection)url.openConnection( );
-	    } catch(java.io.IOException ioe) {
-		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
-	    }
-	} else {
-	
-	    try {
-		//	    	Log.d("RESTClient", "2 Connecting...");
-		  conn = (HttpURLConnection)url.openConnection();
-	    } catch(java.io.IOException ioe) {
-		  throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
-	    }
-	}
-	
-	conn.setRequestProperty("Accept", "application/json");
-	conn.setRequestProperty("X-Auth-Token", token);
-	
-	if( properties!=null ) {
-	    Iterator<Pair<String,String>> it = properties.iterator();
-	    while( it.hasNext( ) ) {
-		Pair<String, String> pair = it.next( );
-		conn.setRequestProperty( pair.first, pair.second );
-	    }
-	}
-	conn.setReadTimeout(20000 /* milliseconds */);
-    conn.setConnectTimeout(15000 /* milliseconds */);
-	try {
-	    ((HttpURLConnection)conn).setRequestMethod("GET");
-	} catch(java.net.ProtocolException pe ) {
-	    //		Log.d("RESTClient", "1 Disconnecting...");
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "setRequestMethod(GET): " + pe.getMessage( ) );
-	}
-	
-	conn.setDoInput(true);
-	conn.setDoOutput(false);
-
-	BufferedInputStream inStream = null;
-	String buf = "";
-	Log.d("REST", "usessl="+usessl+" - Url="+url);
-	try {
-	    inStream = new BufferedInputStream( conn.getInputStream() );
-	        
-	    byte[] b = new byte[ 2048 ];
-	    int res = 0;
-	    
-	    while( (res = inStream.read( b, 0, 2048 )) != -1 )
-		if( res>0 )
-		    buf += new String( b, 0, res );
-	} catch(java.io.IOException ioe) {
-	    //		Log.d("RESTClient", "2 Disconnecting...");
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
+		if(status == HttpStatus.SC_UNAUTHORIZED)
+			throw new NotAuthorizedException( "RESTClient.sendPOSTRequest: Not Authorized" );
+		if(status == HttpStatus.SC_NOT_FOUND)
+			throw new NotFoundException( "RESTClient.sendPOSTRequest: Not Found" );
 		
-	    throw new RuntimeException("BufferedInputStream.read2: " + ioe.getMessage( ) );
-	}
-	//	Log.d("RESTClient", "3 Disconnecting...");
-	if(usessl)
-		  ((HttpsURLConnection)conn).disconnect( );
-		else
-		  ((HttpURLConnection)conn).disconnect( );
-	return buf.toString( );    	
-    } 
-    
-  //________________________________________________________________________________
-    public static String sendPOSTRequest( boolean usessl,
-    								      String sURL, 
-					 					  String token,
-					 					  String extradata,
-					 					  Vector<Pair<String,String>> properties ) 
-	  throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
-    {
-    	String Url = sURL;
-    	if(usessl)
-    		Url = "https://" + Url;
-    	else
-    		Url = "http://" + Url;
-    Log.d("RESTCLIENT","extradata="+extradata);
-	URL url = null;
-	try {
-	    url = new URL(Url);
-	} catch(java.net.MalformedURLException mfu) {
-	    throw new RuntimeException("Malformed URL: " + mfu.toString( ) );
-	}
-	
-	URLConnection conn = null;
-	TrustManager[] trustAllCerts = null;
-	if(usessl) {
-	    trustAllCerts = new TrustManager[] {
-		new X509TrustManager() {
-		    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-			return null;
-		    }
-		    
-		    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
-		    
-		    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
-		    
-		}
-	    };
-	    
-	    try {
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-	    } catch(java.security.NoSuchAlgorithmException e) {
-	    } catch(java.security.KeyManagementException e) {
-	    }
-	    
-	    try {
-		  conn = (HttpsURLConnection)url.openConnection( );
-	    } catch(java.io.IOException ioe) {
-		throw  new RuntimeException("URL.openConnection https: "+ioe.getMessage( ) );
-	    }
-	} else {
-	
-	    try {
-		  conn = (HttpURLConnection)url.openConnection();
-	    } catch(java.io.IOException ioe) {
-		  throw new RuntimeException("URL.openConnection http: "+ioe.getMessage());
-	    }
-	}
-	
-	conn.setRequestProperty("Accept", "application/json");
-	conn.setRequestProperty("X-Auth-Token", token);
-	conn.setRequestProperty("Content-Type", "application/json");
-	
-	if( properties!=null ) {
-	    Iterator<Pair<String,String>> it = properties.iterator();
-	    while( it.hasNext( ) ) {
-		Pair<String, String> pair = it.next( );
-		//Log.d("RESTCLIENT","Adding property ["+pair.first+", "+pair.second+"]");
-		conn.setRequestProperty( pair.first, pair.second );
-	    }
-	}
-	conn.setReadTimeout( 20000 );
-    conn.setConnectTimeout( 15000 );
-	try {
-	    ((HttpURLConnection)conn).setRequestMethod("POST");
-	} catch(java.net.ProtocolException pe ) {
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
-	}
-
-	conn.setDoInput(true);
-	conn.setDoOutput(true);
-	
-	((HttpURLConnection)conn).setChunkedStreamingMode(0);
-	try {
-	    ((HttpURLConnection)conn).setRequestMethod("POST");
-	} catch(java.net.ProtocolException pe ) {
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "setRequestMethod(POST): " + pe.getMessage( ) );
-	}
-	
-	//Log.d("RESTCLIENT", "extradata="+extradata);
-	
-	OutputStream out = null;
-	try {
-	    out = new BufferedOutputStream( conn.getOutputStream() );
-	    out.write( extradata.getBytes( ) );
-	    out.flush( );
-	    out.close( );
-	} catch(java.io.IOException ioe) {
-	    if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("OutputStream.write/close: "+ioe.getMessage( ) );
-	}
-	
-	int status = HttpStatus.SC_OK;
-	try {
-	    status = ((HttpURLConnection)conn).getResponseCode();
-	    //Log.d("RESTCLIENT","status="+status);
-	} catch(IOException ioe) {
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("getResponseCode: "+ioe.getMessage( ) );
-	}
-
-	if( status != HttpStatus.SC_OK && status != HttpStatus.SC_ACCEPTED ) {
+		
 	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
 	    if(in!=null) {
 		int len;
@@ -677,25 +496,15 @@ public class RESTClient {
 			      ((HttpsURLConnection)conn).disconnect( );
 				else
 				  ((HttpURLConnection)conn).disconnect( );
-		    throw new RuntimeException("InputStream.write/close: "+ioe.getMessage( ) );
+		    throw new RuntimeException("RESTClient.sendPOSTRequest.InputStream.write/close: "+ioe.getMessage( ) );
 		}
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-		if( status==HttpStatus.SC_UNAUTHORIZED ) {
-			//Log.d("RESTCLIENT","NOT AUTHORIZED !");
-		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf )+"\n\nPlease check your credentials and try again..." );
-		}
-		if( status==HttpStatus.SC_NOT_FOUND ) {
-			//Log.d("RESTCLIENT","NOT FOUND !");
-			throw new NotFoundException( "SC_NOT_FOUND: "+ParseUtils.getErrorMessage( buf ) );
-		}
-		if( status==HttpStatus.SC_BAD_REQUEST) {
-			throw new NotAuthorizedException(  "Bad Request: "+ParseUtils.getErrorMessage( buf ) + " - " );
-		}
-		//Log.d("RESTCLIENT","GENERIC !");
-		throw new GenericException( "Generic error: "+ParseUtils.getErrorMessage( buf ) );
+		
+		
+		throw new GenericException( "RESTClient.sendPOSTRequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
 	}
 	
@@ -716,7 +525,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException("BufferedInputStream.read3: " + ioe.getMessage( ) );
+	    throw new IOException("RESTClient.sendPOSTRequest.read: " + ioe.getMessage( ) );
 	}
 	//	Log.d("RESTClient", "3 Disconnecting...");
 	if(usessl)
@@ -733,7 +542,7 @@ public class RESTClient {
     									  String sURL, 
 					  					  String token,
 					  					  Vector<Pair<String,String>> properties ) 
-	throws RuntimeException, NotFoundException, NotAuthorizedException
+	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, GenericException, MalformedURLException
     {
     	String Url = sURL;
     	if(usessl)
@@ -743,17 +552,14 @@ public class RESTClient {
     	
 	//	Log.d("RESTCLIENT", "sURL="+sURL);
 	URL url = null;
-	try {
-	    url = new URL(Url);
-	} catch(java.net.MalformedURLException mfu) {
-	    throw new RuntimeException("Malformed URL: " + mfu.toString( ) );
-	}
+	url = new URL(Url);
+	
 	URLConnection conn = null;
 	
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
 	} catch(java.io.IOException ioe) {
-	    throw new RuntimeException("URL.openConnection http: "+ioe.getMessage( ) );
+	    throw new IOException("RESTClient.sendDELETERequest.URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
 	conn.setRequestProperty("Content-Type", "application/octet-stream");
@@ -766,7 +572,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "setRequestMethod: " + pe.getMessage( ) );
+	    throw new RuntimeException( "RESTClient.sendDELETERequest.setRequestMethod(DELETE): " + pe.getMessage( ) );
 	}
 	
 	if( properties!=null ) {
@@ -788,24 +594,43 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "getResponseCode: " + ioe.getMessage( ) );
+	    throw new IOException( "RESTClient.sendDELETERequest.getResponseCode: " + ioe.getMessage( ) );
 	}
 
-	//	Log.d("RESTCLIENT", "status="+status);
+	/**
+	 * Handling of 5xx HTTP error codes
+	 * Note: HttpStatus does not provide 506 error code (W3 stops at 505)
+	 * status == HttpStatus.SC_SERVICE_UNAVAILABLE || // 503
+       status == HttpStatus.SC_BAD_GATEWAY || // 502
+       status == HttpStatus.SC_GATEWAY_TIMEOUT || // 504
+       status == HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED || // 505
+       status == HttpStatus.SC_INSUFFICIENT_STORAGE || // 507
+       status == HttpStatus.SC_INTERNAL_SERVER_ERROR || // 500
+       status == HttpStatus.SC_NOT_IMPLEMENTED ) // 501
+     */
+	if( status >= 500 )
+		throw(new ServiceUnAvailableOrInternalError());
+
 	
 	if( status == HttpStatus.SC_NO_CONTENT) {
 	    return;
 	}
 
-	if( status == HttpStatus.SC_NOT_FOUND ) {
+/*	if( status == HttpStatus.SC_NOT_FOUND ) {
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
 	    throw new NotFoundException( "Server responded with NOT_FOUND (HTTP 404)" );
-	}
+	}*/
 
-	if( status != HttpStatus.SC_OK ) {
+	if( status >= 400 ) {
+		
+		if(status == HttpStatus.SC_UNAUTHORIZED)
+			throw new NotAuthorizedException( "RESTClient.sendDELETERequest: Not Authorized" );
+		if(status == HttpStatus.SC_NOT_FOUND)
+			throw new NotFoundException( "RESTClient.sendDELETERequest: Not Found" );
+		
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    if(in!=null) {
 		int len;
@@ -823,19 +648,14 @@ public class RESTClient {
 			      ((HttpsURLConnection)conn).disconnect( );
 				else
 				  ((HttpURLConnection)conn).disconnect( );
-		    throw new RuntimeException( "InputStream.read/close: " + ioe.getMessage( ) );
+		    throw new IOException( "RESTClient.sendDELETERequest.InputStream.read/close: " + ioe.getMessage( ) );
 		}
 		if(usessl)
 			  ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-		if( status==HttpStatus.SC_UNAUTHORIZED ) 
-		    throw new NotAuthorizedException(  ParseUtils.getErrorMessage( buf ) );
 		
-		if( status==HttpStatus.SC_NOT_FOUND ) 
-		    throw new NotFoundException(  ParseUtils.getErrorMessage( buf ) );
-		
-		throw new RuntimeException( ParseUtils.getErrorMessage( buf ) );
+		throw new GenericException( "RESTClient.sendDELETERequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
 	}
 	if(usessl)

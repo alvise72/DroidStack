@@ -101,7 +101,7 @@ public class OSClient {
      * 
      */
     public void createInstanceSnapshot( String serverID, String snapshotName ) 
-	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable
     {
     	checkToken( );
 	
@@ -125,7 +125,7 @@ public class OSClient {
      * 
      */
     public void requestFloatingIPAllocation( String externalNetworkID ) 
-	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable 
     {
     	checkToken( );
 	
@@ -150,7 +150,7 @@ public class OSClient {
      * 
      */
     public void createSecGroup( String secgrpName, String desc)  
-    		throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+    		throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable 
     {
     	checkToken( );
     	
@@ -172,7 +172,7 @@ public class OSClient {
      * 
      * 
      */
-    public String requestVolumes( ) throws RuntimeException 
+    public String requestVolumes( ) throws RuntimeException, ServiceUnAvailable 
     {
     	checkToken( );
     	
@@ -190,7 +190,7 @@ public class OSClient {
      * 
      */
     public void requestFloatingIPAssociate( String fip, String serverid ) 
-	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable 
     {
     	checkToken( );
     	
@@ -213,7 +213,7 @@ public class OSClient {
      *
     */
     public void requestFloatingIPRelease( String fip ) 
-    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable 
     {
     	checkToken( );
     	
@@ -235,7 +235,7 @@ public class OSClient {
     *
     */
    public void requestReleaseFloatingIP( String floatingip, String serverid )
-      throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException 
+      throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable 
    {
 	   checkToken( );
 	
@@ -261,7 +261,7 @@ public class OSClient {
     *
     */
    public String requestServerLog( String serverid )
-       throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException  
+       throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable  
     {
 	   checkToken( );
 	
@@ -283,7 +283,7 @@ public class OSClient {
      *
      *
      */
-    public String requestImages( ) throws RuntimeException  
+    public String requestImages( ) throws RuntimeException, ServiceUnAvailable  
     {
  	   checkToken( );
  		
@@ -297,7 +297,7 @@ public class OSClient {
      *
      *
      */
-    public String requestQuota( ) throws RuntimeException
+    public String requestQuota( ) throws RuntimeException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -314,7 +314,7 @@ public class OSClient {
      *
      *
      */
-    public String requestFloatingIPs( ) throws RuntimeException
+    public String requestFloatingIPs( ) throws RuntimeException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -334,7 +334,7 @@ public class OSClient {
      *
      *
      */
-    public String requestServers( ) throws RuntimeException
+    public String requestServers( ) throws RuntimeException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -355,7 +355,7 @@ public class OSClient {
      *
      *
      */
-    public String requestFlavors( ) throws RuntimeException
+    public String requestFlavors( ) throws RuntimeException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -377,7 +377,7 @@ public class OSClient {
      *
      */
     public void deleteGlanceImage( String imageID ) 
-    	throws RuntimeException, NotFoundException, NotAuthorizedException
+    	throws RuntimeException, NotFoundException, NotAuthorizedException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -397,7 +397,7 @@ public class OSClient {
      *
      */
     public void deleteRule( String ruleID ) 
-    	throws RuntimeException, NotFoundException, NotAuthorizedException
+    	throws RuntimeException, NotFoundException, NotAuthorizedException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -415,7 +415,7 @@ public class OSClient {
      *
      *
      */
-    public void deleteInstance( String serverID ) throws RuntimeException, NotFoundException, NotAuthorizedException
+    public void deleteInstance( String serverID ) throws RuntimeException, NotFoundException, NotAuthorizedException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -432,7 +432,7 @@ public class OSClient {
      *
      *
      */
-    public String requestNetworks( ) throws RuntimeException
+    public String requestNetworks( ) throws RuntimeException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -452,7 +452,7 @@ public class OSClient {
      *
      *
      */
-    public String requestSubNetworks( ) throws RuntimeException
+    public String requestSubNetworks( ) throws RuntimeException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -472,7 +472,7 @@ public class OSClient {
      * 
      *
      */
-    public String requestKeypairs( ) throws RuntimeException 
+    public String requestKeypairs( ) throws RuntimeException, ServiceUnAvailable 
     {
  	   checkToken( );
  		
@@ -492,7 +492,7 @@ public class OSClient {
      * 
      *
      */
-    public String requestSecGroups( ) throws RuntimeException 
+    public String requestSecGroups( ) throws RuntimeException, ServiceUnAvailable 
     {
  	   checkToken( );
  		
@@ -510,7 +510,7 @@ public class OSClient {
      * 
      *
      */
-    public String requestSecGroupListRules( String secgrpID ) throws RuntimeException 
+    public String requestSecGroupListRules( String secgrpID ) throws RuntimeException, ServiceUnAvailable 
     {
  	   checkToken( );
  		
@@ -530,7 +530,7 @@ public class OSClient {
      *
      */
     public void deleteSecGroup( String secgrpID ) 
-    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -557,7 +557,7 @@ public class OSClient {
     									 int count,
     									 String securityGroupID,
     									 Hashtable<String, String> netID_to_netIP )
-    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+    	throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable
     {
  	   checkToken( );
  		
@@ -612,8 +612,15 @@ public class OSClient {
 				  					 v );
     }
 
+    /**
+     *
+     *
+     *
+     * 
+     *
+     */
 	public void createRule(String secgrpID, int fromPort, int toPort, String protocol, String cidr) 
-			throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException
+			throws RuntimeException, NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailable
 	{
 		checkToken( );
 		

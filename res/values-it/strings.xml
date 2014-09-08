@@ -93,4 +93,5 @@
     <string name="NOEXTSTORAGEWRITABLE">Lo storage esterno non &#xe8; scrivibile. L\'App non pu&#xf2; funzionare.</string>
     <string name="NOINTERNETCONNECTION">Questo dispositivo non &#xe8; connesso a Internet. L\'App non pu&#xf2; funzionare.</string>
     <string name="PROTOCOL">Protocollo</string>
+    <string name="SERVICEUNAVAILABLE">Il servizio remoto non risponde; controllare che sia in funzione...</string>
 </resources>
