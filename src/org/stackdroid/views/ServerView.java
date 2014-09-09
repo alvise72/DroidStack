@@ -1,16 +1,11 @@
 package org.stackdroid.views;
 
-//import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
-//import android.widget.ImageButton;
-//import android.widget.ImageView;
-//import android.widget.TextView;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
-//import android.view.View;
 
 import android.content.Context;
 
@@ -18,8 +13,6 @@ import org.stackdroid.R;
 import org.stackdroid.utils.*;
 
 public class ServerView extends LinearLayout {
-    
-//    private Context ctx = null;
     
     private LinearLayoutNamed row  = null;
     private LinearLayoutNamed text = null;
@@ -34,7 +27,12 @@ public class ServerView extends LinearLayout {
 
     private Server S = null;
 
-    public ServerView( Server s, Context ctx ) {
+    public ServerView( Server s, 
+    				   OnClickListener infoListener, 
+    				   OnClickListener consoleLogListener,
+    				   OnClickListener deleteServerListener,
+    				   OnClickListener snapServerListener,
+    				   Context ctx ) {
 	super(ctx);
 	S = s;
 	
@@ -66,7 +64,7 @@ public class ServerView extends LinearLayout {
 	    servName = servName.substring(0,14) + "..";
 	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
-	Name.setOnClickListener( (OnClickListener)ctx );
+	Name.setOnClickListener( infoListener );
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	Flavor = new TextViewNamed( ctx, (ServerView)this );
@@ -74,12 +72,12 @@ public class ServerView extends LinearLayout {
 	if(flavName.length()>30)
 	    flavName = flavName.substring(0,28) + "..";
 	Flavor.setText( flavName );
-	Flavor.setOnClickListener( (OnClickListener)ctx );
+	Flavor.setOnClickListener( infoListener );
 	Flavor.setTextColor( Color.parseColor("#999999"));
 	//Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
 	Status = new TextViewNamed( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
-	Status.setOnClickListener( (OnClickListener)ctx );
+	Status.setOnClickListener( infoListener );
 
 	if(S.getStatus( ).compareToIgnoreCase("active")==0)
 	    Status.setTextColor( Color.parseColor("#00AA00") );
@@ -101,24 +99,24 @@ public class ServerView extends LinearLayout {
 	if(dispDensity!=null)
 		density = Integer.parseInt(dispDensity);
 	consoleLog.setPadding(10 * density, 2 * density, 10 * density, 2 * density);
-	consoleLog.setOnClickListener( (OnClickListener)ctx );
+	consoleLog.setOnClickListener( consoleLogListener );
 	consoleLog.setLayoutParams(params5);
 	
 	text.addView(Name);
 	text.addView(Flavor);
 	text.addView(Status);
 	text.addView(consoleLog);
-	text.setOnClickListener( (OnClickListener)ctx );
+	text.setOnClickListener( infoListener );
 	row.addView(text);
-	setOnClickListener( (OnClickListener)ctx );
+	setOnClickListener( infoListener );
 
 	deleteServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SERVER );
 	deleteServer.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-	deleteServer.setOnClickListener( (OnClickListener)ctx );
+	deleteServer.setOnClickListener( deleteServerListener );
 
 	snapServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_SNAP_SERVER );
 	snapServer.setImageResource(android.R.drawable.ic_menu_camera);
-	snapServer.setOnClickListener( (OnClickListener)ctx );
+	snapServer.setOnClickListener( snapServerListener );
 
 	info = new LinearLayoutNamed( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );

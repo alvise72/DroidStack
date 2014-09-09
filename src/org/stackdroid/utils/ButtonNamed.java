@@ -26,8 +26,6 @@ public class ButtonNamed extends Button implements Named {
     private SecGroupView relatedSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
     private ListSecGroupView relatedListSecGroupView = null;
-    
-    
 
     private int type;
 
