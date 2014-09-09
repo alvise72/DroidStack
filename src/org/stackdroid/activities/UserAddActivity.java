@@ -44,7 +44,8 @@ public class UserAddActivity extends Activity {
     setContentView( org.stackdroid.R.layout.useradd );
     progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
     progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
-    
+    progressDialogWaitStop.setCancelable(false);
+    progressDialogWaitStop.setCanceledOnTouchOutside(false);
     String last_endpoint = Utils.getStringPreference("LAST_ENDPOINT", "", this);
     String last_tenant   = Utils.getStringPreference("LAST_TENANT", "", this);
     String last_username = Utils.getStringPreference("LAST_USERNAME", "", this);

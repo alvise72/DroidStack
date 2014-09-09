@@ -117,6 +117,8 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 	   
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
+        progressDialogWaitStop.setCancelable(false);
+        progressDialogWaitStop.setCanceledOnTouchOutside(false);
         this.update( );
     }
     
@@ -188,6 +190,8 @@ public class OSImagesActivity extends Activity implements OnClickListener {
 		AlertDialog alert = builder.create();
 		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
 					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+		alert.setCancelable(false);
+		alert.setCanceledOnTouchOutside(false);
 		alert.show();
 	    }
 	    

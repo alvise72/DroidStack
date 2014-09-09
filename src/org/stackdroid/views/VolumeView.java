@@ -53,18 +53,18 @@ public class VolumeView extends LinearLayout {
 			volName = volName.substring(0,14) + "..";
 		Name.setText( volName );
 		Name.setTextColor( Color.parseColor("#333333") );
-		Name.setOnClickListener( (OnClickListener)ctx );
+		//Name.setOnClickListener( (OnClickListener)ctx );
 		Name.setTypeface( null, Typeface.BOLD );
 	
 		Status_and_Size = new TextViewNamed( ctx, (VolumeView)this );
 		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatus()+")" );
-		Status_and_Size.setOnClickListener( (OnClickListener)ctx );
+		//Status_and_Size.setOnClickListener( (OnClickListener)ctx );
 	
 		text.addView(Name);
 		text.addView(Status_and_Size);
-		text.setOnClickListener( (OnClickListener)ctx );
+		//text.setOnClickListener( (OnClickListener)ctx );
 		row.addView(text);
-		setOnClickListener( (OnClickListener)ctx );
+		//setOnClickListener( (OnClickListener)ctx );
 
 		detach = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME );
 		detach.setImageResource(R.drawable.ipassociate);

@@ -83,6 +83,8 @@ public class ServersActivity extends Activity {
 		            
 			AlertDialog alert = builder.create();
 			alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+			alert.setCancelable(false);
+			alert.setCanceledOnTouchOutside(false);
 			alert.show();
 
 		}
@@ -122,7 +124,10 @@ public class ServersActivity extends Activity {
 	         });
 	         alert.setCancelable(false);
 	         //alert.setCanceledOnTouchOutside(false);
-	         alert.create().show( );
+	         AlertDialog dia = alert.create();
+	         dia.setCancelable(false);
+	         dia.setCanceledOnTouchOutside(false);
+	         dia.show( );
 		    	
 		     return;
 		    }
@@ -356,6 +361,8 @@ public class ServersActivity extends Activity {
 	  		AlertDialog alert = builder.create();
 	  		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
 	  					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	  		alert.setCancelable(false);
+	  		alert.setCanceledOnTouchOutside(false);
 	  		alert.show();
 	    	
 	    	
@@ -394,7 +401,8 @@ public class ServersActivity extends Activity {
 
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
-	
+        progressDialogWaitStop.setCancelable(false);
+        progressDialogWaitStop.setCanceledOnTouchOutside(false);
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
         try {
         	U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );

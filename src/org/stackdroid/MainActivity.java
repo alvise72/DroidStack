@@ -7,14 +7,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.content.Intent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.stackdroid.R;
@@ -110,6 +107,8 @@ public class MainActivity extends Activity
 	        
 	      AlertDialog alert = builder.create();
 	      alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	      alert.setCancelable(false);
+	      alert.setCanceledOnTouchOutside(false);
 	      alert.show();
 	      return;
       }
@@ -130,6 +129,8 @@ public class MainActivity extends Activity
 	        
 	      AlertDialog alert = builder.create();
 	      alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+	      alert.setCancelable(false);
+	      alert.setCanceledOnTouchOutside(false);
 	      alert.show();
 	      return;
       }

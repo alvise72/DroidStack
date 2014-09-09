@@ -1,13 +1,10 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
@@ -16,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Gravity;
 import android.view.View;
@@ -23,7 +21,6 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.stackdroid.activities.SecGrpActivity.AsyncTaskCreateSecGroup;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -43,7 +40,7 @@ import android.os.AsyncTask;
 
 import org.stackdroid.utils.CustomProgressDialog;
 
-public class VolumesActivity extends Activity implements OnClickListener {
+public class VolumesActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop = null;
     private User 				 U 						= null;
@@ -96,6 +93,8 @@ public class VolumesActivity extends Activity implements OnClickListener {
     }
 
     //__________________________________________________________________________________
+    /*
+     
     @Override
     public void onClick( View v ) {
     	if(v instanceof ImageButtonNamed) {
@@ -113,6 +112,7 @@ public class VolumesActivity extends Activity implements OnClickListener {
     		return;
     	}
     }
+    */
     
     //__________________________________________________________________________________
     @Override
@@ -122,7 +122,8 @@ public class VolumesActivity extends Activity implements OnClickListener {
 
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
-	
+        progressDialogWaitStop.setCancelable(false);
+        progressDialogWaitStop.setCanceledOnTouchOutside(false);
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
         try {
         	U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
@@ -192,13 +193,37 @@ public class VolumesActivity extends Activity implements OnClickListener {
     protected class DeleteVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
+    		final Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
     		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
     		if(V.isAttached()) {
     			Utils.alert(VolumesActivity.this.getString(R.string.CANNOTDELETEATTACHEDVOL), VolumesActivity.this);
     			return;
     		}
-    		(new VolumesActivity.AsyncTaskDeleteVolume()).execute( V.getID() );
+    		AlertDialog.Builder builder = new AlertDialog.Builder(VolumesActivity.this);
+			builder.setMessage( getString(R.string.AREYOUSURETODELETEVOL));
+			builder.setCancelable(false);
+			    
+			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+				    //deleteNovaInstance( serverid );
+					(new VolumesActivity.AsyncTaskDeleteVolume()).execute( V.getID() );
+				}
+			};
+
+			DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+				    dialog.cancel( );
+				}
+			};
+
+			builder.setPositiveButton(getString(R.string.YES), yesHandler );
+			builder.setNegativeButton(getString(R.string.NO), noHandler );
+		            
+			AlertDialog alert = builder.create();
+			alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+			alert.setCancelable(false);
+			alert.setCanceledOnTouchOutside(false);
+			alert.show();
     	}
     }
     
@@ -228,9 +253,10 @@ public class VolumesActivity extends Activity implements OnClickListener {
         mButton.setOnClickListener(new CreateVolumeClickListener());
         volname = (EditText)promptsView.findViewById(R.id.volumenameET);
         volsize = (EditText)promptsView.findViewById(R.id.volumesizeET);
-        
-        alertDialogCreateVolume.show();
         alertDialogCreateVolume.setCanceledOnTouchOutside(false);
+        alertDialogCreateVolume.setCancelable(false);
+        alertDialogCreateVolume.show();
+        
     }
  
     /**

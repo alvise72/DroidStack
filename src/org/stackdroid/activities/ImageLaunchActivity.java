@@ -115,6 +115,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       
       progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
       progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
+      progressDialogWaitStop.setCancelable(false);
+      progressDialogWaitStop.setCanceledOnTouchOutside(false);
       
       spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
       spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);

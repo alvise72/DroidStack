@@ -90,6 +90,8 @@ public class OverViewActivity extends Activity {
 
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
+        progressDialogWaitStop.setCancelable(false);
+        progressDialogWaitStop.setCanceledOnTouchOutside(false);
         String selectedUserID = Utils.getStringPreference("SELECTEDUSER", "", this);
         setTitle(getString(R.string.USAGEOVERVIEW));
         try {

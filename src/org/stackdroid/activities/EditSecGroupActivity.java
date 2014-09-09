@@ -96,7 +96,9 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
         	if(U==null) {
         		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
         	} else {
-        		this.progressDialogWaitStop.show( );
+        		progressDialogWaitStop.setCancelable(false);
+        		progressDialogWaitStop.setCanceledOnTouchOutside(false);
+        		progressDialogWaitStop.show( );
             	(new AsyncTaskListRules()).execute( secgrpID );
         		return true;
         	}
@@ -247,7 +249,8 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
     	
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
-        
+        progressDialogWaitStop.setCancelable(false);
+		progressDialogWaitStop.setCanceledOnTouchOutside(false);
     	this.progressDialogWaitStop.show( );
     	(new AsyncTaskListRules()).execute( secgrpID );
     }
@@ -298,8 +301,10 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
 
         ruleSpinner.setOnItemSelectedListener((OnItemSelectedListener)this);
         
-        alertDialogSelectRule.show();
+//        alertDialogSelectRule.show();
         alertDialogSelectRule.setCanceledOnTouchOutside(false);
+        alertDialogSelectRule.setCancelable(false);
+        alertDialogSelectRule.show();
     }
 
     /*
@@ -316,7 +321,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
     		ImageButtonNamed bt = (ImageButtonNamed)v;
     		if(bt.getType() == ImageButtonNamed.BUTTON_DELETE_RULE) {
     			SimpleSecGroupRule r = bt.getRuleView().getRule( );
-    			this.progressDialogWaitStop.show( );
+    			progressDialogWaitStop.show( );
     			(new AsyncTaskDeleteRule( )).execute( r.getID());
     		}
     	}
@@ -325,7 +330,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
     		String S = (String)this.ruleSpinner.getSelectedItem();
             
     		alertDialogSelectRule.dismiss();
-            this.progressDialogWaitStop.show();
+            progressDialogWaitStop.show();
             
             String fromPortS = fromPort.getText().toString();
             String toPortS = toPort.getText().toString();

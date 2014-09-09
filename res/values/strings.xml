@@ -108,4 +108,5 @@
     <string name="VOLSIZE">Volume size</string>
     <string name="CANNOTDELETEATTACHEDVOL">Cannot delete a volume attached to an instance.</string>
     <string name="VOLUMEDELETED">Volume successfully deleted. Press on Menu -&gt; Update if it is still displayed.</string>
+    <string name="AREYOUSURETODELETEVOL">Are you sure to delete the volume ?</string>
 </resources>

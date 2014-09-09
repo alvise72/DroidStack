@@ -410,25 +410,23 @@ public class Utils {
      *
      */
     public static void alertInfo( ScrollView sv, String title, Context ctx ) {
-	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
-	alertbox.setTitle(title);
-	alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+    	AlertDialog.Builder alertbox = new AlertDialog.Builder( ctx );
+    	alertbox.setTitle(title);
+    	alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
  
                 public void onClick(DialogInterface arg0, int arg1) {
                 }
-            });
-	AlertDialog alert = alertbox.create();
-	alert.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-				   WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    	});
+    	AlertDialog alert = alertbox.create();
+    	alert.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-	LinearLayout.LayoutParams lp 
-	    = new LinearLayout.LayoutParams(
-					    LinearLayout.LayoutParams.MATCH_PARENT,
-					    LinearLayout.LayoutParams.MATCH_PARENT);
-	LinearLayout l = new LinearLayout(ctx);
-	l.setLayoutParams( lp );
-	l.addView(sv);
-	alert.setView(l); 
+    	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+    	LinearLayout l = new LinearLayout(ctx);
+    	l.setLayoutParams( lp );
+    	l.addView(sv);
+    	alert.setView(l);
+    	alert.setCancelable(false);
+    	alert.setCanceledOnTouchOutside(false);
         alert.show();
     }
 
@@ -439,9 +437,10 @@ public class Utils {
      *
      */
     public static void customAlert( String message, String title, Context ctx ) {
-	ProgressBarDialog dialog = new ProgressBarDialog( ctx, message, title );
-	
-	dialog.show();
+    	ProgressBarDialog dialog = new ProgressBarDialog( ctx, message, title );
+    	dialog.setCancelable(false);
+    	dialog.setCanceledOnTouchOutside(false);
+    	dialog.show();
     }
 
     /**
@@ -509,8 +508,8 @@ public class Utils {
      */
     public static void showProblemAndExit( final Context ctx, String message ) {
 	
-	AlertDialog.Builder builder = new AlertDialog.Builder( ctx );
-	builder.setMessage( message )
+    	AlertDialog.Builder builder = new AlertDialog.Builder( ctx );
+    	builder.setMessage( message )
             .setCancelable(false)
             .setPositiveButton("Quit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -519,7 +518,8 @@ public class Utils {
                 });
         
         AlertDialog alert = builder.create();
-
+        alert.setCancelable(false);
+        alert.setCanceledOnTouchOutside(false);
         alert.show();
     } 
     
