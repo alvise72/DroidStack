@@ -98,4 +98,6 @@
     <string name="SERVICEUNAVAILABLE">Remote service is not responding; please check that it\'s working...</string>
     <string name="NOTFOUND">Resource or URI not found</string>
     <string name="NOTAUTHORIZED">Not authorized to access the resource or URI</string>
+    <string name="RULECREATED">Rule succesfully created. Press on Menu -&gt; Update to refresh view if not automatically displayed.</string>
+    <string name="RULEDELETED">Rule succesfully deleted. Press on Menu -&gt; Update to refresh if rule is still displayed.</string>
 </resources>

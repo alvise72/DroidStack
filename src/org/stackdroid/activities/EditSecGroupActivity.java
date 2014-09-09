@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.R;
+import org.stackdroid.activities.ServersActivity.AsyncTaskDeleteServer;
+import org.stackdroid.activities.ServersActivity.AsyncTaskOSListServers;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.parse.ParseUtils;
@@ -15,14 +17,18 @@ import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.views.RuleView;
+import org.stackdroid.views.ServerView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -53,7 +59,50 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
     private Spinner PROTO = null;
 	private ArrayAdapter<String> spinnerProtoAdapter = null;
 	private Vector<String> protocols = null;
-    
+
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */
+    public boolean onCreateOptionsMenu( Menu menu ) {
+        
+        super.onCreateOptionsMenu( menu );
+        
+        int order = Menu.FIRST;
+        int GROUP = 0;
+                
+        menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
+        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+        //menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
+        return true;
+    }
+
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */
+    public boolean onOptionsItemSelected( MenuItem item ) {
+	 
+        int id = item.getItemId();     
+        
+        if( id == Menu.FIRST-1 ) {
+            Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
+            return true;
+        }
+        
+        if( id == Menu.FIRST ) { 
+        	if(U==null) {
+        		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
+        	} else {
+        		this.progressDialogWaitStop.show( );
+            	(new AsyncTaskListRules()).execute( secgrpID );
+        		return true;
+        	}
+        }
+        return super.onOptionsItemSelected( item );
+    }
     /*
      * 
      * 
@@ -400,6 +449,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
 	    	} catch(ParseException pe) {
 	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
 	    	}
+	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULEDELETED), EditSecGroupActivity.this);
 	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }
     }
@@ -444,6 +494,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
 	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    		return;
 	    	}
+	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULECREATED), EditSecGroupActivity.this);
 	    	(new AsyncTaskListRules()).execute( secgrpID );
 	    	//EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }

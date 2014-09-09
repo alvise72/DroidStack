@@ -96,4 +96,6 @@
     <string name="SERVICEUNAVAILABLE">Il servizio remoto non risponde; controllare che sia in funzione...</string>
     <string name="NOTFOUND">Risorsa o URI non trovata</string>
     <string name="NOTAUTHORIZED">Non autorizzato ad accedere alla risorsa o all\'URI</string>
+    <string name="RULECREATED">Regola creata con successo. Premi su Menu -&gt; Aggiorna per ricaricare se la regola non viene automaticamente mostrata.</string>
+    <string name="RULEDELETED">Regole cancellata con successo. Premi su Menu -&gt; Aggiorna se la regole viene ancora mostrata.</string>
 </resources>
