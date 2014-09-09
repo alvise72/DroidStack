@@ -234,7 +234,6 @@ public class ServersActivity extends Activity {
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
 			l.addView( tv7 );
-			//l.addView( tv8 );
 			for(int i = 0; i<tv8_privip.length; ++i) {
 				l.addView(tv8_privip[i]);
 				tv8_privip[i].setPadding(paddingDp, 0, 0, 0);
@@ -244,8 +243,6 @@ public class ServersActivity extends Activity {
 				l.addView(tv10_pubip[i]);
 				tv10_pubip[i].setPadding(paddingDp, 0, 0, 0);
 			}
-			//l.addView( tv10 );
-			//tv10.setPadding(paddingDp, 0, 0, 0);
 			l.addView( tv11 );
 			l.addView( tv12 );
 			tv12.setPadding(paddingDp, 0, 0, 0);
@@ -297,7 +294,6 @@ public class ServersActivity extends Activity {
         menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
-    
 
 	/**
 	 * 
@@ -384,7 +380,6 @@ public class ServersActivity extends Activity {
     	return;
     }
 
-
 	/**
 	 * 
 	 * @author dorigoa
@@ -413,10 +408,8 @@ public class ServersActivity extends Activity {
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
         progressDialogWaitStop.show();
-        AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-        task.execute( );
+        (new AsyncTaskOSListServers()).execute( );
     }
-    
 
 	/**
 	 * 
@@ -428,7 +421,6 @@ public class ServersActivity extends Activity {
     	super.onDestroy( );
     	progressDialogWaitStop.dismiss();
     }
-
 
 	/**
 	 * 
@@ -510,7 +502,7 @@ public class ServersActivity extends Activity {
      	}
 	
 	@Override
-	    protected void onPostExecute( String result ) {
+	protected void onPostExecute( String result ) {
 	    super.onPostExecute(result);
 	    
  	    if(hasError) {
@@ -582,55 +574,53 @@ public class ServersActivity extends Activity {
     protected class AsyncTaskDeleteServer extends AsyncTask<String, Void, Void>
     {
      	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
-	private  String   jsonBuf          = null;
-	//private  String   jsonBufferFlavor = null;
-	private  String[] serverids        = null;
-	//private  String   username         = null;
-	private  boolean  not_found        = false;
-	@Override
-	protected Void doInBackground(String... args ) 
-	{
-	    serverids = args[0].split(",");
-	    OSClient osc = OSClient.getInstance( U );
+     	private  boolean  hasError         = false;
+     	private  String[] serverids        = null;
+     	private  boolean  not_found        = false;
+     	@Override
+     	protected Void doInBackground(String... args ) 
+     	{
+     		serverids = args[0].split(",");
+     		OSClient osc = OSClient.getInstance( U );
 
 
-	    try {
-	    	not_found = false;
-		for(int i = 0; i<serverids.length; ++i) {
-		    try {
-			  osc.deleteInstance( serverids[i] );
-		    } catch(NotFoundException nfe) {
-		    	Log.d("SERVERSACT",nfe.getMessage());
-			  not_found = true;
-		    }
-		}
-		// jsonBuf = RESTClient.requestServers( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-		// jsonBufferFlavor = RESTClient.requestFlavors( U.getEndpoint(), U.getToken(), U.getTenantID(), U.getTenantName() );
-	    } catch(Exception e) {
-	    	errorMessage = e.getMessage();
-	    	hasError = true;
-	    	return null;
-	    }
+     		try {
+     			not_found = false;
+     			for(int i = 0; i<serverids.length; ++i) {
+     				try {
+     					osc.deleteInstance( serverids[i] );
+     				} catch(NotFoundException nfe) {
+     					Log.d("SERVERSACT",nfe.getMessage());
+     					not_found = true;
+     				}
+     			}
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return null;
+     		}
 	    
-	    return null;
-	}
+     		return null;
+     	}
 	
-	@Override
-        protected void onPostExecute( Void v ) {
-	    super.onPostExecute(v);
-	    ServersActivity.this.progressDialogWaitStop.dismiss( );
-	    if(not_found==true) {
-		Utils.alert(ServersActivity.this.getString(R.string.SOMEDELETIONFAILED), ServersActivity.this );
-		return;
-	    }
- 	    if(hasError==true)
- 		Utils.alert( errorMessage, ServersActivity.this );
- 	    else
-		Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
-	    
-	}
-    }
+     	@Override
+     	protected void onPostExecute( Void v ) {
+     		super.onPostExecute(v);
+     		
+     		if(not_found==true) {
+     			Utils.alert(ServersActivity.this.getString(R.string.SOMEDELETIONFAILED), ServersActivity.this );
+     			ServersActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
+     		if(hasError==true)
+     			Utils.alert( errorMessage, ServersActivity.this );
+     		else {
+     			Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
+     			(new AsyncTaskOSListServers()).execute( );
+     		}
+     		ServersActivity.this.progressDialogWaitStop.dismiss( );
+     	}
+   }
     
   //__________________________________________________________________________________
     protected class AsyncTaskOSLogServer extends AsyncTask<Void, Void, Void>

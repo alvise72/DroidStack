@@ -495,7 +495,7 @@ public class RESTClient {
 			      ((HttpsURLConnection)conn).disconnect( );
 				else
 				  ((HttpURLConnection)conn).disconnect( );
-		    throw new RuntimeException("RESTClient.sendPOSTRequest.InputStream.write/close: "+ioe.getMessage( ) );
+		    throw new IOException("RESTClient.sendPOSTRequest.InputStream.write/close: "+ioe.getMessage( ) );
 		}
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );
@@ -541,7 +541,7 @@ public class RESTClient {
     									  String sURL, 
 					  					  String token,
 					  					  Vector<Pair<String,String>> properties ) 
-	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, GenericException, MalformedURLException
+	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, GenericException, MalformedURLException, ProtocolException
     {
     	String Url = sURL;
     	if(usessl)
@@ -571,7 +571,7 @@ public class RESTClient {
 		      ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-	    throw new RuntimeException( "RESTClient.sendDELETERequest.setRequestMethod(DELETE): " + pe.getMessage( ) );
+	    throw new ProtocolException( "RESTClient.sendDELETERequest.setRequestMethod(DELETE): " + pe.getMessage( ) );
 	}
 	
 	if( properties!=null ) {
