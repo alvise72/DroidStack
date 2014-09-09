@@ -76,10 +76,16 @@
    	 	android:orientation="horizontal" >
     
    		 <Button
-      	  android:id="@+id/myButton"
+      	  android:id="@+id/confirmRuleAdd"
       	  android:layout_width="wrap_content"
       	  android:layout_height="wrap_content"
       	  android:text="@string/CONFIRM" />
+
+   		 <Button
+   		     android:id="@+id/cancelRuleAdd"
+   		     android:layout_width="wrap_content"
+   		     android:layout_height="wrap_content"
+   		     android:text="@string/CANCEL" />
 
 	</LinearLayout>
 </LinearLayout>

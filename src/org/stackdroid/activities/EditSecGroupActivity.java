@@ -41,7 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class EditSecGroupActivity extends Activity  implements OnClickListener, OnItemSelectedListener {
+public class EditSecGroupActivity extends Activity implements OnItemSelectedListener {
 
     private String secgrpID   = null;
 	private String secgrpName = null;
@@ -49,7 +49,7 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
     private User   U          = null;
     private ArrayAdapter<String> spinnerRulesAdapter  = null;
     private Spinner ruleSpinner = null;
-    private Spinner protoSpinner = null;
+    //private Spinner protoSpinner = null;
     private Vector<String> predefinedRules = null;
     private AlertDialog alertDialogSelectRule = null;
     private CustomProgressDialog progressDialogWaitStop = null;
@@ -289,11 +289,14 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
         ruleSpinner = (Spinner)promptsView.findViewById(R.id.mySpinner);
         ruleSpinner.setAdapter(spinnerRulesAdapter);
         
-        protoSpinner = (Spinner)promptsView.findViewById(R.id.protoSpinner);
-        protoSpinner.setAdapter(spinnerProtoAdapter);
+        //protoSpinner = (Spinner)promptsView.findViewById(R.id.protoSpinner);
+        //protoSpinner.setAdapter(spinnerProtoAdapter);
+        ( (Spinner)promptsView.findViewById(R.id.protoSpinner) ).setAdapter(spinnerProtoAdapter);
         
-        final Button mButton = (Button)promptsView.findViewById(R.id.myButton);
-        mButton.setOnClickListener(this);
+        //(Button)promptsView.findViewById(R.id.confirmRuleAdd);
+        ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener( new EditSecGroupActivity.ConfirmRuleAddClickListener( ) );
+        ((Button)promptsView.findViewById(R.id.cancelRuleAdd)).setOnClickListener( new EditSecGroupActivity.CancelRuleAddClickListener( ) );
+        
         fromPort = (EditText)promptsView.findViewById(R.id.fromPortET);
         toPort = (EditText)promptsView.findViewById(R.id.toPortET);
         PROTO = (Spinner)promptsView.findViewById(R.id.protoSpinner);
@@ -301,10 +304,33 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
 
         ruleSpinner.setOnItemSelectedListener((OnItemSelectedListener)this);
         
-//        alertDialogSelectRule.show();
         alertDialogSelectRule.setCanceledOnTouchOutside(false);
         alertDialogSelectRule.setCancelable(false);
         alertDialogSelectRule.show();
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    protected class ConfirmRuleAddClickListener implements OnClickListener {
+    	@Override
+        public void onClick(View v) { 
+    		String S = (String)ruleSpinner.getSelectedItem();
+            
+    		
+            progressDialogWaitStop.show();
+            
+            String fromPortS = fromPort.getText().toString();
+            String toPortS = toPort.getText().toString();
+            String cidrS = CIDR.getText().toString();
+            String protoS = PROTO.getSelectedItem().toString().toLowerCase();
+            ( new AsyncTaskCreateRule( ) ).execute( secgrpID, fromPortS, toPortS, cidrS, protoS );
+    	}
     }
 
     /*
@@ -315,33 +341,12 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
      * 
      * 
      */
-    @Override
-    public void onClick(View v) { 
-    	if(v instanceof ImageButtonNamed) {
-    		ImageButtonNamed bt = (ImageButtonNamed)v;
-    		if(bt.getType() == ImageButtonNamed.BUTTON_DELETE_RULE) {
-    			SimpleSecGroupRule r = bt.getRuleView().getRule( );
-    			progressDialogWaitStop.show( );
-    			(new AsyncTaskDeleteRule( )).execute( r.getID());
-    		}
-    	}
-    	
-    	if(v instanceof Button) {
-    		String S = (String)this.ruleSpinner.getSelectedItem();
-            
+    protected class CancelRuleAddClickListener implements OnClickListener {
+    	@Override
+        public void onClick(View v) { 
     		alertDialogSelectRule.dismiss();
-            progressDialogWaitStop.show();
-            
-            String fromPortS = fromPort.getText().toString();
-            String toPortS = toPort.getText().toString();
-            String cidrS = CIDR.getText().toString();
-            String protoS = PROTO.getSelectedItem().toString().toLowerCase();
-            ( new AsyncTaskCreateRule( ) ).execute( this.secgrpID, fromPortS, toPortS, cidrS, protoS );
-            
     	}
-    	
     }
-
     /*
      * 
      * 
