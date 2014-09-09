@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
+//import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
@@ -46,10 +47,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private ArrayAdapter<KeyPair> spinnerKeypairsArrayAdapter = null;
     private Spinner spinnerFlavors   = null;
     private Spinner spinnerKeypairs  = null;
-    private Vector<Network> networks = null;
+    //private Vector<Network> networks = null;
     //private Flavor flavors[] = null;
-    private Vector<KeyPair> keypairs = null;
-    private Vector<SecGroup> secgroups = null;
+    //private Vector<KeyPair> keypairs = null;
+    //private Vector<SecGroup> secgroups = null;
     private LinearLayout options = null;
     private LinearLayout networksL = null;
     HashSet<String> selectedSecgroups = null;
@@ -128,8 +129,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
   	    Utils.alert("ImageLaunchActivity.onCreate: "+re.getMessage(), this );
   	    return;
   	  }
-      
-      Log.d("IMAGELAUNCH", "User="+U);
+      if(selectedUser.length()!=0)
+  		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+  	  else
+  		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+      //Log.d("IMAGELAUNCH", "User="+U);
       
   	  /*if(selectedUser.length()!=0)
   		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
@@ -225,18 +229,19 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      *
      */  
   public void launch( View v ) {
-
-      if(((EditText)findViewById(R.id.vmnameET)).getText().toString().length()==0) {
-	  Utils.alert(getString(R.string.MUSTSETNAME) , this);
-	  return;
+	  String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
+	  instanceName.trim();
+      if(instanceName.length()==0) {
+    	  Utils.alert(getString(R.string.MUSTSETNAME) , this);
+    	  return;
       }
 
       if(mappingNetEditText.size()==0) {
-	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
-	  return;
+    	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
+    	  return;
       }
 
-      String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
+      //String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
       selectedNetworks.clear();
@@ -274,12 +279,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
       if(kp!=null)
     	  kpName = kp.getName();
       Flavor flv = (Flavor)this.spinnerFlavors.getSelectedItem();
-      /*Log.d("IMAGELAUNCH","instanceName="+instanceName);
-      Log.d("IMAGELAUNCH","kp="+kpName);
-      Log.d("IMAGELAUNCH","flavor="+flv.getID());
-      Log.d("IMAGELAUNCH", "count="+count);
-      Log.d("IMAGELAUNCH", "groups="+Utils.join( selectedSecgroups, "," ));
-      Log.d("IMAGELAUNCH","adminPass="+adminPass);*/
+      
       (new AsyncTaskLaunch()).execute( instanceName, 
     		  						   imageID, 
     		  						   kpName, 
@@ -288,6 +288,71 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     		  						   Utils.join( selectedSecgroups, "," ) );
   }
 
+  	/**
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 */
+  	private void updateNetworkList(Vector<Network> nets) {
+	  Iterator<Network> nit = nets.iterator();
+	  while(nit.hasNext()) {
+		  Network net = nit.next();
+		  //Log.d("LAUNCH", "Handling network "+net);
+		  
+		  // do not show a net owned by someone else and which is not shared (ex. the external one)
+		  if(U.getTenantID().compareTo( net.getTenantID() )!=0) {
+				if(net.isShared()==false) {
+				    //Log.d("LAUNCH", "skipping...");
+					continue;
+				}
+		  }
+		  NetworkView nv = new NetworkView( net, ImageLaunchActivity.this );
+		  nv.setOnClickListener( ImageLaunchActivity.this );
+		  networksL.addView( nv );
+		  EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
+		  etIP.setKeyListener(IPAddressKeyListener.getInstance());
+		    
+		  TextView tv = new TextView( ImageLaunchActivity.this );
+		  tv.setText(getString(R.string.SPECIFYOPTIP));
+		  networksL.addView( tv );
+		  networksL.addView( etIP );
+		  etIP.setEnabled(false);
+		  mappingNetEditText.put( nv.getNetwork().getID(), etIP );
+	  }
+  	}
+
+	public void updateFlavorList(Vector<Flavor> flavs) {
+		spinnerFlavorsArrayAdapter = new ArrayAdapter<Flavor>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,flavs.subList(0,flavs.size()) );
+		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
+	}
+
+	public void updateSecGroupList(Vector<SecGroup> secgs) {
+		Iterator<SecGroup> sit = secgs.iterator();
+		while(sit.hasNext()) {
+			SecGroupView sgv = new SecGroupView( sit.next(), ImageLaunchActivity.this );
+			sgv.setOnClickListener( ImageLaunchActivity.this );
+			options.addView( sgv );
+			if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
+		}
+	}
+
+	public void updateKeyPairList(Vector<KeyPair> keys) {
+		spinnerKeypairsArrayAdapter = new ArrayAdapter<KeyPair>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,keys.subList(0, keys.size()) );
+		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerKeypairs.setAdapter(spinnerKeypairsArrayAdapter);
+	} 
+	
     /**
      *
      *
@@ -312,14 +377,11 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
      	private  String   jsonBufSubnet    = null;
      	private  String   jsonBufKeypairs  = null;
      	private  String   jsonBufSecgroups = null;
-     	//User U = null;
 
      	@Override
      	protected Void doInBackground( Void ... v ) 
      	{
-     		//U = u[0];
      		OSClient osc = OSClient.getInstance(U);
-     		
 
 	    try {
 	    	jsonBufFlavor    = osc.requestFlavors( );
@@ -337,7 +399,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	}
 	
 	@Override
-	    protected void onPostExecute( Void v ) {
+	protected void onPostExecute( Void v ) {
 	    super.onPostExecute( v );
 	    if(hasError) {
  		Utils.alert( errorMessage, ImageLaunchActivity.this );
@@ -346,14 +408,25 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
  	    }
 	    
 	    try {
-		networks = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
-		String[] netNames = new String[networks.size()];
-		
-		Iterator<Network> netit = networks.iterator();
-		int i = 0;
-		while(netit.hasNext()) {
-			Network net = netit.next( );
-			netNames[i] = net.getName( );
+	    	//Log.d("LAUNCH", "jsonBufNetwork="+jsonBufNetwork);
+	    	Vector<Network> nets   = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
+	    	Vector<Flavor> flavs   = ParseUtils.parseFlavors( jsonBufFlavor );
+	    	Vector<KeyPair> keys   = ParseUtils.parseKeyPairs( jsonBufKeypairs );
+	    	Vector<SecGroup> secgs = ParseUtils.parseSecGroups( jsonBufSecgroups );
+	    	
+	    	//String[] netNames = new String[nets.size()];
+
+	    	updateNetworkList( nets );
+	    	updateFlavorList( flavs );
+	    	updateKeyPairList( keys );
+	    	updateSecGroupList( secgs );
+	    	
+/*	    	Iterator<Network> netit = nets.iterator();
+	    	int i = 0;
+	    	while(netit.hasNext()) {
+	    		Network net = netit.next( );
+	    		netNames[i] = net.getName( );
+	    	
 			if(U.getTenantID().compareTo( net.getTenantID() )!=0) {
 				if(net.isShared()==false)
 				    continue;
@@ -363,11 +436,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 			    nv.setOnClickListener( ImageLaunchActivity.this );
 			    networksL.addView( nv );
 			    EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
-			    //etIP.setInputType(InputType.TYPE_NUMBER_VARIATION_NORMAL);
 			    etIP.setKeyListener(IPAddressKeyListener.getInstance());
-			    //etIP.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
-			    //etIP.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
-			    //etIP.setInputType(InputType.TYPE_CLASS_TEXT);
 			    
 			    TextView tv = new TextView(  ImageLaunchActivity.this );
 			    tv.setText(getString(R.string.SPECIFYOPTIP));
@@ -376,7 +445,7 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 			    etIP.setEnabled(false);
 			    mappingNetEditText.put( nv.getNetwork().getID(), etIP );
 			    i++;
-		}
+	    	}
 
 		Vector<Flavor> flavors = ParseUtils.parseFlavors( jsonBufFlavor );
 		
@@ -398,11 +467,10 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 			sgv.setOnClickListener( ImageLaunchActivity.this );
 			options.addView( sgv );
 			if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
-		}
+		}*/
 		
 	    } catch(ParseException pe) {
-		Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
-			    ImageLaunchActivity.this);
+	    	Utils.alert("ImageLaunchActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), ImageLaunchActivity.this);
 	    }
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
 	}
@@ -464,4 +532,5 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    
 	}
     }
+
 }
