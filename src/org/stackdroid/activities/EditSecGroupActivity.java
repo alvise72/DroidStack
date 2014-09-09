@@ -113,7 +113,6 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
      */    
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		// TODO Auto-generated method stub
 		String selected  = (String)parent.getSelectedItem();
 		
 		if(selected.compareTo("Custom")==0) {

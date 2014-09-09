@@ -26,7 +26,7 @@ public class VolumeView extends LinearLayout {
 
     private Volume V = null;
 
-    public VolumeView( Volume v, Context ctx ) {
+    public VolumeView( Volume v, OnClickListener attachdetachVol, OnClickListener deleteVol, Context ctx ) {
     	super(ctx);
     	V = v;
 	
@@ -68,11 +68,11 @@ public class VolumeView extends LinearLayout {
 
 		detach = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME );
 		detach.setImageResource(R.drawable.ipassociate);
-		detach.setOnClickListener( (OnClickListener)ctx );
+		detach.setOnClickListener( attachdetachVol );
 
 		delete = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_SNAP_SERVER );
 		delete.setImageResource(android.R.drawable.ic_menu_delete);
-		delete.setOnClickListener( (OnClickListener)ctx );
+		delete.setOnClickListener( deleteVol );
 
 		info = new LinearLayoutNamed( ctx, (VolumeView)this );
 		info.setOrientation( LinearLayout.HORIZONTAL );

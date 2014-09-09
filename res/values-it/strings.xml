@@ -98,4 +98,12 @@
     <string name="NOTAUTHORIZED">Non autorizzato ad accedere alla risorsa o all\'URI</string>
     <string name="RULECREATED">Regola creata con successo. Premi su Menu -&gt; Aggiorna per ricaricare se la regola non viene automaticamente mostrata.</string>
     <string name="RULEDELETED">Regole cancellata con successo. Premi su Menu -&gt; Aggiorna se la regole viene ancora mostrata.</string>
+    <string name="INPUTVOLNAME">Inserisci il nome e la dimensione del volume</string>
+    <string name="VOLSIZEMUSTBENUMERIC">La dimensione del volume deve essere un numero.</string>
+    <string name="NOZEROVOLSIZE">Dimensione zero del volume non consentita.</string>
+    <string name="VOLUMECREATED">Volume creato con successo. Premi su Menu -&gt; Aggiorna se ancora non viene visualizzato.</string>
+    <string name="VOLNAME">Nome del volume</string>
+    <string name="VOLSIZE">Dimensione del volume</string>
+    <string name="CANNOTDELETEATTACHEDVOL">Non si pu&#xf2; cancellare un volume collegato ad un\'istanza.</string>
+    <string name="VOLUMEDELETED">Volume cancellato con successo. Premi su Menu -&gt; Aggiorna se viene ancora visualizzato.</string>
 </resources>

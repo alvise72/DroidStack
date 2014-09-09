@@ -125,12 +125,13 @@ public class ParseUtils {
     }
 
     /**
+     * @throws ParseException 
      *
      *
      *
      *
      */
-    public static String getErrorMessage ( String jsonBuf ) {
+    public static String getErrorMessage ( String jsonBuf ) throws ParseException {
     	
     	//Log.d("PARSE.getErrorMessage", "jsonBuf="+jsonBuf);
     	
@@ -152,7 +153,7 @@ public class ParseUtils {
 	    errorMessage = jsonObject.getJSONObject("itemNotFound").getString("message");
 
       } catch(org.json.JSONException joe) {
-        return "Cannot parse json error message from remote server";
+        throw new ParseException ("Cannot parse json error message from remote server");
       }
       return errorMessage;
     }

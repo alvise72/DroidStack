@@ -100,4 +100,12 @@
     <string name="NOTAUTHORIZED">Not authorized to access the resource or URI</string>
     <string name="RULECREATED">Rule succesfully created. Press on Menu -&gt; Update to refresh view if not automatically displayed.</string>
     <string name="RULEDELETED">Rule succesfully deleted. Press on Menu -&gt; Update to refresh if rule is still displayed.</string>
+    <string name="INPUTVOLNAME">Insert volume name and size</string>
+    <string name="VOLSIZEMUSTBENUMERIC">Volume size must be numeric.</string>
+    <string name="NOZEROVOLSIZE">Not allowed a zero sized volume.</string>
+    <string name="VOLUMECREATED">Volume created successfully. Press on Menu -&gt; Update if it is not displayed yet.</string>
+    <string name="VOLNAME">Volume name</string>
+    <string name="VOLSIZE">Volume size</string>
+    <string name="CANNOTDELETEATTACHEDVOL">Cannot delete a volume attached to an instance.</string>
+    <string name="VOLUMEDELETED">Volume successfully deleted. Press on Menu -&gt; Update if it is still displayed.</string>
 </resources>

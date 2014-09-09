@@ -17,6 +17,7 @@ import java.util.Vector;
 import java.util.Iterator;
 
 import org.apache.http.HttpStatus;
+import org.stackdroid.parse.ParseException;
 import org.stackdroid.parse.ParseUtils;
 
 import android.util.Log;
@@ -157,36 +158,44 @@ public class RESTClient {
 	 * Any 4xx HTTP error from the Server
 	 */
 	if( status >= 400 ) {
-		
-		if(status == HttpStatus.SC_UNAUTHORIZED)
-			throw new NotAuthorizedException( "RESTClient.requestToken: Not Authorized" );
-		if(status == HttpStatus.SC_NOT_FOUND)
-			throw new NotFoundException( "RESTClient.requestToken: Not Found" );
-		
-	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
+		InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
+	    String buf = "";
 	    if(in!=null) {
-		int len;
-		String buf = "";
-		byte[] buffer = new byte[4096];
-		try {
-		    while (-1 != (len = in.read(buffer)))
-			buf += new String(buffer, 0, len);
-		    in.close();
-		} catch(IOException ioe) {
-			if(usessl)
-			      ((HttpsURLConnection)conn).disconnect( );
-				else
-				  ((HttpURLConnection)conn).disconnect( );
-		    throw new IOException("RESTClient.requestToken.InputStream.write/close: "+ioe.getMessage( ) );
-		}
+	    	int len;
+	    	
+	    	byte[] buffer = new byte[4096];
+	    	try {
+	    		while (-1 != (len = in.read(buffer)))
+	    			buf += new String(buffer, 0, len);
+	    		in.close();
+	    	} catch(IOException ioe) {
+	    		if(usessl)
+	    			((HttpsURLConnection)conn).disconnect( );
+	    		else
+	    			((HttpURLConnection)conn).disconnect( );
+	    		throw new IOException("RESTClient.requestToken.InputStream.write/close: "+ioe.getMessage( ) );
+	    	}
 	    
-		if(usessl)
-			  ((HttpsURLConnection)conn).disconnect( );
+	    	if(usessl)
+	    		((HttpsURLConnection)conn).disconnect( );
 			else
-			  ((HttpURLConnection)conn).disconnect( );
+				((HttpURLConnection)conn).disconnect( );
 		
-		throw new GenericException( "RESTClient.requestToken: " + ParseUtils.getErrorMessage( buf ) );
+	    	
 	    }
+	    
+	    String errorMessage;
+    	try {
+    		errorMessage = ParseUtils.getErrorMessage(buf);
+    	} catch( ParseException pe) {
+    		errorMessage = buf;
+    	}
+    	if(status == HttpStatus.SC_UNAUTHORIZED)
+			throw new NotAuthorizedException( "RESTClient.requestToken - Not Authorized: " + errorMessage );
+		if(status == HttpStatus.SC_NOT_FOUND)
+			throw new NotFoundException( "RESTClient.requestToken - Not Found: " + errorMessage );
+		
+		throw new GenericException( "RESTClient.requestToken: " + errorMessage );
 	}
 	
 	/**
@@ -363,7 +372,7 @@ public class RESTClient {
     
     	URL url = null;
     	url = new URL(Url);
-	
+    	Log.d("REST", "url="+url);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -472,39 +481,54 @@ public class RESTClient {
 	
 	
 	if( status >= 400 ) {
-		
-
+/*
 		if(status == HttpStatus.SC_UNAUTHORIZED)
 			throw new NotAuthorizedException( "RESTClient.sendPOSTRequest: Not Authorized" );
 		if(status == HttpStatus.SC_NOT_FOUND)
 			throw new NotFoundException( "RESTClient.sendPOSTRequest: Not Found" );
-		
-		
+*/		
+		String buf = "";
 	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
 	    if(in!=null) {
-		int len;
-		String buf = "";
-		byte[] buffer = new byte[4096];
-		try {
-		    while(-1 != (len = in.read(buffer))) {
-			  buf += new String(buffer, 0, len);
-		    }
-		    in.close();
-		} catch(IOException ioe) {
-			if(usessl)
-			      ((HttpsURLConnection)conn).disconnect( );
-				else
-				  ((HttpURLConnection)conn).disconnect( );
-		    throw new IOException("RESTClient.sendPOSTRequest.InputStream.write/close: "+ioe.getMessage( ) );
-		}
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
+	    	int len;
+	    	
+	    	byte[] buffer = new byte[4096];
+	    	try {
+	    		while(-1 != (len = in.read(buffer))) {
+	    			buf += new String(buffer, 0, len);
+	    		}
+	    		in.close();
+	    	} catch(IOException ioe) {
+	    		if(usessl)
+	    			((HttpsURLConnection)conn).disconnect( );
+	    		else
+	    			((HttpURLConnection)conn).disconnect( );
+	    		throw new IOException("RESTClient.sendPOSTRequest.InputStream.write/close: "+ioe.getMessage( ) );
+	    	}
+	    	if(usessl)
+	    		((HttpsURLConnection)conn).disconnect( );
+	    	else
+	    		((HttpURLConnection)conn).disconnect( );
 		
 		
-		throw new GenericException( "RESTClient.sendPOSTRequest: " + ParseUtils.getErrorMessage( buf ) );
+	    	//throw new GenericException( "RESTClient.sendPOSTRequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
+	    
+	    Log.d("REST", "buf="+buf);
+	    
+	    String errorMessage;
+	    try {
+	    	errorMessage = ParseUtils.getErrorMessage( buf );
+	    } catch(ParseException pe) {
+	    	errorMessage = buf;
+	    }
+	    
+	    if(status == HttpStatus.SC_UNAUTHORIZED)
+	    	throw new NotAuthorizedException( "RESTClient.sendPOSTRequest - Not Authorized: " + errorMessage );
+	    if(status == HttpStatus.SC_NOT_FOUND)
+			throw new NotFoundException( "RESTClient.sendPOSTRequest - Not Found: " + errorMessage );
+	    
+	    throw new GenericException( "RESTClient.sendPOSTRequest: " + errorMessage );
 	}
 	
 	BufferedInputStream inStream = null;
@@ -625,15 +649,15 @@ public class RESTClient {
 
 	if( status >= 400 ) {
 		
-		if(status == HttpStatus.SC_UNAUTHORIZED)
-			throw new NotAuthorizedException( "RESTClient.sendDELETERequest: Not Authorized" );
-		if(status == HttpStatus.SC_NOT_FOUND)
-			throw new NotFoundException( "RESTClient.sendDELETERequest: Not Found" );
-		
+		//if(status == HttpStatus.SC_UNAUTHORIZED)
+		//	throw new NotAuthorizedException( "RESTClient.sendDELETERequest: Not Authorized" );
+		//if(status == HttpStatus.SC_NOT_FOUND)
+		//	throw new NotFoundException( "RESTClient.sendDELETERequest: Not Found" );
+		String buf = "";
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    if(in!=null) {
 		int len;
-		String buf = "";
+		
 		byte[] buffer = new byte[4096];
 		try {
 		    while (-1 != (len = in.read(buffer))) {
@@ -653,9 +677,21 @@ public class RESTClient {
 			  ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-		
-		throw new GenericException( "RESTClient.sendDELETERequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
+	    
+	    String errorMessage;
+	    try {
+	    	errorMessage = ParseUtils.getErrorMessage(buf);
+	    } catch(ParseException pe) {
+	    	errorMessage = buf;
+	    }
+	    
+	    if(status == HttpStatus.SC_UNAUTHORIZED)
+	    	throw new NotAuthorizedException( "RESTClient.sendPOSTRequest - Not Authorized: " + errorMessage );
+	    if(status == HttpStatus.SC_NOT_FOUND)
+			throw new NotFoundException( "RESTClient.sendPOSTRequest - Not Found: " + errorMessage );
+	    
+	    throw new GenericException( "RESTClient.sendPOSTRequest: " + errorMessage );
 	}
 	if(usessl)
 	      ((HttpsURLConnection)conn).disconnect( );

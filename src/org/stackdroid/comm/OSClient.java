@@ -98,6 +98,55 @@ public class OSClient {
     		
 		}
     }
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void createVolume( String volname, int size_in_GB ) 
+    		throws NotAuthorizedException, NotFoundException, 
+	   GenericException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
+	   {
+    	checkToken( );
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"volume\": {\"display_name\": \"" + volname + "\", \"imageRef\": null, \"availability_zone\": null, \"volume_type\": null, \"display_description\": null, \"snapshot_id\": null, \"size\": " + size_in_GB + "}}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    							    U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes", 
+    							    U.getToken(), 
+    							    extradata, 
+    							    vp );
+	   }
+    
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void deleteVolume( String volID ) 
+    		throws NotAuthorizedException, NotFoundException, 
+	   GenericException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
+	   {
+    	checkToken( );
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	RESTClient.sendDELETERequest( U.useSSL(), 
+    								  U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes/" + volID, 
+    								  U.getToken(), 
+    								  vp );
+	   }
     
     /*
      * 

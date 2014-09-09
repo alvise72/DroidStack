@@ -4,7 +4,7 @@
       android:versionCode="2"
       android:versionName="0.2.0 alpha">
 
-    <uses-sdk android:minSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="14"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -28,7 +28,7 @@
         <activity android:launchMode="singleInstance" android:name="org.stackdroid.MainActivity"
                   android:label="DroidStack"
                   android:configChanges="orientation|keyboardHidden|screenSize"
-		  		  android:icon="@drawable/openstack">
+		  android:icon="@drawable/openstack">
           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -62,7 +62,7 @@
             android:name="org.stackdroid.activities.OverViewActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/USAGEOVERVIEW"
-	   		android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
@@ -70,7 +70,7 @@
             android:name="org.stackdroid.activities.UserAddActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/ADDNEWUSER"
-	   		android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
@@ -78,7 +78,7 @@
             android:name="org.stackdroid.activities.ServersActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/MANAGENOVAINST"
-	    	android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
 
@@ -86,7 +86,7 @@
             android:name="org.stackdroid.activities.ImageLaunchActivity"
             android:launchMode="singleInstance"
             android:label="@string/LAUNCHIMAGE"
-	    	android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        
@@ -94,7 +94,7 @@
             android:name="org.stackdroid.activities.FloatingIPActivity"
             android:launchMode="singleInstance"
             android:label="@string/FLOATINGIP"
-	    	android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        
@@ -102,7 +102,7 @@
             android:name="org.stackdroid.activities.SecGrpActivity"
             android:launchMode="singleInstance"
             android:label="@string/SECGROUP"            
-	        android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        
@@ -110,7 +110,7 @@
             android:name="org.stackdroid.activities.EditSecGroupActivity"
             android:launchMode="singleInstance"
             android:label="@string/EDITSECGROUP"            
-	        android:parentActivityName="org.stackdroid.SecGrpActivity"
+	    android:parentActivityName="org.stackdroid.SecGrpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        
@@ -118,7 +118,7 @@
             android:name="org.stackdroid.activities.VolumesActivity"
             android:launchMode="singleInstance"
             android:label="@string/VOLUMES"            
-	        android:parentActivityName="org.stackdroid.MainActivity"
+	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        
