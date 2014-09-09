@@ -85,7 +85,7 @@
     <string name="PLEASECHECKCREDSFORINSTANCE">Please check your credentials or that the instance you\'re trying to delete is owned by you&#8230;</string>
     <string name="SECGRPNAME">Name</string>
     <string name="SECGRPDESC">Description (optional)</string>
-    <string name="AVAILRULES">Available rules:</string>
+    <string name="AVAILRULES">Available inbound rules:</string>
     <string name="LAUNCH">Launch</string>
     <string name="NETWORKS2">Networks:</string>
     <string name="NUMOFINSTANCES">Number of instances:</string>

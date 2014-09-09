@@ -444,7 +444,8 @@ public class EditSecGroupActivity extends Activity  implements OnClickListener, 
 	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    		return;
 	    	}
-	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    	(new AsyncTaskListRules()).execute( secgrpID );
+	    	//EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }
     } 
 }
