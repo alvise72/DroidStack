@@ -328,7 +328,7 @@ public class OSClient {
     *
     *
     */
-   public String requestServerLog( String serverid ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+   public String requestServerLog( String serverid, int maxlines ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
 	   checkToken( );
@@ -340,7 +340,7 @@ public class OSClient {
 	   return RESTClient.sendPOSTRequest( U.useSSL(), 
 			   							  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/servers/"+serverid+"/action",
 			   							  U.getToken(), 
-			   							  "{\"os-getConsoleOutput\": {\"length\": null}}", 
+			   							  "{\"os-getConsoleOutput\": {\"length\": \"" + maxlines + "\"}}", 
 			   							  vp );   
     }
 

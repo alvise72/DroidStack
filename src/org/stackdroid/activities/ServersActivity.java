@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.stackdroid.activities.SecGrpActivity.AsyncTaskCreateSecGroup;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
@@ -276,9 +278,34 @@ public class ServersActivity extends Activity {
 		@Override
 	    public void onClick( View v ) {
 			serverID = ((ButtonNamed)v).getServerView().getServer().getID();
-			progressDialogWaitStop.show();
-			ServersActivity.AsyncTaskOSLogServer task = new ServersActivity.AsyncTaskOSLogServer();
-			task.execute( );
+			
+			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
+	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));
+	        final EditText input = new EditText(ServersActivity.this);
+	        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+	        
+	        
+	        alert.setView(input);
+	        alert.setPositiveButton("Ok",
+	                new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                        ServersActivity.this.progressDialogWaitStop.show();
+	                        (new ServersActivity.AsyncTaskOSLogServer()).execute( input.getText().toString().trim() );
+	                    }
+	                });
+	        alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                        return;
+	                    }
+	                });
+	        alert.setCancelable(false);
+	        AlertDialog dia = alert.create();
+	        dia.setCancelable(false);
+	        dia.setCanceledOnTouchOutside(false);
+	        dia.show( );
+			//progressDialogWaitStop.show();
+			//ServersActivity.AsyncTaskOSLogServer task = new ServersActivity.AsyncTaskOSLogServer();
+			//task.execute( );
 		}
 	}
 	
@@ -631,19 +658,20 @@ public class ServersActivity extends Activity {
    }
     
   //__________________________________________________________________________________
-    protected class AsyncTaskOSLogServer extends AsyncTask<Void, Void, Void>
+    protected class AsyncTaskOSLogServer extends AsyncTask<String, Void, Void>
     {
      	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	private  String   jsonBuf          = null;
+     	//private  int	  maxnumlines      = 0;
 
 	@Override
-	protected Void doInBackground( Void... v ) 
+	protected Void doInBackground( String... v ) 
 	{
 	    OSClient osc = OSClient.getInstance( U );
-
+	    int maxnumlines = Integer.parseInt(v[0]);
 	    try {
-		  jsonBuf = osc.requestServerLog( ServersActivity.this.serverID );
+		  jsonBuf = osc.requestServerLog( ServersActivity.this.serverID, maxnumlines );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;

@@ -107,4 +107,5 @@
     <string name="CANNOTDELETEATTACHEDVOL">Non si pu&#xf2; cancellare un volume collegato ad un\'istanza.</string>
     <string name="VOLUMEDELETED">Volume cancellato con successo. Premi su Menu -&gt; Aggiorna se viene ancora visualizzato.</string>
     <string name="AREYOUSURETODELETEVOL">Sei sicuro di cancellare il volume ?</string>
+    <string name="INPUTNUMLOGLINES">Numero massimo di linee</string>
 </resources>
