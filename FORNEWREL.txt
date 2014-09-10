@@ -1,3 +1,4 @@
 0.3.0
 - max log lines in console log
 - volume attach/detach to instance
+- volume quota show on Overview

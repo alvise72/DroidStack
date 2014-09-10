@@ -39,7 +39,7 @@
     <string name="SELECTOSUSER">Seleziona un\'utente OpenStack</string>
     <string name="NOCUSTOMIPWITHMOREVM">Non puoi specificare un indirizzo IP se lanci pi&#xf9; di un\'istanza</string>
     <string name="INCORRECTIPFORMAT">Formato indirizzo IPv4 non corretto</string>
-    <string name="FLOATINGIP">Floating IP</string>
+    <string name="FLOATINGIP">Gestisci Floating IP</string>
     <string name="FIPNOTASSOCIATED">Questo floating IP non &#xe8; associato ad alcun server.</string>
     <string name="PICKASERVERTOASSOCIATEFIP">Scegli un server a cui associare il floating IP</string>
     <string name="ALREADYASSOCIATEDWARN">Questo floating IP &#xe8; gi&#xe0; associato ad un server. Se continui, l\'associazione verr&#xe0; spostata al nuovo server che sceglierai.</string>
@@ -48,7 +48,7 @@
     <string name="NOINSTANCEAVAIL">Non ci sono istanze.</string>
     <string name="NOIMAGEAAVAIL">Non ci sono immagini.</string>
     <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
-    <string name="SECGROUP">Gestisci Security Groups.</string>
+    <string name="SECGROUP">Gestisci Security Groups</string>
     <string name="NOTFIPAVAIL">Non ci sono floating IP allocati.</string>
     <string name="PLEASEWAITCONNECTING">Attendere prego: connessione al server remoto&#8230;</string>
     <string name="AREYOUSURETODELETEVM">Sei sicuro di cancellare questa istanza ?</string>
@@ -70,7 +70,7 @@
     <string name="INPUTSNAPNAME">Inserisci il nome dello snapshot</string>
     <string name="SNAPCREATED">Snapshot creato. Attiva la finestra \'Immagini\' per vederlo.</string>
     <string name="INPUTSSECNAME">Inserisci il nome del Security Group</string>
-    <string name="VOLUMES">Volumi</string>
+    <string name="VOLUMES">Gestisci Volumi</string>
     <string name="NETWORKS">Reti</string>
     <string name="EDITSECGROUP">Modifica Regole per</string>
     <string name="ADDRULE">Aggiungi regola</string>
@@ -114,5 +114,5 @@
     <string name="VOLUMEDETACHED">Volume scollegato con successo. Premi su Menu -&gt; Aggiorna per aggiornare le informazioni.</string>
     <string name="NOSERVERTOATTACHVOL">Non ci sono server a cui collegare il volume.</string>
     <string name="PICKASERVERTOATTACHVOL">Seleziona un server a cui collegare il volume:</string>
-    <string name="VolumesActivity">Crea nuovo volume</string>
+    <string name="CREATEVOLUME">Crea nuovo volume</string>
 </resources>

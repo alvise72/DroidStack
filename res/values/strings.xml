@@ -39,7 +39,7 @@
     <string name="SELECTOSUSER">Select an OpenStack user</string>
     <string name="NOCUSTOMIPWITHMOREVM">You cannot specify custom IP address with more than one instance to launch.</string>
     <string name="INCORRECTIPFORMAT">Incorrect IPv4 address format</string>
-    <string name="FLOATINGIP">Floating IP</string>
+    <string name="FLOATINGIP">Manage Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
     <string name="PICKASERVERTOASSOCIATEFIP">Pick a server to which associate the floating IP</string>
     <string name="ALREADYASSOCIATEDWARN">This floating IP is already associated to a server. If you continue, the association will be moved to the chosen server.</string>
@@ -49,7 +49,7 @@
     <string name="NOINSTANCEAVAIL">There aren\'t instances.</string>
     <string name="NOIMAGEAAVAIL">There aren\'t images.</string>
     <string name="NOSECGRPSAVAIL">There aren\'t security groups.</string>
-    <string name="SECGROUP">Manage Security Groups.</string>
+    <string name="SECGROUP">Manage Security Groups</string>
     <string name="NOTFIPAVAIL">There aren\'t allocated floating IP.</string>
     <string name="PLEASEWAITCONNECTING">Please wait: connecting to remote server&#8230;</string>
     <string name="AREYOUSURETODELETEVM">Are you sure to delete this instance ?</string>
@@ -72,7 +72,7 @@
     <string name="INPUTSNAPNAME">Insert the snapshot\'s name</string>
     <string name="SNAPCREATED">Snapshot created. Go to \'Images\' window to see it.</string>
     <string name="INPUTSSECNAME">Insert Security Group\'s name</string>
-    <string name="VOLUMES">Volumes</string>
+    <string name="VOLUMES">Manage Volumes</string>
     <string name="NETWORKS">Networks</string>
     <string name="EDITSECGROUP">Edit Rules for</string>
     <string name="ADDRULE">Add rule</string>

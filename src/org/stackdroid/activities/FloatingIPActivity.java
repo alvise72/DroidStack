@@ -42,19 +42,19 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class FloatingIPActivity extends Activity implements OnClickListener {
 
-    private CustomProgressDialog progressDialogWaitStop = null;
-    private User U = null;
-    private Vector<Network> networks = null;
-    private ArrayAdapter<Network> spinnerNetworksArrayAdapter  = null;
-    private Spinner spinnerNetworks;
-    private String pool = null;
-	private String fip_to_release_ID = null;
-	private Vector<Server> servers = null;
-	private ArrayAdapter<Server> spinnerServersArrayAdapter  = null;
-	private Spinner serverSpinner = null;
-	private AlertDialog alertDialogSelectServer = null;
-	private String fipToAssociate = null;
-	private FloatingIP selectedFIPObj = null;
+    private CustomProgressDialog  progressDialogWaitStop 	  = null;
+    private User 				  U 						  = null;
+    private Vector<Network> 	  networks 					  = null;
+    private ArrayAdapter<Network> spinnerNetworksArrayAdapter = null;
+    private Spinner 			  spinnerNetworks			  = null;
+    private String 				  pool 						  = null;
+	private String 				  fip_to_release_ID			  = null;
+	private Vector<Server> 		  servers 					  = null;
+	private ArrayAdapter<Server>  spinnerServersArrayAdapter  = null;
+	private Spinner 			  serverSpinner 			  = null;
+	private AlertDialog 		  alertDialogSelectServer     = null;
+	private String 				  fipToAssociate			  = null;
+	private FloatingIP 			  selectedFIPObj 			  = null;
 	
 	/**
 	 * 

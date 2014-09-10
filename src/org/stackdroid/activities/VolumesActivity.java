@@ -45,13 +45,18 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class VolumesActivity extends Activity {
 
-    private CustomProgressDialog progressDialogWaitStop  = null;
-    private User 				 U 						 = null;
-	private AlertDialog 		 alertDialogCreateVolume = null;
-	private EditText 			 volname				 = null;
-	private EditText 			 volsize				 = null;
-	private Vector<Server> 		 servers         		 = null;
-	public Spinner serverSpinner;
+    private CustomProgressDialog progressDialogWaitStop     = null;
+    private User 				 U 						    = null;
+	private AlertDialog 		 alertDialogCreateVolume    = null;
+	private EditText 			 volname				    = null;
+	private EditText 			 volsize				    = null;
+	private Vector<Server> 		 servers         		    = null;
+	private Spinner 			 serverSpinner				= null;
+	private AlertDialog 		 alertDialogSelectServer    = null;
+	private ArrayAdapter<Server> spinnerServersArrayAdapter = null;
+	
+	private String 				 currentVolToAttach			= null;
+	private String				 currentSrvToAttach			= null;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -126,6 +131,7 @@ public class VolumesActivity extends Activity {
     /**
      * 
      * @author dorigoa
+     * Is called when the user click on Confirm button of the Volume Creation window
      *
      */
     protected class CreateVolumeClickListener implements OnClickListener {
@@ -156,7 +162,7 @@ public class VolumesActivity extends Activity {
     /**
      * 
      * @author dorigoa
-     *
+     * Is called when the user click on Cancel button of the Volume Creation window
      */
     protected class CreateVolumeCancelClickListener implements OnClickListener {
     	@Override
@@ -168,24 +174,28 @@ public class VolumesActivity extends Activity {
     /**
      * 
      * @author dorigoa
-     *
+     * Is called when the user click on Confirm button of the server selection windows (to attach the current volume)
      */
     protected class ConfirmButtonHandler implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		
+    		Server S = (Server)serverSpinner.getSelectedItem();
+    		//Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
+    		alertDialogSelectServer.dismiss();
+    		VolumesActivity.this.progressDialogWaitStop.show( );
+    		(new VolumesActivity.AsyncTaskAttachVolume()).execute( currentVolToAttach, S.getID() );
     	}
     }
 
     /**
      * 
      * @author dorigoa
-     *
+     * Is called when the user click on Cancel button of the server selection windows (to attach the current volume)
      */
     protected class CancelButtonHandler implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		
+    		VolumesActivity.this.alertDialogSelectServer.dismiss( );
     	}
     }
     
@@ -196,13 +206,8 @@ public class VolumesActivity extends Activity {
      * 
      */
     protected class AttachVolClickListener implements OnClickListener {
-    	private ArrayAdapter<Server> spinnerServersArrayAdapter;
-		private AlertDialog alertDialogSelectServer;
-
 		@Override
     	public void onClick( View v ) {
-    		//Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
-    		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
     		ImageButtonNamed bt = (ImageButtonNamed)v;
     		Volume V = bt.getVolumeView().getVolume();
     		if(V.isAttached()) {
@@ -215,6 +220,8 @@ public class VolumesActivity extends Activity {
     			return;
     		}
     		
+    		currentVolToAttach = V.getID();
+    		
     		spinnerServersArrayAdapter = new ArrayAdapter<Server>(VolumesActivity.this, android.R.layout.simple_spinner_item,servers.subList(0,servers.size()) );
     		spinnerServersArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     		
@@ -226,8 +233,6 @@ public class VolumesActivity extends Activity {
     	    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VolumesActivity.this);
 
     	    alertDialogBuilder.setView(promptsView);
-
-    	    // set dialog message
 
     	    alertDialogBuilder.setTitle(getString(R.string.PICKASERVERTOATTACHVOL) + " " + V.getID());
     	    alertDialogSelectServer = alertDialogBuilder.create();
@@ -242,9 +247,6 @@ public class VolumesActivity extends Activity {
     	    alertDialogSelectServer.setCanceledOnTouchOutside(false);
     	    alertDialogSelectServer.setCancelable(false);
     	    alertDialogSelectServer.show();
-    		
-    		//VolumesActivity.this.progressDialogWaitStop.show();
-    		//(new AsyncTaskAttachVolume()).execute( V.getID(), serverID );
     	}
 
     		
@@ -260,16 +262,14 @@ public class VolumesActivity extends Activity {
     protected class DetachVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		//Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
-    		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
     		ImageButtonNamed bt = (ImageButtonNamed)v;
     		Volume V = bt.getVolumeView().getVolume();
     		if(!V.isAttached()) {
     			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYDETACHED), VolumesActivity.this);
     			return;
     		}
-    		//VolumesActivity.this.progressDialogWaitStop.show();
-    		//(new AsyncTaskDetachVolume()).execute( V.getID(), serverID );
+    		VolumesActivity.this.progressDialogWaitStop.show( );
+    		(new VolumesActivity.AsyncTaskDetachVolume()).execute( V.getID(), V.getAttachedServerID() );
     	}
     }
 
@@ -295,6 +295,7 @@ public class VolumesActivity extends Activity {
 			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 				    //deleteNovaInstance( serverid );
+					VolumesActivity.this.progressDialogWaitStop.show( );
 					(new VolumesActivity.AsyncTaskDeleteVolume()).execute( V.getID() );
 				}
 			};
@@ -435,7 +436,7 @@ public class VolumesActivity extends Activity {
 	    
      		try {
      			Vector<Volume> volumes = ParseUtils.parseVolumes( jsonBufVols, jsonBufServers );
-     			Vector<Server> servers = ParseUtils.parseServers(jsonBufServers);
+     			servers = ParseUtils.parseServers(jsonBufServers);
      			VolumesActivity.this.refreshView( volumes );
      		} catch(ParseException pe) {
      			
@@ -481,7 +482,7 @@ public class VolumesActivity extends Activity {
     		
     		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMECREATED), VolumesActivity.this );
     		(new AsyncTaskListVolumes()).execute( );
-    		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+    		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
     	}
    }
    
@@ -564,7 +565,7 @@ public class VolumesActivity extends Activity {
   		
   		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEATTACHED), VolumesActivity.this );
   		(new AsyncTaskListVolumes()).execute( );
-  		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+  		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
   	}
  }
  
@@ -607,7 +608,7 @@ protected class AsyncTaskDetachVolume extends AsyncTask< String, Void, Void >
  		
  		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDETACHED), VolumesActivity.this );
  		(new AsyncTaskListVolumes()).execute( );
- 		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+ 		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
  	}
 }
 }

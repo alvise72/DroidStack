@@ -322,14 +322,33 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
         public void onClick(View v) { 
     		String S = (String)ruleSpinner.getSelectedItem();
             
-    		
+    		alertDialogSelectRule.dismiss();
             progressDialogWaitStop.show();
-            
             String fromPortS = fromPort.getText().toString();
             String toPortS = toPort.getText().toString();
             String cidrS = CIDR.getText().toString();
             String protoS = PROTO.getSelectedItem().toString().toLowerCase();
             ( new AsyncTaskCreateRule( ) ).execute( secgrpID, fromPortS, toPortS, cidrS, protoS );
+    	}
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    protected class DeleteRuleClickListener implements OnClickListener {
+    	@Override
+        public void onClick(View v) { 
+    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		String ruleID = bt.getRuleView().getRule().getID();
+    		
+            progressDialogWaitStop.show();
+            
+            ( new AsyncTaskDeleteRule( ) ).execute( ruleID );
     	}
     }
 
@@ -361,7 +380,7 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
     	while(rit.hasNext()) {
     		SimpleSecGroupRule rl = rit.next( );
     		Log.d("EDITSEC", "Rule="+rl.to_string());
-    		RuleView rv = new RuleView( rl, this );
+    		RuleView rv = new RuleView( rl, new DeleteRuleClickListener(), this );
     		((LinearLayout)findViewById(R.id.layoutRuleList)).addView( rv );
     	}
     }

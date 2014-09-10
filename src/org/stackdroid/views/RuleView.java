@@ -28,7 +28,7 @@ public class RuleView extends LinearLayout {
     
     private SimpleSecGroupRule Rl = null;
 
-    public RuleView( SimpleSecGroupRule r, Context ctx ) {
+    public RuleView( SimpleSecGroupRule r, OnClickListener deleteRuleListener, Context ctx ) {
     	super(ctx);
     	Rl = r;
 	
@@ -80,7 +80,7 @@ public class RuleView extends LinearLayout {
 
     	deleteRule = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_RULE );
     	deleteRule.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-    	deleteRule.setOnClickListener( (OnClickListener)ctx );
+    	deleteRule.setOnClickListener( deleteRuleListener );
 
     	info = new LinearLayoutNamed( ctx, this );
     	info.setOrientation( LinearLayout.HORIZONTAL );
