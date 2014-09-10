@@ -31,7 +31,9 @@ import org.stackdroid.R;
 import org.stackdroid.utils.ButtonNamed;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.IPAddressKeyListener;
 import org.stackdroid.utils.LinearLayoutNamed;
+import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Server;
@@ -282,13 +284,20 @@ public class ServersActivity extends Activity {
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));
 	        final EditText input = new EditText(ServersActivity.this);
-	        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-	        
+	        //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE);
+	        input.setKeyListener(SimpleNumberKeyListener.getInstance());
+	        //input.setTransformationMethod(TransormationMethod.);
 	        
 	        alert.setView(input);
 	        alert.setPositiveButton("Ok",
 	                new DialogInterface.OnClickListener() {
 	                    public void onClick(DialogInterface dialog, int whichButton) {
+	                    	if(input.getText().toString().trim().length()==0)
+	                    		return;
+	                    	int num = Integer.parseInt(input.getText().toString().trim());
+	                    	if(num==0) {
+	                    		return;
+	                    	}
 	                        ServersActivity.this.progressDialogWaitStop.show();
 	                        (new ServersActivity.AsyncTaskOSLogServer()).execute( input.getText().toString().trim() );
 	                    }

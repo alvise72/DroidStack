@@ -54,8 +54,7 @@ public class ServerView extends LinearLayout {
 
 	text = new LinearLayoutNamed( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
-	LinearLayout.LayoutParams params2 = 
-	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
+	LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 	text.setLayoutParams( params2 );
 
 	Name = new TextViewNamed( ctx, (ServerView)this );
@@ -89,8 +88,7 @@ public class ServerView extends LinearLayout {
 		Status.setTextColor( Color.parseColor("#000000") );
 	}
 
-	LinearLayout.LayoutParams params5 = 
-		    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	consoleLog = new ButtonNamed(ctx, this, -1);
 	consoleLog.setText("Console Log");
 	consoleLog.setTextSize(10.0f);
@@ -120,11 +118,11 @@ public class ServerView extends LinearLayout {
 
 	info = new LinearLayoutNamed( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
-	//info.setGravity(Gravity.CENTER_VERTICAL);
-	LinearLayout.LayoutParams params3 = 
-	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
+	
+	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
 	info.setLayoutParams( params3 );
 	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+	//info.addView( consoleLog );
 	info.addView( snapServer );
 	info.addView( deleteServer );
 	

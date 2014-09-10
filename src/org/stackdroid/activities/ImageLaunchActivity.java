@@ -9,8 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.util.Log;
-//import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
@@ -47,10 +45,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private ArrayAdapter<KeyPair> spinnerKeypairsArrayAdapter = null;
     private Spinner spinnerFlavors   = null;
     private Spinner spinnerKeypairs  = null;
-    //private Vector<Network> networks = null;
-    //private Flavor flavors[] = null;
-    //private Vector<KeyPair> keypairs = null;
-    //private Vector<SecGroup> secgroups = null;
     private LinearLayout options = null;
     private LinearLayout networksL = null;
     HashSet<String> selectedSecgroups = null;
@@ -61,7 +55,6 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private Hashtable<String, EditTextNamed> mappingNetEditText = null;
     private Hashtable<String, String> selectedNetworks = null;
 
-    //private User U = null;
     
     @Override
     public void onClick( View v ) {
