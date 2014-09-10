@@ -152,7 +152,19 @@ public class VolumesActivity extends Activity {
     		(new VolumesActivity.AsyncTaskCreateVolume()).execute( volumeName, volsize.getText().toString().trim() );
     	}
     }
-    
+
+    /**
+     * 
+     * @author dorigoa
+     *
+     */
+    protected class CreateVolumeCancelClickListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		alertDialogCreateVolume.dismiss();
+    		return;
+    	}
+    }
     /**
      * 
      * @author dorigoa
@@ -322,12 +334,14 @@ public class VolumesActivity extends Activity {
 
         // set dialog message
 
-        alertDialogBuilder.setTitle(getString(R.string.ADDRULE) );
+        alertDialogBuilder.setTitle(getString(R.string.CREATEVOLUME) );
 
         alertDialogCreateVolume = alertDialogBuilder.create();
 
-        final Button mButton = (Button)promptsView.findViewById(R.id.myButton);
+        final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateVol);
+        final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateVolCancel);
         mButton.setOnClickListener(new CreateVolumeClickListener());
+        mButtonCancel.setOnClickListener(new CreateVolumeCancelClickListener());
         volname = (EditText)promptsView.findViewById(R.id.volumenameET);
         volsize = (EditText)promptsView.findViewById(R.id.volumesizeET);
         alertDialogCreateVolume.setCanceledOnTouchOutside(false);
@@ -508,7 +522,7 @@ public class VolumesActivity extends Activity {
    		
    		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDELETED), VolumesActivity.this );
    		(new AsyncTaskListVolumes()).execute( );
-   		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+   		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
    	}
   }
   

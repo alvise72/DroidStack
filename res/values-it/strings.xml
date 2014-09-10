@@ -114,4 +114,5 @@
     <string name="VOLUMEDETACHED">Volume scollegato con successo. Premi su Menu -&gt; Aggiorna per aggiornare le informazioni.</string>
     <string name="NOSERVERTOATTACHVOL">Non ci sono server a cui collegare il volume.</string>
     <string name="PICKASERVERTOATTACHVOL">Seleziona un server a cui collegare il volume:</string>
+    <string name="VolumesActivity">Crea nuovo volume</string>
 </resources>

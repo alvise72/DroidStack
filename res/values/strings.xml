@@ -116,4 +116,5 @@
     <string name="VOLUMEDETACHED">Volume successfully detached. Press on Menu -&gt; Update to refresh.</string>
     <string name="NOSERVERTOATTACHVOL">No server available to which attach volume.</string>
     <string name="PICKASERVERTOATTACHVOL">Select a server to which attach the volume:</string>
+    <string name="CREATEVOLUME">Create new volume</string>
 </resources>
