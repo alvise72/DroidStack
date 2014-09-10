@@ -110,4 +110,8 @@
     <string name="INPUTNUMLOGLINES">Numero massimo di linee</string>
     <string name="ALREADYATTACHED">Il volume &#xe8; gi&#xe0; collegato ad un\'istanza. Devi prima scollegarlo.</string>
     <string name="ALREADYDETACHED">Il volume non &#xe8; collegato.</string>
+    <string name="VOLUMEATTACHED">Volume collegato con successo. Premi su Menu -&gt; Aggiorna per aggiornare le informazioni.</string>
+    <string name="VOLUMEDETACHED">Volume scollegato con successo. Premi su Menu -&gt; Aggiorna per aggiornare le informazioni.</string>
+    <string name="NOSERVERTOATTACHVOL">Non ci sono server a cui collegare il volume.</string>
+    <string name="PICKASERVERTOATTACHVOL">Seleziona un server a cui collegare il volume:</string>
 </resources>

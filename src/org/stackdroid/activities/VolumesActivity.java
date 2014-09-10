@@ -1,9 +1,11 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,6 +32,7 @@ import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.Server;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Volume;
@@ -42,11 +45,13 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class VolumesActivity extends Activity {
 
-    private CustomProgressDialog progressDialogWaitStop = null;
-    private User 				 U 						= null;
-	private AlertDialog alertDialogCreateVolume			= null;
-	private EditText volname							= null;
-	private EditText volsize							= null;
+    private CustomProgressDialog progressDialogWaitStop  = null;
+    private User 				 U 						 = null;
+	private AlertDialog 		 alertDialogCreateVolume = null;
+	private EditText 			 volname				 = null;
+	private EditText 			 volsize				 = null;
+	private Vector<Server> 		 servers         		 = null;
+	public Spinner serverSpinner;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -91,28 +96,6 @@ public class VolumesActivity extends Activity {
         
 	return super.onOptionsItemSelected( item );
     }
-
-    //__________________________________________________________________________________
-    /*
-     
-    @Override
-    public void onClick( View v ) {
-    	if(v instanceof ImageButtonNamed) {
-    		ImageButtonNamed bt = (ImageButtonNamed)v;
-		
-    		if(bt.getType() == ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME) {
-    			Volume V = bt.getVolumeView().getVolume();
-    			if(V.isAttached()) {
-    				// DETACH
-    				return;
-    			}
-    			// ATTACH
-    		}
-
-    		return;
-    	}
-    }
-    */
     
     //__________________________________________________________________________________
     @Override
@@ -172,12 +155,39 @@ public class VolumesActivity extends Activity {
     
     /**
      * 
+     * @author dorigoa
+     *
+     */
+    protected class ConfirmButtonHandler implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		
+    	}
+    }
+
+    /**
+     * 
+     * @author dorigoa
+     *
+     */
+    protected class CancelButtonHandler implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		
+    	}
+    }
+    
+    /**
+     * 
      * 
      * 
      * 
      */
     protected class AttachVolClickListener implements OnClickListener {
-    	@Override
+    	private ArrayAdapter<Server> spinnerServersArrayAdapter;
+		private AlertDialog alertDialogSelectServer;
+
+		@Override
     	public void onClick( View v ) {
     		//Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
     		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
@@ -188,8 +198,41 @@ public class VolumesActivity extends Activity {
     			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYATTACHED), VolumesActivity.this);
     			return;
     		}
+    		if(servers.size()==0) {
+    			Utils.alert(getString(R.string.NOSERVERTOATTACHVOL), VolumesActivity.this);
+    			return;
+    		}
     		
-    			// ATTACH
+    		spinnerServersArrayAdapter = new ArrayAdapter<Server>(VolumesActivity.this, android.R.layout.simple_spinner_item,servers.subList(0,servers.size()) );
+    		spinnerServersArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    		
+    		
+    		LayoutInflater li = LayoutInflater.from(VolumesActivity.this);
+
+    	    View promptsView = li.inflate(R.layout.my_dialog_layout_volattach, null);
+
+    	    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VolumesActivity.this);
+
+    	    alertDialogBuilder.setView(promptsView);
+
+    	    // set dialog message
+
+    	    alertDialogBuilder.setTitle(getString(R.string.PICKASERVERTOATTACHVOL) + " " + V.getID());
+    	    alertDialogSelectServer = alertDialogBuilder.create();
+
+    	    serverSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerVol);
+    	    serverSpinner.setAdapter(spinnerServersArrayAdapter);
+    	    final Button mButton = (Button) promptsView.findViewById(R.id.myButtonVol);
+    	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancelVol);
+    		//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
+    	    mButton.setOnClickListener(new VolumesActivity.ConfirmButtonHandler());
+    	    mButtonCancel.setOnClickListener(new VolumesActivity.CancelButtonHandler());
+    	    alertDialogSelectServer.setCanceledOnTouchOutside(false);
+    	    alertDialogSelectServer.setCancelable(false);
+    	    alertDialogSelectServer.show();
+    		
+    		//VolumesActivity.this.progressDialogWaitStop.show();
+    		//(new AsyncTaskAttachVolume()).execute( V.getID(), serverID );
     	}
 
     		
@@ -210,10 +253,11 @@ public class VolumesActivity extends Activity {
     		ImageButtonNamed bt = (ImageButtonNamed)v;
     		Volume V = bt.getVolumeView().getVolume();
     		if(!V.isAttached()) {
-    			// DETACH
     			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYDETACHED), VolumesActivity.this);
     			return;
     		}
+    		//VolumesActivity.this.progressDialogWaitStop.show();
+    		//(new AsyncTaskDetachVolume()).execute( V.getID(), serverID );
     	}
     }
 
@@ -377,6 +421,7 @@ public class VolumesActivity extends Activity {
 	    
      		try {
      			Vector<Volume> volumes = ParseUtils.parseVolumes( jsonBufVols, jsonBufServers );
+     			Vector<Server> servers = ParseUtils.parseServers(jsonBufServers);
      			VolumesActivity.this.refreshView( volumes );
      		} catch(ParseException pe) {
      			
@@ -466,4 +511,89 @@ public class VolumesActivity extends Activity {
    		VolumesActivity.this.progressDialogWaitStop.dismiss( );
    	}
   }
+  
+  
+
+  /**
+  *
+  *
+  *
+  *
+  */
+ protected class AsyncTaskAttachVolume extends AsyncTask< String, Void, Void >
+ {
+  	private  String   errorMessage     = null;
+  	private  boolean  hasError         = false;
+  	
+  	@Override
+  	protected Void doInBackground( String ... v ) 
+  	{
+  		OSClient osc = OSClient.getInstance( U );
+  		try {
+  			osc.volumeAttach( v[0], v[1] );
+  		} catch(Exception e) {
+  			errorMessage = e.getMessage();
+  			hasError = true;
+  		}
+		return null;
+  	}
+	
+  	@Override
+	    protected void onPostExecute( Void v ) {
+  		super.onPostExecute( v );
+	    
+  		if(hasError) {
+  			Utils.alert( errorMessage, VolumesActivity.this );
+  			VolumesActivity.this.progressDialogWaitStop.dismiss( );
+  			return;
+  		}
+  		
+  		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEATTACHED), VolumesActivity.this );
+  		(new AsyncTaskListVolumes()).execute( );
+  		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+  	}
+ }
+ 
+
+ 
+
+ /**
+ *
+ *
+ *
+ *
+ */
+protected class AsyncTaskDetachVolume extends AsyncTask< String, Void, Void >
+{
+ 	private  String   errorMessage     = null;
+ 	private  boolean  hasError         = false;
+ 	
+ 	@Override
+ 	protected Void doInBackground( String ... v ) 
+ 	{
+ 		OSClient osc = OSClient.getInstance( U );
+ 		try {
+ 			osc.volumeDetach( v[0], v[1] );
+ 		} catch(Exception e) {
+ 			errorMessage = e.getMessage();
+ 			hasError = true;
+ 		}
+		return null;
+ 	}
+	
+ 	@Override
+	    protected void onPostExecute( Void v ) {
+ 		super.onPostExecute( v );
+	    
+ 		if(hasError) {
+ 			Utils.alert( errorMessage, VolumesActivity.this );
+ 			VolumesActivity.this.progressDialogWaitStop.dismiss( );
+ 			return;
+ 		}
+ 		
+ 		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDETACHED), VolumesActivity.this );
+ 		(new AsyncTaskListVolumes()).execute( );
+ 		VolumesActivity.this.progressDialogWaitStop.dismiss( );
+ 	}
+}
 }
