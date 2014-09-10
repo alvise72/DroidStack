@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.stackdroid.utils.AllocationPool;
 import org.stackdroid.utils.FloatingIP;
+import org.stackdroid.utils.QuotaVol;
 import org.stackdroid.utils.SimpleSecGroupRule;
 //import org.stackdroid.utils.Rule;
 import org.stackdroid.utils.SubNetwork;
@@ -601,6 +602,29 @@ public class ParseUtils {
 			throw new ParseException( je.getMessage( ) );
 		}
 		return vols;
+	}
+
+	public static QuotaVol parseQuotaVolume(String jsonVols) throws ParseException  {
+		// TODO Auto-generated method stub
+		//return null;
+		
+		
+		try {
+			JSONObject quota = (new JSONObject( jsonVols )).getJSONObject("quota_set");
+			JSONObject giga = quota.getJSONObject("gigabytes");
+			JSONObject vols = quota.getJSONObject("volumes");
+			JSONObject snaps= quota.getJSONObject("snapshots");
+			
+			int volUsage = vols.getInt("in_use");
+			int gigaUsage = giga.getInt("in_use");
+			int snapUsage = snaps.getInt("in_use");
+			int maxVols  = vols.getInt("limit");
+			int maxGiga = giga.getInt("limit");
+			int maxSnaps = snaps.getInt("limit");
+			return new QuotaVol( volUsage, gigaUsage, snapUsage, maxVols, maxGiga, maxSnaps );
+		} catch(org.json.JSONException je) {
+			throw new ParseException( je.getMessage( ) );
+		}
 	}
 	
 }

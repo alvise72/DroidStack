@@ -436,6 +436,28 @@ public class OSClient {
      *
      *
      */
+    public String requestVolQuota( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+ 	   checkToken( );
+ 		
+ 	   Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
+ 	   Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
+ 	   v.add(p);
+ 	   return RESTClient.sendGETRequest( U.useSSL(),  
+ 			   							 U.getEndpoint() + ":8776/v1/"+U.getTenantID()+"/os-quota-sets/"+U.getTenantID( )+"?usage=True", 
+ 			   							 U.getToken(), 
+ 			   							 v);
+    }
+
+    /**
+     * @throws ParseException 
+     *
+     *
+     * 
+     *
+     *
+     */
     public String requestFloatingIPs( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {

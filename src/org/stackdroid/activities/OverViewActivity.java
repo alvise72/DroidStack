@@ -14,10 +14,12 @@ import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.Flavor;
 import org.stackdroid.utils.FloatingIP;
 import org.stackdroid.utils.Quota;
+import org.stackdroid.utils.QuotaVol;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
+import org.stackdroid.utils.Volume;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -128,61 +130,74 @@ public class OverViewActivity extends Activity {
      *
      */
     private void refreshView( Quota Q,
-			      Vector<Server> servers, 
-			      Vector<Flavor> flavors,
-			      Vector<FloatingIP> fips, 
-			      Vector<SecGroup> secgs ) 
+    						  QuotaVol QV,
+    						  Vector<Server> servers, 
+    						  Vector<Flavor> flavors,
+    						  Vector<FloatingIP> fips, 
+    						  Vector<SecGroup> secgs) 
     {
 	
-	Iterator<Server> it = servers.iterator();
-	int totMem = 0;
-	int totVCPU = 0;
-	int totInstances = 0;
+    	Iterator<Server> it = servers.iterator();
+    	int totMem = 0;
+    	int totVCPU = 0;
+    	int totInstances = 0;
 	
-	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
-	Iterator<Flavor> fit = flavors.iterator();
-	while( fit.hasNext( ) ) {
-		Flavor f = fit.next();
-		//		Log.d("OVERVIEW","Putting "+f.getID( ) + " -> "+f.toString());
-		flavHash.put( f.getID(), f );
-	}
-	while( it.hasNext( ) ) {
-	    Server S = it.next( );
-	    //	    Log.d("OVERVIEW", "FlavorID for Server " + S.getName( ) + " = "+S.getFlavorID( ) + " - MEM=" + flavHash.get( S.getFlavorID( ) ).getRAM( ) );
-	    Flavor F = flavHash.get( S.getFlavorID( ) );
-	    if(F!=null) {
-	    totMem += F.getRAM( );
-	    totVCPU += F.getVCPU( );
-	    } else {
-	    	Utils.alert("FlavorID Mismatch! The instance ["+S.getID()+"] has a FlavorID ["+S.getFlavorID( )+"] which is not present in the flavor list", this);
-	    }
-	    totInstances++;
-	}
+    	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
+    	Iterator<Flavor> fit = flavors.iterator();
+    	while( fit.hasNext( ) ) {
+    		Flavor f = fit.next();
+    		//		Log.d("OVERVIEW","Putting "+f.getID( ) + " -> "+f.toString());
+    		flavHash.put( f.getID(), f );
+    	}
+    	while( it.hasNext( ) ) {
+    		Server S = it.next( );
+    		//	    Log.d("OVERVIEW", "FlavorID for Server " + S.getName( ) + " = "+S.getFlavorID( ) + " - MEM=" + flavHash.get( S.getFlavorID( ) ).getRAM( ) );
+    		Flavor F = flavHash.get( S.getFlavorID( ) );
+    		if(F!=null) {
+    			totMem += F.getRAM( );
+    			totVCPU += F.getVCPU( );
+    		} else {
+    			Utils.alert("FlavorID Mismatch! The instance ["+S.getID()+"] has a FlavorID ["+S.getFlavorID( )+"] which is not present in the flavor list", this);
+    		}
+    		totInstances++;
+    	}
     
-	((TextView)findViewById(R.id.vmusageTV)).setText("" + totInstances );
-	((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
-	((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
-	((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( totInstances);
+    	((TextView)findViewById(R.id.vmusageTV)).setText("" + totInstances );
+    	((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
+    	((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
+    	((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( totInstances);
 	
-	((TextView)findViewById(R.id.cpuusageTV)).setText("" + totVCPU );
-	((TextView)findViewById(R.id.cpuusageMAXTV)).setText("/" + Q.getMaxCPU() );
-	((ProgressBar)findViewById(R.id.cpuusagePB)).setMax( Q.getMaxCPU() );
-	((ProgressBar)findViewById(R.id.cpuusagePB)).setProgress( totVCPU );
+    	((TextView)findViewById(R.id.cpuusageTV)).setText("" + totVCPU );
+    	((TextView)findViewById(R.id.cpuusageMAXTV)).setText("/" + Q.getMaxCPU() );
+    	((ProgressBar)findViewById(R.id.cpuusagePB)).setMax( Q.getMaxCPU() );
+    	((ProgressBar)findViewById(R.id.cpuusagePB)).setProgress( totVCPU );
 	
-	((TextView)findViewById(R.id.ramusageTV)).setText("" + totMem );
-	((TextView)findViewById(R.id.ramusageMAXTV)).setText("/" + Q.getMaxRAM( ) );
-	((ProgressBar)findViewById(R.id.ramusagePB)).setMax( Q.getMaxRAM( ) );
-	((ProgressBar)findViewById(R.id.ramusagePB)).setProgress( totMem );
+    	((TextView)findViewById(R.id.ramusageTV)).setText("" + totMem );
+    	((TextView)findViewById(R.id.ramusageMAXTV)).setText("/" + Q.getMaxRAM( ) );
+    	((ProgressBar)findViewById(R.id.ramusagePB)).setMax( Q.getMaxRAM( ) );
+    	((ProgressBar)findViewById(R.id.ramusagePB)).setProgress( totMem );
 
-	((TextView)findViewById(R.id.fipusageTV)).setText("" + (fips!=null ? fips.size() : 0) );
-	((TextView)findViewById(R.id.fipusageMAXTV)).setText("/" + Q.getMaxFloatingIP( ) );
-	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
-	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips!=null ? fips.size() : 0 );
+    	((TextView)findViewById(R.id.fipusageTV)).setText("" + (fips!=null ? fips.size() : 0) );
+    	((TextView)findViewById(R.id.fipusageMAXTV)).setText("/" + Q.getMaxFloatingIP( ) );
+    	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
+    	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips!=null ? fips.size() : 0 );
 	
-	((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.size() : 0) );
-	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
-	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.size() : 0 );
+    	((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.size() : 0) );
+    	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
+    	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
+    	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.size() : 0 );
+    	
+    	((TextView)findViewById(R.id.volusageTV)).setText("" + QV.getVolumeUsage() );
+    	((TextView)findViewById(R.id.volusageMAXTV)).setText("/" + QV.getMaxVolumes() );
+    	((ProgressBar)findViewById(R.id.volumesPB)).setMax( QV.getMaxVolumes() );
+    	((ProgressBar)findViewById(R.id.volumesPB)).setProgress( QV.getVolumeUsage() );
+    	
+    	((TextView)findViewById(R.id.gigausageTV)).setText("" + QV.getGigabyteUsage( ) );
+    	((TextView)findViewById(R.id.gigausageMAXTV)).setText("/" + QV.getMaxGigabytes( ) );
+    	((ProgressBar)findViewById(R.id.gigaPB)).setMax( QV.getMaxGigabytes( ) );
+    	((ProgressBar)findViewById(R.id.gigaPB)).setProgress( QV.getGigabyteUsage( ) );
+    	
+    	
     }
 
     /**
@@ -209,55 +224,62 @@ public class OverViewActivity extends Activity {
      	private  String   jsonBufFIPs      = null;
      	private  String   jsonBufSecgs     = null;
      	private  String   jsonBufferFlavor = null;
+		private String    jsonBufferVolumes= null;
+		private String    jsonBufferQuotaVols= null;
 	
      	@Override
      	protected String doInBackground(Void... u ) 
      	{
-	    OSClient osc = OSClient.getInstance(U);
+     		OSClient osc = OSClient.getInstance(U);
 	    
-	    try {
-		jsonBufQuota 	 = osc.requestQuota( );
-		jsonBuf 	 = osc.requestServers( );
-		jsonBufFIPs 	 = osc.requestFloatingIPs( );
-		jsonBufSecgs 	 = osc.requestSecGroups( );
-		jsonBufferFlavor = osc.requestFlavors( );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		return "";
-	    }
+	    	try {
+	    		jsonBufQuota 	 = osc.requestQuota( );
+	    		jsonBuf 	 	 = osc.requestServers( );
+	    		jsonBufFIPs 	 = osc.requestFloatingIPs( );
+	    		jsonBufSecgs 	 = osc.requestSecGroups( );
+	    		jsonBufferFlavor = osc.requestFlavors( );
+	    		jsonBufferVolumes= osc.requestVolumes( );
+	    		jsonBufferQuotaVols= osc.requestVolQuota( );
+	    	} catch(Exception e) {
+	    		errorMessage = e.getMessage();
+	    		hasError = true;
+	    		return "";
+	    	}
 	    
-	    return jsonBuf;
+	    	return jsonBuf;
      	}
 	
      	@Override
-     	protected void onPreExecute() {
-	    super.onPreExecute();
+        protected void onPreExecute() {
+     		super.onPreExecute();
      	}
 	
      	@Override
-     	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+     		protected void onPostExecute( String result ) {
+     		super.onPostExecute(result);
+     		
+     		if(hasError) {
+     			Utils.alert( errorMessage, OverViewActivity.this );
+     			OverViewActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
 	    
-	    if(hasError) {
-		Utils.alert( errorMessage, OverViewActivity.this );
-		OverViewActivity.this.progressDialogWaitStop.dismiss( );
-		return;
-	    }
-	    
-	    try {
-		//		Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
-		OverViewActivity.this.refreshView( ParseUtils.parseQuota( jsonBufQuota ),
-						   ParseUtils.parseServers( jsonBuf ), 
-						   ParseUtils.parseFlavors( jsonBufferFlavor ),
-						   ParseUtils.parseFloatingIP( jsonBufFIPs ),
-						   ParseUtils.parseSecGroups( jsonBufSecgs ) 
-						   );
-	    } catch(ParseException pe) {
-		Utils.alert( pe.getMessage( ), OverViewActivity.this );
-	    }
+     		try {
+     			//		Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
+     			Quota Q = ParseUtils.parseQuota( jsonBufQuota );
+     			QuotaVol QV = ParseUtils.parseQuotaVolume(jsonBufferQuotaVols);
+     			OverViewActivity.this.refreshView( Q,//ParseUtils.parseQuota( jsonBufQuota ),
+     											   QV,
+     											   ParseUtils.parseServers( jsonBuf ), 
+     											   ParseUtils.parseFlavors( jsonBufferFlavor ),
+     											   ParseUtils.parseFloatingIP( jsonBufFIPs ),
+     											   ParseUtils.parseSecGroups( jsonBufSecgs )
+     											 );
+     		} catch(ParseException pe) {
+     			Utils.alert( pe.getMessage( ), OverViewActivity.this );
+     		}
 
-	    OverViewActivity.this.progressDialogWaitStop.dismiss( );
-	}
+     		OverViewActivity.this.progressDialogWaitStop.dismiss( );
+     	}
     }
 }

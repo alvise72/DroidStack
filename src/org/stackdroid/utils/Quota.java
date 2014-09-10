@@ -15,17 +15,18 @@ public class Quota {
 
     private final int maxFIP;
     private final int currFIP;
+    
 
     public Quota( int currentInstance, 
-		  int currentVirtCPU,
-		  int currentRAM,
-		  int currentFIP,
-		  int currentSECG,
-		  int maxInstances,
-		  int maxVirtCPU,
-		  int maxRAM,
-		  int maxFIP,
-		  int maxSecGroups ) {
+    			  int currentVirtCPU,
+    			  int currentRAM,
+    			  int currentFIP,
+    			  int currentSECG,
+    			  int maxInstances,
+    			  int maxVirtCPU,
+    			  int maxRAM,
+    			  int maxFIP,
+    			  int maxSecGroups ) {
 	this.maxCPU  = maxVirtCPU;
 	this.currCPU = currentVirtCPU;
 
@@ -52,5 +53,5 @@ public class Quota {
     public int getCurrentFloatingIP() { return currFIP;}
     public int getCurrentInstances() { return currVM;}
     public int getCurrentSecurityGroups() { return currSECG;}
-    
+
 }

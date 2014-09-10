@@ -115,4 +115,6 @@
     <string name="NOSERVERTOATTACHVOL">Non ci sono server a cui collegare il volume.</string>
     <string name="PICKASERVERTOATTACHVOL">Seleziona un server a cui collegare il volume:</string>
     <string name="CREATEVOLUME">Crea nuovo volume</string>
+    <string name="VOLUMEGIGA">Gigabytes totali</string>
+    <string name="VOLUMES_LAB">Volumi</string>
 </resources>

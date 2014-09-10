@@ -117,4 +117,6 @@
     <string name="NOSERVERTOATTACHVOL">No server available to which attach volume.</string>
     <string name="PICKASERVERTOATTACHVOL">Select a server to which attach the volume:</string>
     <string name="CREATEVOLUME">Create new volume</string>
+    <string name="VOLUMEGIGA">Total Gigabytes</string>
+    <string name="VOLUMES_LAB">Volumes</string>
 </resources>
