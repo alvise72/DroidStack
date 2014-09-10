@@ -284,6 +284,7 @@ public class VolumesActivity extends Activity {
     	public void onClick( View v ) {
     		final Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
     		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
+    		//Log.d("VOLUMES", "Vol="+V);
     		if(V.isAttached()) {
     			Utils.alert(VolumesActivity.this.getString(R.string.CANNOTDELETEATTACHEDVOL), VolumesActivity.this);
     			return;
@@ -378,6 +379,7 @@ public class VolumesActivity extends Activity {
     	Iterator<Volume> vit = volumes.iterator();
     	while(vit.hasNext()) {
     		Volume v = vit.next();
+    		//Log.d("VOLUMES", "V="+v.tostring());
     		VolumeView vv = new VolumeView(v,
     									   new VolumesActivity.AttachVolClickListener(), 
     									   new VolumesActivity.DetachVolClickListener(), 

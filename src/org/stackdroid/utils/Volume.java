@@ -58,5 +58,28 @@ public class Volume implements Serializable {
     	return name;
     }
     
+    public String tostring( ) {
+    	return "Volume={" + 
+    			"name=" + name +
+    			", ID=" + ID +
+    			", status=" + status +
+    			", bootable=" + bootable +
+    			", readonly=" + readonly +
+    			", attachmode=" + attachmode +
+    			", gigabytes=" + gigabyte +
+    			", serverid=" + attachedto_serverid +
+    			", servername=" + attachedto_servername +
+    			", device=" + attachedto_device +
+    			", isAttached=" + isAttached( ) +
+    			"}";
+    }
+    
     public boolean isAttached( ) { return ( attachedto_serverid!=null && attachedto_serverid.length()!=0 ); }
+    /*
+    public boolean isAttached( ) { 
+    	if(status.compareTo("in-use") == 0) return true;
+    	return false;
+    
+    }
+    */
 }
