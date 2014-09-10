@@ -108,4 +108,6 @@
     <string name="VOLUMEDELETED">Volume cancellato con successo. Premi su Menu -&gt; Aggiorna se viene ancora visualizzato.</string>
     <string name="AREYOUSURETODELETEVOL">Sei sicuro di cancellare il volume ?</string>
     <string name="INPUTNUMLOGLINES">Numero massimo di linee</string>
+    <string name="ALREADYATTACHED">Il volume &#xe8; gi&#xe0; collegato ad un\'istanza. Devi prima scollegarlo.</string>
+    <string name="ALREADYDETACHED">Il volume non &#xe8; collegato.</string>
 </resources>

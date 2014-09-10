@@ -110,4 +110,6 @@
     <string name="VOLUMEDELETED">Volume successfully deleted. Press on Menu -&gt; Update if it is still displayed.</string>
     <string name="AREYOUSURETODELETEVOL">Are you sure to delete the volume ?</string>
     <string name="INPUTNUMLOGLINES">Max number of lines</string>
+    <string name="ALREADYATTACHED">The volume is already attached to an instance. Detach it first.</string>
+    <string name="ALREADYDETACHED">The volume is not attached.</string>
 </resources>

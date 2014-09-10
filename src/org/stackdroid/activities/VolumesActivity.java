@@ -176,11 +176,44 @@ public class VolumesActivity extends Activity {
      * 
      * 
      */
-    protected class AttachDetachVolClickListener implements OnClickListener {
+    protected class AttachVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
     		//Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
-    		Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
+    		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
+    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		Volume V = bt.getVolumeView().getVolume();
+    		if(V.isAttached()) {
+    			// DETACH
+    			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYATTACHED), VolumesActivity.this);
+    			return;
+    		}
+    		
+    			// ATTACH
+    	}
+
+    		
+    }
+    
+
+    /**
+     * 
+     * 
+     * 
+     * 
+     */
+    protected class DetachVolClickListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		//Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
+    		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
+    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		Volume V = bt.getVolumeView().getVolume();
+    		if(!V.isAttached()) {
+    			// DETACH
+    			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYDETACHED), VolumesActivity.this);
+    			return;
+    		}
     	}
     }
 
@@ -286,7 +319,12 @@ public class VolumesActivity extends Activity {
     	Iterator<Volume> vit = volumes.iterator();
     	while(vit.hasNext()) {
     		Volume v = vit.next();
-    		VolumeView vv = new VolumeView(v, new VolumesActivity.AttachDetachVolClickListener(), new VolumesActivity.DeleteVolClickListener(), this);
+    		VolumeView vv = new VolumeView(v,
+    									   new VolumesActivity.AttachVolClickListener(), 
+    									   new VolumesActivity.DetachVolClickListener(), 
+    									   new VolumesActivity.DeleteVolClickListener(), 
+    									   this);
+    									   
     		((LinearLayout)findViewById( R.id.volumeLayout) ).addView( vv );
     		((LinearLayout)findViewById( R.id.volumeLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
     		View space = new View( this );

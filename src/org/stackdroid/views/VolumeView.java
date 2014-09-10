@@ -17,16 +17,22 @@ public class VolumeView extends LinearLayout {
     
     private LinearLayoutNamed row  			= null;
     private LinearLayoutNamed text 			= null;
-    private LinearLayoutNamed info 			= null;
+    private LinearLayoutNamed commands   	= null;
     private TextViewNamed Name     		    = null;
     private TextViewNamed Status_and_Size   = null;
     
+    private ImageButtonNamed attach = null;
     private ImageButtonNamed detach = null;
     private ImageButtonNamed delete = null;
 
     private Volume V = null;
 
-    public VolumeView( Volume v, OnClickListener attachdetachVol, OnClickListener deleteVol, Context ctx ) {
+    public VolumeView( Volume v, 
+    				   OnClickListener attachVol, 
+    				   OnClickListener detachVol, 
+    				   OnClickListener deleteVol, 
+    				   Context ctx ) 
+    {
     	super(ctx);
     	V = v;
 	
@@ -66,23 +72,28 @@ public class VolumeView extends LinearLayout {
 		row.addView(text);
 		//setOnClickListener( (OnClickListener)ctx );
 
-		detach = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME );
-		detach.setImageResource(R.drawable.ipassociate);
-		detach.setOnClickListener( attachdetachVol );
+		attach = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME );
+		attach.setImageResource(R.drawable.ipassociate);
+		attach.setOnClickListener( attachVol );
 
+		detach = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_ATTACHDETACH_VOlUME );
+		detach.setImageResource(android.R.drawable.ic_delete);
+		detach.setOnClickListener( detachVol );
+		
 		delete = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_SNAP_SERVER );
 		delete.setImageResource(android.R.drawable.ic_menu_delete);
 		delete.setOnClickListener( deleteVol );
 
-		info = new LinearLayoutNamed( ctx, (VolumeView)this );
-		info.setOrientation( LinearLayout.HORIZONTAL );
-		LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
-		info.setLayoutParams( params3 );
-		info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-		info.addView( detach );
-		info.addView( delete );
+		commands = new LinearLayoutNamed( ctx, (VolumeView)this );
+		commands.setOrientation( LinearLayout.HORIZONTAL );
+		LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
+		commands.setLayoutParams( params3 );
+		commands.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+		commands.addView( attach );
+		commands.addView( detach );
+		commands.addView( delete );
 	
-		row.addView( info );
+		row.addView( commands );
 		addView( row );
     		
     }
