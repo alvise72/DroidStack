@@ -6,3 +6,4 @@
 - volume and gigabytes quota show on Overview
 - confirm detach volume 
 - sync moved from menu to windows' buttons
+- confirmation ask for volume detach

@@ -245,13 +245,21 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
 		    return;
 	    }
-	    
+	    /*
 	    SubNetwork[] subnets = nethashes.get(netID).getSubNetworks();
 	    for(int i = 0; i < subnets.length; i++) {
-	    	String cidr = subnets[i].getAddress();
-	    	
+	    	//String cidr = subnets[i].getAddress();
+	    	//String subnetaddr = Utils.convertCidr(subnets[i].getAddress());
+	    	//Utils.alert(Utils.join(Utils.convertCidr(subnets[i].getAddress()), " - "), this);
+	    	Vector<String> vv = Utils.convertCidr(subnets[i].getAddress());
+	    	if(Utils.checkIPInRange(netIP, vv.elementAt(1), vv.elementAt(2))) {
+	    		Utils.alert("IP belongs to subnet", this);
+	    		return;
+	    	}
+	    	Utils.alert("IP does not belong to subnet", this);
+	    	return;
 	    }
-	    
+	    */
 	  }
       progressDialogWaitStop.show();
       

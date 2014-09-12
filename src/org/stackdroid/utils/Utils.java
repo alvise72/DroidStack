@@ -17,49 +17,73 @@ import java.io.FileInputStream;
 
 
 
+
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.app.*;
-//import android.view.LayoutInflater;
-//import android.view.View;
+import android.util.Log;
 import android.view.WindowManager;
 import android.net.*;
 import android.os.*;
-//import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-//import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Utils {
 
-	public static String convertCidr( String cidr ) {
-		String[] parts = cidr.split("/");
-	    String ip = parts[0];
-	    int prefix;
-	    if (parts.length < 2) {
-	        prefix = 0;
-	    } else {
-	        prefix = Integer.parseInt(parts[1]);
-	    }
-	    int mask = 0xffffffff << (32 - prefix);
-	    System.out.println("Prefix=" + prefix);
-	    System.out.println("Address=" + ip);
-
-	    int value = mask;
-	    byte[] bytes = new byte[]{ 
-	            (byte)(value >>> 24), (byte)(value >> 16 & 0xff), (byte)(value >> 8 & 0xff), (byte)(value & 0xff) };
-
-	    InetAddress netAddr = null;
-	    try {
-			netAddr = InetAddress.getByAddress(bytes);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+	public static boolean checkIPInRange( String IP, String range, String mask ) {
+		String IPv[]    = IP.split("\\.");
+		String rangev[] = range.split("\\.");
+		String maskv[]  = mask.split("\\.");
+		
+		Log.d("UTILS", "IPv="+Utils.join(IPv, ",")+ " - rangev="+Utils.join(rangev,",")+" - maskv="+Utils.join(maskv, ",") );
+		
+		for(int i = 0; i<=3; i++) {
+			int byteIP 		= Integer.parseInt(IPv[i]);
+			int byteRange   = Integer.parseInt(rangev[i]);
+			int byteMask 	= Integer.parseInt(maskv[i]);
+			
+			int and = byteMask & byteIP;
+			Log.d("UTILS", "AND="+and);
+			
+			if( and == byteRange) {
+				if(byteRange!=byteIP) return false;
+			}
 		}
-	    return netAddr.getHostAddress();
+		
+		return true;
 	}
+	
+	public static Vector<String> convertCidr( String cidr ) {
+		String[] parts = cidr.split("/");
+		String ip = parts[0];
+		int prefix;
+		if (parts.length < 2) {
+			prefix = 0;
+		} else {
+			prefix = Integer.parseInt(parts[1]);
+		}
+		int mask = 0xffffffff << (32 - prefix);
+		System.out.println("Prefix=" + prefix);
+		System.out.println("Address=" + ip);
+
+		int value = mask;
+		byte[] bytes = new byte[]{
+				(byte)(value >>> 24), (byte)(value >> 16 & 0xff), (byte)(value >> 8 & 0xff), (byte)(value & 0xff) };
+
+		InetAddress netAddr = null;
+		try {
+			netAddr = InetAddress.getByAddress(bytes);
+	    } catch (Exception e) {
+	    }	
+		Vector<String> out = new Vector<String>();
+		out.add(""+prefix);
+		out.add(ip);
+		out.add(netAddr.getHostAddress());
+		return out;
+	}
+	
     /**
      *
      *
@@ -67,8 +91,7 @@ public class Utils {
      *
      */
     public static int getDisplayPixel( Context ctx, int absPixel ) {
-	
-	return (int)(absPixel*getDisplayDensity( ctx ) + 0.5f);
+    	return (int)(absPixel*getDisplayDensity( ctx ) + 0.5f);
     }
 
     /**
