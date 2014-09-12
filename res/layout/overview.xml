@@ -28,27 +28,29 @@
           android:layout_width="fill_parent"
           android:layout_height="3dp"
           android:background="#FF909090" />  
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
+        
         <LinearLayout 
  			 android:layout_width="match_parent"
 			 android:layout_height="wrap_content"
  			 android:orientation="horizontal"
  	 		 android:layout_gravity="left|center_vertical">
 
-            <ImageButton
+            <Button
                 android:id="@+id/updateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu_refresh"
+                android:drawableLeft="@drawable/ic_menu_refresh"
+                android:text="@string/UPDATE"
                 android:onClick="update" />
  	 		 
             </LinearLayout>
+            <View   
+          android:layout_width="fill_parent"
+          android:layout_height="3dp"
+          android:background="#FF909090" /> 
  </LinearLayout>
         
-  <Space
+  <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
 
@@ -100,7 +102,7 @@
 		            android:textColor="#555555"
                     android:textSize="16sp" />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
 
@@ -127,7 +129,7 @@
 
     </LinearLayout>
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
 
@@ -168,7 +170,7 @@
 		            android:textColor="#555555"
                     android:textSize="16sp" />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
@@ -197,7 +199,7 @@
 <!-- 
      *************************************************************************************
 -->
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
 
@@ -233,7 +235,7 @@
 		    android:textColor="#555555"
                     android:textSize="16sp" />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
@@ -262,7 +264,7 @@
 <!-- 
      *************************************************************************************
 -->
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
 
@@ -298,7 +300,7 @@
 		    android:textColor="#555555"
                     android:textSize="16sp" />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
@@ -327,7 +329,7 @@
 <!-- 
      *************************************************************************************
 -->
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
 
@@ -364,7 +366,7 @@
 		    android:textSize="16sp"
                     />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
@@ -389,7 +391,7 @@
         </LinearLayout>
 
     </LinearLayout>
-    <Space
+    <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
   <LinearLayout
@@ -425,7 +427,7 @@
 		   			android:textSize="16sp"
                     />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
@@ -450,7 +452,7 @@
         </LinearLayout>
 
     </LinearLayout>
-  <Space
+  <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
   <LinearLayout
@@ -486,7 +488,7 @@
 		   			android:textSize="16sp"
                     />
 
-            <Space
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout

@@ -55,7 +55,7 @@ public class VolumeView extends LinearLayout {
 
 		Name = new TextViewNamed( ctx, (VolumeView)this );
 		String volName = V.getName();
-		if(volName.length()>16)
+		if( volName.length() > 16 )
 			volName = volName.substring(0,14) + "..";
 		Name.setText( volName );
 		Name.setTextColor( Color.parseColor("#333333") );

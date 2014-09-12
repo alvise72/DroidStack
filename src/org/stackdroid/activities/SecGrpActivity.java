@@ -61,7 +61,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         int GROUP = 0;
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+        //menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         return true;
     }
     
@@ -83,18 +83,13 @@ public class SecGrpActivity extends Activity implements OnClickListener {
             return true;
         }
         
-        if( id == Menu.FIRST ) { 
-        	if(U==null) {
-        		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
-        	} else {
-        		this.update( );
-        		return true;
-        	}
-        }
-        
         return super.onOptionsItemSelected( item );
     }
 
+    public void update( View v ) {
+    	this.update( );
+    }
+    
     /**
      * 
      * 

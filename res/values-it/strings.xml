@@ -117,4 +117,6 @@
     <string name="CREATEVOLUME">Crea nuovo volume</string>
     <string name="VOLUMEGIGA">Gigabytes totali</string>
     <string name="VOLUMES_LAB">Volumi</string>
+    <string name="UPDATE">Aggiorna</string>
+    <string name="MENUDELETEALLVOL">Cancella tutti i volumi</string>
 </resources>

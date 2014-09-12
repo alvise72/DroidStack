@@ -67,9 +67,13 @@ public class VolumesActivity extends Activity {
         int GROUP = 0;
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
-        //menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
+        menu.add(GROUP, 1, order++, getString(R.string.MENUDELETEALLVOL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
+    }
+    
+    public void update(View v) {
+    	progressDialogWaitStop.show();
+		(new AsyncTaskListVolumes()).execute( );
     }
     
     //__________________________________________________________________________________
@@ -83,18 +87,6 @@ public class VolumesActivity extends Activity {
         }
         
         if( id == Menu.FIRST ) { 
-        	if(U==null) {
-        		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
-        	} else {
-        		progressDialogWaitStop.show();
-        		(new AsyncTaskListVolumes()).execute( );
-        		//AsyncTaskOSListServers task = new AsyncTaskOSListServers();
-        		//task.execute( );
-        		return true;
-        	}
-        }
-
-        if( id == Menu.FIRST+1 ) { 
         	Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
 	    }

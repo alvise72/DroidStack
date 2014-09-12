@@ -119,4 +119,6 @@
     <string name="CREATEVOLUME">Create new volume</string>
     <string name="VOLUMEGIGA">Total Gigabytes</string>
     <string name="VOLUMES_LAB">Volumes</string>
+    <string name="UPDATE">Update</string>
+    <string name="MENUDELETEALLVOL">Delete all volumes</string>
 </resources>

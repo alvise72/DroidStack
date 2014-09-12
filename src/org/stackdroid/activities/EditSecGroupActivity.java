@@ -73,11 +73,16 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
         int GROUP = 0;
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
+        //menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         //menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
-
+    public void update(View v) {
+    	progressDialogWaitStop.setCancelable(false);
+		progressDialogWaitStop.setCanceledOnTouchOutside(false);
+		progressDialogWaitStop.show( );
+    	(new AsyncTaskListRules()).execute( secgrpID );
+    }
 	/**
 	 * 
 	 * @author dorigoa
@@ -90,18 +95,6 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
         if( id == Menu.FIRST-1 ) {
             Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
-        }
-        
-        if( id == Menu.FIRST ) { 
-        	if(U==null) {
-        		Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
-        	} else {
-        		progressDialogWaitStop.setCancelable(false);
-        		progressDialogWaitStop.setCanceledOnTouchOutside(false);
-        		progressDialogWaitStop.show( );
-            	(new AsyncTaskListRules()).execute( secgrpID );
-        		return true;
-        	}
         }
         return super.onOptionsItemSelected( item );
     }
