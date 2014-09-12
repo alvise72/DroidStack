@@ -1,6 +1,8 @@
 package org.stackdroid.utils;
 
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -12,6 +14,8 @@ import java.io.OutputStream;
 import java.io.FileInputStream;
 
 //import org.stackdroid.R;
+
+
 
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
@@ -30,6 +34,32 @@ import android.widget.TextView;
 
 public class Utils {
 
+	public static String convertCidr( String cidr ) {
+		String[] parts = cidr.split("/");
+	    String ip = parts[0];
+	    int prefix;
+	    if (parts.length < 2) {
+	        prefix = 0;
+	    } else {
+	        prefix = Integer.parseInt(parts[1]);
+	    }
+	    int mask = 0xffffffff << (32 - prefix);
+	    System.out.println("Prefix=" + prefix);
+	    System.out.println("Address=" + ip);
+
+	    int value = mask;
+	    byte[] bytes = new byte[]{ 
+	            (byte)(value >>> 24), (byte)(value >> 16 & 0xff), (byte)(value >> 8 & 0xff), (byte)(value & 0xff) };
+
+	    InetAddress netAddr = null;
+	    try {
+			netAddr = InetAddress.getByAddress(bytes);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+	    return netAddr.getHostAddress();
+	}
     /**
      *
      *
