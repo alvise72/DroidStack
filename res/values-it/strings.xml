@@ -119,4 +119,5 @@
     <string name="VOLUMES_LAB">Volumi</string>
     <string name="UPDATE">Aggiorna</string>
     <string name="MENUDELETEALLVOL">Cancella tutti i volumi</string>
+    <string name="AREYOUSURETODETACHVOL">Sei sicuro di scollegare il volume ?</string>
 </resources>

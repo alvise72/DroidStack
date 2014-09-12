@@ -57,6 +57,7 @@ public class VolumesActivity extends Activity {
 	
 	private String 				 currentVolToAttach			= null;
 	private String				 currentSrvToAttach			= null;
+	public String currentVolToDetach;
     
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -233,8 +234,7 @@ public class VolumesActivity extends Activity {
     	    serverSpinner.setAdapter(spinnerServersArrayAdapter);
     	    final Button mButton = (Button) promptsView.findViewById(R.id.myButtonVol);
     	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancelVol);
-    		//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
-    	    mButton.setOnClickListener(new VolumesActivity.ConfirmButtonHandler());
+    		mButton.setOnClickListener(new VolumesActivity.ConfirmButtonHandler());
     	    mButtonCancel.setOnClickListener(new VolumesActivity.CancelButtonHandler());
     	    alertDialogSelectServer.setCanceledOnTouchOutside(false);
     	    alertDialogSelectServer.setCancelable(false);
@@ -255,13 +255,39 @@ public class VolumesActivity extends Activity {
     	@Override
     	public void onClick( View v ) {
     		ImageButtonNamed bt = (ImageButtonNamed)v;
-    		Volume V = bt.getVolumeView().getVolume();
+    		final Volume V = bt.getVolumeView().getVolume();
     		if(!V.isAttached()) {
     			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYDETACHED), VolumesActivity.this);
     			return;
     		}
-    		VolumesActivity.this.progressDialogWaitStop.show( );
-    		(new VolumesActivity.AsyncTaskDetachVolume()).execute( V.getID(), V.getAttachedServerID() );
+    		
+    		AlertDialog.Builder builder = new AlertDialog.Builder(VolumesActivity.this);
+			builder.setMessage( getString(R.string.AREYOUSURETODETACHVOL));
+			builder.setCancelable(false);
+			    
+			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+				    VolumesActivity.this.progressDialogWaitStop.show( );
+		    		(new VolumesActivity.AsyncTaskDetachVolume()).execute( V.getID(), V.getAttachedServerID() );
+				}
+			};
+
+			DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+				    dialog.cancel( );
+				}
+			};
+
+			builder.setPositiveButton(getString(R.string.YES), yesHandler );
+			builder.setNegativeButton(getString(R.string.NO), noHandler );
+		            
+			AlertDialog alert = builder.create();
+			alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+			alert.setCancelable(false);
+			alert.setCanceledOnTouchOutside(false);
+			alert.show();
+    		
+    		
     	}
     }
 

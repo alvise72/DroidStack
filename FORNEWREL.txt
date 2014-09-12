@@ -1,8 +1,8 @@
 0.3.0
+- Status info per ogni immagini glance
+- some visual fix
 - max log lines in console log
 - volume attach/detach to instance
 - volume and gigabytes quota show on Overview
-
-0.4.0
-- Status info per ogni immagini glance
-- some visual fix
+- confirm detach volume 
+- sync moved from menu to windows' buttons

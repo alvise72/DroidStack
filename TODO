@@ -1,5 +1,4 @@
 conferma detach volume
 click sul volume per info estese
-icona-pulsante sync invece che nel menu
 non permettere di specificare IP relativo ad una rete con subnet differente
 User.fromFileID -> messaggio d'errore se viene tornato null
