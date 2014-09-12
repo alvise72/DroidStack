@@ -26,7 +26,8 @@ public class OSImageView extends LinearLayout {
     private LinearLayoutNamed buttonsLayout = null;
     private LinearLayoutNamed nameLayout    = null;
     private TextViewNamed     textImageName = null;
-    private TextViewNamed     textSize    = null;
+    private TextViewNamed     textSize      = null;
+    private TextViewNamed     testStatus    = null;
     private ImageButtonNamed  launchImage   = null;
     private ImageButtonNamed  deleteImage   = null;
     
@@ -74,8 +75,14 @@ public class OSImageView extends LinearLayout {
 	textSize.setTextColor( Color.parseColor("#BBBBBB") );
 	textSize.setOnClickListener( (OnClickListener)ctx );
 
+	testStatus = new TextViewNamed( ctx, (OSImageView)this );
+	testStatus.setText( "Status: " + image.getStatus() );
+	testStatus.setTextColor( Color.parseColor("#BBBBBB") );
+	testStatus.setOnClickListener( (OnClickListener)ctx );
+
 	nameLayout.addView(textImageName);
 	nameLayout.addView(textSize);
+	nameLayout.addView(testStatus);
 	nameLayout.setOnClickListener( (OnClickListener)ctx );
 	
 	row.addView(nameLayout);
@@ -85,7 +92,7 @@ public class OSImageView extends LinearLayout {
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params4 
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
-	params4.gravity=Gravity.RIGHT;
+	params4.gravity=Gravity.RIGHT|Gravity.CENTER_VERTICAL;
 	buttonsLayout.setLayoutParams( params4 );
 	buttonsLayout.setGravity( Gravity.RIGHT );
 	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
