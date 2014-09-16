@@ -28,7 +28,11 @@ public class FloatingIPView extends LinearLayout {
     private ImageButtonNamed  releaseFIP    = null;
     private ImageButtonNamed  dissociateFIP = null;
     
-    public FloatingIPView( FloatingIP fip, Context ctx ) {
+    public FloatingIPView( FloatingIP fip, 
+    					   OnClickListener associateListener,
+    					   OnClickListener dissociateListener,
+    					   OnClickListener releaseListener,
+    					   Context ctx ) {
 	    super(ctx);
 	    this.fip = fip;
 	  
@@ -89,17 +93,17 @@ public class FloatingIPView extends LinearLayout {
 		
 		associateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_ASSOCIATE_IP);
 		associateFIP.setImageResource(R.drawable.ipassociate);
-		associateFIP.setOnClickListener( (OnClickListener)ctx );
+		associateFIP.setOnClickListener( associateListener );
 		
 		releaseFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_RELEASE_IP);
 		//releaseFIP.setImageResource(android.R.drawable.ic_menu_close_clear_cancel );
 		releaseFIP.setImageResource(android.R.drawable.ic_menu_delete );
 		
-		releaseFIP.setOnClickListener( (OnClickListener)ctx );
+		releaseFIP.setOnClickListener( releaseListener );
 		
 		dissociateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_DISSOCIATE_IP);
 		dissociateFIP.setImageResource(android.R.drawable.ic_delete );
-		dissociateFIP.setOnClickListener( (OnClickListener)ctx );
+		dissociateFIP.setOnClickListener( dissociateListener );
 		
 		buttonsLayout.addView( associateFIP );
 		buttonsLayout.addView( dissociateFIP );

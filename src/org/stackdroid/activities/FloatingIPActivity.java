@@ -40,7 +40,7 @@ import android.os.AsyncTask;
 
 import org.stackdroid.utils.CustomProgressDialog;
 
-public class FloatingIPActivity extends Activity implements OnClickListener {
+public class FloatingIPActivity extends Activity {
 
     private CustomProgressDialog  progressDialogWaitStop 	  = null;
     private User 				  U 						  = null;
@@ -55,6 +55,91 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	private AlertDialog 		  alertDialogSelectServer     = null;
 	private String 				  fipToAssociate			  = null;
 	private FloatingIP 			  selectedFIPObj 			  = null;
+
+	/**
+	 * 
+	 * 
+	 *
+	 */	
+	protected class ReleaseFIPListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+			if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
+				fip_to_release_ID  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getID();
+				progressDialogWaitStop.show();
+				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
+				task.execute();	    
+			} else {
+				Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), FloatingIPActivity.this);
+				return;
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 *
+	 */
+	protected class AssociateFIPListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			selectedFIPObj  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
+			if(selectedFIPObj.isAssociated()) {
+				final String fip = selectedFIPObj.getIP();
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(FloatingIPActivity.this);
+				builder.setMessage( getString(R.string.ALREADYASSOCIATEDWARN));
+				builder.setCancelable(false);
+			    
+				DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						associateFIP(fip);
+					}
+				    };
+
+				DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					    dialog.cancel( );
+					}
+				    };
+
+				builder.setPositiveButton(getString(R.string.CONTINUE), yesHandler );
+				builder.setNegativeButton(getString(R.string.CANCEL), noHandler );
+		            
+				AlertDialog alert = builder.create();
+				alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+							    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+				
+				alert.setCancelable(false);
+				alert.setCanceledOnTouchOutside(false);
+				alert.show();
+			} else associateFIP(selectedFIPObj.getIP());
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 *
+	 */
+	protected class DissociateFIPListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			FloatingIP FIP = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
+			String fip = FIP.getIP();
+			if(FIP.isAssociated()==false) {
+				Utils.alert(getString(R.string.FIPNOTASSOCIATED), FloatingIPActivity.this);
+				return;
+			}
+			String serverid= FIP.getServerID();
+			
+			progressDialogWaitStop.show();
+			AsyncTaskFIPDeassociate task = new AsyncTaskFIPDeassociate();
+			task.execute( fip, serverid );
+		}
+	}
 	
 	/**
 	 * 
@@ -168,16 +253,6 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     private void loadFIP() {
     	(new AsyncTaskFIPList()).execute();
     }
-    
-    /**
-	 * 
-	 * 
-	 *
-	 */
-    @Override
-    public void onResume( ) {
-	  super.onResume( );
-    }
  
     /**
 	 * 
@@ -207,7 +282,12 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	    Iterator<FloatingIP> it = fips.iterator();
 	    while(it.hasNext()) {
 		  FloatingIP fip = it.next();
-	      ((LinearLayout)findViewById( R.id.fipLayout) ).addView( new FloatingIPView( fip, this ) );
+	      ((LinearLayout)findViewById( R.id.fipLayout) ).addView( new FloatingIPView( fip, 
+	    		  																	  new FloatingIPActivity.AssociateFIPListener(),
+	    		  																	  new FloatingIPActivity.DissociateFIPListener(),
+	    		  																	  new FloatingIPActivity.ReleaseFIPListener(),
+	    		  																	  this) 
+	    		  												);
 	      ((LinearLayout)findViewById( R.id.fipLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
 	      View space = new View( this );
 	      space.setMinimumHeight(10);
@@ -536,7 +616,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
 	 * 
 	 * 
 	 *
-	 */
+	 *
     @Override
     public void onClick(View v) {
 	
@@ -605,6 +685,7 @@ public class FloatingIPActivity extends Activity implements OnClickListener {
     	}
     	
   	 }	
+    */
     
     /**
 	 * 
