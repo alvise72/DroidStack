@@ -1,3 +1,4 @@
 click sul volume per info estese
-non permettere di specificare IP relativo ad una rete con subnet differente
 User.fromFileID -> messaggio d'errore se viene tornato null
+verificare presenza cinder, altrimenti disabilitare bottone volumi
+Neutron interface
