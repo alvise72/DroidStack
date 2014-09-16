@@ -1,4 +1,4 @@
-0.3.0
+0.4.0
 - Status info per ogni immagini glance
 - some visual fix
 - max log lines in console log
@@ -7,3 +7,4 @@
 - confirm detach volume 
 - sync moved from menu to windows' buttons
 - confirmation ask for volume detach
+- Check custom IP appartiene al CIDR della subnet nella ImageLaunchActivity

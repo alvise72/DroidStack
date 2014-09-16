@@ -120,4 +120,5 @@
     <string name="UPDATE">Aggiorna</string>
     <string name="MENUDELETEALLVOL">Cancella tutti i volumi</string>
     <string name="AREYOUSURETODETACHVOL">Sei sicuro di scollegare il volume ?</string>
+    <string name="NOTINRANGE">non &#xe8; nel range subnet</string>
 </resources>

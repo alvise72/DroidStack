@@ -122,4 +122,5 @@
     <string name="UPDATE">Update</string>
     <string name="MENUDELETEALLVOL">Delete all volumes</string>
     <string name="AREYOUSURETODETACHVOL">Are you sure to detach volume ?</string>
+    <string name="NOTINRANGE">is not in the subnet range</string>
 </resources>

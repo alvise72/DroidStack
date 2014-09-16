@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
+//import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
@@ -16,7 +17,9 @@ import android.view.View;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.IPAddressKeyListener;
-import org.stackdroid.utils.SubNetwork;
+//import org.stackdroid.utils.SubNetwork;
+import org.stackdroid.utils.SubnetUtils;
+import org.stackdroid.utils.SubnetUtils.SubnetInfo;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Flavor;
@@ -241,25 +244,24 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	    if(mappingNetEditText.get( netID ).isEnabled()==false)
 	      continue;
 	    String netIP = selectedNetworks.get( netID );
+	    
 	    if(netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
 		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
 		    return;
 	    }
-	    /*
-	    SubNetwork[] subnets = nethashes.get(netID).getSubNetworks();
-	    for(int i = 0; i < subnets.length; i++) {
-	    	//String cidr = subnets[i].getAddress();
-	    	//String subnetaddr = Utils.convertCidr(subnets[i].getAddress());
-	    	//Utils.alert(Utils.join(Utils.convertCidr(subnets[i].getAddress()), " - "), this);
-	    	Vector<String> vv = Utils.convertCidr(subnets[i].getAddress());
-	    	if(Utils.checkIPInRange(netIP, vv.elementAt(1), vv.elementAt(2))) {
-	    		Utils.alert("IP belongs to subnet", this);
+	    if(netIP.length()!=0) { // Let's check only if the user specified the custom IP
+	    	//(new SubnetUtils( nethashes.get(netID) ) );
+	    	SubnetUtils su = null;
+	    	Network n = nethashes.get(netID);
+	    	//Log.d("LAUNCH", "SubnetUtils for CIDR "+n.getSubNetworks()[0].getAddress());
+	    	su = new SubnetUtils( n.getSubNetworks()[0].getAddress() ); // let's take only the first one
+	    	SubnetInfo si = su.getInfo();
+	    	//Log.d("LAUNCH", "Checking IP " + netIP + " inCIDR "+n.getSubNetworks()[0].getAddress());
+	    	if(!si.isInRange(netIP)) {
+	    		Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+n.getSubNetworks()[0].getAddress(), this);
 	    		return;
 	    	}
-	    	Utils.alert("IP does not belong to subnet", this);
-	    	return;
 	    }
-	    */
 	  }
       progressDialogWaitStop.show();
       
