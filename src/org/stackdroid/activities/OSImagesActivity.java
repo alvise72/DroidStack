@@ -18,13 +18,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.stackdroid.comm.GenericException;
 import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
@@ -41,14 +37,13 @@ import org.stackdroid.views.OSImageView;
 import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.LinearLayoutNamed;
-//import org.stackdroid.utils.Configuration;
 
 
 
 
 import android.graphics.Typeface;
 
-public class OSImagesActivity extends Activity implements OnClickListener {
+public class OSImagesActivity extends Activity {
     
     private Vector<OSImage> OS;
     private CustomProgressDialog progressDialogWaitStop = null;
@@ -154,156 +149,153 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     	this.refreshView( );
     }
 
+    protected class imageDeleteListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
+    		AlertDialog.Builder builder = new AlertDialog.Builder(OSImagesActivity.this);
+    		builder.setMessage( "Are you sure to delete this image ?" );
+    		builder.setCancelable(false);
+    	    
+    		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int id) {
+    			    deleteGlanceImage( ID );
+    			}
+    		    };
 
-    //__________________________________________________________________________________
-    public void onClick( View v ) { 
+    		DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int id) {
+    			    dialog.cancel( );
+    			}
+    		    };
 
-	if(v instanceof ImageButtonNamed) {
+    		builder.setPositiveButton("Yes", yesHandler );
+    		builder.setNegativeButton("No", noHandler );
+                
+    		AlertDialog alert = builder.create();
+    		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
+    					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    		alert.setCancelable(false);
+    		alert.setCanceledOnTouchOutside(false);
+    		alert.show();
+    	}
+    }
 
-	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_IMAGE ) {
-		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage( "Are you sure to delete this image ?" );
-		builder.setCancelable(false);
-	    
-		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-			    deleteGlanceImage( ID );
-			}
-		    };
+    protected class imageLaunchListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
+    		NAME = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getName();
+    		Class<?> c = (Class<?>)ImageLaunchActivity.class;
+    		Intent I = new Intent( OSImagesActivity.this, c );
+    		I.putExtra( "IMAGEID", ID );
+    	    I.putExtra("IMAGENAME", NAME);
+    		startActivity( I );
+    	}
+    }
 
-		DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-			    dialog.cancel( );
-			}
-		    };
-
-		builder.setPositiveButton("Yes", yesHandler );
-		builder.setNegativeButton("No", noHandler );
-            
-		AlertDialog alert = builder.create();
-		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-		alert.setCancelable(false);
-		alert.setCanceledOnTouchOutside(false);
-		alert.show();
-	    }
-	    
-	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_LAUNCH_IMAGE ) {
-		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
-		NAME = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getName();
-		Class<?> c = (Class<?>)ImageLaunchActivity.class;
-		Intent I = new Intent( OSImagesActivity.this, c );
-		I.putExtra( "IMAGEID", ID );
-	    I.putExtra("IMAGENAME", NAME);
-		startActivity( I );
-	    }
-	}
-
-
-	if(v instanceof OSImageView || v instanceof TextViewNamed || v instanceof LinearLayoutNamed ) {
-	    OSImage osi = null;
-	    if(v instanceof OSImageView) {
-		//		Utils.alert("Toccato OSImageView", this);
-		osi = ((OSImageView)v).getOSImage();
-	    }
-	    if(v instanceof TextViewNamed) {
-		//		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
-		osi = ((TextViewNamed)v).getOSImageView().getOSImage();
-	    }
-	    if(v instanceof LinearLayoutNamed) {
-		//Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
-		osi = ((LinearLayoutNamed)v).getOSImageView().getOSImage();
-	    }
-	    TextView tv1 = new TextView(this);
-	    tv1.setText("Image name:");
-	    tv1.setTypeface( null, Typeface.BOLD );
-	    TextView tv2 = new TextView(this);
-	    tv2.setText(osi.getName());
-	    TextView tv3 = new TextView(this);
-	    tv3.setText("Status:");
-	    tv3.setTypeface( null, Typeface.BOLD );
-	    TextView tv4 = new TextView(this);
-	    tv4.setText(osi.getStatus());
-	    TextView tv5 = new TextView(this);
-	    tv5.setText("Size: ");
-	    tv5.setTypeface( null, Typeface.BOLD );
-	    TextView tv6 = new TextView(this);
-	    tv6.setText(""+osi.getSize() + " (" + osi.getSize()/1048576 + " MB)");
-	    TextView tv7 = new TextView(this);
-	    tv7.setText("Public:");
-	    tv7.setTypeface( null, Typeface.BOLD );
-	    TextView tv8 = new TextView(this);
-	    tv8.setText(""+osi.isPublic());
-	    TextView tv9 = new TextView(this);
-	    tv9.setText("Format:");
-	    tv9.setTypeface( null, Typeface.BOLD );
-	    TextView tv10 = new TextView(this);
-	    tv10.setText(osi.getFormat());
-	    TextView tv11 = new TextView( this );
-	    tv11.setText("ID:");
-	    tv11.setTypeface( null, Typeface.BOLD );
-	    TextView tv12 = new TextView( this );
-	    tv12.setText(osi.getID());
-	    TextView tv13 = new TextView( this );
-	    tv13.setText("Minimum Disk:");
-	    tv13.setTypeface( null, Typeface.BOLD );
-	    TextView tv14 = new TextView( this );
-	    tv14.setText(osi.getMinDISK( ) + " GB");
-	    TextView tv15 = new TextView( this );
-	    tv15.setText("Minimum RAM:");
-	    tv15.setTypeface( null, Typeface.BOLD );
-	    TextView tv16 = new TextView( this );
-	    tv16.setText(osi.getMinRAM( ) + " MB");
-	    ScrollView sv = new ScrollView(this);
-	    LinearLayout.LayoutParams lp 
-		= new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.MATCH_PARENT,
-						LinearLayout.LayoutParams.MATCH_PARENT);
-	    sv.setLayoutParams( lp );
-	    LinearLayout l = new LinearLayout(this);
-	    l.setLayoutParams( lp );
-	    l.setOrientation( LinearLayout.VERTICAL );
-	    int paddingPixel = 8;
-	    float density = Utils.getDisplayDensity( this );
-	    int paddingDp = (int)(paddingPixel * density);
-	    l.setPadding(paddingDp, 0, 0, 0);
-	    l.addView( tv1 );
-	    tv2.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv2 );
-	    l.addView( tv3 );
-	    tv4.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv4 );
-	    l.addView( tv5 );
-	    tv6.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv6 );
-	    l.addView( tv7 );
-	    tv8.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv8 );
-	    l.addView( tv9 );
-	    tv10.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv10 );
-	    l.addView( tv11 );
-	    tv12.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv12 );
-	    l.addView( tv13 );
-	    tv14.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv14 );
-	    l.addView( tv15 );
-	    tv16.setPadding(2*paddingDp, 0, 0, 0);
-	    l.addView( tv16 );
-	    //sv.setOrientation( LinearLayout.VERTICAL );
-	    sv.addView(l);
-	    String name;
-	    if(osi.getName().length()>=16)
-		name = osi.getName().substring(0,14) + "..";
-	    else
-		name = osi.getName();
-	    Utils.alertInfo( sv, "Image information: " + name, this );
-	    
-	}
-
-	
+    protected class imageInfoListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		OSImage osi = null;
+    	    if(v instanceof OSImageView) {
+    		//		Utils.alert("Toccato OSImageView", this);
+    		osi = ((OSImageView)v).getOSImage();
+    	    }
+    	    if(v instanceof TextViewNamed) {
+    		//		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
+    		osi = ((TextViewNamed)v).getOSImageView().getOSImage();
+    	    }
+    	    if(v instanceof LinearLayoutNamed) {
+    		//Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
+    		osi = ((LinearLayoutNamed)v).getOSImageView().getOSImage();
+    	    }
+    	    TextView tv1 = new TextView(OSImagesActivity.this);
+    	    tv1.setText("Image name:");
+    	    tv1.setTypeface( null, Typeface.BOLD );
+    	    TextView tv2 = new TextView(OSImagesActivity.this);
+    	    tv2.setText(osi.getName());
+    	    TextView tv3 = new TextView(OSImagesActivity.this);
+    	    tv3.setText("Status:");
+    	    tv3.setTypeface( null, Typeface.BOLD );
+    	    TextView tv4 = new TextView(OSImagesActivity.this);
+    	    tv4.setText(osi.getStatus());
+    	    TextView tv5 = new TextView(OSImagesActivity.this);
+    	    tv5.setText("Size: ");
+    	    tv5.setTypeface( null, Typeface.BOLD );
+    	    TextView tv6 = new TextView(OSImagesActivity.this);
+    	    tv6.setText(""+osi.getSize() + " (" + osi.getSize()/1048576 + " MB)");
+    	    TextView tv7 = new TextView(OSImagesActivity.this);
+    	    tv7.setText("Public:");
+    	    tv7.setTypeface( null, Typeface.BOLD );
+    	    TextView tv8 = new TextView(OSImagesActivity.this);
+    	    tv8.setText(""+osi.isPublic());
+    	    TextView tv9 = new TextView(OSImagesActivity.this);
+    	    tv9.setText("Format:");
+    	    tv9.setTypeface( null, Typeface.BOLD );
+    	    TextView tv10 = new TextView(OSImagesActivity.this);
+    	    tv10.setText(osi.getFormat());
+    	    TextView tv11 = new TextView( OSImagesActivity.this );
+    	    tv11.setText("ID:");
+    	    tv11.setTypeface( null, Typeface.BOLD );
+    	    TextView tv12 = new TextView( OSImagesActivity.this );
+    	    tv12.setText(osi.getID());
+    	    TextView tv13 = new TextView( OSImagesActivity.this );
+    	    tv13.setText("Minimum Disk:");
+    	    tv13.setTypeface( null, Typeface.BOLD );
+    	    TextView tv14 = new TextView( OSImagesActivity.this );
+    	    tv14.setText(osi.getMinDISK( ) + " GB");
+    	    TextView tv15 = new TextView( OSImagesActivity.this );
+    	    tv15.setText("Minimum RAM:");
+    	    tv15.setTypeface( null, Typeface.BOLD );
+    	    TextView tv16 = new TextView( OSImagesActivity.this );
+    	    tv16.setText(osi.getMinRAM( ) + " MB");
+    	    ScrollView sv = new ScrollView(OSImagesActivity.this);
+    	    LinearLayout.LayoutParams lp 
+    		= new LinearLayout.LayoutParams(
+    						LinearLayout.LayoutParams.MATCH_PARENT,
+    						LinearLayout.LayoutParams.MATCH_PARENT);
+    	    sv.setLayoutParams( lp );
+    	    LinearLayout l = new LinearLayout(OSImagesActivity.this);
+    	    l.setLayoutParams( lp );
+    	    l.setOrientation( LinearLayout.VERTICAL );
+    	    int paddingPixel = 8;
+    	    float density = Utils.getDisplayDensity( OSImagesActivity.this );
+    	    int paddingDp = (int)(paddingPixel * density);
+    	    l.setPadding(paddingDp, 0, 0, 0);
+    	    l.addView( tv1 );
+    	    tv2.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv2 );
+    	    l.addView( tv3 );
+    	    tv4.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv4 );
+    	    l.addView( tv5 );
+    	    tv6.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv6 );
+    	    l.addView( tv7 );
+    	    tv8.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv8 );
+    	    l.addView( tv9 );
+    	    tv10.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv10 );
+    	    l.addView( tv11 );
+    	    tv12.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv12 );
+    	    l.addView( tv13 );
+    	    tv14.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv14 );
+    	    l.addView( tv15 );
+    	    tv16.setPadding(2*paddingDp, 0, 0, 0);
+    	    l.addView( tv16 );
+    	    //sv.setOrientation( LinearLayout.VERTICAL );
+    	    sv.addView(l);
+    	    String name;
+    	    if(osi.getName().length()>=16)
+    		name = osi.getName().substring(0,14) + "..";
+    	    else
+    		name = osi.getName();
+    	    Utils.alertInfo( sv, "Image information: " + name, OSImagesActivity.this );
+    	}
     }
 
     private  void deleteGlanceImage( String ID ) {
@@ -322,7 +314,11 @@ public class OSImagesActivity extends Activity implements OnClickListener {
     	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
     	while( sit.hasNext( )) {
     		OSImage os = sit.next();
-    		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( new OSImageView(os, this) );
+    		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( new OSImageView(os, 
+    																				   new OSImagesActivity.imageInfoListener(),
+    																				   new OSImagesActivity.imageLaunchListener(),
+    																				   new OSImagesActivity.imageDeleteListener(),
+    																				   this) );
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( space );

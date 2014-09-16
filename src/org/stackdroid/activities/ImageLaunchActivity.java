@@ -42,7 +42,7 @@ import java.util.Vector;
 import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.R;
 
-public class ImageLaunchActivity extends Activity implements OnClickListener {
+public class ImageLaunchActivity extends Activity {
 
     private org.stackdroid.utils.CustomProgressDialog progressDialogWaitStop 	  = null;
     private ArrayAdapter<Flavor> 					  spinnerFlavorsArrayAdapter  = null;
@@ -60,33 +60,35 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
     private Hashtable<String, String> 				  selectedNetworks 			  = null;
     private Vector<Network> 						  networks 					  = null;
     private Hashtable<String, Network>				  nethashes					  = null;
-
     
-    @Override
-    public void onClick( View v ) {
-	if(v instanceof SecGroupView) {
-	    SecGroupView s = (SecGroupView)v;
-	    if(s.isChecked())
-		selectedSecgroups.add( s.getSecGroup().getID() );
-	    else
-		selectedSecgroups.remove(s.getSecGroup().getID());
-	    return;
-	}
-	
-	if(v instanceof NetworkView) {
-	    NetworkView nv = (NetworkView)v;
-	    if(nv.isChecked()) {
-		String netID = nv.getNetwork().getID();
-		mappingNetEditText.get( netID ).setEnabled(true);
-	    }
-	    else {
-		String netID = nv.getNetwork().getID();
-		mappingNetEditText.get( netID ).setEnabled(false);
-	    }
-	    return;
-	}
+    protected class SecGroupListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		SecGroupView s = (SecGroupView)v;
+    	    if(s.isChecked())
+    		selectedSecgroups.add( s.getSecGroup().getID() );
+    	    else
+    		selectedSecgroups.remove(s.getSecGroup().getID());
+    	    return;
+    	}
     }
 
+    protected class NetworkViewListener implements OnClickListener {
+    	@Override
+    	public void onClick( View v ) {
+    		NetworkView nv = (NetworkView)v;
+    	    if(nv.isChecked()) {
+    		String netID = nv.getNetwork().getID();
+    		mappingNetEditText.get( netID ).setEnabled(true);
+    	    }
+    	    else {
+    		String netID = nv.getNetwork().getID();
+    		mappingNetEditText.get( netID ).setEnabled(false);
+    	    }
+    	    return;
+    	}
+    }
+    
     public ImageLaunchActivity( ) {
     	nethashes = new Hashtable<String, Network>( );
     }
@@ -303,8 +305,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 					continue;
 				}
 		  }
-		  NetworkView nv = new NetworkView( net, ImageLaunchActivity.this );
-		  nv.setOnClickListener( ImageLaunchActivity.this );
+		  NetworkView nv = new NetworkView( net, new ImageLaunchActivity.NetworkViewListener(), ImageLaunchActivity.this );
+		  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
 		  networksL.addView( nv );
 		  EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
 		  etIP.setKeyListener(IPAddressKeyListener.getInstance());
@@ -327,8 +329,8 @@ public class ImageLaunchActivity extends Activity implements OnClickListener {
 	public void updateSecGroupList(Vector<SecGroup> secgs) {
 		Iterator<SecGroup> sit = secgs.iterator();
 		while(sit.hasNext()) {
-			SecGroupView sgv = new SecGroupView( sit.next(), ImageLaunchActivity.this );
-			sgv.setOnClickListener( ImageLaunchActivity.this );
+			SecGroupView sgv = new SecGroupView( sit.next(), new ImageLaunchActivity.SecGroupListener(),ImageLaunchActivity.this );
+			sgv.setOnClickListener( new ImageLaunchActivity.SecGroupListener() );
 			options.addView( sgv );
 			if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
 		}
