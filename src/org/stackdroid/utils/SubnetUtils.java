@@ -17,6 +17,13 @@ package org.stackdroid.utils;
  */
 //package org.apache.commons.net.util;
 
+/**
+ * 
+ * Got from here: http://commons.apache.org/proper/commons-net/jacoco/org.apache.commons.net.util/SubnetUtils.java.html
+ * 
+ * 
+ */
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
