@@ -9,15 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
-//import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
 
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.EditTextWithView;
 import org.stackdroid.utils.IPAddressKeyListener;
-//import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.SubnetUtils;
 import org.stackdroid.utils.SubnetUtils.SubnetInfo;
 import org.stackdroid.utils.User;
@@ -28,7 +27,6 @@ import org.stackdroid.comm.OSClient;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.NetworkView;
 import org.stackdroid.utils.CustomProgressDialog;
-import org.stackdroid.utils.EditTextNamed;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.Network;
 import org.stackdroid.parse.ParseUtils;
@@ -56,7 +54,7 @@ public class ImageLaunchActivity extends Activity {
     private Bundle 									  bundle 					  = null;
     private String 									  imageID 					  = null;
     private String 									  imageNAME 				  = null;
-    private Hashtable<String, EditTextNamed> 		  mappingNetEditText 		  = null;
+    private Hashtable<String, EditTextWithView>		  mappingNetEditText 		  = null;
     private Hashtable<String, String> 				  selectedNetworks 			  = null;
     private Vector<Network> 						  networks 					  = null;
     private Hashtable<String, Network>				  nethashes					  = null;
@@ -78,12 +76,12 @@ public class ImageLaunchActivity extends Activity {
     	public void onClick( View v ) {
     		NetworkView nv = (NetworkView)v;
     	    if(nv.isChecked()) {
-    		String netID = nv.getNetwork().getID();
-    		mappingNetEditText.get( netID ).setEnabled(true);
+    	    	String netID = nv.getNetwork().getID();
+    	    	mappingNetEditText.get( netID ).setEnabled(true);
     	    }
     	    else {
-    		String netID = nv.getNetwork().getID();
-    		mappingNetEditText.get( netID ).setEnabled(false);
+    	    	String netID = nv.getNetwork().getID();
+    	    	mappingNetEditText.get( netID ).setEnabled(false);
     	    }
     	    return;
     	}
@@ -145,7 +143,7 @@ public class ImageLaunchActivity extends Activity {
       
       selectedSecgroups = new HashSet<String>();
       
-      mappingNetEditText = new Hashtable<String, EditTextNamed>();
+      mappingNetEditText = new Hashtable<String, EditTextWithView>();
       selectedNetworks = new Hashtable<String, String>();
 
       (new AsyncTaskGetOptions()).execute( );
@@ -308,7 +306,7 @@ public class ImageLaunchActivity extends Activity {
 		  NetworkView nv = new NetworkView( net, new ImageLaunchActivity.NetworkViewListener(), ImageLaunchActivity.this );
 		  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
 		  networksL.addView( nv );
-		  EditTextNamed etIP = new EditTextNamed(  ImageLaunchActivity.this, nv );
+		  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
 		  etIP.setKeyListener(IPAddressKeyListener.getInstance());
 		    
 		  TextView tv = new TextView( ImageLaunchActivity.this );

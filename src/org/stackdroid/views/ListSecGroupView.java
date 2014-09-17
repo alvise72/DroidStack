@@ -15,12 +15,12 @@ import org.stackdroid.utils.*;
 
 public class ListSecGroupView extends LinearLayout {
     
-    private LinearLayoutNamed row  = null;
-    private LinearLayoutNamed text = null;
-    private LinearLayoutNamed info = null;
-    private TextViewNamed Name     = null;
-    private ImageButtonNamed deleteSecGroup = null;
-    private ImageButtonNamed editSecGroup = null;
+    private LinearLayoutWithView row  = null;
+    private LinearLayoutWithView text = null;
+    private LinearLayoutWithView info = null;
+    private TextViewWithView Name     = null;
+    private ImageButtonWithView deleteSecGroup = null;
+    private ImageButtonWithView editSecGroup = null;
     
     private SecGroup S = null;
 
@@ -36,7 +36,7 @@ public class ListSecGroupView extends LinearLayout {
 	int padding = Utils.getDisplayPixel( ctx, 2 );
 	setPadding( padding, padding, padding, padding );
 	
-	row = new LinearLayoutNamed( ctx, this );
+	row = new LinearLayoutWithView( ctx, this );
 	row.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams _params1
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -44,14 +44,14 @@ public class ListSecGroupView extends LinearLayout {
 	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
 
-	text = new LinearLayoutNamed( ctx, (ListSecGroupView)this );
+	text = new LinearLayoutWithView( ctx, (ListSecGroupView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 = 
 	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	text.setLayoutParams( params2 );
 	text.setGravity( Gravity.CENTER_VERTICAL);
 
-	Name = new TextViewNamed( ctx, (ListSecGroupView)this );
+	Name = new TextViewWithView( ctx, (ListSecGroupView)this );
 	String servName = S.getName();
 	if(servName.length()>16)
 	    servName = servName.substring(0,14) + "..";
@@ -63,14 +63,14 @@ public class ListSecGroupView extends LinearLayout {
 	row.addView(text);
 	
 	if(S.getName( ).compareTo("default") != 0) {
-		editSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_EDIT_SECGRP );
+		editSecGroup = new ImageButtonWithView( ctx, this );
 		editSecGroup.setImageResource(android.R.drawable.ic_menu_edit);
 		editSecGroup.setOnClickListener( editListener );
-		deleteSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SECGRP );
+		deleteSecGroup = new ImageButtonWithView( ctx, this );
 		deleteSecGroup.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
 		deleteSecGroup.setOnClickListener( deleteListener );
 	}
-	info = new LinearLayoutNamed( ctx, (ListSecGroupView)this );
+	info = new LinearLayoutWithView( ctx, (ListSecGroupView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
 	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);

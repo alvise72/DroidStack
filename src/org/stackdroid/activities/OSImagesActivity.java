@@ -30,16 +30,13 @@ import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.R;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.LinearLayoutWithView;
+import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.OSImage;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.views.OSImageView;
-import org.stackdroid.utils.TextViewNamed;
-import org.stackdroid.utils.ImageButtonNamed;
-import org.stackdroid.utils.LinearLayoutNamed;
-
-
-
 
 import android.graphics.Typeface;
 
@@ -152,7 +149,7 @@ public class OSImagesActivity extends Activity {
     protected class imageDeleteListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
+    		ID = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getID();
     		AlertDialog.Builder builder = new AlertDialog.Builder(OSImagesActivity.this);
     		builder.setMessage( "Are you sure to delete this image ?" );
     		builder.setCancelable(false);
@@ -184,8 +181,8 @@ public class OSImagesActivity extends Activity {
     protected class imageLaunchListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		ID = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getID();
-    		NAME = ((ImageButtonNamed)v).getOSImageView( ).getOSImage().getName();
+    		ID = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getID();
+    		NAME = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getName();
     		Class<?> c = (Class<?>)ImageLaunchActivity.class;
     		Intent I = new Intent( OSImagesActivity.this, c );
     		I.putExtra( "IMAGEID", ID );
@@ -202,13 +199,13 @@ public class OSImagesActivity extends Activity {
     		//		Utils.alert("Toccato OSImageView", this);
     		osi = ((OSImageView)v).getOSImage();
     	    }
-    	    if(v instanceof TextViewNamed) {
+    	    if(v instanceof TextViewWithView) {
     		//		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
-    		osi = ((TextViewNamed)v).getOSImageView().getOSImage();
+    		osi = ((TextViewWithView)v).getOSImageView().getOSImage();
     	    }
-    	    if(v instanceof LinearLayoutNamed) {
+    	    if(v instanceof LinearLayoutWithView) {
     		//Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
-    		osi = ((LinearLayoutNamed)v).getOSImageView().getOSImage();
+    		osi = ((LinearLayoutWithView)v).getOSImageView().getOSImage();
     	    }
     	    TextView tv1 = new TextView(OSImagesActivity.this);
     	    tv1.setText("Image name:");

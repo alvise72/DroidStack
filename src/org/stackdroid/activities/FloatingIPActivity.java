@@ -29,11 +29,11 @@ import org.stackdroid.R;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.FloatingIP;
-import org.stackdroid.utils.ImageButtonNamed;
 import org.stackdroid.utils.Network;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.views.FloatingIPView;
 
 import android.os.AsyncTask;
@@ -64,9 +64,9 @@ public class FloatingIPActivity extends Activity {
 	protected class ReleaseFIPListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
+			String serverid= ((ImageButtonWithView)v).getFloatingIPView().getFloatingIP().getServerID();
 			if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-				fip_to_release_ID  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getID();
+				fip_to_release_ID  = ((ImageButtonWithView)v).getFloatingIPView().getFloatingIP().getID();
 				progressDialogWaitStop.show();
 				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
 				task.execute();	    
@@ -85,7 +85,7 @@ public class FloatingIPActivity extends Activity {
 	protected class AssociateFIPListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			selectedFIPObj  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
+			selectedFIPObj  = ((ImageButtonWithView)v).getFloatingIPView().getFloatingIP();
 			if(selectedFIPObj.isAssociated()) {
 				final String fip = selectedFIPObj.getIP();
 				
@@ -127,7 +127,7 @@ public class FloatingIPActivity extends Activity {
 	protected class DissociateFIPListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			FloatingIP FIP = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
+			FloatingIP FIP = ((ImageButtonWithView)v).getFloatingIPView().getFloatingIP();
 			String fip = FIP.getIP();
 			if(FIP.isAssociated()==false) {
 				Utils.alert(getString(R.string.FIPNOTASSOCIATED), FloatingIPActivity.this);

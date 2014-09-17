@@ -2,22 +2,20 @@ package org.stackdroid.utils;
 
 import android.widget.LinearLayout;
 import android.content.Context;
-//import android.widget.Gallery.LayoutParams;
 import android.view.Gravity;
 import android.view.ViewGroup;
-//import android.util.Log;
 import org.stackdroid.views.UserView;
 
 public class ImageOSElement {
 
     public LinearLayout row;
-    public TextViewNamed view;
-    public ImageViewNamed img;
+    public TextViewWithView view;
+    public ImageViewWithView img;
 
     public ImageOSElement( String name, String format, long size, int imageResource, Context ctx ) {
 	
-	view = new TextViewNamed( ctx, (UserView)null );
-	img  = new ImageViewNamed( ctx, (UserView)null );
+	view = new TextViewWithView( ctx, (UserView)null );
+	img  = new ImageViewWithView( ctx, (UserView)null );
 	img.setClickable( true );
 	img.setImageResource(imageResource);
 	

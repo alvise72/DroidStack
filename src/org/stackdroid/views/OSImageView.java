@@ -22,14 +22,14 @@ public class OSImageView extends LinearLayout {
 
     //private Context ctx = null;
 
-    private LinearLayoutNamed row           = null;
-    private LinearLayoutNamed buttonsLayout = null;
-    private LinearLayoutNamed nameLayout    = null;
-    private TextViewNamed     textImageName = null;
-    private TextViewNamed     textSize      = null;
-    private TextViewNamed     testStatus    = null;
-    private ImageButtonNamed  launchImage   = null;
-    private ImageButtonNamed  deleteImage   = null;
+    private LinearLayoutWithView row           = null;
+    private LinearLayoutWithView buttonsLayout = null;
+    private LinearLayoutWithView nameLayout    = null;
+    private TextViewWithView     textImageName = null;
+    private TextViewWithView     textSize      = null;
+    private TextViewWithView     testStatus    = null;
+    private ImageButtonWithView  launchImage   = null;
+    private ImageButtonWithView  deleteImage   = null;
     
     private OSImage image = null;
 
@@ -51,20 +51,20 @@ public class OSImageView extends LinearLayout {
 	setPadding( padding, padding, padding, padding );
 	setOnClickListener( infoListener );
 
-	row = new LinearLayoutNamed( ctx, this );
+	row = new LinearLayoutWithView( ctx, this );
 	row.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams _params1
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	row.setLayoutParams( _params1 );
 	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
-	nameLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
+	nameLayout = new LinearLayoutWithView( ctx, (OSImageView)this );
 	nameLayout.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 
 	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	nameLayout.setLayoutParams( params2 );
 	
-	textImageName = new TextViewNamed( ctx, (OSImageView)this );
+	textImageName = new TextViewWithView( ctx, (OSImageView)this );
 	String name = image.getName( );
 	if(name.length()>20) {
 	    name = name.substring(0,17) + "..";
@@ -74,12 +74,12 @@ public class OSImageView extends LinearLayout {
 	textImageName.setTypeface( null, Typeface.BOLD );
 	textImageName.setOnClickListener( infoListener );
 	
-	textSize = new TextViewNamed( ctx, (OSImageView)this );
+	textSize = new TextViewWithView( ctx, (OSImageView)this );
 	textSize.setText( "Size: " + image.getSizeMB() + " MB" );
 	textSize.setTextColor( Color.parseColor("#BBBBBB") );
 	textSize.setOnClickListener( infoListener );
 
-	testStatus = new TextViewNamed( ctx, (OSImageView)this );
+	testStatus = new TextViewWithView( ctx, (OSImageView)this );
 	testStatus.setText( "Status: " + image.getStatus() );
 	testStatus.setTextColor( Color.parseColor("#BBBBBB") );
 	testStatus.setOnClickListener( infoListener );
@@ -92,7 +92,7 @@ public class OSImageView extends LinearLayout {
 	row.addView(nameLayout);
 	setOnClickListener( infoListener );
 
-	buttonsLayout = new LinearLayoutNamed( ctx, (OSImageView)this );
+	buttonsLayout = new LinearLayoutWithView( ctx, (OSImageView)this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params4 
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
@@ -101,11 +101,11 @@ public class OSImageView extends LinearLayout {
 	buttonsLayout.setGravity( Gravity.RIGHT );
 	buttonsLayout.setOnClickListener( infoListener );
 
-	launchImage = new ImageButtonNamed( ctx, (OSImageView)this, ImageButtonNamed.BUTTON_LAUNCH_IMAGE );
+	launchImage = new ImageButtonWithView( ctx, (OSImageView)this );
 	launchImage.setImageResource(R.drawable.ic_menu_play_clip );
 	launchImage.setOnClickListener( launchListener );
 	
-	deleteImage = new ImageButtonNamed( ctx, (OSImageView)this, ImageButtonNamed.BUTTON_DELETE_IMAGE );
+	deleteImage = new ImageButtonWithView( ctx, (OSImageView)this );
 	deleteImage.setImageResource(android.R.drawable.ic_menu_delete);
 	deleteImage.setOnClickListener( deleteListener );
 	

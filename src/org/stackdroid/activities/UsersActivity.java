@@ -17,8 +17,8 @@ import java.io.File;
 import org.stackdroid.views.UserView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
-import org.stackdroid.utils.TextViewNamed;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.TextViewWithView;
+import org.stackdroid.utils.ImageButtonWithView;
 
 public class UsersActivity extends Activity {
 
@@ -50,7 +50,7 @@ public class UsersActivity extends Activity {
   protected class UserDeleteListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) { 
-		  String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
+		  String filenameToDelete = ((ImageButtonWithView)v).getUserView( ).getFilename();
 			
 			(new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/"+filenameToDelete)).delete();
 			String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", UsersActivity.this);
@@ -73,7 +73,7 @@ public class UsersActivity extends Activity {
   protected class UserSelectedListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) {
-		  Utils.putStringPreference("SELECTEDUSER", ((TextViewNamed)v).getUserView().getFilename(), UsersActivity.this);
+		  Utils.putStringPreference("SELECTEDUSER", ((TextViewWithView)v).getUserView().getFilename(), UsersActivity.this);
 		  refreshUserViews();
 	  }
   }

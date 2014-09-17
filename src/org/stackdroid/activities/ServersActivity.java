@@ -26,18 +26,18 @@ import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
-import org.stackdroid.utils.ButtonNamed;
+import org.stackdroid.utils.ImageButtonWithView;
+import org.stackdroid.utils.ButtonWithView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
-import org.stackdroid.utils.LinearLayoutNamed;
+import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.Flavor;
 import org.stackdroid.views.ServerView;
-import org.stackdroid.utils.TextViewNamed;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.TextViewWithView;
 
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -61,7 +61,7 @@ public class ServersActivity extends Activity {
 		@Override
 	    public void onClick( View v ) {
 			// Delete the server
-			final String serverid = ((ImageButtonNamed)v).getServerView( ).getServer().getID();
+			final String serverid = ((ImageButtonWithView)v).getServerView( ).getServer().getID();
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(ServersActivity.this);
 			builder.setMessage( getString(R.string.AREYOUSURETODELETEVM));
@@ -99,7 +99,7 @@ public class ServersActivity extends Activity {
 	protected class ServerSnapClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-		   	serverid  = ((ImageButtonNamed)v).getServerView().getServer().getID();
+		   	serverid  = ((ImageButtonWithView)v).getServerView().getServer().getID();
 		    	
 		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
@@ -143,12 +143,12 @@ public class ServersActivity extends Activity {
 		@Override
 	    public void onClick( View v ) {
 		    Server s = null;
-			if( v instanceof TextViewNamed )
-				s = ((TextViewNamed)v).getServerView( ).getServer( );
+			if( v instanceof TextViewWithView )
+				s = ((TextViewWithView)v).getServerView( ).getServer( );
 			if( v instanceof ServerView )
 				s = ((ServerView)v).getServer( );
-			if( v instanceof LinearLayoutNamed )
-				s = ((LinearLayoutNamed)v).getServerView( ).getServer();
+			if( v instanceof LinearLayoutWithView )
+				s = ((LinearLayoutWithView)v).getServerView( ).getServer();
 			
 			String[] secgrps = s.getSecurityGroupNames( );
 
@@ -276,7 +276,7 @@ public class ServersActivity extends Activity {
 	protected class ConsoleLogClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-			serverID = ((ButtonNamed)v).getServerView().getServer().getID();
+			serverID = ((ButtonWithView)v).getServerView().getServer().getID();
 			
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));

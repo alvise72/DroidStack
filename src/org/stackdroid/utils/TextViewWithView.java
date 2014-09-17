@@ -5,6 +5,7 @@ import android.content.Context;
 
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
+import org.stackdroid.views.NetworkListView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
@@ -13,7 +14,7 @@ import org.stackdroid.views.OSImageView;
 import org.stackdroid.views.NetworkView;
 import org.stackdroid.views.VolumeView;
 
-public class TextViewNamed extends TextView implements Named {
+public class TextViewWithView extends TextView implements GetView {
 
 	private RuleView relatedRuleView = null;
     private UserView relatedUserView = null;
@@ -21,51 +22,79 @@ public class TextViewNamed extends TextView implements Named {
     private VolumeView relatedVolumeView = null;
     private OSImageView relatedOSImageView = null;
     private NetworkView relatedNetworkView = null;
-    private ListSecGroupView relatedListSecGroupView = null;
+    private SecGroupView relatedSecGroupView = null;
     private FloatingIPView relatedFloatingIPView = null;
-	private SecGroupView relatedSecGroupView;
+    private NetworkListView relatedNetworkListView = null;
+    private ListSecGroupView relatedListSecGroupView = null;
     
-    public TextViewNamed( Context ctx, UserView uv ) {
-	super( ctx );
-	relatedUserView = uv;
+    public TextViewWithView( Context ctx, UserView uv ) {
+    	super( ctx );
+    	relatedUserView = uv;
     }
 
-    public TextViewNamed( Context ctx, ServerView sv ) {
-	super( ctx );
-	relatedServerView = sv;
+    public TextViewWithView( Context ctx, ServerView sv ) {
+    	super( ctx );
+    	relatedServerView = sv;
     }
 
-    public TextViewNamed( Context ctx, OSImageView sv ) {
-	super( ctx );
-	relatedOSImageView = sv;
+    public TextViewWithView( Context ctx, OSImageView sv ) {
+    	super( ctx );
+    	relatedOSImageView = sv;
     }
 
-    public TextViewNamed( Context ctx, NetworkView nv ) {
-	super( ctx );
-	relatedNetworkView = nv;
+    public TextViewWithView( Context ctx, NetworkView nv ) {
+    	super( ctx );
+    	relatedNetworkView = nv;
     }
-    public TextViewNamed( Context ctx, ListSecGroupView nv ) {
+    
+    public TextViewWithView( Context ctx, ListSecGroupView nv ) {
     	super( ctx );
     	relatedListSecGroupView = nv;
-        }
+    }
 
-    public TextViewNamed( Context ctx, VolumeView vv ) {
+    public TextViewWithView( Context ctx, VolumeView vv ) {
    	    super( ctx );
    	    relatedVolumeView = vv;
-     }
+    }
     
-    public TextViewNamed( Context ctx, RuleView rv ) {
+    public TextViewWithView( Context ctx, RuleView rv ) {
    	    super( ctx );
    	    relatedRuleView = rv;
-     }
+    }
     
-    public RuleView getRuleView( ) { return relatedRuleView; }
-    public UserView getUserView( ) { return relatedUserView; }
-    public ServerView getServerView( ) { return relatedServerView; }
-    public OSImageView getOSImageView( ) { return relatedOSImageView; }
-    public NetworkView getNetworkView( ) { return relatedNetworkView; }
-    public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView;}
-    public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
-    public VolumeView getVolumeView( ) { return relatedVolumeView; }
-    public SecGroupView getSecGroupView( ) { return relatedSecGroupView; }
+    public TextViewWithView(Context ctx, NetworkListView nv ){
+    	super( ctx );
+   	    relatedNetworkListView = nv;
+    }
+    
+    public TextViewWithView(Context ctx, SecGroupView sv ){
+    	super( ctx );
+    	relatedSecGroupView = sv;
+    }
+    
+    public TextViewWithView(Context ctx, FloatingIPView nv ){
+    	super( ctx );
+    	relatedFloatingIPView = nv;
+    }
+    
+    @Override
+	public RuleView getRuleView( ) { return relatedRuleView; }
+    @Override
+	public UserView getUserView( ) { return relatedUserView; }
+    @Override
+	public ServerView getServerView( ) { return relatedServerView; }
+    @Override
+	public OSImageView getOSImageView( ) { return relatedOSImageView; }
+    @Override
+	public NetworkView getNetworkView( ) { return relatedNetworkView; }
+    @Override
+	public ListSecGroupView getListSecGroupView( ) { return relatedListSecGroupView;}
+    @Override
+	public FloatingIPView getFloatingIPView( ) { return relatedFloatingIPView; }
+    @Override
+	public VolumeView getVolumeView( ) { return relatedVolumeView; }
+    @Override
+	public SecGroupView getSecGroupView( ) { return relatedSecGroupView; }
+    @Override
+	public NetworkListView getNetworkListView() { return relatedNetworkListView; }
 };

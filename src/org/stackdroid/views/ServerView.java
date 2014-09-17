@@ -14,16 +14,16 @@ import org.stackdroid.utils.*;
 
 public class ServerView extends LinearLayout {
     
-    private LinearLayoutNamed row  = null;
-    private LinearLayoutNamed text = null;
-    private LinearLayoutNamed info = null;
-    private TextViewNamed Name     = null;
-    private TextViewNamed Flavor   = null;
-    private TextViewNamed Status   = null;
+    private LinearLayoutWithView row  = null;
+    private LinearLayoutWithView text = null;
+    private LinearLayoutWithView info = null;
+    private TextViewWithView Name     = null;
+    private TextViewWithView Flavor   = null;
+    private TextViewWithView Status   = null;
 
-    private ImageButtonNamed snapServer = null;
-    private ImageButtonNamed deleteServer = null;
-    private ButtonNamed consoleLog = null;
+    private ImageButtonWithView snapServer = null;
+    private ImageButtonWithView deleteServer = null;
+    private ButtonWithView consoleLog = null;
 
     private Server S = null;
 
@@ -44,7 +44,7 @@ public class ServerView extends LinearLayout {
 	int padding = Utils.getDisplayPixel( ctx, 2 );
 	setPadding( padding, padding, padding, padding );
 	
-	row = new LinearLayoutNamed( ctx, this );
+	row = new LinearLayoutWithView( ctx, this );
 	row.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams _params1
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -52,12 +52,12 @@ public class ServerView extends LinearLayout {
 	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
 
-	text = new LinearLayoutNamed( ctx, (ServerView)this );
+	text = new LinearLayoutWithView( ctx, (ServerView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 	text.setLayoutParams( params2 );
 
-	Name = new TextViewNamed( ctx, (ServerView)this );
+	Name = new TextViewWithView( ctx, (ServerView)this );
 	String servName = S.getName();
 	if(servName.length()>16)
 	    servName = servName.substring(0,14) + "..";
@@ -66,7 +66,7 @@ public class ServerView extends LinearLayout {
 	Name.setOnClickListener( infoListener );
 	Name.setTypeface( null, Typeface.BOLD );
 	
-	Flavor = new TextViewNamed( ctx, (ServerView)this );
+	Flavor = new TextViewWithView( ctx, (ServerView)this );
 	String flavName = S.getFlavor( ).getName();// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
 	if(flavName.length()>30)
 	    flavName = flavName.substring(0,28) + "..";
@@ -74,7 +74,7 @@ public class ServerView extends LinearLayout {
 	Flavor.setOnClickListener( infoListener );
 	Flavor.setTextColor( Color.parseColor("#999999"));
 	//Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
-	Status = new TextViewNamed( ctx, (ServerView)this );
+	Status = new TextViewWithView( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
 	Status.setOnClickListener( infoListener );
 
@@ -89,7 +89,7 @@ public class ServerView extends LinearLayout {
 	}
 
 	LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-	consoleLog = new ButtonNamed(ctx, this, -1);
+	consoleLog = new ButtonWithView(ctx, this);
 	consoleLog.setText("Console Log");
 	consoleLog.setTextSize(10.0f);
 	int density = 200;
@@ -108,15 +108,15 @@ public class ServerView extends LinearLayout {
 	row.addView(text);
 	setOnClickListener( infoListener );
 
-	deleteServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SERVER );
+	deleteServer = new ImageButtonWithView( ctx, this );
 	deleteServer.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
 	deleteServer.setOnClickListener( deleteServerListener );
 
-	snapServer = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_SNAP_SERVER );
+	snapServer = new ImageButtonWithView( ctx, this );
 	snapServer.setImageResource(android.R.drawable.ic_menu_camera);
 	snapServer.setOnClickListener( snapServerListener );
 
-	info = new LinearLayoutNamed( ctx, (ServerView)this );
+	info = new LinearLayoutWithView( ctx, (ServerView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	
 	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);

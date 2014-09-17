@@ -12,7 +12,7 @@ import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.Defaults;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -336,7 +336,7 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
     protected class DeleteRuleClickListener implements OnClickListener {
     	@Override
         public void onClick(View v) { 
-    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		ImageButtonWithView bt = (ImageButtonWithView)v;
     		String ruleID = bt.getRuleView().getRule().getID();
     		
             progressDialogWaitStop.show();

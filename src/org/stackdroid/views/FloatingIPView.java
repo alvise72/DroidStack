@@ -3,11 +3,10 @@ package org.stackdroid.views;
 
 import org.stackdroid.R;
 import org.stackdroid.utils.FloatingIP;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Utils;
 
 import android.view.Gravity;
-
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,9 +23,9 @@ public class FloatingIPView extends LinearLayout {
     private TextView     textIP             = null;
     private TextView     textPool           = null;
     private TextView     textServer         = null;
-    private ImageButtonNamed  associateFIP    = null;
-    private ImageButtonNamed  releaseFIP    = null;
-    private ImageButtonNamed  dissociateFIP = null;
+    private ImageButtonWithView  associateFIP    = null;
+    private ImageButtonWithView  releaseFIP    = null;
+    private ImageButtonWithView  dissociateFIP = null;
     
     public FloatingIPView( FloatingIP fip, 
     					   OnClickListener associateListener,
@@ -91,17 +90,17 @@ public class FloatingIPView extends LinearLayout {
 		buttonsLayout.setLayoutParams( params4 );
 		buttonsLayout.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL );
 		
-		associateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_ASSOCIATE_IP);
+		associateFIP = new ImageButtonWithView( ctx, (FloatingIPView)this);
 		associateFIP.setImageResource(R.drawable.ipassociate);
 		associateFIP.setOnClickListener( associateListener );
 		
-		releaseFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_RELEASE_IP);
+		releaseFIP = new ImageButtonWithView( ctx, (FloatingIPView)this);
 		//releaseFIP.setImageResource(android.R.drawable.ic_menu_close_clear_cancel );
 		releaseFIP.setImageResource(android.R.drawable.ic_menu_delete );
 		
 		releaseFIP.setOnClickListener( releaseListener );
 		
-		dissociateFIP = new ImageButtonNamed( ctx, (FloatingIPView)this, ImageButtonNamed.BUTTON_DISSOCIATE_IP);
+		dissociateFIP = new ImageButtonWithView( ctx, (FloatingIPView)this);
 		dissociateFIP.setImageResource(android.R.drawable.ic_delete );
 		dissociateFIP.setOnClickListener( dissociateListener );
 		

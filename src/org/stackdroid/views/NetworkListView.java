@@ -2,7 +2,7 @@ package org.stackdroid.views;
 
 
 import org.stackdroid.R;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Network;
 import org.stackdroid.utils.Utils;
 
@@ -21,7 +21,7 @@ public class NetworkListView extends LinearLayout {
     private LinearLayout 	 nameLayout         = null;
     private TextView     	 name               = null;
     private TextView     	 subnet             = null;
-    private ImageButtonNamed delete  			= null;
+    private ImageButtonWithView delete  		= null;
     
     
     public NetworkListView( Network net, 

@@ -28,7 +28,7 @@ import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -134,7 +134,7 @@ public class SecGrpActivity extends Activity {
     protected class SecGroupDeleteListener implements OnClickListener {
     	@Override
         public void onClick( View v ) {
-    		final String secgrpID = ((ImageButtonNamed)v).getListSecGroupView().getSecGroup().getID();
+    		final String secgrpID = ((ImageButtonWithView)v).getListSecGroupView().getSecGroup().getID();
 	    	
 	    	AlertDialog.Builder builder = new AlertDialog.Builder(SecGrpActivity.this);
 			builder.setMessage( getString(R.string.AREYOUSURETODELETESECGRP));
@@ -170,7 +170,7 @@ public class SecGrpActivity extends Activity {
         public void onClick( View v ) {
     		Class<?> c = (Class<?>)EditSecGroupActivity.class;
 	        Intent I = new Intent( SecGrpActivity.this, c );
-	        SecGroup sv = ((ImageButtonNamed)v).getListSecGroupView().getSecGroup();
+	        SecGroup sv = ((ImageButtonWithView)v).getListSecGroupView().getSecGroup();
 	        I.putExtra( "SECGRPNAME", sv.getName());
 	        I.putExtra( "SECGRPDESC", sv.getDescription());
 	        I.putExtra( "SECGRPID", sv.getID());

@@ -36,7 +36,7 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Volume;
 import org.stackdroid.views.VolumeView;
-import org.stackdroid.utils.ImageButtonNamed;
+import org.stackdroid.utils.ImageButtonWithView;
 
 import android.os.AsyncTask;
 
@@ -200,7 +200,7 @@ public class VolumesActivity extends Activity {
     protected class AttachVolClickListener implements OnClickListener {
 		@Override
     	public void onClick( View v ) {
-    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		ImageButtonWithView bt = (ImageButtonWithView)v;
     		Volume V = bt.getVolumeView().getVolume();
     		if(V.isAttached()) {
     			// DETACH
@@ -253,7 +253,7 @@ public class VolumesActivity extends Activity {
     protected class DetachVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		ImageButtonNamed bt = (ImageButtonNamed)v;
+    		ImageButtonWithView bt = (ImageButtonWithView)v;
     		final Volume V = bt.getVolumeView().getVolume();
     		if(!V.isAttached()) {
     			Utils.alert(VolumesActivity.this.getString(R.string.ALREADYDETACHED), VolumesActivity.this);
@@ -299,7 +299,7 @@ public class VolumesActivity extends Activity {
     protected class DeleteVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		final Volume V = ((ImageButtonNamed)v).getVolumeView().getVolume();
+    		final Volume V = ((ImageButtonWithView)v).getVolumeView().getVolume();
     		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
     		//Log.d("VOLUMES", "Vol="+V);
     		if(V.isAttached()) {

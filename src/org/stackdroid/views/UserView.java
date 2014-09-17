@@ -1,33 +1,25 @@
 package org.stackdroid.views;
 
 import android.widget.LinearLayout;
-//import android.widget.ImageButton;
-//import android.widget.ImageView;
-//import android.widget.TextView;
-
 import android.graphics.Typeface;
 import android.graphics.Color;
-
 import android.view.Gravity;
-//import android.view.View;
-
 import android.content.Context;
 
 import org.stackdroid.R;
-
 import org.stackdroid.utils.*;
 
 public class UserView extends LinearLayout {
 
-    private LinearLayoutNamed row            = null;
-    private LinearLayoutNamed buttonsLayout  = null;
-    private LinearLayoutNamed userLayout     = null;
-    private TextViewNamed     textUserName   = null;
-    private TextViewNamed     textTenantName = null;
-    private TextViewNamed     textEndpoint   = null;
-    private TextViewNamed	  textSSL        = null;
+    private LinearLayoutWithView row            = null;
+    private LinearLayoutWithView buttonsLayout  = null;
+    private LinearLayoutWithView userLayout     = null;
+    private TextViewWithView     textUserName   = null;
+    private TextViewWithView     textTenantName = null;
+    private TextViewWithView     textEndpoint   = null;
+    private TextViewWithView	  textSSL        = null;
 
-    private ImageButtonNamed  deleteUser     = null;
+    private ImageButtonWithView  deleteUser     = null;
     
     private User user = null;
 
@@ -45,38 +37,38 @@ public class UserView extends LinearLayout {
 	int padding = Utils.getDisplayPixel( ctx, 2 );
 	setPadding( padding, padding, padding, padding );
 
-	row = new LinearLayoutNamed( ctx, this );
+	row = new LinearLayoutWithView( ctx, this );
 	row.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams _params1
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	row.setLayoutParams( _params1 );
 	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
-	userLayout = new LinearLayoutNamed( ctx, this );
+	userLayout = new LinearLayoutWithView( ctx, this );
 	userLayout.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 
 	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	userLayout.setLayoutParams( params2 );
 	
-	textUserName = new TextViewNamed( ctx, (UserView)this );
+	textUserName = new TextViewWithView( ctx, (UserView)this );
 	textUserName.setText("User: "+user.getUserName() );
 	textUserName.setTextColor( Color.parseColor("#333333") );
 	textUserName.setOnClickListener( selectUserListener );
 	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
 
-	textTenantName = new TextViewNamed( ctx, (UserView)this );
+	textTenantName = new TextViewWithView( ctx, (UserView)this );
 	textTenantName.setText("Tenant: "+user.getTenantName() );
 	textTenantName.setTextColor( Color.parseColor("#333333") );
 	textTenantName.setOnClickListener( selectUserListener );
 	textTenantName.setTextColor( Color.parseColor("#BBBBBB"));
 
-	textEndpoint = new TextViewNamed( ctx, (UserView)this );
+	textEndpoint = new TextViewWithView( ctx, (UserView)this );
 	textEndpoint.setText("Endpoint: "+U.getEndpoint( ));
 	textEndpoint.setTextColor( Color.parseColor("#333333") );
 	textEndpoint.setOnClickListener( selectUserListener );
 	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
 
-	textSSL = new TextViewNamed( ctx, (UserView)this );
+	textSSL = new TextViewWithView( ctx, (UserView)this );
 	textSSL.setText("SSL: ");
 	if(U.useSSL()==true) {
 		textSSL.setTextColor(Color.parseColor("#FF0000"));
@@ -97,14 +89,14 @@ public class UserView extends LinearLayout {
 	row.addView(userLayout);
 	setOnClickListener( selectUserListener );
       
-	buttonsLayout = new LinearLayoutNamed( ctx, this );
+	buttonsLayout = new LinearLayoutWithView( ctx, this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
 	params3.gravity=Gravity.RIGHT;
 	buttonsLayout.setLayoutParams( params3 );
 	buttonsLayout.setGravity( Gravity.RIGHT|Gravity.CENTER_VERTICAL );
 	
-	deleteUser = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_USER );
+	deleteUser = new ImageButtonWithView( ctx, this );
 	deleteUser.setImageResource(android.R.drawable.ic_menu_delete);
 	deleteUser.setOnClickListener( deleteUserListener );
 	
