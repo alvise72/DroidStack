@@ -19,9 +19,8 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.TextViewNamed;
 import org.stackdroid.utils.ImageButtonNamed;
-import org.stackdroid.utils.LinearLayoutNamed;
 
-public class UsersActivity extends Activity implements OnClickListener {
+public class UsersActivity extends Activity {
 
   //__________________________________________________________________________________
   @Override
@@ -48,42 +47,36 @@ public class UsersActivity extends Activity implements OnClickListener {
     startActivity( I );  
   }
 
-  //__________________________________________________________________________________
-    public void onClick( View v ) { 
-	if(v instanceof ImageButtonNamed) {
-	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_DELETE_USER ) {
-		String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
-		
-		(new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/"+filenameToDelete)).delete();
-		String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
-		if(selectedUser.compareTo(filenameToDelete)==0)
-		    Utils.putStringPreference( "SELECTEDUSER", "", this);
-		
-		refreshUserViews();
-		return;
-	    }
-	    if(((ImageButtonNamed)v).getType( ) == ImageButtonNamed.BUTTON_MODIFY_USER ) {
-		Utils.alert( getString(R.string.NOTIMPLEMENTED) , this);
-		return;
-	    }
-	}
-
-	if(v instanceof TextViewNamed) {
-	    //String selectedUser = ((TextViewNamed)v).getUserView().getFilename();
-
-	    Utils.putStringPreference("SELECTEDUSER", ((TextViewNamed)v).getUserView().getFilename(), this);
-	    
-	    refreshUserViews();
-
-	    return;
-	}
-
-	if(v instanceof LinearLayoutNamed) {
-	    Utils.putStringPreference("SELECTEDUSER", ((LinearLayoutNamed)v).getUserView().getFilename(), this);
-	    refreshUserViews();
-	}
-	
-    }
+  protected class UserDeleteListener implements OnClickListener {
+	  @Override
+	  public void onClick( View v ) { 
+		  String filenameToDelete = ((ImageButtonNamed)v).getUserView( ).getFilename();
+			
+			(new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/"+filenameToDelete)).delete();
+			String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", UsersActivity.this);
+			if(selectedUser.compareTo(filenameToDelete)==0)
+			    Utils.putStringPreference( "SELECTEDUSER", "", UsersActivity.this);
+			
+			refreshUserViews();
+			return;
+	  }
+  }
+  
+/*  protected class UserModifyListener implements OnClickListener {
+	  @Override
+	  public void onClick( View v ) {
+		  Utils.alert( getString(R.string.NOTIMPLEMENTED) , UsersActivity.this);
+		  return;
+	  }
+  }
+  */
+  protected class UserSelectedListener implements OnClickListener {
+	  @Override
+	  public void onClick( View v ) {
+		  Utils.putStringPreference("SELECTEDUSER", ((TextViewNamed)v).getUserView().getFilename(), UsersActivity.this);
+		  refreshUserViews();
+	  }
+  }
 
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
@@ -111,7 +104,7 @@ public class UsersActivity extends Activity implements OnClickListener {
 	    	continue;
 	    }
 	    
-	    UserView uv = new UserView ( U, this );
+	    UserView uv = new UserView ( U, new UsersActivity.UserDeleteListener(), new UsersActivity.UserSelectedListener(),this );
 	    ((LinearLayout)findViewById(R.id.userLayout)).addView( uv );
 	    View space = new View( this );
 	    space.setMinimumHeight(10);

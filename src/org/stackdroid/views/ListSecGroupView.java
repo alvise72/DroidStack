@@ -1,16 +1,11 @@
 package org.stackdroid.views;
 
-//import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
-//import android.widget.ImageButton;
-//import android.widget.ImageView;
-//import android.widget.TextView;
 
 import android.graphics.Typeface;
 import android.graphics.Color;
 
 import android.view.Gravity;
-//import android.view.View;
 
 import android.content.Context;
 
@@ -20,22 +15,16 @@ import org.stackdroid.utils.*;
 
 public class ListSecGroupView extends LinearLayout {
     
-//    private Context ctx = null;
-    
     private LinearLayoutNamed row  = null;
     private LinearLayoutNamed text = null;
     private LinearLayoutNamed info = null;
     private TextViewNamed Name     = null;
-    //private TextViewNamed Flavor   = null;
-    //private TextViewNamed Status   = null;
-
-//    private ImageButtonNamed edit = null;
     private ImageButtonNamed deleteSecGroup = null;
     private ImageButtonNamed editSecGroup = null;
     
     private SecGroup S = null;
 
-    public ListSecGroupView( SecGroup s, Context ctx ) {
+    public ListSecGroupView( SecGroup s, OnClickListener deleteListener, OnClickListener editListener, Context ctx ) {
 	  super(ctx);
 	  S = s;
 	
@@ -68,7 +57,6 @@ public class ListSecGroupView extends LinearLayout {
 	    servName = servName.substring(0,14) + "..";
 	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
-	//Name.setOnClickListener( (OnClickListener)ctx );
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	text.addView(Name);
@@ -77,10 +65,10 @@ public class ListSecGroupView extends LinearLayout {
 	if(S.getName( ).compareTo("default") != 0) {
 		editSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_EDIT_SECGRP );
 		editSecGroup.setImageResource(android.R.drawable.ic_menu_edit);
-		editSecGroup.setOnClickListener( (OnClickListener)ctx );
+		editSecGroup.setOnClickListener( editListener );
 		deleteSecGroup = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_SECGRP );
 		deleteSecGroup.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-		deleteSecGroup.setOnClickListener( (OnClickListener)ctx );
+		deleteSecGroup.setOnClickListener( deleteListener );
 	}
 	info = new LinearLayoutNamed( ctx, (ListSecGroupView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );

@@ -11,7 +11,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -56,7 +55,7 @@ public class VolumesActivity extends Activity {
 	private ArrayAdapter<Server> spinnerServersArrayAdapter = null;
 	
 	private String 				 currentVolToAttach			= null;
-	private String				 currentSrvToAttach			= null;
+	//private String				 currentSrvToAttach			= null;
 	public String currentVolToDetach;
     
     //__________________________________________________________________________________

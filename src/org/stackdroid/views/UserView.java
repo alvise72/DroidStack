@@ -33,7 +33,7 @@ public class UserView extends LinearLayout {
 
     public User getUser( ) { return user; } 
     
-    public UserView ( User U, Context ctx ) {
+    public UserView ( User U, OnClickListener deleteUserListener, OnClickListener selectUserListener, Context ctx ) {
 	super(ctx);
 
 	user = U;
@@ -61,19 +61,19 @@ public class UserView extends LinearLayout {
 	textUserName = new TextViewNamed( ctx, (UserView)this );
 	textUserName.setText("User: "+user.getUserName() );
 	textUserName.setTextColor( Color.parseColor("#333333") );
-	textUserName.setOnClickListener( (OnClickListener)ctx );
+	textUserName.setOnClickListener( selectUserListener );
 	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textTenantName = new TextViewNamed( ctx, (UserView)this );
 	textTenantName.setText("Tenant: "+user.getTenantName() );
 	textTenantName.setTextColor( Color.parseColor("#333333") );
-	textTenantName.setOnClickListener( (OnClickListener)ctx );
+	textTenantName.setOnClickListener( selectUserListener );
 	textTenantName.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textEndpoint = new TextViewNamed( ctx, (UserView)this );
 	textEndpoint.setText("Endpoint: "+U.getEndpoint( ));
 	textEndpoint.setTextColor( Color.parseColor("#333333") );
-	textEndpoint.setOnClickListener( (OnClickListener)ctx );
+	textEndpoint.setOnClickListener( selectUserListener );
 	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textSSL = new TextViewNamed( ctx, (UserView)this );
@@ -92,10 +92,10 @@ public class UserView extends LinearLayout {
 	userLayout.addView(textTenantName);
 	userLayout.addView(textEndpoint);
 	userLayout.addView(textSSL);
-	userLayout.setOnClickListener( (OnClickListener)ctx );
+	userLayout.setOnClickListener( selectUserListener );
 
 	row.addView(userLayout);
-	setOnClickListener( (OnClickListener)ctx );
+	setOnClickListener( selectUserListener );
       
 	buttonsLayout = new LinearLayoutNamed( ctx, this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
@@ -106,10 +106,10 @@ public class UserView extends LinearLayout {
 	
 	deleteUser = new ImageButtonNamed( ctx, this, ImageButtonNamed.BUTTON_DELETE_USER );
 	deleteUser.setImageResource(android.R.drawable.ic_menu_delete);
-	deleteUser.setOnClickListener( (OnClickListener)ctx );
+	deleteUser.setOnClickListener( deleteUserListener );
 	
 	buttonsLayout.addView( deleteUser );
-	buttonsLayout.setOnClickListener( (OnClickListener)ctx );
+//	buttonsLayout.setOnClickListener( delete );
 	
 	row.addView( buttonsLayout );
 	addView( row );

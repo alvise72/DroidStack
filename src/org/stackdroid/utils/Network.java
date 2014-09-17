@@ -11,15 +11,15 @@ public class Network {
     private String tenantID;
     
     public Network( String status, String name, String ID, SubNetwork[] subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
-	//this.status = status;
-	this.name = name;
-	this.ID   = ID;
-	this.subnets = subnets;
-	this.shared= shared;
-	this.up = up;
-	this.ext = ext;
-	this.tenantID = tenantID;
-	//fixedIP = "";
+    	//this.status = status;
+    	this.name = name;
+    	this.ID   = ID;
+    	this.subnets = subnets;
+    	this.shared= shared;
+    	this.up = up;
+    	this.ext = ext;
+    	this.tenantID = tenantID;
+    	//fixedIP = "";
     }
 
     @Override

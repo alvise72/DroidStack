@@ -123,4 +123,6 @@
     <string name="MENUDELETEALLVOL">Delete all volumes</string>
     <string name="AREYOUSURETODETACHVOL">Are you sure to detach volume ?</string>
     <string name="NOTINRANGE">is not in the subnet range</string>
+    <string name="POOL">Pool: </string>
+    <string name="SERVER">Server: </string>
 </resources>

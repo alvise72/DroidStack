@@ -39,7 +39,7 @@ import android.os.AsyncTask;
 import org.stackdroid.utils.CustomProgressDialog;
 
 
-public class SecGrpActivity extends Activity implements OnClickListener {
+public class SecGrpActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop = null;
     private User U = null;
@@ -61,7 +61,6 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         int GROUP = 0;
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        //menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         return true;
     }
     
@@ -132,26 +131,12 @@ public class SecGrpActivity extends Activity implements OnClickListener {
         //alert.create().show();
     }
     
-    /**
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
-    @Override
-    public void onClick( View v ) {
-	if(v instanceof ImageButtonNamed) {
-		
-		ImageButtonNamed bt = (ImageButtonNamed)v;
-		
-	    if( bt.getType() == ImageButtonNamed.BUTTON_DELETE_SECGRP ) {
+    protected class SecGroupDeleteListener implements OnClickListener {
+    	@Override
+        public void onClick( View v ) {
+    		final String secgrpID = ((ImageButtonNamed)v).getListSecGroupView().getSecGroup().getID();
 	    	
-	    	final String secgrpID = bt.getListSecGroupView().getSecGroup().getID();
-	    	
-	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    	AlertDialog.Builder builder = new AlertDialog.Builder(SecGrpActivity.this);
 			builder.setMessage( getString(R.string.AREYOUSURETODELETESECGRP));
 			builder.setCancelable(false);
 		    
@@ -177,23 +162,23 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 			alert.setCancelable(false);
 			alert.setCanceledOnTouchOutside(false);
 			alert.show();
-	    	
-	    }
-	    
-	    if( bt.getType() == ImageButtonNamed.BUTTON_EDIT_SECGRP ) {
-	    	Class<?> c = (Class<?>)EditSecGroupActivity.class;
+    	}
+    }
+    
+    protected class SecGroupEditListener implements OnClickListener {
+    	@Override
+        public void onClick( View v ) {
+    		Class<?> c = (Class<?>)EditSecGroupActivity.class;
 	        Intent I = new Intent( SecGrpActivity.this, c );
-	        SecGroup sv = bt.getListSecGroupView().getSecGroup();
+	        SecGroup sv = ((ImageButtonNamed)v).getListSecGroupView().getSecGroup();
 	        I.putExtra( "SECGRPNAME", sv.getName());
 	        I.putExtra( "SECGRPDESC", sv.getDescription());
 	        I.putExtra( "SECGRPID", sv.getID());
 	        startActivity( I );
 	    	return;
-	    }
-	    
-	}
+    	}
     }
-
+    
     /**
      * 
      * 
@@ -267,7 +252,7 @@ public class SecGrpActivity extends Activity implements OnClickListener {
 	
     	while(it.hasNext()) {
     		SecGroup s = it.next();
-    		ListSecGroupView sgv = new ListSecGroupView(s, this);
+    		ListSecGroupView sgv = new ListSecGroupView(s, new SecGrpActivity.SecGroupDeleteListener(), new SecGrpActivity.SecGroupEditListener(),this);
     		((LinearLayout)findViewById( R.id.secgrpLayout) ).addView( sgv );
     		((LinearLayout)findViewById( R.id.secgrpLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
     		View space = new View( this );
