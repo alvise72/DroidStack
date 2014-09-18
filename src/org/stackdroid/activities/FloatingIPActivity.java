@@ -741,7 +741,7 @@ public class FloatingIPActivity extends Activity {
 	    	FloatingIPActivity.this.servers = ParseUtils.parseServers( jsonBuf );
 	    	FloatingIPActivity.this.pickAServerToAssociateFIP();
 	    } catch(ParseException pe) {
-	    	Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
+	    	Utils.alert("NeutronActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
 	    }
 	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
 	}

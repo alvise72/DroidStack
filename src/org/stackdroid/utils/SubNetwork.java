@@ -2,7 +2,7 @@ package org.stackdroid.utils;
 
 
 
-public class SubNetwork { //implements Serializable {
+public class SubNetwork { 
     private String name;
     private String ID;
     private String cidr;
@@ -12,13 +12,13 @@ public class SubNetwork { //implements Serializable {
     private boolean dhcp;
     
     public SubNetwork( String name, String ID, String cidr, String gatewayIP, AllocationPool[] allocPools, String[] dns, boolean dhcp ) {
-	this.name = name;
-	this.ID   = ID;
-	this.cidr = cidr;
-	this.gw= gatewayIP;
-	this.allocPools = allocPools;
-	this.dns = dns;
-	this.dhcp = dhcp;
+    	this.name = name;
+    	this.ID   = ID;
+    	this.cidr = cidr;
+    	this.gw= gatewayIP;
+    	this.allocPools = allocPools;
+    	this.dns = dns;
+    	this.dhcp = dhcp;
     }
 
     public String getName( ) { return name; }

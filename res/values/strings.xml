@@ -95,11 +95,11 @@
     <string name="NOEXTSTORAGEWRITABLE">External storage is not writable ! This App cannot work.</string>
     <string name="NOINTERNETCONNECTION">This device is NOT connected to Internet. This App cannot work.</string>
     <string name="PROTOCOL">Protocol</string>
-    <string name="SERVICEUNAVAILABLE">Remote service is not responding; please check that it\'s working...</string>
+    <string name="SERVICEUNAVAILABLE">Remote service is not responding; please check that it\'s working&#8230;</string>
     <string name="NOTFOUND">Resource or URI not found</string>
     <string name="NOTAUTHORIZED">Not authorized to access the resource or URI</string>
-    <string name="RULECREATED">Rule succesfully created. Press on Menu -&gt; Update to refresh view if not automatically displayed.</string>
-    <string name="RULEDELETED">Rule succesfully deleted. Press on Menu -&gt; Update to refresh if rule is still displayed.</string>
+    <string name="RULECREATED">Rule successfully created. Press on Menu -&gt; Update to refresh view if not automatically displayed.</string>
+    <string name="RULEDELETED">Rule successfully deleted. Press on Menu -&gt; Update to refresh if rule is still displayed.</string>
     <string name="INPUTVOLNAME">Insert volume name and size</string>
     <string name="VOLSIZEMUSTBENUMERIC">Volume size must be numeric.</string>
     <string name="NOZEROVOLSIZE">Not allowed a zero sized volume.</string>
@@ -125,4 +125,5 @@
     <string name="NOTINRANGE">is not in the subnet range</string>
     <string name="POOL">Pool: </string>
     <string name="SERVER">Server: </string>
+    <string name="NONETAVAIL">No network available.</string>
 </resources>

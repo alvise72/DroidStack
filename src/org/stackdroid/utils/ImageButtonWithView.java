@@ -81,6 +81,11 @@ public class ImageButtonWithView extends ImageButton implements GetView {
    	    super( ctx );
    	    relatedRuleView = rv;
     }
+
+    public ImageButtonWithView( Context ctx, NetworkListView rv ) {
+   	    super( ctx );
+   	    relatedNetworkListView = rv;
+    }
     
     @Override
 	public RuleView getRuleView( ) { return relatedRuleView; }

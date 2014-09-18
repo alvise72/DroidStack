@@ -46,10 +46,8 @@ public class NetworkListView extends LinearLayout {
 		
 		nameLayout = new LinearLayout( ctx );
 		nameLayout.setOrientation( LinearLayout.VERTICAL );
-		LinearLayout.LayoutParams params2 
-		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
+		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
 		nameLayout.setLayoutParams( params2 );
-		
 		
 		name = new TextView( ctx );
 		name.setText( net.getName() );
@@ -59,9 +57,6 @@ public class NetworkListView extends LinearLayout {
 		subnet = new TextView( ctx );
 		subnet.setText( net.getSubNetworks()[0].getAddress() );
 		subnet.setTextColor( Color.parseColor("#333333") );
-		//textPool.setTypeface( null, Typeface.BOLD );
-		
-		
 		
 		nameLayout.addView(name);
 		nameLayout.addView(subnet);
@@ -75,11 +70,9 @@ public class NetworkListView extends LinearLayout {
 		buttonsLayout.setLayoutParams( params4 );
 		buttonsLayout.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL );
 		
-		//delete = new ImageButtonNamed( ctx, (NetworkListView)this, ImageButtonNamed.BUTTON_ASSOCIATE_IP);
+		delete = new ImageButtonWithView( ctx, (NetworkListView)this );
 		delete.setImageResource(R.drawable.ipassociate);
 		delete.setOnClickListener( deleteNetListener );
-		
-		
 		
 		buttonsLayout.addView( delete );
 		row.addView( buttonsLayout );

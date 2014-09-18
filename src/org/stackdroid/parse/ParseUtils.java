@@ -417,7 +417,7 @@ public class ParseUtils {
      *
      *
      */    
-    public static Hashtable<String, SubNetwork> parseSubNetworks( String jsonBuf )  throws ParseException  {
+    private static Hashtable<String, SubNetwork> parseSubNetworks( String jsonBuf )  throws ParseException  {
 	Hashtable<String, SubNetwork> result = new Hashtable<String, SubNetwork>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
@@ -447,6 +447,7 @@ public class ParseUtils {
  	}
 	return result;
     }
+    
 
     /**
      *
