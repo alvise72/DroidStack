@@ -174,13 +174,13 @@ public class MainActivity extends Activity
      *
      */
     public void overview( View v ) {
-	if(selectedUser.length()==0) {
+    	if(selectedUser.length()==0) {
     	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
     	    return;
     	}
-	Class<?> c = (Class<?>)OverViewActivity.class;
-	Intent I = new Intent( MainActivity.this, c );
-	startActivity( I );
+    	Class<?> c = (Class<?>)OverViewActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity( I );
     }
 
     /**
@@ -194,9 +194,9 @@ public class MainActivity extends Activity
     	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
     	    return;
     	}
-	Class<?> c = (Class<?>)OSImagesActivity.class;
- 	Intent I = new Intent( MainActivity.this, c );
-	startActivity(I);
+    	Class<?> c = (Class<?>)OSImagesActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity(I);
     }
     
 
@@ -223,14 +223,14 @@ public class MainActivity extends Activity
      *
      */
     public void nova( View v ) {
-	if(selectedUser.length()==0) {
-	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
-	    return;
-	}
+    	if(selectedUser.length()==0) {
+    		Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    		return;
+    	}
 
-	Class<?> c = (Class<?>)ServersActivity.class;
-	Intent I = new Intent( MainActivity.this, c );
-	startActivity(I);
+    	Class<?> c = (Class<?>)ServersActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity(I);
 	
     }
 
@@ -275,7 +275,14 @@ public class MainActivity extends Activity
      *
      */
     public void neutron( View v ) {
-    	Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
+    	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
+    	Class<?> c = (Class<?>)NeutronActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity( I );
     }
 
     /**
