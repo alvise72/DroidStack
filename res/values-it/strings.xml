@@ -5,6 +5,7 @@
     <string name="USERS">Utenti</string>
     <string name="OVERVIEW">Quote</string>
     <string name="IMAGES">Immagini</string>
+    <string name="IMAGENAME">Nome immagine</string>
     <string name="INSTANCES">Istanze</string>
     <string name="MEMORY">Memoria (MB)</string>
     <string name="CURRENTUSER">Utente corrente</string>
@@ -123,4 +124,16 @@
     <string name="NOTINRANGE">non &#xe8; nel range subnet</string>
     <string name="NONETAVAIL">Nessuna rete disponibile.</string>
     <string name="NETNAME">Nome della rete</string>
+    <string name="VOLUMENAME">Nome volume</string>
+    <string name="STATUS">Stato</string>
+    <string name="SIZE">Dimensione</string>
+    <string name="PUBLIC">Pubblica</string>
+    <string name="FORMAT">Formato</string>
+    <string name="MINDISK">Disco minimo</string>
+    <string name="MINRAM">RAM minima</string>
+    <string name="INUSE">In uso</string>
+    <string name="AVAILABLE">Disponibile</string>
+	<string name="BOOTABLE">Avviabile</string>
+	<string name="READONLY">Sola lettura</string>
+	<string name="ATTACHMENT">Collegamento</string>
 </resources>

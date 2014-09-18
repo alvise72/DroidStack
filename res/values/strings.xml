@@ -5,6 +5,7 @@
     <string name="USERS">Users</string>
     <string name="OVERVIEW">Quotas</string>
     <string name="IMAGES">Images</string>
+    <string name="IMAGENAME">Image name</string>
     <string name="INSTANCES">Instances</string>
     <string name="MEMORY">Memory (MB)</string>
     <string name="CURRENTUSER">Current user</string>
@@ -127,4 +128,17 @@
     <string name="SERVER">Server: </string>
     <string name="NONETAVAIL">No network available.</string>
     <string name="NETNAME">Network name</string>
+    <string name="VOLUMENAME">Volume name</string>
+    <string name="STATUS">Status</string>
+    <string name="SIZE">Size</string>
+    <string name="PUBLIC">Public</string>
+    <string name="FORMAT">Format</string>
+    <string name="MINDISK">Minimum disk</string>
+	<string name="MINRAM">Minimum RAM</string>
+	<string name="INUSE">In use</string>
+	<string name="AVAILABLE">Available</string>
+	<string name="BOOTABLE">Bootable</string>
+	<string name="READONLY">Read only</string>
+	<string name="ATTACHMENT">Attachment</string>
+	
 </resources>

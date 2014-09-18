@@ -31,6 +31,7 @@ public class VolumeView extends LinearLayout {
     				   OnClickListener attachVol, 
     				   OnClickListener detachVol, 
     				   OnClickListener deleteVol, 
+    				   OnClickListener infoVol,
     				   Context ctx ) 
     {
     	super(ctx);
@@ -46,13 +47,14 @@ public class VolumeView extends LinearLayout {
 		LinearLayout.LayoutParams _params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		row.setLayoutParams( _params1 );
 		row.setBackgroundResource(R.drawable.rounded_corner_thin);
-
+		setOnClickListener(infoVol);
 
 		text = new LinearLayoutWithView( ctx, (VolumeView)this );
 		text.setOrientation( LinearLayout.VERTICAL );
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		text.setLayoutParams( params2 );
-
+		text.setOnClickListener(infoVol);
+		
 		Name = new TextViewWithView( ctx, (VolumeView)this );
 		String volName = V.getName();
 		if( volName.length() > 16 )
@@ -61,17 +63,19 @@ public class VolumeView extends LinearLayout {
 		Name.setTextColor( Color.parseColor("#333333") );
 		//Name.setOnClickListener( (OnClickListener)ctx );
 		Name.setTypeface( null, Typeface.BOLD );
-	
+		Name.setOnClickListener(infoVol);
+		
 		Status_and_Size = new TextViewWithView( ctx, (VolumeView)this );
 		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatus()+")" );
-		//Status_and_Size.setOnClickListener( (OnClickListener)ctx );
+		Status_and_Size.setOnClickListener( infoVol );
 	
 		text.addView(Name);
 		text.addView(Status_and_Size);
 		//text.setOnClickListener( (OnClickListener)ctx );
 		row.addView(text);
 		//setOnClickListener( (OnClickListener)ctx );
-
+		row.setOnClickListener(infoVol);
+		
 		attach = new ImageButtonWithView( ctx, this );
 		attach.setImageResource(R.drawable.ipassociate);
 		attach.setOnClickListener( attachVol );
