@@ -122,4 +122,5 @@
     <string name="AREYOUSURETODETACHVOL">Sei sicuro di scollegare il volume ?</string>
     <string name="NOTINRANGE">non &#xe8; nel range subnet</string>
     <string name="NONETAVAIL">Nessuna rete disponibile.</string>
+    <string name="NETNAME">Nome della rete</string>
 </resources>

@@ -20,6 +20,7 @@ import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.activities.FloatingIPActivity;
+import org.stackdroid.activities.NeutronActivity;
 import org.stackdroid.activities.SecGrpActivity;
 import org.stackdroid.activities.UsersActivity;
 import org.stackdroid.activities.ServersActivity;
@@ -31,13 +32,8 @@ import org.stackdroid.activities.VolumesActivity;
 
 public class MainActivity extends Activity
 {
-//    private int SCREENH = 0;
-    private int SCREENW = 0;
-//    private static boolean downloading_image_list = false;
-//    private static boolean downloading_quota_list = false;
-//    private static boolean downloading_server_list = false;
-
-    private String selectedUser;
+    private int    SCREENW 		= 0;
+    private String selectedUser = null;
 
     /**
      *
@@ -59,8 +55,6 @@ public class MainActivity extends Activity
         Utils.putStringPreference( "VERSIONNAME", versionName, this );
         setContentView(R.layout.main);
         this.setTitle("DroidStack v "+versionName);
-        
-        //Utils.createDir( getFilesDir( ) + "/DroidStack/users" );
         
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -241,7 +235,6 @@ public class MainActivity extends Activity
      *
      */
     public void secgroups( View v ) {
-	  //Utils.alert("NOTIMPLEMENTED", this);
     	if(selectedUser.length()==0) {
     	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
     	    return;
@@ -258,7 +251,6 @@ public class MainActivity extends Activity
      *
      */
     public void volumes( View v ) {
-    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
     	if(selectedUser.length()==0) {
     	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
     	    return;
@@ -275,7 +267,6 @@ public class MainActivity extends Activity
      *
      */
     public void neutron( View v ) {
-    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
     	if(selectedUser.length()==0) {
     	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
     	    return;

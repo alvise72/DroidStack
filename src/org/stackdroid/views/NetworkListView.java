@@ -55,7 +55,7 @@ public class NetworkListView extends LinearLayout {
 		name.setTypeface( null, Typeface.BOLD );
 		
 		subnet = new TextView( ctx );
-		subnet.setText( net.getSubNetworks()[0].getAddress() );
+		subnet.setText( net.getSubNetworks()[0] != null ? net.getSubNetworks()[0].getAddress() : "" );
 		subnet.setTextColor( Color.parseColor("#333333") );
 		
 		nameLayout.addView(name);
@@ -71,7 +71,7 @@ public class NetworkListView extends LinearLayout {
 		buttonsLayout.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL );
 		
 		delete = new ImageButtonWithView( ctx, (NetworkListView)this );
-		delete.setImageResource(R.drawable.ipassociate);
+		delete.setImageResource(android.R.drawable.ic_menu_delete);
 		delete.setOnClickListener( deleteNetListener );
 		
 		buttonsLayout.addView( delete );

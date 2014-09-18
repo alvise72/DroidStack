@@ -22,6 +22,8 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.stackdroid.activities.VolumesActivity.CreateVolumeCancelClickListener;
+import org.stackdroid.activities.VolumesActivity.CreateVolumeClickListener;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -29,6 +31,7 @@ import org.stackdroid.parse.ParseException;
 
 
 import org.stackdroid.R;
+import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.Network;
@@ -36,6 +39,7 @@ import org.stackdroid.utils.Server;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Volume;
+import org.stackdroid.views.NetworkListView;
 import org.stackdroid.views.VolumeView;
 import org.stackdroid.utils.ImageButtonWithView;
 
@@ -55,11 +59,21 @@ public class NeutronActivity extends Activity {
 	//private Spinner 			 serverSpinner				= null;
 	//private AlertDialog 		 alertDialogSelectServer    = null;
 	//private ArrayAdapter<Server> spinnerServersArrayAdapter = null;
+	private AlertDialog alertDialogCreateNetwork;
+	private EditText netname;
+	private EditText cidr;
 	
 	//private String 				 currentVolToAttach			= null;
 	//private String				 currentSrvToAttach			= null;
 	//public String currentVolToDetach;
     
+	protected class DeleteNetworkListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			Utils.alert( getString(R.string.NOTIMPLEMENTED) ,NeutronActivity.this );
+		}
+	}
+	
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
         
@@ -71,11 +85,6 @@ public class NeutronActivity extends Activity {
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
         //menu.add(GROUP, 1, order++, getString(R.string.MENUDELETEALLVOL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
-    }
-    
-    public void update(View v) {
-    	progressDialogWaitStop.show();
-		//(new AsyncTaskListVolumes()).execute( );
     }
     
     //__________________________________________________________________________________
@@ -114,9 +123,28 @@ public class NeutronActivity extends Activity {
 			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
         progressDialogWaitStop.show();
-        //(new AsyncTaskListVolumes()).execute( );
+        (new AsyncTaskOSListNetworks()).execute( );
     }
     
+    protected class CreateNetworkClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    }
+
+    protected class CreateNetworkCancelClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			alertDialogCreateNetwork.dismiss();
+		}
+    	
+    }
     
     /**
     *
@@ -126,7 +154,30 @@ public class NeutronActivity extends Activity {
     */
     public void createNetwork( View v ) {
     	
-    	
+    	LayoutInflater li = LayoutInflater.from(this);
+
+        View promptsView = li.inflate(R.layout.my_dialog_create_network, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setView(promptsView);
+
+        // set dialog message
+
+        alertDialogBuilder.setTitle(getString(R.string.CREATEVOLUME) );
+
+        alertDialogCreateNetwork = alertDialogBuilder.create();
+
+        final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
+        final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateNetCancel);
+        ((EditText)findViewById(R.id.cidrET)).setKeyListener( CIDRAddressKeyListener.getInstance() );
+        mButton.setOnClickListener(new CreateNetworkClickListener());
+        mButtonCancel.setOnClickListener(new CreateNetworkCancelClickListener());
+        netname = (EditText)promptsView.findViewById(R.id.volumenameET);
+        cidr = (EditText)promptsView.findViewById(R.id.volumesizeET);
+        alertDialogCreateNetwork.setCanceledOnTouchOutside(false);
+        alertDialogCreateNetwork.setCancelable(false);
+        alertDialogCreateNetwork.show();
         
     }
  
@@ -142,6 +193,11 @@ public class NeutronActivity extends Activity {
     	progressDialogWaitStop.dismiss();
     }
 
+    public void update(View v) {
+    	progressDialogWaitStop.show();
+        (new AsyncTaskOSListNetworks()).execute( );
+    }
+    
     /**
      *
      *
@@ -149,25 +205,22 @@ public class NeutronActivity extends Activity {
      *
      */
     private void refreshView( ) {
-    	((LinearLayout)findViewById(R.id.volumeLayout)).removeAllViews();
+    	((LinearLayout)findViewById(R.id.networkLayout)).removeAllViews();
     	if(networks.size()==0) {
     		Utils.alert(getString(R.string.NONETAVAIL), this);	
     		return;
     	}
-    	/*
-    	Iterator<Volume> vit = volumes.iterator();
-    	while(vit.hasNext()) {
-    		Volume v = vit.next();
-    		//Log.d("VOLUMES", "V="+v.tostring());
-    		
-    									   
-    		//((LinearLayout)findViewById( R.id.volumeLayout) ).addView( vv );
-    		((LinearLayout)findViewById( R.id.volumeLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+    	
+    	Iterator<Network> nit = networks.iterator();
+    	while(nit.hasNext()) {
+    		Network n = nit.next();
+    		((LinearLayout)findViewById( R.id.networkLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
     		View space = new View( this );
     		space.setMinimumHeight(10);
-    		((LinearLayout)findViewById(R.id.volumeLayout)).addView( space );
+    		((LinearLayout)findViewById(R.id.networkLayout)).addView( space );
+    		((LinearLayout)findViewById(R.id.networkLayout)).addView( new NetworkListView(n, new NeutronActivity.DeleteNetworkListener(), this) );
     	}
-    	*/
+    	
     }
 
 

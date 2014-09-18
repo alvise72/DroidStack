@@ -126,4 +126,5 @@
     <string name="POOL">Pool: </string>
     <string name="SERVER">Server: </string>
     <string name="NONETAVAIL">No network available.</string>
+    <string name="NETNAME">Network name</string>
 </resources>
