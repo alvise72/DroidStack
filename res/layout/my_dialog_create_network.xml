@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+    
+	<Space
+        android:layout_width="wrap_content"
+        android:layout_height="5dip" />
+	
+    
+    
+    
+    <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="@string/NETNAME" />
+    <EditText
+             android:id="@+id/netnameET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text=""
+             android:inputType="textNoSuggestions"
+             android:ems="10" />
+    
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="CIDR" />
+     <EditText
+             android:id="@+id/cidrET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="192.168.1.0/24"
+             android:inputType="number"
+             android:ems="10" />
+	
+	<LinearLayout
+  		android:layout_width="match_parent"
+   		android:layout_height="wrap_content"
+   	 	android:gravity="center_horizontal"
+   	 	android:orientation="horizontal" >
+    
+   		 <Button
+	      	  android:id="@+id/myButtonCreateNet"
+      		  android:layout_width="wrap_content"
+      		  android:layout_height="wrap_content"
+      	  	  android:text="@string/CONFIRM" />
+
+	         <Button
+              android:id="@+id/myButtonCreateNetCancel"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:text="@string/CANCEL" />
+
+	</LinearLayout>
+</LinearLayout>
