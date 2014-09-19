@@ -141,5 +141,7 @@
 	<string name="READONLY">Read only</string>
 	<string name="ATTACHMENT">Attachment</string>
 	<string name="CREATENETWORK">Create new network</string>
+	<string name="INCORRECTMASKFORMAT">CIDR mask must be in the range 1&#8211;32</string>
+	<string name="MyNet">myNetwork</string>
 	
 </resources>

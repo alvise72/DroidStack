@@ -137,4 +137,6 @@
 	<string name="READONLY">Sola lettura</string>
 	<string name="ATTACHMENT">Collegamento</string>
 	<string name="CREATENETWORK">Crea nuova rete</string>
+	<string name="INCORRECTMASKFORMAT">La maschera CIDR deve essere nell\'intervallo 1&#8211;32</string>
+	<string name="MYNET">miaRete</string>
 </resources>

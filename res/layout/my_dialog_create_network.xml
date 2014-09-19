@@ -5,24 +5,16 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
     
-	<Space
+	<View
         android:layout_width="wrap_content"
         android:layout_height="5dip" />
-	
-    
-    
     
     <TextView
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="@string/NETNAME" />
-    <EditText
-             android:id="@+id/netnameET"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text=""
-             android:inputType="textNoSuggestions"
-             android:ems="10" />
+    
+    
     
      <TextView
              android:layout_width="wrap_content"

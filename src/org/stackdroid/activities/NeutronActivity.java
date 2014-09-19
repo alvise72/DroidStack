@@ -18,6 +18,7 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -45,8 +46,8 @@ public class NeutronActivity extends Activity {
 	private AlertDialog 		 alertDialogDeleteNetwork   = null;
 	private Vector<Network>		 networks					= null;
 	private AlertDialog alertDialogCreateNetwork;
-	private EditText netname;
-	private EditText cidr;
+	//private EditText netname;
+	private EditText cidrNet, cidrMask;
 	
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
@@ -111,8 +112,24 @@ public class NeutronActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
+			//String netnameS = netname.getText().toString().trim();
+			/*if(netnameS.length()==0) {
+				Utils.alert(NeutronActivity.this.getString(R.string.NOEMPTYNAME), NeutronActivity.this);
+				netname.requestFocus();
+				return;
+			}*/
+			String netAddr = cidrNet.getText().toString().trim();
+			if(netAddr.length()!=0 && InetAddressUtils.isIPv4Address(netAddr) == false) {
+			    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netAddr, NeutronActivity.this);
+			    cidrNet.requestFocus();
+			    return;
+		    }
+			String netMask = cidrMask.getText().toString().trim();
+			if(netMask.length()==0 || Integer.parseInt(netMask)>32 || Integer.parseInt(netMask)<0) {
+				Utils.alert(getString(R.string.INCORRECTMASKFORMAT), NeutronActivity.this);
+				cidrMask.requestFocus();
+			    return;
+			}
 		}
     	
     }
@@ -122,7 +139,6 @@ public class NeutronActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			alertDialogCreateNetwork.dismiss();
 		}
     	
@@ -143,12 +159,12 @@ public class NeutronActivity extends Activity {
     	alertDialogCreateNetwork = alertDialogBuilder.create();
     	final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
         final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateNetCancel);
-        final EditText cidrNetET = (EditText)promptsView.findViewById(R.id.cidrNetET);
-        cidrNetET.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
+        cidrNet = (EditText)promptsView.findViewById(R.id.cidrNetET);
+        cidrNet.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
+        cidrMask = (EditText)promptsView.findViewById(R.id.cidrMaskET);
+        
         mButton.setOnClickListener(new CreateNetworkClickListener());
         mButtonCancel.setOnClickListener(new CreateNetworkCancelClickListener());
-        netname = (EditText)promptsView.findViewById(R.id.volumenameET);
-        cidr = (EditText)promptsView.findViewById(R.id.volumesizeET);
         alertDialogCreateNetwork.setCanceledOnTouchOutside(false);
         alertDialogCreateNetwork.setCancelable(false);
         alertDialogCreateNetwork.show();
