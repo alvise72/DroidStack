@@ -1,20 +1,16 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Gravity;
 import android.view.View;
@@ -22,8 +18,6 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.stackdroid.activities.VolumesActivity.CreateVolumeCancelClickListener;
-import org.stackdroid.activities.VolumesActivity.CreateVolumeClickListener;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -35,13 +29,10 @@ import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.Network;
-import org.stackdroid.utils.Server;
+import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
-import org.stackdroid.utils.Volume;
 import org.stackdroid.views.NetworkListView;
-import org.stackdroid.views.VolumeView;
-import org.stackdroid.utils.ImageButtonWithView;
 
 import android.os.AsyncTask;
 
@@ -53,24 +44,14 @@ public class NeutronActivity extends Activity {
     private User 				 U 						    = null;
 	private AlertDialog 		 alertDialogDeleteNetwork   = null;
 	private Vector<Network>		 networks					= null;
-	//private EditText 			 volname				    = null;
-	//private EditText 			 volsize				    = null;
-	//private Vector<Server> 		 servers         		    = null;
-	//private Spinner 			 serverSpinner				= null;
-	//private AlertDialog 		 alertDialogSelectServer    = null;
-	//private ArrayAdapter<Server> spinnerServersArrayAdapter = null;
 	private AlertDialog alertDialogCreateNetwork;
 	private EditText netname;
 	private EditText cidr;
 	
-	//private String 				 currentVolToAttach			= null;
-	//private String				 currentSrvToAttach			= null;
-	//public String currentVolToDetach;
-    
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			Utils.alert( getString(R.string.NOTIMPLEMENTED) ,NeutronActivity.this );
+			Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
 		}
 	}
 	
@@ -83,7 +64,6 @@ public class NeutronActivity extends Activity {
         int GROUP = 0;
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        //menu.add(GROUP, 1, order++, getString(R.string.MENUDELETEALLVOL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
     
@@ -126,6 +106,7 @@ public class NeutronActivity extends Activity {
         (new AsyncTaskOSListNetworks()).execute( );
     }
     
+    //__________________________________________________________________________________	
     protected class CreateNetworkClickListener implements OnClickListener {
 
 		@Override
@@ -135,7 +116,8 @@ public class NeutronActivity extends Activity {
 		}
     	
     }
-
+    
+    //__________________________________________________________________________________
     protected class CreateNetworkCancelClickListener implements OnClickListener {
 
 		@Override
@@ -153,24 +135,16 @@ public class NeutronActivity extends Activity {
     *
     */
     public void createNetwork( View v ) {
-    	
     	LayoutInflater li = LayoutInflater.from(this);
-
-        View promptsView = li.inflate(R.layout.my_dialog_create_network, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        alertDialogBuilder.setView(promptsView);
-
-        // set dialog message
-
-        alertDialogBuilder.setTitle(getString(R.string.CREATEVOLUME) );
-
-        alertDialogCreateNetwork = alertDialogBuilder.create();
-
-        final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
+    	View promptsView = li.inflate(R.layout.my_dialog_create_network, null);
+    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    	alertDialogBuilder.setView(promptsView);
+    	alertDialogBuilder.setTitle(getString(R.string.CREATENETWORK) );
+    	alertDialogCreateNetwork = alertDialogBuilder.create();
+    	final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
         final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateNetCancel);
-        ((EditText)findViewById(R.id.cidrET)).setKeyListener( CIDRAddressKeyListener.getInstance() );
+        final EditText cidrNetET = (EditText)promptsView.findViewById(R.id.cidrNetET);
+        cidrNetET.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
         mButton.setOnClickListener(new CreateNetworkClickListener());
         mButtonCancel.setOnClickListener(new CreateNetworkCancelClickListener());
         netname = (EditText)promptsView.findViewById(R.id.volumenameET);

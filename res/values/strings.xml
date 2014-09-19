@@ -140,5 +140,6 @@
 	<string name="BOOTABLE">Bootable</string>
 	<string name="READONLY">Read only</string>
 	<string name="ATTACHMENT">Attachment</string>
+	<string name="CREATENETWORK">Create new network</string>
 	
 </resources>

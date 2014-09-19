@@ -136,4 +136,5 @@
 	<string name="BOOTABLE">Avviabile</string>
 	<string name="READONLY">Sola lettura</string>
 	<string name="ATTACHMENT">Collegamento</string>
+	<string name="CREATENETWORK">Crea nuova rete</string>
 </resources>
