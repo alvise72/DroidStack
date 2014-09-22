@@ -1,6 +1,7 @@
 package org.stackdroid;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.stackdroid.R;
@@ -28,7 +30,6 @@ import org.stackdroid.activities.OSImagesActivity;
 import org.stackdroid.activities.OverViewActivity;
 import org.stackdroid.activities.VolumesActivity;
 
-//import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity
 {
@@ -134,19 +135,68 @@ public class MainActivity extends Activity
       Configuration.getInstance().setValue( "FILESDIR", file.getPath() );
       (new File(Environment.getExternalStorageDirectory() + "/DroidStack/users" )).mkdirs( );
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
+      User U = null;
       if(selectedUser.length()!=0) {  
 
     	  try {
-    		  User u = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	      
-    		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+u.getUserName() + " (" + u.getTenantName() + ")"); 
+    		  U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+    		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+    		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(true);
+        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(true);
+        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(true);
+        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(true);
+        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(true);
+        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(true);
+        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(true);
+        	  
+    	  } catch(IOException ioe) {
+    		  Utils.alert("ERROR: "+ioe.getMessage() + "\n\n"+getString(R.string.RECREATEUSERS), this);
+    		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+        	  return;
     	  } catch(Exception e) {
     		  Utils.alert("ERROR: "+e.getMessage(), this );
+    		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
     		  return;
     	  }
+    	  
+    	  if(U.hasGlance()==false) {
+        	  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
+          }
+          
+          if(U.hasNova()==false) {
+        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
+          }
+          
+          if(U.hasNeutron()==false) {
+        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
+          }
+          
+          if(U.hasNova()==false) {
+        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
+          }
+    	  
       } else {
     	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+    	  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
+    	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
+    	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
+    	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
+    	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
+    	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
       }
+      
     }
     
     /**

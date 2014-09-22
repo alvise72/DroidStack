@@ -9,3 +9,5 @@
 - confirmation ask for volume detach
 - Check custom IP appartiene al CIDR della subnet nella ImageLaunchActivity
 - Click su volume item per info estese
+- In ServersActivity bottone per creare istanze (scegliendo immagine da
+  dialog)

@@ -54,6 +54,34 @@ public class ParseUtils {
     	  String username = (String)((JSONObject)access.get("user")).get("username");
     	  String userID = (String)((JSONObject)access.get("user")).get("id");
     	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
+    	  JSONArray serviceArray = access.getJSONArray("serviceCatalog");
+    	  //Hashtable<String, >
+    	  boolean nova=false, glance=false, neutron=false, cinder1=false, cinder2=false;
+    	  String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null;
+    	  for(int i = 0; i<serviceArray.length();++i) {
+    		  JSONObject service = serviceArray.getJSONObject(i);
+    		  if(service.getString("type").compareTo("compute")==0) {
+    			  nova=true;
+    			  novaEP = service.getString("publicURL");
+    		  }
+    		  if(service.getString("type").compareTo("network")==0) {
+    			  neutron=true;
+    			  neutronEP = service.getString("publicURL");
+    		  }
+    		  if(service.getString("type").compareTo("volumev2")==0) {
+    			  cinder2=true;
+    			  cinder2EP = service.getString("publicURL");
+    		  }
+    		  if(service.getString("type").compareTo("volume")==0) {
+    			  cinder1=true;
+    			  cinder1EP = service.getString("publicURL");
+    		  }
+    		  if(service.getString("type").compareTo("image")==0) {
+    			  glance=true;
+    			  glanceEP = service.getString("publicURL");
+    		  }
+    		  
+    	  }
     	  boolean role_admin = false;
     	  for(int i = 0; i<roleArray.length(); ++i)
     		  if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
@@ -68,7 +96,24 @@ public class ParseUtils {
     		  throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
     	  }
     	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
-    	  User U = new User( username, userID, tenantname, tenantid, stoken, expireTimestamp, role_admin );
+    	  User U = new User( 
+    			  			 username, 
+    			  			 userID, 
+    			  			 tenantname, 
+    			  			 tenantid, 
+    			  			 stoken, 
+    			  			 expireTimestamp, 
+    			  			 role_admin,
+    			  			 glance,
+    			  			 nova,
+    			  			 neutron,
+    			  			 cinder1,
+    			  			 cinder2,
+    			  			 glanceEP,
+    			  			 novaEP,
+    			  			 neutronEP,
+    			  			 cinder1EP,
+    			  			 cinder2EP);
     	  return U;
       } catch(org.json.JSONException je) {
 	  throw new ParseException( je.getMessage( ) );

@@ -139,4 +139,5 @@
 	<string name="CREATENETWORK">Crea nuova rete</string>
 	<string name="INCORRECTMASKFORMAT">La maschera CIDR deve essere nell\'intervallo 1&#8211;32</string>
 	<string name="MYNET">miaRete</string>
+	<string name="RECREATEUSERS">Il sistema di persistenza degli utenti &#xe8; cambiato... Prova a ricreare gli utenti.\n\nI vecchi utenti sono stati rimossi.</string>
 </resources>

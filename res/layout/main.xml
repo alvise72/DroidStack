@@ -113,7 +113,7 @@
               android:layout_height="match_parent" >
 
                   <Button
-                      android:id="@+id/fips_but"
+                      android:id="@+id/FIPS"
                       android:layout_width="match_parent"
 		      android:layout_height="match_parent"
                       android:onClick="floatingip"
@@ -124,7 +124,7 @@
               
 
                   <Button
-                      android:id="@+id/secg_but"
+                      android:id="@+id/SECG"
                       android:layout_width="match_parent"
 		  			  android:layout_height="match_parent"
 		  			  android:onClick="secgroups"
@@ -144,7 +144,7 @@
               android:layout_height="match_parent" >
 
                   <Button
-                      android:id="@+id/volumes_but"
+                      android:id="@+id/CINDER"
                       android:layout_width="match_parent"
 		      		  android:layout_height="match_parent"
                       android:onClick="volumes"
@@ -154,7 +154,7 @@
 
              
                   <Button
-                      android:id="@+id/neutron_but"
+                      android:id="@+id/NEUTRON"
                       android:layout_width="match_parent"
 		      		  android:layout_height="match_parent"
                       android:onClick="neutron"

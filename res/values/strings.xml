@@ -143,5 +143,6 @@
 	<string name="CREATENETWORK">Create new network</string>
 	<string name="INCORRECTMASKFORMAT">CIDR mask must be in the range 1&#8211;32</string>
 	<string name="MyNet">myNetwork</string>
+	<string name="RECREATEUSERS">The user persistency has changed... Please try to recreate users.\n\nOld users have been removed.</string>
 	
 </resources>
