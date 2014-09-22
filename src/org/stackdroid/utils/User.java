@@ -144,7 +144,7 @@ public class User implements Serializable, Comparable<User> {
      * 
      * 
      */
-    public static User fromFileID( String ID, String filesDir ) throws IOException, ClassNotFoundException {
+    public static User fromFileID( String ID, String filesDir ) throws IOException, ClassNotFoundException, NotExistingFileException {
     	String filename = filesDir + "/users/" + ID;
     	if(false == (new File(filename)).exists())
     		throw new NotExistingFileException( "File [" + filename + "] doesn't exist" );

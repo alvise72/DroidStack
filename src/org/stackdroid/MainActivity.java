@@ -19,6 +19,7 @@ import android.widget.TextView;
 import org.stackdroid.R;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.NotExistingFileException;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.activities.FloatingIPActivity;
@@ -137,9 +138,7 @@ public class MainActivity extends Activity
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       User U = null;
       if(selectedUser.length()!=0) {  
-
-    	  
-    	  
+ 
     	  try {
     		  U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
     		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
@@ -151,7 +150,18 @@ public class MainActivity extends Activity
         	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(true);
         	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(true);
         	  
-    	  } catch(IOException ioe) {
+    	  } catch(NotExistingFileException nf) {
+    		  Utils.putStringPreference("SELECTEDUSER", "", this);
+    		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+        	  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
+        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+        	  return;
+          } catch(IOException ioe) {
     		  Utils.alert("ERROR: "+ioe.getMessage() + "\n\n"+getString(R.string.RECREATEUSERS), this);
     		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
         	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
@@ -197,6 +207,7 @@ public class MainActivity extends Activity
     	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
     	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
     	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
+    	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
       }
       
     }
