@@ -332,19 +332,14 @@ public class OSImagesActivity extends Activity {
      *
      *
      *
-     *
-     *
-     *
-     *
-     *
      */
-    protected class AsyncTaskOSDelete extends AsyncTask<String, String, String>
+    protected class AsyncTaskOSDelete extends AsyncTask<String, Void, Void>
     {
       private  String   errorMessage  =  null;
 	  private  boolean  hasError      =  false;
 	  private  String   jsonBuf       = null;
 	
-	  protected String doInBackground(String... u ) 
+	  protected Void doInBackground(String... u ) 
 	  {
 	    String imagetodel = u[0];
 	    OSClient osc = OSClient.getInstance(U);
@@ -367,24 +362,16 @@ public class OSImagesActivity extends Activity {
 	    	errorMessage = e.getMessage( );
 	    	hasError = true;
 		} 
-	    return "";
+	    return null;
 	}
 
 	/**
 	 * 
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	*/	
 	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+	protected void onPostExecute( Void v ) {
+	    super.onPostExecute(v);
 	    
  	    if(hasError) {
  	    	Utils.alert( errorMessage, OSImagesActivity.this );
@@ -419,14 +406,14 @@ public class OSImagesActivity extends Activity {
      *
      *
      */
-    protected class AsyncTaskOSListImages extends AsyncTask<Void, String, String>
+    protected class AsyncTaskOSListImages extends AsyncTask<Void, Void, Void>
     {
      	private  String   errorMessage  =  null;
      	private  boolean  hasError      =  false;
      	private  String   jsonBuf       = null;
 
      	@Override
-     	protected String doInBackground(Void ... voids ) 
+     	protected Void doInBackground(Void ... voids ) 
      	{
      		OSClient osc = OSClient.getInstance(U);
 
@@ -436,34 +423,23 @@ public class OSImagesActivity extends Activity {
      			errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
      			hasError = true;
      		} catch (Exception e) {
-     			// TODO Auto-generated catch block
-     			//e.printStackTrace();
      			errorMessage = e.getMessage( );
      			hasError = true;
      		} 
 	    
-	    return jsonBuf;
-     	}		
-	
-     	@Override
-     	protected void onPreExecute() {
-     		super.onPreExecute();
-	    
-     		//downloading_image_list = true;
+	      return null;
      	}
 	
      	@Override
-     	protected void onPostExecute( String result ) {
-     		super.onPostExecute(result);
+     	protected void onPostExecute( Void v ) {
+     		super.onPostExecute(v);
 	    
      		if(hasError) {
      			Utils.alert( errorMessage, OSImagesActivity.this );
-     			//downloading_image_list = false;
      			OSImagesActivity.this.progressDialogWaitStop.dismiss( );
      			return;
      		}
 	    
-     		//downloading_image_list = false; // questo non va spostato da qui a
      		try {
      			OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
      			OSImagesActivity.this.refreshView( );
@@ -471,9 +447,7 @@ public class OSImagesActivity extends Activity {
      			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
      					    OSImagesActivity.this);
      		}
-     		//Utils.putLongPreference("LASTIMAGELIST_TIMESTAMP", Utils.now( ), OSImagesActivity.this );
      		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
-     		//OSImagesActivity.this.refreshView( jsonBuf );
      	}
     }
 }

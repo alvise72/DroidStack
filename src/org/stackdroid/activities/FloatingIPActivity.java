@@ -758,7 +758,7 @@ public class FloatingIPActivity extends Activity {
 
 
 
-public void pickAServerToAssociateFIP() {
+protected void pickAServerToAssociateFIP() {
 	//Log.d("FLOATING","server count="+servers.size());
 	if(servers.size()==0) {
 		Utils.alert(getString(R.string.NOSERVERTOASSOCIATEFIP), this);

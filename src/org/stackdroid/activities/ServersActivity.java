@@ -1,15 +1,20 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View.OnClickListener;
@@ -23,6 +28,7 @@ import java.util.Vector;
 
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
+import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
@@ -31,6 +37,7 @@ import org.stackdroid.utils.ButtonWithView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.LinearLayoutWithView;
+import org.stackdroid.utils.OSImage;
 import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -47,11 +54,73 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class ServersActivity extends Activity {
 
-    private CustomProgressDialog progressDialogWaitStop = null;
-    private User 				 U 						= null;
-	public 	String 				 serverID 				= null;
-	private String 				 serverid 				= null;
+    private CustomProgressDialog progressDialogWaitStop    = null;
+    private User 				 U 						   = null;
+	public 	String 				 serverID 				   = null;
+	private String 				 serverid 				   = null;
+	private ArrayAdapter<OSImage> spinnerImagesArrayAdapter= null;
+	private AlertDialog 		 alertDialogSelectImage    = null;
+	private Spinner 			 imageSpinner			   = null;
+	public  Vector<OSImage> 	 images					   = null;
     
+	protected class ConfirmButtonHandler implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			OSImage osi = (OSImage)imageSpinner.getSelectedItem();
+			Class<?> c = (Class<?>)ImageLaunchActivity.class;
+    		Intent I = new Intent( ServersActivity.this, c );
+    		I.putExtra( "IMAGEID", osi.getID() );
+    	    I.putExtra("IMAGENAME", osi.getName());
+    		startActivity( I );
+		}
+	}
+	
+	protected class CancelButtonHandler implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogSelectImage.dismiss();
+		}
+	}
+	
+	public void createInstance( View v ) {
+		this.progressDialogWaitStop.show();
+		(new ServersActivity.AsyncTaskOSListImages()).execute();
+
+		
+	}
+	
+	protected void pickAnImageToLaunch( ) {
+		spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(ServersActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
+		spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		
+		LayoutInflater li = LayoutInflater.from(this);
+
+	    View promptsView = li.inflate(R.layout.my_dialog_create_instance, null);
+
+	    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+	    alertDialogBuilder.setView(promptsView);
+
+	    // set dialog message
+
+	    alertDialogBuilder.setTitle("Choose an image");
+	    //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
+	    // create alert dialog
+	    alertDialogSelectImage = alertDialogBuilder.create();
+
+	    imageSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseImage);
+	    imageSpinner.setAdapter(spinnerImagesArrayAdapter);
+	    final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
+	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
+		//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
+	    mButton.setOnClickListener(new ServersActivity.ConfirmButtonHandler());
+	    mButtonCancel.setOnClickListener(new ServersActivity.CancelButtonHandler());
+	    alertDialogSelectImage.setCanceledOnTouchOutside(false);
+	    alertDialogSelectImage.setCancelable(false);
+	    alertDialogSelectImage.show();
+	}
+	
 	/**
 	 * 
 	 * @author dorigoa
@@ -697,5 +766,58 @@ public class ServersActivity extends Activity {
 	    }
 	    ServersActivity.this.progressDialogWaitStop.dismiss( );
 	}
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    protected class AsyncTaskOSListImages extends AsyncTask<Void, Void, Void>
+    {
+     	private  String   errorMessage  =  null;
+     	private  boolean  hasError      =  false;
+     	private  String   jsonBuf       = null;
+
+     	@Override
+     	protected Void doInBackground(Void ... voids ) 
+     	{
+     		OSClient osc = OSClient.getInstance(U);
+
+     		try {
+     			jsonBuf = osc.requestImages( );
+     		} catch(ServiceUnAvailableOrInternalError se) {
+     			errorMessage = ServersActivity.this.getString(R.string.SERVICEUNAVAILABLE);
+     			hasError = true;
+     		} catch (Exception e) {
+     			errorMessage = e.getMessage( );
+     			hasError = true;
+     		} 
+	    
+	    return null;
+     	}		
+	
+     	@Override
+     	protected void onPostExecute( Void v ) {
+     		super.onPostExecute(v);
+	    
+     		if(hasError) {
+     			Utils.alert( errorMessage, ServersActivity.this );
+     			ServersActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
+	    
+     		try {
+     			ServersActivity.this.images = ParseUtils.parseImages(jsonBuf);
+     			ServersActivity.this.pickAnImageToLaunch();
+     		} catch(ParseException pe) {
+     			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+     					ServersActivity.this);
+     		}
+     		
+     		ServersActivity.this.progressDialogWaitStop.dismiss( );
+     	}
     }
 }

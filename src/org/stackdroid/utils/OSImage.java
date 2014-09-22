@@ -50,15 +50,6 @@ public class OSImage implements Serializable {
     
     @Override
     public String toString( ) {
-	return "Image{name=" + name
-	    + ",ID="+ID
-	    + ",size="+size
-	    + ",format="+format
-	    + ",status="+status
-	    + ",is_public="+is_public
-	    + ",createdAt="+createdAt
-	    + ",minDisk="+minDisk+"GB"
-	    + ",minRAM="+minRAM+"MB"
-	    +"}";
+    	return name;
     }
 }
