@@ -138,6 +138,8 @@ public class MainActivity extends Activity
       User U = null;
       if(selectedUser.length()!=0) {  
 
+    	  
+    	  
     	  try {
     		  U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
     		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 

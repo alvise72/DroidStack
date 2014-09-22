@@ -47,6 +47,7 @@ public class UsersActivity extends Activity {
     startActivity( I );  
   }
 
+  //__________________________________________________________________________________
   protected class UserDeleteListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) { 
@@ -61,15 +62,8 @@ public class UsersActivity extends Activity {
 			return;
 	  }
   }
-  
-/*  protected class UserModifyListener implements OnClickListener {
-	  @Override
-	  public void onClick( View v ) {
-		  Utils.alert( getString(R.string.NOTIMPLEMENTED) , UsersActivity.this);
-		  return;
-	  }
-  }
-  */
+
+  //__________________________________________________________________________________
   protected class UserSelectedListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) {

@@ -147,13 +147,12 @@ public class User implements Serializable, Comparable<User> {
     public static User fromFileID( String ID, String filesDir ) throws IOException, ClassNotFoundException {
     	String filename = filesDir + "/users/" + ID;
     	if(false == (new File(filename)).exists())
-    		throw new RuntimeException( "File ["+filename+"] doesn't exist" );
+    		throw new NotExistingFileException( "File [" + filename + "] doesn't exist" );
     	try {
     		InputStream is = new FileInputStream( filename );
     		ObjectInputStream ois = new ObjectInputStream( is );
     		User U = (User)ois.readObject( );
     		ois.close( );
-    		//U.setContext( ctx );
     		return U;
     	} catch(IOException ioe) {
     		(new File(filename)).delete();
@@ -171,7 +170,7 @@ public class User implements Serializable, Comparable<User> {
      * 
      */
     public void toFile( String filesDir ) throws IOException {
-    	String filename = filesDir + "/users/" + getUserID( ) + "." + getTenantID( );
+    	String filename = filesDir + "/users/" + getUserID( ) + "." + getTenantID( ) + "." + endpoint.hashCode();
     	File f = new File( filename );
     	if(f.exists()) f.delete();
     	try {

@@ -60,26 +60,28 @@ public class ParseUtils {
     	  String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null;
     	  for(int i = 0; i<serviceArray.length();++i) {
     		  JSONObject service = serviceArray.getJSONObject(i);
-    		  if(service.getString("type").compareTo("compute")==0) {
-    			  nova=true;
-    			  novaEP = service.getString("publicURL");
-    		  }
-    		  if(service.getString("type").compareTo("network")==0) {
-    			  neutron=true;
-    			  neutronEP = service.getString("publicURL");
-    		  }
-    		  if(service.getString("type").compareTo("volumev2")==0) {
-    			  cinder2=true;
-    			  cinder2EP = service.getString("publicURL");
-    		  }
-    		  if(service.getString("type").compareTo("volume")==0) {
-    			  cinder1=true;
-    			  cinder1EP = service.getString("publicURL");
-    		  }
-    		  if(service.getString("type").compareTo("image")==0) {
-    			  glance=true;
-    			  glanceEP = service.getString("publicURL");
-    		  }
+    		  JSONArray endpoints = service.getJSONArray("endpoints");
+    		  JSONObject endpoint = endpoints.getJSONObject(0);
+    			  if(endpoint.getString("type").compareTo("compute")==0) {
+    				  nova=true;
+    				  novaEP = service.getString("publicURL");
+    			  }
+    			  if(endpoint.getString("type").compareTo("network")==0) {
+    				  neutron=true;
+    				  neutronEP = service.getString("publicURL");
+    			  }
+    			  if(endpoint.getString("type").compareTo("volumev2")==0) {
+    				  cinder2=true;
+    				  cinder2EP = service.getString("publicURL");
+    			  }
+    			  if(endpoint.getString("type").compareTo("volume")==0) {
+    				  cinder1=true;
+    				  cinder1EP = service.getString("publicURL");
+    			  }
+    			  if(endpoint.getString("type").compareTo("image")==0) {
+    				  glance=true;
+    				  glanceEP = service.getString("publicURL");
+    			  }
     		  
     	  }
     	  boolean role_admin = false;
