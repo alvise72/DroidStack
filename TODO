@@ -1,3 +1,4 @@
 User.fromFileID -> messaggio d'errore se viene tornato null
 verificare presenza cinder, altrimenti disabilitare bottone volumi
+creazione istanza dal activity "Istanze" con tasto "+" che mostra lista immagini.
 Neutron interface

@@ -643,13 +643,15 @@ public class ServersActivity extends Activity {
      			ServersActivity.this.progressDialogWaitStop.dismiss( );
      			return;
      		}
-     		if(hasError==true)
+     		if(hasError==true) {
      			Utils.alert( errorMessage, ServersActivity.this );
+     			ServersActivity.this.progressDialogWaitStop.dismiss( );
+     		}
      		else {
      			Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
      			(new AsyncTaskOSListServers()).execute( );
      		}
-     		ServersActivity.this.progressDialogWaitStop.dismiss( );
+     		//ServersActivity.this.progressDialogWaitStop.dismiss( );
      	}
    }
     

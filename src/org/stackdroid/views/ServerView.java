@@ -16,7 +16,7 @@ public class ServerView extends LinearLayout {
     
     private LinearLayoutWithView row  = null;
     private LinearLayoutWithView text = null;
-    private LinearLayoutWithView info = null;
+    private LinearLayoutWithView btns = null;
     private TextViewWithView Name     = null;
     private TextViewWithView Flavor   = null;
     private TextViewWithView Status   = null;
@@ -116,17 +116,17 @@ public class ServerView extends LinearLayout {
 	snapServer.setImageResource(android.R.drawable.ic_menu_camera);
 	snapServer.setOnClickListener( snapServerListener );
 
-	info = new LinearLayoutWithView( ctx, (ServerView)this );
-	info.setOrientation( LinearLayout.HORIZONTAL );
+	btns = new LinearLayoutWithView( ctx, (ServerView)this );
+	btns.setOrientation( LinearLayout.HORIZONTAL );
 	
 	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
-	info.setLayoutParams( params3 );
-	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+	btns.setLayoutParams( params3 );
+	btns.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 	//info.addView( consoleLog );
-	info.addView( snapServer );
-	info.addView( deleteServer );
+	btns.addView( snapServer );
+	btns.addView( deleteServer );
 	
-	row.addView( info );
+	row.addView( btns );
 	addView( row );
     		
     }
