@@ -63,7 +63,7 @@ public class UserView extends LinearLayout {
 	textTenantName.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textEndpoint = new TextViewWithView( ctx, (UserView)this );
-	textEndpoint.setText("Endpoint: "+U.getEndpoint( ));
+	textEndpoint.setText("Endpoint: "+U.getIdentityEndpoint( ));
 	textEndpoint.setTextColor( Color.parseColor("#333333") );
 	textEndpoint.setOnClickListener( selectUserListener );
 	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));

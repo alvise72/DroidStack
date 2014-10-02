@@ -83,16 +83,16 @@ public class OSClient {
     		
     		
     			String jsonBuffer = RESTClient.requestToken( U.useSSL() ,
-	    												 U.getEndpoint(),
-	    												 U.getTenantName(),
-	    												 U.getUserName(),
-	    												 U.getPassword() );
+	    												 	 U.getIdentityEndpoint()+"/tokens",
+	    												 	 U.getTenantName(),
+	    												 	 U.getUserName(),
+	    												 	 U.getPassword() );
     			String  pwd = U.getPassword();
-    			String  edp = U.getEndpoint();
+    			String  edp = U.getIdentityEndpoint();
     			boolean ssl = U.useSSL();
     			U = ParseUtils.parseUser( jsonBuffer );
     			U.setPassword( pwd );
-    			U.setEndpoint( edp );
+    			//U.setEndpoint( edp );
     			U.setSSL( ssl );
     			U.toFile( Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
     		
@@ -118,7 +118,7 @@ public class OSClient {
 		vp.add( p );
 		String extradata = "{\"volumeAttachment\": {\"device\": null, \"volumeId\": \"" + volumeID + "\"}}";
 		RESTClient.sendPOSTRequest( U.useSSL(), 
-									U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverID + "/os-volume_attachments", 
+									U.getCinder2Endpoint() + "/servers/" + serverID + "/os-volume_attachments", 
 									U.getToken(), 
 									extradata, 
 									vp );
@@ -143,7 +143,7 @@ public class OSClient {
 		vp.add( p );
 		//String extradata = "{\"volumeAttachment\": {\"device\": null, \"volumeId\": \"" + volumeID + "\"}}";
 		RESTClient.sendDELETERequest( U.useSSL(), 
-								   	  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID, 
+									  U.getCinder2Endpoint() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID, 
 									  U.getToken(), 
 									  vp );
 	}
@@ -167,10 +167,10 @@ public class OSClient {
     		vp.add( p );
     		String extradata = "{\"volume\": {\"display_name\": \"" + volname + "\", \"imageRef\": null, \"availability_zone\": null, \"volume_type\": null, \"display_description\": null, \"snapshot_id\": null, \"size\": " + size_in_GB + "}}";
     		RESTClient.sendPOSTRequest( U.useSSL(), 
-    							    U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes", 
-    							    U.getToken(), 
-    							    extradata, 
-    							    vp );
+    									U.getCinder2Endpoint() + "/volumes", 
+    									U.getToken(), 
+    									extradata, 
+    									vp );
 	   }
     
 
@@ -192,7 +192,7 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	RESTClient.sendDELETERequest( U.useSSL(), 
-    								  U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes/" + volID, 
+    								  U.getCinder2Endpoint() + "/volumes/" + volID, 
     								  U.getToken(), 
     								  vp );
 	   }
@@ -217,10 +217,10 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"createImage\": {\"name\": \"" + snapshotName + "\", \"metadata\": {}}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-				    U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverID + "/action", 
-				    U.getToken(), 
-				    extradata, 
-				    vp );
+    								U.getNovaEndpoint() + "/servers/" + serverID + "/action", 
+				    				U.getToken(), 
+				    				extradata, 
+				    				vp );
     }
     
     /*
@@ -242,7 +242,7 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"pool\": \"" + externalNetworkID + "\"}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-    								U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-floating-ips", 
+    								U.getNovaEndpoint() + "/os-floating-ips", 
     								U.getToken(), 
     								extradata, 
     								vp );
@@ -269,10 +269,10 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"security_group\": {\"name\": \"" + secgrpName + "\", \"description\": \"" + desc + "\"}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-				    U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups", 
-				    U.getToken(), 
-				    extradata, 
-				    vp );
+    								U.getNovaEndpoint()  + "/os-security-groups", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
     }
     
     /**
@@ -291,7 +291,10 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	return RESTClient.sendGETRequest( U.useSSL(), U.getEndpoint() + ":8776/v1/" + U.getTenantID() + "/volumes/detail", U.getToken( ), vp );
+    	return RESTClient.sendGETRequest( U.useSSL(), 
+    									  U.getCinder2Endpoint() + "/volumes/detail", 
+    									  U.getToken( ), 
+    									  vp );
     }
 
     /**
@@ -313,10 +316,10 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"addFloatingIp\": {\"address\": \"" + fip + "\"}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-				    U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/"+serverid+"/action", 
-				    U.getToken(), 
-				    extradata, 
-				    vp );   	
+				    			    U.getNovaEndpoint() + "/servers/"+serverid+"/action", 
+				    			    U.getToken(), 
+				    			    extradata, 
+				    			    vp );   	
     }
     
     /**
@@ -336,9 +339,9 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	RESTClient.sendDELETERequest( U.useSSL(), 
-				      U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-floating-ips/" + fip, 
-				      U.getToken(), 
-				      vp );
+				      				  U.getNovaEndpoint() + "/os-floating-ips/" + fip, 
+				      				  U.getToken(), 
+				      				  vp );
     }
     
     /**
@@ -362,7 +365,7 @@ public class OSClient {
        String extradata = "{\"removeFloatingIp\": {\"address\": \"" + floatingip + "\"}}";
        
        RESTClient.sendPOSTRequest( U.useSSL(), 
-    		   					   U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/" + serverid + "/action", 
+    		   					   U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
     		   					   U.getToken(), 
     		   					   extradata, 
     		   					   vp );
@@ -387,7 +390,7 @@ public class OSClient {
 	   vp.add( p );
 	
 	   return RESTClient.sendPOSTRequest( U.useSSL(), 
-			   							  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/servers/"+serverid+"/action",
+			   							  U.getNovaEndpoint() + "/servers/"+serverid+"/action",
 			   							  U.getToken(), 
 			   							  "{\"os-getConsoleOutput\": {\"length\": \"" + maxlines + "\"}}", 
 			   							  vp );   
@@ -406,7 +409,10 @@ public class OSClient {
     {
  	   checkToken( );
  		
-       return RESTClient.sendGETRequest( U.useSSL(), U.getEndpoint() + ":9292/v2/images", U.getToken(), null );   
+       return RESTClient.sendGETRequest( U.useSSL(), 
+    		   							 U.getGlanceEndpoint() + "/v2/images", 
+    		   							 U.getToken(), 
+    		   							 null );   
     }
     
     /**
@@ -425,7 +431,10 @@ public class OSClient {
  	   Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
  	   Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
  	   v.add(p);
- 	   return RESTClient.sendGETRequest( U.useSSL(),  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/limits", U.getToken(), v);
+ 	   return RESTClient.sendGETRequest( U.useSSL(), 
+ 			   							 U.getNovaEndpoint() + "/limits", 
+ 			   							 U.getToken(), 
+ 			   							 v );
     }
 
     /**
@@ -445,9 +454,9 @@ public class OSClient {
  	   Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
  	   v.add(p);
  	   return RESTClient.sendGETRequest( U.useSSL(),  
- 			   							 U.getEndpoint() + ":8776/v1/"+U.getTenantID()+"/os-quota-sets/"+U.getTenantID( )+"?usage=True", 
+ 			   							 U.getCinder2Endpoint() + "/os-quota-sets/"+U.getTenantID( )+"?usage=True", 
  			   							 U.getToken(), 
- 			   							 v);
+ 			   							 v );
     }
 
     /**
@@ -467,9 +476,9 @@ public class OSClient {
  	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
  	   v.add(p);
  	   return RESTClient.sendGETRequest( U.useSSL(), 
-    									  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/os-floating-ips", 
-    									  U.getToken(), 
-    									  v );
+    									 U.getNovaEndpoint() + "/os-floating-ips", 
+    									 U.getToken(), 
+    									 v );
     }
 
     /**
@@ -489,7 +498,7 @@ public class OSClient {
  	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
  	   v.add(p);
  	   return RESTClient.sendGETRequest( U.useSSL(),
-    									 U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/servers/detail", //?all_tenants=1",
+    									 U.getNovaEndpoint() + "/servers/detail", //?all_tenants=1",
     									 U.getToken(), 
     									 v );
     }
@@ -512,9 +521,9 @@ public class OSClient {
  	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
  	   v.add(p);
  	   return RESTClient.sendGETRequest( U.useSSL(),
-    									  U.getEndpoint() + ":8774/v2/"+U.getTenantID()+"/flavors/detail",
-    									  U.getToken(),
-    									  v );
+    									 U.getNovaEndpoint() + "/flavors/detail",
+    									 U.getToken(),
+    									 v );
     }
 
     /**
@@ -533,7 +542,7 @@ public class OSClient {
  	   checkToken( );
  		
  	   RESTClient.sendDELETERequest( U.useSSL(),
-					   				  U.getEndpoint() + ":9292/v2/images/" + imageID, 
+					   				  U.getGlanceEndpoint() + "/v2/images/" + imageID, 
 					   				  U.getToken( ),
 					   				  null );
     }
@@ -555,7 +564,7 @@ public class OSClient {
  	   checkToken( );
  		
     	RESTClient.sendDELETERequest( U.useSSL(),
-					   				  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-group-rules/" + ruleID, 
+					   				  U.getNovaEndpoint() + "/os-security-group-rules/" + ruleID, 
 					   				  U.getToken( ),
 					   				  null );
     }
@@ -575,9 +584,9 @@ public class OSClient {
  	   checkToken( );
  		
     	RESTClient.sendDELETERequest( U.useSSL(), 
-					  U.getEndpoint() + ":8774/v2/" + U.getTenantID()+ "/servers/" + serverID, 
-					  U.getToken(),
-					  null );
+    								  U.getNovaEndpoint() + "/servers/" + serverID, 
+    								  U.getToken(),
+    								  null );
     }
 
     /**
@@ -597,7 +606,7 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(),  
-    									  U.getEndpoint() + ":9696/v2.0/networks",
+    									  U.getNeutronEndpoint() + "/v2.0/networks",
     									  U.getToken(), 
     									  v );
     }
@@ -619,7 +628,7 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(), 
-    									  U.getEndpoint() + ":9696/v2.0/subnets",
+    									  U.getNeutronEndpoint() + "/v2.0/subnets",
     									  U.getToken(), 
     									  v );
     }
@@ -641,7 +650,7 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(),  
-					  					  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-keypairs",
+					  					  U.getNovaEndpoint() + "/os-keypairs",
 					  					  U.getToken(), 
 					  					  v );
     }
@@ -660,7 +669,7 @@ public class OSClient {
  	   checkToken( );
  		
     	String buf = RESTClient.sendGETRequest( U.useSSL(), 
-											    U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/os-security-groups",
+											    U.getNovaEndpoint() + "/os-security-groups",
 											    U.getToken(), 
 											    null );
     	return buf;
@@ -680,7 +689,7 @@ public class OSClient {
  	   checkToken( );
  		
     	String buf = RESTClient.sendGETRequest( U.useSSL(), 
-    											U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/os-security-groups/" + secgrpID,
+    											U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
     											U.getToken(), 
     											null );
 		//Log.d("OSCLIENT", "buf="+buf);
@@ -705,7 +714,7 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
     	RESTClient.sendDELETERequest( U.useSSL(), 
-    								  U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-groups/" + secgrpID,
+    								  U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
     								  U.getToken(),
     								  v );
     }    
@@ -775,7 +784,7 @@ public class OSClient {
     	
     	data = obj.toString( );
     	 RESTClient.sendPOSTRequest( U.useSSL(), 
-		     						 U.getEndpoint() + ":8774/v2/" + U.getTenantID( ) + "/servers",
+		     						 U.getNovaEndpoint() + "/servers",
 				  					 U.getToken(), 
 				  					 data, 
 				  					 v );
@@ -800,7 +809,7 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"security_group_rule\": {\"from_port\": " + fromPort + ", \"ip_protocol\": \"" + protocol + "\", \"to_port\": " + toPort + ", \"parent_group_id\": \"" + secgrpID + "\", \"cidr\": \"" + cidr + "\", \"group_id\": null}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-    								U.getEndpoint() + ":8774/v2/" + U.getTenantID() + "/os-security-group-rules", 
+    								U.getNovaEndpoint() + "/os-security-group-rules", 
     								U.getToken(), 
     								extradata, 
     								vp );

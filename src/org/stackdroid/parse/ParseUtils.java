@@ -57,15 +57,13 @@ public class ParseUtils {
     	  JSONArray serviceArray = access.getJSONArray("serviceCatalog");
 
     	  boolean nova=false, glance=false, neutron=false, cinder1=false, cinder2=false;
-    	  String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null;
+    	  String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null, identityEP = null;
     	  for(int i = 0; i<serviceArray.length();++i) {
 
     		  JSONObject service = serviceArray.getJSONObject(i);
     		  JSONArray endpoints = service.getJSONArray("endpoints");
     		  String type = service.getString("type");
     		  JSONObject endpoint = endpoints.getJSONObject(0);
- //   		  Log.d("PARSEUSER", "endpoint="+endpoint.toString());
- //   		      String type = endpoint.getString("type");
     			  if(type.compareTo("compute")==0) {
     				  nova=true;
     				  novaEP = endpoint.getString("publicURL");
@@ -85,6 +83,9 @@ public class ParseUtils {
     			  if(type.compareTo("image")==0) {
     				  glance=true;
     				  glanceEP = endpoint.getString("publicURL");
+    			  }
+    			  if(type.compareTo("identity") == 0) {
+    				  identityEP = endpoint.getString("publicURL");
     			  }
     		  
     	  }
@@ -115,6 +116,7 @@ public class ParseUtils {
     			  			 neutron,
     			  			 cinder1,
     			  			 cinder2,
+    			  			 identityEP,
     			  			 glanceEP,
     			  			 novaEP,
     			  			 neutronEP,
@@ -591,7 +593,6 @@ public class ParseUtils {
      *
      */  
 	public static String parseServerConsoleLog(String jsonBuf)  throws ParseException  {
-		// TODO Auto-generated method stub
 		String consoleLog = null;
 		try{
 		    JSONObject jsonObject = new JSONObject( jsonBuf );
@@ -657,9 +658,6 @@ public class ParseUtils {
 	}
 
 	public static QuotaVol parseQuotaVolume(String jsonVols) throws ParseException  {
-		// TODO Auto-generated method stub
-		//return null;
-		
 		
 		try {
 			JSONObject quota = (new JSONObject( jsonVols )).getJSONObject("quota_set");

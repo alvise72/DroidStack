@@ -43,13 +43,13 @@ public class RESTClient {
       		 ServiceUnAvailableOrInternalError, MalformedURLException,
       		 ProtocolException
     {
-	String proto = "http://";
+/*	String proto = "http://";
 	if(usessl)
 	    proto = "https://";
 	
 	String sUrl = proto + endpoint + ":5000/v2.0/tokens";
-	URL url = null;
-	url = new URL(sUrl);
+	*/
+	URL url = new URL(endpoint);
 	
 	URLConnection conn = null;
 	TrustManager[] trustAllCerts = null;
@@ -243,14 +243,13 @@ public class RESTClient {
 					 					 Vector<Pair<String,String>> properties ) 
 		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
     {
-    	String Url = sURL;
+    	/*String Url = sURL;
     	if(usessl)
 	    Url = "https://"+Url;
     	else
 	    Url = "http://"+Url;
-    	
-    	URL url = null;
-    	url = new URL(Url);
+    	*/
+    	URL url = new URL(sURL);
     	
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
@@ -364,15 +363,14 @@ public class RESTClient {
 	  		 GenericException, ServiceUnAvailableOrInternalError, 
 	  		 MalformedURLException, IOException, ProtocolException
     {
-    	String Url = sURL;
+    	/*String Url = sURL;
     	if(usessl)
     		Url = "https://" + Url;
     	else
     		Url = "http://" + Url;
-    
-    	URL url = null;
-    	url = new URL(Url);
-    	Log.d("REST", "url="+url);
+        */
+    	URL url = new URL(sURL);
+    	//Log.d("REST", "url="+url);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -514,7 +512,7 @@ public class RESTClient {
 	    	//throw new GenericException( "RESTClient.sendPOSTRequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
 	    
-	    Log.d("REST", "buf="+buf);
+	    //Log.d("REST", "buf="+buf);
 	    
 	    String errorMessage;
 	    try {
@@ -574,8 +572,7 @@ public class RESTClient {
     		Url = "http://"+Url;
     	
 	//	Log.d("RESTCLIENT", "sURL="+sURL);
-	URL url = null;
-	url = new URL(Url);
+	URL url = new URL(Url);
 	
 	URLConnection conn = null;
 	

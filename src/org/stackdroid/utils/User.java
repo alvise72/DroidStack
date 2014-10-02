@@ -14,7 +14,7 @@ public class User implements Serializable, Comparable<User> {
 
     private static final long serialVersionUID = 2087368867376448462L;
 
-    private String  endpoint;
+    //private String  endpoint;
     private String  userName;
     private String  userID;
     private String  tenantName;
@@ -31,6 +31,7 @@ public class User implements Serializable, Comparable<User> {
     private boolean hasCinder1;
     private boolean hasCinder2;
     
+    private String identityEndpoint;
     private String novaEndpoint;
     private String glanceEndpoint;
     private String neutronEndpoint;
@@ -50,6 +51,7 @@ public class User implements Serializable, Comparable<User> {
     			 boolean hasNeutron,
     			 boolean hasCinder1,
     			 boolean hasCinder2,
+    			 String identityEndpoint,
     			 String glanceEndpoint,
     			 String novaEndpoint,
     			 String neutronEndpoint,
@@ -69,18 +71,19 @@ public class User implements Serializable, Comparable<User> {
         this.hasNeutron = hasNeutron;
         this.hasCinder1 = hasCinder1;
         this.hasCinder2 = hasCinder2;
-        this.glanceEndpoint = glanceEndpoint;
-        this.novaEndpoint   = novaEndpoint;
-        this.neutronEndpoint= neutronEndpoint;
-        this.cinder1Endpoint = cinder1Endpoint;
-        this.cinder2Endpoint = cinder2Endpoint;
+        this.identityEndpoint 	= identityEndpoint;
+        this.glanceEndpoint 	= glanceEndpoint;
+        this.novaEndpoint   	= novaEndpoint;
+        this.neutronEndpoint	= neutronEndpoint;
+        this.cinder1Endpoint	= cinder1Endpoint;
+        this.cinder2Endpoint	= cinder2Endpoint;
     }
     
     public void setPassword( String _password ) { password = _password ;} 
-    public void setEndpoint( String ep ) { endpoint = ep; }
+    //public void setAuthEndpoint( String ep ) { endpoint = ep; }
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
     
-    public String getEndpoint( ) { return endpoint; }
+    //public String getEndpoint( ) { return endpoint; }
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
     public String getToken( ) { return token; }
@@ -97,6 +100,7 @@ public class User implements Serializable, Comparable<User> {
     public boolean hasCinder1( ) { return hasCinder1; }
     public boolean hasCinder2( ) { return hasCinder2; }
      
+    public String getIdentityEndpoint( ) { return identityEndpoint; }
     public String getNovaEndpoint( ) { return novaEndpoint; }
     public String getGlanceEndpoint( ) { return glanceEndpoint; }
     public String getNeutronEndpoint( ) { return neutronEndpoint; }
@@ -104,7 +108,7 @@ public class User implements Serializable, Comparable<User> {
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
     
     public String getFilename( ) {
-    	return getUserID( ) + "." + getTenantID( ) + "." + endpoint.hashCode();
+    	return getUserID( ) + "." + getTenantID( ) + "." + identityEndpoint.hashCode();
     }
     
     /*
@@ -116,7 +120,12 @@ public class User implements Serializable, Comparable<User> {
      */
     @Override
     public String toString( ) {
-    	return "User{endpoint="+endpoint+
+    	return "User{identityEndpoint="+identityEndpoint+
+    	",novaEndpoint="+novaEndpoint+
+    	",glanceEndpoint="+glanceEndpoint+
+    	",neutronEndpoint="+neutronEndpoint+
+    	",cinder1Endpoint="+cinder1Endpoint+
+    	",cinder2Endpoint="+cinder2Endpoint+
 	    ",userName="+userName+
 	    ",userID="+userID+
 	    ",tenantName="+tenantName+

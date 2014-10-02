@@ -264,7 +264,7 @@ public class UserAddActivity extends Activity {
 	try {
 	    User U = ParseUtils.parseUser( jsonResponse );
 	    U.setPassword(password);
-	    U.setEndpoint(endpoint);
+	    //U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
 	    U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	    Utils.alert(getString(R.string.ADDSUCCESS), this);

@@ -257,7 +257,6 @@ public class MainActivity extends Activity
     	Intent I = new Intent( MainActivity.this, c );
     	startActivity(I);
     }
-    
 
     /**
      *
