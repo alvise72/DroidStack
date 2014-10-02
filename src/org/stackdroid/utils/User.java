@@ -12,9 +12,8 @@ import java.io.File;
 
 public class User implements Serializable, Comparable<User> {
 
-    private static final long serialVersionUID = 2087368867376448462L;
+    private static final long serialVersionUID = 3000000000000000000L;
 
-    //private String  endpoint;
     private String  userName;
     private String  userID;
     private String  tenantName;
@@ -108,7 +107,10 @@ public class User implements Serializable, Comparable<User> {
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
     
     public String getFilename( ) {
-    	return getUserID( ) + "." + getTenantID( ) + "." + identityEndpoint.hashCode();
+    	String filename = getUserID( );
+    	filename += "."+getTenantID( );
+    	filename += "."+identityEndpoint.hashCode();
+    	return filename;//getUserID( ) + "." + getTenantID( ) + "." + identityEndpoint.hashCode();
     }
     
     /*

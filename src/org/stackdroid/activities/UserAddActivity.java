@@ -264,7 +264,6 @@ public class UserAddActivity extends Activity {
 	try {
 	    User U = ParseUtils.parseUser( jsonResponse );
 	    U.setPassword(password);
-	    //U.setEndpoint(endpoint);
 	    U.setSSL( usessl );
 	    U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	    Utils.alert(getString(R.string.ADDSUCCESS), this);
@@ -291,58 +290,46 @@ public class UserAddActivity extends Activity {
     protected class AsyncTaskRequestToken extends AsyncTask<String, Void, Void>
     {
      	private  String   errorMessage  = null;
-	private  boolean  hasError      = false;
-	private  String   jsonBuf       = null;
+     	private  boolean  hasError      = false;
+     	private  String   jsonBuf       = null;
 	
-	private String endpoint = null;
-	private String password = null;
-	private boolean usessl;
+     	private String endpoint = null;
+     	private String password = null;
+     	private boolean usessl;
 	
-	@Override
-	protected Void doInBackground( String... args ) 
-	{
-	    endpoint = args[0];
-	    String tenant   = args[1];
-	    String username = args[2];
-	    password = args[3];
-	    String s_usessl = args[4];
+     	@Override
+     	protected Void doInBackground( String... args ) 
+     	{
+     		endpoint = args[0];
+     		String tenant   = args[1];
+     		String username = args[2];
+     		password = args[3];
+     		String s_usessl = args[4];
 	    
-	    usessl = Boolean.parseBoolean( s_usessl );
+     		usessl = Boolean.parseBoolean( s_usessl );
 	    
-	    try {
-		jsonBuf = RESTClient.requestToken( usessl, endpoint, tenant, username, password );
-	    } catch(Exception e) {
-		errorMessage = e.getMessage();
-		hasError = true;
-		//    	     return "";
-		//return;
-	    }
-	    return null;
-	    //    	   return jsonBuf;
-	}
+     		try {
+     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     		}
+     		return null;
+     	}
 	
-	@Override
-	protected void onPreExecute() {
-	    super.onPreExecute();
-	    //requesting_token = true;
-	}
-	
-	@Override
-	    protected void onPostExecute( Void v ) {
-	    super.onPostExecute( v );
+     	@Override
+     		protected void onPostExecute( Void v ) {
+     		super.onPostExecute( v );
 	    
- 	    if(hasError) {	
-		UserAddActivity.this.progressDialogWaitStop.dismiss( );
- 		Utils.alert( errorMessage, UserAddActivity.this );
- 		//requesting_token = false;
- 		//ACTIVITY.progressDialogWaitStop.dismiss( );
-		UserAddActivity.this.progressDialogWaitStop.dismiss( );
- 		return;
- 	    }
+     		if(hasError) {	
+     			UserAddActivity.this.progressDialogWaitStop.dismiss( );
+     			Utils.alert( errorMessage, UserAddActivity.this );
+ 				UserAddActivity.this.progressDialogWaitStop.dismiss( );
+ 				return;
+     		}
 	    
-	    //requesting_token = false; // questo non va spostato da qui a
-	    UserAddActivity.this.progressDialogWaitStop.dismiss( );
-	    UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
-	}
+     		UserAddActivity.this.progressDialogWaitStop.dismiss( );
+     		UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
+     	}
     }
 }

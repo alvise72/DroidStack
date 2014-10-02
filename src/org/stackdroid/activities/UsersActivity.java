@@ -76,14 +76,14 @@ public class UsersActivity extends Activity {
 
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
-	File[] users = (new File( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/")).listFiles();
-	if(users==null) {
-	    Utils.alert("UsersActivity.refreshUserViews: " 
-			+ Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) 
-			+ "/users/" 
-			+ " exists but it is not a directory !", this);
-	    return;
-	}
+    	File[] users = (new File( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/")).listFiles();
+    	if(users==null) {
+    		Utils.alert("UsersActivity.refreshUserViews: " 
+    				+ Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) 
+    				+ "/users/" 
+    				+ " exists but it is not a directory !", this);
+    		return;
+    	}
 	    
 	// TODO: should we filter here ?
 

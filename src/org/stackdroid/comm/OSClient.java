@@ -78,12 +78,10 @@ public class OSClient {
      */
     private void checkToken( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException {
-    	Log.d("OSC", "expiration="+U.getTokenExpireTime() + " - now="+Utils.now() + 5);
+    	//Log.d("OSC", "expiration="+U.getTokenExpireTime() + " - now="+Utils.now() + 5);
     	if(U.getTokenExpireTime() <= Utils.now() + 5) {
-    		
-    		
     			String jsonBuffer = RESTClient.requestToken( U.useSSL() ,
-	    												 	 U.getIdentityEndpoint()+"/tokens",
+	    												 	 U.getIdentityEndpoint() + "/tokens",
 	    												 	 U.getTenantName(),
 	    												 	 U.getUserName(),
 	    												 	 U.getPassword() );

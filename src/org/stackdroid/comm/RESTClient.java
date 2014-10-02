@@ -49,6 +49,7 @@ public class RESTClient {
 	
 	String sUrl = proto + endpoint + ":5000/v2.0/tokens";
 	*/
+    Log.d("REQUESTOKEN", "endpoint="+endpoint);
 	URL url = new URL(endpoint);
 	
 	URLConnection conn = null;
