@@ -103,6 +103,10 @@ public class User implements Serializable, Comparable<User> {
     public String getCinder1Endpoint( ) { return cinder1Endpoint; }
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
     
+    public String getFilename( ) {
+    	return getUserID( ) + "." + getTenantID( ) + "." + endpoint.hashCode();
+    }
+    
     /*
      * 
      * 
@@ -170,7 +174,7 @@ public class User implements Serializable, Comparable<User> {
      * 
      */
     public void toFile( String filesDir ) throws IOException {
-    	String filename = filesDir + "/users/" + getUserID( ) + "." + getTenantID( ) + "." + endpoint.hashCode();
+    	String filename = filesDir + "/users/" + getFilename( );// getUserID( ) + "." + getTenantID( ) + "." + endpoint.hashCode();
     	File f = new File( filename );
     	if(f.exists()) f.delete();
     	try {

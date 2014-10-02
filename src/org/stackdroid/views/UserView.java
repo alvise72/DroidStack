@@ -104,7 +104,7 @@ public class UserView extends LinearLayout {
 //	buttonsLayout.setOnClickListener( delete );
 	
 	row.addView( buttonsLayout );
-	addView( row );
+		addView( row );
     }
 
     public void setSelected( ) {
@@ -124,6 +124,4 @@ public class UserView extends LinearLayout {
 		textUserName.setTextColor( Color.parseColor("#BBBBBB") );
 		textTenantName.setTextColor( Color.parseColor("#BBBBBB") );
     }
-
-    public String getFilename( ) { return user.getUserID()+"."+user.getTenantID(); }
 }

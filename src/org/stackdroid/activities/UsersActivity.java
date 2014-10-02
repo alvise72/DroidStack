@@ -5,6 +5,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.content.Intent;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.View;
 
@@ -51,7 +52,7 @@ public class UsersActivity extends Activity {
   protected class UserDeleteListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) { 
-		  String filenameToDelete = ((ImageButtonWithView)v).getUserView( ).getFilename();
+		  String filenameToDelete = ((ImageButtonWithView)v).getUserView( ).getUser().getFilename();
 			
 			(new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/"+filenameToDelete)).delete();
 			String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", UsersActivity.this);
@@ -67,7 +68,8 @@ public class UsersActivity extends Activity {
   protected class UserSelectedListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) {
-		  Utils.putStringPreference("SELECTEDUSER", ((TextViewWithView)v).getUserView().getFilename(), UsersActivity.this);
+		  //Log.d("USERS", "SELECTEDUSER="+((TextViewWithView)v).getUserView().getUser().getFilename());
+		  Utils.putStringPreference("SELECTEDUSER", ((TextViewWithView)v).getUserView().getUser().getFilename(), UsersActivity.this);
 		  refreshUserViews();
 	  }
   }
@@ -104,7 +106,7 @@ public class UsersActivity extends Activity {
 	    space.setMinimumHeight(10);
 	    ((LinearLayout)findViewById(R.id.userLayout)).addView( space );
 	    
-	    if( uv.getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
+	    if( uv.getUser().getFilename().compareTo(Utils.getStringPreference("SELECTEDUSER","",this))==0 )
 	    	uv.setSelected( );
 	    else
 	    	uv.setUnselected( );
@@ -113,7 +115,7 @@ public class UsersActivity extends Activity {
 	if(users.length==1) {
 		if(lastUV!=null) {
 			lastUV.setSelected( );
-			Utils.putStringPreference("SELECTEDUSER",lastUV.getFilename(),this);
+			Utils.putStringPreference("SELECTEDUSER",lastUV.getUser().getFilename(),this);
 		}
 	}
 	

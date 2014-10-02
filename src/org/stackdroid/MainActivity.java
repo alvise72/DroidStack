@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -137,6 +138,7 @@ public class MainActivity extends Activity
       (new File(Environment.getExternalStorageDirectory() + "/DroidStack/users" )).mkdirs( );
       selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
       User U = null;
+      //Log.d("MAIN", "Selected user="+selectedUser);
       if(selectedUser.length()!=0) {  
  
     	  try {
