@@ -41,7 +41,7 @@ public class ParseUtils {
     {
       try {
     	  JSONObject jsonObject = null;
-       
+    	  System.out.println("PARSEUSER - jsonUser="+jsonString);
     	  jsonObject = new JSONObject( jsonString );
 	  
     	  JSONObject access = (JSONObject)jsonObject.get("access");
@@ -55,32 +55,36 @@ public class ParseUtils {
     	  String userID = (String)((JSONObject)access.get("user")).get("id");
     	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
     	  JSONArray serviceArray = access.getJSONArray("serviceCatalog");
-    	  //Hashtable<String, >
+
     	  boolean nova=false, glance=false, neutron=false, cinder1=false, cinder2=false;
     	  String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null;
     	  for(int i = 0; i<serviceArray.length();++i) {
+
     		  JSONObject service = serviceArray.getJSONObject(i);
     		  JSONArray endpoints = service.getJSONArray("endpoints");
+    		  String type = service.getString("type");
     		  JSONObject endpoint = endpoints.getJSONObject(0);
-    			  if(endpoint.getString("type").compareTo("compute")==0) {
+ //   		  Log.d("PARSEUSER", "endpoint="+endpoint.toString());
+ //   		      String type = endpoint.getString("type");
+    			  if(type.compareTo("compute")==0) {
     				  nova=true;
-    				  novaEP = service.getString("publicURL");
+    				  novaEP = endpoint.getString("publicURL");
     			  }
-    			  if(endpoint.getString("type").compareTo("network")==0) {
+    			  if(type.compareTo("network")==0) {
     				  neutron=true;
-    				  neutronEP = service.getString("publicURL");
+    				  neutronEP = endpoint.getString("publicURL");
     			  }
-    			  if(endpoint.getString("type").compareTo("volumev2")==0) {
+    			  if(type.compareTo("volumev2")==0) {
     				  cinder2=true;
-    				  cinder2EP = service.getString("publicURL");
+    				  cinder2EP = endpoint.getString("publicURL");
     			  }
-    			  if(endpoint.getString("type").compareTo("volume")==0) {
+    			  if(type.compareTo("volume")==0) {
     				  cinder1=true;
-    				  cinder1EP = service.getString("publicURL");
+    				  cinder1EP = endpoint.getString("publicURL");
     			  }
-    			  if(endpoint.getString("type").compareTo("image")==0) {
+    			  if(type.compareTo("image")==0) {
     				  glance=true;
-    				  glanceEP = service.getString("publicURL");
+    				  glanceEP = endpoint.getString("publicURL");
     			  }
     		  
     	  }
