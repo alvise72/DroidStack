@@ -200,6 +200,10 @@ public class SecGrpActivity extends Activity {
 	  String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
 	  try {
 	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+	    if(U==null) {
+    		Utils.alert(getString(R.string.RECREATEUSERS), this);
+    		return;
+    	}
 	  } catch(Exception re) {
 	    Utils.alert("ServersActivity.onCreate: " + re.getMessage(), this );
 	    return;

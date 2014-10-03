@@ -78,6 +78,26 @@ public class MainActivity extends Activity
       super.onDestroy( );
     }
 
+    private void disableButtons( ) {
+      ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
+  	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
+  	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
+  	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
+  	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
+  	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
+  	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+    }
+    
+    private void enableButtons( ) {
+      ((Button)this.findViewById(R.id.GLANCE)).setEnabled(true);
+  	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(true);
+  	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(true);
+  	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(true);
+  	  ((Button)this.findViewById(R.id.SECG)).setEnabled(true);
+  	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(true);
+  	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(true);
+    }
+    
     /**
      *
      *
@@ -143,45 +163,26 @@ public class MainActivity extends Activity
  
     	  try {
     		  U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+    		  if(U==null) {
+          		Utils.alert(getString(R.string.RECREATEUSERS), this);
+          		disableButtons( );
+          		return;
+          	  }
     		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
-    		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(true);
-        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(true);
-        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(true);
-        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(true);
-        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(true);
-        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(true);
-        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(true);
+    		  enableButtons( );
         	  
     	  } catch(NotExistingFileException nf) {
     		  Utils.putStringPreference("SELECTEDUSER", "", this);
     		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-        	  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+        	  disableButtons( );
         	  return;
           } catch(IOException ioe) {
     		  Utils.alert("ERROR: "+ioe.getMessage() + "\n\n"+getString(R.string.RECREATEUSERS), this);
-    		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+    		  disableButtons( );
         	  return;
     	  } catch(Exception e) {
     		  Utils.alert("ERROR: "+e.getMessage(), this );
-    		  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
-        	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+    		  disableButtons( );
     		  return;
     	  }
     	  
@@ -203,13 +204,7 @@ public class MainActivity extends Activity
     	  
       } else {
     	  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-    	  ((Button)this.findViewById(R.id.GLANCE)).setEnabled(false);
-    	  ((Button)this.findViewById(R.id.NOVA)).setEnabled(false);
-    	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
-    	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
-    	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
-    	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
-    	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+    	  disableButtons( );
       }
       
     }

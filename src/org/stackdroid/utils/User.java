@@ -9,10 +9,14 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 public class User implements Serializable, Comparable<User> {
 
-    private static final long serialVersionUID = 3000000000000000000L;
+    private static final long serialVersionUID = 3000000000000000003L;
 
     private String  userName;
     private String  userID;
@@ -36,7 +40,8 @@ public class User implements Serializable, Comparable<User> {
     private String neutronEndpoint;
     private String cinder1Endpoint;
     private String cinder2Endpoint;
-    
+    private String identityHostname;
+    //private URL    identityUrl;
     
     public User( String _userName, 
     			 String _userID, 
@@ -55,7 +60,8 @@ public class User implements Serializable, Comparable<User> {
     			 String novaEndpoint,
     			 String neutronEndpoint,
     			 String cinder1Endpoint,
-    			 String cinder2Endpoint) 
+    			 String cinder2Endpoint,
+    			 String identityHostname) 
     {
         userName        = _userName;
         userID          = _userID;
@@ -76,6 +82,23 @@ public class User implements Serializable, Comparable<User> {
         this.neutronEndpoint	= neutronEndpoint;
         this.cinder1Endpoint	= cinder1Endpoint;
         this.cinder2Endpoint	= cinder2Endpoint;
+        this.identityHostname   = identityHostname;
+        
+/*        try {
+			identityUrl	= new URL(identityEndpoint);
+		} catch (MalformedURLException e) {
+		}*/
+    }
+    
+    public String getIdentityHostname( ) { 
+    	//InetAddress addr = InetAddress.getByName("192.168.190.62");
+    	  //String host = addr.getHostName();
+    	//try {
+		//	return InetAddress.getByName(identityUrl.getHost()).getHostName();
+		//} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			return identityHostname;
+		//} 
     }
     
     public void setPassword( String _password ) { password = _password ;} 
@@ -128,6 +151,7 @@ public class User implements Serializable, Comparable<User> {
     	",neutronEndpoint="+neutronEndpoint+
     	",cinder1Endpoint="+cinder1Endpoint+
     	",cinder2Endpoint="+cinder2Endpoint+
+    	",identityHostname="+identityHostname+
 	    ",userName="+userName+
 	    ",userID="+userID+
 	    ",tenantName="+tenantName+
@@ -171,7 +195,12 @@ public class User implements Serializable, Comparable<User> {
     		return U;
     	} catch(IOException ioe) {
     		(new File(filename)).delete();
-    		throw new IOException( "User.fromFileID.InputStream.read/close: " + ioe.getMessage( ) );
+    		
+    		if(ioe.getMessage( ).contains("Incompatible class (SUID")) {
+    			return null;
+    		}
+    		
+    		throw new IOException( "User.fromFileID.InputStream.readObject: " + ioe.getMessage( ) );
     	} catch(ClassNotFoundException cnfe) {
     		throw new ClassNotFoundException( "User.fromFileID.ObjectInputStream.readObject: " + cnfe.getMessage( ) );
     	}

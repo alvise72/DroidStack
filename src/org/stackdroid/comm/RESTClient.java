@@ -43,12 +43,7 @@ public class RESTClient {
       		 ServiceUnAvailableOrInternalError, MalformedURLException,
       		 ProtocolException
     {
-/*	String proto = "http://";
-	if(usessl)
-	    proto = "https://";
-	
-	String sUrl = proto + endpoint + ":5000/v2.0/tokens";
-	*/
+
     Log.d("REQUESTOKEN", "endpoint="+endpoint);
 	URL url = new URL(endpoint);
 	

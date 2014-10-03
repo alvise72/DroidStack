@@ -1,7 +1,10 @@
 package org.stackdroid.activities;
 
+import java.io.IOException;
+
 import android.os.Bundle; 
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.widget.EditText;
 import android.widget.CheckBox;
 import android.app.Activity;
@@ -257,19 +260,9 @@ public class UserAddActivity extends Activity {
      *
      *
      */  
-    protected void completeUserAdd( String jsonResponse, String password, String endpoint, boolean usessl ) {
-	if(jsonResponse == null || jsonResponse.length()==0) {
-	    return;
-	}
-	try {
-	    User U = ParseUtils.parseUser( jsonResponse );
-	    U.setPassword(password);
-	    U.setSSL( usessl );
-	    U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	    Utils.alert(getString(R.string.ADDSUCCESS), this);
-	} catch(Exception e) {
-	    Utils.alert("ERROR: "+e.getMessage(), this);
-	} 	
+    protected void completeUserAdd( User U ) {
+    	
+    	
     }
   
     /**
@@ -296,20 +289,34 @@ public class UserAddActivity extends Activity {
      	private String endpoint = null;
      	private String password = null;
      	private boolean usessl;
-	
+     	private User U = null;
+     	
      	@Override
      	protected Void doInBackground( String... args ) 
      	{
+     		
      		endpoint = args[0];
      		String tenant   = args[1];
      		String username = args[2];
      		password = args[3];
      		String s_usessl = args[4];
-	    
+     		
      		usessl = Boolean.parseBoolean( s_usessl );
-	    
+     		//Looper.prepare();
      		try {
      			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
+     			//UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
+     			if(jsonBuf == null || jsonBuf.length()==0) {
+     				hasError = true;
+     				errorMessage = "Server's response buffer is NULL or empty!";
+     				return null;
+     			}
+     			
+     			U = ParseUtils.parseUser( jsonBuf );
+     			U.setPassword(password);
+     			U.setSSL( usessl );
+     			
+     				
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;
@@ -327,9 +334,15 @@ public class UserAddActivity extends Activity {
  				UserAddActivity.this.progressDialogWaitStop.dismiss( );
  				return;
      		}
-	    
+     		// se metto questo in doInBackgroud genera il problema di Looper.prepare()
+     		Utils.alert(getString(R.string.ADDSUCCESS), UserAddActivity.this);
+     		try {
+     			U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+     		} catch(IOException ioe) {
+     			;
+     		}
      		UserAddActivity.this.progressDialogWaitStop.dismiss( );
-     		UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
+     		//UserAddActivity.this.completeUserAdd( U );
      	}
     }
 }

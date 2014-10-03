@@ -100,6 +100,10 @@ public class OverViewActivity extends Activity {
         	U = User.fromFileID( selectedUserID, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
         	//setTitle(getString(R.string.USAGEOVERVIEW) + " " + U.getUserName() + " ("+U.getTenantName()+")");
         	//Log.d("OVERVIEW", "USER="+U);
+        	if(U==null) {
+        		Utils.alert(getString(R.string.RECREATEUSERS), this);
+        		return;
+        	}
         	progressDialogWaitStop.show();
         	(new AsyncTaskQuota()).execute( );
         }  catch(Exception re) {

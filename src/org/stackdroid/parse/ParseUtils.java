@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Iterator;
 import java.util.Vector;
+import java.net.InetAddress;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 
 import org.json.JSONArray;
@@ -103,6 +105,15 @@ public class ParseUtils {
     		  throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
     	  }
     	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
+    	  String addrS = "";
+    	  try {
+    		  URL identityUrl = new URL(identityEP);
+    		  InetAddress addr = InetAddress.getByName(identityUrl.getHost());
+    		  addrS = addr.getCanonicalHostName();//.getHostName();
+    	  } catch(Exception e) {
+    		  addrS = identityEP;
+    	  }
+    	  
     	  User U = new User( 
     			  			 username, 
     			  			 userID, 
@@ -121,10 +132,11 @@ public class ParseUtils {
     			  			 novaEP,
     			  			 neutronEP,
     			  			 cinder1EP,
-    			  			 cinder2EP);
+    			  			 cinder2EP,
+    			  			 addrS);
     	  return U;
       } catch(org.json.JSONException je) {
-	  throw new ParseException( je.getMessage( ) );
+    	  throw new ParseException( je.getMessage( ) );
       }
     }
 

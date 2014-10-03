@@ -91,6 +91,10 @@ public class OSImagesActivity extends Activity {
     	String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
     		U = User.fromFileID( selectedUser, org.stackdroid.utils.Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+    		if(U==null) {
+        		Utils.alert(getString(R.string.RECREATEUSERS), this);
+        		return;
+        	}
     	} catch(Exception re) {
     		Utils.alert("OSImagesActivity: "+re.getMessage(), this );
     		return;

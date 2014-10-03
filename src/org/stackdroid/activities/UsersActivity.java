@@ -94,7 +94,10 @@ public class UsersActivity extends Activity {
 	    try {
 		
 	    	U = User.fromFileID( users[i].getName( ), Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-		
+	    	if(U==null) {
+        		Utils.alert(getString(R.string.RECREATEUSERS), this);
+        		return;
+        	}
 	    } catch(Exception e) {
 	    	Utils.alert("ERROR: " + e.getMessage(), this);
 	    	continue;
