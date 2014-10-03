@@ -46,13 +46,16 @@ public class OSClient {
      * 
      */
     synchronized public static OSClient getInstance( User U ) {
+    	
+    	
+    	
     	if(instanceArray==null) instanceArray = new Hashtable<String, OSClient>( );
     	
-    	if(instanceArray.containsKey(U.getUserID()))
-    		return instanceArray.get( U.getUserID() );
+    	if(instanceArray.containsKey(U.getFilename()))
+    		return instanceArray.get( U.getFilename() );
 	
     	OSClient osc = new OSClient(U);
-    	instanceArray.put(U.getUserID( ), osc );
+    	instanceArray.put(U.getFilename(), osc );
     	return osc;
     }
     
@@ -189,6 +192,7 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
+    	Log.d("OSC", "endpoint="+U.getCinder2Endpoint() + "/volumes/" + volID);
     	RESTClient.sendDELETERequest( U.useSSL(), 
     								  U.getCinder2Endpoint() + "/volumes/" + volID, 
     								  U.getToken(), 

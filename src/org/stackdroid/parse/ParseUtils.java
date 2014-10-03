@@ -625,6 +625,9 @@ public class ParseUtils {
      *
      */
 	public static Vector<Volume> parseVolumes( String volumesJson, String serversJson)  throws ParseException  {
+		
+		Log.d("PARSE", "volume json="+volumesJson);
+		
 		Vector<Server> servs = parseServers( serversJson );
 		Hashtable<String, String> server_id_to_name_mapping = new Hashtable<String, String>();
 		Iterator<Server> sit = servs.iterator();
@@ -637,9 +640,12 @@ public class ParseUtils {
 			JSONArray volArray = (new JSONObject( volumesJson )).getJSONArray("volumes");
 			for(int i = 0; i<volArray.length(); i++) {
 				JSONObject volume = volArray.getJSONObject(i);
-				String name = volume.getString("display_name");
-				String status = volume.getString("status");
-				boolean bootable = volume.getBoolean("bootable");
+				String name = volume.has("display_name") ? volume.getString("display_name") : "N/A";
+				if(name.compareTo("N/A")==0) {
+					name = volume.has("name") ? volume.getString("name") : "N/A";
+				}
+				String status = volume.has("status") ? volume.getString("status") : "N/A";
+				boolean bootable = volume.has("bootable") ? volume.getBoolean("bootable") : false;
 				boolean readonly = false;
 				String attachmode = "rw";
 				if(volume.has("metadata")) {

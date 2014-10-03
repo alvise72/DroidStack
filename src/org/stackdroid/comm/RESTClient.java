@@ -561,14 +561,8 @@ public class RESTClient {
 					  					  Vector<Pair<String,String>> properties ) 
 	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, GenericException, MalformedURLException, ProtocolException
     {
-    	String Url = sURL;
-    	if(usessl)
-    		Url = "https://"+Url;
-    	else
-    		Url = "http://"+Url;
-    	
-	//	Log.d("RESTCLIENT", "sURL="+sURL);
-	URL url = new URL(Url);
+  
+	URL url = new URL(sURL);
 	
 	URLConnection conn = null;
 	
