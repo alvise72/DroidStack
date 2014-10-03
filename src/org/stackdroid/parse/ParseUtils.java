@@ -148,46 +148,48 @@ public class ParseUtils {
      */ 
     public static Vector<OSImage> parseImages( String jsonString ) throws ParseException
     {
-      try {
-        Vector<OSImage> result = new Vector<OSImage>();
+//    	Log.d("PARSE", "image json="+jsonString);
+    	try {
+    		Vector<OSImage> result = new Vector<OSImage>();
         
-        JSONObject jsonObject = new JSONObject( jsonString );
-        JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
+    		JSONObject jsonObject = new JSONObject( jsonString );
+    		JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
       
-        for(int i=0; i<images.length( ); ++i ) {
-          String name         = images.getJSONObject(i).getString("name");
-	  long   size         = (long)images.getJSONObject(i).getLong("size");
-	  String format       = images.getJSONObject(i).getString("disk_format");
-	  String creationDate = images.getJSONObject(i).getString("created_at");
-	  String visibility   = images.getJSONObject(i).getString("visibility");
-	  String status       = images.getJSONObject(i).getString("status");
-	  String ID           = images.getJSONObject(i).getString("id");
-	  int    mindisk      = images.getJSONObject(i).getInt("min_disk");
-	  int    minram       = images.getJSONObject(i).getInt("min_ram");
+    		for(int i=0; i<images.length( ); ++i ) {
+    			Log.d("PARSE", images.getJSONObject(i).toString(4));
+    			String name         = images.getJSONObject(i).has("name") ? images.getJSONObject(i).getString("name") : "N/A";
+    			long   size         = images.getJSONObject(i).has("size") ? (long)images.getJSONObject(i).getLong("size") : 0L;
+    			String format       = images.getJSONObject(i).has("disk_format") ? images.getJSONObject(i).getString("disk_format") : "N/A";
+    			String creationDate = images.getJSONObject(i).has("created_at") ? images.getJSONObject(i).getString("created_at") : "N/A";
+    			String visibility   = images.getJSONObject(i).has("visibility") ? images.getJSONObject(i).getString("visibility") : "N/A";
+    			String status       = images.getJSONObject(i).has("status") ? images.getJSONObject(i).getString("status") : "N/A";
+    			String ID           = images.getJSONObject(i).has("id") ? images.getJSONObject(i).getString("id") : "N/A";
+    			int    mindisk      = images.getJSONObject(i).has("min_disk") ? images.getJSONObject(i).getInt("min_disk") : 0;
+    			int    minram       = images.getJSONObject(i).has("min_ram") ? images.getJSONObject(i).getInt("min_ram") : 0;
 
-	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-          timeFormatter.setTimeZone( TimeZone.getDefault( ) );
-          Calendar calendar = Calendar.getInstance();
-	  long cdate = 0;
-          try {
-            calendar.setTime(timeFormatter.parse(creationDate));
-	    cdate = calendar.getTimeInMillis() / 1000;
-          } catch(java.text.ParseException pe) {
-          }
+    			SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    			timeFormatter.setTimeZone( TimeZone.getDefault( ) );
+    			Calendar calendar = Calendar.getInstance();
+    			long cdate = 0;
+    			try {
+    				calendar.setTime(timeFormatter.parse(creationDate));
+    				cdate = calendar.getTimeInMillis() / 1000;
+    			} catch(java.text.ParseException pe) {
+    				
+    			}
           	  
-	  boolean pub = (visibility.compareTo("public")==0 ? true : false);
+    			boolean pub = (visibility.compareTo("public")==0 ? true : false);
 	  
-	  OSImage osimg = new OSImage( name, ID, size, format, status, pub, cdate, mindisk,minram );
+    			OSImage osimg = new OSImage( name, ID, size, format, status, pub, cdate, mindisk,minram );
 	  
-	  if(format.compareToIgnoreCase("ari")!=0 && format.compareToIgnoreCase("aki") != 0)
-	    result.add( osimg );
-	  
-        }
-        return result;
+    			if(format.compareToIgnoreCase("ari")!=0 && format.compareToIgnoreCase("aki") != 0)
+    				result.add( osimg );
+    		}
+    		return result;
 	
-      } catch(org.json.JSONException je) {
-	  throw new ParseException( je.getMessage( ) );
-      }
+    	} catch(org.json.JSONException je) {
+    		throw new ParseException( je.getMessage( ) );
+    	}
     }
 
     /**
