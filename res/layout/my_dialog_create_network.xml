@@ -62,6 +62,23 @@
 
      </LinearLayout>
 	
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="DNS hostname/IP" />
+
+         <EditText
+             android:id="@+id/dnsET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:text="8.8.8.8" >
+             <requestFocus />
+         </EditText>
+         
+
+     
 	<LinearLayout
   		android:layout_width="match_parent"
    		android:layout_height="wrap_content"

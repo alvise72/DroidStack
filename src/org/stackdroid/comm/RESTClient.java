@@ -359,14 +359,8 @@ public class RESTClient {
 	  		 GenericException, ServiceUnAvailableOrInternalError, 
 	  		 MalformedURLException, IOException, ProtocolException
     {
-    	/*String Url = sURL;
-    	if(usessl)
-    		Url = "https://" + Url;
-    	else
-    		Url = "http://" + Url;
-        */
     	URL url = new URL(sURL);
-    	//Log.d("REST", "url="+url);
+    	Log.d("REST", "url="+sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {

@@ -156,7 +156,7 @@ public class ParseUtils {
     		JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
       
     		for(int i=0; i<images.length( ); ++i ) {
-    			Log.d("PARSE", images.getJSONObject(i).toString(4));
+    			//Log.d("PARSE", images.getJSONObject(i).toString(4));
     			String name         = images.getJSONObject(i).has("name") ? images.getJSONObject(i).getString("name") : "N/A";
     			long   size         = images.getJSONObject(i).has("size") ? (long)images.getJSONObject(i).getLong("size") : 0L;
     			String format       = images.getJSONObject(i).has("disk_format") ? images.getJSONObject(i).getString("disk_format") : "N/A";
@@ -443,41 +443,60 @@ public class ParseUtils {
      *
      */    
     public static Vector<Network> parseNetworks( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
-
-	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
-	Vector<Network> nets = new Vector<Network>();
-	try {
-	    JSONObject jsonObject = new JSONObject( jsonBuf );
-	    JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
-	    for(int i =0; i<networks.length(); ++i) {
-		JSONObject network = networks.getJSONObject(i);
-		String status = (String)network.getString("status");
-		String name = (String)network.getString("name");
-		boolean up = network.getBoolean("admin_state_up");
-		boolean ext = network.getBoolean("router:external");
-		boolean shared = network.getBoolean("shared");
-		String ID = network.getString("id");
-		JSONArray subnets  = network.getJSONArray("subnets");
-		String[] arraySubnetID = new String[ subnets.length() ];
-		String tenantID = network.getString("tenant_id");
-		for(int j = 0; j<subnets.length(); ++j)
-		    arraySubnetID[j] = (String)subnets.getString(j);
-
+    	//Log.d("PARSE", "jsonBuf="+jsonBuf);
+    	//Log.d("PARSE", "jsonBufSubnet="+jsonBufSubnet);
+    	
+    	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
+    	Vector<Network> nets = new Vector<Network>();
+    	try {
+    		JSONObject jsonObject = new JSONObject( jsonBuf );
+    		JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
+    		for(int i =0; i<networks.length(); ++i) {
+    			JSONObject network = networks.getJSONObject(i);
+    			String status = (String)network.getString("status");
+    			String name = (String)network.getString("name");
+    			boolean up = network.getBoolean("admin_state_up");
+    			boolean ext = network.getBoolean("router:external");
+    			boolean shared = network.getBoolean("shared");
+    			String ID = network.getString("id");
+    			JSONArray subnets  = network.getJSONArray("subnets");
+    			String[] arraySubnetID = new String[ subnets.length() ];
+    			String tenantID = network.getString("tenant_id");
+    			for(int j = 0; j<subnets.length(); ++j)
+    				arraySubnetID[j] = (String)subnets.getString(j);
 		
-		SubNetwork[] _subnets = new SubNetwork[subnets.length()];
-		for(int j = 0; j< arraySubnetID.length; j++)
-		    if(subnetsTable.containsKey(arraySubnetID[j]) == true) 
-			_subnets[j] = subnetsTable.get(arraySubnetID[j]);
-	    //Log.d("PARSENETWORK","NetName="+name);	
-		//nets[i] = new Network(status, name, ID, _subnets, shared, up, ext, tenantID );
-		nets.add( new Network(status, name, ID, _subnets, shared, up, ext, tenantID ) );
-	    }
-	} catch(org.json.JSONException je) {
- 	    throw new ParseException( je.getMessage( ) );
- 	}
-	return nets;
+    			SubNetwork[] _subnets = new SubNetwork[subnets.length()];
+    			for(int j = 0; j< arraySubnetID.length; j++)
+    				if(subnetsTable.containsKey(arraySubnetID[j]) == true) 
+    					_subnets[j] = subnetsTable.get(arraySubnetID[j]);
+    			nets.add( new Network(status, name, ID, _subnets, shared, up, ext, tenantID ) );
+    		}
+    	} catch(org.json.JSONException je) {
+    		throw new ParseException( je.getMessage( ) );
+    	}
+    	return nets;
     }
 
+    /**
+    *
+    *
+    *
+    *
+    */    
+   public static String parseSingleNetwork( String jsonBuf)  throws ParseException  {
+   		//Log.d("PARSE", "jsonBuf="+jsonBuf);
+   		//Log.d("PARSE", "jsonBufSubnet="+jsonBufSubnet);
+   	
+   		//Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
+   		//Vector<Network> nets = new Vector<Network>();
+   		try {
+   			JSONObject jsonObject = new JSONObject( jsonBuf );
+   			return jsonObject.getJSONObject("network").getString("id");   		
+   		} catch(org.json.JSONException je) {
+   			throw new ParseException( je.getMessage( ) );
+   		}
+   }
+    
     /**
      *
      *

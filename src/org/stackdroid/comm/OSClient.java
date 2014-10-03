@@ -217,12 +217,12 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"myNetTest\", \"admin_state_up\": true}}";
+    	String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"" + netname + "\", \"admin_state_up\": true}}";
     	return RESTClient.sendPOSTRequest( U.useSSL(), 
-									U.getNeutronEndpoint() + "/v2.0/networks.json", 
-									U.getToken(), 
-									extradata, 
-									vp );
+										   U.getNeutronEndpoint() + "/v2.0/networks.json", 
+										   U.getToken(), 
+										   extradata, 
+										   vp );
     }
     
 
@@ -234,7 +234,7 @@ public class OSClient {
      * 
      * 
      */
-    public String createSubnetworkNetwork( String netID, String CIDR, String DNS, String startIP, String endIP ) 
+    public void createSubnetworkNetwork( String netID, String CIDR, String DNS, String startIP, String endIP ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   GenericException, ServiceUnAvailableOrInternalError,
 		   IOException, MalformedURLException, ProtocolException, ParseException
@@ -245,7 +245,8 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
-    	return RESTClient.sendPOSTRequest( U.useSSL(), 
+    	Log.d("REST", "extradata="+extradata);
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
 									U.getNeutronEndpoint() + "/v2.0/subnets.json", 
 									U.getToken(), 
 									extradata, 

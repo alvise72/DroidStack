@@ -46,7 +46,7 @@ public class NeutronActivity extends Activity {
 	private AlertDialog 		 alertDialogDeleteNetwork   = null;
 	private Vector<Network>		 networks					= null;
 	private AlertDialog 		 alertDialogCreateNetwork;
-	private EditText 			 cidrNet, cidrMask, netname;
+	private EditText 			 cidrNet, cidrMask, netname, DNS;
 	
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
@@ -134,7 +134,7 @@ public class NeutronActivity extends Activity {
 			    return;
 			}
 			
-			(new AsyncTaskOSCreateNetwork()).execute(netnameS);
+			(new AsyncTaskOSCreateNetwork()).execute(netnameS, cidrNet.getText().toString().trim(), DNS.getText().toString().trim(), "", "");
 		}
     	
     }
@@ -167,7 +167,8 @@ public class NeutronActivity extends Activity {
         netname = (EditText)promptsView.findViewById(R.id.netnameET);
         cidrNet = (EditText)promptsView.findViewById(R.id.cidrNetET);
         cidrNet.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
-        cidrMask = (EditText)promptsView.findViewById(R.id.cidrMaskET);
+        cidrMask 	= (EditText)promptsView.findViewById(R.id.cidrMaskET);
+        DNS 		= (EditText)promptsView.findViewById(R.id.dnsET);
         
         mButton.setOnClickListener(new CreateNetworkClickListener());
         mButtonCancel.setOnClickListener(new CreateNetworkCancelClickListener());
@@ -275,7 +276,7 @@ public class NeutronActivity extends Activity {
 	 *
 	 */
     protected class AsyncTaskOSCreateNetwork extends AsyncTask<String, Void, Void> {
-    	private String jsonBufNet, jsonBufSubnet;
+    	private String jsonBufNet;
     	private String errorMessage;
     	private boolean hasError = false;
     	
@@ -284,10 +285,15 @@ public class NeutronActivity extends Activity {
     	{
     		OSClient osc = OSClient.getInstance(U);
     		String netname = v[0];
+    		String CIDR    = v[1];
+    		String DNS	   = v[2];
+    		String startIP = v[3];
+    		String endIP   = v[4];
     		
     	    try {
     	    	jsonBufNet 		 = osc.createNetwork(netname, false);
-    	    	//jsonBufSubnet    = osc.requestSubNetworks();
+    	    	String netID     = ParseUtils.parseSingleNetwork(jsonBufNet);
+    	    	osc.createSubnetworkNetwork(netID, CIDR, DNS, "192.168.1.1", "192.168.1.254");
     	    } catch(Exception e) {
     	    	errorMessage = e.getMessage();
     	    	hasError = true;
@@ -305,12 +311,12 @@ public class NeutronActivity extends Activity {
      	    	return;
      	    }
     	    
-    	    try {
-    	    	NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
+    	    //try {
+    	    	//NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
     	    	NeutronActivity.this.refreshView( );
-    	    } catch(ParseException pe) {
-    	    	Utils.alert("NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
-    	    }
+    	    //} catch(ParseException pe) {
+    	    //	Utils.alert("NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
+    	    //}
     	    NeutronActivity.this.progressDialogWaitStop.dismiss( );
     	}
     }

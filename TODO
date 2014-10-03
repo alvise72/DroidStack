@@ -1,4 +1,3 @@
-User.fromFileID -> messaggio d'errore se viene tornato null
 verificare presenza dei vari service (impatto su classe User che ha dei booleani hasXYZ e stringhe con gli endpoint, altrimenti disabilitare bottone volumi
-Salvere nel filename dello User persistente anche una codica dell'hostname, altrimenti ci possono essere 2 UUID uguali di due diverse cloud.
 Neutron interface
+startIP e endIP in NeutronActivity

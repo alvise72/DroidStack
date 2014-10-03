@@ -302,7 +302,7 @@ public class UserAddActivity extends Activity {
      		String s_usessl = args[4];
      		
      		usessl = Boolean.parseBoolean( s_usessl );
-     		//Looper.prepare();
+     		
      		try {
      			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
      			//UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
