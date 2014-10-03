@@ -45,9 +45,8 @@ public class NeutronActivity extends Activity {
     private User 				 U 						    = null;
 	private AlertDialog 		 alertDialogDeleteNetwork   = null;
 	private Vector<Network>		 networks					= null;
-	private AlertDialog alertDialogCreateNetwork;
-	//private EditText netname;
-	private EditText cidrNet, cidrMask;
+	private AlertDialog 		 alertDialogCreateNetwork;
+	private EditText 			 cidrNet, cidrMask, netname;
 	
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
@@ -116,12 +115,12 @@ public class NeutronActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			//String netnameS = netname.getText().toString().trim();
-			/*if(netnameS.length()==0) {
+			String netnameS = netname.getText().toString().trim();
+			if(netnameS.length()==0) {
 				Utils.alert(NeutronActivity.this.getString(R.string.NOEMPTYNAME), NeutronActivity.this);
 				netname.requestFocus();
 				return;
-			}*/
+			}
 			String netAddr = cidrNet.getText().toString().trim();
 			if(netAddr.length()!=0 && InetAddressUtils.isIPv4Address(netAddr) == false) {
 			    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netAddr, NeutronActivity.this);
@@ -134,6 +133,8 @@ public class NeutronActivity extends Activity {
 				cidrMask.requestFocus();
 			    return;
 			}
+			
+			(new AsyncTaskOSCreateNetwork()).execute(netnameS);
 		}
     	
     }
@@ -163,6 +164,7 @@ public class NeutronActivity extends Activity {
     	alertDialogCreateNetwork = alertDialogBuilder.create();
     	final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
         final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateNetCancel);
+        netname = (EditText)promptsView.findViewById(R.id.netnameET);
         cidrNet = (EditText)promptsView.findViewById(R.id.cidrNetET);
         cidrNet.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
         cidrMask = (EditText)promptsView.findViewById(R.id.cidrMaskET);
@@ -261,6 +263,53 @@ public class NeutronActivity extends Activity {
     	    	NeutronActivity.this.refreshView( );
     	    } catch(ParseException pe) {
     	    	Utils.alert("NeutronActivity.AsyncTaskOSListNetworks.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
+    	    }
+    	    NeutronActivity.this.progressDialogWaitStop.dismiss( );
+    	}
+    }
+    
+
+    /**
+	 * 
+	 * 
+	 *
+	 */
+    protected class AsyncTaskOSCreateNetwork extends AsyncTask<String, Void, Void> {
+    	private String jsonBufNet, jsonBufSubnet;
+    	private String errorMessage;
+    	private boolean hasError = false;
+    	
+    	@Override
+    	protected Void doInBackground( String... v ) 
+    	{
+    		OSClient osc = OSClient.getInstance(U);
+    		String netname = v[0];
+    		
+    	    try {
+    	    	jsonBufNet 		 = osc.createNetwork(netname, false);
+    	    	//jsonBufSubnet    = osc.requestSubNetworks();
+    	    } catch(Exception e) {
+    	    	errorMessage = e.getMessage();
+    	    	hasError = true;
+    	    }
+    	    return null;
+    	}
+    	
+    	@Override
+    	protected void onPostExecute( Void v ) {
+    	    super.onPostExecute(v);
+    	    
+     	    if(hasError) {
+     	    	Utils.alert( "NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+errorMessage, NeutronActivity.this );
+     	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
+     	    	return;
+     	    }
+    	    
+    	    try {
+    	    	NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
+    	    	NeutronActivity.this.refreshView( );
+    	    } catch(ParseException pe) {
+    	    	Utils.alert("NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
     	    }
     	    NeutronActivity.this.progressDialogWaitStop.dismiss( );
     	}

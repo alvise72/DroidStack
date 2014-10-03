@@ -55,7 +55,7 @@ public class NetworkListView extends LinearLayout {
 		name.setTypeface( null, Typeface.BOLD );
 		
 		subnet = new TextView( ctx );
-		subnet.setText( net.getSubNetworks()[0] != null ? net.getSubNetworks()[0].getAddress() : "" );
+		subnet.setText( net.getSubNetworks()!=null && net.getSubNetworks().length!=0 && net.getSubNetworks()[0] != null ? net.getSubNetworks()[0].getAddress() : "" );
 		subnet.setTextColor( Color.parseColor("#333333") );
 		
 		nameLayout.addView(name);

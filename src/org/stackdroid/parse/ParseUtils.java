@@ -485,6 +485,9 @@ public class ParseUtils {
      *
      */    
     private static Hashtable<String, SubNetwork> parseSubNetworks( String jsonBuf )  throws ParseException  {
+    	//Log.d("PARSE", "subnet json="+jsonBuf);
+    	if(jsonBuf==null) return new Hashtable<String, SubNetwork>();
+    	
 	Hashtable<String, SubNetwork> result = new Hashtable<String, SubNetwork>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );

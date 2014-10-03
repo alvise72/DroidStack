@@ -192,12 +192,65 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	Log.d("OSC", "endpoint="+U.getCinder2Endpoint() + "/volumes/" + volID);
+    	//Log.d("OSC", "endpoint="+U.getCinder2Endpoint() + "/volumes/" + volID);
     	RESTClient.sendDELETERequest( U.useSSL(), 
     								  U.getCinder2Endpoint() + "/volumes/" + volID, 
     								  U.getToken(), 
     								  vp );
 	   }
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public String createNetwork( String netname, boolean shared ) 
+	throws NotAuthorizedException, NotFoundException, 
+		   GenericException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+    	checkToken( );
+	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"myNetTest\", \"admin_state_up\": true}}";
+    	return RESTClient.sendPOSTRequest( U.useSSL(), 
+									U.getNeutronEndpoint() + "/v2.0/networks.json", 
+									U.getToken(), 
+									extradata, 
+									vp );
+    }
+    
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public String createSubnetworkNetwork( String netID, String CIDR, String DNS, String startIP, String endIP ) 
+	throws NotAuthorizedException, NotFoundException, 
+		   GenericException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+    	checkToken( );
+	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
+    	return RESTClient.sendPOSTRequest( U.useSSL(), 
+									U.getNeutronEndpoint() + "/v2.0/subnets.json", 
+									U.getToken(), 
+									extradata, 
+									vp );
+    }
     
     /*
      * 
