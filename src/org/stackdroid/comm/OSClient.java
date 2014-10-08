@@ -119,7 +119,7 @@ public class OSClient {
 		vp.add( p );
 		String extradata = "{\"volumeAttachment\": {\"device\": null, \"volumeId\": \"" + volumeID + "\"}}";
 		RESTClient.sendPOSTRequest( U.useSSL(), 
-									U.getCinder2Endpoint() + "/servers/" + serverID + "/os-volume_attachments", 
+									U.getNovaEndpoint() + "/servers/" + serverID + "/os-volume_attachments", 
 									U.getToken(), 
 									extradata, 
 									vp );
@@ -144,7 +144,7 @@ public class OSClient {
 		vp.add( p );
 		//String extradata = "{\"volumeAttachment\": {\"device\": null, \"volumeId\": \"" + volumeID + "\"}}";
 		RESTClient.sendDELETERequest( U.useSSL(), 
-									  U.getCinder2Endpoint() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID, 
+									  U.getNovaEndpoint() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID, 
 									  U.getToken(), 
 									  vp );
 	}

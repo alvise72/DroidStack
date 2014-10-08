@@ -43,8 +43,9 @@ public class RESTClient {
       		 ServiceUnAvailableOrInternalError, MalformedURLException,
       		 ProtocolException
     {
+    	//Log.d("REST", "REQTOKEN url="+endpoint);
 
-    Log.d("REQUESTOKEN", "endpoint="+endpoint);
+//    Log.d("REQUESTOKEN", "endpoint="+endpoint);
 	URL url = new URL(endpoint);
 	
 	URLConnection conn = null;
@@ -246,7 +247,7 @@ public class RESTClient {
 	    Url = "http://"+Url;
     	*/
     	URL url = new URL(sURL);
-    	
+    	//Log.d("REST", "GET url="+sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -359,8 +360,11 @@ public class RESTClient {
 	  		 GenericException, ServiceUnAvailableOrInternalError, 
 	  		 MalformedURLException, IOException, ProtocolException
     {
+    	
+    	
+    	
     	URL url = new URL(sURL);
-    	Log.d("REST", "url="+sURL);
+    	//Log.d("REST", "POST url="+sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -555,7 +559,7 @@ public class RESTClient {
 					  					  Vector<Pair<String,String>> properties ) 
 	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, GenericException, MalformedURLException, ProtocolException
     {
-  
+    	//Log.d("REST", "DELETE url="+sURL);
 	URL url = new URL(sURL);
 	
 	URLConnection conn = null;
