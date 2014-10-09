@@ -70,7 +70,14 @@ public class NeutronActivity extends Activity {
 	protected class InfoNetworkListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			Network N = ((NetworkListView)v).getNetwork();
+			Network N = null;
+			if(v instanceof LinearLayoutWithView) { 
+				N = ((LinearLayoutWithView)v).getNetworkListView().getNetwork();
+			}
+			if(v instanceof TextViewWithView) { 
+				N = ((TextViewWithView)v).getNetworkListView().getNetwork();
+			}
+			
 			
 			TextView tv1 = new TextView(NeutronActivity.this);
 			tv1.setText("Network name:");
@@ -110,7 +117,7 @@ public class NeutronActivity extends Activity {
 			l.addView( tv5 );
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
-			
+			sv.addView(l);
 			String name;
 			if(N.getName().length()>=16)
 				name = N.getName().substring(0,14) + "..";

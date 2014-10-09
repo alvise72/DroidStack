@@ -3,7 +3,9 @@ package org.stackdroid.views;
 
 import org.stackdroid.R;
 import org.stackdroid.utils.ImageButtonWithView;
+import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.Network;
+import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.Utils;
 
 import android.view.Gravity;
@@ -15,13 +17,13 @@ import android.graphics.Typeface;
 
 public class NetworkListView extends LinearLayout {
 	
-    private Network      	 net                = null;
-    private LinearLayout 	 row                = null;
-    private LinearLayout 	 buttonsLayout      = null;
-    private LinearLayout 	 nameLayout         = null;
-    private TextView     	 name               = null;
-    private TextView     	 subnet             = null;
-    private ImageButtonWithView delete  		= null;
+    private Network      	 		 net                = null;
+    private LinearLayoutWithView 	 row                = null;
+    private LinearLayoutWithView 	 buttonsLayout      = null;
+    private LinearLayoutWithView 	 nameLayout         = null;
+    private TextViewWithView     	 name               = null;
+    private TextViewWithView     	 subnet             = null;
+    private ImageButtonWithView 	 delete  		= null;
     
     
     public NetworkListView( Network net, 
@@ -38,24 +40,24 @@ public class NetworkListView extends LinearLayout {
 		int padding = Utils.getDisplayPixel( ctx, 2 );
 		setPadding( padding, padding, padding, padding );
 		
-		row = new LinearLayout( ctx);
+		row = new LinearLayoutWithView( ctx, (NetworkListView)this );
 		row.setOrientation( LinearLayout.HORIZONTAL );
 		LinearLayout.LayoutParams _params1
 		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		row.setLayoutParams( _params1 );
 		row.setBackgroundResource(R.drawable.rounded_corner_thin);
 		row.setOnClickListener(infoNetListener);
-		nameLayout = new LinearLayout( ctx );
+		nameLayout = new LinearLayoutWithView( ctx, (NetworkListView)this  );
 		nameLayout.setOrientation( LinearLayout.VERTICAL );
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
 		nameLayout.setLayoutParams( params2 );
 		nameLayout.setOnClickListener(infoNetListener);
-		name = new TextView( ctx );
+		name = new TextViewWithView( ctx, (NetworkListView)this  );
 		name.setText( net.getName() );
 		name.setTextColor( Color.parseColor("#333333") );
 		name.setTypeface( null, Typeface.BOLD );
 		
-		subnet = new TextView( ctx );
+		subnet = new TextViewWithView( ctx, (NetworkListView)this  );
 		subnet.setText( net.getSubNetworks()!=null && net.getSubNetworks().length!=0 && net.getSubNetworks()[0] != null ? net.getSubNetworks()[0].getAddress() : "" );
 		subnet.setTextColor( Color.parseColor("#333333") );
 		subnet.setOnClickListener(infoNetListener);
@@ -64,7 +66,7 @@ public class NetworkListView extends LinearLayout {
 		nameLayout.setOnClickListener(infoNetListener);
 		row.addView(nameLayout);
 		
-		buttonsLayout = new LinearLayout( ctx );
+		buttonsLayout = new LinearLayoutWithView( ctx, (NetworkListView)this );
 		buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 		LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f );
 		params4.gravity=Gravity.RIGHT;
