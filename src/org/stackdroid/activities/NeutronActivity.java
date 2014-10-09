@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -30,11 +32,15 @@ import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.IPAddressKeyListener;
+import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.Network;
+import org.stackdroid.utils.Server;
 import org.stackdroid.utils.SimpleNumberKeyListener;
+import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.ServerView;
 
 import android.os.AsyncTask;
 
@@ -51,11 +57,66 @@ public class NeutronActivity extends Activity {
 	private EditText startIP;
 	private EditText endIP;
 	private EditText gatewayIP;
-	
+
+    //__________________________________________________________________________________
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
 			Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
+		}
+	}
+
+    //__________________________________________________________________________________
+	protected class InfoNetworkListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			Network N = ((NetworkListView)v).getNetwork();
+			
+			TextView tv1 = new TextView(NeutronActivity.this);
+			tv1.setText("Network name:");
+			tv1.setTypeface( null, Typeface.BOLD );
+			TextView tv2 = new TextView(NeutronActivity.this);
+			tv2.setText(N.getName());
+			TextView tv3 = new TextView(NeutronActivity.this);
+			tv3.setText("Shared:");
+			tv3.setTypeface( null, Typeface.BOLD );
+			TextView tv4 = new TextView(NeutronActivity.this);
+			tv4.setText( N.isShared( ) ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
+			TextView tv5 = new TextView(NeutronActivity.this);
+			tv5.setText("External: ");
+			tv5.setTypeface( null, Typeface.BOLD );
+			TextView tv6 = new TextView(NeutronActivity.this);
+			tv6.setText( N.isExt() ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
+	    
+	    
+			ScrollView sv = new ScrollView(NeutronActivity.this);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.MATCH_PARENT);
+			sv.setLayoutParams( lp );
+			LinearLayout l = new LinearLayout(NeutronActivity.this);
+			l.setLayoutParams( lp );
+			l.setOrientation( LinearLayout.VERTICAL );
+			int paddingPixel = 8;
+			float density = Utils.getDisplayDensity( NeutronActivity.this );
+			int paddingDp = (int)(paddingPixel * density);
+			l.setPadding(paddingDp, 0, 0, 0);
+			l.addView( tv1 );
+			l.addView( tv2 );
+			tv2.setPadding(paddingDp, 0, 0, 0);
+			l.addView( tv3 );
+			l.addView( tv4 );
+			tv4.setPadding(paddingDp, 0, 0, 0);
+			l.addView( tv5 );
+			l.addView( tv6 );
+			tv6.setPadding(paddingDp, 0, 0, 0);
+			
+			String name;
+			if(N.getName().length()>=16)
+				name = N.getName().substring(0,14) + "..";
+			else
+				name = N.getName();
+			Utils.alertInfo( sv, "Network information: "+name, NeutronActivity.this );
 		}
 	}
 	
@@ -255,7 +316,9 @@ public class NeutronActivity extends Activity {
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.networkLayout)).addView( space );
-    		((LinearLayout)findViewById(R.id.networkLayout)).addView( new NetworkListView(n, new NeutronActivity.DeleteNetworkListener(), this) );
+    		((LinearLayout)findViewById(R.id.networkLayout)).addView( new NetworkListView(n,
+    																					  new NeutronActivity.InfoNetworkListener(),
+    																					  new NeutronActivity.DeleteNetworkListener(), this) );
     	}
     }
 
@@ -353,12 +416,13 @@ public class NeutronActivity extends Activity {
     	    
     	    //try {
     	    	//NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
-    	    NeutronActivity.this.refreshView( );
+    	    //NeutronActivity.this.refreshView( );
     	    //} catch(ParseException pe) {
     	    //	Utils.alert("NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
     	    //}
     	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronActivity.this );
-    	    NeutronActivity.this.progressDialogWaitStop.dismiss( );
+    	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
+    	    //NeutronActivity.this.progressDialogWaitStop.dismiss( );
     	}
     }
 }

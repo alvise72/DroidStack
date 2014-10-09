@@ -25,12 +25,13 @@ public class NetworkListView extends LinearLayout {
     
     
     public NetworkListView( Network net, 
+    						OnClickListener infoNetListener,
     						OnClickListener deleteNetListener,
     						Context ctx )
     {
 	    super(ctx);
 	    this.net = net;
-	  
+	    this.setOnClickListener(infoNetListener);
 	    setOrientation( LinearLayout.HORIZONTAL );
 	    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		setLayoutParams( params1 );
@@ -43,12 +44,12 @@ public class NetworkListView extends LinearLayout {
 		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		row.setLayoutParams( _params1 );
 		row.setBackgroundResource(R.drawable.rounded_corner_thin);
-		
+		row.setOnClickListener(infoNetListener);
 		nameLayout = new LinearLayout( ctx );
 		nameLayout.setOrientation( LinearLayout.VERTICAL );
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
 		nameLayout.setLayoutParams( params2 );
-		
+		nameLayout.setOnClickListener(infoNetListener);
 		name = new TextView( ctx );
 		name.setText( net.getName() );
 		name.setTextColor( Color.parseColor("#333333") );
@@ -57,10 +58,10 @@ public class NetworkListView extends LinearLayout {
 		subnet = new TextView( ctx );
 		subnet.setText( net.getSubNetworks()!=null && net.getSubNetworks().length!=0 && net.getSubNetworks()[0] != null ? net.getSubNetworks()[0].getAddress() : "" );
 		subnet.setTextColor( Color.parseColor("#333333") );
-		
+		subnet.setOnClickListener(infoNetListener);
 		nameLayout.addView(name);
 		nameLayout.addView(subnet);
-		
+		nameLayout.setOnClickListener(infoNetListener);
 		row.addView(nameLayout);
 		
 		buttonsLayout = new LinearLayout( ctx );
