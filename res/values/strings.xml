@@ -144,5 +144,9 @@
 	<string name="INCORRECTMASKFORMAT">CIDR mask must be in the range 1&#8211;32</string>
 	<string name="MyNet">myNetwork</string>
 	<string name="RECREATEUSERS">The user persistency has changed... Please try to recreate users.\n\nOld users have been removed.</string>
+	<string name="NETWORKCREATED">Network created succesfully. Press on Update button to refresh view...</string>
+	<string name="NOTALLOWEDSTARTIPEMPTY">Not allowed an empty start IP</string>
+	<string name="NOTALLOWEDENDIPEMPTY">Not allowed an empty end IP</string>
+	<string name="NOTALLOWEDGATEWAYIPEMPTY">Not allowed an empty gateway IP</string>
 	
 </resources>

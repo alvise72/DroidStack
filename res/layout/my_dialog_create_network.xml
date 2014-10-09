@@ -41,7 +41,6 @@
              android:layout_weight="1"
              android:ems="10"
              android:text="192.168.1.0" >
-             <requestFocus />
          </EditText>
          
 		 <TextView
@@ -65,6 +64,56 @@
      <TextView
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
+             android:text="Start IP / End IP" />
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal" >
+
+         <EditText
+             android:id="@+id/startIPET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:text="192.168.1.2" >
+         </EditText>
+         
+		 <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"	
+             android:text="/" />
+		 
+         <EditText
+             android:id="@+id/endIPET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:text="192.168.1.254" />
+
+     </LinearLayout>
+     
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Gateway IP" />
+
+         <EditText
+             android:id="@+id/gatewayIPET"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:text="192.168.1.254" >
+         </EditText>
+         
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
              android:text="DNS hostname/IP" />
 
          <EditText
@@ -74,7 +123,6 @@
              android:layout_weight="1"
              android:ems="10"
              android:text="8.8.8.8" >
-             <requestFocus />
          </EditText>
          
 

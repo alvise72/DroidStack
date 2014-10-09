@@ -140,4 +140,8 @@
 	<string name="INCORRECTMASKFORMAT">La maschera CIDR deve essere nell\'intervallo 1&#8211;32</string>
 	<string name="MYNET">miaRete</string>
 	<string name="RECREATEUSERS">Il sistema di persistenza degli utenti &#xe8; cambiato... Prova a ricreare gli utenti.\n\nI vecchi utenti sono stati rimossi.</string>
+	<string name="NeutronActivity.this">Rete creata con successo. Premi sul pulsante Aggiorna per ricaricare la vista...</string>
+	<string name="NOTALLOWEDSTARTIPEMPTY">Non consentito un indirizzo vuoto per start IP</string>
+	<string name="NOTALLOWEDENDIPEMPTY">Non consentito un indirizzo vuoto per end IP</string>
+	<string name="NOTALLOWEDGATEWAYIPEMPTY">Non consensito un indirizzo vuoto per gateway IP</string>
 </resources>

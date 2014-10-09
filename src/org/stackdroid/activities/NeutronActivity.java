@@ -29,6 +29,7 @@ import org.stackdroid.R;
 import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.IPAddressKeyListener;
 import org.stackdroid.utils.Network;
 import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.User;
@@ -47,6 +48,9 @@ public class NeutronActivity extends Activity {
 	private Vector<Network>		 networks					= null;
 	private AlertDialog 		 alertDialogCreateNetwork;
 	private EditText 			 cidrNet, cidrMask, netname, DNS;
+	private EditText startIP;
+	private EditText endIP;
+	private EditText gatewayIP;
 	
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
@@ -133,8 +137,38 @@ public class NeutronActivity extends Activity {
 				cidrMask.requestFocus();
 			    return;
 			}
+			String startIPAddr = startIP.getText().toString().trim();
+			if( startIPAddr.length() == 0) {
+				Utils.alert(getString(R.string.NOTALLOWEDSTARTIPEMPTY), NeutronActivity.this);
+				startIP.requestFocus();
+			    return;
+			}
+			String endIPAddr = endIP.getText().toString().trim();
+			if( endIPAddr.length() == 0) {
+				Utils.alert(getString(R.string.NOTALLOWEDENDIPEMPTY), NeutronActivity.this);
+				startIP.requestFocus();
+			    return;
+			}
+			if(InetAddressUtils.isIPv4Address(startIPAddr) == false) {
+				Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + startIPAddr, NeutronActivity.this);
+			    startIP.requestFocus();
+			    return;
+			}
+			if(InetAddressUtils.isIPv4Address(endIPAddr) == false) {
+				Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + endIPAddr, NeutronActivity.this);
+			    endIP.requestFocus();
+			    return;
+			}
+			String gatewayIPAddr = gatewayIP.getText( ).toString( ).trim( );
+			if( endIPAddr.length() == 0) {
+				Utils.alert(getString(R.string.NOTALLOWEDGATEWAYIPEMPTY), NeutronActivity.this);
+				gatewayIP.requestFocus();
+			    return;
+			}
 			
-			(new AsyncTaskOSCreateNetwork()).execute(netnameS, cidrNet.getText().toString().trim(), DNS.getText().toString().trim(), "", "");
+			alertDialogCreateNetwork.dismiss();
+			NeutronActivity.this.progressDialogWaitStop.show( );
+			(new AsyncTaskOSCreateNetwork()).execute(netnameS, netAddr + "/" + netMask, DNS.getText().toString().trim(), startIPAddr, endIPAddr, gatewayIPAddr);
 		}
     	
     }
@@ -164,18 +198,24 @@ public class NeutronActivity extends Activity {
     	alertDialogCreateNetwork = alertDialogBuilder.create();
     	final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
         final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateNetCancel);
-        netname = (EditText)promptsView.findViewById(R.id.netnameET);
-        cidrNet = (EditText)promptsView.findViewById(R.id.cidrNetET);
+        netname 	= (EditText)promptsView.findViewById(R.id.netnameET);
+        cidrNet 	= (EditText)promptsView.findViewById(R.id.cidrNetET);
         cidrNet.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
         cidrMask 	= (EditText)promptsView.findViewById(R.id.cidrMaskET);
-        DNS 		= (EditText)promptsView.findViewById(R.id.dnsET);
+        startIP 	= (EditText)promptsView.findViewById(R.id.startIPET);
+        startIP.setKeyListener(IPAddressKeyListener.getInstance());
+        endIP 		= (EditText)promptsView.findViewById(R.id.endIPET);
+        endIP.setKeyListener(IPAddressKeyListener.getInstance());
+        gatewayIP   = (EditText)promptsView.findViewById(R.id.gatewayIPET);
+        gatewayIP.setKeyListener(IPAddressKeyListener.getInstance());
         
+        DNS 		= (EditText)promptsView.findViewById(R.id.dnsET);
+        DNS.setKeyListener(IPAddressKeyListener.getInstance());
         mButton.setOnClickListener(new CreateNetworkClickListener());
         mButtonCancel.setOnClickListener(new CreateNetworkCancelClickListener());
         alertDialogCreateNetwork.setCanceledOnTouchOutside(false);
         alertDialogCreateNetwork.setCancelable(false);
         alertDialogCreateNetwork.show();
-        
     }
  
     /**
@@ -217,7 +257,6 @@ public class NeutronActivity extends Activity {
     		((LinearLayout)findViewById(R.id.networkLayout)).addView( space );
     		((LinearLayout)findViewById(R.id.networkLayout)).addView( new NetworkListView(n, new NeutronActivity.DeleteNetworkListener(), this) );
     	}
-    	
     }
 
 
@@ -289,11 +328,12 @@ public class NeutronActivity extends Activity {
     		String DNS	   = v[2];
     		String startIP = v[3];
     		String endIP   = v[4];
+    		String gatewayIP = v[5];
     		
     	    try {
     	    	jsonBufNet 		 = osc.createNetwork(netname, false);
     	    	String netID     = ParseUtils.parseSingleNetwork(jsonBufNet);
-    	    	osc.createSubnetworkNetwork(netID, CIDR, DNS, "192.168.1.1", "192.168.1.254");
+    	    	osc.createSubnetwork(netID, CIDR, DNS, startIP, endIP, gatewayIP);
     	    } catch(Exception e) {
     	    	errorMessage = e.getMessage();
     	    	hasError = true;
@@ -313,10 +353,11 @@ public class NeutronActivity extends Activity {
     	    
     	    //try {
     	    	//NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
-    	    	NeutronActivity.this.refreshView( );
+    	    NeutronActivity.this.refreshView( );
     	    //} catch(ParseException pe) {
     	    //	Utils.alert("NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
     	    //}
+    	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronActivity.this );
     	    NeutronActivity.this.progressDialogWaitStop.dismiss( );
     	}
     }

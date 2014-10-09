@@ -443,9 +443,6 @@ public class ParseUtils {
      *
      */    
     public static Vector<Network> parseNetworks( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
-    	//Log.d("PARSE", "jsonBuf="+jsonBuf);
-    	//Log.d("PARSE", "jsonBufSubnet="+jsonBufSubnet);
-    	
     	Hashtable<String, SubNetwork> subnetsTable = parseSubNetworks( jsonBufSubnet );
     	Vector<Network> nets = new Vector<Network>();
     	try {

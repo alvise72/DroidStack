@@ -234,7 +234,7 @@ public class OSClient {
      * 
      * 
      */
-    public void createSubnetworkNetwork( String netID, String CIDR, String DNS, String startIP, String endIP ) 
+    public void createSubnetwork( String netID, String CIDR, String DNS, String startIP, String endIP, String gatewayIP ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   GenericException, ServiceUnAvailableOrInternalError,
 		   IOException, MalformedURLException, ProtocolException, ParseException

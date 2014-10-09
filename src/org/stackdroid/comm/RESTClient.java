@@ -364,7 +364,8 @@ public class RESTClient {
     	
     	
     	URL url = new URL(sURL);
-    	//Log.d("REST", "POST url="+sURL);
+    	Log.d("REST", "POST url="+sURL);
+    	Log.d("REST", "POST extradata="+extradata);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -506,8 +507,8 @@ public class RESTClient {
 	    	//throw new GenericException( "RESTClient.sendPOSTRequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
 	    
-	    //Log.d("REST", "buf="+buf);
-	    
+	    Log.d("REST", "buf="+buf);
+	    Log.d("REST", "status code="+status);
 	    String errorMessage;
 	    try {
 	    	errorMessage = ParseUtils.getErrorMessage( buf );
