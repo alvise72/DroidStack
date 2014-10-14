@@ -205,7 +205,6 @@ public class RESTClient {
 	
 	String res = "";
 	try {
-	    //String buf = "";
 	    InputStream in = new BufferedInputStream( conn.getInputStream( ) );
 	    int len;
 	    byte[] buffer = new byte[4096];
@@ -241,14 +240,7 @@ public class RESTClient {
 					 					 Vector<Pair<String,String>> properties ) 
 		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
     {
-    	/*String Url = sURL;
-    	if(usessl)
-	    Url = "https://"+Url;
-    	else
-	    Url = "http://"+Url;
-    	*/
     	URL url = new URL(sURL);
-    	//Log.d("REST", "GET url="+sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -281,7 +273,6 @@ public class RESTClient {
     	} else {
 	
     		try {
-    			//	    	Log.d("RESTClient", "2 Connecting...");
     			conn = (HttpURLConnection)url.openConnection();
     		} catch(java.io.IOException ioe) {
 	    			throw new IOException("RESTClient.sendGETRequest.URL.openConnection http: "+ioe.getMessage());
