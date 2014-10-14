@@ -79,7 +79,7 @@
             android:launchMode="singleInstance" 
             android:label="@string/MANAGENOVAINST"
 	    	android:parentActivityName="org.stackdroid.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="orientation|screenSize"
           />
 
        <activity

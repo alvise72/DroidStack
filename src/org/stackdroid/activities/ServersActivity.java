@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.app.ProgressDialog;
@@ -21,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -352,6 +354,9 @@ public class ServersActivity extends Activity {
 	        final EditText input = new EditText(ServersActivity.this);
 	        //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE);
 	        input.setKeyListener(SimpleNumberKeyListener.getInstance());
+	        //input.requestFocus();
+	        //input.performClick();
+	        //((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(input, InputMethodManager.SHOW_FORCED);
 	        //input.setTransformationMethod(TransormationMethod.);
 	        
 	        alert.setView(input);

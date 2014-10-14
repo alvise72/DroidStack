@@ -22,6 +22,7 @@ import org.stackdroid.parse.ParseUtils;
 
 import android.util.Log;
 import android.util.Pair;
+import org.stackdroid.comm.ServerErrorException;
 
 public class RESTClient {
 
@@ -358,7 +359,7 @@ public class RESTClient {
 					 					  Vector<Pair<String,String>> properties ) 
 	  throws NotAuthorizedException, NotFoundException, 
 	  		 GenericException, ServiceUnAvailableOrInternalError, 
-	  		 MalformedURLException, IOException, ProtocolException
+	  		 MalformedURLException, IOException, ProtocolException, ServerErrorException
     {
     	
     	
@@ -474,12 +475,6 @@ public class RESTClient {
 	
 	
 	if( status >= 400 ) {
-/*
-		if(status == HttpStatus.SC_UNAUTHORIZED)
-			throw new NotAuthorizedException( "RESTClient.sendPOSTRequest: Not Authorized" );
-		if(status == HttpStatus.SC_NOT_FOUND)
-			throw new NotFoundException( "RESTClient.sendPOSTRequest: Not Found" );
-*/		
 		String buf = "";
 	    InputStream in = new BufferedInputStream( ((HttpURLConnection)conn).getErrorStream( ) );
 	    if(in!=null) {
@@ -502,9 +497,6 @@ public class RESTClient {
 	    		((HttpsURLConnection)conn).disconnect( );
 	    	else
 	    		((HttpURLConnection)conn).disconnect( );
-		
-		
-	    	//throw new GenericException( "RESTClient.sendPOSTRequest: " + ParseUtils.getErrorMessage( buf ) );
 	    }
 	    
 	    Log.d("REST", "buf="+buf);
@@ -517,9 +509,11 @@ public class RESTClient {
 	    }
 	    
 	    if(status == HttpStatus.SC_UNAUTHORIZED)
-	    	throw new NotAuthorizedException( "RESTClient.sendPOSTRequest - Not Authorized: " + errorMessage );
+	    	throw new NotAuthorizedException( errorMessage );
 	    if(status == HttpStatus.SC_NOT_FOUND)
-			throw new NotFoundException( "RESTClient.sendPOSTRequest - Not Found: " + errorMessage );
+			throw new NotFoundException( errorMessage );
+	    if(status == HttpStatus.SC_CONFLICT || status == HttpStatus.SC_BAD_REQUEST)
+	    	throw new ServerErrorException( buf );
 	    
 	    throw new GenericException( "RESTClient.sendPOSTRequest: " + errorMessage );
 	}

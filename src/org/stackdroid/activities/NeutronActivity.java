@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.comm.OSClient;
+import org.stackdroid.comm.ServerErrorException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 
@@ -95,6 +96,11 @@ public class NeutronActivity extends Activity {
 			TextView tv6 = new TextView(NeutronActivity.this);
 			tv6.setText( N.isExt() ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
 	    
+			TextView tv7 = new TextView(NeutronActivity.this);
+			tv7.setText("Subnet address");
+			tv7.setTypeface( null, Typeface.BOLD );
+			TextView tv8 = new TextView(NeutronActivity.this);
+			tv8.setText(N.getSubNetworks()[0].getAddress());
 	    
 			ScrollView sv = new ScrollView(NeutronActivity.this);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -117,6 +123,10 @@ public class NeutronActivity extends Activity {
 			l.addView( tv5 );
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
+			l.addView(tv7);
+			l.addView(tv8);
+			tv8.setPadding(paddingDp, 0, 0, 0);
+			
 			sv.addView(l);
 			String name;
 			if(N.getName().length()>=16)
@@ -404,6 +414,9 @@ public class NeutronActivity extends Activity {
     	    	jsonBufNet 		 = osc.createNetwork(netname, false);
     	    	String netID     = ParseUtils.parseSingleNetwork(jsonBufNet);
     	    	osc.createSubnetwork(netID, CIDR, DNS, startIP, endIP, gatewayIP);
+    	    } catch(ServerErrorException se) {
+    	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+    	    	hasError = true;
     	    } catch(Exception e) {
     	    	errorMessage = e.getMessage();
     	    	hasError = true;
@@ -416,20 +429,12 @@ public class NeutronActivity extends Activity {
     	    super.onPostExecute(v);
     	    
      	    if(hasError) {
-     	    	Utils.alert( "NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+errorMessage, NeutronActivity.this );
+     	    	Utils.alert( errorMessage, NeutronActivity.this );
      	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
      	    	return;
      	    }
-    	    
-    	    //try {
-    	    	//NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
-    	    //NeutronActivity.this.refreshView( );
-    	    //} catch(ParseException pe) {
-    	    //	Utils.alert("NeutronActivity.AsyncTaskOSCreateNetwork.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
-    	    //}
     	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronActivity.this );
     	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
-    	    //NeutronActivity.this.progressDialogWaitStop.dismiss( );
     	}
     }
 }

@@ -111,7 +111,7 @@ public class OSClient {
     public void volumeAttach( String volumeID, String serverID ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
 	{
     	checkToken( );
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -160,7 +160,7 @@ public class OSClient {
     public void createVolume( String volname, int size_in_GB ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
 	   {
     		checkToken( );
     		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -210,7 +210,7 @@ public class OSClient {
     public String createNetwork( String netname, boolean shared ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException
+		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
     	checkToken( );
 	
@@ -218,6 +218,7 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"" + netname + "\", \"admin_state_up\": true}}";
+    	//Log.d("REST/createNetwork", "extradata="+extradata);
     	return RESTClient.sendPOSTRequest( U.useSSL(), 
 										   U.getNeutronEndpoint() + "/v2.0/networks.json", 
 										   U.getToken(), 
@@ -237,15 +238,15 @@ public class OSClient {
     public void createSubnetwork( String netID, String CIDR, String DNS, String startIP, String endIP, String gatewayIP ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException
+		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException, ServerErrorException
     {
     	checkToken( );
 	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
-    	Log.d("REST", "extradata="+extradata);
+    	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"gateway_ip\":\"" + gatewayIP + "\", \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
+    	//Log.d("REST/createSubnetwork", "extradata="+extradata);
     	RESTClient.sendPOSTRequest( U.useSSL(), 
 									U.getNeutronEndpoint() + "/v2.0/subnets.json", 
 									U.getToken(), 
@@ -264,7 +265,7 @@ public class OSClient {
     public void createInstanceSnapshot( String serverID, String snapshotName ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException
+		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
     	checkToken( );
 	
@@ -289,7 +290,7 @@ public class OSClient {
      */
     public void requestFloatingIPAllocation( String externalNetworkID ) 
 	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
     	checkToken( );
 	
@@ -316,7 +317,7 @@ public class OSClient {
      */
     public void createSecGroup( String secgrpName, String desc)  
     		throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError ,
- 		   IOException, MalformedURLException, ProtocolException, ParseException
+ 		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
     	checkToken( );
     	
@@ -363,7 +364,7 @@ public class OSClient {
      */
     public void requestFloatingIPAssociate( String fip, String serverid ) 
 	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError ,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
     	checkToken( );
     	
@@ -410,7 +411,7 @@ public class OSClient {
     *
     */
    public void requestReleaseFloatingIP( String floatingip, String serverid ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
    {
 	   checkToken( );
 	
@@ -437,7 +438,7 @@ public class OSClient {
     *
     */
    public String requestServerLog( String serverid, int maxlines ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
 	   checkToken( );
 	
@@ -791,7 +792,7 @@ public class OSClient {
     									 String securityGroupID,
     									 Hashtable<String, String> netID_to_netIP )
     	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
- 	   IOException, MalformedURLException, ProtocolException, ParseException
+ 	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
     {
  	   checkToken( );
  		
@@ -856,7 +857,7 @@ public class OSClient {
      */
 	public void createRule(String secgrpID, int fromPort, int toPort, String protocol, String cidr) 
 			throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-			   IOException, MalformedURLException, ProtocolException, ParseException
+			   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
 	{
 		checkToken( );
 		

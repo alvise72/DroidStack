@@ -43,7 +43,7 @@ public class ParseUtils {
     {
       try {
     	  JSONObject jsonObject = null;
-    	  System.out.println("PARSEUSER - jsonUser="+jsonString);
+    	  //System.out.println("PARSEUSER - jsonUser="+jsonString);
     	  jsonObject = new JSONObject( jsonString );
 	  
     	  JSONObject access = (JSONObject)jsonObject.get("access");
@@ -140,6 +140,28 @@ public class ParseUtils {
       }
     }
 
+    /**
+     * @throws JSONException 
+     *
+     *
+     *
+     *
+     */ 
+    public static String parseNeutronError( String buffer ) {
+      JSONObject jsonObject = null;
+  	  try {
+		jsonObject = new JSONObject( buffer );
+		JSONObject NE = (JSONObject)jsonObject.get("NeutronError");
+		  if(NE.has("message")) {
+			  return NE.getString("message");
+		  } else return "Cannot parse Neutron server's error message";
+  	  } catch (JSONException e) {
+		// TODO Auto-generated catch block
+  		return "Cannot parse Neutron server's error message";
+  	  }
+	  
+    }
+    
     /**
      *
      *
@@ -645,7 +667,7 @@ public class ParseUtils {
      */
 	public static Vector<Volume> parseVolumes( String volumesJson, String serversJson)  throws ParseException  {
 		
-		Log.d("PARSE", "volume json="+volumesJson);
+		//Log.d("PARSE", "volume json="+volumesJson);
 		
 		Vector<Server> servs = parseServers( serversJson );
 		Hashtable<String, String> server_id_to_name_mapping = new Hashtable<String, String>();
