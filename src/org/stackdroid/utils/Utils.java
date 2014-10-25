@@ -471,20 +471,26 @@ public class Utils {
      */
     public static boolean internetOn( Context ctx ) {
 
-	ConnectivityManager cm = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+    	ConnectivityManager cm = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
        	if(cm==null) return true;	
-	NetworkInfo ni_mob = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-	NetworkInfo ni_wifi= cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-	if(ni_mob!=null) {
-	    if(ni_mob.getState()==NetworkInfo.State.CONNECTED)
-		return true;
-	}
-	if(ni_wifi!=null) {
-	    if(ni_wifi.getState()==NetworkInfo.State.CONNECTED)
-		return true;
-	}
-	if(ni_wifi==null && ni_mob==null) return true;
-	return false;
+       	NetworkInfo ni_mob  = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+       	NetworkInfo ni_wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+       	NetworkInfo ni_bt   = cm.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH);
+
+       	if(ni_mob!=null) {
+       		if(ni_mob.getState()==NetworkInfo.State.CONNECTED)
+       			return true;
+       	}
+       	if(ni_wifi!=null) {
+       		if(ni_wifi.getState()==NetworkInfo.State.CONNECTED)
+       			return true;
+       	}
+       	if(ni_bt!=null) {
+       		if(ni_bt.getState()==NetworkInfo.State.CONNECTED)
+       			return true;
+       	}
+       	if(ni_wifi==null && ni_mob==null && ni_bt==null) return true;
+       	return false;
     }
 
     /**
