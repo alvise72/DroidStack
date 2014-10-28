@@ -171,7 +171,14 @@ public class MainActivity extends Activity
     		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
     		  enableButtons( );
         	  
-    	  } catch(NotExistingFileException nf) {
+    	  } catch(ClassNotFoundException cnfe) {
+    		  Utils.putStringPreference("SELECTEDUSER", "", this);
+    		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+        	  disableButtons( );
+        	  (new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/" + selectedUser )).delete();
+        	  return;
+    	  }
+    	    catch(NotExistingFileException nf) {
     		  Utils.putStringPreference("SELECTEDUSER", "", this);
     		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
         	  disableButtons( );

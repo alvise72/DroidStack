@@ -198,7 +198,32 @@ public class OSClient {
     								  U.getToken(), 
     								  vp );
 	   }
-    
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void deleteNetwork( String netID ) 
+	throws NotAuthorizedException, NotFoundException, 
+		   GenericException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+    {
+    	checkToken( );
+	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	//String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"" + netname + "\", \"admin_state_up\": true}}";
+    	//Log.d("REST/createNetwork", "extradata="+extradata);
+    	RESTClient.sendDELETERequest( U.useSSL(), 
+										   U.getNeutronEndpoint() + "/v2.0/networks/"+netID, 
+										   U.getToken(), 
+										   vp );
+    }    
     /*
      * 
      * 

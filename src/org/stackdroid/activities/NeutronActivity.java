@@ -33,6 +33,7 @@ import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.IPAddressKeyListener;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.Network;
 import org.stackdroid.utils.Server;
@@ -63,7 +64,9 @@ public class NeutronActivity extends Activity {
 	protected class DeleteNetworkListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
+			//Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
+			String netID = ((ImageButtonWithView) v).getNetworkListView( ).getNetwork().getID();
+			(new NeutronActivity.AsyncTaskOSDeleteNetwork()).execute(netID, "true");
 		}
 	}
 
@@ -244,7 +247,7 @@ public class NeutronActivity extends Activity {
 			    return;
 			}
 			
-			alertDialogCreateNetwork.dismiss();
+			//alertDialogCreateNetwork.dismiss();
 			NeutronActivity.this.progressDialogWaitStop.show( );
 			(new AsyncTaskOSCreateNetwork()).execute(netnameS, netAddr + "/" + netMask, DNS.getText().toString().trim(), startIPAddr, endIPAddr, gatewayIPAddr);
 		}
@@ -260,6 +263,7 @@ public class NeutronActivity extends Activity {
 		}
     	
     }
+
     
     /**
     *
@@ -398,7 +402,7 @@ public class NeutronActivity extends Activity {
     	private String jsonBufNet;
     	private String errorMessage;
     	private boolean hasError = false;
-    	
+    	private String netID;
     	@Override
     	protected Void doInBackground( String... v ) 
     	{
@@ -412,7 +416,7 @@ public class NeutronActivity extends Activity {
     		
     	    try {
     	    	jsonBufNet 		 = osc.createNetwork(netname, false);
-    	    	String netID     = ParseUtils.parseSingleNetwork(jsonBufNet);
+    	    	netID 		     = ParseUtils.parseSingleNetwork(jsonBufNet);
     	    	osc.createSubnetwork(netID, CIDR, DNS, startIP, endIP, gatewayIP);
     	    } catch(ServerErrorException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
@@ -431,9 +435,57 @@ public class NeutronActivity extends Activity {
      	    if(hasError) {
      	    	Utils.alert( errorMessage, NeutronActivity.this );
      	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
+     	    	(new NeutronActivity.AsyncTaskOSDeleteNetwork()).execute( netID, "false" );
      	    	return;
      	    }
     	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronActivity.this );
+    	    NeutronActivity.this.alertDialogCreateNetwork.dismiss();
+    	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
+    	}
+    }
+    
+    /**
+	 * 
+	 * 
+	 *
+	 */
+    protected class AsyncTaskOSDeleteNetwork extends AsyncTask<String, Void, Void> {
+    	private String jsonBufNet;
+    	private String errorMessage;
+    	private boolean hasError = false;
+    	boolean showMessage;
+    	
+    	@Override
+    	protected Void doInBackground( String... v ) 
+    	{
+    		OSClient osc = OSClient.getInstance(U);
+    		String netID = v[0];
+    		showMessage = Boolean.parseBoolean(v[1]);
+    		
+    	    try {
+    	    	osc.deleteNetwork(netID);
+    	    } catch(ServerErrorException se) {
+    	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+    	    	hasError = true;
+    	    } catch(Exception e) {
+    	    	errorMessage = e.getMessage();
+    	    	hasError = true;
+    	    }
+    	    return null;
+    	}
+    	
+    	@Override
+    	protected void onPostExecute( Void v ) {
+    	    super.onPostExecute(v);
+    	    
+     	    if(hasError) {
+     	    	Utils.alert( errorMessage, NeutronActivity.this );
+     	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
+     	    	NeutronActivity.this.alertDialogCreateNetwork.dismiss();
+     	    	return;
+     	    }
+     	    if(showMessage==true)
+     	    	Utils.alert(getString(R.string.NETWORKDELETED), NeutronActivity.this );
     	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
     	}
     }

@@ -2,6 +2,7 @@ package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 import android.app.Activity;
@@ -14,10 +15,12 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.stackdroid.views.UserView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.NotExistingFileException;
 import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.ImageButtonWithView;
 
@@ -104,10 +107,20 @@ public class UsersActivity extends Activity {
 	    		Log.d("USERS", "BAD file ["+users[i].getName( )+"]");
 	    		continue;
 	    	}
-	    } catch(Exception e) {
-	    	Utils.alert("ERROR: " + e.getMessage(), this);
-	    	continue;
-	    }
+	    }  catch(ClassNotFoundException cnfe) {
+  		  Utils.putStringPreference("SELECTEDUSER", "", this);
+  		  (new File(Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) + "/users/" + users[i].getName( ))).delete();
+      	  return;
+  	  	} catch(NotExistingFileException nf) {
+  		  Utils.putStringPreference("SELECTEDUSER", "", this);
+  		  return;
+        } catch(IOException ioe) {
+  		  Utils.alert("ERROR: "+ioe.getMessage() + "\n\n"+getString(R.string.RECREATEUSERS), this);
+  		  return;
+  	    } catch(Exception e) {
+  		  Utils.alert("ERROR: "+e.getMessage(), this );
+  		  return;
+  	    } 
 	    
 	    UserView uv = new UserView ( U, new UsersActivity.UserDeleteListener(), new UsersActivity.UserSelectedListener(),this );
 	    ((LinearLayout)findViewById(R.id.userLayout)).addView( uv );

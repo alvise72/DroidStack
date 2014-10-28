@@ -322,12 +322,42 @@ public class ImageLaunchActivity extends Activity {
 	  }
   	}
 
+  	/**
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 */
 	public void updateFlavorList(Vector<Flavor> flavs) {
 		spinnerFlavorsArrayAdapter = new ArrayAdapter<Flavor>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,flavs.subList(0,flavs.size()) );
 		spinnerFlavorsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerFlavors.setAdapter(spinnerFlavorsArrayAdapter);
 	}
 
+  	/**
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 */
 	public void updateSecGroupList(Vector<SecGroup> secgs) {
 		Iterator<SecGroup> sit = secgs.iterator();
 		while(sit.hasNext()) {
@@ -338,6 +368,21 @@ public class ImageLaunchActivity extends Activity {
 		}
 	}
 
+  	/**
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 *
+  	 */
 	public void updateKeyPairList(Vector<KeyPair> keys) {
 		spinnerKeypairsArrayAdapter = new ArrayAdapter<KeyPair>(ImageLaunchActivity.this, android.R.layout.simple_spinner_item,keys.subList(0, keys.size()) );
 		spinnerKeypairsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

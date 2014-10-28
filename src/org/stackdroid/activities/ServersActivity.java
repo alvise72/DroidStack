@@ -73,6 +73,7 @@ public class ServersActivity extends Activity {
     		Intent I = new Intent( ServersActivity.this, c );
     		I.putExtra( "IMAGEID", osi.getID() );
     	    I.putExtra("IMAGENAME", osi.getName());
+    	    ServersActivity.this.alertDialogSelectImage.dismiss();
     		startActivity( I );
 		}
 	}

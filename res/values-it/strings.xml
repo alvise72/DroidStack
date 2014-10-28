@@ -144,4 +144,7 @@
 	<string name="NOTALLOWEDSTARTIPEMPTY">Non consentito un indirizzo vuoto per start IP</string>
 	<string name="NOTALLOWEDENDIPEMPTY">Non consentito un indirizzo vuoto per end IP</string>
 	<string name="NOTALLOWEDGATEWAYIPEMPTY">Non consensito un indirizzo vuoto per gateway IP</string>
+	<string name="NETWORKDELETED">Rete cancellata con successo.</string>
+	<string name="NETWORKCREATED">Rete creata con successo. Tocca il pulsante \'Aggiorna\' per aggiornare la finestra...</string>
+	
 </resources>
