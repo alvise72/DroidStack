@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+	<View
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+    <Spinner
+        android:id="@+id/mySpinnerChooseIP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	android:textSize="14sp"
+        android:gravity="center_horizontal" />
+	<View
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+	<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal" >
+    <Button
+        android:id="@+id/myButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CONFIRM" />
+    <Button
+        android:id="@+id/myButtonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CANCEL" />
+
+</LinearLayout>
+</LinearLayout>
