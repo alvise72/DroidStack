@@ -61,8 +61,8 @@ public class ServersActivity extends Activity {
 
     private CustomProgressDialog    progressDialogWaitStop     = null;
     private User 				    U 						   = null;
-	public 	String 				    serverID 				   = null;
-	private String 				    serverid 				   = null;
+	private String 				    serverID 				   = null;
+	//private String 				    serverid 				   = null;
 	private ArrayAdapter<OSImage>   spinnerImagesArrayAdapter  = null;
 	private AlertDialog 		    alertDialogSelectImage     = null;
 	private AlertDialog 		    alertDialogSelectFIP       = null;
@@ -72,7 +72,6 @@ public class ServersActivity extends Activity {
 	public  Vector<FloatingIP>      fips					   = null;
 	public ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter     = null;
 	private Spinner fipSpinner;
-	//private Dialog alertDialogSelectFip;
 
 	/**
 	 * 
@@ -84,6 +83,7 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			ServersActivity.this.progressDialogWaitStop.show();
+			serverID = ( (ButtonWithView)v ).getServerView().getServer().getID();
 			(new ServersActivity.AsyncTaskFIPList()).execute( );
 		}
 	}
@@ -97,6 +97,10 @@ public class ServersActivity extends Activity {
 	protected void pickAFloatingIP( ) {
 		if(fips==null) {
 			Utils.alert("Severe: FIPS is NULL !!", this);
+			return;
+		}
+		if(fips.size()==0) {
+			Utils.alert(getString(R.string.NOFIPTOASSOCIATE), this);
 			return;
 		}
 		spinnerFIPArrayAdapter = new ArrayAdapter<FloatingIP>(ServersActivity.this, android.R.layout.simple_spinner_item,fips.subList(0,fips.size()) );
@@ -135,8 +139,9 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
-			Utils.alert(fip.getIP(), ServersActivity.this);
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
+			ServersActivity.this.progressDialogWaitStop.show();
+			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getIP(), serverID );
 		}
 	}
 
@@ -205,6 +210,10 @@ public class ServersActivity extends Activity {
 	 * 
 	 */
 	protected void pickAnImageToLaunch( ) {
+		if(images.size()==0) {
+			Utils.alert(getString(R.string.NOIMAGETOASSOCIATE), this);
+			return;
+		}
 		spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(ServersActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
 		spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
@@ -283,7 +292,7 @@ public class ServersActivity extends Activity {
 	protected class ServerSnapClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-		   	serverid  = ((ImageButtonWithView)v).getServerView().getServer().getID();
+		   	serverID  = ((ImageButtonWithView)v).getServerView().getServer().getID();
 		    	
 		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
@@ -298,7 +307,7 @@ public class ServersActivity extends Activity {
 	                } else {
 	                	//button.setText(newCateg);
 	                    ServersActivity.this.progressDialogWaitStop.show();
-	                    (new AsyncTaskCreateSnapshot( )).execute(serverid, snapname);
+	                    (new AsyncTaskCreateSnapshot( )).execute(serverID, snapname);
 	                }
 	            }
 	         });
@@ -460,7 +469,7 @@ public class ServersActivity extends Activity {
 	protected class ConsoleLogClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-			serverID = ((ButtonWithView)v).getServerView().getServer().getID();
+			ServersActivity.this.serverID = ((ButtonWithView)v).getServerView().getServer().getID();
 			
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));
@@ -991,4 +1000,50 @@ public class ServersActivity extends Activity {
 	    ServersActivity.this.pickAFloatingIP();
 	  }
     }
+    
+    /**
+ 	 * 
+ 	 * 
+ 	 *
+ 	 */
+     protected class AsyncTaskFIPAssociate extends AsyncTask<String, Void, Void>
+     {
+       private  String   errorMessage     = null;
+   	   private  boolean  hasError         = false;
+       private  String   floatingip       = null;
+       private  String   serverid         = null;
+       
+       @Override
+       protected Void doInBackground( String... ip_serverid ) 
+       {
+ 		floatingip = ip_serverid[0];
+ 		serverid   = ip_serverid[1];
+ 		OSClient osc = OSClient.getInstance(U);
+ 		
+ 	    
+ 	    try {
+ 		  osc.requestFloatingIPAssociate(floatingip, serverid);	    
+ 		} catch(Exception e) {
+ 		  errorMessage = e.getMessage();
+ 		  hasError = true;
+ 	    }
+ 	    return null;
+       }
+ 	
+ 	  @Override
+ 	  protected void onPostExecute( Void v ) {
+ 	    super.onPostExecute( v );
+ 	    
+  	    if(hasError) {
+  		  Utils.alert( errorMessage, ServersActivity.this );
+  		  ServersActivity.this.progressDialogWaitStop.dismiss( );
+  		  return;
+  	    }
+  	    Utils.alert( getString(R.string.FIPASSOCIATED2), ServersActivity.this );
+  	    (new AsyncTaskOSListServers()).execute( );
+  	    //ServersActivity.this.progressDialogWaitStop.dismiss( );
+  	    //ServersActivity.this.loadFIP();
+  	    
+ 	  }
+     }
 }

@@ -154,5 +154,8 @@
 	<string name="TOUCHUVOLTOVIEWINFO">Touch a volume to view extended info.</string>
 	<string name="TOUCHNETTOVIEWINFO">Touch a net to view extended info.</string>
 	<string name="NETWORKINFO">Network info</string>
+	<string name="NOIMAGETOASSOCIATE">There\'s no image to create an instance from.</string>
+	<string name="NOFIPTOASSOCIATE">There\'s no floating ip to associate.</string>
+	<string name="FIPASSOCIATED2">Floating IP has been associated to the server. Press on Menu-&gt;Update if the information are not updated.</string>
 	
 </resources>

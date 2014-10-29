@@ -73,7 +73,7 @@ public class ServerView extends LinearLayout {
 	String flavName = S.getFlavor( ).getName();// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
 	if(flavName.length()>30)
 	    flavName = flavName.substring(0,28) + "..";
-	Flavor.setText( flavName );
+	Flavor.setText( "Flavor: "+flavName );
 	Flavor.setOnClickListener( infoListener );
 	Flavor.setTextColor( Color.parseColor("#999999"));
 	//Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
