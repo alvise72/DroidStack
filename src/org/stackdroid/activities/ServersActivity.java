@@ -66,6 +66,13 @@ public class ServersActivity extends Activity {
 	private Spinner 			 imageSpinner			   = null;
 	public  Vector<OSImage> 	 images					   = null;
     
+	protected class AddIPButtonHandler implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			Utils.alert(getString(R.string.NOTIMPLEMENTED), ServersActivity.this);
+		}
+	}
+	
 	protected class ConfirmButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -563,6 +570,7 @@ public class ServersActivity extends Activity {
     		ServerView sv = new ServerView(s, new ServersActivity.ServerInfoClickListener(),
     										  new ServersActivity.ConsoleLogClickListener(),
     										  new ServersActivity.ServerDeleteClickListener(),
+    										  new ServersActivity.AddIPButtonHandler(),
     										  new ServersActivity.ServerSnapClickListener(),
     										  this);
     		((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );

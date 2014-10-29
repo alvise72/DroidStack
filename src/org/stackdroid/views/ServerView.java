@@ -23,6 +23,8 @@ public class ServerView extends LinearLayout {
 
     private ImageButtonWithView snapServer = null;
     private ImageButtonWithView deleteServer = null;
+    private ButtonWithView addIPToServer = null;
+    
     private ButtonWithView consoleLog = null;
 
     private Server S = null;
@@ -31,6 +33,7 @@ public class ServerView extends LinearLayout {
     				   OnClickListener infoListener, 
     				   OnClickListener consoleLogListener,
     				   OnClickListener deleteServerListener,
+    				   OnClickListener addIP,
     				   OnClickListener snapServerListener,
     				   Context ctx ) {
 	super(ctx);
@@ -116,13 +119,18 @@ public class ServerView extends LinearLayout {
 	snapServer.setImageResource(android.R.drawable.ic_menu_camera);
 	snapServer.setOnClickListener( snapServerListener );
 
+	addIPToServer = new ButtonWithView( ctx, this );
+	addIPToServer.setText("IP");
+	addIPToServer.setOnClickListener(addIP);
+	
 	btns = new LinearLayoutWithView( ctx, (ServerView)this );
 	btns.setOrientation( LinearLayout.HORIZONTAL );
 	
-	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 2f);
+	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 	btns.setLayoutParams( params3 );
 	btns.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 	//info.addView( consoleLog );
+	btns.addView( addIPToServer );
 	btns.addView( snapServer );
 	btns.addView( deleteServer );
 	
