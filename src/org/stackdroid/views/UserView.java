@@ -70,6 +70,7 @@ public class UserView extends LinearLayout {
 
 	textSSL = new TextViewWithView( ctx, (UserView)this );
 	textSSL.setText("SSL: ");
+	textSSL.setOnClickListener(selectUserListener);
 	if(U.useSSL()==true) {
 		textSSL.setTextColor(Color.parseColor("#FF0000"));
 		textSSL.setText("ssl: yes");
@@ -84,10 +85,10 @@ public class UserView extends LinearLayout {
 	userLayout.addView(textTenantName);
 	userLayout.addView(textEndpoint);
 	userLayout.addView(textSSL);
-	userLayout.setOnClickListener( selectUserListener );
+	//userLayout.setOnClickListener( selectUserListener );
 
 	row.addView(userLayout);
-	setOnClickListener( selectUserListener );
+	//setOnClickListener( selectUserListener );
       
 	buttonsLayout = new LinearLayoutWithView( ctx, this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
