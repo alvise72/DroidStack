@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
@@ -193,6 +194,7 @@ public class NeutronActivity extends Activity {
 		
         progressDialogWaitStop.show();
         (new AsyncTaskOSListNetworks()).execute( );
+        (Toast.makeText(this, getString(R.string.TOUCHNETTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
     
     //__________________________________________________________________________________	

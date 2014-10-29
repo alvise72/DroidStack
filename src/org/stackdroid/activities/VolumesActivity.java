@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Activity;
@@ -126,7 +127,7 @@ public class VolumesActivity extends Activity {
         	((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
 		else
 			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-		
+        (Toast.makeText(this, getString(R.string.TOUCHUVOLTOVIEWINFO), Toast.LENGTH_LONG)).show();
         progressDialogWaitStop.show();
         (new AsyncTaskListVolumes()).execute( );
     }

@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -519,6 +520,7 @@ public class ServersActivity extends Activity {
 		
         progressDialogWaitStop.show();
         (new AsyncTaskOSListServers()).execute( );
+        (Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
 
 	/**

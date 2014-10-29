@@ -149,5 +149,9 @@
 	<string name="NOTALLOWEDENDIPEMPTY">Not allowed an empty end IP</string>
 	<string name="NOTALLOWEDGATEWAYIPEMPTY">Not allowed an empty gateway IP</string>
 	<string name="NETWORKDELETED">Network successfully deleted.</string>
+	<string name="TOUCHUSERTOVIEWINFO">Touch a server name to view extended info.</string>
+	<string name="TOUCHUIMGTOVIEWINFO">Touch an image to view extended info.</string>
+	<string name="TOUCHUVOLTOVIEWINFO">Touch a volume to view extended info.</string>
+	<string name="TOUCHNETTOVIEWINFO">Touch a net to view extended info.</string>
 	
 </resources>

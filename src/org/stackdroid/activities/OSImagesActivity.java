@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
@@ -109,6 +110,7 @@ public class OSImagesActivity extends Activity {
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
         progressDialogWaitStop.setCancelable(false);
         progressDialogWaitStop.setCanceledOnTouchOutside(false);
+        (Toast.makeText(this, getString(R.string.TOUCHUIMGTOVIEWINFO), Toast.LENGTH_LONG)).show();
         this.update( );
     }
     

@@ -146,5 +146,9 @@
 	<string name="NOTALLOWEDGATEWAYIPEMPTY">Non consensito un indirizzo vuoto per gateway IP</string>
 	<string name="NETWORKDELETED">Rete cancellata con successo.</string>
 	<string name="NETWORKCREATED">Rete creata con successo. Tocca il pulsante \'Aggiorna\' per aggiornare la finestra...</string>
+	<string name="TOUCHUSERTOVIEWINFO">Tocca il nome di un server per vedere pi&#xf9; informazioni.</string>
+	<string name="TOUCHUIMGTOVIEWINFO">Tocca un\'immagine per vedere pi&#xf9; informazioni.</string>
+	<string name="TOUCHUVOLTOVIEWINFO">Tocca un volume per vedere pi&#xf9; informazioni.</string>
+	<string name="TOUCHNETTOVIEWINFO">Tocca una rete per vedere pi&#xf9; informazioni.</string>
 	
 </resources>
