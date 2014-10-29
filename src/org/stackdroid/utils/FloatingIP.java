@@ -23,11 +23,12 @@ public class FloatingIP {
 
     @Override
     public String toString( ) {
-	return "FloatingIP{IP=" + IP
+    	return IP;
+/*	return "FloatingIP{IP=" + IP
 		+ ",fixed IP=" + fixedIP
 	    + ",pool=" + poolName
 	    + ",server="+attachedTo
-	    + "}";
+	    + "}";*/
     }
 
     public String getPoolName( ) { return poolName; }

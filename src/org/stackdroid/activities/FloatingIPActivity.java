@@ -384,7 +384,7 @@ public class FloatingIPActivity extends Activity {
 	    	}
 	    	FloatingIPActivity.this.refreshView(fips, networks);
 	    } catch(ParseException pe) {
-		  Utils.alert("FloatingIPActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
+		  Utils.alert("FloatingIPActivity.AsyncTaskFIPList.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );
 	    }
 	    FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
 	  }

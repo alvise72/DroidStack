@@ -12,6 +12,7 @@ import android.widget.Toast;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
@@ -35,6 +36,7 @@ import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
+import org.stackdroid.utils.FloatingIP;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.ButtonWithView;
 import org.stackdroid.utils.Configuration;
@@ -57,22 +59,106 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class ServersActivity extends Activity {
 
-    private CustomProgressDialog progressDialogWaitStop    = null;
-    private User 				 U 						   = null;
-	public 	String 				 serverID 				   = null;
-	private String 				 serverid 				   = null;
-	private ArrayAdapter<OSImage> spinnerImagesArrayAdapter= null;
-	private AlertDialog 		 alertDialogSelectImage    = null;
-	private Spinner 			 imageSpinner			   = null;
-	public  Vector<OSImage> 	 images					   = null;
-    
+    private CustomProgressDialog    progressDialogWaitStop     = null;
+    private User 				    U 						   = null;
+	public 	String 				    serverID 				   = null;
+	private String 				    serverid 				   = null;
+	private ArrayAdapter<OSImage>   spinnerImagesArrayAdapter  = null;
+	private AlertDialog 		    alertDialogSelectImage     = null;
+	private AlertDialog 		    alertDialogSelectFIP       = null;
+	
+	private Spinner 			    imageSpinner			   = null;
+	public  Vector<OSImage> 	    images					   = null;
+	public  Vector<FloatingIP>      fips					   = null;
+	public ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter     = null;
+	private Spinner fipSpinner;
+	//private Dialog alertDialogSelectFip;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	protected class AddIPButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			Utils.alert(getString(R.string.NOTIMPLEMENTED), ServersActivity.this);
+			ServersActivity.this.progressDialogWaitStop.show();
+			(new ServersActivity.AsyncTaskFIPList()).execute( );
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	protected void pickAFloatingIP( ) {
+		if(fips==null) {
+			Utils.alert("Severe: FIPS is NULL !!", this);
+			return;
+		}
+		spinnerFIPArrayAdapter = new ArrayAdapter<FloatingIP>(ServersActivity.this, android.R.layout.simple_spinner_item,fips.subList(0,fips.size()) );
+		spinnerFIPArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			
+		LayoutInflater li = LayoutInflater.from(this);
+
+	    View promptsView = li.inflate(R.layout.my_dialog_associate_fip, null);
+
+	    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+	    alertDialogBuilder.setView(promptsView);
+
+	    alertDialogBuilder.setTitle("Choose a Floating IP");
+	    alertDialogSelectFIP = alertDialogBuilder.create();
+
+	    fipSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseIP);
+	    fipSpinner.setAdapter(spinnerFIPArrayAdapter);
+	    final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
+	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
+		
+	    mButton.setOnClickListener(new ServersActivity.ConfirmButtonHandlerForFIP());
+	    mButtonCancel.setOnClickListener(new ServersActivity.CancelButtonHandlerForFIP());
+	    alertDialogSelectFIP.setCanceledOnTouchOutside(false);
+	    alertDialogSelectFIP.setCancelable(false);
+	    alertDialogSelectFIP.show();
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	protected class ConfirmButtonHandlerForFIP implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
+			Utils.alert(fip.getIP(), ServersActivity.this);
+			ServersActivity.this.alertDialogSelectFIP.dismiss();
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	protected class CancelButtonHandlerForFIP implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogSelectFIP.dismiss();
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	protected class ConfirmButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -85,21 +171,39 @@ public class ServersActivity extends Activity {
     		startActivity( I );
 		}
 	}
-	
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	protected class CancelButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
 			alertDialogSelectImage.dismiss();
 		}
 	}
-	
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	public void createInstance( View v ) {
 		this.progressDialogWaitStop.show();
 		(new ServersActivity.AsyncTaskOSListImages()).execute();
 
 		
 	}
-	
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	protected void pickAnImageToLaunch( ) {
 		spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(ServersActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
 		spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -744,7 +848,7 @@ public class ServersActivity extends Activity {
      	}
    }
     
-  //__________________________________________________________________________________
+    //__________________________________________________________________________________
     protected class AsyncTaskOSLogServer extends AsyncTask<String, Void, Void>
     {
      	private  String   errorMessage     = null;
@@ -839,5 +943,52 @@ public class ServersActivity extends Activity {
      		
      		ServersActivity.this.progressDialogWaitStop.dismiss( );
      	}
+    }
+    
+    /**
+	 * 
+	 * 
+	 *
+	 */
+    protected class AsyncTaskFIPList extends AsyncTask<Void, Void, Void>
+    {
+      private  String   errorMessage     = null;
+  	  private  boolean  hasError         = false;
+	  private  String   jsonBuf          = null;
+	  
+	  @Override
+	  protected Void doInBackground( Void ... v ) 
+	  {
+	    OSClient osc = OSClient.getInstance(U);
+
+	    try {
+		  jsonBuf         = osc.requestFloatingIPs( );
+	    } catch(Exception e) {
+		  errorMessage = e.getMessage();
+		  hasError = true;
+	    }
+		return null;
+	  }
+	
+	  @Override
+	  protected void onPostExecute( Void v ) {
+	    super.onPostExecute( v );
+	    
+ 	    if(hasError) {
+ 		  Utils.alert( errorMessage, ServersActivity.this );
+ 		  ServersActivity.this.progressDialogWaitStop.dismiss( );
+ 		  return;
+ 	    }
+	    
+	    try {
+	    	ServersActivity.this.fips = ParseUtils.parseFloatingIP(jsonBuf);
+	    } catch(ParseException pe) {
+		    Utils.alert("ServersActivity.AsyncTaskFIPList.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
+		    ServersActivity.this.progressDialogWaitStop.dismiss( );
+		    return;
+	    }
+	    ServersActivity.this.progressDialogWaitStop.dismiss( );
+	    ServersActivity.this.pickAFloatingIP();
+	  }
     }
 }
