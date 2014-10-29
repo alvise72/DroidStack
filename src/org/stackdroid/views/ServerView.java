@@ -129,7 +129,7 @@ public class ServerView extends LinearLayout {
 	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 	btns.setLayoutParams( params3 );
 	btns.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-	//info.addView( consoleLog );
+
 	btns.addView( addIPToServer );
 	btns.addView( snapServer );
 	btns.addView( deleteServer );

@@ -150,5 +150,6 @@
 	<string name="TOUCHUIMGTOVIEWINFO">Tocca un\'immagine per vedere pi&#xf9; informazioni.</string>
 	<string name="TOUCHUVOLTOVIEWINFO">Tocca un volume per vedere pi&#xf9; informazioni.</string>
 	<string name="TOUCHNETTOVIEWINFO">Tocca una rete per vedere pi&#xf9; informazioni.</string>
+	<string name="NETWORKINFO">Info sulla rete</string>
 	
 </resources>

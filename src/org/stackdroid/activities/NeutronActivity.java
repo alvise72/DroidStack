@@ -103,9 +103,20 @@ public class NeutronActivity extends Activity {
 			TextView tv7 = new TextView(NeutronActivity.this);
 			tv7.setText("Subnet address");
 			tv7.setTypeface( null, Typeface.BOLD );
-			TextView tv8 = new TextView(NeutronActivity.this);
-			tv8.setText(N.getSubNetworks()[0].getAddress());
-	    
+			
+			TextView tv8 = null;
+			Vector<TextView> tv9V = new Vector<TextView>();
+			if( N.getSubNetworks().length>=1 && N.getSubNetworks()[0]!=null ) {
+			  tv8 = new TextView(NeutronActivity.this);			
+			  tv8.setText(N.getSubNetworks()[0].getAddress());
+			  if(N.getSubNetworks()[0].getAllocationPools()!=null) {
+				  for(int j=0; j<N.getSubNetworks()[0].getAllocationPools().length;++j ) {
+				    TextView t = new TextView(NeutronActivity.this);
+				    t.setText(N.getSubNetworks()[0].getAllocationPools()[j].getStartIP()+" - "+N.getSubNetworks()[0].getAllocationPools()[0].getEndIP());
+				    tv9V.add( t );
+				  }
+			  }
+			}
 			ScrollView sv = new ScrollView(NeutronActivity.this);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT,
@@ -128,16 +139,21 @@ public class NeutronActivity extends Activity {
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
 			l.addView(tv7);
-			l.addView(tv8);
-			tv8.setPadding(paddingDp, 0, 0, 0);
-			
+			if(tv8!=null) {
+			  l.addView(tv8);
+			  tv8.setPadding(paddingDp, 0, 0, 0);
+			  for(int j = 0; j<tv9V.size(); j++) {
+			    l.addView(tv9V.elementAt(j));
+			    tv9V.elementAt(j).setPadding(paddingDp, 0, 0, 0);
+			  }
+			}
 			sv.addView(l);
 			String name;
 			if(N.getName().length()>=16)
 				name = N.getName().substring(0,14) + "..";
 			else
 				name = N.getName();
-			Utils.alertInfo( sv, "Network information: "+name, NeutronActivity.this );
+			Utils.alertInfo( sv, getString(R.string.NETWORKINFO)+" " +name, NeutronActivity.this );
 		}
 	}
 	

@@ -153,5 +153,6 @@
 	<string name="TOUCHUIMGTOVIEWINFO">Touch an image to view extended info.</string>
 	<string name="TOUCHUVOLTOVIEWINFO">Touch a volume to view extended info.</string>
 	<string name="TOUCHNETTOVIEWINFO">Touch a net to view extended info.</string>
+	<string name="NETWORKINFO">Network info</string>
 	
 </resources>
