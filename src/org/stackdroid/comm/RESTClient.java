@@ -22,7 +22,6 @@ import org.stackdroid.parse.ParseUtils;
 
 import android.util.Log;
 import android.util.Pair;
-import org.stackdroid.comm.ServerErrorException;
 
 public class RESTClient {
 
@@ -39,30 +38,27 @@ public class RESTClient {
     								   String tenantName, 
     								   String username, 
     								   String password )
-      throws IOException, GenericException, 
+      throws IOException, ServerException, 
       		 NotFoundException, NotAuthorizedException, 
       		 ServiceUnAvailableOrInternalError, MalformedURLException,
       		 ProtocolException
     {
-    	//Log.d("REST", "REQTOKEN url="+endpoint);
-
-//    Log.d("REQUESTOKEN", "endpoint="+endpoint);
-	URL url = new URL(endpoint);
+    	URL url = new URL(endpoint);
 	
-	URLConnection conn = null;
-	TrustManager[] trustAllCerts = null;
-	if(usessl) {
-	    trustAllCerts = new TrustManager[] {
-		new X509TrustManager() {
-		    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-			return null;
-		    }
+    	URLConnection conn = null;
+    	TrustManager[] trustAllCerts = null;
+    	if(usessl) {
+    		trustAllCerts = new TrustManager[] {
+    				new X509TrustManager() {
+    					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+    						return null;
+    					}
 		    
 		    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
 		    
 		    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
 		    
-		}
+    				}
 	    };
 	    
 	    try {
@@ -138,17 +134,6 @@ public class RESTClient {
 	    throw new IOException( mex );
 	}
 	
-	/**
-	 * Handling of 5xx HTTP error codes
-	 * Note: HttpStatus does not provide 506 error code (W3 stops at 505)
-	 * status == HttpStatus.SC_SERVICE_UNAVAILABLE || // 503
-	   status == HttpStatus.SC_BAD_GATEWAY || // 502
-	   status == HttpStatus.SC_GATEWAY_TIMEOUT || // 504
-	   status == HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED || // 505
-	   status == HttpStatus.SC_INSUFFICIENT_STORAGE || // 507
-	   status == HttpStatus.SC_INTERNAL_SERVER_ERROR || // 500
-	   status == HttpStatus.SC_NOT_IMPLEMENTED ) // 501
-	 */
 	if( status >= 500 )
 		throw(new ServiceUnAvailableOrInternalError());
 	
@@ -193,7 +178,7 @@ public class RESTClient {
 		if(status == HttpStatus.SC_NOT_FOUND)
 			throw new NotFoundException( "RESTClient.requestToken - Not Found: " + errorMessage );
 		
-		throw new GenericException( "RESTClient.requestToken: " + errorMessage );
+		throw new ServerException( buf );
 	}
 	
 	/**
@@ -349,8 +334,8 @@ public class RESTClient {
 					 					  String extradata,
 					 					  Vector<Pair<String,String>> properties ) 
 	  throws NotAuthorizedException, NotFoundException, 
-	  		 GenericException, ServiceUnAvailableOrInternalError, 
-	  		 MalformedURLException, IOException, ProtocolException, ServerErrorException
+	  		 ServerException, ServiceUnAvailableOrInternalError, 
+	  		 MalformedURLException, IOException, ProtocolException
     {
     	
     	
@@ -440,7 +425,6 @@ public class RESTClient {
     	int status = HttpStatus.SC_OK;
     	try {
     		status = ((HttpURLConnection)conn).getResponseCode();
-    		//Log.d("RESTCLIENT","status="+status);
     	} catch(IOException ioe) {
     		if(usessl)
     			((HttpsURLConnection)conn).disconnect( );
@@ -449,21 +433,8 @@ public class RESTClient {
     		throw new IOException("RESTClient.sendPOSTRequest.getResponseCode: "+ioe.getMessage( ) );
     	}
 	
-    	/**
-    	 * Handling of 5xx HTTP error codes
-    	 * Note: HttpStatus does not provide 506 error code (W3 stops at 505)
-    	 * status == HttpStatus.SC_SERVICE_UNAVAILABLE || // 503
-	       status == HttpStatus.SC_BAD_GATEWAY || // 502
-	       status == HttpStatus.SC_GATEWAY_TIMEOUT || // 504
-	       status == HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED || // 505
-	       status == HttpStatus.SC_INSUFFICIENT_STORAGE || // 507
-	       status == HttpStatus.SC_INTERNAL_SERVER_ERROR || // 500
-	       status == HttpStatus.SC_NOT_IMPLEMENTED ) // 501
-	     */
     	if( status >= 500 )
     		throw(new ServiceUnAvailableOrInternalError());
-	
-	
 	
 	if( status >= 400 ) {
 		String buf = "";
@@ -503,10 +474,10 @@ public class RESTClient {
 	    	throw new NotAuthorizedException( errorMessage );
 	    if(status == HttpStatus.SC_NOT_FOUND)
 			throw new NotFoundException( errorMessage );
-	    if(status == HttpStatus.SC_CONFLICT || status == HttpStatus.SC_BAD_REQUEST)
-	    	throw new ServerErrorException( buf );
+	    //if(status == HttpStatus.SC_CONFLICT || status == HttpStatus.SC_BAD_REQUEST)
+	    //	throw new ServerErrorException( buf );
 	    
-	    throw new GenericException( "RESTClient.sendPOSTRequest: " + errorMessage );
+	    throw new ServerException( buf );
 	}
 	
 	BufferedInputStream inStream = null;
@@ -543,9 +514,9 @@ public class RESTClient {
     									  String sURL, 
 					  					  String token,
 					  					  Vector<Pair<String,String>> properties ) 
-	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, GenericException, MalformedURLException, ProtocolException
+	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, ServerException, MalformedURLException, ProtocolException
     {
-    	//Log.d("REST", "DELETE url="+sURL);
+    	
 	URL url = new URL(sURL);
 	
 	URLConnection conn = null;
@@ -591,17 +562,6 @@ public class RESTClient {
 	    throw new IOException( "RESTClient.sendDELETERequest.getResponseCode: " + ioe.getMessage( ) );
 	}
 
-	/**
-	 * Handling of 5xx HTTP error codes
-	 * Note: HttpStatus does not provide 506 error code (W3 stops at 505)
-	 * status == HttpStatus.SC_SERVICE_UNAVAILABLE || // 503
-       status == HttpStatus.SC_BAD_GATEWAY || // 502
-       status == HttpStatus.SC_GATEWAY_TIMEOUT || // 504
-       status == HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED || // 505
-       status == HttpStatus.SC_INSUFFICIENT_STORAGE || // 507
-       status == HttpStatus.SC_INTERNAL_SERVER_ERROR || // 500
-       status == HttpStatus.SC_NOT_IMPLEMENTED ) // 501
-     */
 	if( status >= 500 )
 		throw(new ServiceUnAvailableOrInternalError());
 
@@ -610,20 +570,8 @@ public class RESTClient {
 	    return;
 	}
 
-/*	if( status == HttpStatus.SC_NOT_FOUND ) {
-		if(usessl)
-		      ((HttpsURLConnection)conn).disconnect( );
-			else
-			  ((HttpURLConnection)conn).disconnect( );
-	    throw new NotFoundException( "Server responded with NOT_FOUND (HTTP 404)" );
-	}*/
-
 	if( status >= 400 ) {
 		
-		//if(status == HttpStatus.SC_UNAUTHORIZED)
-		//	throw new NotAuthorizedException( "RESTClient.sendDELETERequest: Not Authorized" );
-		//if(status == HttpStatus.SC_NOT_FOUND)
-		//	throw new NotFoundException( "RESTClient.sendDELETERequest: Not Found" );
 		String buf = "";
 	    InputStream in = ((HttpURLConnection)conn).getErrorStream( );
 	    if(in!=null) {
@@ -632,9 +580,7 @@ public class RESTClient {
 		byte[] buffer = new byte[4096];
 		try {
 		    while (-1 != (len = in.read(buffer))) {
-			//bos.write(buffer, 0, len);
 			buf += new String(buffer, 0, len);
-			//			Log.d("RESTCLIENT", new String(buffer, 0, len));
 		    }
 		    in.close();
 		} catch(IOException ioe) {
@@ -658,11 +604,11 @@ public class RESTClient {
 	    }
 	    
 	    if(status == HttpStatus.SC_UNAUTHORIZED)
-	    	throw new NotAuthorizedException( "RESTClient.sendPOSTRequest - Not Authorized: " + errorMessage );
+	    	throw new NotAuthorizedException( "RESTClient.sendDELETERequest - Not Authorized: " + errorMessage );
 	    if(status == HttpStatus.SC_NOT_FOUND)
-			throw new NotFoundException( "RESTClient.sendPOSTRequest - Not Found: " + errorMessage );
+			throw new NotFoundException( "RESTClient.sendDELETERequest - Not Found: " + errorMessage );
 	    
-	    throw new GenericException( "RESTClient.sendPOSTRequest: " + errorMessage );
+	    throw new ServerException( buf );
 	}
 	if(usessl)
 	      ((HttpsURLConnection)conn).disconnect( );

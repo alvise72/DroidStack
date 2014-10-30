@@ -79,7 +79,7 @@ public class OSClient {
      * 
      * 
      */
-    private void checkToken( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    private void checkToken( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException {
     	//Log.d("OSC", "expiration="+U.getTokenExpireTime() + " - now="+Utils.now() + 5);
     	if(U.getTokenExpireTime() <= Utils.now() + 5) {
@@ -110,8 +110,8 @@ public class OSClient {
      */
     public void volumeAttach( String volumeID, String serverID ) 
     		throws NotAuthorizedException, NotFoundException, 
-	   GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+	   ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
 	{
     	checkToken( );
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -135,7 +135,7 @@ public class OSClient {
      */
     public void volumeDetach( String volumeID, String serverID ) 
     		throws NotAuthorizedException, NotFoundException, 
-	   GenericException, ServiceUnAvailableOrInternalError,
+	   ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
 	{
     	checkToken( );
@@ -159,8 +159,8 @@ public class OSClient {
      */
     public void createVolume( String volname, int size_in_GB ) 
     		throws NotAuthorizedException, NotFoundException, 
-	   GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+	   ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
 	   {
     		checkToken( );
     		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -185,7 +185,7 @@ public class OSClient {
      */
     public void deleteVolume( String volID ) 
     		throws NotAuthorizedException, NotFoundException, 
-	   GenericException, ServiceUnAvailableOrInternalError,
+	   ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
 	   {
     	checkToken( );
@@ -209,8 +209,8 @@ public class OSClient {
      */
     public void deleteNetwork( String netID ) 
 	throws NotAuthorizedException, NotFoundException, 
-		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+		   ServerException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
 	
@@ -234,8 +234,8 @@ public class OSClient {
      */
     public String createNetwork( String netname, boolean shared ) 
 	throws NotAuthorizedException, NotFoundException, 
-		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+		   ServerException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
 	
@@ -262,8 +262,8 @@ public class OSClient {
      */
     public void createSubnetwork( String netID, String CIDR, String DNS, String startIP, String endIP, String gatewayIP ) 
 	throws NotAuthorizedException, NotFoundException, 
-		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException, ServerErrorException
+		   ServerException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
 	
@@ -289,8 +289,8 @@ public class OSClient {
      */
     public void createInstanceSnapshot( String serverID, String snapshotName ) 
 	throws NotAuthorizedException, NotFoundException, 
-		   GenericException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+		   ServerException, ServiceUnAvailableOrInternalError,
+		   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
 	
@@ -314,8 +314,8 @@ public class OSClient {
      * 
      */
     public void requestFloatingIPAllocation( String externalNetworkID ) 
-	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
 	
@@ -341,8 +341,8 @@ public class OSClient {
      * 
      */
     public void createSecGroup( String secgrpName, String desc)  
-    		throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError ,
- 		   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+    		throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError ,
+ 		   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
     	
@@ -365,7 +365,7 @@ public class OSClient {
      * 
      * 
      */
-    public String requestVolumes( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestVolumes( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
@@ -388,8 +388,8 @@ public class OSClient {
      * 
      */
     public void requestFloatingIPAssociate( String fip, String serverid ) 
-	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError ,
-	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError ,
+	   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
     	
@@ -412,7 +412,7 @@ public class OSClient {
      *
      *
     */
-    public void requestFloatingIPRelease( String fip ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public void requestFloatingIPRelease( String fip ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
@@ -435,8 +435,8 @@ public class OSClient {
     *
     *
     */
-   public void requestReleaseFloatingIP( String floatingip, String serverid ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+   public void requestReleaseFloatingIP( String floatingip, String serverid ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
    {
 	   checkToken( );
 	
@@ -462,8 +462,8 @@ public class OSClient {
     *
     *
     */
-   public String requestServerLog( String serverid, int maxlines ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+   public String requestServerLog( String serverid, int maxlines ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
     {
 	   checkToken( );
 	
@@ -486,7 +486,7 @@ public class OSClient {
      *
      *
      */
-    public String requestImages( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestImages( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -505,7 +505,7 @@ public class OSClient {
      *
      *
      */
-    public String requestQuota( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestQuota( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -527,7 +527,7 @@ public class OSClient {
      *
      *
      */
-    public String requestVolQuota( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestVolQuota( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -549,7 +549,7 @@ public class OSClient {
      *
      *
      */
-    public String requestFloatingIPs( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestFloatingIPs( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -571,7 +571,7 @@ public class OSClient {
      *
      *
      */
-    public String requestServers( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -594,7 +594,7 @@ public class OSClient {
      *
      *
      */
-    public String requestFlavors( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestFlavors( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -618,7 +618,7 @@ public class OSClient {
      *
      */
     public void deleteGlanceImage( String imageID ) 
-    	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
   	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -640,7 +640,7 @@ public class OSClient {
      *
      */
     public void deleteRule( String ruleID ) 
-    	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
   	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -660,7 +660,7 @@ public class OSClient {
      *
      *
      */
-    public void deleteInstance( String serverID ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public void deleteInstance( String serverID ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -679,7 +679,7 @@ public class OSClient {
      *
      *
      */
-    public String requestNetworks( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -701,7 +701,7 @@ public class OSClient {
      *
      *
      */
-    public String requestSubNetworks( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestSubNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -723,7 +723,7 @@ public class OSClient {
      * 
      *
      */
-    public String requestKeypairs( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestKeypairs( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -745,7 +745,7 @@ public class OSClient {
      * 
      *
      */
-    public String requestSecGroups( ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestSecGroups( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -765,7 +765,7 @@ public class OSClient {
      * 
      *
      */
-    public String requestSecGroupListRules( String secgrpID ) throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    public String requestSecGroupListRules( String secgrpID ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -787,7 +787,7 @@ public class OSClient {
      *
      */
     public void deleteSecGroup( String secgrpID ) 
-    	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
+    	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
   	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
@@ -816,8 +816,8 @@ public class OSClient {
     									 int count,
     									 String securityGroupID,
     									 Hashtable<String, String> netID_to_netIP )
-    	throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
- 	   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+    	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+ 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
  		
@@ -881,8 +881,8 @@ public class OSClient {
      *
      */
 	public void createRule(String secgrpID, int fromPort, int toPort, String protocol, String cidr) 
-			throws NotAuthorizedException, NotFoundException, GenericException, ServiceUnAvailableOrInternalError,
-			   IOException, MalformedURLException, ProtocolException, ParseException, ServerErrorException
+			throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+			   IOException, MalformedURLException, ProtocolException, ParseException
 	{
 		checkToken( );
 		

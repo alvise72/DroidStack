@@ -230,17 +230,17 @@ public class ParseUtils {
       try {
         jsonObject = new JSONObject( jsonBuf );
 
-	if(jsonObject.has("error"))
-	    errorMessage = jsonObject.getJSONObject("error").getString("message");
+        if(jsonObject.has("error"))
+        	errorMessage = jsonObject.getJSONObject("error").getString("message");
 
-	if(jsonObject.has("badRequest"))
-	    errorMessage = jsonObject.getJSONObject("badRequest").getString("message");
+        if(jsonObject.has("badRequest"))
+        	errorMessage = jsonObject.getJSONObject("badRequest").getString("message");
 
-	if(jsonObject.has("overLimit"))
-	    errorMessage = jsonObject.getJSONObject("overLimit").getString("message");
+        if(jsonObject.has("overLimit"))
+        	errorMessage = jsonObject.getJSONObject("overLimit").getString("message");
 
-	if(jsonObject.has("itemNotFound"))
-	    errorMessage = jsonObject.getJSONObject("itemNotFound").getString("message");
+        if(jsonObject.has("itemNotFound"))
+        	errorMessage = jsonObject.getJSONObject("itemNotFound").getString("message");
 
       } catch(org.json.JSONException joe) {
         throw new ParseException ("Cannot parse json error message from remote server");

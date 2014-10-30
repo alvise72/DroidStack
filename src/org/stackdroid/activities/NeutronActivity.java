@@ -23,7 +23,8 @@ import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.comm.ServerErrorException;
+//import org.stackdroid.comm.ServerErrorException;
+import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 
@@ -383,6 +384,9 @@ public class NeutronActivity extends Activity {
     	    try {
     	    	jsonBufNet 		 = osc.requestNetworks();
     	    	jsonBufSubnet    = osc.requestSubNetworks();
+    	    } catch(ServerException se) {
+    	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+    	    	hasError = true;
     	    } catch(Exception e) {
     	    	errorMessage = e.getMessage();
     	    	hasError = true;
@@ -436,7 +440,7 @@ public class NeutronActivity extends Activity {
     	    	jsonBufNet 		 = osc.createNetwork(netname, false);
     	    	netID 		     = ParseUtils.parseSingleNetwork(jsonBufNet);
     	    	osc.createSubnetwork(netID, CIDR, DNS, startIP, endIP, gatewayIP);
-    	    } catch(ServerErrorException se) {
+    	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
     	    	hasError = true;
     	    } catch(Exception e) {
@@ -482,7 +486,7 @@ public class NeutronActivity extends Activity {
     		
     	    try {
     	    	osc.deleteNetwork(netID);
-    	    } catch(ServerErrorException se) {
+    	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
     	    	hasError = true;
     	    } catch(Exception e) {
@@ -499,7 +503,8 @@ public class NeutronActivity extends Activity {
      	    if(hasError) {
      	    	Utils.alert( errorMessage, NeutronActivity.this );
      	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
-     	    	NeutronActivity.this.alertDialogCreateNetwork.dismiss();
+     	    	if(NeutronActivity.this.alertDialogCreateNetwork!=null)
+     	    		NeutronActivity.this.alertDialogCreateNetwork.dismiss();
      	    	return;
      	    }
      	    if(showMessage==true)
