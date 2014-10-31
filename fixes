@@ -1,3 +1,4 @@
 fixed access to OpenStack's keystone running as wsgi inside apache (and which doesn't support chunked mode)
 ability to differentiately talk with SSL to keystone, and plain to nova/neutron/...
 other minor fixes
+fixed detection of cinder service and endpoint 1 or 2
