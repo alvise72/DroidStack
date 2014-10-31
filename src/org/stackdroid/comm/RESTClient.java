@@ -208,6 +208,8 @@ public class RESTClient {
 	      ((HttpsURLConnection)conn).disconnect( );
 		else
 		  ((HttpURLConnection)conn).disconnect( );
+	
+	Log.d("RESTClient", "res="+res);
 	return res;
     }
 
@@ -226,7 +228,7 @@ public class RESTClient {
 		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
     {
     	
-    	//Log.d("RESTClient", "sURL="+sURL);
+    	Log.d("RESTClient", "sURL="+sURL);
     	
     	if(sURL.startsWith("https://")) usessl=true;
     	if(sURL.startsWith("http://")) usessl=false;

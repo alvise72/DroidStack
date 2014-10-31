@@ -76,10 +76,12 @@ public class ParseUtils {
     			  }
     			  if(type.compareTo("volumev2")==0) {
     				  cinder2=true;
+    				  //Log.d("ParseUtils", "VOLUME2 - PublicURL="+endpoint.getString("publicURL"));
     				  cinder2EP = endpoint.getString("publicURL");
     			  }
     			  if(type.compareTo("volume")==0) {
     				  cinder1=true;
+    				  //Log.d("ParseUtils", "VOLUME - PublicURL="+endpoint.getString("publicURL"));
     				  cinder1EP = endpoint.getString("publicURL");
     			  }
     			  if(type.compareTo("image")==0) {

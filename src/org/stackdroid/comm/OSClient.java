@@ -81,7 +81,6 @@ public class OSClient {
      */
     private void checkToken( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException {
-    	//Log.d("OSC", "expiration="+U.getTokenExpireTime() + " - now="+Utils.now() + 5);
     	if(U.getTokenExpireTime() <= Utils.now() + 5) {
     			String jsonBuffer = RESTClient.requestToken( U.useSSL() ,
 	    												 	 U.getIdentityEndpoint() + "/tokens",
@@ -93,7 +92,6 @@ public class OSClient {
     			boolean ssl = U.useSSL();
     			U = ParseUtils.parseUser( jsonBuffer );
     			U.setPassword( pwd );
-    			//U.setEndpoint( edp );
     			U.setSSL( ssl );
     			U.toFile( Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
     		
@@ -369,12 +367,19 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
     	checkToken( );
+    	String cinderEP = null;
+    	if(U.getCinder2Endpoint()!=null)
+    		cinderEP = U.getCinder2Endpoint();
+    	else
+    		cinderEP = U.getCinder1Endpoint();
+    	
+    	
     	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	return RESTClient.sendGETRequest( U.useSSL(), 
-    									  U.getCinder2Endpoint() + "/volumes/detail", 
+    									  cinderEP + "/volumes/detail", 
     									  U.getToken( ), 
     									  vp );
     }
