@@ -86,7 +86,7 @@ public class RESTClient {
 	conn.setRequestProperty("Accept", "application/json");
 	conn.setDoOutput(true);
 	conn.setDoInput(true);
-	((HttpURLConnection)conn).setChunkedStreamingMode(0);
+	//((HttpURLConnection)conn).setChunkedStreamingMode(0);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
 	} catch(java.net.ProtocolException pe ) {
@@ -225,6 +225,9 @@ public class RESTClient {
 					 					 Vector<Pair<String,String>> properties ) 
 		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
     {
+    	
+    	Log.d("RESTClient", "sURL="+sURL);
+    	
     	URL url = new URL(sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
@@ -394,7 +397,7 @@ public class RESTClient {
     	}
     	conn.setReadTimeout( 20000 );
     	conn.setConnectTimeout( 15000 );
-    	((HttpURLConnection)conn).setChunkedStreamingMode(0);
+    	//((HttpURLConnection)conn).setChunkedStreamingMode(0);
     	try {
     		((HttpURLConnection)conn).setRequestMethod("POST");
     	} catch(java.net.ProtocolException pe ) {

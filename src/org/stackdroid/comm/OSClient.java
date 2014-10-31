@@ -492,7 +492,7 @@ public class OSClient {
  	   checkToken( );
  		
        return RESTClient.sendGETRequest( U.useSSL(), 
-    		   							 U.getGlanceEndpoint() + "/v2/images", 
+    		   							 U.getNovaEndpoint() + "/images/detail", 
     		   							 U.getToken(), 
     		   							 null );   
     }
@@ -623,8 +623,8 @@ public class OSClient {
     {
  	   checkToken( );
  		
- 	   RESTClient.sendDELETERequest( U.useSSL(),
-					   				  U.getGlanceEndpoint() + "/v2/images/" + imageID, 
+ 	   RESTClient.sendDELETERequest(  U.useSSL(),
+					   				  U.getNovaEndpoint() + "/images/" + imageID, 
 					   				  U.getToken( ),
 					   				  null );
     }
