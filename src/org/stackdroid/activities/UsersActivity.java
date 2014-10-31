@@ -87,8 +87,6 @@ public class UsersActivity extends Activity {
     				+ " exists but it is not a directory !", this);
     		return;
     	}
-	    
-	// TODO: should we filter here ?
     
 	((LinearLayout)findViewById(R.id.userLayout)).removeAllViews();
 	UserView lastUV = null;
@@ -96,7 +94,7 @@ public class UsersActivity extends Activity {
 	    User U = null;
 	    try {
 	    	//Log.d("USERS", "handling file ["+users[i].getName( )+"]");
-	    	if(users[i].getName( ).matches("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[0-9]+")) {
+	    	if(users[i].getName( ).matches("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[-]?[0-9]+")) {
 	    		//Log.d("USERS", "OK file ["+users[i].getName( )+"]");
 	    		U = User.fromFileID( users[i].getName( ), Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	    		if(U==null) {

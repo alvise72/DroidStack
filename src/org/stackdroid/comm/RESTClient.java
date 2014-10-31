@@ -228,6 +228,9 @@ public class RESTClient {
     	
     	//Log.d("RESTClient", "sURL="+sURL);
     	
+    	if(sURL.startsWith("https://")) usessl=true;
+    	if(sURL.startsWith("http://")) usessl=false;
+    	
     	URL url = new URL(sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
@@ -341,7 +344,8 @@ public class RESTClient {
 	  		 MalformedURLException, IOException, ProtocolException
     {
     	
-    	
+    	if(sURL.startsWith("https://")) usessl=true;
+    	if(sURL.startsWith("http://")) usessl=false;
     	
     	URL url = new URL(sURL);
     	//Log.d("REST", "POST url="+sURL);
@@ -519,6 +523,9 @@ public class RESTClient {
 					  					  Vector<Pair<String,String>> properties ) 
 	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, ServerException, MalformedURLException, ProtocolException
     {
+
+    	if(sURL.startsWith("https://")) usessl=true;
+    	if(sURL.startsWith("http://")) usessl=false;
     	
 	URL url = new URL(sURL);
 	
