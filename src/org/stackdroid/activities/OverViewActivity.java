@@ -276,7 +276,7 @@ public class OverViewActivity extends Activity {
      											   QV,
      											   ParseUtils.parseServers( jsonBuf ), 
      											   ParseUtils.parseFlavors( jsonBufferFlavor ),
-     											   ParseUtils.parseFloatingIP( jsonBufFIPs ),
+     											   ParseUtils.parseFloatingIP( jsonBufFIPs, false ),
      											   ParseUtils.parseSecGroups( jsonBufSecgs )
      											 );
      		} catch(ParseException pe) {

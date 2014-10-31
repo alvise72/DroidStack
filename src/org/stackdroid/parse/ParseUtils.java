@@ -310,24 +310,28 @@ public class ParseUtils {
      *
      *
      */    
-    public static Vector<FloatingIP> parseFloatingIP( String jsonBuf ) throws ParseException {
+    public static Vector<FloatingIP> parseFloatingIP( String jsonBuf, boolean only_unassigned ) throws ParseException {
 	  try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray fips = jsonObject.getJSONArray( "floating_ips" );
 	    
 	    Vector<FloatingIP> res = new Vector<FloatingIP>();
 	    for(int i = 0; i<fips.length(); ++i) {
-		JSONObject fip = fips.getJSONObject( i );
-		String id = fip.getString("id");
-		String ip = fip.getString("ip");
-		String fixip = fip.getString("fixed_ip");
-		String poolname = fip.getString("pool");
-		String server = null;
-		if(fip.has("instance_id")== true)
-		  server = fip.getString("instance_id");
+	    	JSONObject fip = fips.getJSONObject( i );
+	    	
+	    	String id = fip.getString("id");
+	    	String ip = fip.getString("ip");
+	    	String fixip = fip.getString("fixed_ip");
+	    	String poolname = fip.getString("pool");
+	    	String server = null;
+	    	if(fip.has("instance_id")== true)
+	    		server = fip.getString("instance_id");
 		
-		FloatingIP Fip = new FloatingIP(ip,fixip,id,server,poolname);
-		res.add( Fip );
+	    	FloatingIP Fip = new FloatingIP(ip,fixip,id,server,poolname);
+	    	if(only_unassigned)
+	    		if(Fip.isAssociated())
+	    			continue;
+	    	res.add( Fip );
 	    }
 	    return res;
       } catch(org.json.JSONException je) {

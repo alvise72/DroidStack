@@ -62,7 +62,6 @@ public class ServersActivity extends Activity {
     private CustomProgressDialog    progressDialogWaitStop     = null;
     private User 				    U 						   = null;
 	private String 				    serverID 				   = null;
-	//private String 				    serverid 				   = null;
 	private ArrayAdapter<OSImage>   spinnerImagesArrayAdapter  = null;
 	private AlertDialog 		    alertDialogSelectImage     = null;
 	private AlertDialog 		    alertDialogSelectFIP       = null;
@@ -990,7 +989,8 @@ public class ServersActivity extends Activity {
  	    }
 	    
 	    try {
-	    	ServersActivity.this.fips = ParseUtils.parseFloatingIP(jsonBuf);
+	    	boolean only_unassigned = true;
+	    	ServersActivity.this.fips = ParseUtils.parseFloatingIP(jsonBuf, only_unassigned );
 	    } catch(ParseException pe) {
 		    Utils.alert("ServersActivity.AsyncTaskFIPList.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 		    ServersActivity.this.progressDialogWaitStop.dismiss( );

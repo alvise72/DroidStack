@@ -368,7 +368,7 @@ public class FloatingIPActivity extends Activity {
  	    }
 	    
 	    try {
-	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIP(jsonBuf);
+	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIP(jsonBuf, false);
 	    	Vector<Server> servers = ParseUtils.parseServers( jsonBufServers );
 	    	networks = ParseUtils.parseNetworks( jsonBufNetworks, jsonBufSubNets );
 	    	Iterator<Server> it = servers.iterator();
