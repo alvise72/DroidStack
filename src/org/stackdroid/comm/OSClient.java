@@ -112,6 +112,7 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException
 	{
     	checkToken( );
+    	
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 		vp.add( p );
@@ -161,12 +162,17 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException
 	   {
     		checkToken( );
+    		String cinderEP = null;
+        	if(U.getCinder2Endpoint()!=null)
+        		cinderEP = U.getCinder2Endpoint();
+        	else
+        		cinderEP = U.getCinder1Endpoint();
     		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     		vp.add( p );
     		String extradata = "{\"volume\": {\"display_name\": \"" + volname + "\", \"imageRef\": null, \"availability_zone\": null, \"volume_type\": null, \"display_description\": null, \"snapshot_id\": null, \"size\": " + size_in_GB + "}}";
     		RESTClient.sendPOSTRequest( U.useSSL(), 
-    									U.getCinder2Endpoint() + "/volumes", 
+    									cinderEP + "/volumes", 
     									U.getToken(), 
     									extradata, 
     									vp );
@@ -187,12 +193,17 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException
 	   {
     	checkToken( );
+    	String cinderEP = null;
+    	if(U.getCinder2Endpoint()!=null)
+    		cinderEP = U.getCinder2Endpoint();
+    	else
+    		cinderEP = U.getCinder1Endpoint();
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	//Log.d("OSC", "endpoint="+U.getCinder2Endpoint() + "/volumes/" + volID);
     	RESTClient.sendDELETERequest( U.useSSL(), 
-    								  U.getCinder2Endpoint() + "/volumes/" + volID, 
+    								  cinderEP + "/volumes/" + volID, 
     								  U.getToken(), 
     								  vp );
 	   }
@@ -536,12 +547,16 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
  	   checkToken( );
- 		
+ 	  String cinderEP = null;
+ 	  if(U.getCinder2Endpoint()!=null)
+  		cinderEP = U.getCinder2Endpoint();
+ 	  else
+  		cinderEP = U.getCinder1Endpoint();
  	   Pair<String, String> p = new Pair<String,String>( "X-Auth-Project-Id", U.getTenantName() );
  	   Vector<Pair<String, String>> v = new Vector<Pair<String,String>>();
  	   v.add(p);
  	   return RESTClient.sendGETRequest( U.useSSL(),  
- 			   							 U.getCinder2Endpoint() + "/os-quota-sets/"+U.getTenantID( )+"?usage=True", 
+ 			   							 cinderEP + "/os-quota-sets/"+U.getTenantID( )+"?usage=True", 
  			   							 U.getToken(), 
  			   							 v );
     }
