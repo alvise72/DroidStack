@@ -205,7 +205,7 @@ public class MainActivity extends Activity
         	  ((Button)this.findViewById(R.id.NEUTRON)).setEnabled(false);
           }
           
-          if(U.hasNova()==false) {
+          if(!U.hasCinder1() && !U.hasCinder2()) {
         	  ((Button)this.findViewById(R.id.CINDER)).setEnabled(false);
           }
     	  
