@@ -226,7 +226,7 @@ public class RESTClient {
 		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
     {
     	
-    	Log.d("RESTClient", "sURL="+sURL);
+    	//Log.d("RESTClient", "sURL="+sURL);
     	
     	URL url = new URL(sURL);
     	URLConnection conn = null;
@@ -344,8 +344,8 @@ public class RESTClient {
     	
     	
     	URL url = new URL(sURL);
-    	Log.d("REST", "POST url="+sURL);
-    	Log.d("REST", "POST extradata="+extradata);
+    	//Log.d("REST", "POST url="+sURL);
+    	//Log.d("REST", "POST extradata="+extradata);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
     	if(usessl) {
@@ -464,8 +464,8 @@ public class RESTClient {
 	    		((HttpURLConnection)conn).disconnect( );
 	    }
 	    
-	    Log.d("REST", "buf="+buf);
-	    Log.d("REST", "status code="+status);
+	    //Log.d("REST", "buf="+buf);
+	    //Log.d("REST", "status code="+status);
 	    String errorMessage;
 	    try {
 	    	errorMessage = ParseUtils.getErrorMessage( buf );

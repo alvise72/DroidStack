@@ -376,7 +376,7 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
     	Iterator<SimpleSecGroupRule> rit = rules.iterator();
     	while(rit.hasNext()) {
     		SimpleSecGroupRule rl = rit.next( );
-    		Log.d("EDITSEC", "Rule="+rl.to_string());
+    		//Log.d("EDITSEC", "Rule="+rl.to_string());
     		RuleView rv = new RuleView( rl, new DeleteRuleClickListener(), this );
     		((LinearLayout)findViewById(R.id.layoutRuleList)).addView( rv );
     	}

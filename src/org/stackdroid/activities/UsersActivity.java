@@ -95,16 +95,16 @@ public class UsersActivity extends Activity {
 	for(int i = 0; i<users.length; ++i) {
 	    User U = null;
 	    try {
-	    	Log.d("USERS", "handling file ["+users[i].getName( )+"]");
+	    	//Log.d("USERS", "handling file ["+users[i].getName( )+"]");
 	    	if(users[i].getName( ).matches("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[0-9]+")) {
-	    		Log.d("USERS", "OK file ["+users[i].getName( )+"]");
+	    		//Log.d("USERS", "OK file ["+users[i].getName( )+"]");
 	    		U = User.fromFileID( users[i].getName( ), Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
 	    		if(U==null) {
 	    			Utils.alert(getString(R.string.RECREATEUSERS), this);
 	    			return;
 	    		}
 	    	} else {
-	    		Log.d("USERS", "BAD file ["+users[i].getName( )+"]");
+	    		//Log.d("USERS", "BAD file ["+users[i].getName( )+"]");
 	    		continue;
 	    	}
 	    }  catch(ClassNotFoundException cnfe) {
