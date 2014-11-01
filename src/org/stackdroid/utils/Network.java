@@ -1,16 +1,18 @@
 package org.stackdroid.utils;
 
+import java.util.Vector;
+
 public class Network {
     //private String status;
-    private String name;
-    private String ID;
-    private SubNetwork[] subnets;
-    private boolean shared;
-    private boolean up;
-    private boolean ext;
-    private String tenantID;
+    private String 				name;
+    private String 				ID;
+    private Vector<SubNetwork> 	subnets;
+    private boolean 			shared;
+    private boolean 			up;
+    private boolean 			ext;
+    private String 				tenantID;
     
-    public Network( String status, String name, String ID, SubNetwork[] subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
+    public Network( String status, String name, String ID, Vector<SubNetwork> subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
     	//this.status = status;
     	this.name = name;
     	this.ID   = ID;
@@ -31,7 +33,7 @@ public class Network {
 
     public String getName( ) { return name; }
     public String getID( ) { return ID; }
-    public SubNetwork[] getSubNetworks( ) { return subnets; }
+    public Vector<SubNetwork> getSubNetworks( ) { return subnets; }
     public boolean isShared( ) { return shared; }
     public boolean isUp( ) { return up; }
     public boolean isExt( ) { return ext; }

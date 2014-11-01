@@ -1,11 +1,2 @@
-fixed access to OpenStack's keystone running as wsgi inside apache (and which doesn't support chunked mode)
-ability to differentiately talk with SSL to keystone, and plain to nova/neutron/...
-other minor fixes
-fixed detection of cinder service and endpoint 1 or 2
-
-toast messaggi per alcune activity
-nuova immagine per il pulsante glance
-(TODO) azioni multiple (tipo delete)
-Associa IP nella activity servers
-mostra gli alloc pool in network info
-fissato crash in UsersActivity quando si toccava un punto del layout
+show (only, no creation) of IPv6 networks with details.
+Details for subnetworks when touching a net in Network window

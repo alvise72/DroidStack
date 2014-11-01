@@ -9,10 +9,10 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.NumberKeyListener;
 
-public class IPAddressKeyListener extends NumberKeyListener {
+public class IPv4AddressKeyListener extends NumberKeyListener {
  
     private char[] mAccepted;
-    private static IPAddressKeyListener sInstance;
+    private static IPv4AddressKeyListener sInstance;
  
     @Override
     protected char[] getAcceptedChars() {
@@ -29,7 +29,7 @@ public class IPAddressKeyListener extends NumberKeyListener {
  
     new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' };
  
-    private IPAddressKeyListener() {
+    private IPv4AddressKeyListener() {
         mAccepted = CHARACTERS;
     }
  
@@ -38,10 +38,10 @@ public class IPAddressKeyListener extends NumberKeyListener {
      * character, subject to IP address rules: the first character has to be a digit, and
      * no more than 3 dots are allowed.
      */
-    public static IPAddressKeyListener getInstance() {
+    public static IPv4AddressKeyListener getInstance() {
         if (sInstance != null) return sInstance;
  
-        sInstance = new IPAddressKeyListener();
+        sInstance = new IPv4AddressKeyListener();
         return sInstance;
     }
  

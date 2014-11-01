@@ -31,15 +31,17 @@ import org.stackdroid.parse.ParseException;
 
 
 import org.stackdroid.R;
+import org.stackdroid.utils.AllocationPool;
 import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
-import org.stackdroid.utils.IPAddressKeyListener;
+import org.stackdroid.utils.IPv4AddressKeyListener;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.Network;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.SimpleNumberKeyListener;
+import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -102,22 +104,48 @@ public class NeutronActivity extends Activity {
 			tv6.setText( N.isExt() ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
 	    
 			TextView tv7 = new TextView(NeutronActivity.this);
-			tv7.setText("Subnet address");
+			tv7.setText(getString(R.string.SUBNETS));
 			tv7.setTypeface( null, Typeface.BOLD );
 			
-			TextView tv8 = null;
-			Vector<TextView> tv9V = new Vector<TextView>();
-			if( N.getSubNetworks().length>=1 && N.getSubNetworks()[0]!=null ) {
-			  tv8 = new TextView(NeutronActivity.this);			
-			  tv8.setText(N.getSubNetworks()[0].getAddress());
-			  if(N.getSubNetworks()[0].getAllocationPools()!=null) {
-				  for(int j=0; j<N.getSubNetworks()[0].getAllocationPools().length;++j ) {
-				    TextView t = new TextView(NeutronActivity.this);
-				    t.setText(N.getSubNetworks()[0].getAllocationPools()[j].getStartIP()+" - "+N.getSubNetworks()[0].getAllocationPools()[0].getEndIP());
-				    tv9V.add( t );
-				  }
-			  }
+			Vector<TextView> subnetinfo = new Vector<TextView>();
+			
+			if(N.getSubNetworks().size()>0) {
+				Iterator<SubNetwork> it = N.getSubNetworks().iterator();
+				while(it.hasNext()) {
+					SubNetwork sn = it.next();
+					TextView t = new  TextView(NeutronActivity.this);
+					t.setText( "- "+sn.getName() );
+					t.setTypeface( null, Typeface.BOLD );
+					t.setPadding(5, 0,0,0);
+					TextView tt = new  TextView(NeutronActivity.this);
+					tt.setText("IPv"+sn.getIPVersion());
+					tt.setPadding(15, 0,0,0);
+					TextView ttt = new  TextView(NeutronActivity.this);
+					ttt.setText(sn.getAddress());
+					ttt.setPadding(15, 0,0,0);
+					TextView tttt = new TextView(NeutronActivity.this);
+					tttt.setText("DNS: " + Utils.join(sn.getDNS(), ", "));
+					tttt.setPadding(15, 0,0,0);
+					AllocationPool[] pools = sn.getAllocationPools();
+					String allocPool[] = new String[pools.length];
+					for(int i = 0; i<pools.length; i++) {
+						allocPool[i] = pools[i].getStartIP() + "-" + pools[i].getEndIP();
+					}
+					TextView ttttt = null;//new TextView(NeutronActivity.this);
+					
+					subnetinfo.add(t);
+					subnetinfo.add(tt);
+					subnetinfo.add(ttt);
+					subnetinfo.add(tttt);
+					if(allocPool.length>0) {
+						ttttt = new TextView(NeutronActivity.this);
+						ttttt.setText("IP pool: "+Utils.join(allocPool, "\n"));
+						ttttt.setPadding(15, 0,0,0);
+						subnetinfo.add(ttttt);
+					}
+				}
 			}
+			
 			ScrollView sv = new ScrollView(NeutronActivity.this);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT,
@@ -140,13 +168,17 @@ public class NeutronActivity extends Activity {
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
 			l.addView(tv7);
-			if(tv8!=null) {
+/*			if(tv8!=null) {
 			  l.addView(tv8);
 			  tv8.setPadding(paddingDp, 0, 0, 0);
 			  for(int j = 0; j<tv9V.size(); j++) {
 			    l.addView(tv9V.elementAt(j));
 			    tv9V.elementAt(j).setPadding(paddingDp, 0, 0, 0);
 			  }
+			}*/
+			Iterator<TextView> subnetinfoIT = subnetinfo.iterator();
+			while(subnetinfoIT.hasNext()) {
+				l.addView(subnetinfoIT.next());
 			}
 			sv.addView(l);
 			String name;
@@ -295,7 +327,7 @@ public class NeutronActivity extends Activity {
     	View promptsView = li.inflate(R.layout.my_dialog_create_network, null);
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     	alertDialogBuilder.setView(promptsView);
-    	alertDialogBuilder.setTitle(getString(R.string.CREATENETWORK) );
+    	alertDialogBuilder.setTitle(getString(R.string.CREATENETWORK) + " (IPv4)" );
     	alertDialogCreateNetwork = alertDialogBuilder.create();
     	final Button mButton = (Button)promptsView.findViewById(R.id.myButtonCreateNet);
         final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCreateNetCancel);
@@ -304,14 +336,14 @@ public class NeutronActivity extends Activity {
         cidrNet.setKeyListener( SimpleNumberKeyListener.getInstance( ) );
         cidrMask 	= (EditText)promptsView.findViewById(R.id.cidrMaskET);
         startIP 	= (EditText)promptsView.findViewById(R.id.startIPET);
-        startIP.setKeyListener(IPAddressKeyListener.getInstance());
+        startIP.setKeyListener(IPv4AddressKeyListener.getInstance());
         endIP 		= (EditText)promptsView.findViewById(R.id.endIPET);
-        endIP.setKeyListener(IPAddressKeyListener.getInstance());
+        endIP.setKeyListener(IPv4AddressKeyListener.getInstance());
         gatewayIP   = (EditText)promptsView.findViewById(R.id.gatewayIPET);
-        gatewayIP.setKeyListener(IPAddressKeyListener.getInstance());
+        gatewayIP.setKeyListener(IPv4AddressKeyListener.getInstance());
         
         DNS 		= (EditText)promptsView.findViewById(R.id.dnsET);
-        DNS.setKeyListener(IPAddressKeyListener.getInstance());
+        DNS.setKeyListener(IPv4AddressKeyListener.getInstance());
         mButton.setOnClickListener(new CreateNetworkClickListener());
         mButtonCancel.setOnClickListener(new CreateNetworkCancelClickListener());
         alertDialogCreateNetwork.setCanceledOnTouchOutside(false);

@@ -10,15 +10,17 @@ public class SubNetwork {
     private AllocationPool[] allocPools;
     private String[] dns;
     private boolean dhcp;
+    private String ipv;
     
-    public SubNetwork( String name, String ID, String cidr, String gatewayIP, AllocationPool[] allocPools, String[] dns, boolean dhcp ) {
-    	this.name = name;
-    	this.ID   = ID;
-    	this.cidr = cidr;
-    	this.gw= gatewayIP;
+    public SubNetwork( String name, String ID, String cidr, String gatewayIP, AllocationPool[] allocPools, String[] dns, boolean dhcp, String ipv ) {
+    	this.name       = name;
+    	this.ID         = ID;
+    	this.cidr       = cidr;
+    	this.gw         = gatewayIP;
     	this.allocPools = allocPools;
-    	this.dns = dns;
-    	this.dhcp = dhcp;
+    	this.dns        = dns;
+    	this.dhcp       = dhcp;
+    	this.ipv        = ipv;
     }
 
     public String getName( ) { return name; }
@@ -27,6 +29,7 @@ public class SubNetwork {
     public String getGatewayIP( ) { return gw; }
     public AllocationPool[] getAllocationPools( ) { return allocPools; }
     public String[] getDNS( ) { return dns; }
+    public String getIPVersion( ) { return ipv; }
 
     @Override
     public String toString() {

@@ -154,5 +154,6 @@
 	<string name="NOIMAGETOASSOCIATE">Non ci sono immagini da cui creare un\'istanza.</string>
 	<string name="NOFIPTOASSOCIATE">Non ci sono floating IP da associare.</string>
 	<string name="FIPASSOCIATED2">Il floating IP è stato associato al server. Premi Menu-&gt;Aggiorna se le informazioni non sono aggiornate.</string>
+	<string name="SUBNETS">Sottoreti</string>
 	
 </resources>

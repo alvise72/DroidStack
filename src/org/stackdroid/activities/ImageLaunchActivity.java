@@ -16,7 +16,7 @@ import android.view.View;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.EditTextWithView;
-import org.stackdroid.utils.IPAddressKeyListener;
+import org.stackdroid.utils.IPv4AddressKeyListener;
 import org.stackdroid.utils.SubnetUtils;
 import org.stackdroid.utils.SubnetUtils.SubnetInfo;
 import org.stackdroid.utils.User;
@@ -253,7 +253,7 @@ public class ImageLaunchActivity extends Activity {
 		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
 		    return;
 	    }
-	    if(netIP.length()!=0) { // Let's check only if the user specified the custom IP
+	    /*if(netIP.length()!=0) { // Let's check only if the user specified the custom IP
 	    	//(new SubnetUtils( nethashes.get(netID) ) );
 	    	SubnetUtils su = null;
 	    	Network n = nethashes.get(netID);
@@ -265,7 +265,7 @@ public class ImageLaunchActivity extends Activity {
 	    		Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+n.getSubNetworks()[0].getAddress(), this);
 	    		return;
 	    	}
-	    }
+	    }*/
 	  }
       progressDialogWaitStop.show();
       
@@ -311,7 +311,7 @@ public class ImageLaunchActivity extends Activity {
 		  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
 		  networksL.addView( nv );
 		  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
-		  etIP.setKeyListener(IPAddressKeyListener.getInstance());
+		  etIP.setKeyListener(IPv4AddressKeyListener.getInstance());
 		    
 		  TextView tv = new TextView( ImageLaunchActivity.this );
 		  tv.setText(getString(R.string.SPECIFYOPTIP));

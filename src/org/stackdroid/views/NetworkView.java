@@ -13,8 +13,8 @@ public class NetworkView extends CheckBox {
     public NetworkView( Network net, OnClickListener listener, Context ctx ) {
 	  super(ctx);
 	  setOnClickListener(listener);
-	  if(net.getSubNetworks().length>=1)
-		  setText( net.getName( )+" ("+net.getSubNetworks()[0].getAddress()+")" );
+	  if(net.getSubNetworks().size()>0)
+		  setText( net.getName( )+" ("+net.getSubNetworks().elementAt(0).getAddress()+")" );
 	  this.net = net;
     }
     

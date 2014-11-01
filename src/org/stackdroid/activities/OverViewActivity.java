@@ -237,13 +237,13 @@ public class OverViewActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 	    
 	    	try {
-	    		jsonBufQuota 	 = osc.requestQuota( );
-	    		jsonBuf 	 	 = osc.requestServers( );
-	    		jsonBufFIPs 	 = osc.requestFloatingIPs( );
-	    		jsonBufSecgs 	 = osc.requestSecGroups( );
-	    		jsonBufferFlavor = osc.requestFlavors( );
-	    		jsonBufferVolumes= osc.requestVolumes( );
-	    		jsonBufferQuotaVols= osc.requestVolQuota( );
+	    		jsonBufQuota 	    = osc.requestQuota( );
+	    		jsonBuf 	 	    = osc.requestServers( );
+	    		jsonBufFIPs 	    = osc.requestFloatingIPs( );
+	    		jsonBufSecgs 	    = osc.requestSecGroups( );
+	    		jsonBufferFlavor    = osc.requestFlavors( );
+	    		jsonBufferVolumes   = osc.requestVolumes( );
+	    		jsonBufferQuotaVols = osc.requestVolQuota( );
 	    	} catch(Exception e) {
 	    		errorMessage = e.getMessage();
 	    		hasError = true;
