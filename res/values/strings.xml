@@ -39,7 +39,7 @@
     <string name="MANAGEGLANCEIMG">Manage Glance images</string>
     <string name="SELECTOSUSER">Select an OpenStack user</string>
     <string name="NOCUSTOMIPWITHMOREVM">You cannot specify custom IP address with more than one instance to launch.</string>
-    <string name="INCORRECTIPFORMAT">Incorrect IPv4 address format</string>
+    <string name="INCORRECTIPFORMAT">Incorrect IPv4/IPv6 address format</string>
     <string name="FLOATINGIP">Manage Floating IP</string>
     <string name="FIPNOTASSOCIATED">This floating IP is not associated to any server.</string>
     <string name="PICKASERVERTOASSOCIATEFIP">Pick a server to which associate the floating IP</string>

@@ -39,7 +39,7 @@
     <string name="MANAGEGLANCEIMG">Gestisci immagini Glance</string>
     <string name="SELECTOSUSER">Seleziona un\'utente OpenStack</string>
     <string name="NOCUSTOMIPWITHMOREVM">Non puoi specificare un indirizzo IP se lanci pi&#xf9; di un\'istanza</string>
-    <string name="INCORRECTIPFORMAT">Formato indirizzo IPv4 non corretto</string>
+    <string name="INCORRECTIPFORMAT">Formato indirizzo IPv4/IPv6 non corretto</string>
     <string name="FLOATINGIP">Gestisci Floating IP</string>
     <string name="FIPNOTASSOCIATED">Questo floating IP non &#xe8; associato ad alcun server.</string>
     <string name="PICKASERVERTOASSOCIATEFIP">Scegli un server a cui associare il floating IP</string>

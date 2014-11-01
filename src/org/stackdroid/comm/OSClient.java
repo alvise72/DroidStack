@@ -835,7 +835,8 @@ public class OSClient {
     									 String flavorID,
     									 int count,
     									 String securityGroupID,
-    									 Hashtable<String, String> netID_to_netIP )
+    									 Hashtable<Pair<String,String>, String> netID_to_netIP )
+    									 //Hashtable<String, String> netID_to_netIP )
     	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
  	   IOException, MalformedURLException, ProtocolException, ParseException
     {
@@ -864,9 +865,10 @@ public class OSClient {
 
 
     	    {
-    		Iterator<String> it = netID_to_netIP.keySet().iterator();
+    		//Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
+    	    	Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
     		while( it.hasNext() ) {
-    		    String netID = it.next( );
+    		    String netID = it.next( ).first;
     		    String netIP = netID_to_netIP.get( netID );
     		    if( netIP != null && netIP.length()!=0) 
     			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );

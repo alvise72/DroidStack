@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.util.Pair;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
@@ -17,6 +18,8 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.EditTextWithView;
 import org.stackdroid.utils.IPv4AddressKeyListener;
+import org.stackdroid.utils.IPv6AddressKeyListener;
+import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.SubnetUtils;
 import org.stackdroid.utils.SubnetUtils.SubnetInfo;
 import org.stackdroid.utils.User;
@@ -54,8 +57,8 @@ public class ImageLaunchActivity extends Activity {
     private Bundle 									  bundle 					  = null;
     private String 									  imageID 					  = null;
     private String 									  imageNAME 				  = null;
-    private Hashtable<String, EditTextWithView>		  mappingNetEditText 		  = null;
-    private Hashtable<String, String> 				  selectedNetworks 			  = null;
+    private Hashtable<Pair<String,String>, EditTextWithView>		  mappingNetEditText 		  = null;
+    private Hashtable<Pair<String,String>, String> 				  selectedNetworks 			  = null;
     private Vector<Network> 						  networks 					  = null;
     private Hashtable<String, Network>				  nethashes					  = null;
     
@@ -76,12 +79,14 @@ public class ImageLaunchActivity extends Activity {
     	public void onClick( View v ) {
     		NetworkView nv = (NetworkView)v;
     	    if(nv.isChecked()) {
-    	    	String netID = nv.getNetwork().getID();
-    	    	mappingNetEditText.get( netID ).setEnabled(true);
+    	    	//String netID = nv.getNetwork().getID();
+    	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
+    	    	mappingNetEditText.get( p ).setEnabled(true);
     	    }
     	    else {
-    	    	String netID = nv.getNetwork().getID();
-    	    	mappingNetEditText.get( netID ).setEnabled(false);
+    	    	//String netID = nv.getNetwork().getID();
+    	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
+    	    	mappingNetEditText.get( p ).setEnabled(false);
     	    }
     	    return;
     	}
@@ -109,7 +114,7 @@ public class ImageLaunchActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView( org.stackdroid.R.layout.launchimage );
+      setContentView( org.stackdroid.R.layout.imagelaunch );
       
       bundle = getIntent( ).getExtras( );
       imageID = bundle.getString("IMAGEID");
@@ -147,8 +152,8 @@ public class ImageLaunchActivity extends Activity {
       
       selectedSecgroups = new HashSet<String>();
       
-      mappingNetEditText = new Hashtable<String, EditTextWithView>();
-      selectedNetworks = new Hashtable<String, String>();
+      mappingNetEditText = new Hashtable<Pair<String,String>, EditTextWithView>();
+      selectedNetworks = new Hashtable<Pair<String,String>, String>();
 
       (new AsyncTaskGetOptions()).execute( );
   }
@@ -226,30 +231,32 @@ public class ImageLaunchActivity extends Activity {
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
       selectedNetworks.clear();
-      Iterator<String> it = mappingNetEditText.keySet().iterator();
+      Iterator<Pair<String,String>> it = mappingNetEditText.keySet().iterator();
       
       while(it.hasNext()) {
-	    String netID = it.next();
-	    if(mappingNetEditText.get( netID ).isEnabled()==false)
+    	  Pair<String,String> net_subnet = it.next();
+	    //String netID = net_subnet.first;
+	    if(mappingNetEditText.get( net_subnet ).isEnabled()==false)
 	      continue;
-	    String netIP = mappingNetEditText.get( netID ).getText().toString();
+	    String netIP = mappingNetEditText.get( net_subnet ).getText().toString();
 	    //Log.d("IMAGELAUNCH", "netIP="+netIP);
 	    if(netIP!=null && netIP.length()!=0 && count>1) {
 	    	Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
 	    	return;
 	    }
-	    selectedNetworks.put( netID, netIP );
+	    selectedNetworks.put( net_subnet, netIP );
       }
       
       
       it = mappingNetEditText.keySet().iterator();
       while(it.hasNext()) {
-	    String netID = it.next();
-	    if(mappingNetEditText.get( netID ).isEnabled()==false)
+    	  Pair<String,String> net_subnet = it.next();
+	    //String netID = it.next();
+	    if(mappingNetEditText.get( net_subnet ).isEnabled()==false)
 	      continue;
-	    String netIP = selectedNetworks.get( netID );
+	    String netIP = selectedNetworks.get( net_subnet );
 	    
-	    if(netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
+	    if(netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false && InetAddressUtils.isIPv6Address(netIP) == false) {
 		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
 		    return;
 	    }
@@ -307,18 +314,27 @@ public class ImageLaunchActivity extends Activity {
 					continue;
 				}
 		  }
-		  NetworkView nv = new NetworkView( net, new ImageLaunchActivity.NetworkViewListener(), ImageLaunchActivity.this );
-		  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
-		  networksL.addView( nv );
-		  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
-		  etIP.setKeyListener(IPv4AddressKeyListener.getInstance());
-		    
-		  TextView tv = new TextView( ImageLaunchActivity.this );
-		  tv.setText(getString(R.string.SPECIFYOPTIP));
-		  networksL.addView( tv );
-		  networksL.addView( etIP );
-		  etIP.setEnabled(false);
-		  mappingNetEditText.put( nv.getNetwork().getID(), etIP );
+		  
+		  Iterator<SubNetwork> subnetsIT = net.getSubNetworks().iterator();
+		  while(subnetsIT.hasNext()) {
+			  SubNetwork sn = subnetsIT.next();
+			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), ImageLaunchActivity.this );
+			  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
+			  networksL.addView( nv );
+			  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
+			  if(sn.getIPVersion().compareToIgnoreCase("4")==0)
+				  etIP.setKeyListener(IPv4AddressKeyListener.getInstance());
+			  if(sn.getIPVersion().compareToIgnoreCase("6")==0)
+				  etIP.setKeyListener(IPv6AddressKeyListener.getInstance());
+			  
+			  TextView tv = new TextView( ImageLaunchActivity.this );
+			  tv.setText(getString(R.string.SPECIFYOPTIP));
+			  networksL.addView( tv );
+			  networksL.addView( etIP );
+			  etIP.setEnabled(false);
+			  Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), sn.getID() );
+			  mappingNetEditText.put( p, etIP );
+		  }
 	  }
   	}
 

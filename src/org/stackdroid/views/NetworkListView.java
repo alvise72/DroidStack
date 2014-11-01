@@ -5,6 +5,7 @@ import org.stackdroid.R;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.Network;
+import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.Utils;
 
@@ -18,21 +19,24 @@ import android.graphics.Typeface;
 public class NetworkListView extends LinearLayout {
 	
     private Network      	 		 net                = null;
+    //private SubNetwork				 subnet				= null;
     private LinearLayoutWithView 	 row                = null;
     private LinearLayoutWithView 	 buttonsLayout      = null;
     private LinearLayoutWithView 	 nameLayout         = null;
     private TextViewWithView     	 name               = null;
-    private TextViewWithView     	 subnet             = null;
-    private ImageButtonWithView 	 delete  		= null;
+    private TextViewWithView     	 subnetView         = null;
+    private ImageButtonWithView 	 delete  			= null;
     
     
     public NetworkListView( Network net, 
+    						//SubNetwork subnet,
     						OnClickListener infoNetListener,
     						OnClickListener deleteNetListener,
     						Context ctx )
     {
 	    super(ctx);
 	    this.net = net;
+	    //this.subnet = subnet;
 	    this.setOnClickListener(infoNetListener);
 	    setOrientation( LinearLayout.HORIZONTAL );
 	    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -57,12 +61,12 @@ public class NetworkListView extends LinearLayout {
 		name.setTextColor( Color.parseColor("#333333") );
 		name.setTypeface( null, Typeface.BOLD );
 		
-		subnet = new TextViewWithView( ctx, (NetworkListView)this  );
-		subnet.setText( net.getSubNetworks()!=null && net.getSubNetworks().size()!=0 ? net.getSubNetworks().elementAt(0).getAddress() : "" );
-		subnet.setTextColor( Color.parseColor("#333333") );
-		subnet.setOnClickListener(infoNetListener);
+		subnetView = new TextViewWithView( ctx, (NetworkListView)this  );
+		subnetView.setText( net.getSubNetworks()!=null && net.getSubNetworks().size()!=0 ? net.getSubNetworks().elementAt(0).getAddress() : "" );
+		subnetView.setTextColor( Color.parseColor("#333333") );
+		subnetView.setOnClickListener(infoNetListener);
 		nameLayout.addView(name);
-		nameLayout.addView(subnet);
+		nameLayout.addView(subnetView);
 		nameLayout.setOnClickListener(infoNetListener);
 		row.addView(nameLayout);
 		

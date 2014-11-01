@@ -103,9 +103,7 @@ public class NeutronActivity extends Activity {
 			TextView tv6 = new TextView(NeutronActivity.this);
 			tv6.setText( N.isExt() ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
 	    
-			TextView tv7 = new TextView(NeutronActivity.this);
-			tv7.setText(getString(R.string.SUBNETS));
-			tv7.setTypeface( null, Typeface.BOLD );
+			
 			
 			Vector<TextView> subnetinfo = new Vector<TextView>();
 			
@@ -133,6 +131,11 @@ public class NeutronActivity extends Activity {
 					}
 					TextView ttttt = null;//new TextView(NeutronActivity.this);
 					
+					TextView tv7 = new TextView(NeutronActivity.this);
+					tv7.setText(getString(R.string.SUBNETS));
+					tv7.setTypeface( null, Typeface.BOLD );
+					
+					subnetinfo.add(tv7);
 					subnetinfo.add(t);
 					subnetinfo.add(tt);
 					subnetinfo.add(ttt);
@@ -167,7 +170,7 @@ public class NeutronActivity extends Activity {
 			l.addView( tv5 );
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
-			l.addView(tv7);
+			//l.addView(tv7);
 /*			if(tv8!=null) {
 			  l.addView(tv8);
 			  tv8.setPadding(paddingDp, 0, 0, 0);
