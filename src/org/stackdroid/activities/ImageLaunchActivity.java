@@ -79,12 +79,10 @@ public class ImageLaunchActivity extends Activity {
     	public void onClick( View v ) {
     		NetworkView nv = (NetworkView)v;
     	    if(nv.isChecked()) {
-    	    	//String netID = nv.getNetwork().getID();
     	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
     	    	mappingNetEditText.get( p ).setEnabled(true);
     	    }
     	    else {
-    	    	//String netID = nv.getNetwork().getID();
     	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
     	    	mappingNetEditText.get( p ).setEnabled(false);
     	    }
@@ -260,19 +258,21 @@ public class ImageLaunchActivity extends Activity {
 		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
 		    return;
 	    }
-	    /*if(netIP.length()!=0) { // Let's check only if the user specified the custom IP
+	    if(netIP.length()!=0) { 
 	    	//(new SubnetUtils( nethashes.get(netID) ) );
 	    	SubnetUtils su = null;
-	    	Network n = nethashes.get(netID);
+	    	//Network n = nethashes.get(netID);
 	    	//Log.d("LAUNCH", "SubnetUtils for CIDR "+n.getSubNetworks()[0].getAddress());
-	    	su = new SubnetUtils( n.getSubNetworks()[0].getAddress() ); // let's take only the first one
+	    	NetworkView nv = mappingNetEditText.get(net_subnet).getNetworkView();
+	    	
+	    	su = new SubnetUtils( nv.getSubNetwork().getAddress() ); // let's take only the first one
 	    	SubnetInfo si = su.getInfo();
 	    	//Log.d("LAUNCH", "Checking IP " + netIP + " inCIDR "+n.getSubNetworks()[0].getAddress());
 	    	if(!si.isInRange(netIP)) {
-	    		Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+n.getSubNetworks()[0].getAddress(), this);
+	    		Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " " + nv.getSubNetwork().getAddress(), this);
 	    		return;
 	    	}
-	    }*/
+	    }
 	  }
       progressDialogWaitStop.show();
       
