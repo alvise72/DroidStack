@@ -851,9 +851,9 @@ public class OSClient {
     		    "\", \"max_count\": " + count + 
     		    ", \"min_count\": " + count + "}}";
     	JSONObject obj = null;
-    	//Log.d("RESTClient", "_secgrpIDs=["+_secgrpIDs+"]");
+    	
     	String[] secgrpIDs = securityGroupID.split(",");
-    	//String[] networkIDs = _networkIDs.split(",");
+    	
     	try {
     	    obj = new JSONObject( data );
     	    JSONArray secgs = new JSONArray();
@@ -883,7 +883,7 @@ public class OSClient {
     	}
     	
     	data = obj.toString( );
-    	Log.d("OSC","data="+data);
+    	//Log.d("OSC","data="+data);
     	 RESTClient.sendPOSTRequest( U.useSSL(), 
 		     						 U.getNovaEndpoint() + "/servers",
 				  					 U.getToken(), 

@@ -78,13 +78,14 @@ public class ImageLaunchActivity extends Activity {
     	@Override
     	public void onClick( View v ) {
     		NetworkView nv = (NetworkView)v;
-    	    if(nv.isChecked()) {
+    	    if(nv.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
     	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
     	    	mappingNetEditText.get( p ).setEnabled(true);
     	    }
     	    else {
     	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
-    	    	mappingNetEditText.get( p ).setEnabled(false);
+    	    	if(mappingNetEditText.containsKey(p))
+    	    		mappingNetEditText.get( p ).setEnabled(false);
     	    }
     	    return;
     	}
@@ -321,19 +322,19 @@ public class ImageLaunchActivity extends Activity {
 			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), ImageLaunchActivity.this );
 			  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
 			  networksL.addView( nv );
-			  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
-			  if(sn.getIPVersion().compareToIgnoreCase("4")==0)
+			  if(sn.getIPVersion().compareTo("4")==0) {
+				  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
+				  //if(sn.getIPVersion().compareToIgnoreCase("4")==0)
 				  etIP.setKeyListener(IPv4AddressKeyListener.getInstance());
-			  if(sn.getIPVersion().compareToIgnoreCase("6")==0)
-				  etIP.setKeyListener(IPv6AddressKeyListener.getInstance());
 			  
-			  TextView tv = new TextView( ImageLaunchActivity.this );
-			  tv.setText(getString(R.string.SPECIFYOPTIP));
-			  networksL.addView( tv );
-			  networksL.addView( etIP );
-			  etIP.setEnabled(false);
-			  Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), sn.getID() );
-			  mappingNetEditText.put( p, etIP );
+				  TextView tv = new TextView( ImageLaunchActivity.this );
+				  tv.setText(getString(R.string.SPECIFYOPTIP));
+				  networksL.addView( tv );
+				  networksL.addView( etIP );
+				  etIP.setEnabled(false);
+				  Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), sn.getID() );
+				  mappingNetEditText.put( p, etIP );
+			  }
 		  }
 	  }
   	}
