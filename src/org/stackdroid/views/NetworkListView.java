@@ -24,7 +24,7 @@ public class NetworkListView extends LinearLayout {
     private LinearLayoutWithView 	 buttonsLayout      = null;
     private LinearLayoutWithView 	 nameLayout         = null;
     private TextViewWithView     	 name               = null;
-    private TextViewWithView     	 subnetView         = null;
+    //private TextViewWithView     	 subnetView         = null;
     private ImageButtonWithView 	 delete  			= null;
     
     
@@ -61,12 +61,12 @@ public class NetworkListView extends LinearLayout {
 		name.setTextColor( Color.parseColor("#333333") );
 		name.setTypeface( null, Typeface.BOLD );
 		
-		subnetView = new TextViewWithView( ctx, (NetworkListView)this  );
+		/*subnetView = new TextViewWithView( ctx, (NetworkListView)this  );
 		subnetView.setText( net.getSubNetworks()!=null && net.getSubNetworks().size()!=0 ? net.getSubNetworks().elementAt(0).getAddress() : "" );
 		subnetView.setTextColor( Color.parseColor("#333333") );
-		subnetView.setOnClickListener(infoNetListener);
+		subnetView.setOnClickListener(infoNetListener);*/
 		nameLayout.addView(name);
-		nameLayout.addView(subnetView);
+		//nameLayout.addView(subnetView);
 		nameLayout.setOnClickListener(infoNetListener);
 		row.addView(nameLayout);
 		

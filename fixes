@@ -2,3 +2,4 @@ show (only, no creation) of IPv6 networks with details.
 Details for subnetworks when touching a net in Network window
 not showing anymore IP custom when a net is IPv6
 several other fixes
+not showing anymore subnetinfo in the list (only in deep view when touching a net)
