@@ -510,13 +510,13 @@ public class ImageLaunchActivity extends Activity {
 	    
 
 	    try {
-		   osc.requestInstanceCreation( args[0],
-				   						args[1],
-				   						args[2],
-				   						args[3],
-				   						Integer.parseInt(args[4]),
-				   						args[5],
-				   						ImageLaunchActivity.this.selectedNetworks );
+		   osc.createInstance( args[0],
+				   				args[1],
+				   				args[2],
+				   				args[3],
+				   				Integer.parseInt(args[4]),
+				   				args[5],
+				   				ImageLaunchActivity.this.selectedNetworks );
 	    } catch(Exception e) {
 		   e.printStackTrace( );
 		   errorMessage = e.getMessage();

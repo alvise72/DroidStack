@@ -829,14 +829,13 @@ public class OSClient {
      * 
      *
      */
-    public void requestInstanceCreation( String instanceName, 
-    									 String imageID,
-    									 String key_name,
-    									 String flavorID,
-    									 int count,
-    									 String securityGroupID,
-    									 Hashtable<Pair<String,String>, String> netID_to_netIP )
-    									 //Hashtable<String, String> netID_to_netIP )
+    public void createInstance( String instanceName, 
+    							String imageID,
+    							String key_name,
+    							String flavorID,
+    							int count,
+    							String securityGroupID,
+    							Hashtable<Pair<String,String>, String> netID_to_netIP )
     	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
  	   IOException, MalformedURLException, ProtocolException, ParseException
     {
@@ -864,21 +863,18 @@ public class OSClient {
     		    secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
 
 
-    	    {
-    		//Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
-    	    	Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
-    		while( it.hasNext() ) {
-    		    String netID = it.next( ).first;
-    		    String netIP = netID_to_netIP.get( netID );
-    		    if( netIP != null && netIP.length()!=0) 
-    			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
-    		    else
-    			nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
-    		}
+    	    
+    		Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
+    	    while( it.hasNext() ) {
+    	    	Pair<String,String> thisNet = it.next();
+    	    	String netID = thisNet.first;
+    	    	String netIP = netID_to_netIP.get( thisNet );
+    	    	if( netIP != null && netIP.length()!=0) 
+    	    		nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
+    	    	else
+    	    		nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
     	    }
-
-
-
+    	    
     	    obj.getJSONObject("server").put("security_groups", secgs);
     	    obj.getJSONObject("server").put("networks", nets);
     	    
@@ -887,6 +883,7 @@ public class OSClient {
     	}
     	
     	data = obj.toString( );
+    	Log.d("OSC","data="+data);
     	 RESTClient.sendPOSTRequest( U.useSSL(), 
 		     						 U.getNovaEndpoint() + "/servers",
 				  					 U.getToken(), 
