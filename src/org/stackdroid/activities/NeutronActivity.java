@@ -112,7 +112,10 @@ public class NeutronActivity extends Activity {
 				while(it.hasNext()) {
 					SubNetwork sn = it.next();
 					TextView t = new  TextView(NeutronActivity.this);
-					t.setText( "- "+sn.getName() );
+					String subnetname = sn.getName();
+					if(subnetname.trim().length()==0)
+						subnetname = "No name";
+					t.setText( "- "+subnetname );
 					t.setTypeface( null, Typeface.BOLD );
 					t.setPadding(5, 0,0,0);
 					TextView tt = new  TextView(NeutronActivity.this);
@@ -131,11 +134,7 @@ public class NeutronActivity extends Activity {
 					}
 					TextView ttttt = null;//new TextView(NeutronActivity.this);
 					
-					TextView tv7 = new TextView(NeutronActivity.this);
-					tv7.setText(getString(R.string.SUBNETS));
-					tv7.setTypeface( null, Typeface.BOLD );
-					
-					subnetinfo.add(tv7);
+					//subnetinfo.add(tv7);
 					subnetinfo.add(t);
 					subnetinfo.add(tt);
 					subnetinfo.add(ttt);
@@ -170,18 +169,16 @@ public class NeutronActivity extends Activity {
 			l.addView( tv5 );
 			l.addView( tv6 );
 			tv6.setPadding(paddingDp, 0, 0, 0);
-			//l.addView(tv7);
-/*			if(tv8!=null) {
-			  l.addView(tv8);
-			  tv8.setPadding(paddingDp, 0, 0, 0);
-			  for(int j = 0; j<tv9V.size(); j++) {
-			    l.addView(tv9V.elementAt(j));
-			    tv9V.elementAt(j).setPadding(paddingDp, 0, 0, 0);
-			  }
-			}*/
-			Iterator<TextView> subnetinfoIT = subnetinfo.iterator();
-			while(subnetinfoIT.hasNext()) {
-				l.addView(subnetinfoIT.next());
+			
+			if(subnetinfo.size()>0) {
+				TextView tv7 = new TextView(NeutronActivity.this);
+				tv7.setText(getString(R.string.SUBNETS)+":");
+				tv7.setTypeface( null, Typeface.BOLD );
+				l.addView(tv7);
+				Iterator<TextView> subnetinfoIT = subnetinfo.iterator();
+				while(subnetinfoIT.hasNext()) {
+					l.addView(subnetinfoIT.next());
+				}
 			}
 			sv.addView(l);
 			String name;
