@@ -869,10 +869,13 @@ public class OSClient {
     	    	Pair<String,String> thisNet = it.next();
     	    	String netID = thisNet.first;
     	    	String netIP = netID_to_netIP.get( thisNet );
+    	    	
     	    	if( netIP != null && netIP.length()!=0) 
     	    		nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
-    	    	else
+    	    	else {
+    	    		
     	    		nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
+    	    	}
     	    }
     	    
     	    obj.getJSONObject("server").put("security_groups", secgs);
@@ -883,7 +886,7 @@ public class OSClient {
     	}
     	
     	data = obj.toString( );
-    	//Log.d("OSC","data="+data);
+    	Log.d("OSC","data="+data);
     	 RESTClient.sendPOSTRequest( U.useSSL(), 
 		     						 U.getNovaEndpoint() + "/servers",
 				  					 U.getToken(), 

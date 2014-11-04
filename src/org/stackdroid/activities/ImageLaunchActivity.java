@@ -9,11 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.View;
 
+import org.stackdroid.utils.CheckBoxWithView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.EditTextWithView;
@@ -57,7 +59,7 @@ public class ImageLaunchActivity extends Activity {
     private Bundle 									  bundle 					  = null;
     private String 									  imageID 					  = null;
     private String 									  imageNAME 				  = null;
-    private Hashtable<Pair<String,String>, EditTextWithView>		  mappingNetEditText 		  = null;
+    //private Hashtable<Pair<String,String>, EditTextWithView>		  mappingNetEditText 		  = null;
     private Hashtable<Pair<String,String>, String> 				  selectedNetworks 			  = null;
     private Vector<Network> 						  networks 					  = null;
     private Hashtable<String, Network>				  nethashes					  = null;
@@ -77,17 +79,12 @@ public class ImageLaunchActivity extends Activity {
     protected class NetworkViewListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		NetworkView nv = (NetworkView)v;
-    	    if(nv.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
-    	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
-    	    	mappingNetEditText.get( p ).setEnabled(true);
-    	    }
-    	    else {
-    	    	Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID());
-    	    	if(mappingNetEditText.containsKey(p))
-    	    		mappingNetEditText.get( p ).setEnabled(false);
-    	    }
-    	    return;
+    		CheckBoxWithView cb = (CheckBoxWithView)v;
+    		NetworkView nv = cb.getNetworkView();
+    		if(cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
+    			nv.getNetworkIP().setEnabled(true);
+    			return;
+    		}
     	}
     }
     
@@ -151,7 +148,7 @@ public class ImageLaunchActivity extends Activity {
       
       selectedSecgroups = new HashSet<String>();
       
-      mappingNetEditText = new Hashtable<Pair<String,String>, EditTextWithView>();
+      //mappingNetEditText = new Hashtable<Pair<String,String>, EditTextWithView>();
       selectedNetworks = new Hashtable<Pair<String,String>, String>();
 
       (new AsyncTaskGetOptions()).execute( );
@@ -222,28 +219,33 @@ public class ImageLaunchActivity extends Activity {
     	  return;
       }
 
-      if(mappingNetEditText.size()==0) {
+      CONTROLLARE CHE ALMENO UNA RETE SIA CHECKED
+      
+/*      if(mappingNetEditText.size()==0) {
     	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
     	  return;
       }
-
+*/
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
+      
       selectedNetworks.clear();
+      
+      /*
       Iterator<Pair<String,String>> it = mappingNetEditText.keySet().iterator();
       
       while(it.hasNext()) {
     	  Pair<String,String> net_subnet = it.next();
-	    //String netID = net_subnet.first;
-	    if(mappingNetEditText.get( net_subnet ).isEnabled()==false)
-	      continue;
-	    String netIP = mappingNetEditText.get( net_subnet ).getText().toString();
-	    //Log.d("IMAGELAUNCH", "netIP="+netIP);
-	    if(netIP!=null && netIP.length()!=0 && count>1) {
-	    	Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
-	    	return;
-	    }
-	    selectedNetworks.put( net_subnet, netIP );
+    	  
+    	  if(mappingNetEditText.get( net_subnet ).isEnabled()==false)
+    		  continue;
+    	  String netIP = mappingNetEditText.get( net_subnet ).getText().toString();
+    	  if(netIP!=null && netIP.length()!=0 && count>1) {
+    		  Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
+    		  return;
+    	  }
+    	  Log.d("IMAGELAUNCH", "Adding NET "+net_subnet.first);
+    	  selectedNetworks.put( net_subnet, netIP );
       }
       
       
@@ -289,6 +291,7 @@ public class ImageLaunchActivity extends Activity {
     		  						   flv.getID(), 
     		  						   "" + count, 
     		  						   Utils.join( selectedSecgroups, "," ) );
+      */
   }
 
   	/**
@@ -319,22 +322,8 @@ public class ImageLaunchActivity extends Activity {
 		  Iterator<SubNetwork> subnetsIT = net.getSubNetworks().iterator();
 		  while(subnetsIT.hasNext()) {
 			  SubNetwork sn = subnetsIT.next();
-			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), ImageLaunchActivity.this );
-			  nv.setOnClickListener( new ImageLaunchActivity.NetworkViewListener() );
+			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), ImageLaunchActivity.this );
 			  networksL.addView( nv );
-			  if(sn.getIPVersion().compareTo("4")==0) {
-				  EditTextWithView etIP = new EditTextWithView(  ImageLaunchActivity.this, nv );
-				  //if(sn.getIPVersion().compareToIgnoreCase("4")==0)
-				  etIP.setKeyListener(IPv4AddressKeyListener.getInstance());
-			  
-				  TextView tv = new TextView( ImageLaunchActivity.this );
-				  tv.setText(getString(R.string.SPECIFYOPTIP));
-				  networksL.addView( tv );
-				  networksL.addView( etIP );
-				  etIP.setEnabled(false);
-				  Pair<String,String> p = new Pair<String,String>( nv.getNetwork().getID(), sn.getID() );
-				  mappingNetEditText.put( p, etIP );
-			  }
 		  }
 	  }
   	}
