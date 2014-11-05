@@ -158,5 +158,6 @@
 	<string name="NOFIPTOASSOCIATE">There\'s no floating ip to associate.</string>
 	<string name="FIPASSOCIATED2">Floating IP has been associated to the server. Press on Menu-&gt;Update if the information are not updated.</string>
 	<string name="SUBNETS">Subnets</string>
+	<string name="ALREADYCHOOSENNET">You\'ve already selected this network</string>
 	
 </resources>

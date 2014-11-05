@@ -10,8 +10,6 @@ import org.stackdroid.utils.Utils;
 
 import android.content.Context;
 import android.text.method.NumberKeyListener;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 /*
@@ -33,7 +31,6 @@ public class NetworkView extends CheckBox {
     public SubNetwork getSubNetwork( ) { return subnet; }
 }
 */
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class NetworkView extends LinearLayout {
@@ -66,7 +63,6 @@ public class NetworkView extends LinearLayout {
 		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		row.setLayoutParams( _params1 );
 		row.setBackgroundResource(R.drawable.rounded_corner_thin);
-		//row.setOnClickListener(listener);
 		select = new CheckBoxWithView(ctx, this);
 		select.setOnClickListener(listener);
 		select.setChecked(false);
@@ -89,4 +85,5 @@ public class NetworkView extends LinearLayout {
     public EditText getNetworkIP( ) { return netIP; }
     public Network getNetwork( ) { return net; }
     public SubNetwork getSubNetwork( ) { return subnet; }
+    public boolean isChecked( ) { return select.isChecked(); }
 }

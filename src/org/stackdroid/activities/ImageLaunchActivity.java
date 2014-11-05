@@ -40,6 +40,7 @@ import org.stackdroid.parse.ParseException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
@@ -59,9 +60,11 @@ public class ImageLaunchActivity extends Activity {
     private Bundle 									  bundle 					  = null;
     private String 									  imageID 					  = null;
     private String 									  imageNAME 				  = null;
-    private Hashtable<Pair<String,String>, String> 				  selectedNetworks 			  = null;
+    private Hashtable<Pair<String,String>, String> 	  selectedNetworks 			  = null;
     private Vector<Network> 						  networks 					  = null;
-    private Hashtable<String, Network>				  nethashes					  = null;
+    private Vector<NetworkView>						  netViewList				  = null;
+    Hashtable<String, String> 						  netids 					  = null;
+    //private Hashtable<String, Network>				  nethashes					  = null;
     
     protected class SecGroupListener implements OnClickListener {
     	@Override
@@ -80,19 +83,38 @@ public class ImageLaunchActivity extends Activity {
     	public void onClick( View v ) {
     		CheckBoxWithView cb = (CheckBoxWithView)v;
     		NetworkView nv = cb.getNetworkView();
+    		Log.d("IMAGELAUNCH", "NetworkID="+nv.getNetwork().getID());
+    		
+    		if(cb.isChecked() && netids.containsKey(nv.getNetwork().getID())) {
+    			cb.setChecked(false);
+    			Utils.alert(getString(R.string.ALREADYCHOOSENNET) + ": "+nv.getNetwork().getName(), ImageLaunchActivity.this);
+    			return;
+    		}
+    		
+    		if(cb.isChecked()) {
+    			netids.put(nv.getNetwork().getID(), "1");
+    		}
+    		if(!cb.isChecked()) {
+    			netids.remove(nv.getNetwork().getID());
+    		}
+    		
     		if(cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
     			nv.getNetworkIP().setEnabled(true);
+    			//netids.put(nv.getNetwork().getID(), "1");
     			return;
     		}
     		if(!cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
     			nv.getNetworkIP().setEnabled(false);
+    			//netids.remove(nv.getNetwork().getID());
     			return;
     		}
     	}
     }
     
     public ImageLaunchActivity( ) {
-    	nethashes = new Hashtable<String, Network>( );
+    	//nethashes = new Hashtable<String, Network>( );
+    	netViewList = new Vector<NetworkView>( );
+    	netids = new Hashtable<String, String>();
     }
     
     /**
@@ -221,80 +243,75 @@ public class ImageLaunchActivity extends Activity {
     	  Utils.alert(getString(R.string.MUSTSETNAME) , this);
     	  return;
       }
+ 
+      int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
-      //CONTROLLARE CHE ALMENO UNA RETE SIA CHECKED
-      
-/*      if(mappingNetEditText.size()==0) {
+      Iterator<NetworkView> nvit = netViewList.iterator();
+      int netcount = 0;
+      while(nvit.hasNext()) {
+    	  NetworkView nv = nvit.next();
+    	  if(nv.isChecked()) netcount++;
+      }
+      if(count==0) {
     	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
     	  return;
       }
-*/
-      int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
-
       
       selectedNetworks.clear();
+      nvit = netViewList.iterator();
       
-      /*
-      Iterator<Pair<String,String>> it = mappingNetEditText.keySet().iterator();
-      
-      while(it.hasNext()) {
-    	  Pair<String,String> net_subnet = it.next();
-    	  
-    	  if(mappingNetEditText.get( net_subnet ).isEnabled()==false)
-    		  continue;
-    	  String netIP = mappingNetEditText.get( net_subnet ).getText().toString();
-    	  if(netIP!=null && netIP.length()!=0 && count>1) {
-    		  Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
-    		  return;
+      while(nvit.hasNext()) {
+    	  NetworkView nv = nvit.next();
+    	  if(nv.isChecked()) {
+    		  String netIP = "";
+    		  if(nv.getSubNetwork().getIPVersion().compareTo("4") == 0) {
+    			  netIP = nv.getNetworkIP().getText().toString().trim();
+    			  if(netIP != null && netIP.length()!=0 && count>1) {
+    				  Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), this);
+    	    		  return;
+    			  }
+    			  if(netIP != null && netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
+    				  Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
+    				  return;
+    			  }
+    			  if(netIP != null && netIP.length()!=0) { // Let's check only if the user specified the custom IP
+    			    	SubnetUtils su = null;
+    			    	SubNetwork sn = nv.getSubNetwork();
+    			    	su = new SubnetUtils( sn.getAddress() ); // let's take only the first one
+    			    	SubnetInfo si = su.getInfo();
+    			    	if(!si.isInRange(netIP)) {
+    			    		Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+sn.getAddress(), this);
+    			    		return;
+    			    	}
+    			    }
+    		  }
+    		  
+    		  Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
+    		  if(netIP==null) netIP = "";
+    		  selectedNetworks.put(net_subnet, netIP);
+    		  /*if(netids.containsKey(nv.getNetwork().getID())) {
+    			  	Utils.alert(getString(R.string.ALREADYCHOOSENNET) + ": "+nv.getNetwork().getName(), this);
+		    		return;
+    		  }
+    		  netids.put(nv.getNetwork().getID(), "");
+    		  */
+    		  //selectedNetworks.add( net_subnet, netIP );
     	  }
-    	  Log.d("IMAGELAUNCH", "Adding NET "+net_subnet.first);
-    	  selectedNetworks.put( net_subnet, netIP );
       }
-      
-      
-      it = mappingNetEditText.keySet().iterator();
-      while(it.hasNext()) {
-    	  Pair<String,String> net_subnet = it.next();
-	    //String netID = it.next();
-	    if(mappingNetEditText.get( net_subnet ).isEnabled()==false)
-	      continue;
-	    String netIP = selectedNetworks.get( net_subnet );
-	    
-	    if(netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false && InetAddressUtils.isIPv6Address(netIP) == false) {
-		    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, this);
-		    return;
-	    }
-	    if(netIP.length()!=0) { 
-	    	//(new SubnetUtils( nethashes.get(netID) ) );
-	    	SubnetUtils su = null;
-	    	//Network n = nethashes.get(netID);
-	    	//Log.d("LAUNCH", "SubnetUtils for CIDR "+n.getSubNetworks()[0].getAddress());
-	    	NetworkView nv = mappingNetEditText.get(net_subnet).getNetworkView();
-	    	
-	    	su = new SubnetUtils( nv.getSubNetwork().getAddress() ); // let's take only the first one
-	    	SubnetInfo si = su.getInfo();
-	    	//Log.d("LAUNCH", "Checking IP " + netIP + " inCIDR "+n.getSubNetworks()[0].getAddress());
-	    	if(!si.isInRange(netIP)) {
-	    		Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " " + nv.getSubNetwork().getAddress(), this);
-	    		return;
-	    	}
-	    }
-	  }
-      progressDialogWaitStop.show();
       
       KeyPair kp = (KeyPair)spinnerKeypairs.getSelectedItem();
       String kpName = "";
       if(kp!=null)
     	  kpName = kp.getName();
       Flavor flv = (Flavor)this.spinnerFlavors.getSelectedItem();
-      
+      progressDialogWaitStop.show();
       (new AsyncTaskLaunch()).execute( instanceName, 
     		  						   imageID, 
     		  						   kpName, 
     		  						   flv.getID(), 
     		  						   "" + count, 
     		  						   Utils.join( selectedSecgroups, "," ) );
-      */
+      
   }
 
   	/**
@@ -327,6 +344,7 @@ public class ImageLaunchActivity extends Activity {
 			  SubNetwork sn = subnetsIT.next();
 			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), getString(R.string.SPECIFYOPTIP), ImageLaunchActivity.this );
 			  networksL.addView( nv );
+			  netViewList.add(nv);
 		  }
 	  }
   	}
@@ -459,10 +477,10 @@ public class ImageLaunchActivity extends Activity {
 	    	Vector<SecGroup> secgs = ParseUtils.parseSecGroups( jsonBufSecgroups );
 	    	
 	    	Iterator<Network> nit = networks.iterator();
-	    	while(nit.hasNext()) {
+	    	/*while(nit.hasNext()) {
 	    		Network net = nit.next( );
 	    		nethashes.put( net.getID(), net );
-	    	}
+	    	}*/
 	    	
 	    	updateNetworkList( networks );
 	    	updateFlavorList( flavs );

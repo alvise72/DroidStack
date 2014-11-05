@@ -139,13 +139,13 @@
 	<string name="CREATENETWORK">Crea nuova rete</string>
 	<string name="INCORRECTMASKFORMAT">La maschera CIDR deve essere nell\'intervallo 1&#8211;32</string>
 	<string name="MYNET">miaRete</string>
-	<string name="RECREATEUSERS">Il sistema di persistenza degli utenti &#xe8; cambiato... Prova a ricreare gli utenti.\n\nI vecchi utenti sono stati rimossi.</string>
-	<string name="NeutronActivity.this">Rete creata con successo. Premi sul pulsante Aggiorna per ricaricare la vista...</string>
+	<string name="RECREATEUSERS">Il sistema di persistenza degli utenti &#xe8; cambiato&#8230; Prova a ricreare gli utenti.\n\nI vecchi utenti sono stati rimossi.</string>
+	<string name="NeutronActivity.this">Rete creata con successo. Premi sul pulsante Aggiorna per ricaricare la vista&#8230;</string>
 	<string name="NOTALLOWEDSTARTIPEMPTY">Non consentito un indirizzo vuoto per start IP</string>
 	<string name="NOTALLOWEDENDIPEMPTY">Non consentito un indirizzo vuoto per end IP</string>
 	<string name="NOTALLOWEDGATEWAYIPEMPTY">Non consensito un indirizzo vuoto per gateway IP</string>
 	<string name="NETWORKDELETED">Rete cancellata con successo.</string>
-	<string name="NETWORKCREATED">Rete creata con successo. Tocca il pulsante \'Aggiorna\' per aggiornare la finestra...</string>
+	<string name="NETWORKCREATED">Rete creata con successo. Tocca il pulsante \'Aggiorna\' per aggiornare la finestra&#8230;</string>
 	<string name="TOUCHUSERTOVIEWINFO">Tocca il nome di un server per vedere pi&#xf9; informazioni.</string>
 	<string name="TOUCHUIMGTOVIEWINFO">Tocca un\'immagine per vedere pi&#xf9; informazioni.</string>
 	<string name="TOUCHUVOLTOVIEWINFO">Tocca un volume per vedere pi&#xf9; informazioni.</string>
@@ -153,7 +153,8 @@
 	<string name="NETWORKINFO">Info sulla rete</string>
 	<string name="NOIMAGETOASSOCIATE">Non ci sono immagini da cui creare un\'istanza.</string>
 	<string name="NOFIPTOASSOCIATE">Non ci sono floating IP da associare.</string>
-	<string name="FIPASSOCIATED2">Il floating IP è stato associato al server. Premi Menu-&gt;Aggiorna se le informazioni non sono aggiornate.</string>
+	<string name="FIPASSOCIATED2">Il floating IP &#xe8; stato associato al server. Premi Menu-&gt;Aggiorna se le informazioni non sono aggiornate.</string>
 	<string name="SUBNETS">Sottoreti</string>
+	<string name="ALREADYCHOOSENNET">Hai gi&#xe0; selezionato questa rete</string>
 	
 </resources>
