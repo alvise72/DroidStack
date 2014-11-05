@@ -886,7 +886,7 @@ public class OSClient {
     	}
     	
     	data = obj.toString( );
-    	Log.d("OSC","data="+data);
+    	//Log.d("OSC","data="+data);
     	 RESTClient.sendPOSTRequest( U.useSSL(), 
 		     						 U.getNovaEndpoint() + "/servers",
 				  					 U.getToken(), 
