@@ -59,7 +59,6 @@ public class ImageLaunchActivity extends Activity {
     private Bundle 									  bundle 					  = null;
     private String 									  imageID 					  = null;
     private String 									  imageNAME 				  = null;
-    //private Hashtable<Pair<String,String>, EditTextWithView>		  mappingNetEditText 		  = null;
     private Hashtable<Pair<String,String>, String> 				  selectedNetworks 			  = null;
     private Vector<Network> 						  networks 					  = null;
     private Hashtable<String, Network>				  nethashes					  = null;
@@ -83,6 +82,10 @@ public class ImageLaunchActivity extends Activity {
     		NetworkView nv = cb.getNetworkView();
     		if(cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
     			nv.getNetworkIP().setEnabled(true);
+    			return;
+    		}
+    		if(!cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
+    			nv.getNetworkIP().setEnabled(false);
     			return;
     		}
     	}
@@ -219,7 +222,7 @@ public class ImageLaunchActivity extends Activity {
     	  return;
       }
 
-      CONTROLLARE CHE ALMENO UNA RETE SIA CHECKED
+      //CONTROLLARE CHE ALMENO UNA RETE SIA CHECKED
       
 /*      if(mappingNetEditText.size()==0) {
     	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
@@ -322,7 +325,7 @@ public class ImageLaunchActivity extends Activity {
 		  Iterator<SubNetwork> subnetsIT = net.getSubNetworks().iterator();
 		  while(subnetsIT.hasNext()) {
 			  SubNetwork sn = subnetsIT.next();
-			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), ImageLaunchActivity.this );
+			  NetworkView nv = new NetworkView( net, sn, new ImageLaunchActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), getString(R.string.SPECIFYOPTIP), ImageLaunchActivity.this );
 			  networksL.addView( nv );
 		  }
 	  }

@@ -34,18 +34,21 @@ public class NetworkView extends CheckBox {
 }
 */
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
 public class NetworkView extends LinearLayout {
-	private Network    				net    = null;
-    private SubNetwork 				subnet = null;
-    private LinearLayoutWithView	row    = null;
-    private CheckBoxWithView		select = null;
-    private EditText				netIP  = null;
+	private Network    				net   		= null;
+    private SubNetwork 				subnet		= null;
+    private LinearLayoutWithView	row    		= null;
+    private CheckBoxWithView		select 		= null;
+    private TextView			    netIPLabel 	= null;
+    private EditText				netIP  		= null;
     
     public NetworkView( Network net, 
 					    SubNetwork subnet,
 					    OnClickListener listener,
 					    NumberKeyListener kl,
+					    String specifyip_label,
 					    Context ctx ) {
     	super(ctx);
     	
@@ -67,14 +70,19 @@ public class NetworkView extends LinearLayout {
 		select = new CheckBoxWithView(ctx, this);
 		select.setOnClickListener(listener);
 		select.setChecked(false);
+		select.setText(net.getName() + " (" + subnet.getAddress() + ")");
+		
 		row.addView(select);
+		
 		if(subnet.getIPVersion().compareTo("4")==0) {
 			netIP = new EditText(ctx);
 			netIP.setEnabled(false);
 			netIP.setKeyListener(kl);
+			netIPLabel = new TextView(ctx);
+			netIPLabel.setText(specifyip_label);
+			row.addView(netIPLabel);
 			row.addView(netIP);
 		}
-		
 		addView( row );
     }
     
