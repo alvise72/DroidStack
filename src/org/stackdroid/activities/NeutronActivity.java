@@ -69,6 +69,7 @@ public class NeutronActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			//Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
+			NeutronActivity.this.progressDialogWaitStop.show( );
 			String netID = ((ImageButtonWithView) v).getNetworkListView( ).getNetwork().getID();
 			(new NeutronActivity.AsyncTaskOSDeleteNetwork()).execute(netID, "true");
 		}
@@ -537,6 +538,7 @@ public class NeutronActivity extends Activity {
      	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
      	    	if(NeutronActivity.this.alertDialogCreateNetwork!=null)
      	    		NeutronActivity.this.alertDialogCreateNetwork.dismiss();
+     	    	NeutronActivity.this.progressDialogWaitStop.dismiss();
      	    	return;
      	    }
      	    if(showMessage==true)
