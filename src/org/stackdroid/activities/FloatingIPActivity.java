@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.comm.OSClient;
+import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
@@ -418,6 +419,9 @@ public class FloatingIPActivity extends Activity {
 		
 		try {
 		  osc.requestReleaseFloatingIP( floatingip, serverid );	    
+		} catch(ServerException se ) {
+			errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+			hasError = true;
 		} catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -471,6 +475,9 @@ public class FloatingIPActivity extends Activity {
 	    
 	    try {
 		  osc.requestFloatingIPAssociate(floatingip, serverid);	    
+		} catch(ServerException se ) {
+			errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+			hasError = true;
 		} catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -527,7 +534,10 @@ public class FloatingIPActivity extends Activity {
     		OSClient osc = OSClient.getInstance(U);
 		
     		try {
-    			osc.requestFloatingIPAllocation( pool );	    
+    			osc.allocateFloatingIP( pool );	    
+    		} catch(ServerException se ) {
+    			errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+    			hasError = true;
     		} catch(Exception e) {
     			errorMessage = e.getMessage();
     			hasError = true;
@@ -579,26 +589,29 @@ public class FloatingIPActivity extends Activity {
     	@Override
     	protected String doInBackground( String... ip_serverid ) 
     	{
-		OSClient osc = OSClient.getInstance(U);
+    		OSClient osc = OSClient.getInstance(U);
 
-	    try {
-	    	osc.requestFloatingIPRelease( fip_to_release_ID );	    
-	    } catch(Exception e) {
-	    	errorMessage = e.getMessage();
-	    	hasError = true;
-	    	return "";
-	    }
-	    return "";
+    		try {
+    			osc.requestFloatingIPRelease( fip_to_release_ID );	    
+    		} catch(ServerException se ) {
+    			errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+    			hasError = true;
+    		} catch(Exception e) {
+    			errorMessage = e.getMessage();
+    			hasError = true;
+    			return "";
+    		}
+    		return "";
     	}
 	
     	@Override
     	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+    		super.onPostExecute(result);
 	    
  	    if(hasError) {
-		Utils.alert( errorMessage, FloatingIPActivity.this );
-		FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
-		return;
+ 	    	Utils.alert( errorMessage, FloatingIPActivity.this );
+ 	    	FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+ 	    	return;
  	    }
  	    Utils.alert( getString(R.string.FIPRELEASED), FloatingIPActivity.this );
 	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );

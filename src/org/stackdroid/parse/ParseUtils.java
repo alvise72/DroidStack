@@ -159,7 +159,6 @@ public class ParseUtils {
   	  } catch (JSONException e) {
   		return "Cannot parse Neutron server's error message";
   	  }
-	  
     }
     
     /**

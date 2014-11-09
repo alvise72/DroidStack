@@ -322,18 +322,21 @@ public class OSClient {
      * 
      * 
      */
-    public void requestFloatingIPAllocation( String externalNetworkID ) 
-	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException
+    public void allocateFloatingIP( String externalNetworkID ) 
+    		throws NotAuthorizedException, NotFoundException, 
+    			   ServerException, ServiceUnAvailableOrInternalError,
+    			   IOException, MalformedURLException, 
+    			   ProtocolException, ParseException
     {
     	checkToken( );
 	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String extradata = "{\"pool\": \"" + externalNetworkID + "\"}";
+    	//String extradata = "{\"pool\": \"" + externalNetworkID + "\"}";
+    	String extradata = "{\"floatingip\": {\"floating_network_id\": \"" + externalNetworkID + "\"}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-    								U.getNovaEndpoint() + "/os-floating-ips", 
+    								U.getNeutronEndpoint() + "/v2.0/floatingips.json",//os-floating-ips", 
     								U.getToken(), 
     								extradata, 
     								vp );
