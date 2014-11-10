@@ -188,6 +188,16 @@ public class ParseUtils {
     			int    mindisk      = images.getJSONObject(i).has("min_disk") ? images.getJSONObject(i).getInt("min_disk") : 0;
     			int    minram       = images.getJSONObject(i).has("min_ram") ? images.getJSONObject(i).getInt("min_ram") : 0;
 
+    			/*if(size==0 && images.getJSONObject(i).has("OS-EXT-IMG-SIZE:size"))
+    				size = images.getJSONObject(i).getLong("OS-EXT-IMG-SIZE:size");
+    			
+    			if(mindisk==0 && images.getJSONObject(i).has("mindisk"))
+    				mindisk=images.getJSONObject(i).getInt("mindisk");
+    			
+    			if(minram==0 && images.getJSONObject(i).has("min_ram"))
+    				minram=images.getJSONObject(i).getInt("min_ram");
+    			*/
+    			
     			SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     			timeFormatter.setTimeZone( TimeZone.getDefault( ) );
     			Calendar calendar = Calendar.getInstance();

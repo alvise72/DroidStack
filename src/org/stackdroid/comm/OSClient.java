@@ -510,8 +510,17 @@ public class OSClient {
     {
  	   checkToken( );
  		
-       return RESTClient.sendGETRequest( U.useSSL(), 
-    		   							 U.getNovaEndpoint() + "/images/detail", 
+ 	   String glanceEP = U.getGlanceEndpoint();
+ 	   if(glanceEP.endsWith("v2"))
+ 		   glanceEP += "/images";
+ 	   if(glanceEP.endsWith("v1"))
+ 		   glanceEP += "/images/detail";
+ 	  
+ 	   if(glanceEP.matches("http.+:\\d+$"))
+ 		  glanceEP += "/v2/images";
+ 	   
+ 	   return RESTClient.sendGETRequest( U.useSSL(), 
+    		   							 glanceEP, 
     		   							 U.getToken(), 
     		   							 null );   
     }

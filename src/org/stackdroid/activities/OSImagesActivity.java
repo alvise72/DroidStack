@@ -363,8 +363,6 @@ public class OSImagesActivity extends Activity {
 	    	errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
 	    	hasError = true;
 	    } catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 	    	errorMessage = e.getMessage( );
 	    	hasError = true;
 		} 
