@@ -156,10 +156,16 @@ public class ParseUtils {
       JSONObject jsonObject = null;
   	  try {
 		jsonObject = new JSONObject( buffer );
-		JSONObject NE = (JSONObject)jsonObject.get("NeutronError");
-		  if(NE.has("message")) {
-			  return NE.getString("message");
-		  } else return "Cannot parse Neutron server's error message";
+		if(jsonObject.get("NeutronError") instanceof String) {
+			return jsonObject.getString("NeutronError");
+		}
+		if(jsonObject.get("NeutronError") instanceof JSONObject) {
+			JSONObject NE = (JSONObject)jsonObject.get("NeutronError");
+			if(NE.has("message")) {
+				return NE.getString("message");
+			} else return "Cannot parse Neutron server's error message";
+		}
+		return "Cannot parse Neutron server's error message";
   	  } catch (JSONException e) {
   		return "Cannot parse Neutron server's error message";
   	  }

@@ -29,6 +29,7 @@ import java.util.Vector;
 
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
+import org.stackdroid.comm.ServerException;
 import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -40,6 +41,7 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.LinearLayoutWithView;
 import org.stackdroid.utils.OSImage;
+import org.stackdroid.utils.Port;
 import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -137,6 +139,9 @@ public class ServersActivity extends Activity {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
 			ServersActivity.this.progressDialogWaitStop.show();
+			//Log.d("CONFIRM", "UUID="+fip.getID())
+			
+			
 			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), server.getPrivateIP()[0] );
 		}
 	}
@@ -1007,19 +1012,39 @@ public class ServersActivity extends Activity {
      {
        private  String   errorMessage     = null;
    	   private  boolean  hasError         = false;
-       private  String   floatingip       = null;
-       private  String   serverid         = null;
+       //private  String   floatingip       = null;
+       //private  String   serverid         = null;
+       private  String   jsonPort		  = null;
        
        @Override
        protected Void doInBackground( String... ip_serverid ) 
        {
- 		floatingip = ip_serverid[0];
- 		serverid   = ip_serverid[1];
+ 		String floatingipid = ip_serverid[0];
+ 		String fixedip      = ip_serverid[1];
  		OSClient osc = OSClient.getInstance(U);
- 		
  	    
  	    try {
- 		  osc.associateFloatingIP(floatingip, serverid);	    
+ 		  
+ 		  jsonPort = osc.requestPortList( );
+	      Vector<Port> vecP = ParseUtils.parsePort(jsonPort);
+	    	
+	      Iterator<Port> portIt = vecP.iterator();
+	      String portID = "";
+	      while(portIt.hasNext()) {
+	    	  Port p = portIt.next();
+	    	  if(p.getFixedIP().compareTo(fixedip)==0)
+	       	  portID = p.getID();
+	      }
+	    	
+	      if(portID.compareTo("")==0) {
+	    	  return null;
+	      }
+
+	      osc.associateFloatingIP(floatingipid, portID);
+	      
+ 		} catch(ServerException se) {
+ 		  errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+ 		  hasError = true;
  		} catch(Exception e) {
  		  errorMessage = e.getMessage();
  		  hasError = true;
