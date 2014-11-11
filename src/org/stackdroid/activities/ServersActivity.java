@@ -9,10 +9,8 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
@@ -24,7 +22,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -61,7 +58,7 @@ public class ServersActivity extends Activity {
 
     private CustomProgressDialog    progressDialogWaitStop     = null;
     private User 				    U 						   = null;
-	private String 				    serverID 				   = null;
+	private Server 				    server    				   = null;
 	private ArrayAdapter<OSImage>   spinnerImagesArrayAdapter  = null;
 	private AlertDialog 		    alertDialogSelectImage     = null;
 	private AlertDialog 		    alertDialogSelectFIP       = null;
@@ -82,7 +79,7 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			ServersActivity.this.progressDialogWaitStop.show();
-			serverID = ( (ButtonWithView)v ).getServerView().getServer().getID();
+			server = ( (ButtonWithView)v ).getServerView().getServer();
 			(new ServersActivity.AsyncTaskFIPList()).execute( );
 		}
 	}
@@ -140,7 +137,7 @@ public class ServersActivity extends Activity {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
 			ServersActivity.this.progressDialogWaitStop.show();
-			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getIP(), serverID );
+			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), server.getPrivateIP()[0] );
 		}
 	}
 
@@ -291,7 +288,7 @@ public class ServersActivity extends Activity {
 	protected class ServerSnapClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-		   	serverID  = ((ImageButtonWithView)v).getServerView().getServer().getID();
+		   	server  = ((ImageButtonWithView)v).getServerView().getServer();
 		    	
 		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
@@ -306,7 +303,7 @@ public class ServersActivity extends Activity {
 	                } else {
 	                	//button.setText(newCateg);
 	                    ServersActivity.this.progressDialogWaitStop.show();
-	                    (new AsyncTaskCreateSnapshot( )).execute(serverID, snapname);
+	                    (new AsyncTaskCreateSnapshot( )).execute(server.getID(), snapname);
 	                }
 	            }
 	         });
@@ -468,7 +465,7 @@ public class ServersActivity extends Activity {
 	protected class ConsoleLogClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-			ServersActivity.this.serverID = ((ButtonWithView)v).getServerView().getServer().getID();
+			//ServersActivity.this.server = ((ButtonWithView)v).getServerView().getServer();
 			
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));
@@ -870,7 +867,7 @@ public class ServersActivity extends Activity {
 	    OSClient osc = OSClient.getInstance( U );
 	    int maxnumlines = Integer.parseInt(v[0]);
 	    try {
-		  jsonBuf = osc.requestServerLog( ServersActivity.this.serverID, maxnumlines );
+		  jsonBuf = osc.requestServerLog( ServersActivity.this.server.getID(), maxnumlines );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -1022,7 +1019,7 @@ public class ServersActivity extends Activity {
  		
  	    
  	    try {
- 		  osc.requestFloatingIPAssociate(floatingip, serverid);	    
+ 		  osc.associateFloatingIP(floatingip, serverid);	    
  		} catch(Exception e) {
  		  errorMessage = e.getMessage();
  		  hasError = true;

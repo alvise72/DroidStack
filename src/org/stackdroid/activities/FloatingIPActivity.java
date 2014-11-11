@@ -31,6 +31,7 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.FloatingIP;
 import org.stackdroid.utils.Network;
+import org.stackdroid.utils.Port;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -54,7 +55,7 @@ public class FloatingIPActivity extends Activity {
 	private ArrayAdapter<Server>  spinnerServersArrayAdapter  = null;
 	private Spinner 			  serverSpinner 			  = null;
 	private AlertDialog 		  alertDialogSelectServer     = null;
-	private String 				  fipToAssociate			  = null;
+	//private FloatingIP			  FipToAssociate			  = null;
 	private FloatingIP 			  selectedFIPObj 			  = null;
 
 	/**
@@ -88,7 +89,7 @@ public class FloatingIPActivity extends Activity {
 		public void onClick(View v) {
 			selectedFIPObj  = ((ImageButtonWithView)v).getFloatingIPView().getFloatingIP();
 			if(selectedFIPObj.isAssociated()) {
-				final String fip = selectedFIPObj.getIP();
+				//final String fip = selectedFIPObj.getID();//.getIP();
 				
 				AlertDialog.Builder builder = new AlertDialog.Builder(FloatingIPActivity.this);
 				builder.setMessage( getString(R.string.ALREADYASSOCIATEDWARN));
@@ -96,7 +97,7 @@ public class FloatingIPActivity extends Activity {
 			    
 				DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						associateFIP(fip);
+						associateFIP( );
 					}
 				    };
 
@@ -116,7 +117,7 @@ public class FloatingIPActivity extends Activity {
 				alert.setCancelable(false);
 				alert.setCanceledOnTouchOutside(false);
 				alert.show();
-			} else associateFIP(selectedFIPObj.getIP());
+			} else associateFIP( );
 		}
 	}
 
@@ -162,7 +163,8 @@ public class FloatingIPActivity extends Activity {
 	            FloatingIPActivity.this.progressDialogWaitStop.show();
 	            
 	            AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
-	            task.execute(fipToAssociate, S.getID());
+	            
+	            task.execute(FloatingIPActivity.this.selectedFIPObj.getID(), S.getPrivateIP()[0]);
 	    	}
 	  	 }	
 	}
@@ -462,28 +464,42 @@ public class FloatingIPActivity extends Activity {
     {
       private  String   errorMessage     = null;
   	  private  boolean  hasError         = false;
-      private  String   floatingip       = null;
-      private  String   serverid         = null;
+      private  String   jsonPort         = null;
       
       @Override
       protected Void doInBackground( String... ip_serverid ) 
       {
-		floatingip = ip_serverid[0];
-		serverid   = ip_serverid[1];
+		String floatingipid  = ip_serverid[0];
+		String serverfixedip = ip_serverid[1];
 		OSClient osc = OSClient.getInstance(U);
 		
 	    
 	    try {
-		  osc.requestFloatingIPAssociate(floatingip, serverid);	    
+	    	jsonPort = osc.requestPortList( );
+	    	Vector<Port> vecP = ParseUtils.parsePort(jsonPort);
+	    	
+	    	Iterator<Port> portIt = vecP.iterator();
+	    	String portID = "";
+	    	while(portIt.hasNext()) {
+	    		Port p = portIt.next();
+	    		if(p.getFixedIP().compareTo(serverfixedip)==0)
+	    			portID = p.getID();
+	    	}
+	    	
+	    	if(portID.compareTo("")==0) {
+	    		return null;
+	    	}
+	    	
+	    	osc.associateFloatingIP(floatingipid, portID);
+	    	
 		} catch(ServerException se ) {
 			errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 			hasError = true;
 		} catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
-	  	  //return "";
 	    }
-	    //return "";
+
 		return null;
       }
 	
@@ -497,27 +513,10 @@ public class FloatingIPActivity extends Activity {
  		  return;
  	    }
  	    Utils.alert( getString(R.string.FIPASSOCIATED), FloatingIPActivity.this );
- 	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
 	    FloatingIPActivity.this.loadFIP();
 	  }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
     /**
 	 * 
 	 * 
@@ -556,25 +555,9 @@ public class FloatingIPActivity extends Activity {
     			return;
     		}
     		Utils.alert( getString(R.string.FIPALLOCATED), FloatingIPActivity.this );
-    		//FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
     		FloatingIPActivity.this.loadFIP();
     	}
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     /**
 	 * 
@@ -614,103 +597,17 @@ public class FloatingIPActivity extends Activity {
  	    	return;
  	    }
  	    Utils.alert( getString(R.string.FIPRELEASED), FloatingIPActivity.this );
-	    //FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
 	    FloatingIPActivity.this.loadFIP();
     	}
     }
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-    /**
-	 * 
-	 * 
-	 *
-	 *
-    @Override
-    public void onClick(View v) {
-	
-    	if(v instanceof ImageButtonNamed) {
-    		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_DISSOCIATE_IP) {
-    			FloatingIP FIP = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
-    			String fip = FIP.getIP();
-    			if(FIP.isAssociated()==false) {
-    				Utils.alert(getString(R.string.FIPNOTASSOCIATED), this);
-    				return;
-    			}
-    			String serverid= FIP.getServerID();
-    			
-    			progressDialogWaitStop.show();
-    			AsyncTaskFIPDeassociate task = new AsyncTaskFIPDeassociate();
-    			task.execute( fip, serverid );
-    		}
-	    
-    		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_RELEASE_IP) {
-    			String serverid= ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getServerID();
-    			if(serverid==null || serverid.length()==0 || serverid.compareTo("null") == 0) {
-    				fip_to_release_ID  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP().getID();
-    				progressDialogWaitStop.show();
-    				AsyncTaskFIPRelease task = new AsyncTaskFIPRelease();
-    				task.execute();	    
-    			} else {
-    				Utils.alert(getString(R.string.CANNOTRELEASEASSOCIATEDFIP), this);
-    				return;
-    			}
-    		}
-	    
-    		if(((ImageButtonNamed)v).getType()==ImageButtonNamed.BUTTON_ASSOCIATE_IP) {
-    			selectedFIPObj  = ((ImageButtonNamed)v).getFloatingIPView().getFloatingIP();
-    			if(selectedFIPObj.isAssociated()) {
-    				final String fip = selectedFIPObj.getIP();
-    				
-    				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    				builder.setMessage( getString(R.string.ALREADYASSOCIATEDWARN));
-    				builder.setCancelable(false);
-    			    
-    				DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
-    					public void onClick(DialogInterface dialog, int id) {
-    						associateFIP(fip);
-    					}
-    				    };
-
-    				DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
-    					public void onClick(DialogInterface dialog, int id) {
-    					    dialog.cancel( );
-    					}
-    				    };
-
-    				builder.setPositiveButton(getString(R.string.CONTINUE), yesHandler );
-    				builder.setNegativeButton(getString(R.string.CANCEL), noHandler );
-    		            
-    				AlertDialog alert = builder.create();
-    				alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-    							    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    				
-    				alert.setCancelable(false);
-    				alert.setCanceledOnTouchOutside(false);
-    				alert.show();
-    			} else associateFIP(selectedFIPObj.getIP());
-    		}
-    		
-    	}
-    	
-  	 }	
-    */
     
     /**
 	 * 
 	 * 
 	 *
 	 */
-    private void associateFIP( String fip ) {
-    	fipToAssociate = fip;
+    private void associateFIP( ) {
+    	//fipIDToAssociate = fip;
 		this.progressDialogWaitStop.show( );
 		(new AsyncTaskOSListServers()).execute( );
     }
@@ -725,7 +622,7 @@ public class FloatingIPActivity extends Activity {
      	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	private  String   jsonBuf          = null;
-     	private  String   jsonBufferFlavor = null;
+     	//private  String   jsonBufferFlavor = null;
 
 	@Override
 	protected String doInBackground( Void... v ) 
@@ -734,7 +631,7 @@ public class FloatingIPActivity extends Activity {
 		
 	    try {
 	    	jsonBuf 		 = osc.requestServers( );
-	    	jsonBufferFlavor = osc.requestFlavors( );
+	    	//jsonBufferFlavor = osc.requestFlavors( );
 	    } catch(Exception e) {
 	    	errorMessage = e.getMessage();
 	    	hasError = true;
@@ -795,7 +692,7 @@ protected void pickAServerToAssociateFIP() {
 
     // set dialog message
 
-    alertDialogBuilder.setTitle(getString(R.string.PICKASERVERTOASSOCIATEFIP) + " "+this.fipToAssociate);
+    alertDialogBuilder.setTitle(getString(R.string.PICKASERVERTOASSOCIATEFIP) + " " + this.selectedFIPObj.getIP() );
     //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
     // create alert dialog
     alertDialogSelectServer = alertDialogBuilder.create();

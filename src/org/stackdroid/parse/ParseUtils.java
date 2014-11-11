@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.stackdroid.utils.AllocationPool;
 import org.stackdroid.utils.FloatingIP;
+import org.stackdroid.utils.Port;
 import org.stackdroid.utils.QuotaVol;
 import org.stackdroid.utils.SimpleSecGroupRule;
 import org.stackdroid.utils.SubNetwork;
@@ -149,6 +150,9 @@ public class ParseUtils {
      *
      */ 
     public static String parseNeutronError( String buffer ) {
+    	
+    	Log.d("PARSE", "buffer="+buffer);
+    	
       JSONObject jsonObject = null;
   	  try {
 		jsonObject = new JSONObject( buffer );
@@ -747,6 +751,23 @@ public class ParseUtils {
 			int maxGiga = giga.getInt("limit");
 			int maxSnaps = snaps.getInt("limit");
 			return new QuotaVol( volUsage, gigaUsage, snapUsage, maxVols, maxGiga, maxSnaps );
+		} catch(org.json.JSONException je) {
+			throw new ParseException( je.getMessage( ) );
+		}
+    }
+	
+	public static Vector<Port> parsePort( String jsonPort ) throws ParseException {
+		Vector<Port> vecP = new Vector<Port>();
+		try {
+			JSONObject jsonObject = new JSONObject( jsonPort );
+			JSONArray ports = jsonObject.getJSONArray("ports");
+			for(int i = 0; i<ports.length(); ++i) {
+				JSONObject port = ports.getJSONObject(i);
+				String id = port.getString("id");
+				String fixedip = port.has("fixed_ips") ? port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") : "";
+				vecP.add(new Port(id, fixedip));
+			}
+			return vecP;
 		} catch(org.json.JSONException je) {
 			throw new ParseException( je.getMessage( ) );
 		}

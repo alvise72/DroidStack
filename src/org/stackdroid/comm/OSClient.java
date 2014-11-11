@@ -333,7 +333,6 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	//String extradata = "{\"pool\": \"" + externalNetworkID + "\"}";
     	String extradata = "{\"floatingip\": {\"floating_network_id\": \"" + externalNetworkID + "\"}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
     								U.getNeutronEndpoint() + "/v2.0/floatingips.json",//os-floating-ips", 
@@ -406,7 +405,7 @@ public class OSClient {
      * 
      * 
      */
-    public void requestFloatingIPAssociate( String fip, String serverid ) 
+    public void associateFloatingIP( String fipid, String portid ) 
 	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError ,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
@@ -415,13 +414,36 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String extradata = "{\"addFloatingIp\": {\"address\": \"" + fip + "\"}}";
-    	RESTClient.sendPOSTRequest( U.useSSL(), 
-				    			    U.getNovaEndpoint() + "/servers/"+serverid+"/action", 
-				    			    U.getToken(), 
-				    			    extradata, 
-				    			    vp );   	
+    	String extradata = "{\"floatingip\": {\"port_id\": \"" + portid + "\"}}";
+    	RESTClient.sendPUTRequest( U.useSSL(), 
+				    			   U.getNeutronEndpoint() + "/v2.0/floatingips/" + fipid + ".json",
+				    			   U.getToken(), 
+				    			   extradata, 
+				    			   vp );   	
     }
+    
+    /**
+     * @throws ParseException 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public String requestPortList( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
+	{
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	return RESTClient.sendGETRequest( U.useSSL(), 
+    									  U.getNeutronEndpoint() + "/v2.0/ports.json", 
+    									  U.getToken( ), 
+    									  vp );
+    	
+	}
     
     /**
      * @throws ParseException 
