@@ -70,7 +70,8 @@ public class ServerView extends LinearLayout {
 	Name.setTypeface( null, Typeface.BOLD );
 	
 	Flavor = new TextViewWithView( ctx, (ServerView)this );
-	String flavName = S.getFlavor( ).getName();// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
+	
+	String flavName = S.getFlavor( )!=null ? S.getFlavor().getName() : "N/A";// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
 	if(flavName.length()>30)
 	    flavName = flavName.substring(0,28) + "..";
 	Flavor.setText( "Flavor: "+flavName );

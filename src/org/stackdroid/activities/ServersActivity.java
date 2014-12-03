@@ -360,7 +360,7 @@ public class ServersActivity extends Activity {
 			tv5.setText("Flavor: ");
 			tv5.setTypeface( null, Typeface.BOLD );
 			TextView tv6 = new TextView(ServersActivity.this);
-			tv6.setText( s.getFlavor( ).getFullInfo() );
+			tv6.setText( s!=null && s.getFlavor( )!=null ? s.getFlavor().getFullInfo() : "N/A" );
 			TextView tv7 = new TextView(ServersActivity.this);
 			tv7.setText("Fixed IP(s):");
 			tv7.setTypeface( null, Typeface.BOLD );
