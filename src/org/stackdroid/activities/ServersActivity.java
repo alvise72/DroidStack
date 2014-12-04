@@ -678,6 +678,16 @@ public class ServersActivity extends Activity {
 	
     	while(it.hasNext()) {
     		Server s = it.next();
+		
+		//Log.d("SERVERS", "Considereing Server ["+s.getName( )+"] with flavor ["+s.getFlavorID()+"]");
+		
+		Iterator<Flavor> flvIt = flavors.iterator( );
+		while(flvIt.hasNext( ) ) {
+			Flavor f = flvIt.next( );
+		  	//Log.d("SERVERS", "Considereing Flavor ["+f.getName( )+"] with ID ["+f.getID()+"]");	
+		}
+
+		
     		Flavor F = flavHash.get( s.getFlavorID( ) );
     		if( F != null)
     			s.setFlavor( F );
@@ -773,8 +783,9 @@ public class ServersActivity extends Activity {
 	    
 
 	      try {
-	    	  jsonBuf 			= osc.requestServers( );
+	    	  jsonBuf 	    = osc.requestServers( );
 	    	  jsonBufferFlavor  = osc.requestFlavors( );
+		  //Log.d("SERVERS", "jsonBufferFlavor="+jsonBufferFlavor);
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
 	    	  hasError = true;
@@ -824,7 +835,7 @@ public class ServersActivity extends Activity {
      				try {
      					osc.deleteInstance( serverids[i] );
      				} catch(NotFoundException nfe) {
-     					Log.d("SERVERSACT",nfe.getMessage());
+     					//Log.d("SERVERSACT",nfe.getMessage());
      					not_found = true;
      				}
      			}

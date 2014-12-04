@@ -151,7 +151,7 @@ public class ParseUtils {
      */ 
     public static String parseNeutronError( String buffer ) {
     	
-    	Log.d("PARSE", "buffer="+buffer);
+    	//Log.d("PARSE", "buffer="+buffer);
     	
       JSONObject jsonObject = null;
   	  try {
@@ -376,6 +376,8 @@ public class ParseUtils {
 	long creationTime    = 0;
 	int power            = -1;
 	
+	//Log.d("PARSE", "jsonBuf="+jsonBuf);
+	
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray servers     = (JSONArray)jsonObject.getJSONArray("servers");
@@ -393,7 +395,7 @@ public class ParseUtils {
 		} catch(JSONException je) { secgrpNames = null; }
 		JSONObject flavObj = server.getJSONObject("flavor");
 		flavorID = flavObj.getString("id");
-		ID = (String)server.getString("id");
+		ID = server.getString("id");
 		if(server.has("OS-EXT-SRV-ATTR:hypervisor_hostname"))
 		    computeNode = server.getString("OS-EXT-SRV-ATTR:hypervisor_hostname");
 		else
