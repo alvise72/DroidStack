@@ -1,3 +1,5 @@
 verificare presenza dei vari service (impatto su classe User che ha dei booleani hasXYZ e stringhe con gli endpoint, altrimenti disabilitare bottone volumi
 Neutron interface
 startIP e endIP in NeutronActivity
+
+Se si cambia il nome di un flavor (o si cancella e si ricrea) cambia il suo ID. Se un'istanza aveva l'ID precedente, adesso il riferimento è andato perso.
