@@ -14,7 +14,7 @@ import android.content.Intent;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
-import android.util.Log;
+//import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
