@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.util.Log;
 //import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -470,17 +471,16 @@ public class ServersActivity extends Activity {
 	protected class ConsoleLogClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-			//ServersActivity.this.server = ((ButtonWithView)v).getServerView().getServer();
+			
+			//Log.d("SERVER","Click CONSOLE !!");
+			
+			ButtonWithView btv = (ButtonWithView)v;
+			server = btv.getServerView().getServer();
 			
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));
 	        final EditText input = new EditText(ServersActivity.this);
-	        //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE);
 	        input.setKeyListener(SimpleNumberKeyListener.getInstance());
-	        //input.requestFocus();
-	        //input.performClick();
-	        //((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(input, InputMethodManager.SHOW_FORCED);
-	        //input.setTransformationMethod(TransormationMethod.);
 	        
 	        alert.setView(input);
 	        alert.setPositiveButton("Ok",
@@ -492,6 +492,7 @@ public class ServersActivity extends Activity {
 	                    	if(num==0) {
 	                    		return;
 	                    	}
+	                    	//Log.d("SERVERLOG", "Invoking async task for log...");
 	                        ServersActivity.this.progressDialogWaitStop.show();
 	                        (new ServersActivity.AsyncTaskOSLogServer()).execute( input.getText().toString().trim() );
 	                    }
@@ -522,7 +523,7 @@ public class ServersActivity extends Activity {
         int GROUP = 0;
                 
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        menu.add(GROUP, 1, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
+        //menu.add(GROUP, 1, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
 
@@ -544,7 +545,7 @@ public class ServersActivity extends Activity {
             Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
         }
-
+/*
         if( id == Menu.FIRST ) { 
 	      if(U==null) {
 		    Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
@@ -590,6 +591,7 @@ public class ServersActivity extends Activity {
 		return true;
 	    }
         }
+        */
 	return super.onOptionsItemSelected( item );
     }
 
@@ -882,9 +884,16 @@ public class ServersActivity extends Activity {
 	{
 	    OSClient osc = OSClient.getInstance( U );
 	    int maxnumlines = Integer.parseInt(v[0]);
+	    
+	    //Log.d("SERVER", "Asking for "+maxnumlines+" lines");
+	    
+	    String ID = ServersActivity.this.server.getID();
+	    
 	    try {
-		  jsonBuf = osc.requestServerLog( ServersActivity.this.server.getID(), maxnumlines );
+		  jsonBuf = osc.requestServerLog( ID, maxnumlines );
+		  //Log.d("SERVER", "jsonBuf="+jsonBuf);
 	    } catch(Exception e) {
+	    	//Log.d("SERVER", "ECCEZIONE !! "+e.getMessage());
 		  errorMessage = e.getMessage();
 		  hasError = true;
 		  //return;
@@ -904,6 +913,7 @@ public class ServersActivity extends Activity {
  	    }
 	    
 	    try {
+	    	//Log.d("SERVER", "jsonBuf="+jsonBuf);
 		  String consoleLog = ParseUtils.parseServerConsoleLog( jsonBuf );
 		  Utils.alertTitle(consoleLog,"Console Log", 8.0f, ServersActivity.this);
 	    } catch(ParseException pe) {

@@ -72,7 +72,7 @@ public class NeutronRouterActivity extends Activity {
 			//Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
 			NeutronRouterActivity.this.progressDialogWaitStop.show( );
 			String netID = ((ImageButtonWithView) v).getNetworkListView( ).getNetwork().getID();
-			(new NeutronActivity.AsyncTaskOSDeleteRouter()).execute(netID, "true");
+			//(new NeutronActivity.AsyncTaskOSDeleteRouter()).execute(netID, "true");
 		}
 	}
 
@@ -492,12 +492,12 @@ public class NeutronRouterActivity extends Activity {
      	    if(hasError) {
      	    	Utils.alert( errorMessage, NeutronRouterActivity.this );
      	    	NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
-     	    	(new NeutronActivity.AsyncTaskOSDeleteRouter()).execute( netID, "false" );
+     	    	//(new NeutronActivity.AsyncTaskOSDeleteRouter()).execute( netID, "false" );
      	    	return;
      	    }
     	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronRouterActivity.this );
     	    NeutronRouterActivity.this.alertDialogCreateRouter.dismiss();
-    	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
+    	    //(new NeutronActivity.AsyncTaskOSListNetworks()).execute();
     	}
     }
     

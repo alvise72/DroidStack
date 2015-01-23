@@ -111,7 +111,7 @@
             android:name="org.stackdroid.activities.EditSecGroupActivity"
             android:launchMode="singleInstance"
             android:label="@string/EDITSECGROUP"            
-	    	android:parentActivityName="org.stackdroid.SecGrpActivity"
+	    	android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
        

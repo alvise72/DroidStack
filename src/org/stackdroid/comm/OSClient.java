@@ -507,7 +507,7 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {
 	   checkToken( );
-	
+	   Log.d("requestServerLog", "serverid="+serverid+" - maxlines="+maxlines);
 	   Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 	   Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	   vp.add( p );
