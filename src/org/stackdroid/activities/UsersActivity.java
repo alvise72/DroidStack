@@ -2,9 +2,11 @@ package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View.OnClickListener;
@@ -76,6 +78,93 @@ public class UsersActivity extends Activity {
 		  refreshUserViews();
 	  }
   }
+  
+//__________________________________________________________________________________
+  protected class UserInfoListener implements OnClickListener {
+	  @Override
+	  public void onClick( View v ) {
+		  //Log.d("USERS", "SELECTEDUSER="+((TextViewWithView)v).getUserView().getUser().getFilename());
+		  //Utils.putStringPreference("SELECTEDUSER", ((TextViewWithView)v).getUserView().getUser().getFilename(), UsersActivity.this);
+		  //refreshUserViews();
+		  User U = ((ImageButtonWithView)v).getUserView( ).getUser();
+		  //String info = "User name: " + uv.getUser().getUserName() + "\n";
+		  //info += "Tenant name: " + uv.getUser().getTenantName() + "\n";
+		  //info += "Auth URL: "+uv.getUser().getIdentityEndpoint() + "\n";
+		  //info += "Compute URL: "+uv.getUser().getNovaEndpoint() + "\n";
+		  //info += "Image URL: "+uv.getUser().getGlanceEndpoint() + "\n";
+		  //info += "Neutron URL: "+uv.getUser().getNeutronEndpoint() + "\n";
+		  ScrollView sv = new ScrollView( UsersActivity.this );
+		  TextView t1 = new TextView( UsersActivity.this );
+		  t1.setText("Username:");
+		  t1.setTypeface( null, Typeface.BOLD );
+		  TextView t2 = new TextView( UsersActivity.this );
+		  t2.setText("   " + U.getUserName());
+		  TextView t3 = new TextView( UsersActivity.this );
+		  t3.setText("Tenant:");
+		  t3.setTypeface(null, Typeface.BOLD);
+		  TextView t4 = new TextView( UsersActivity.this );
+		  t4.setText("   "+U.getTenantName());
+		  TextView t5 = new TextView( UsersActivity.this );
+		  t5.setText("Identity hostname:");
+		  t5.setTypeface(null, Typeface.BOLD);
+		  TextView t6 = new TextView( UsersActivity.this );
+		  t6.setText("   "+U.getIdentityHostname());
+		  
+		  TextView t7 = new TextView( UsersActivity.this );
+		  t7.setText("Identity endpoint:");
+		  t7.setTypeface(null, Typeface.BOLD);
+		  TextView t8 = new TextView( UsersActivity.this );
+		  t8.setText("   "+U.getIdentityEndpoint());
+		  
+		  TextView t9 = new TextView( UsersActivity.this );
+		  t9.setText("Compute endpoint:");
+		  t9.setTypeface(null, Typeface.BOLD);
+		  TextView t10 = new TextView( UsersActivity.this );
+		  t10.setText("   "+U.getNovaEndpoint());
+		  
+		  TextView t11 = new TextView( UsersActivity.this );
+		  t11.setText("Network endpoint:");
+		  t11.setTypeface(null, Typeface.BOLD);
+		  TextView t12 = new TextView( UsersActivity.this );
+		  t12.setText("   "+U.getNeutronEndpoint());
+		  
+		  TextView t13 = new TextView( UsersActivity.this );
+		  t13.setText("SSL:");
+		  t13.setTypeface(null, Typeface.BOLD);
+		  TextView t14 = new TextView( UsersActivity.this );
+		  t14.setText("   "+(U.useSSL() ? UsersActivity.this.getString(R.string.YES) : "no"));
+		  
+		  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.MATCH_PARENT);
+		  sv.setLayoutParams( lp );
+		  LinearLayout l = new LinearLayout(UsersActivity.this);
+		  l.setLayoutParams( lp );
+		  l.setOrientation( LinearLayout.VERTICAL );
+		  int paddingPixel = 8;
+		  float density = Utils.getDisplayDensity( UsersActivity.this );
+		  int paddingDp = (int)(paddingPixel * density);
+		  l.setPadding(paddingDp, 0, 0, 0);
+		  l.addView( t1 );
+		  l.addView( t2 );
+		  l.addView( t3 );
+		  l.addView( t4 );
+		  l.addView( t5 );
+		  l.addView( t6 );
+		  l.addView( t7 );
+		  l.addView( t8 );
+		  l.addView( t9 );
+		  l.addView( t10 );
+		  l.addView( t11 );
+		  l.addView( t12 );
+		  l.addView( t13 );
+		  l.addView( t14 );
+		  
+		  sv.addView(l);
+		  Utils.alertInfo(sv, UsersActivity.this.getString(R.string.USERINFO), UsersActivity.this);
+		  //Utils.alertTitle(info, UsersActivity.this.getString(R.string.USERINFO), 12, UsersActivity.this);
+	  }
+  }
 
     //__________________________________________________________________________________
     private void refreshUserViews( ) {
@@ -120,7 +209,11 @@ public class UsersActivity extends Activity {
   		  return;
   	    } 
 	    
-	    UserView uv = new UserView ( U, new UsersActivity.UserDeleteListener(), new UsersActivity.UserSelectedListener(),this );
+	    UserView uv = new UserView ( U, 
+	    							 new UsersActivity.UserDeleteListener(), 
+	    							 new UsersActivity.UserSelectedListener(),
+	    							 new UsersActivity.UserInfoListener(), 
+	    							 this );
 	    ((LinearLayout)findViewById(R.id.userLayout)).addView( uv );
 	    View space = new View( this );
 	    space.setMinimumHeight(10);

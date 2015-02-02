@@ -17,15 +17,16 @@ public class UserView extends LinearLayout {
     private TextViewWithView     textUserName   = null;
     private TextViewWithView     textTenantName = null;
     private TextViewWithView     textEndpoint   = null;
-    private TextViewWithView	  textSSL        = null;
+    private TextViewWithView	 textSSL        = null;
 
     private ImageButtonWithView  deleteUser     = null;
+    private ImageButtonWithView  infoUser       = null;
     
     private User user = null;
 
     public User getUser( ) { return user; } 
     
-    public UserView ( User U, OnClickListener deleteUserListener, OnClickListener selectUserListener, Context ctx ) {
+    public UserView ( User U, OnClickListener deleteUserListener, OnClickListener selectUserListener, OnClickListener infoUserListener, Context ctx ) {
 	super(ctx);
 
 	user = U;
@@ -51,19 +52,31 @@ public class UserView extends LinearLayout {
 	userLayout.setLayoutParams( params2 );
 	
 	textUserName = new TextViewWithView( ctx, (UserView)this );
-	textUserName.setText("User: "+user.getUserName() );
+	String uname = "User: "+user.getUserName() ;
+	if(uname.length()>35) {
+		uname = uname.substring(0, 31) + "...";
+	}
+	textUserName.setText(uname);
 	textUserName.setTextColor( Color.parseColor("#333333") );
 	textUserName.setOnClickListener( selectUserListener );
 	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textTenantName = new TextViewWithView( ctx, (UserView)this );
-	textTenantName.setText("Tenant: "+user.getTenantName() );
+	String tname = "Tenant: "+user.getTenantName();
+	if(tname.length()>35) {
+		tname = tname.substring(0, 31) + "...";
+	}
+	textTenantName.setText(tname);
 	textTenantName.setTextColor( Color.parseColor("#333333") );
 	textTenantName.setOnClickListener( selectUserListener );
 	textTenantName.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textEndpoint = new TextViewWithView( ctx, (UserView)this );
-	textEndpoint.setText("Endpoint: "+U.getIdentityHostname( ));
+	String ename = "Endpoint: "+U.getIdentityHostname( );
+	if(ename.length()>35) {
+		ename = ename.substring(0,31)+"...";
+	}
+	textEndpoint.setText(ename);
 	textEndpoint.setTextColor( Color.parseColor("#333333") );
 	textEndpoint.setOnClickListener( selectUserListener );
 	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
@@ -100,8 +113,12 @@ public class UserView extends LinearLayout {
 	deleteUser = new ImageButtonWithView( ctx, this );
 	deleteUser.setImageResource(android.R.drawable.ic_menu_delete);
 	deleteUser.setOnClickListener( deleteUserListener );
-	
+	infoUser = new ImageButtonWithView( ctx, this );
+	infoUser.setImageResource(android.R.drawable.ic_dialog_info);
+	infoUser.setOnClickListener( infoUserListener );
+	buttonsLayout.addView( infoUser );
 	buttonsLayout.addView( deleteUser );
+	
 //	buttonsLayout.setOnClickListener( delete );
 	
 	row.addView( buttonsLayout );

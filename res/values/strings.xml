@@ -161,4 +161,5 @@
 	<string name="ALREADYCHOOSENNET">You\'ve already selected this network</string>
 	<string name="MYNET">myNet</string>	
 	<string name="ROUTERS">Router</string>
+	<string name="USERINFO">User Information</string>
 </resources>

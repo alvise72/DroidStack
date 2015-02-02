@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -723,7 +724,8 @@ protected class AsyncTaskDetachVolume extends AsyncTask< String, Void, Void >
  		try {
  			osc.volumeDetach( v[0], v[1] );
  		} catch(Exception e) {
- 			errorMessage = e.getMessage();
+ 			Log.d("VOLUMEDETACH", "ECCEZIONE: "+e.getMessage());
+ 			errorMessage = e.getMessage();;
  			hasError = true;
  		}
 		return null;

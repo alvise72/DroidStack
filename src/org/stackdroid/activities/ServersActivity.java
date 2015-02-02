@@ -228,19 +228,14 @@ public class ServersActivity extends Activity {
 
 	    alertDialogBuilder.setView(promptsView);
 
-	    // set dialog message
-
 	    alertDialogBuilder.setTitle("Choose an image");
-	    //    alertDialogBuilder.setIcon(android.R.drawable.ic_launcher);
-	    // create alert dialog
 	    alertDialogSelectImage = alertDialogBuilder.create();
 
 	    imageSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseImage);
 	    imageSpinner.setAdapter(spinnerImagesArrayAdapter);
 	    final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
 	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
-		//final Button mButtonCancel = (Button) promptsView.findViewById(R.id.myButtonCancel);
-	    mButton.setOnClickListener(new ServersActivity.ConfirmButtonHandler());
+		mButton.setOnClickListener(new ServersActivity.ConfirmButtonHandler());
 	    mButtonCancel.setOnClickListener(new ServersActivity.CancelButtonHandler());
 	    alertDialogSelectImage.setCanceledOnTouchOutside(false);
 	    alertDialogSelectImage.setCancelable(false);

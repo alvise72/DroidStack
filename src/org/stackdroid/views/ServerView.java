@@ -87,7 +87,7 @@ public class ServerView extends LinearLayout {
 	if(S.getStatus( ).compareToIgnoreCase("error")==0)
 	    Status.setTextColor( Color.parseColor("#AA0000") );
 	if(S.getStatus( ).compareToIgnoreCase("build")==0) {
-	    Status.setText("Status: " + S.getStatus( ) +" (" + S.getTask( ) + ")");
+	    Status.setText("Status: " + S.getStatus( ) +" (" + (S.getTask( )!=null ? S.getTask() : "None") + ")");
 	    if(S.getTask( ).compareToIgnoreCase("deleting")==0) 
 		Status.setTextColor( Color.parseColor("#000000") );
 	}
