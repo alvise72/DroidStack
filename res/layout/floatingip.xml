@@ -33,12 +33,13 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
-        <Button
+        <ImageButton
                 android:id="@+id/updateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_menu_refresh"
+                android:src="@drawable/ic_menu_refresh"
                 android:text="@string/UPDATE"
+                android:background="#f2f2f2"
                 android:onClick="update" />
         <View
           android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View.OnClickListener;
@@ -44,6 +45,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
+import org.stackdroid.MainActivity;
 import org.stackdroid.R;
 
 public class ImageLaunchActivity extends Activity {
@@ -64,7 +66,6 @@ public class ImageLaunchActivity extends Activity {
     private Vector<Network> 						  networks 					  = null;
     private Vector<NetworkView>						  netViewList				  = null;
     Hashtable<String, String> 						  netids 					  = null;
-    //private Hashtable<String, Network>				  nethashes					  = null;
     
     protected class SecGroupListener implements OnClickListener {
     	@Override
@@ -112,7 +113,6 @@ public class ImageLaunchActivity extends Activity {
     }
     
     public ImageLaunchActivity( ) {
-    	//nethashes = new Hashtable<String, Network>( );
     	netViewList = new Vector<NetworkView>( );
     	netids = new Hashtable<String, String>();
     }
@@ -173,7 +173,6 @@ public class ImageLaunchActivity extends Activity {
       
       selectedSecgroups = new HashSet<String>();
       
-      //mappingNetEditText = new Hashtable<Pair<String,String>, EditTextWithView>();
       selectedNetworks = new Hashtable<Pair<String,String>, String>();
 
       (new AsyncTaskGetOptions()).execute( );
@@ -247,11 +246,11 @@ public class ImageLaunchActivity extends Activity {
       int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
 
       Iterator<NetworkView> nvit = netViewList.iterator();
-      int netcount = 0;
+      /*int netcount = 0;
       while(nvit.hasNext()) {
     	  NetworkView nv = nvit.next();
     	  if(nv.isChecked()) netcount++;
-      }
+      }*/
       if(count==0) {
     	  Utils.alert(getString(R.string.MUSTSELECTNET) , this);
     	  return;
@@ -289,13 +288,7 @@ public class ImageLaunchActivity extends Activity {
     		  Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
     		  if(netIP==null) netIP = "";
     		  selectedNetworks.put(net_subnet, netIP);
-    		  /*if(netids.containsKey(nv.getNetwork().getID())) {
-    			  	Utils.alert(getString(R.string.ALREADYCHOOSENNET) + ": "+nv.getNetwork().getName(), this);
-		    		return;
-    		  }
-    		  netids.put(nv.getNetwork().getID(), "");
-    		  */
-    		  //selectedNetworks.add( net_subnet, netIP );
+    		  
     	  }
       }
       
@@ -543,7 +536,13 @@ public class ImageLaunchActivity extends Activity {
 	    super.onPostExecute( v );
 	      if(hasError) {
  		    Utils.alert( errorMessage, ImageLaunchActivity.this );
- 	      } else Utils.alert(getString(R.string.IMAGELAUNCHED), ImageLaunchActivity.this);
+ 	      } else {
+ 	    	  ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+ 	    	  //Utils.alert(getString(R.string.IMAGELAUNCHED), ImageLaunchActivity.this);
+ 	    	  Class<?> c = (Class<?>)ServersActivity.class;
+ 	          Intent I = new Intent( ImageLaunchActivity.this, c );
+ 	          startActivity(I);
+ 	      }
 	    
 	    ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
 	    

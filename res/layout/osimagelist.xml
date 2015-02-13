@@ -34,25 +34,15 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
-        <Button
+        <ImageButton
                 android:id="@+id/updateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_menu_refresh"
+                android:src="@drawable/ic_menu_refresh"
+                android:background="#f2f2f2"
                 android:text="@string/UPDATE"
                 android:onClick="update" />
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
-        <View   
-          android:layout_width="fill_parent"
-          android:layout_height="3dp"
-          android:background="#FF909090" />  
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
+        
   <ScrollView
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"

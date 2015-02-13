@@ -39,33 +39,33 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
-        <Button
-                android:id="@+id/updateButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_menu_refresh"
-                android:text="@string/UPDATE"
-                android:onClick="update" />
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
-        <View   
-          android:layout_width="fill_parent"
-          android:layout_height="3dp"
-          android:background="#FF909090" />  
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
-		     
-		  <ImageButton
+            <LinearLayout
+     	 android:layout_width="fill_parent"
+     	 android:layout_height="wrap_content"
+     	 android:gravity="center_vertical"
+     	 android:background="#f2f2f2"
+     	 android:orientation="horizontal" >
+            <ImageButton
              android:id="@+id/addrule"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:src="@android:drawable/ic_menu_add"
              android:background="#f2f2f2"
+                android:layout_weight="1"
              android:onClick="addRule" />
+        <ImageButton
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu_refresh"
+                android:text="@string/UPDATE"
+            	android:background="#f2f2f2"
+                android:layout_weight="1"
+                android:onClick="update" />
+        </LinearLayout>
+        
+		     
+		  
 		  <View
              android:layout_width="wrap_content"
              android:layout_height="5dip" />

@@ -162,4 +162,5 @@
 	<string name="MYNET">myNet</string>	
 	<string name="ROUTERS">Router</string>
 	<string name="USERINFO">User Information</string>
+	<string name="TOUCHINSTANCE">Touch an instance to get info</string>
 </resources>

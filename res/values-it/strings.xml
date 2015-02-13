@@ -157,4 +157,5 @@
 	<string name="ALREADYCHOOSENNET">Hai gi&#xe0; selezionato questa rete</string>
 	<string name="ROUTERS">Router</string>
 	<string name="USERINFO">Informazioni utente</string>
+	<string name="TOUCHINSTANCE">Tocca un\'istanza per info</string>
 </resources>
