@@ -1,6 +1,11 @@
 package org.stackdroid.utils;
 
 import java.util.Hashtable;
+import java.util.Vector;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.stackdroid.parse.ParseException;
 
 public class SimpleSecGroupRule {
   private String ID;
@@ -48,5 +53,30 @@ public class SimpleSecGroupRule {
   
   public String to_string( ) {
 	  return "SimpleSecGroupRule{ID="+ID + ", FromPort="+fromPort+", ToPort="+toPort+", Protocol="+protocol+", IP Range="+IPRange+"}";
+  }
+  
+  public static Vector<SimpleSecGroupRule> parse( String jsonBuf ) throws ParseException  {
+	Vector<SimpleSecGroupRule> rulesV = new Vector<SimpleSecGroupRule>();
+	//Log.d("PARSE", "jsonBuf="+jsonBuf);
+	try{
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray rules = jsonObject.getJSONObject("security_group").getJSONArray("rules");
+	    
+	    for(int i =0; i<rules.length(); ++i) {
+		  JSONObject rule = rules.getJSONObject(i);
+		  String id = rule.getString("id");
+		  String iprange = "";
+		  if(rule.getJSONObject("ip_range").has("cidr"))
+			  iprange = rule.getJSONObject("ip_range").getString("cidr");
+		  String proto = rule.getString("ip_protocol");
+		  int fromport = rule.getInt("from_port");
+		  int toport = rule.getInt("to_port");
+		  rulesV.add(new SimpleSecGroupRule(id, fromport, toport, proto, iprange) );
+		  //Log.d("PARSE", "Rule="+id);
+	    }
+	} catch(org.json.JSONException je) {
+	    throw new ParseException( je.getMessage( ) );
+	}
+	  return rulesV;
   }
 }

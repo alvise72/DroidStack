@@ -1,5 +1,8 @@
 package org.stackdroid.utils;
 
+import org.json.JSONObject;
+import org.stackdroid.parse.ParseException;
+
 public class Quota {
     private final int maxCPU;
     private final int currCPU;
@@ -54,4 +57,33 @@ public class Quota {
     public int getCurrentInstances() { return currVM;}
     public int getCurrentSecurityGroups() { return currSECG;}
 
+    public static Quota parse( String jsonBuf )  throws ParseException {
+    	try {
+    	    JSONObject jsonObject = new JSONObject( jsonBuf );
+    	    JSONObject limits     = (JSONObject)jsonObject.getJSONObject("limits");
+    	    JSONObject absolute   = (JSONObject)limits.getJSONObject("absolute");
+    	    int maxInstances      = absolute.getInt("maxTotalInstances");
+    	    int maxVirtCPU        = absolute.getInt("maxTotalCores");
+    	    int maxRAM            = absolute.getInt("maxTotalRAMSize");
+    	    int maxFIP            = absolute.getInt("maxTotalFloatingIps");
+    	    int maxSecGroups      = absolute.getInt("maxSecurityGroups");
+    	    int currentInstance   = absolute.getInt("totalInstancesUsed");
+    	    int currentVirtCPU    = absolute.getInt("totalCoresUsed");
+    	    int currentRAM        = absolute.getInt("totalRAMUsed");
+    	    int currentFIP        = absolute.getInt("totalFloatingIpsUsed");
+    	    int currentSECG       = absolute.getInt("totalSecurityGroupsUsed");
+    	    return new Quota(currentInstance, 
+    			     currentVirtCPU,
+    			     currentRAM,
+    			     currentFIP,
+    			     currentSECG,
+    			     maxInstances,
+    			     maxVirtCPU,
+    			     maxRAM,
+    			     maxFIP,
+    			     maxSecGroups );
+    	} catch(org.json.JSONException je) {
+    	    throw new ParseException( je.getMessage( ) );
+    	}
+        }
 }

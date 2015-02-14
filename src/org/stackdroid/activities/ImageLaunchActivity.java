@@ -464,10 +464,10 @@ public class ImageLaunchActivity extends Activity {
  	    }
 	    
 	    try {
-	    	networks               = ParseUtils.parseNetworks( jsonBufNetwork, jsonBufSubnet );
-	    	Vector<Flavor> flavs   = ParseUtils.parseFlavors( jsonBufFlavor );
-	    	Vector<KeyPair> keys   = ParseUtils.parseKeyPairs( jsonBufKeypairs );
-	    	Vector<SecGroup> secgs = ParseUtils.parseSecGroups( jsonBufSecgroups );
+	    	networks               = Network.parse( jsonBufNetwork, jsonBufSubnet );
+	    	Vector<Flavor> flavs   = Flavor.parse( jsonBufFlavor );
+	    	Vector<KeyPair> keys   = KeyPair.parse( jsonBufKeypairs );
+	    	Vector<SecGroup> secgs = SecGroup.parse( jsonBufSecgroups );
 	    	
 	    	Iterator<Network> nit = networks.iterator();
 	    	/*while(nit.hasNext()) {

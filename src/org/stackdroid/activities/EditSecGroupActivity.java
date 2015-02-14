@@ -421,7 +421,7 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
 	    		return;
 	    	}
 	    	try {
-	    		Vector<SimpleSecGroupRule> rules = ParseUtils.parseSecGroupRules(jsonBuf);
+	    		Vector<SimpleSecGroupRule> rules = SimpleSecGroupRule.parse(jsonBuf);
 	    		EditSecGroupActivity.this.update( rules );
 	    	} catch(ParseException pe) {
 	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
@@ -469,7 +469,7 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
 	    		return;
 	    	}
 	    	try {
-	    		Vector<SimpleSecGroupRule> rules = ParseUtils.parseSecGroupRules(jsonBuf);
+	    		Vector<SimpleSecGroupRule> rules = SimpleSecGroupRule.parse(jsonBuf);
 	    		EditSecGroupActivity.this.update( rules );
 	    	} catch(ParseException pe) {
 	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );

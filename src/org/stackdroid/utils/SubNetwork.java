@@ -1,5 +1,11 @@
 package org.stackdroid.utils;
 
+import java.util.Hashtable;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.stackdroid.parse.ParseException;
+
 
 
 public class SubNetwork { 
@@ -42,5 +48,40 @@ public class SubNetwork {
 	    + ",dns=" + dns[0]
 	    + ",dhcp=" + dhcp
 	    +"}";
+    }
+    
+   public static Hashtable<String, SubNetwork> parse( String jsonBuf )  throws ParseException  {
+    	
+    	if(jsonBuf==null) return new Hashtable<String, SubNetwork>();
+    	
+    	Hashtable<String, SubNetwork> result = new Hashtable<String, SubNetwork>();
+    	try{
+    		JSONObject jsonObject = new JSONObject( jsonBuf );
+    		JSONArray subnets = (JSONArray)jsonObject.getJSONArray("subnets");
+    		for(int i =0; i<subnets.length(); ++i) {
+    			JSONObject subnet = subnets.getJSONObject(i);
+    			boolean dhcp = subnet.getBoolean("enable_dhcp");
+    			String ID = (String)subnet.getString("id");
+    			String name = (String)subnet.getString("name");
+    			String gateway = (String)subnet.getString("gateway_ip");
+    			String cidr = (String)subnet.getString("cidr");
+    			String ipv = subnet.getString("ip_version");
+    			JSONArray dnsarray = (JSONArray)subnet.getJSONArray("dns_nameservers");
+    			String[] dns = new String[dnsarray.length()];
+    			for(int j = 0; j<dnsarray.length(); j++)
+    				dns[j] = (String)dnsarray.getString(j);
+    			JSONArray allocpools = (JSONArray)subnet.getJSONArray("allocation_pools");
+    			AllocationPool[] pools = new AllocationPool[allocpools.length()];
+    			for(int j=0; j<allocpools.length(); j++) {
+    				AllocationPool pool = new AllocationPool( (String)allocpools.getJSONObject(j).getString("start"), 
+					(String)allocpools.getJSONObject(j).getString("end") );
+    				pools[j] = pool;
+    			}
+    			result.put( ID, new SubNetwork( name, ID, cidr, gateway, pools, dns, dhcp, ipv ));
+    		}
+    	} catch(org.json.JSONException je) {
+    		throw new ParseException( je.getMessage( ) );
+    	}
+    	return result;
     }
 }

@@ -270,14 +270,14 @@ public class OverViewActivity extends Activity {
 	    
      		try {
      			//		Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
-     			Quota Q = ParseUtils.parseQuota( jsonBufQuota );
-     			QuotaVol QV = ParseUtils.parseQuotaVolume(jsonBufferQuotaVols);
+     			Quota Q = Quota.parse( jsonBufQuota );
+     			QuotaVol QV = QuotaVol.parse(jsonBufferQuotaVols);
      			OverViewActivity.this.refreshView( Q,//ParseUtils.parseQuota( jsonBufQuota ),
      											   QV,
-     											   ParseUtils.parseServers( jsonBuf ), 
-     											   ParseUtils.parseFlavors( jsonBufferFlavor ),
-     											   ParseUtils.parseFloatingIP( jsonBufFIPs, false ),
-     											   ParseUtils.parseSecGroups( jsonBufSecgs )
+     											   Server.parse( jsonBuf ), 
+     											   Flavor.parse( jsonBufferFlavor ),
+     											   FloatingIP.parse( jsonBufFIPs, false ),
+     											   SecGroup.parse( jsonBufSecgs )
      											 );
      		} catch(ParseException pe) {
      			Utils.alert( pe.getMessage( ), OverViewActivity.this );

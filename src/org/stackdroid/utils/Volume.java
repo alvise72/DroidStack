@@ -1,6 +1,13 @@
 package org.stackdroid.utils;
 
 import java.io.Serializable;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.stackdroid.parse.ParseException;
 
 public class Volume implements Serializable {
 	
@@ -75,11 +82,56 @@ public class Volume implements Serializable {
     }
     
     public boolean isAttached( ) { return ( attachedto_serverid!=null && attachedto_serverid.length()!=0 ); }
-    /*
-    public boolean isAttached( ) { 
-    	if(status.compareTo("in-use") == 0) return true;
-    	return false;
     
-    }
-    */
+	public static Vector<Volume> parse( String volumesJson, String serversJson)  throws ParseException  {
+		
+		Vector<Server> servs = Server.parse( serversJson );
+		Hashtable<String, String> server_id_to_name_mapping = new Hashtable<String, String>();
+		Iterator<Server> sit = servs.iterator();
+		while(sit.hasNext()) {
+			Server S = sit.next();
+			server_id_to_name_mapping.put( S.getID(), S.getName() );
+		}
+		Vector<Volume> vols = new Vector<Volume>();
+		try {
+			JSONArray volArray = (new JSONObject( volumesJson )).getJSONArray("volumes");
+			for(int i = 0; i<volArray.length(); i++) {
+				JSONObject volume = volArray.getJSONObject(i);
+				String name = volume.has("display_name") ? volume.getString("display_name") : "N/A";
+				if(name.compareTo("N/A")==0) {
+					name = volume.has("name") ? volume.getString("name") : "N/A";
+				}
+				String status = volume.has("status") ? volume.getString("status") : "N/A";
+				boolean bootable = volume.has("bootable") ? volume.getBoolean("bootable") : false;
+				boolean readonly = false;
+				String attachmode = "rw";
+				if(volume.has("metadata")) {
+					JSONObject metadata = volume.getJSONObject("metadata");
+					if(metadata.has("attached_mode"))
+						attachmode = metadata.getString("attached_mode");
+					if(metadata.has("readonly"))
+					    readonly = metadata.getBoolean("readonly");
+				}
+				String ID = volume.getString("id");
+				int size = volume.getInt("size");
+				JSONArray attaches = volume.getJSONArray("attachments");
+				String attached_serverid = null;
+				String attached_servername = null;
+				String attached_device = null;
+				if(attaches.length()>0) {
+					attached_serverid = attaches.getJSONObject(0).getString("server_id");
+					attached_servername = server_id_to_name_mapping.get(attached_serverid);
+					attached_device   = attaches.getJSONObject(0).getString("device");
+				}
+				Volume vol = new Volume(name, ID, status,
+										bootable, readonly, attachmode,
+										size, attached_serverid, attached_servername, attached_device );
+				vols.add(vol);
+			}
+		} catch(org.json.JSONException je) {
+			throw new ParseException( je.getMessage( ) );
+		}
+		return vols;
+	}
+
 }

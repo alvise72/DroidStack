@@ -361,7 +361,7 @@ public class SecGrpActivity extends Activity {
 	    	}
 	    
 	    	try {
-	    		Vector<SecGroup> secgrps = ParseUtils.parseSecGroups( jsonBuf );
+	    		Vector<SecGroup> secgrps = SecGroup.parse( jsonBuf );
 	    		SecGrpActivity.this.refreshView( secgrps );
 	  	 } catch(ParseException pe) {
 	  		 Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: " + pe.getMessage( ), SecGrpActivity.this );

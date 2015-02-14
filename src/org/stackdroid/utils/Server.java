@@ -1,8 +1,16 @@
 package org.stackdroid.utils;
 
 import java.io.Serializable;
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.TimeZone;
 import java.util.Vector;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.stackdroid.parse.ParseException;
 
 public class Server implements Serializable {
 	
@@ -84,4 +92,94 @@ public class Server implements Serializable {
     public String toString( ) {
 	return name;
     }
+    
+    public static Vector<Server> parse( String jsonBuf )  throws ParseException {
+        
+    Vector<Server> serverVector = new Vector<Server>();
+	String status        = "N/A";
+	String keyname       ="N/A";
+	String[] secgrpNames = null;
+	String flavorID      = "N/A";
+	String ID            = "N/A";
+	String computeNode   = "N/A";
+	String name          = "N/A";
+	String task          = "N/A";
+	long creationTime    = 0;
+	int power            = -1;
+	
+	//Log.d("PARSE", "jsonBuf="+jsonBuf);
+	
+	try {
+	    JSONObject jsonObject = new JSONObject( jsonBuf );
+	    JSONArray servers     = (JSONArray)jsonObject.getJSONArray("servers");
+
+	    for(int i=0; i<servers.length( ); ++i) {
+		JSONObject server = (JSONObject)servers.getJSONObject(i);
+		status = (String)server.getString("status");
+		try{keyname = (String)server.getString("key_name");} catch(JSONException je) {}
+		try{
+		    JSONArray secgarray  =  ((JSONArray)server.getJSONArray("security_groups"));
+		    secgrpNames = new String[secgarray.length()];
+		    for(int j=0; j<secgarray.length(); j++) 
+			secgrpNames[j] = secgarray.getJSONObject(j).getString("name");
+
+		} catch(JSONException je) { secgrpNames = null; }
+		JSONObject flavObj = server.getJSONObject("flavor");
+		flavorID = flavObj.getString("id");
+		ID = server.getString("id");
+		if(server.has("OS-EXT-SRV-ATTR:hypervisor_hostname"))
+		    computeNode = server.getString("OS-EXT-SRV-ATTR:hypervisor_hostname");
+		else
+		    computeNode = "N/A (admin privilege required)";
+		name = (String)server.getString("name");
+		task = (String)server.getString("OS-EXT-STS:task_state");
+		Vector<String> fixedIP = new Vector<String>();//.clear();
+		Vector<String> floatingIP = new Vector<String>();
+		try {
+		    JSONObject addresses = server.getJSONObject("addresses");
+
+		    Iterator<String> keys = addresses.keys( );
+		    while( keys.hasNext( ) ) {
+			String key = keys.next();
+			JSONArray arrayAddr = addresses.getJSONArray( key );
+			
+			floatingIP.clear();
+			for(int j = 0; j < arrayAddr.length(); ++j) {
+			    
+			    String ip = arrayAddr.getJSONObject(j).getString("addr");
+			    String type = arrayAddr.getJSONObject(j).getString("OS-EXT-IPS:type");
+
+			    //Log.d("PARSEUTILS", "ip="+ip+" - type="+type);
+			    
+			    if(type.compareTo("fixed")==0)
+				fixedIP.add(ip);
+			    if(type.compareTo("floating")==0)
+				floatingIP.add(ip);
+			}
+		    }
+
+		} catch(JSONException je) {}
+		try {
+		    String creation = (String)server.getString("created");
+		    SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		    timeFormatter.setTimeZone( TimeZone.getDefault( ) );
+		    Calendar calendar = Calendar.getInstance();
+		    try {
+			calendar.setTime(timeFormatter.parse(creation));
+		    } catch(java.text.ParseException pe) {
+			throw new ParseException( "Error parsing the creation date ["+creation+"]" );
+		    }
+		    creationTime = calendar.getTimeInMillis() / 1000;
+		} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
+
+		try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
+		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
+		serverVector.add(S);
+	    }
+ 	} catch(org.json.JSONException je) {
+ 	    throw new ParseException( je.getMessage( ) );
+ 	}
+	return serverVector;
+    }   
+
 }

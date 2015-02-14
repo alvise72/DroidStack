@@ -312,7 +312,7 @@ public class UserAddActivity extends Activity {
      				return null;
      			}
      			
-     			U = ParseUtils.parseUser( jsonBuf );
+     			U = User.parse( jsonBuf );
      			U.setPassword(password);
      			U.setSSL( usessl );
      			

@@ -90,7 +90,7 @@ public class OSClient {
     			String  pwd = U.getPassword();
     			String  edp = U.getIdentityEndpoint();
     			boolean ssl = U.useSSL();
-    			U = ParseUtils.parseUser( jsonBuffer );
+    			U = User.parse( jsonBuffer );
     			U.setPassword( pwd );
     			U.setSSL( ssl );
     			U.toFile( Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));

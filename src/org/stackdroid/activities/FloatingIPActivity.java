@@ -371,9 +371,9 @@ public class FloatingIPActivity extends Activity {
  	    }
 	    
 	    try {
-	    	Vector<FloatingIP> fips = ParseUtils.parseFloatingIP(jsonBuf, false);
-	    	Vector<Server> servers = ParseUtils.parseServers( jsonBufServers );
-	    	networks = ParseUtils.parseNetworks( jsonBufNetworks, jsonBufSubNets );
+	    	Vector<FloatingIP> fips = FloatingIP.parse(jsonBuf, false);
+	    	Vector<Server> servers = Server.parse( jsonBufServers );
+	    	networks = Network.parse( jsonBufNetworks, jsonBufSubNets );
 	    	Iterator<Server> it = servers.iterator();
 	    	Hashtable<String,String> mappingServerIDName = new Hashtable<String,String>();
 	    	while( it.hasNext( ) ) {
@@ -476,7 +476,7 @@ public class FloatingIPActivity extends Activity {
 	    
 	    try {
 	    	jsonPort = osc.requestPortList( );
-	    	Vector<Port> vecP = ParseUtils.parsePort(jsonPort);
+	    	Vector<Port> vecP = Port.parse(jsonPort);
 	    	
 	    	Iterator<Port> portIt = vecP.iterator();
 	    	String portID = "";
@@ -652,7 +652,7 @@ public class FloatingIPActivity extends Activity {
  	    }
 	    
 	    try {
-	    	FloatingIPActivity.this.servers = ParseUtils.parseServers( jsonBuf );
+	    	FloatingIPActivity.this.servers = Server.parse( jsonBuf );
 	    	FloatingIPActivity.this.pickAServerToAssociateFIP();
 	    } catch(ParseException pe) {
 	    	Utils.alert("NeutronActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );

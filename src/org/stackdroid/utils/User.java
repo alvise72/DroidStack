@@ -13,6 +13,13 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.stackdroid.parse.ParseException;
 
 public class User implements Serializable, Comparable<User> {
 
@@ -226,4 +233,108 @@ public class User implements Serializable, Comparable<User> {
 	    		throw new IOException("User.toFile.OutputStream.write/close: "+ioe.getMessage() );
 		}
     }
+    
+    public static User parse( String jsonString ) throws ParseException
+    {
+      try {
+    	  JSONObject jsonObject = null;
+    	  //System.out.println("PARSEUSER - jsonUser="+jsonString);
+    	  jsonObject = new JSONObject( jsonString );
+	  
+    	  JSONObject access = (JSONObject)jsonObject.get("access");
+    	  JSONObject token = (JSONObject)access.get("token");
+    	  String stoken = (String)token.get("id");
+    	  String expires = (String)token.get("expires");
+    	  JSONObject tenant = (JSONObject)token.get("tenant");
+    	  String tenantid = (String)tenant.get("id");
+    	  String tenantname = (String)tenant.get("name");
+    	  String username = (String)((JSONObject)access.get("user")).get("username");
+    	  String userID = (String)((JSONObject)access.get("user")).get("id");
+    	  JSONArray roleArray = access.getJSONObject("user").getJSONArray("roles");
+    	  JSONArray serviceArray = access.getJSONArray("serviceCatalog");
+
+    	  boolean nova=false, glance=false, neutron=false, cinder1=false, cinder2=false;
+    	  String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null, identityEP = null;
+    	  for(int i = 0; i<serviceArray.length();++i) {
+
+    		  JSONObject service = serviceArray.getJSONObject(i);
+    		  JSONArray endpoints = service.getJSONArray("endpoints");
+    		  String type = service.getString("type");
+    		  JSONObject endpoint = endpoints.getJSONObject(0);
+    			  if(type.compareTo("compute")==0) {
+    				  nova=true;
+    				  novaEP = endpoint.getString("publicURL");
+    			  }
+    			  if(type.compareTo("network")==0) {
+    				  neutron=true;
+    				  neutronEP = endpoint.getString("publicURL");
+    			  }
+    			  if(type.compareTo("volumev2")==0) {
+    				  cinder2=true;
+    				  //Log.d("ParseUtils", "VOLUME2 - PublicURL="+endpoint.getString("publicURL"));
+    				  cinder2EP = endpoint.getString("publicURL");
+    			  }
+    			  if(type.compareTo("volume")==0) {
+    				  cinder1=true;
+    				  //Log.d("ParseUtils", "VOLUME - PublicURL="+endpoint.getString("publicURL"));
+    				  cinder1EP = endpoint.getString("publicURL");
+    			  }
+    			  if(type.compareTo("image")==0) {
+    				  glance=true;
+    				  glanceEP = endpoint.getString("publicURL");
+    			  }
+    			  if(type.compareTo("identity") == 0) {
+    				  identityEP = endpoint.getString("publicURL");
+    			  }
+    		  
+    	  }
+    	  boolean role_admin = false;
+    	  for(int i = 0; i<roleArray.length(); ++i)
+    		  if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
+		  role_admin = true;
+	  
+    	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );
+    	  Calendar calendar = Calendar.getInstance();
+    	  try {
+    		  calendar.setTime(timeFormatter.parse(expires));
+    	  } catch(java.text.ParseException pe) {
+    		  throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
+    	  }
+    	  long expireTimestamp = calendar.getTimeInMillis() / 1000;
+    	  String addrS = "";
+    	  try {
+    		  URL identityUrl = new URL(identityEP);
+    		  InetAddress addr = InetAddress.getByName(identityUrl.getHost());
+    		  addrS = addr.getCanonicalHostName();//.getHostName();
+    	  } catch(Exception e) {
+    		  addrS = identityEP;
+    	  }
+    	  
+    	  User U = new User( 
+    			  			 username, 
+    			  			 userID, 
+    			  			 tenantname, 
+    			  			 tenantid, 
+    			  			 stoken, 
+    			  			 expireTimestamp, 
+    			  			 role_admin,
+    			  			 glance,
+    			  			 nova,
+    			  			 neutron,
+    			  			 cinder1,
+    			  			 cinder2,
+    			  			 identityEP,
+    			  			 glanceEP,
+    			  			 novaEP,
+    			  			 neutronEP,
+    			  			 cinder1EP,
+    			  			 cinder2EP,
+    			  			 addrS);
+    	  return U;
+      } catch(org.json.JSONException je) {
+    	  throw new ParseException( je.getMessage( ) );
+      }
+    }
+
 }

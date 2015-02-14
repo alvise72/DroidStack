@@ -384,7 +384,7 @@ public class OSImagesActivity extends Activity {
  	    }
 	    
 	    try {
-	    	OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+	    	OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
 	    	OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
 	    	Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
@@ -445,7 +445,7 @@ public class OSImagesActivity extends Activity {
      		}
 	    
      		try {
-     			OSImagesActivity.this.OS = ParseUtils.parseImages(jsonBuf);
+     			OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
      			OSImagesActivity.this.refreshView( );
      		} catch(ParseException pe) {
      			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 

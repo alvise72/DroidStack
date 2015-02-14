@@ -803,8 +803,8 @@ public class ServersActivity extends Activity {
 			}
 	    
 			try {
-				Vector<Server> servers = ParseUtils.parseServers( jsonBuf );
-				ServersActivity.this.refreshView( servers, ParseUtils.parseFlavors( jsonBufferFlavor ) );
+				Vector<Server> servers = Server.parse( jsonBuf );
+				ServersActivity.this.refreshView( servers, Flavor.parse( jsonBufferFlavor ) );
 			} catch(ParseException pe) {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 			}
@@ -960,7 +960,7 @@ public class ServersActivity extends Activity {
      		}
 	    
      		try {
-     			ServersActivity.this.images = ParseUtils.parseImages(jsonBuf);
+     			ServersActivity.this.images = OSImage.parse(jsonBuf);
      			ServersActivity.this.pickAnImageToLaunch();
      		} catch(ParseException pe) {
      			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
@@ -1008,7 +1008,7 @@ public class ServersActivity extends Activity {
 	    
 	    try {
 	    	boolean only_unassigned = true;
-	    	ServersActivity.this.fips = ParseUtils.parseFloatingIP(jsonBuf, only_unassigned );
+	    	ServersActivity.this.fips = FloatingIP.parse(jsonBuf, only_unassigned );
 	    } catch(ParseException pe) {
 		    Utils.alert("ServersActivity.AsyncTaskFIPList.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 		    ServersActivity.this.progressDialogWaitStop.dismiss( );
@@ -1042,7 +1042,7 @@ public class ServersActivity extends Activity {
  	    try {
  		  
  		  jsonPort = osc.requestPortList( );
-	      Vector<Port> vecP = ParseUtils.parsePort(jsonPort);
+	      Vector<Port> vecP = Port.parse(jsonPort);
 	    	
 	      Iterator<Port> portIt = vecP.iterator();
 	      String portID = "";

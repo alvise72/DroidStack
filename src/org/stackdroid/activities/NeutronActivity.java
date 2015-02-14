@@ -438,7 +438,7 @@ public class NeutronActivity extends Activity {
      	    }
     	    
     	    try {
-    	    	NeutronActivity.this.networks = ParseUtils.parseNetworks(jsonBufNet, jsonBufSubnet);
+    	    	NeutronActivity.this.networks = Network.parse(jsonBufNet, jsonBufSubnet);
     	    	NeutronActivity.this.refreshView( );
     	    } catch(ParseException pe) {
     	    	Utils.alert("NeutronActivity.AsyncTaskOSListNetworks.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
