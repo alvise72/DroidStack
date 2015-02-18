@@ -31,7 +31,7 @@ import org.stackdroid.parse.ParseException;
 
 
 import org.stackdroid.R;
-import org.stackdroid.utils.AllocationPool;
+import org.stackdroid.utils.IPAllocationPool;
 import org.stackdroid.utils.CIDRAddressKeyListener;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
@@ -128,14 +128,13 @@ public class NeutronActivity extends Activity {
 					TextView tttt = new TextView(NeutronActivity.this);
 					tttt.setText("DNS: " + Utils.join(sn.getDNS(), ", "));
 					tttt.setPadding(15, 0,0,0);
-					AllocationPool[] pools = sn.getAllocationPools();
+					IPAllocationPool[] pools = sn.getIPAllocationPools();
 					String allocPool[] = new String[pools.length];
 					for(int i = 0; i<pools.length; i++) {
 						allocPool[i] = pools[i].getStartIP() + "-" + pools[i].getEndIP();
 					}
-					TextView ttttt = null;//new TextView(NeutronActivity.this);
-					
-					//subnetinfo.add(tv7);
+					TextView ttttt = null;
+
 					subnetinfo.add(t);
 					subnetinfo.add(tt);
 					subnetinfo.add(ttt);

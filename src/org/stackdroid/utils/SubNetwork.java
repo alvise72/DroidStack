@@ -13,12 +13,12 @@ public class SubNetwork {
     private String ID;
     private String cidr;
     private String gw;
-    private AllocationPool[] allocPools;
+    private IPAllocationPool[] allocPools;
     private String[] dns;
     private boolean dhcp;
     private String ipv;
     
-    public SubNetwork( String name, String ID, String cidr, String gatewayIP, AllocationPool[] allocPools, String[] dns, boolean dhcp, String ipv ) {
+    public SubNetwork( String name, String ID, String cidr, String gatewayIP, IPAllocationPool[] allocPools, String[] dns, boolean dhcp, String ipv ) {
     	this.name       = name;
     	this.ID         = ID;
     	this.cidr       = cidr;
@@ -33,7 +33,7 @@ public class SubNetwork {
     public String getID( ) { return ID; }
     public String getAddress( ) { return cidr; }
     public String getGatewayIP( ) { return gw; }
-    public AllocationPool[] getAllocationPools( ) { return allocPools; }
+    public IPAllocationPool[] getIPAllocationPools( ) { return allocPools; }
     public String[] getDNS( ) { return dns; }
     public String getIPVersion( ) { return ipv; }
 
@@ -71,9 +71,9 @@ public class SubNetwork {
     			for(int j = 0; j<dnsarray.length(); j++)
     				dns[j] = (String)dnsarray.getString(j);
     			JSONArray allocpools = (JSONArray)subnet.getJSONArray("allocation_pools");
-    			AllocationPool[] pools = new AllocationPool[allocpools.length()];
+    			IPAllocationPool[] pools = new IPAllocationPool[allocpools.length()];
     			for(int j=0; j<allocpools.length(); j++) {
-    				AllocationPool pool = new AllocationPool( (String)allocpools.getJSONObject(j).getString("start"), 
+    				IPAllocationPool pool = new IPAllocationPool( (String)allocpools.getJSONObject(j).getString("start"), 
 					(String)allocpools.getJSONObject(j).getString("end") );
     				pools[j] = pool;
     			}

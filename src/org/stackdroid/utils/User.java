@@ -42,6 +42,8 @@ public class User implements Serializable, Comparable<User> {
     private boolean hasCinder2;
     
     private String identityEndpoint;
+    //private String identityEndpointIP;
+    
     private String novaEndpoint;
     private String glanceEndpoint;
     private String neutronEndpoint;
@@ -63,6 +65,7 @@ public class User implements Serializable, Comparable<User> {
     			 boolean hasCinder1,
     			 boolean hasCinder2,
     			 String identityEndpoint,
+    			 //String identityEndpointIP,
     			 String glanceEndpoint,
     			 String novaEndpoint,
     			 String neutronEndpoint,
@@ -70,49 +73,36 @@ public class User implements Serializable, Comparable<User> {
     			 String cinder2Endpoint,
     			 String identityHostname) 
     {
-        userName        = _userName;
-        userID          = _userID;
-        tenantName      = _tenantName;
-        tenantId        = _tenantId;
-        token           = _token;
-        tokenExpireTime = _tokenExpireTime;
-        password        = "";
-        role_admin      = _role_admin;
-        this.hasGlance  = hasGlance;
-        this.hasNova    = hasNova;
-        this.hasNeutron = hasNeutron;
-        this.hasCinder1 = hasCinder1;
-        this.hasCinder2 = hasCinder2;
-        this.identityEndpoint 	= identityEndpoint;
-        this.glanceEndpoint 	= glanceEndpoint;
-        this.novaEndpoint   	= novaEndpoint;
-        this.neutronEndpoint	= neutronEndpoint;
-        this.cinder1Endpoint	= cinder1Endpoint;
-        this.cinder2Endpoint	= cinder2Endpoint;
-        this.identityHostname   = identityHostname;
-        
-/*        try {
-			identityUrl	= new URL(identityEndpoint);
-		} catch (MalformedURLException e) {
-		}*/
+        userName       			 = _userName;
+        userID         			 = _userID;
+        tenantName     			 = _tenantName;
+        tenantId       			 = _tenantId;
+        token          			 = _token;
+        tokenExpireTime			 = _tokenExpireTime;
+        password       			 = "";
+        role_admin     			 = _role_admin;
+        this.hasGlance  	 	 = hasGlance;
+        this.hasNova    		 = hasNova;
+        this.hasNeutron 		 = hasNeutron;
+        this.hasCinder1 		 = hasCinder1;
+        this.hasCinder2 		 = hasCinder2;
+        this.identityEndpoint 	 = identityEndpoint;
+        //this.identityEndpointIP  = identityEndpointIP;
+        this.glanceEndpoint 	 = glanceEndpoint;
+        this.novaEndpoint   	 = novaEndpoint;
+        this.neutronEndpoint	 = neutronEndpoint;
+        this.cinder1Endpoint	 = cinder1Endpoint;
+        this.cinder2Endpoint	 = cinder2Endpoint;
+        this.identityHostname    = identityHostname;
     }
     
     public String getIdentityHostname( ) { 
-    	//InetAddress addr = InetAddress.getByName("192.168.190.62");
-    	  //String host = addr.getHostName();
-    	//try {
-		//	return InetAddress.getByName(identityUrl.getHost()).getHostName();
-		//} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			return identityHostname;
-		//} 
     }
     
     public void setPassword( String _password ) { password = _password ;} 
-    //public void setAuthEndpoint( String ep ) { endpoint = ep; }
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
     
-    //public String getEndpoint( ) { return endpoint; }
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
     public String getToken( ) { return token; }
@@ -140,7 +130,7 @@ public class User implements Serializable, Comparable<User> {
     	String filename = getUserID( );
     	filename += "."+getTenantID( );
     	filename += "."+identityEndpoint.hashCode();
-    	return filename;//getUserID( ) + "." + getTenantID( ) + "." + identityEndpoint.hashCode();
+    	return filename;
     }
     
     /*
@@ -153,6 +143,7 @@ public class User implements Serializable, Comparable<User> {
     @Override
     public String toString( ) {
     	return "User{identityEndpoint="+identityEndpoint+
+    	//",identityEndpointIP="+identityEndpointIP+
     	",novaEndpoint="+novaEndpoint+
     	",glanceEndpoint="+glanceEndpoint+
     	",neutronEndpoint="+neutronEndpoint+
@@ -238,7 +229,6 @@ public class User implements Serializable, Comparable<User> {
     {
       try {
     	  JSONObject jsonObject = null;
-    	  //System.out.println("PARSEUSER - jsonUser="+jsonString);
     	  jsonObject = new JSONObject( jsonString );
 	  
     	  JSONObject access = (JSONObject)jsonObject.get("access");
@@ -311,6 +301,18 @@ public class User implements Serializable, Comparable<User> {
     		  addrS = identityEP;
     	  }
     	  
+/*    	  
+    	  String identityIP = "";
+    	  if(identityEP!=null && identityEP.length()!=0) {
+    		  InetAddress address = null;
+    		  try {
+    		      address = InetAddress.getByName(identityEP);
+    		  } catch (UnknownHostException e) {
+    		      
+    		  }
+    		  identityIP = address.getHostAddress();
+    	  }
+*/    	  
     	  User U = new User( 
     			  			 username, 
     			  			 userID, 
@@ -325,6 +327,7 @@ public class User implements Serializable, Comparable<User> {
     			  			 cinder1,
     			  			 cinder2,
     			  			 identityEP,
+    			  			 //identityIP,
     			  			 glanceEP,
     			  			 novaEP,
     			  			 neutronEP,
@@ -337,4 +340,9 @@ public class User implements Serializable, Comparable<User> {
       }
     }
 
+/*	public String getIdentityEndpointIP() {
+		// TODO Auto-generated method stub
+		return identityEndpointIP;
+	}
+*/
 }

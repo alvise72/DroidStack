@@ -18,6 +18,10 @@ import org.stackdroid.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.stackdroid.views.UserView;
 import org.stackdroid.utils.Configuration;
@@ -83,16 +87,7 @@ public class UsersActivity extends Activity {
   protected class UserInfoListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) {
-		  //Log.d("USERS", "SELECTEDUSER="+((TextViewWithView)v).getUserView().getUser().getFilename());
-		  //Utils.putStringPreference("SELECTEDUSER", ((TextViewWithView)v).getUserView().getUser().getFilename(), UsersActivity.this);
-		  //refreshUserViews();
 		  User U = ((ImageButtonWithView)v).getUserView( ).getUser();
-		  //String info = "User name: " + uv.getUser().getUserName() + "\n";
-		  //info += "Tenant name: " + uv.getUser().getTenantName() + "\n";
-		  //info += "Auth URL: "+uv.getUser().getIdentityEndpoint() + "\n";
-		  //info += "Compute URL: "+uv.getUser().getNovaEndpoint() + "\n";
-		  //info += "Image URL: "+uv.getUser().getGlanceEndpoint() + "\n";
-		  //info += "Neutron URL: "+uv.getUser().getNeutronEndpoint() + "\n";
 		  ScrollView sv = new ScrollView( UsersActivity.this );
 		  TextView t1 = new TextView( UsersActivity.this );
 		  t1.setText("Username:");
@@ -105,10 +100,11 @@ public class UsersActivity extends Activity {
 		  TextView t4 = new TextView( UsersActivity.this );
 		  t4.setText("   "+U.getTenantName());
 		  TextView t5 = new TextView( UsersActivity.this );
+		  
 		  t5.setText("Identity hostname:");
 		  t5.setTypeface(null, Typeface.BOLD);
 		  TextView t6 = new TextView( UsersActivity.this );
-		  t6.setText("   "+U.getIdentityHostname());
+		  t6.setText("   " + U.getIdentityHostname() );
 		  
 		  TextView t7 = new TextView( UsersActivity.this );
 		  t7.setText("Identity endpoint:");
@@ -126,13 +122,41 @@ public class UsersActivity extends Activity {
 		  t11.setText("Network endpoint:");
 		  t11.setTypeface(null, Typeface.BOLD);
 		  TextView t12 = new TextView( UsersActivity.this );
-		  t12.setText("   "+U.getNeutronEndpoint());
+		  t12.setText("   " + (U.getNeutronEndpoint()!=null ? U.getNeutronEndpoint() : "N/A"));
 		  
 		  TextView t13 = new TextView( UsersActivity.this );
-		  t13.setText("SSL:");
+		  t13.setText("Image endpoint:");
 		  t13.setTypeface(null, Typeface.BOLD);
 		  TextView t14 = new TextView( UsersActivity.this );
-		  t14.setText("   "+(U.useSSL() ? UsersActivity.this.getString(R.string.YES) : "no"));
+		  t14.setText("   " + (U.getGlanceEndpoint() != null ? U.getGlanceEndpoint(): "N/A"));
+		  
+		  TextView t15 = new TextView( UsersActivity.this );
+		  t15.setText("Cinder v1 endpoint:");
+		  t15.setTypeface(null, Typeface.BOLD);
+		  TextView t16 = new TextView( UsersActivity.this );
+		  t16.setText("   " + (U.getCinder1Endpoint()!=null ? U.getCinder1Endpoint() : "N/A") );
+
+		  TextView t17 = new TextView( UsersActivity.this );
+		  t17.setText("Cinder v2 endpoint:");
+		  t17.setTypeface(null, Typeface.BOLD);
+		  TextView t18 = new TextView( UsersActivity.this );
+		  t18.setText("   " + (U.getCinder2Endpoint()!=null ? U.getCinder2Endpoint() : "N/A") );
+	
+		  TextView t19 = new TextView( UsersActivity.this );
+		  t19.setText("SSL:");
+		  t19.setTypeface(null, Typeface.BOLD);
+		  TextView t20 = new TextView( UsersActivity.this );
+		  t20.setText("   "+(U.useSSL() ? UsersActivity.this.getString(R.string.YES) : "no"));
+		  
+
+		  TextView t21 = new TextView( UsersActivity.this );
+		  t21.setText("Token expiration:");
+		  t21.setTypeface(null, Typeface.BOLD);
+		  TextView t22 = new TextView( UsersActivity.this );
+		  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y H:mm:ss");
+		  
+		  t22.setText("   "+sdf.format(new Date(U.getTokenExpireTime()*1000)) );
+		  
 		  
 		  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.MATCH_PARENT,
@@ -159,6 +183,14 @@ public class UsersActivity extends Activity {
 		  l.addView( t12 );
 		  l.addView( t13 );
 		  l.addView( t14 );
+		  l.addView( t15 );
+		  l.addView( t16 );
+		  l.addView( t17 );
+		  l.addView( t18 );
+		  l.addView( t19 );
+		  l.addView( t20 );
+		  l.addView( t21 );
+		  l.addView( t22 );
 		  
 		  sv.addView(l);
 		  Utils.alertInfo(sv, UsersActivity.this.getString(R.string.USERINFO), UsersActivity.this);
