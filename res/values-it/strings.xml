@@ -158,4 +158,9 @@
 	<string name="ROUTERS">Router</string>
 	<string name="USERINFO">Informazioni utente</string>
 	<string name="TOUCHINSTANCE">Tocca un\'istanza per info</string>
+	<string name="MANAGESERVERS">Gestisci istanze</string>
+	<string name="CHANGENAMESERVER">Cambia nome</string>
+	<string name="MAKESNAP">Crea snapshot</string>
+	<string name="STARTUP">Boot</string>
+	<string name="RESIZESERVER">Ridimensiona</string>
 </resources>

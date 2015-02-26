@@ -286,10 +286,10 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
-	protected class ServerSnapClickListener implements OnClickListener {
+	protected class ServerManageClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-		   	server  = ((ImageButtonWithView)v).getServerView().getServer();
+/*		   	server  = ((ImageButtonWithView)v).getServerView().getServer();
 		    	
 		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
@@ -321,7 +321,69 @@ public class ServersActivity extends Activity {
 	         dia.show( );
 		    	
 		     return;
-		    }
+*/
+			server  = ((ImageButtonWithView)v).getServerView().getServer();
+			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
+			alert.setMessage(getString(R.string.MANAGESERVERS));
+			LinearLayout L = new LinearLayout( ServersActivity.this );
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                            							  LinearLayout.LayoutParams.MATCH_PARENT,
+                                            							  LinearLayout.LayoutParams.MATCH_PARENT);
+			
+			L.setLayoutParams( lp );
+			L.setOrientation(LinearLayout.VERTICAL);
+			final Button changeName = new Button( ServersActivity.this );
+			final Button makeSnap = new Button( ServersActivity.this );
+			final Button shutOff = new Button( ServersActivity.this );
+			final Button startUp = new Button( ServersActivity.this );
+			final Button pauseServer = new Button( ServersActivity.this );
+			final Button resumeServer = new Button( ServersActivity.this );
+			final Button resizeServer = new Button( ServersActivity.this );
+			changeName.setText(getString(R.string.CHANGENAMESERVER));
+			makeSnap.setText(getString(R.string.MAKESNAP));
+			shutOff.setText(getString(R.string.SHUTOFF));
+			startUp.setText(getString(R.string.STARTUP));
+			pauseServer.setText(getString(R.string.PAUSESERVER));
+			resumeServer.setText(getString(R.string.RESUMESERVER));
+			resizeServer.setText(getString(R.string.RESIZESERVER));
+			
+			L.addView(changeName);
+			L.addView(makeSnap);
+			L.addView(shutOff);
+			L.addView(startUp);
+			L.addView(pauseServer);
+			L.addView(resumeServer);
+			L.addView(resizeServer);
+			alert.setView(L);
+			/*
+			alert.setPositiveButton(getString(R.string.CANCEL),new DialogInterface.OnClickListener() {
+	        	public void onClick(DialogInterface dialog,int whichButton) {
+	            	String snapname = input.getText().toString();
+	                snapname = snapname.trim();
+	                if(snapname==null || snapname.length()==0) {
+	                	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
+	                } else {
+	                	//button.setText(newCateg);
+	                    ServersActivity.this.progressDialogWaitStop.show();
+	                    (new AsyncTaskCreateSnapshot( )).execute(server.getID(), snapname);
+	                }
+	            }
+	         });
+	         */
+	         alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+	                    
+	                }
+	         });
+	         alert.setCancelable(false);
+	         AlertDialog dia = alert.create();
+	         dia.setCancelable(false);
+	         dia.setCanceledOnTouchOutside(false);
+	         dia.show( );
+		    	
+		     return;
+		 }
+			
 	}
 
 	/**
@@ -540,53 +602,7 @@ public class ServersActivity extends Activity {
             Utils.alert( getString(R.string.NOTIMPLEMENTED) ,this );
             return true;
         }
-/*
-        if( id == Menu.FIRST ) { 
-	      if(U==null) {
-		    Utils.alert("An error occurred recovering User from sdcard. Try to go back and return to this activity.", this);
-	      } else {
-	      
-	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	  		builder.setMessage( getString(R.string.AREYOUSURETODELETEVMS));
-	  		builder.setCancelable(false);
-	  	    
-	  		DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
-	  			public void onClick(DialogInterface dialog, int id) {
-	  				progressDialogWaitStop.show();
-	  				AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
-	  				int numChilds = ((LinearLayout)findViewById(R.id.serverLayout)).getChildCount();
-	  				String[] listedServers = new String[numChilds];
-	  				for(int i = 0; i < numChilds; ++i) {
-	  				    View sv = ((LinearLayout)findViewById(R.id.serverLayout)).getChildAt(i);
-	  				    if(sv instanceof ServerView)
-	  					listedServers[i] = ((ServerView)sv).getServer().getID();
-	  				}
-	  				task.execute( Utils.join(listedServers, ",") ) ;
-	  			}
-	  		    };
 
-	  		DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
-	  			public void onClick(DialogInterface dialog, int id) {
-	  			    dialog.cancel( );
-	  			}
-	  		    };
-
-	  		builder.setPositiveButton(getString(R.string.YES), yesHandler );
-	  		builder.setNegativeButton(getString(R.string.NO), noHandler );
-	              
-	  		AlertDialog alert = builder.create();
-	  		alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,  
-	  					    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-	  		alert.setCancelable(false);
-	  		alert.setCanceledOnTouchOutside(false);
-	  		alert.show();
-	    	
-	    	
-		
-		return true;
-	    }
-        }
-        */
 	return super.onOptionsItemSelected( item );
     }
 
@@ -614,8 +630,6 @@ public class ServersActivity extends Activity {
     	super.onCreate(savedInstanceState);
     	setContentView( R.layout.serverlist );
 	
-    	//listedServers = new HashSet();
-
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
         progressDialogWaitStop.setCancelable(false);
@@ -692,7 +706,7 @@ public class ServersActivity extends Activity {
     										  new ServersActivity.ConsoleLogClickListener(),
     										  new ServersActivity.ServerDeleteClickListener(),
     										  new ServersActivity.AddIPButtonHandler(),
-    										  new ServersActivity.ServerSnapClickListener(),
+    										  new ServersActivity.ServerManageClickListener(),
     										  this);
     		((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
     		((LinearLayout)findViewById( R.id.serverLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );

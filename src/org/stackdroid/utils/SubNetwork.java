@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-
-
 public class SubNetwork { 
     private String name;
     private String ID;

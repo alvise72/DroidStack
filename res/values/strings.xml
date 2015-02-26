@@ -163,4 +163,12 @@
 	<string name="ROUTERS">Router</string>
 	<string name="USERINFO">User Information</string>
 	<string name="TOUCHINSTANCE">Touch an instance to get info</string>
+	<string name="MANAGESERVERS">Manage instances</string>
+	<string name="CHANGENAMESERVER">Change name</string>
+	<string name="MAKESNAP">Take snapshot</string>
+	<string name="SHUTOFF">Shutdown</string>
+	<string name="STARTUP">Boot</string>
+	<string name="PAUSESERVER">Pause</string>
+	<string name="RESUMESERVER">Resume</string>
+	<string name="RESIZESERVER">Resize instance</string>
 </resources>
