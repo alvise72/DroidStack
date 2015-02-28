@@ -14,8 +14,6 @@ import android.content.Intent;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Activity;
-import android.util.Log;
-//import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -59,7 +57,7 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class ServersActivity extends Activity {
 
-    private CustomProgressDialog    progressDialogWaitStop     = null;
+	private CustomProgressDialog    progressDialogWaitStop     = null;
     private User 				    U 						   = null;
 	private Server 				    server    				   = null;
 	private ArrayAdapter<OSImage>   spinnerImagesArrayAdapter  = null;
@@ -72,6 +70,44 @@ public class ServersActivity extends Activity {
 	public ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter     = null;
 	private Spinner fipSpinner;
 
+	private class MakeInstanceSnapshot implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			server  = ((ButtonWithView)v).getServerView().getServer();
+	    	
+		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
+	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
+	        final EditText input = new EditText(ServersActivity.this);
+	        alert.setView(input);
+	        alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+	        	public void onClick(DialogInterface dialog,int whichButton) {
+	            	String snapname = input.getText().toString();
+	                snapname = snapname.trim();
+	                if(snapname==null || snapname.length()==0) {
+	                	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
+	                } else {
+	                	ServersActivity.this.progressDialogWaitStop.show();
+	                    (new AsyncTaskCreateSnapshot( )).execute(server.getID(), snapname);
+	                }
+	            }
+	         });
+	         alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+	                    
+	                }
+	         });
+	         alert.setCancelable(false);
+	         AlertDialog dia = alert.create();
+	         dia.setCancelable(false);
+	         dia.setCanceledOnTouchOutside(false);
+	         dia.show( );
+		    	
+		     return;
+		}
+
+	}
+	
 	/**
 	 * 
 	 * 
@@ -81,7 +117,6 @@ public class ServersActivity extends Activity {
 	protected class ChangeInstanceNameHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			//ServersActivity.this.progressDialogWaitStop.show();
 			server = ( (ButtonWithView)v ).getServerView().getServer();
 			
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
@@ -95,8 +130,7 @@ public class ServersActivity extends Activity {
 	                if(newname==null || newname.length()==0) {
 	                	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
 	                } else {
-	                	//button.setText(newCateg);
-	                    ServersActivity.this.progressDialogWaitStop.show();
+	                	ServersActivity.this.progressDialogWaitStop.show();
 	                    (new ServersActivity.AsyncTaskChangeInstanceName()).execute( server.getID(), newname);
 	                }
 	            }
@@ -107,16 +141,13 @@ public class ServersActivity extends Activity {
 	                }
 	         });
 	         alert.setCancelable(false);
-	         //alert.setCanceledOnTouchOutside(false);
 	         AlertDialog dia = alert.create();
 	         dia.setCancelable(false);
 	         dia.setCanceledOnTouchOutside(false);
 	         dia.show( );
 		    	
 		     return;
-			 //(new ServersActivity.AsyncTaskChangeInstanceName()).execute( );
 		}
-		
 	}
 	/**
 	 * 
@@ -186,7 +217,6 @@ public class ServersActivity extends Activity {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
 			ServersActivity.this.progressDialogWaitStop.show();
-			//Log.d("CONFIRM", "UUID="+fip.getID())
 			
 			
 			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), server.getPrivateIP()[0] );
@@ -379,7 +409,7 @@ public class ServersActivity extends Activity {
 			L.setLayoutParams( lp );
 			L.setOrientation(LinearLayout.VERTICAL);
 			final ButtonWithView changeName = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView() );
-			final Button makeSnap = new Button( ServersActivity.this );
+			final ButtonWithView makeSnap = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView()  );
 			final Button shutOff = new Button( ServersActivity.this );
 			final Button startUp = new Button( ServersActivity.this );
 			final Button pauseServer = new Button( ServersActivity.this );
@@ -393,8 +423,8 @@ public class ServersActivity extends Activity {
 			resumeServer.setText(getString(R.string.RESUMESERVER));
 			resizeServer.setText(getString(R.string.RESIZESERVER));
 			
-			changeName.setOnClickListener(new ServersActivity.ChangeInstanceNameHandler()) ;
-			
+			changeName.setOnClickListener( new ServersActivity.ChangeInstanceNameHandler( ) ) ;
+			makeSnap.setOnClickListener( new ServersActivity.MakeInstanceSnapshot( ) );
 			L.addView(changeName);
 			L.addView(makeSnap);
 			L.addView(shutOff);
@@ -461,7 +491,7 @@ public class ServersActivity extends Activity {
 			tv3.setText("Status:");
 			tv3.setTypeface( null, Typeface.BOLD );
 			TextView tv4 = new TextView(ServersActivity.this);
-			tv4.setText(s.getStatus() + " ("+ (s.getTask()!=null && s.getTask().length()!=0 ? s.getTask() : "None") + ")");
+			tv4.setText(s.getStatus() + (s.getTask()!=null && s.getTask().length()!=0 && s.getTask().equalsIgnoreCase("null")==false ? " (" + s.getTask()+")" : "") );
 			TextView tv5 = new TextView(ServersActivity.this);
 			tv5.setText("Flavor: ");
 			tv5.setTypeface( null, Typeface.BOLD );

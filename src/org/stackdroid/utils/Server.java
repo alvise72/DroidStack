@@ -22,19 +22,19 @@ public class Server implements Serializable {
 
     public final static String[] POWER_STRING = {"No State", "Running", "", "", "Shutdown"};
 
-    private String name;
-    private String ID;
-    private String status;
-    private String task;
-    private int powerstate;
-    private Vector<String> privIP;
-    private Vector<String> pubIP;
-    private String computeNode;
-    private String keyname;
-    private String flavorID;
-    private String[] secgrpNames;
-    private long creationTime;
-    private Flavor flavor;
+    private String			 name;
+    private String 			ID;
+    private String 			status;
+    private String 			task;
+    private int 			powerstate;
+    private Vector<String> 	privIP;
+    private Vector<String> 	pubIP;
+    private String 			computeNode;
+    private String 			keyname;
+    private String 			flavorID;
+    private String[] 		secgrpNames;
+    private long 			creationTime;
+    private Flavor 			flavor;
     
     public Server( String _name,
 		   String _ID,
@@ -49,34 +49,36 @@ public class Server implements Serializable {
 		   long _creationTime,
 		   String[] secgroups ) 
     {
-	name           = _name;
-	ID             = _ID;
-	status         = _status;
-	task           = _task;
-	powerstate     = _power;
-	privIP         = _privIP;
-	pubIP          = _pubIP;
-	computeNode    = _computeNode;
-	keyname        = _keyname;
-	flavorID       = _flavorID;
-	creationTime   = _creationTime;
-	secgrpNames    = secgroups;
+    	name           = _name;
+    	ID             = _ID;
+    	status         = _status;
+    	task           = _task;
+    	powerstate     = _power;
+    	privIP         = _privIP;
+    	pubIP          = _pubIP;
+    	computeNode    = _computeNode;
+    	keyname        = _keyname;
+    	flavorID       = _flavorID;
+    	creationTime   = _creationTime;
+    	secgrpNames    = secgroups;
     }
 
-    public String getName() { return name; }
-    public String getID() { return ID; }
-    public String getStatus() { return status; }
-    public String getTask() { return task; }
-    public int    getPowerState() { return powerstate; }
+    public String 	getName() { return name; }
+    public String	getID() { return ID; }
+    public String 	getStatus() { return status; }
+    public String 	getTask() { return task; }
+    public int    	getPowerState() { return powerstate; }
     public String[] getPrivateIP() { 
-	String[] ips = new String[privIP.size()];
+	String[] 		ips = new String[privIP.size()];
+	
 	privIP.toArray(ips);
-	return ips;
+		return ips;
     }
+    
     public String[] getPublicIP() { 
-	String[] ips = new String[pubIP.size()];
-	pubIP.toArray(ips);
-	return ips; 
+    	String[] ips = new String[pubIP.size()];
+    	pubIP.toArray(ips);
+    	return ips; 
     }
     public String getComputeNode() { return computeNode; }
     public String getKeyName() { return keyname; }
@@ -107,8 +109,6 @@ public class Server implements Serializable {
 	long creationTime    = 0;
 	int power            = -1;
 	
-	//Log.d("PARSE", "jsonBuf="+jsonBuf);
-	
 	try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray servers     = (JSONArray)jsonObject.getJSONArray("servers");
@@ -132,8 +132,11 @@ public class Server implements Serializable {
 		else
 		    computeNode = "N/A (admin privilege required)";
 		name = (String)server.getString("name");
-		task = (String)server.getString("OS-EXT-STS:task_state");
-		Vector<String> fixedIP = new Vector<String>();//.clear();
+		if(server.has("OS-EXT-STS:task_state"))
+			task = (String)server.getString("OS-EXT-STS:task_state");
+		else
+			task = null;
+		Vector<String> fixedIP = new Vector<String>();
 		Vector<String> floatingIP = new Vector<String>();
 		try {
 		    JSONObject addresses = server.getJSONObject("addresses");
@@ -149,8 +152,6 @@ public class Server implements Serializable {
 			    String ip = arrayAddr.getJSONObject(j).getString("addr");
 			    String type = arrayAddr.getJSONObject(j).getString("OS-EXT-IPS:type");
 
-			    //Log.d("PARSEUTILS", "ip="+ip+" - type="+type);
-			    
 			    if(type.compareTo("fixed")==0)
 				fixedIP.add(ip);
 			    if(type.compareTo("floating")==0)

@@ -21,7 +21,6 @@ public class ServerView extends LinearLayout {
     private TextViewWithView Flavor   = null;
     private TextViewWithView Status   = null;
 
-    //private ImageButtonWithView snapServer = null;
     private ImageButtonWithView manageServer = null;
     private ImageButtonWithView deleteServer = null;
     private ButtonWithView addIPToServer = null;
@@ -44,7 +43,6 @@ public class ServerView extends LinearLayout {
 	LinearLayout.LayoutParams params1 
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	setLayoutParams( params1 );
-	//setBackgroundResource(R.drawable.rounded_corner_thin);
 	int padding = Utils.getDisplayPixel( ctx, 2 );
 	setPadding( padding, padding, padding, padding );
 	
@@ -78,7 +76,6 @@ public class ServerView extends LinearLayout {
 	Flavor.setText( "Flavor: "+flavName );
 	Flavor.setOnClickListener( infoListener );
 	Flavor.setTextColor( Color.parseColor("#999999"));
-	//Log.d("SERVERVIEW", "STATUS="+S.getStatus( ));
 	Status = new TextViewWithView( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
 	Status.setOnClickListener( infoListener );
