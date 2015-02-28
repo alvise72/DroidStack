@@ -171,4 +171,5 @@
 	<string name="PAUSESERVER">Pause</string>
 	<string name="RESUMESERVER">Resume</string>
 	<string name="RESIZESERVER">Resize instance</string>
+	<string name="SERVERNAMECHANGED">Instance name changed</string>
 </resources>

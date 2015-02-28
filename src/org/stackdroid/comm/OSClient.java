@@ -625,6 +625,28 @@ public class OSClient {
      *
      *
      */
+    public void changeServerName( String serverid, String newServerName ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException 
+	{
+    	checkToken( );
+    	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+  	   	v.add(p);
+  	    String extradata = "{\"server\": {\"name\": \"" + newServerName + "\"}}";
+  	    RESTClient.sendPUTRequest( U.useSSL(),
+  	    						   U.getNovaEndpoint() + "/servers/"+serverid,
+  	    						   U.getToken(), 
+  	    						   extradata, 
+  	    						   v );
+	}
+    /**
+     * @throws ParseException 
+     *
+     *
+     * 
+     *
+     *
+     */
     public String requestServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException
     {

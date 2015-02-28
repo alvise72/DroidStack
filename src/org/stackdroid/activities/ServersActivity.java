@@ -78,6 +78,52 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+	protected class ChangeInstanceNameHandler implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			//ServersActivity.this.progressDialogWaitStop.show();
+			server = ( (ButtonWithView)v ).getServerView().getServer();
+			
+			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
+	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
+	        final EditText input = new EditText(ServersActivity.this);
+	        alert.setView(input);
+	        alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+	        	public void onClick(DialogInterface dialog,int whichButton) {
+	            	String newname = input.getText().toString();
+	            	newname = newname.trim();
+	                if(newname==null || newname.length()==0) {
+	                	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
+	                } else {
+	                	//button.setText(newCateg);
+	                    ServersActivity.this.progressDialogWaitStop.show();
+	                    (new ServersActivity.AsyncTaskChangeInstanceName()).execute( server.getID(), newname);
+	                }
+	            }
+	         });
+	         alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+	                    
+	                }
+	         });
+	         alert.setCancelable(false);
+	         //alert.setCanceledOnTouchOutside(false);
+	         AlertDialog dia = alert.create();
+	         dia.setCancelable(false);
+	         dia.setCanceledOnTouchOutside(false);
+	         dia.show( );
+		    	
+		     return;
+			 //(new ServersActivity.AsyncTaskChangeInstanceName()).execute( );
+		}
+		
+	}
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	protected class AddIPButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -322,7 +368,7 @@ public class ServersActivity extends Activity {
 		    	
 		     return;
 */
-			server  = ((ImageButtonWithView)v).getServerView().getServer();
+			//pippserver  = ((ImageButtonWithView)v).getServerView().getServer();
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 			alert.setMessage(getString(R.string.MANAGESERVERS));
 			LinearLayout L = new LinearLayout( ServersActivity.this );
@@ -332,7 +378,7 @@ public class ServersActivity extends Activity {
 			
 			L.setLayoutParams( lp );
 			L.setOrientation(LinearLayout.VERTICAL);
-			final Button changeName = new Button( ServersActivity.this );
+			final ButtonWithView changeName = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView() );
 			final Button makeSnap = new Button( ServersActivity.this );
 			final Button shutOff = new Button( ServersActivity.this );
 			final Button startUp = new Button( ServersActivity.this );
@@ -346,6 +392,8 @@ public class ServersActivity extends Activity {
 			pauseServer.setText(getString(R.string.PAUSESERVER));
 			resumeServer.setText(getString(R.string.RESUMESERVER));
 			resizeServer.setText(getString(R.string.RESIZESERVER));
+			
+			changeName.setOnClickListener(new ServersActivity.ChangeInstanceNameHandler()) ;
 			
 			L.addView(changeName);
 			L.addView(makeSnap);
@@ -730,7 +778,42 @@ public class ServersActivity extends Activity {
 
     //  ASYNC TASKS.....
 
-
+    
+  //__________________________________________________________________________________
+    protected class AsyncTaskChangeInstanceName extends AsyncTask<String, String, String> {
+    	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	
+    	protected String doInBackground( String... v ) 
+     	{
+     		String serverid = v[0];
+     		String newname  = v[1];
+		    OSClient osc = OSClient.getInstance( U );
+		    
+	     	
+     		try {
+     			osc.changeServerName(serverid, newname);
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return "";
+     		}
+	    
+     		return "";
+     	}
+    	@Override
+    	protected void onPostExecute( String result ) {
+    	    super.onPostExecute(result);
+    	    
+     	    if(hasError) {
+     	    	Utils.alert( errorMessage, ServersActivity.this );
+     	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
+     	    	return;
+     	    }
+    		ServersActivity.this.progressDialogWaitStop.dismiss( );
+    		Utils.alert(ServersActivity.this.getString(R.string.SERVERNAMECHANGED), ServersActivity.this);
+    	}
+    }
     
   //__________________________________________________________________________________
     protected class AsyncTaskCreateSnapshot extends AsyncTask<String, String, String>

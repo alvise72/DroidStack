@@ -536,8 +536,8 @@ public class RESTClient {
 	  		 ServerException, ServiceUnAvailableOrInternalError, 
 	  		 MalformedURLException, IOException, ProtocolException
    {
-   	//Log.d("REST", "sURL="+sURL);
-   	//Log.d("REST", "extradata="+extradata);
+   	Log.d("REST", "sURL="+sURL);
+   	Log.d("REST", "extradata="+extradata);
    	if(sURL.startsWith("https://")) usessl=true;
    	if(sURL.startsWith("http://")) usessl=false;
    	
