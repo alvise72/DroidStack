@@ -75,6 +75,23 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+	protected class ResizeInstance implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			server  = ((ButtonWithView)v).getServerView().getServer();
+			//ServersActivity.this.progressDialogWaitStop.show();
+            //(new AsyncTaskPauseInstance( )).execute( server.getID() );
+            //ServersActivity.this.manageInstanceDialog.dismiss();
+			
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */
 	protected class PauseInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -452,14 +469,14 @@ public class ServersActivity extends Activity {
 			
 			final ButtonWithView pauseServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView resumeServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
-			final Button resizeServer = new Button( ServersActivity.this );
+			//final Button resizeServer = new Button( ServersActivity.this );
 			changeName.setText(getString(R.string.CHANGENAMESERVER));
 			makeSnap.setText(getString(R.string.MAKESNAP));
 			hardReboot.setText(getString(R.string.HARDREBOOT));
 			softReboot.setText(getString(R.string.SOFTREBOOT));
 			pauseServer.setText(getString(R.string.PAUSESERVER));
 			resumeServer.setText(getString(R.string.RESUMESERVER));
-			resizeServer.setText(getString(R.string.RESIZESERVER));
+			//resizeServer.setText(getString(R.string.RESIZESERVER));
 			
 			changeName.setOnClickListener( new ServersActivity.ChangeInstanceNameHandler( ) ) ;
 			makeSnap.setOnClickListener( new ServersActivity.MakeInstanceSnapshot( ) );
@@ -475,7 +492,7 @@ public class ServersActivity extends Activity {
 			//L.addView(startUp);
 			L.addView(pauseServer);
 			L.addView(resumeServer);
-			L.addView(resizeServer);
+			//L.addView(resizeServer);
 			sv.addView( L );
 			alert.setView(sv);
 			
