@@ -313,6 +313,59 @@ public class OSClient {
 				    				extradata, 
 				    				vp );
     }
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void softReboot( String serverid )
+    throws NotAuthorizedException, NotFoundException, 
+ 		   ServerException, ServiceUnAvailableOrInternalError,
+ 		   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"reboot\": {\"type\": \"SOFT\"}}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+    }
+    
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void hardReboot( String serverid )
+    throws NotAuthorizedException, NotFoundException, 
+ 		   ServerException, ServiceUnAvailableOrInternalError,
+ 		   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"reboot\": {\"type\": \"HARD\"}}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+    }
     
     /*
      * 

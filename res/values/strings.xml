@@ -172,4 +172,7 @@
 	<string name="RESUMESERVER">Resume</string>
 	<string name="RESIZESERVER">Resize instance</string>
 	<string name="SERVERNAMECHANGED">Instance name changed</string>
+	<string name="HARDREBOOT">Hard reboot (power reset)</string>
+	<string name="SOFTREBOOT">Reboot Operating System</string>
+	<string name="SERVERREBOOTED">Instance rebooted</string>
 </resources>

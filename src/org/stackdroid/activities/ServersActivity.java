@@ -57,19 +57,56 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class ServersActivity extends Activity {
 
-	private CustomProgressDialog    progressDialogWaitStop     = null;
-    private User 				    U 						   = null;
-	private Server 				    server    				   = null;
-	private ArrayAdapter<OSImage>   spinnerImagesArrayAdapter  = null;
-	private AlertDialog 		    alertDialogSelectImage     = null;
-	private AlertDialog 		    alertDialogSelectFIP       = null;
-	
-	private Spinner 			    imageSpinner			   = null;
-	public  Vector<OSImage> 	    images					   = null;
-	public  Vector<FloatingIP>      fips					   = null;
-	public ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter     = null;
-	private Spinner fipSpinner;
+	private CustomProgressDialog     progressDialogWaitStop    = null;
+    private User 				     U 						   = null;
+	private Server 				     server    				   = null;
+	private ArrayAdapter<OSImage>    spinnerImagesArrayAdapter = null;
+	private AlertDialog 		     alertDialogSelectImage    = null;
+	private AlertDialog 		     alertDialogSelectFIP      = null;	
+	private Spinner 			     imageSpinner			   = null;
+	public  Vector<OSImage> 	     images					   = null;
+	public  Vector<FloatingIP>       fips					   = null;
+	public  ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter    = null;
+	private Spinner                  fipSpinner                = null;
+	private AlertDialog 			 manageInstanceDialog      = null;
 
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */
+	private class HardRebootInstance implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			server  = ((ButtonWithView)v).getServerView().getServer();
+			ServersActivity.this.progressDialogWaitStop.show();
+            (new AsyncTaskHardReboot( )).execute( server.getID() );
+            ServersActivity.this.manageInstanceDialog.dismiss();
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */
+	private class SoftRebootInstance implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			server  = ((ButtonWithView)v).getServerView().getServer();
+			ServersActivity.this.progressDialogWaitStop.show();
+            (new AsyncTaskSoftReboot( )).execute( server.getID() );
+            ServersActivity.this.manageInstanceDialog.dismiss();
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */	
 	private class MakeInstanceSnapshot implements OnClickListener {
 
 		@Override
@@ -89,6 +126,7 @@ public class ServersActivity extends Activity {
 	                } else {
 	                	ServersActivity.this.progressDialogWaitStop.show();
 	                    (new AsyncTaskCreateSnapshot( )).execute(server.getID(), snapname);
+	                    ServersActivity.this.manageInstanceDialog.dismiss();
 	                }
 	            }
 	         });
@@ -132,6 +170,7 @@ public class ServersActivity extends Activity {
 	                } else {
 	                	ServersActivity.this.progressDialogWaitStop.show();
 	                    (new ServersActivity.AsyncTaskChangeInstanceName()).execute( server.getID(), newname);
+	                    ServersActivity.this.manageInstanceDialog.dismiss();
 	                }
 	            }
 	         });
@@ -149,6 +188,7 @@ public class ServersActivity extends Activity {
 		     return;
 		}
 	}
+	
 	/**
 	 * 
 	 * 
@@ -161,6 +201,7 @@ public class ServersActivity extends Activity {
 			ServersActivity.this.progressDialogWaitStop.show();
 			server = ( (ButtonWithView)v ).getServerView().getServer();
 			(new ServersActivity.AsyncTaskFIPList()).execute( );
+            ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 	}
 	
@@ -217,9 +258,8 @@ public class ServersActivity extends Activity {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
 			ServersActivity.this.progressDialogWaitStop.show();
-			
-			
 			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), server.getPrivateIP()[0] );
+            ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 	}
 
@@ -277,8 +317,7 @@ public class ServersActivity extends Activity {
 	public void createInstance( View v ) {
 		this.progressDialogWaitStop.show();
 		(new ServersActivity.AsyncTaskOSListImages()).execute();
-
-		
+        ServersActivity.this.manageInstanceDialog.dismiss();		
 	}
 
 	/**
@@ -410,14 +449,17 @@ public class ServersActivity extends Activity {
 			L.setOrientation(LinearLayout.VERTICAL);
 			final ButtonWithView changeName = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView() );
 			final ButtonWithView makeSnap = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView()  );
-			final Button shutOff = new Button( ServersActivity.this );
+			final ButtonWithView hardReboot = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView softReboot = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			
 			final Button startUp = new Button( ServersActivity.this );
 			final Button pauseServer = new Button( ServersActivity.this );
 			final Button resumeServer = new Button( ServersActivity.this );
 			final Button resizeServer = new Button( ServersActivity.this );
 			changeName.setText(getString(R.string.CHANGENAMESERVER));
 			makeSnap.setText(getString(R.string.MAKESNAP));
-			shutOff.setText(getString(R.string.SHUTOFF));
+			hardReboot.setText(getString(R.string.HARDREBOOT));
+			softReboot.setText(getString(R.string.SOFTREBOOT));
 			startUp.setText(getString(R.string.STARTUP));
 			pauseServer.setText(getString(R.string.PAUSESERVER));
 			resumeServer.setText(getString(R.string.RESUMESERVER));
@@ -425,9 +467,14 @@ public class ServersActivity extends Activity {
 			
 			changeName.setOnClickListener( new ServersActivity.ChangeInstanceNameHandler( ) ) ;
 			makeSnap.setOnClickListener( new ServersActivity.MakeInstanceSnapshot( ) );
+			hardReboot.setOnClickListener( new ServersActivity.HardRebootInstance( ) );
+			softReboot.setOnClickListener( new ServersActivity.SoftRebootInstance( ) );
+			
 			L.addView(changeName);
 			L.addView(makeSnap);
-			L.addView(shutOff);
+			L.addView(hardReboot);
+			L.addView(softReboot);
+			
 			L.addView(startUp);
 			L.addView(pauseServer);
 			L.addView(resumeServer);
@@ -454,10 +501,10 @@ public class ServersActivity extends Activity {
 	                }
 	         });
 	         alert.setCancelable(false);
-	         AlertDialog dia = alert.create();
-	         dia.setCancelable(false);
-	         dia.setCanceledOnTouchOutside(false);
-	         dia.show( );
+	         manageInstanceDialog = alert.create();
+	         manageInstanceDialog.setCancelable(false);
+	         manageInstanceDialog.setCanceledOnTouchOutside(false);
+	         manageInstanceDialog.show( );
 		    	
 		     return;
 		 }
@@ -807,9 +854,76 @@ public class ServersActivity extends Activity {
 
 
     //  ASYNC TASKS.....
-
+    //__________________________________________________________________________________
+    protected class AsyncTaskSoftReboot extends AsyncTask<String, String, String> {
+    	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	
+    	protected String doInBackground( String... v ) 
+     	{
+     		String serverid = v[0];
+     		OSClient osc = OSClient.getInstance( U );
+     		try {
+     			osc.softReboot(serverid);
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return "";
+     		}
+	    
+     		return "";
+     	}
+    	
+    	@Override
+    	protected void onPostExecute( String result ) {
+    		super.onPostExecute(result);
+    	    
+     	    if(hasError) {
+     	    	Utils.alert( errorMessage, ServersActivity.this );
+     	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
+     	    	return;
+     	    }
+    		ServersActivity.this.progressDialogWaitStop.dismiss( );
+    		Utils.alert(ServersActivity.this.getString(R.string.SERVERREBOOTED), ServersActivity.this);
+    	}
+    	
+    }
     
-  //__________________________________________________________________________________
+    //__________________________________________________________________________________
+    protected class AsyncTaskHardReboot extends AsyncTask<String, String, String> {
+    	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	
+    	protected String doInBackground( String... v ) 
+     	{
+     		String serverid = v[0];
+     		OSClient osc = OSClient.getInstance( U );
+     		try {
+     			osc.hardReboot(serverid);
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return "";
+     		}
+	    
+     		return "";
+     	}
+    	
+    	@Override
+    	protected void onPostExecute( String result ) {
+    		super.onPostExecute(result);
+    	    
+     	    if(hasError) {
+     	    	Utils.alert( errorMessage, ServersActivity.this );
+     	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
+     	    	return;
+     	    }
+    		ServersActivity.this.progressDialogWaitStop.dismiss( );
+    		Utils.alert(ServersActivity.this.getString(R.string.SERVERREBOOTED), ServersActivity.this);
+    	}
+    	
+    }
+    //__________________________________________________________________________________
     protected class AsyncTaskChangeInstanceName extends AsyncTask<String, String, String> {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;

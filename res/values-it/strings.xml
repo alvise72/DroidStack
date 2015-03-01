@@ -164,4 +164,7 @@
 	<string name="STARTUP">Boot</string>
 	<string name="RESIZESERVER">Ridimensiona</string>
 	<string name="SERVERNAMECHANGED">Nome istanza cambiato</string>
+	<string name="HARDREBOOT">Hard reboot (power reset)</string>
+	<string name="SOFTREBOOT">Reboot Sistema Operativo</string>
+	<string name="SERVERREBOOTED">Istanza riavviata</string>
 </resources>
