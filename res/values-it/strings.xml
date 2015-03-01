@@ -167,4 +167,6 @@
 	<string name="HARDREBOOT">Hard reboot (power reset)</string>
 	<string name="SOFTREBOOT">Reboot Sistema Operativo</string>
 	<string name="SERVERREBOOTED">Istanza riavviata</string>
+	<string name="SERVERRPAUSED">Istanza in pausa</string>
+	<string name="SERVERRESUMED">Instance resumed</string>
 </resources>

@@ -340,7 +340,57 @@ public class OSClient {
     								vp );
     }
     
-
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void pauseServer( String serverid )
+    throws NotAuthorizedException, NotFoundException, 
+ 		   ServerException, ServiceUnAvailableOrInternalError,
+ 		   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"pause\": \"null\"}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void resumeServer( String serverid )
+    throws NotAuthorizedException, NotFoundException, 
+ 		   ServerException, ServiceUnAvailableOrInternalError,
+ 		   IOException, MalformedURLException, ProtocolException, ParseException
+    {
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"resume\": null}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+    }  
     /*
      * 
      * 
