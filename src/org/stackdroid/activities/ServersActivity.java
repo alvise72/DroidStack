@@ -75,7 +75,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
-	private class HardRebootInstance implements OnClickListener {
+	protected class HardRebootInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
@@ -91,7 +91,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
-	private class SoftRebootInstance implements OnClickListener {
+	protected class SoftRebootInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
@@ -107,12 +107,11 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */	
-	private class MakeInstanceSnapshot implements OnClickListener {
+	protected class MakeInstanceSnapshot implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
-	    	
 		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
 	        final EditText input = new EditText(ServersActivity.this);
@@ -404,40 +403,6 @@ public class ServersActivity extends Activity {
 	protected class ServerManageClickListener implements OnClickListener {
 		@Override
 	    public void onClick( View v ) {
-/*		   	server  = ((ImageButtonWithView)v).getServerView().getServer();
-		    	
-		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
-	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
-	        final EditText input = new EditText(ServersActivity.this);
-	        alert.setView(input);
-	        alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog,int whichButton) {
-	            	String snapname = input.getText().toString();
-	                snapname = snapname.trim();
-	                if(snapname==null || snapname.length()==0) {
-	                	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
-	                } else {
-	                	//button.setText(newCateg);
-	                    ServersActivity.this.progressDialogWaitStop.show();
-	                    (new AsyncTaskCreateSnapshot( )).execute(server.getID(), snapname);
-	                }
-	            }
-	         });
-	         alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
-	                public void onClick(DialogInterface dialog, int whichButton) {
-	                    
-	                }
-	         });
-	         alert.setCancelable(false);
-	         //alert.setCanceledOnTouchOutside(false);
-	         AlertDialog dia = alert.create();
-	         dia.setCancelable(false);
-	         dia.setCanceledOnTouchOutside(false);
-	         dia.show( );
-		    	
-		     return;
-*/
-			//pippserver  = ((ImageButtonWithView)v).getServerView().getServer();
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 			alert.setMessage(getString(R.string.MANAGESERVERS));
 			LinearLayout L = new LinearLayout( ServersActivity.this );
@@ -480,22 +445,8 @@ public class ServersActivity extends Activity {
 			L.addView(resumeServer);
 			L.addView(resizeServer);
 			alert.setView(L);
-			/*
-			alert.setPositiveButton(getString(R.string.CANCEL),new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog,int whichButton) {
-	            	String snapname = input.getText().toString();
-	                snapname = snapname.trim();
-	                if(snapname==null || snapname.length()==0) {
-	                	Utils.alert(getString(R.string.NOEMPTYNAME), ServersActivity.this);
-	                } else {
-	                	//button.setText(newCateg);
-	                    ServersActivity.this.progressDialogWaitStop.show();
-	                    (new AsyncTaskCreateSnapshot( )).execute(server.getID(), snapname);
-	                }
-	            }
-	         });
-	         */
-	         alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
+			
+	        alert.setNegativeButton(getString(R.string.CANCEL), new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int whichButton) {
 	                    
 	                }
@@ -654,8 +605,6 @@ public class ServersActivity extends Activity {
 		@Override
 	    public void onClick( View v ) {
 			
-			//Log.d("SERVER","Click CONSOLE !!");
-			
 			ButtonWithView btv = (ButtonWithView)v;
 			server = btv.getServerView().getServer();
 			
@@ -674,7 +623,6 @@ public class ServersActivity extends Activity {
 	                    	if(num==0) {
 	                    		return;
 	                    	}
-	                    	//Log.d("SERVERLOG", "Invoking async task for log...");
 	                        ServersActivity.this.progressDialogWaitStop.show();
 	                        (new ServersActivity.AsyncTaskOSLogServer()).execute( input.getText().toString().trim() );
 	                    }
@@ -736,7 +684,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
-    private void deleteNovaInstance( String serverid ) {
+    protected void deleteNovaInstance( String serverid ) {
     	progressDialogWaitStop.show();
     	AsyncTaskDeleteServer task = new AsyncTaskDeleteServer();
     	String[] ids = new String[1];
@@ -796,7 +744,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
-    private void refreshView( Vector<Server> servers, Vector<Flavor> flavors ) {
+    protected void refreshView( Vector<Server> servers, Vector<Flavor> flavors ) {
     	((LinearLayout)findViewById(R.id.serverLayout)).removeAllViews();
     	if(servers.size()==0) {
     		Utils.alert(getString(R.string.NOINSTANCEAVAIL), this);	
@@ -815,12 +763,9 @@ public class ServersActivity extends Activity {
     	while(it.hasNext()) {
     		Server s = it.next();
 		
-		//Log.d("SERVERS", "Considereing Server ["+s.getName( )+"] with flavor ["+s.getFlavorID()+"]");
-		
 		Iterator<Flavor> flvIt = flavors.iterator( );
 		while(flvIt.hasNext( ) ) {
 			Flavor f = flvIt.next( );
-		  	//Log.d("SERVERS", "Considereing Flavor ["+f.getName( )+"] with ID ["+f.getID()+"]");	
 		}
 
 		
@@ -854,6 +799,7 @@ public class ServersActivity extends Activity {
 
 
     //  ASYNC TASKS.....
+    
     //__________________________________________________________________________________
     protected class AsyncTaskSoftReboot extends AsyncTask<String, String, String> {
     	private  String   errorMessage     = null;
@@ -870,7 +816,6 @@ public class ServersActivity extends Activity {
      			hasError = true;
      			return "";
      		}
-	    
      		return "";
      	}
     	
@@ -885,8 +830,8 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERREBOOTED), ServersActivity.this);
+    		(new AsyncTaskOSListServers()).execute( );
     	}
-    	
     }
     
     //__________________________________________________________________________________
@@ -920,6 +865,7 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERREBOOTED), ServersActivity.this);
+    		(new AsyncTaskOSListServers()).execute( );
     	}
     	
     }
@@ -956,10 +902,11 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERNAMECHANGED), ServersActivity.this);
+    		(new AsyncTaskOSListServers()).execute( );
     	}
     }
     
-  //__________________________________________________________________________________
+    //__________________________________________________________________________________
     protected class AsyncTaskCreateSnapshot extends AsyncTask<String, String, String>
     {
      	private  String   errorMessage     = null;
@@ -1023,7 +970,6 @@ public class ServersActivity extends Activity {
 	      try {
 	    	  jsonBuf 	    = osc.requestServers( );
 	    	  jsonBufferFlavor  = osc.requestFlavors( );
-		  //Log.d("SERVERS", "jsonBufferFlavor="+jsonBufferFlavor);
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
 	    	  hasError = true;
@@ -1050,6 +996,7 @@ public class ServersActivity extends Activity {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 			}
 			ServersActivity.this.progressDialogWaitStop.dismiss( );
+			//(new AsyncTaskOSListServers()).execute( );
 		}
     }
     
@@ -1073,7 +1020,6 @@ public class ServersActivity extends Activity {
      				try {
      					osc.deleteInstance( serverids[i] );
      				} catch(NotFoundException nfe) {
-     					//Log.d("SERVERSACT",nfe.getMessage());
      					not_found = true;
      				}
      			}
@@ -1103,7 +1049,6 @@ public class ServersActivity extends Activity {
      			Utils.alert(getString(R.string.DELETEDINSTSANCES), ServersActivity.this );
      			(new AsyncTaskOSListServers()).execute( );
      		}
-     		//ServersActivity.this.progressDialogWaitStop.dismiss( );
      	}
    }
     
@@ -1121,20 +1066,14 @@ public class ServersActivity extends Activity {
 	    OSClient osc = OSClient.getInstance( U );
 	    int maxnumlines = Integer.parseInt(v[0]);
 	    
-	    //Log.d("SERVER", "Asking for "+maxnumlines+" lines");
-	    
 	    String ID = ServersActivity.this.server.getID();
 	    
 	    try {
 		  jsonBuf = osc.requestServerLog( ID, maxnumlines );
-		  //Log.d("SERVER", "jsonBuf="+jsonBuf);
 	    } catch(Exception e) {
-	    	//Log.d("SERVER", "ECCEZIONE !! "+e.getMessage());
 		  errorMessage = e.getMessage();
 		  hasError = true;
-		  //return;
 	    }
-	    //return jsonBuf;
 		return null;
 	}
 	
@@ -1149,8 +1088,7 @@ public class ServersActivity extends Activity {
  	    }
 	    
 	    try {
-	    	//Log.d("SERVER", "jsonBuf="+jsonBuf);
-		  String consoleLog = ParseUtils.parseServerConsoleLog( jsonBuf );
+	      String consoleLog = ParseUtils.parseServerConsoleLog( jsonBuf );
 		  Utils.alertTitle(consoleLog,"Console Log", 8.0f, ServersActivity.this);
 	    } catch(ParseException pe) {
 		  Utils.alert("ServersActivity.AsyncTaskOSLogServer.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
@@ -1269,8 +1207,6 @@ public class ServersActivity extends Activity {
      {
        private  String   errorMessage     = null;
    	   private  boolean  hasError         = false;
-       //private  String   floatingip       = null;
-       //private  String   serverid         = null;
        private  String   jsonPort		  = null;
        
        @Override
@@ -1320,8 +1256,6 @@ public class ServersActivity extends Activity {
   	    }
   	    Utils.alert( getString(R.string.FIPASSOCIATED2), ServersActivity.this );
   	    (new AsyncTaskOSListServers()).execute( );
-  	    //ServersActivity.this.progressDialogWaitStop.dismiss( );
-  	    //ServersActivity.this.loadFIP();
   	    
  	  }
      }
