@@ -177,4 +177,5 @@
 	<string name="SERVERREBOOTED">Instance rebooted</string>
 	<string name="SERVERRPAUSED">Instanced paused</string>
 	<string name="SERVERRESUMED">Instance resumed</string>
+	<string name="HEAT">Orchestrator</string>
 </resources>

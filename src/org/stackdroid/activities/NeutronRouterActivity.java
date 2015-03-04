@@ -66,7 +66,7 @@ public class NeutronRouterActivity extends Activity {
 	private EditText gatewayIP;
 
     //__________________________________________________________________________________
-	protected class DeleteNetworkListener implements OnClickListener {
+	protected class DeleteRouterListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
 			//Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );

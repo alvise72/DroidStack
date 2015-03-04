@@ -17,19 +17,13 @@ import android.view.Menu;
 import android.view.View.OnClickListener;
 import android.view.Gravity;
 import android.view.View;
-
 import java.util.Iterator;
 import java.util.Vector;
-
 import org.apache.http.conn.util.InetAddressUtils;
-import org.stackdroid.comm.OSClient;
-//import org.stackdroid.comm.ServerErrorException;
+import org.stackdroid.comm.OSClient;//import org.stackdroid.comm.ServerErrorException;
 import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
-
-
-
 import org.stackdroid.R;
 import org.stackdroid.utils.IPAllocationPool;
 import org.stackdroid.utils.CIDRAddressKeyListener;
@@ -47,12 +41,10 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.views.NetworkListView;
 import org.stackdroid.views.ServerView;
-
 import android.os.AsyncTask;
-
 import org.stackdroid.utils.CustomProgressDialog;
 
-public class NeutronActivity extends Activity {
+public class NeutronNetworkActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop     = null;
     private User 				 U 						    = null;

@@ -25,6 +25,8 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.activities.FloatingIPActivity;
 import org.stackdroid.activities.NeutronActivity;
+import org.stackdroid.activities.NeutronNetworkActivity;
+import org.stackdroid.activities.NeutronRouterActivity;
 import org.stackdroid.activities.SecGrpActivity;
 import org.stackdroid.activities.UsersActivity;
 import org.stackdroid.activities.ServersActivity;
@@ -337,7 +339,23 @@ public class MainActivity extends Activity
     	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
     	    return;
     	}
-    	Class<?> c = (Class<?>)NeutronActivity.class;
+    	Class<?> c = (Class<?>)NeutronNetworkActivity.class;
+    	Intent I = new Intent( MainActivity.this, c );
+    	startActivity( I );
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public void routers( View v ) {
+    	if(selectedUser.length()==0) {
+    	    Utils.alert( getString(R.string.NOUSERSELECTED) , this);
+    	    return;
+    	}
+    	Class<?> c = (Class<?>)NeutronRouterActivity.class;
     	Intent I = new Intent( MainActivity.this, c );
     	startActivity( I );
     }

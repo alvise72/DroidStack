@@ -164,7 +164,7 @@
 
              
           </LinearLayout>
-<!--  
+ 
           <LinearLayout
               android:paddingLeft="10dp"
               android:paddingRight="10dp"
@@ -176,14 +176,23 @@
                       android:id="@+id/ROUTER"
                       android:layout_width="match_parent"
 		      		  android:layout_height="match_parent"
-                      android:onClick="volumes"
+                      android:onClick="routers"
                       android:layout_weight="1"
 		      		  android:drawableLeft="@drawable/router"
                       android:text="@string/ROUTERS" />
 
-                          
+                  <Button
+                      android:id="@+id/HEAT"
+                      android:layout_width="match_parent"
+		      		  android:layout_height="match_parent"
+                      android:onClick="heat"
+                      android:layout_weight="1"
+		      		  android:drawableLeft="@drawable/router"
+		      		  android:enabled="false"
+                      android:text="@string/HEAT" />
+                      
           </LinearLayout>
-          -->
+          
 
         </LinearLayout>
 	
