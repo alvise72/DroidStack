@@ -61,9 +61,9 @@ public class NeutronNetworkActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			//Utils.alert( getString(R.string.NOTIMPLEMENTED), NeutronActivity.this );
-			NeutronActivity.this.progressDialogWaitStop.show( );
+			NeutronNetworkActivity.this.progressDialogWaitStop.show( );
 			String netID = ((ImageButtonWithView) v).getNetworkListView( ).getNetwork().getID();
-			(new NeutronActivity.AsyncTaskOSDeleteNetwork()).execute(netID, "true");
+			(new NeutronNetworkActivity.AsyncTaskOSDeleteNetwork()).execute(netID, "true");
 		}
 	}
 
@@ -80,21 +80,21 @@ public class NeutronNetworkActivity extends Activity {
 			}
 			
 			
-			TextView tv1 = new TextView(NeutronActivity.this);
+			TextView tv1 = new TextView(NeutronNetworkActivity.this);
 			tv1.setText("Network name:");
 			tv1.setTypeface( null, Typeface.BOLD );
-			TextView tv2 = new TextView(NeutronActivity.this);
+			TextView tv2 = new TextView(NeutronNetworkActivity.this);
 			tv2.setText(N.getName());
-			TextView tv3 = new TextView(NeutronActivity.this);
+			TextView tv3 = new TextView(NeutronNetworkActivity.this);
 			tv3.setText("Shared:");
 			tv3.setTypeface( null, Typeface.BOLD );
-			TextView tv4 = new TextView(NeutronActivity.this);
-			tv4.setText( N.isShared( ) ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
-			TextView tv5 = new TextView(NeutronActivity.this);
+			TextView tv4 = new TextView(NeutronNetworkActivity.this);
+			tv4.setText( N.isShared( ) ? NeutronNetworkActivity.this.getString(R.string.YES) : NeutronNetworkActivity.this.getString(R.string.NO));
+			TextView tv5 = new TextView(NeutronNetworkActivity.this);
 			tv5.setText("External: ");
 			tv5.setTypeface( null, Typeface.BOLD );
-			TextView tv6 = new TextView(NeutronActivity.this);
-			tv6.setText( N.isExt() ? NeutronActivity.this.getString(R.string.YES) : NeutronActivity.this.getString(R.string.NO));
+			TextView tv6 = new TextView(NeutronNetworkActivity.this);
+			tv6.setText( N.isExt() ? NeutronNetworkActivity.this.getString(R.string.YES) : NeutronNetworkActivity.this.getString(R.string.NO));
 	    
 			
 			
@@ -104,20 +104,20 @@ public class NeutronNetworkActivity extends Activity {
 				Iterator<SubNetwork> it = N.getSubNetworks().iterator();
 				while(it.hasNext()) {
 					SubNetwork sn = it.next();
-					TextView t = new  TextView(NeutronActivity.this);
+					TextView t = new  TextView(NeutronNetworkActivity.this);
 					String subnetname = sn.getName();
 					if(subnetname.trim().length()==0)
 						subnetname = "No name";
 					t.setText( "- "+subnetname );
 					t.setTypeface( null, Typeface.BOLD );
 					t.setPadding(5, 0,0,0);
-					TextView tt = new  TextView(NeutronActivity.this);
+					TextView tt = new  TextView(NeutronNetworkActivity.this);
 					tt.setText("IPv"+sn.getIPVersion());
 					tt.setPadding(15, 0,0,0);
-					TextView ttt = new  TextView(NeutronActivity.this);
+					TextView ttt = new  TextView(NeutronNetworkActivity.this);
 					ttt.setText(sn.getAddress());
 					ttt.setPadding(15, 0,0,0);
-					TextView tttt = new TextView(NeutronActivity.this);
+					TextView tttt = new TextView(NeutronNetworkActivity.this);
 					tttt.setText("DNS: " + Utils.join(sn.getDNS(), ", "));
 					tttt.setPadding(15, 0,0,0);
 					IPAllocationPool[] pools = sn.getIPAllocationPools();
@@ -132,7 +132,7 @@ public class NeutronNetworkActivity extends Activity {
 					subnetinfo.add(ttt);
 					subnetinfo.add(tttt);
 					if(allocPool.length>0) {
-						ttttt = new TextView(NeutronActivity.this);
+						ttttt = new TextView(NeutronNetworkActivity.this);
 						ttttt.setText("IP pool: "+Utils.join(allocPool, "\n"));
 						ttttt.setPadding(15, 0,0,0);
 						subnetinfo.add(ttttt);
@@ -140,16 +140,16 @@ public class NeutronNetworkActivity extends Activity {
 				}
 			}
 			
-			ScrollView sv = new ScrollView(NeutronActivity.this);
+			ScrollView sv = new ScrollView(NeutronNetworkActivity.this);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT,
 						LinearLayout.LayoutParams.MATCH_PARENT);
 			sv.setLayoutParams( lp );
-			LinearLayout l = new LinearLayout(NeutronActivity.this);
+			LinearLayout l = new LinearLayout(NeutronNetworkActivity.this);
 			l.setLayoutParams( lp );
 			l.setOrientation( LinearLayout.VERTICAL );
 			int paddingPixel = 8;
-			float density = Utils.getDisplayDensity( NeutronActivity.this );
+			float density = Utils.getDisplayDensity( NeutronNetworkActivity.this );
 			int paddingDp = (int)(paddingPixel * density);
 			l.setPadding(paddingDp, 0, 0, 0);
 			l.addView( tv1 );
@@ -163,7 +163,7 @@ public class NeutronNetworkActivity extends Activity {
 			tv6.setPadding(paddingDp, 0, 0, 0);
 			
 			if(subnetinfo.size()>0) {
-				TextView tv7 = new TextView(NeutronActivity.this);
+				TextView tv7 = new TextView(NeutronNetworkActivity.this);
 				tv7.setText(getString(R.string.SUBNETS)+":");
 				tv7.setTypeface( null, Typeface.BOLD );
 				l.addView(tv7);
@@ -178,7 +178,7 @@ public class NeutronNetworkActivity extends Activity {
 				name = N.getName().substring(0,14) + "..";
 			else
 				name = N.getName();
-			Utils.alertInfo( sv, getString(R.string.NETWORKINFO)+" " +name, NeutronActivity.this );
+			Utils.alertInfo( sv, getString(R.string.NETWORKINFO)+" " +name, NeutronNetworkActivity.this );
 		}
 	}
 	
@@ -245,53 +245,53 @@ public class NeutronNetworkActivity extends Activity {
 		public void onClick(View v) {
 			String netnameS = netname.getText().toString().trim();
 			if(netnameS.length()==0) {
-				Utils.alert(NeutronActivity.this.getString(R.string.NOEMPTYNAME), NeutronActivity.this);
+				Utils.alert(NeutronNetworkActivity.this.getString(R.string.NOEMPTYNAME), NeutronNetworkActivity.this);
 				netname.requestFocus();
 				return;
 			}
 			String netAddr = cidrNet.getText().toString().trim();
 			if(netAddr.length()!=0 && InetAddressUtils.isIPv4Address(netAddr) == false) {
-			    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netAddr, NeutronActivity.this);
+			    Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netAddr, NeutronNetworkActivity.this);
 			    cidrNet.requestFocus();
 			    return;
 		    }
 			String netMask = cidrMask.getText().toString().trim();
 			if(netMask.length()==0 || Integer.parseInt(netMask)>32 || Integer.parseInt(netMask)<0) {
-				Utils.alert(getString(R.string.INCORRECTMASKFORMAT), NeutronActivity.this);
+				Utils.alert(getString(R.string.INCORRECTMASKFORMAT), NeutronNetworkActivity.this);
 				cidrMask.requestFocus();
 			    return;
 			}
 			String startIPAddr = startIP.getText().toString().trim();
 			if( startIPAddr.length() == 0) {
-				Utils.alert(getString(R.string.NOTALLOWEDSTARTIPEMPTY), NeutronActivity.this);
+				Utils.alert(getString(R.string.NOTALLOWEDSTARTIPEMPTY), NeutronNetworkActivity.this);
 				startIP.requestFocus();
 			    return;
 			}
 			String endIPAddr = endIP.getText().toString().trim();
 			if( endIPAddr.length() == 0) {
-				Utils.alert(getString(R.string.NOTALLOWEDENDIPEMPTY), NeutronActivity.this);
+				Utils.alert(getString(R.string.NOTALLOWEDENDIPEMPTY), NeutronNetworkActivity.this);
 				startIP.requestFocus();
 			    return;
 			}
 			if(InetAddressUtils.isIPv4Address(startIPAddr) == false) {
-				Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + startIPAddr, NeutronActivity.this);
+				Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + startIPAddr, NeutronNetworkActivity.this);
 			    startIP.requestFocus();
 			    return;
 			}
 			if(InetAddressUtils.isIPv4Address(endIPAddr) == false) {
-				Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + endIPAddr, NeutronActivity.this);
+				Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + endIPAddr, NeutronNetworkActivity.this);
 			    endIP.requestFocus();
 			    return;
 			}
 			String gatewayIPAddr = gatewayIP.getText( ).toString( ).trim( );
 			if( endIPAddr.length() == 0) {
-				Utils.alert(getString(R.string.NOTALLOWEDGATEWAYIPEMPTY), NeutronActivity.this);
+				Utils.alert(getString(R.string.NOTALLOWEDGATEWAYIPEMPTY), NeutronNetworkActivity.this);
 				gatewayIP.requestFocus();
 			    return;
 			}
 			
 			//alertDialogCreateNetwork.dismiss();
-			NeutronActivity.this.progressDialogWaitStop.show( );
+			NeutronNetworkActivity.this.progressDialogWaitStop.show( );
 			(new AsyncTaskOSCreateNetwork()).execute(netnameS, netAddr + "/" + netMask, DNS.getText().toString().trim(), startIPAddr, endIPAddr, gatewayIPAddr);
 		}
     	
@@ -381,8 +381,8 @@ public class NeutronNetworkActivity extends Activity {
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.networkLayout)).addView( space );
     		((LinearLayout)findViewById(R.id.networkLayout)).addView( new NetworkListView(n,
-    																					  new NeutronActivity.InfoNetworkListener(),
-    																					  new NeutronActivity.DeleteNetworkListener(), this) );
+    																					  new NeutronNetworkActivity.InfoNetworkListener(),
+    																					  new NeutronNetworkActivity.DeleteNetworkListener(), this) );
     	}
     }
 
@@ -423,18 +423,18 @@ public class NeutronNetworkActivity extends Activity {
     	    super.onPostExecute(v);
     	    
      	    if(hasError) {
-     	    	Utils.alert( errorMessage, NeutronActivity.this );
-     	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
+     	    	Utils.alert( errorMessage, NeutronNetworkActivity.this );
+     	    	NeutronNetworkActivity.this.progressDialogWaitStop.dismiss( );
      	    	return;
      	    }
     	    
     	    try {
-    	    	NeutronActivity.this.networks = Network.parse(jsonBufNet, jsonBufSubnet);
-    	    	NeutronActivity.this.refreshView( );
+    	    	NeutronNetworkActivity.this.networks = Network.parse(jsonBufNet, jsonBufSubnet);
+    	    	NeutronNetworkActivity.this.refreshView( );
     	    } catch(ParseException pe) {
-    	    	Utils.alert("NeutronActivity.AsyncTaskOSListNetworks.onPostExecute: "+pe.getMessage( ), NeutronActivity.this );
+    	    	Utils.alert("NeutronActivity.AsyncTaskOSListNetworks.onPostExecute: "+pe.getMessage( ), NeutronNetworkActivity.this );
     	    }
-    	    NeutronActivity.this.progressDialogWaitStop.dismiss( );
+    	    NeutronNetworkActivity.this.progressDialogWaitStop.dismiss( );
     	}
     }
     
@@ -479,14 +479,14 @@ public class NeutronNetworkActivity extends Activity {
     	    super.onPostExecute(v);
     	    
      	    if(hasError) {
-     	    	Utils.alert( errorMessage, NeutronActivity.this );
-     	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
-     	    	(new NeutronActivity.AsyncTaskOSDeleteNetwork()).execute( netID, "false" );
+     	    	Utils.alert( errorMessage, NeutronNetworkActivity.this );
+     	    	NeutronNetworkActivity.this.progressDialogWaitStop.dismiss( );
+     	    	(new NeutronNetworkActivity.AsyncTaskOSDeleteNetwork()).execute( netID, "false" );
      	    	return;
      	    }
-    	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronActivity.this );
-    	    NeutronActivity.this.alertDialogCreateNetwork.dismiss();
-    	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
+    	    Utils.alert(getString(R.string.NETWORKCREATED), NeutronNetworkActivity.this );
+    	    NeutronNetworkActivity.this.alertDialogCreateNetwork.dismiss();
+    	    (new NeutronNetworkActivity.AsyncTaskOSListNetworks()).execute();
     	}
     }
     
@@ -525,16 +525,16 @@ public class NeutronNetworkActivity extends Activity {
     	    super.onPostExecute(v);
     	    
      	    if(hasError) {
-     	    	Utils.alert( errorMessage, NeutronActivity.this );
-     	    	NeutronActivity.this.progressDialogWaitStop.dismiss( );
-     	    	if(NeutronActivity.this.alertDialogCreateNetwork!=null)
-     	    		NeutronActivity.this.alertDialogCreateNetwork.dismiss();
-     	    	NeutronActivity.this.progressDialogWaitStop.dismiss();
+     	    	Utils.alert( errorMessage, NeutronNetworkActivity.this );
+     	    	NeutronNetworkActivity.this.progressDialogWaitStop.dismiss( );
+     	    	if(NeutronNetworkActivity.this.alertDialogCreateNetwork!=null)
+     	    		NeutronNetworkActivity.this.alertDialogCreateNetwork.dismiss();
+     	    	NeutronNetworkActivity.this.progressDialogWaitStop.dismiss();
      	    	return;
      	    }
      	    if(showMessage==true)
-     	    	Utils.alert(getString(R.string.NETWORKDELETED), NeutronActivity.this );
-    	    (new NeutronActivity.AsyncTaskOSListNetworks()).execute();
+     	    	Utils.alert(getString(R.string.NETWORKDELETED), NeutronNetworkActivity.this );
+    	    (new NeutronNetworkActivity.AsyncTaskOSListNetworks()).execute();
     	}
     }
 }

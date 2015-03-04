@@ -1,5 +1,6 @@
 package org.stackdroid.utils;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 import org.json.JSONArray;
@@ -9,13 +10,13 @@ import org.stackdroid.parse.ParseException;
 public class Router {
     private String name;
     private String ID;
-    private ExtGateway gw;
+    private Network gw;
     private String tenantID;
     
-    public Router( String name, String ID, ExtGateway gw, String tenantID ) {
-	  this.name = name;
-	  this.ID   = ID;
-	  this.gw   = gw;
+    public Router( String name, String ID, Network gw, String tenantID ) {
+	  this.name     = name;
+	  this.ID       = ID;
+	  this.gw       = gw;
 	  this.tenantID = tenantID;
     }
 
@@ -24,12 +25,12 @@ public class Router {
 	  return name;
     }
 
-    public String getName( ) { return name; }
-    public String getID( ) { return ID; }
-    public String getTenantID( ) { return tenantID; }
-    public ExtGateway getExternalGateway( ) { return gw; }
+    public String  getName( ) { return name; }
+    public String  getID( ) { return ID; }
+    public String  getTenantID( ) { return tenantID; }
+    public Network getGatewayNetwork( ) { return gw; }
     
-    public static Vector<Router> parse ( String jsonBuf ) throws ParseException {
+    public static Vector<Router> parse ( String jsonBuf, Hashtable<String, Network> nets ) throws ParseException {
     	Vector<Router> VR = new Vector<Router>( );
     
     	try {
@@ -41,11 +42,8 @@ public class Router {
        			String ID = routerObj.getString("id");
        			String tenantID = routerObj.getString("tenant_id");
        			JSONObject gwObj = routerObj.getJSONObject("external_gateway_info");
-       			ExtGateway gw = null;
-       			if(gwObj!=null) {
-       				gw = ExtGateway.parse( gwObj.toString() );
-       			}
-       			VR.add(new Router(name, ID, gw, tenantID ));
+       			String gwnetID = gwObj.getString("network_id");
+       			VR.add(new Router(name, ID, nets.get(gwnetID), tenantID ));
        		}
        		return VR;
         } catch(org.json.JSONException je) {
