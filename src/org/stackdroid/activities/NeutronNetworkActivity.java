@@ -225,7 +225,7 @@ public class NeutronNetworkActivity extends Activity {
         		return;
         	}
         } catch(Exception re) {
-        	Utils.alert("NeutronActivity.onCreate: "+re.getMessage(), this );
+        	Utils.alert("NeutronRouterActivity.onCreate: "+re.getMessage(), this );
         	return;
         }
         if(selectedUser.length()!=0)
@@ -432,7 +432,7 @@ public class NeutronNetworkActivity extends Activity {
     	    	NeutronNetworkActivity.this.networks = Network.parse(jsonBufNet, jsonBufSubnet);
     	    	NeutronNetworkActivity.this.refreshView( );
     	    } catch(ParseException pe) {
-    	    	Utils.alert("NeutronActivity.AsyncTaskOSListNetworks.onPostExecute: "+pe.getMessage( ), NeutronNetworkActivity.this );
+    	    	Utils.alert("NeutronRouterActivity.AsyncTaskOSListNetworks.onPostExecute: "+pe.getMessage( ), NeutronNetworkActivity.this );
     	    }
     	    NeutronNetworkActivity.this.progressDialogWaitStop.dismiss( );
     	}
@@ -496,7 +496,6 @@ public class NeutronNetworkActivity extends Activity {
 	 *
 	 */
     protected class AsyncTaskOSDeleteNetwork extends AsyncTask<String, Void, Void> {
-    	private String jsonBufNet;
     	private String errorMessage;
     	private boolean hasError = false;
     	boolean showMessage;

@@ -178,4 +178,5 @@
 	<string name="SERVERRPAUSED">Instanced paused</string>
 	<string name="SERVERRESUMED">Instance resumed</string>
 	<string name="HEAT">Orchestrator</string>
+	<string name="NOROUTERAVAIL">No router available</string>
 </resources>

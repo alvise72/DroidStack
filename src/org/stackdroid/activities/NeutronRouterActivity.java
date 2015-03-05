@@ -221,7 +221,7 @@ public class NeutronRouterActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    	setContentView( R.layout.networklist );
+    	setContentView( R.layout.routerlist );
 
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
@@ -235,7 +235,7 @@ public class NeutronRouterActivity extends Activity {
         		return;
         	}
         } catch(Exception re) {
-        	Utils.alert("NeutronActivity.onCreate: "+re.getMessage(), this );
+        	Utils.alert("NeutronRouterActivity.onCreate: "+re.getMessage(), this );
         	return;
         }
         if(selectedUser.length()!=0)
@@ -244,12 +244,12 @@ public class NeutronRouterActivity extends Activity {
 			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
         progressDialogWaitStop.show();
-        (new AsyncTaskOSListNetworks()).execute( );
+        (new AsyncTaskOSListRouters()).execute( );
         (Toast.makeText(this, getString(R.string.TOUCHNETTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
     
     //__________________________________________________________________________________	
-    protected class CreateNetworkClickListener implements OnClickListener {
+/*    protected class CreateNetworkClickListener implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
@@ -306,7 +306,8 @@ public class NeutronRouterActivity extends Activity {
 		}
     	
     }
-    
+*/   
+/*
     //__________________________________________________________________________________
     protected class CreateNetworkCancelClickListener implements OnClickListener {
 
@@ -316,15 +317,15 @@ public class NeutronRouterActivity extends Activity {
 		}
     	
     }
-
+*/
     
     /**
-    *
-    *
-    *
-    *
-    */
-    public void createNetwork( View v ) {
+     *
+     *
+     *
+     *
+     */
+/*   public void createNetwork( View v ) {
     	LayoutInflater li = LayoutInflater.from(this);
     	View promptsView = li.inflate(R.layout.my_dialog_create_network, null);
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -352,7 +353,8 @@ public class NeutronRouterActivity extends Activity {
         alertDialogCreateRouter.setCancelable(false);
         alertDialogCreateRouter.show();
     }
- 
+*/
+    
     /**
      *
      *
@@ -367,7 +369,7 @@ public class NeutronRouterActivity extends Activity {
 
     public void update(View v) {
     	progressDialogWaitStop.show();
-        (new AsyncTaskOSListNetworks()).execute( );
+        (new AsyncTaskOSListRouters()).execute( );
     }
     
     /**
@@ -375,25 +377,24 @@ public class NeutronRouterActivity extends Activity {
      *
      *
      *
+     *
+     *
      */
-    private void refreshView( ) {
-    	((LinearLayout)findViewById(R.id.networkLayout)).removeAllViews();
+    private void refreshView( String jsonBufRouter, String jsonBufNet, String jsonBufSubnet ) {
+    	((LinearLayout)findViewById(R.id.routerLayout)).removeAllViews();
     	if(routers.size()==0) {
-    		Utils.alert(getString(R.string.NONETAVAIL), this);	
+    		Utils.alert(getString(R.string.NOROUTERAVAIL), this);	
     		return;
     	}
     	
     	Iterator<Router> nit = routers.iterator();
     	while(nit.hasNext()) {
     		Router n = nit.next();
-    		((LinearLayout)findViewById( R.id.networkLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+    		((LinearLayout)findViewById( R.id.routerLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
     		View space = new View( this );
     		space.setMinimumHeight(10);
-    		((LinearLayout)findViewById(R.id.networkLayout)).addView( space );
-    		//((LinearLayout)findViewById(R.id.networkLayout)).addView( new NetworkListView(n,
-    		//																			  new NeutronActivity.InfoNetworkListener(),
-    		//																			  new NeutronActivity.DeleteNetworkListener(), this) );
-    	}
+    		((LinearLayout)findViewById(R.id.routerLayout)).addView( space );
+    		    	}
     }
 
 
@@ -405,8 +406,8 @@ public class NeutronRouterActivity extends Activity {
 	 * 
 	 *
 	 */
-    protected class AsyncTaskOSListNetworks extends AsyncTask<Void, Void, Void> {
-    	private String jsonBufNet, jsonBufSubnet;
+    protected class AsyncTaskOSListRouters extends AsyncTask<Void, Void, Void> {
+    	private String jsonBufNet, jsonBufSubnet, jsonBufRouter;
     	private String errorMessage;
     	private boolean hasError = false;
     	
@@ -416,8 +417,9 @@ public class NeutronRouterActivity extends Activity {
     		OSClient osc = OSClient.getInstance(U);
     		
     	    try {
-    	    	jsonBufNet 		 = osc.requestNetworks();
-    	    	jsonBufSubnet    = osc.requestSubNetworks();
+    	    	jsonBufNet 		 = osc.requestNetworks( );
+    	    	jsonBufSubnet    = osc.requestSubNetworks( );
+    	    	jsonBufRouter    = osc.requestRouters( );
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
     	    	hasError = true;
@@ -446,6 +448,7 @@ public class NeutronRouterActivity extends Activity {
     	    }
     	    */
     	    NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
+    	    NeutronRouterActivity.this.refreshView( jsonBufRouter, jsonBufNet, jsonBufSubnet);
     	}
     }
     
@@ -455,7 +458,7 @@ public class NeutronRouterActivity extends Activity {
 	 * 
 	 *
 	 */
-    protected class AsyncTaskOSCreateRouter extends AsyncTask<String, Void, Void> {
+/*    protected class AsyncTaskOSCreateRouter extends AsyncTask<String, Void, Void> {
     	private String jsonBufNet;
     	private String errorMessage;
     	private boolean hasError = false;
@@ -500,13 +503,15 @@ public class NeutronRouterActivity extends Activity {
     	    //(new NeutronActivity.AsyncTaskOSListNetworks()).execute();
     	}
     }
-    
+    */
     /**
+	 * 
+	 * 
 	 * 
 	 * 
 	 *
 	 */
-    protected class AsyncTaskOSDeleteRouter extends AsyncTask<String, Void, Void> {
+/*    protected class AsyncTaskOSDeleteRouter extends AsyncTask<String, Void, Void> {
     	private String jsonBufNet;
     	private String errorMessage;
     	private boolean hasError = false;
@@ -548,4 +553,5 @@ public class NeutronRouterActivity extends Activity {
     	    (new NeutronRouterActivity.AsyncTaskOSListNetworks()).execute();
     	}
     }
+    */
 }

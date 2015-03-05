@@ -106,6 +106,25 @@ public class OSClient {
      * 
      * 
      */
+    public String requestRouters( ) throws NotAuthorizedException, NotFoundException, 
+	   ServerException, ServiceUnAvailableOrInternalError,
+	   IOException, MalformedURLException, ProtocolException, ParseException
+	{
+    	checkToken( );
+    	return RESTClient.sendGETRequest(U.useSSL(), 
+    									 U.getNeutronEndpoint()+"/v2.0/routers.json",
+    									 U.getToken(),
+    									 new Vector<Pair<String,String>>());
+    }
+    
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
     public void volumeAttach( String volumeID, String serverID ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   ServerException, ServiceUnAvailableOrInternalError,
@@ -930,11 +949,10 @@ public class OSClient {
     {
  	   checkToken( );
  		
-    	String buf = RESTClient.sendGETRequest( U.useSSL(), 
-											    U.getNovaEndpoint() + "/os-security-groups",
-											    U.getToken(), 
-											    null );
-    	return buf;
+       return RESTClient.sendGETRequest( U.useSSL(), 
+										 U.getNovaEndpoint() + "/os-security-groups",
+										 U.getToken(), 
+										 null );
     }
 
     /**
@@ -950,12 +968,10 @@ public class OSClient {
     {
  	   checkToken( );
  		
-    	String buf = RESTClient.sendGETRequest( U.useSSL(), 
-    											U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
-    											U.getToken(), 
-    											null );
-		//Log.d("OSCLIENT", "buf="+buf);
-		return buf;
+       return RESTClient.sendGETRequest( U.useSSL(), 
+    									 U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
+    									 U.getToken(), 
+    									 null );
     }
 
     /**
