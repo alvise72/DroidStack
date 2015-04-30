@@ -105,13 +105,32 @@
         <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="horizontal" >
           <CheckBox
                         android:id="@+id/usesslCB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 			android:textSize="14sp"
                         android:text="@string/USESSL" />
+          <CheckBox
+                        android:id="@+id/insecureCB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+			android:textSize="14sp"
+			android:onClick="toggleSelectCA"
+                        android:text="@string/INSECURE" />
+        </LinearLayout>
+       <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+          <Button
+                        android:id="@+id/selectCABT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+			android:textSize="14sp"
+			android:onClick="selectCA"
+                        android:text="@string/SELECTCA" />
         </LinearLayout>
         <View
           android:layout_width="match_parent"

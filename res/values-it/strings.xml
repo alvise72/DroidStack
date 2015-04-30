@@ -171,4 +171,5 @@
 	<string name="SERVERRESUMED">Instance resumed</string>
 	<string name="HEAT">Orchestratore</string>
 	<string name="NOROUTERAVAIL">Nessun router disponibile</string>
+	<string name="INSECURE">Insicuro</string>
 </resources>

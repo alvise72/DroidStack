@@ -37,8 +37,7 @@
         </activity>
 
 	<activity 
-	    android:name="org.stackdroid.activities.CAFileExploreActivity"
-	    android:launchMode="singleInstance"
+	    android:name="org.stackdroid.activities.ListFileActivity"
 	    android:label="Select CA File"
 	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

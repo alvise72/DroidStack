@@ -7,11 +7,13 @@ import android.os.AsyncTask;
 import android.os.Looper;
 import android.widget.EditText;
 import android.widget.CheckBox;
+import android.widget.Button;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.text.InputType;
 import android.view.WindowManager;
 import android.view.View;
+import android.content.Intent;
 
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
@@ -55,12 +57,15 @@ public class UserAddActivity extends Activity {
     String last_password = Utils.getStringPreference("LAST_PASSWORD", "", this);
     boolean usessl       = Utils.getBoolPreference("LAST_USESSL", false, this);
     boolean showPWD      = Utils.getBoolPreference("LAST_SHOWPWD", false, this);
+    boolean insecure     = Utils.getBoolPreference("INSECURE", false, this);
     ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
     ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
     ((EditText)findViewById(R.id.usernameET)).setText( last_username );
     ((EditText)findViewById(R.id.passwordET)).setText( last_password );
     ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
     ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
+    ((CheckBox)findViewById(R.id.insecureCB)).setChecked( insecure );
+    ((CheckBox)findViewById(R.id.selectCABT)).setEnabled( insecure );
     
     EditText pwd = (EditText)this.findViewById(R.id.passwordET);
     CheckBox showpwd = (CheckBox)this.findViewById(R.id.checkBoxPWD);
@@ -117,6 +122,7 @@ public class UserAddActivity extends Activity {
       Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);     
       Utils.putBoolPreference("LAST_USESSL", ((CheckBox)findViewById(R.id.usesslCB)).isChecked( ), this);
       Utils.putBoolPreference("LAST_SHOWPWD", ((CheckBox)findViewById(R.id.checkBoxPWD)).isChecked(), this);
+      Utils.putBoolPreference("INSECURE", ((CheckBox)findViewById(R.id.insecureCB)).isChecked(), this);
   } 
   
     /**
@@ -191,60 +197,105 @@ public class UserAddActivity extends Activity {
     task.execute(endpoint,tenant,username,password,""+usessl);
   }
 
-  /**
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   */  
-  public void showPWD( View v ) {
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */  
+    public void showPWD( View v ) {
 	CheckBox showpwd = (CheckBox)v;
 	EditText pwd = (EditText)this.findViewById(R.id.passwordET);
 	if(showpwd.isChecked()==false) {
-		pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-		pwd.setSelection(pwd.getText().length());
+	    pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+	    pwd.setSelection(pwd.getText().length());
 	} else {
-		pwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+	    pwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 	}
-  }
-
-/**
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */ 
-  public void reset( View v ) {
-    EditText endpointET = (EditText)findViewById(org.stackdroid.R.id.endpointET);
-    EditText tenantET   = (EditText)findViewById(org.stackdroid.R.id.tenantnameET);
-    EditText usernameET = (EditText)findViewById(org.stackdroid.R.id.usernameET);
-    EditText passwordET = (EditText)findViewById(org.stackdroid.R.id.passwordET);
-    CheckBox usesslET   = (CheckBox)findViewById(org.stackdroid.R.id.usesslCB);
+    }
     
-    endpointET.setText("");
-    tenantET.setText("");
-    usernameET.setText("");
-    passwordET.setText("");
-    usesslET.setChecked( false );
-  }
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */ 
+    public void reset( View v ) {
+	EditText endpointET = (EditText)findViewById(org.stackdroid.R.id.endpointET);
+	EditText tenantET   = (EditText)findViewById(org.stackdroid.R.id.tenantnameET);
+	EditText usernameET = (EditText)findViewById(org.stackdroid.R.id.usernameET);
+	EditText passwordET = (EditText)findViewById(org.stackdroid.R.id.passwordET);
+	CheckBox usesslET   = (CheckBox)findViewById(org.stackdroid.R.id.usesslCB);
+	CheckBox insecure   = (CheckBox)findViewById(org.stackdroid.R.id.insecureCB);
+	Button   CABt       = (Button)findViewById(org.stackdroid.R.id.selectCABT);
+	endpointET.setText("");
+	tenantET.setText("");
+	usernameET.setText("");
+	passwordET.setText("");
+	usesslET.setChecked( false );
+	insecure.setChecked( false );
+	CABt.setEnabled( false );
+
+    }
+    
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */  
+    public void toggleSelectCA( View v ) {
+	((Button)(findViewById(R.id.selectCABT))).setEnabled( ((CheckBox)v).isChecked() );
+    }    
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */  
+    public void selectCA( View v ) {
+	//ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
+	Class<?> c = (Class<?>)ListFileActivity.class;
+	Intent I = new Intent( UserAddActivity.this, c );
+	startActivity(I);
+    }
+
     /**
      *
      *
