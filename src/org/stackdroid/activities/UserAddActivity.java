@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.view.View;
 import android.content.DialogInterface;
 import android.content.Intent;
-import ar.com.daidalos.afiledialog.FileChooserDialog;
 
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
@@ -290,11 +289,9 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void selectCA( View v ) {
-    	//FileChooserDialog dialog = new FileChooserDialog(getBaseContext());
-    	// dialog.show();
-    	//DialogChooseDirectory dialog = new DialogChooseDirectory(this, null, "/sdcard");
-    	FileChooserDialog dialog = new FileChooserDialog(this);
-        dialog.show();
+	Class<?> c = (Class<?>)FilePickerActivity.class;
+	Intent I = new Intent( UserAddActivity.this, c );
+	startActivity( I );
     }
 
     /**

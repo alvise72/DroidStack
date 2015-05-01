@@ -26,7 +26,7 @@
 	android:theme="@android:style/Theme.Holo.Light"
 	android:icon="@drawable/openstack">
 
-	<activity android:name="ar.com.daidalos.afiledialog.FileChooserActivity" />
+	<activity android:name="org.stackdroid.activities.FilePickerActivity" />
 
         <activity android:launchMode="singleInstance" android:name="org.stackdroid.MainActivity"
                   android:label="DroidStack"
