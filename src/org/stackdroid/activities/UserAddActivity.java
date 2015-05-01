@@ -1,19 +1,28 @@
 package org.stackdroid.activities;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-import android.os.Looper;
+import android.os.Environment;
 import android.widget.EditText;
 import android.widget.CheckBox;
 import android.widget.Button;
+import android.widget.Toast;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.WindowManager;
 import android.view.View;
+import android.content.DialogInterface;
 import android.content.Intent;
+import ar.com.daidalos.afiledialog.FileChooserDialog;
 
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
@@ -21,13 +30,12 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.comm.RESTClient;
-import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.R;
 
 public class UserAddActivity extends Activity {
 
     private org.stackdroid.utils.CustomProgressDialog progressDialogWaitStop = null;
-
+      
     /**
      *
      *
@@ -65,7 +73,7 @@ public class UserAddActivity extends Activity {
     ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
     ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
     ((CheckBox)findViewById(R.id.insecureCB)).setChecked( insecure );
-    ((CheckBox)findViewById(R.id.selectCABT)).setEnabled( insecure );
+    ((Button)findViewById(R.id.selectCABT)).setEnabled( insecure );
     
     EditText pwd = (EditText)this.findViewById(R.id.passwordET);
     CheckBox showpwd = (CheckBox)this.findViewById(R.id.checkBoxPWD);
@@ -213,14 +221,14 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void showPWD( View v ) {
-	CheckBox showpwd = (CheckBox)v;
-	EditText pwd = (EditText)this.findViewById(R.id.passwordET);
-	if(showpwd.isChecked()==false) {
-	    pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-	    pwd.setSelection(pwd.getText().length());
-	} else {
-	    pwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-	}
+    	CheckBox showpwd = (CheckBox)v;
+    	EditText pwd = (EditText)this.findViewById(R.id.passwordET);
+    	if(showpwd.isChecked()==false) {
+    		pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+    		pwd.setSelection(pwd.getText().length());
+    	} else {
+    		pwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+    	}
     }
     
     /**
@@ -239,21 +247,13 @@ public class UserAddActivity extends Activity {
      *
      */ 
     public void reset( View v ) {
-	EditText endpointET = (EditText)findViewById(org.stackdroid.R.id.endpointET);
-	EditText tenantET   = (EditText)findViewById(org.stackdroid.R.id.tenantnameET);
-	EditText usernameET = (EditText)findViewById(org.stackdroid.R.id.usernameET);
-	EditText passwordET = (EditText)findViewById(org.stackdroid.R.id.passwordET);
-	CheckBox usesslET   = (CheckBox)findViewById(org.stackdroid.R.id.usesslCB);
-	CheckBox insecure   = (CheckBox)findViewById(org.stackdroid.R.id.insecureCB);
-	Button   CABt       = (Button)findViewById(org.stackdroid.R.id.selectCABT);
-	endpointET.setText("");
-	tenantET.setText("");
-	usernameET.setText("");
-	passwordET.setText("");
-	usesslET.setChecked( false );
-	insecure.setChecked( false );
-	CABt.setEnabled( false );
-
+    	((EditText)findViewById(org.stackdroid.R.id.endpointET)).setText("");
+    	((EditText)findViewById(org.stackdroid.R.id.tenantnameET)).setText("");
+    	((EditText)findViewById(org.stackdroid.R.id.usernameET)).setText("");
+    	((EditText)findViewById(org.stackdroid.R.id.passwordET)).setText("");
+    	((CheckBox)findViewById(org.stackdroid.R.id.usesslCB)).setChecked( false );
+    	((CheckBox)findViewById(org.stackdroid.R.id.insecureCB)).setChecked( false );
+    	((Button)findViewById(org.stackdroid.R.id.selectCABT)).setEnabled( false );
     }
     
     /**
@@ -290,10 +290,11 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void selectCA( View v ) {
-	//ImageLaunchActivity.this.progressDialogWaitStop.dismiss( );
-	Class<?> c = (Class<?>)ListFileActivity.class;
-	Intent I = new Intent( UserAddActivity.this, c );
-	startActivity(I);
+    	//FileChooserDialog dialog = new FileChooserDialog(getBaseContext());
+    	// dialog.show();
+    	//DialogChooseDirectory dialog = new DialogChooseDirectory(this, null, "/sdcard");
+    	FileChooserDialog dialog = new FileChooserDialog(this);
+        dialog.show();
     }
 
     /**
