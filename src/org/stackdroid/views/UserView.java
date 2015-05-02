@@ -18,6 +18,8 @@ public class UserView extends LinearLayout {
     private TextViewWithView     textTenantName = null;
     private TextViewWithView     textEndpoint   = null;
     private TextViewWithView	 textSSL        = null;
+	private TextViewWithView     textInsecure       = null;
+	private TextViewWithView     textCAFile         = null;
 
     private ImageButtonWithView  deleteUser     = null;
     private ImageButtonWithView  infoUser       = null;
@@ -77,27 +79,53 @@ public class UserView extends LinearLayout {
 		ename = ename.substring(0,31)+"...";
 	}
 	textEndpoint.setText(ename);
-	textEndpoint.setTextColor( Color.parseColor("#333333") );
-	textEndpoint.setOnClickListener( selectUserListener );
-	textEndpoint.setTextColor( Color.parseColor("#BBBBBB"));
+	textEndpoint.setTextColor(Color.parseColor("#333333"));
+	textEndpoint.setOnClickListener(selectUserListener);
+	textEndpoint.setTextColor(Color.parseColor("#BBBBBB"));
 
 	textSSL = new TextViewWithView( ctx, (UserView)this );
-	textSSL.setText("SSL: ");
+	//textSSL.setText("SSL: ");
 	textSSL.setOnClickListener(selectUserListener);
 	if(U.useSSL()==true) {
 		textSSL.setTextColor(Color.parseColor("#FF0000"));
-		textSSL.setText("ssl: yes");
+		textSSL.setText("SSL: yes");
 		textSSL.setTypeface( null, Typeface.BOLD );
 	} else {
 		textSSL.setTextColor( Color.parseColor("#BBBBBB"));
-		textSSL.setText("ssl: no");
+		textSSL.setText("SSL: no");
 		textSSL.setTypeface( null, Typeface.NORMAL );
 	}
+
+		textInsecure = new TextViewWithView( ctx, (UserView)this );
+		textInsecure.setOnClickListener(selectUserListener);
+		if(U.getInsecure()) {
+			textInsecure.setTextColor(Color.parseColor("#FF0000"));
+			textInsecure.setText("Verify server's certificate: yes");
+			textInsecure.setTypeface(null, Typeface.BOLD);
+		} else {
+			textInsecure.setTextColor( Color.parseColor("#BBBBBB"));
+			textInsecure.setText("Verify server's certificate: no");
+			textInsecure.setTypeface( null, Typeface.NORMAL );
+		}
+		textCAFile=new TextViewWithView( ctx, (UserView)this );
+		textCAFile.setOnClickListener(selectUserListener);
+		if(U.getInsecure()) {
+			textCAFile.setTextColor( Color.parseColor("#BBBBBB"));
+			textCAFile.setText("CAFile: N/A");
+			textCAFile.setTypeface( null, Typeface.NORMAL );
+		} else {
+			textCAFile.setTextColor(Color.parseColor("#FF0000"));
+			textCAFile.setText("CAFile: " + U.getCAFile().getPath() );
+			textCAFile.setTypeface(null, Typeface.BOLD);
+		}
 
 	userLayout.addView(textUserName);
 	userLayout.addView(textTenantName);
 	userLayout.addView(textEndpoint);
 	userLayout.addView(textSSL);
+		userLayout.addView(textInsecure);
+		userLayout.addView(textCAFile);
+
 	//userLayout.setOnClickListener( selectUserListener );
 
 	row.addView(userLayout);

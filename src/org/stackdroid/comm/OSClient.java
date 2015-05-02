@@ -1,5 +1,6 @@
 package org.stackdroid.comm;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -82,18 +83,22 @@ public class OSClient {
     private void checkToken( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException {
     	if(U.getTokenExpireTime() <= Utils.now() + 5) {
-    			String jsonBuffer = RESTClient.requestToken( U.useSSL() ,
-	    												 	 U.getIdentityEndpoint() + "/tokens",
-	    												 	 U.getTenantName(),
-	    												 	 U.getUserName(),
-	    												 	 U.getPassword() );
+    			String jsonBuffer = RESTClient.requestToken(U.useSSL(),
+						U.getIdentityEndpoint() + "/tokens",
+						U.getTenantName(),
+						U.getUserName(),
+						U.getPassword());
     			String  pwd = U.getPassword();
     			String  edp = U.getIdentityEndpoint();
     			boolean ssl = U.useSSL();
+				boolean insecure = U.getInsecure();
+				File CAFile = U.getCAFile();
     			U = User.parse( jsonBuffer );
     			U.setPassword( pwd );
-    			U.setSSL( ssl );
-    			U.toFile( Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+    			U.setSSL(ssl);
+    			U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+				U.setInsecure(insecure);
+				U.setCAFile( CAFile );
     		
 		}
     }

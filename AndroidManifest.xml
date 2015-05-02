@@ -61,10 +61,10 @@
 	    	android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
           />
-
+        <!-- NON USARE SINGLEINSTANCE altrimenti non funziona onActivityResult -->
         <activity
             android:name="org.stackdroid.activities.UserAddActivity" 
-            android:launchMode="singleInstance" 
+            android:launchMode="singleTop"
             android:label="@string/ADDNEWUSER"
 	    	android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

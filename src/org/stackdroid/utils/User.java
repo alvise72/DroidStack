@@ -23,7 +23,7 @@ import org.stackdroid.parse.ParseException;
 
 public class User implements Serializable, Comparable<User> {
 
-    private static final long serialVersionUID = 3000000000000000003L;
+    private static final long serialVersionUID = 3000000000000000004L;
 
     private String  userName;
     private String  userID;
@@ -50,6 +50,8 @@ public class User implements Serializable, Comparable<User> {
     private String cinder1Endpoint;
     private String cinder2Endpoint;
     private String identityHostname;
+	private File   CAFile;
+	private boolean insecure;
     //private URL    identityUrl;
     
     public User( String _userName, 
@@ -71,7 +73,9 @@ public class User implements Serializable, Comparable<User> {
     			 String neutronEndpoint,
     			 String cinder1Endpoint,
     			 String cinder2Endpoint,
-    			 String identityHostname) 
+    			 String identityHostname,
+				 File CAFile,
+				 boolean insecure)
     {
         userName       			 = _userName;
         userID         			 = _userID;
@@ -94,6 +98,8 @@ public class User implements Serializable, Comparable<User> {
         this.cinder1Endpoint	 = cinder1Endpoint;
         this.cinder2Endpoint	 = cinder2Endpoint;
         this.identityHostname    = identityHostname;
+		this.CAFile				 = CAFile;
+		this.insecure            = insecure;
     }
     
     public String getIdentityHostname( ) { 
@@ -102,6 +108,8 @@ public class User implements Serializable, Comparable<User> {
     
     public void setPassword( String _password ) { password = _password ;} 
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
+	public void setCAFile( File cafile ) { this.CAFile = cafile; }
+	public void setInsecure( boolean insecure ) { this.insecure=insecure; }
     
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
@@ -125,6 +133,8 @@ public class User implements Serializable, Comparable<User> {
     public String getNeutronEndpoint( ) { return neutronEndpoint; }
     public String getCinder1Endpoint( ) { return cinder1Endpoint; }
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
+	public File   getCAFile( ) { return CAFile; }
+	public boolean getInsecure( ) { return insecure; }
     
     public String getFilename( ) {
     	String filename = getUserID( );
@@ -158,6 +168,8 @@ public class User implements Serializable, Comparable<User> {
 	    ",password="+password+
 	    ",usessl="+usessl+
 	    ",role_admin="+role_admin+
+				",insecure="+insecure+
+				",CAFile="+CAFile+
 	    "}";
     }
 
@@ -192,7 +204,7 @@ public class User implements Serializable, Comparable<User> {
     		ois.close( );
     		return U;
     	} catch(IOException ioe) {
-    		(new File(filename)).delete();
+    		(new File(filename)).delete( );
     		
     		if(ioe.getMessage( ).contains("Incompatible class (SUID")) {
     			return null;
@@ -224,7 +236,14 @@ public class User implements Serializable, Comparable<User> {
 	    		throw new IOException("User.toFile.OutputStream.write/close: "+ioe.getMessage() );
 		}
     }
-    
+
+	/*
+     *
+     *
+     *
+     *
+     *
+     */
     public static User parse( String jsonString ) throws ParseException
     {
       try {
@@ -300,19 +319,7 @@ public class User implements Serializable, Comparable<User> {
     	  } catch(Exception e) {
     		  addrS = identityEP;
     	  }
-    	  
-/*    	  
-    	  String identityIP = "";
-    	  if(identityEP!=null && identityEP.length()!=0) {
-    		  InetAddress address = null;
-    		  try {
-    		      address = InetAddress.getByName(identityEP);
-    		  } catch (UnknownHostException e) {
-    		      
-    		  }
-    		  identityIP = address.getHostAddress();
-    	  }
-*/    	  
+
     	  User U = new User( 
     			  			 username, 
     			  			 userID, 
@@ -333,7 +340,9 @@ public class User implements Serializable, Comparable<User> {
     			  			 neutronEP,
     			  			 cinder1EP,
     			  			 cinder2EP,
-    			  			 addrS);
+    			  			 addrS,
+				  			 null,
+				             true);
     	  return U;
       } catch(org.json.JSONException je) {
     	  throw new ParseException( je.getMessage( ) );

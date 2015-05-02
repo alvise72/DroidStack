@@ -26,39 +26,6 @@ public class FilePickerActivity extends ListActivity {
     private String root = Environment.getExternalStorageDirectory( ).getAbsolutePath();
     private TextView myPath;
 
-    /**
-     *
-     *
-     *
-     *
-     *   
-    class customAdapter extends ArrayAdapter<File> {
-	@Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            int type = getItemViewType(position);
-            System.out.println("getView " + position + " " + convertView + " type = " + type);
-            if (convertView == null) {
-                holder = new ViewHolder();
-                switch (type) {
-                    case TYPE_ITEM:
-                        convertView = mInflater.inflate(R.layout.item1, null);
-                        holder.textView = (TextView)convertView.findViewById(R.id.text);
-                        break;
-                    case TYPE_SEPARATOR:
-                        convertView = mInflater.inflate(R.layout.item2, null);
-                        holder.textView = (TextView)convertView.findViewById(R.id.textSeparator);
-                        break;
-                }
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder)convertView.getTag();
-            }
-            holder.textView.setText(mData.get(position));
-            return convertView;
-        }
-    }
-    */
     /** Called when the activity is first created. */
     @Override
 
@@ -118,30 +85,27 @@ public class FilePickerActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	File file = new File(path.get(position));
 	
-	if (file.isDirectory())
+		if (file.isDirectory())
 	    {
-		if(file.canRead())
-		    getDir(path.get(position));
-		else {
-		    new AlertDialog.Builder(this)
-			.setIcon(R.drawable.icon)
-			.setTitle("[" + file.getName() + "] folder can't be read!")
-			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-				}
-			    }).show();   
+			if(file.canRead())
+		   		 getDir(path.get(position));
+			else {
+		   	 new AlertDialog.Builder(this)
+				.setIcon(R.drawable.icon)
+				.setTitle("[" + file.getName() + "] folder can't be read!")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				}).show();
+			}
+	    } else {
+			//Utils.putStringPreference("CAFILE", file.getAbsolutePath(), FilePickerActivity.this);
+	    	Intent returnIntent = getIntent();
+			returnIntent.putExtra( "selectedcafile", file.getAbsolutePath() );
+	   	 	setResult(Activity.RESULT_OK, returnIntent);
+	   		finish();
 		}
-	    }
-	else {	
-	    /*Intent returnIntent = getIntent();
-	    returnIntent.putExtra( "selectedcafile", file.getAbsolutePath() );
-	    setResult(Activity.RESULT_OK,returnIntent);
-	    finish();
-	    */
-	    Utils.putStringPreference("CAFILE", file.getAbsolutePath(), FilePickerActivity.this);
-	    finish( );
-	}
     
     }
 }

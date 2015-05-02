@@ -309,17 +309,17 @@ public class UserAddActivity extends Activity {
      *
      *
      */  
-   @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       /*
-	 if(data!=null) {
+
+	  if(data!=null) {
 	    String result=data.getStringExtra("selectedcafile");
 	    Log.d("USERADDACTIVITY-onActivityResult", "result="+result);
 	    ((TextView)findViewById(R.id.CAFILE)).setText(result);
-	}
-       */
-       String cafile = Utils.getStringPreference("CAFILE", null, this);
-       Log.d("USERADDACTIVITY-onActivityResult", "result="+cafile);
+	  }
+
+      // String cafile = Utils.getStringPreference("CAFILE", null, this);
+      // Log.d("USERADDonActivityResult", "result="+cafile);
     }
 
     /**
