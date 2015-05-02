@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.content.Intent;
+import android.util.Log;
 import org.stackdroid.R;
+import org.stackdroid.utils.Utils;
 
 public class FilePickerActivity extends ListActivity {
 
@@ -129,19 +133,15 @@ public class FilePickerActivity extends ListActivity {
 			    }).show();   
 		}
 	    }
-	else {		
-		new AlertDialog.Builder(this)
-		    .setIcon(R.drawable.icon)		    
-		    .setTitle("[" + file.getName() + "]")
-		    .setPositiveButton("OK", 				       
-				       new DialogInterface.OnClickListener() {
-					   @Override
-					   public void onClick(DialogInterface dialog, int which) {
-					       // TODO Auto-generated method stub
-					   }
-					   
-				       }).show();	
-	    }	
-    }
+	else {	
+	    /*Intent returnIntent = getIntent();
+	    returnIntent.putExtra( "selectedcafile", file.getAbsolutePath() );
+	    setResult(Activity.RESULT_OK,returnIntent);
+	    finish();
+	    */
+	    Utils.putStringPreference("CAFILE", file.getAbsolutePath(), FilePickerActivity.this);
+	    finish( );
+	}
     
+    }
 }

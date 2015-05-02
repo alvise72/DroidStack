@@ -7,6 +7,7 @@ import java.io.IOException;
 import android.os.Bundle; 
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.CheckBox;
 import android.widget.Button;
@@ -72,7 +73,7 @@ public class UserAddActivity extends Activity {
     ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
     ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
     ((CheckBox)findViewById(R.id.insecureCB)).setChecked( insecure );
-    ((Button)findViewById(R.id.selectCABT)).setEnabled( insecure );
+    ((Button)findViewById(R.id.selectCABT)).setEnabled( !insecure );
     
     EditText pwd = (EditText)this.findViewById(R.id.passwordET);
     CheckBox showpwd = (CheckBox)this.findViewById(R.id.checkBoxPWD);
@@ -251,7 +252,7 @@ public class UserAddActivity extends Activity {
     	((EditText)findViewById(org.stackdroid.R.id.usernameET)).setText("");
     	((EditText)findViewById(org.stackdroid.R.id.passwordET)).setText("");
     	((CheckBox)findViewById(org.stackdroid.R.id.usesslCB)).setChecked( false );
-    	((CheckBox)findViewById(org.stackdroid.R.id.insecureCB)).setChecked( false );
+    	((CheckBox)findViewById(org.stackdroid.R.id.insecureCB)).setChecked( true );
     	((Button)findViewById(org.stackdroid.R.id.selectCABT)).setEnabled( false );
     }
     
@@ -271,8 +272,9 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void toggleSelectCA( View v ) {
-	((Button)(findViewById(R.id.selectCABT))).setEnabled( ((CheckBox)v).isChecked() );
-    }    
+	((Button)(findViewById(R.id.selectCABT))).setEnabled( !((CheckBox)v).isChecked() );
+    }  
+  
     /**
      *
      *
@@ -289,9 +291,35 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void selectCA( View v ) {
-	Class<?> c = (Class<?>)FilePickerActivity.class;
-	Intent I = new Intent( UserAddActivity.this, c );
-	startActivity( I );
+	startActivityForResult( new Intent( UserAddActivity.this, (Class<?>)FilePickerActivity.class ), 1 );
+    }
+ 
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */  
+   @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       /*
+	 if(data!=null) {
+	    String result=data.getStringExtra("selectedcafile");
+	    Log.d("USERADDACTIVITY-onActivityResult", "result="+result);
+	    ((TextView)findViewById(R.id.CAFILE)).setText(result);
+	}
+       */
+       String cafile = Utils.getStringPreference("CAFILE", null, this);
+       Log.d("USERADDACTIVITY-onActivityResult", "result="+cafile);
     }
 
     /**

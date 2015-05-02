@@ -120,17 +120,27 @@
 			android:onClick="toggleSelectCA"
                         android:text="@string/INSECURE" />
         </LinearLayout>
-       <LinearLayout
+        <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="horizontal" >
           <Button
-                        android:id="@+id/selectCABT"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-			android:textSize="14sp"
-			android:onClick="selectCA"
-                        android:text="@string/SELECTCA" />
+                    android:id="@+id/selectCABT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:onClick="selectCA"
+                    android:text="@string/SELECTCA" />
+          <TextView
+		android:id="@+id/CAFILE"
+		android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="14sp"
+        	android:paddingLeft="4dp"
+                android:ems="10"	
+	 	   />
         </LinearLayout>
         <View
           android:layout_width="match_parent"

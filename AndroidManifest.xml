@@ -38,12 +38,6 @@
           </intent-filter>
         </activity>
 
-	<activity 
-	    android:name="org.stackdroid.activities.ListFileActivity"
-	    android:label="Select CA File"
-	    android:parentActivityName="org.stackdroid.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-	   />
 	<activity
 	    android:name="org.stackdroid.activities.UsersActivity" 
 	    android:launchMode="singleInstance" 
