@@ -156,6 +156,12 @@ public class UsersActivity extends Activity {
 		  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y H:mm:ss");
 		  
 		  t22.setText("   "+sdf.format(new Date(U.getTokenExpireTime()*1000)) );
+
+		  TextView t23 = new TextView( UsersActivity.this );
+		  t23.setText("Verify server's certificate");
+		  t23.setTypeface(null, Typeface.BOLD);
+		  TextView t24 = new TextView (UsersActivity.this );
+		  t24.setText( " "+(!U.getInsecure() ? "yes" : "no"));
 		  
 		  
 		  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -191,6 +197,8 @@ public class UsersActivity extends Activity {
 		  l.addView( t20 );
 		  l.addView( t21 );
 		  l.addView( t22 );
+		  l.addView( t23 );
+		  l.addView( t24 );
 		  
 		  sv.addView(l);
 		  Utils.alertInfo(sv, UsersActivity.this.getString(R.string.USERINFO), UsersActivity.this);

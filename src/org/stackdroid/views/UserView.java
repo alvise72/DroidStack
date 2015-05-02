@@ -98,11 +98,11 @@ public class UserView extends LinearLayout {
 
 		textInsecure = new TextViewWithView( ctx, (UserView)this );
 		textInsecure.setOnClickListener(selectUserListener);
-		if(U.getInsecure()) {
+		if(!U.getInsecure()) { // not insecure, Secure
 			textInsecure.setTextColor(Color.parseColor("#FF0000"));
 			textInsecure.setText("Verify server's certificate: yes");
 			textInsecure.setTypeface(null, Typeface.BOLD);
-		} else {
+		} else { // Insecure
 			textInsecure.setTextColor( Color.parseColor("#BBBBBB"));
 			textInsecure.setText("Verify server's certificate: no");
 			textInsecure.setTypeface( null, Typeface.NORMAL );

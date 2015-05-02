@@ -88,18 +88,18 @@ public class OSClient {
 						U.getTenantName(),
 						U.getUserName(),
 						U.getPassword());
-    			String  pwd = U.getPassword();
-    			String  edp = U.getIdentityEndpoint();
-    			boolean ssl = U.useSSL();
-				boolean insecure = U.getInsecure();
-				File CAFile = U.getCAFile();
-    			U = User.parse( jsonBuffer );
-    			U.setPassword( pwd );
-    			U.setSSL(ssl);
-    			U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
-				U.setInsecure(insecure);
-				U.setCAFile( CAFile );
-    		
+    					String  pwd = U.getPassword();
+    					String  edp = U.getIdentityEndpoint();
+    					boolean ssl = U.useSSL();
+						boolean insecure = U.getInsecure();
+						File CAFile = U.getCAFile();
+    					U = User.parse( jsonBuffer );
+    					U.setPassword( pwd );
+    					U.setSSL(ssl);
+    					U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+						U.setInsecure(insecure);
+						U.setCAFile( CAFile );
+
 		}
     }
 
