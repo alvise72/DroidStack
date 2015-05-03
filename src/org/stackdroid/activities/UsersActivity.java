@@ -161,7 +161,7 @@ public class UsersActivity extends Activity {
 		  t23.setText("Verify server's certificate");
 		  t23.setTypeface(null, Typeface.BOLD);
 		  TextView t24 = new TextView (UsersActivity.this );
-		  t24.setText( " "+(!U.getInsecure() ? "yes" : "no"));
+		  t24.setText( " "+(U.getVerifyServerCert() ? "yes" : "no"));
 		  
 		  
 		  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

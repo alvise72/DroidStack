@@ -91,13 +91,13 @@ public class OSClient {
     					String  pwd = U.getPassword();
     					String  edp = U.getIdentityEndpoint();
     					boolean ssl = U.useSSL();
-						boolean insecure = U.getInsecure();
+						boolean verifyServerCert = U.getVerifyServerCert();
 						File CAFile = U.getCAFile();
     					U = User.parse( jsonBuffer );
     					U.setPassword( pwd );
     					U.setSSL(ssl);
     					U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
-						U.setInsecure(insecure);
+						U.setVerifyServerCert(verifyServerCert);
 						U.setCAFile( CAFile );
 
 		}

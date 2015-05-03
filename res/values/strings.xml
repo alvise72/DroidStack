@@ -179,7 +179,8 @@
 	<string name="SERVERRESUMED">Instance resumed</string>
 	<string name="HEAT">Orchestrator</string>
 	<string name="NOROUTERAVAIL">No router available</string>
-	<string name="INSECURE">Insecure</string>
+	<string name="VERIFYSERVERCERT">Verify server\'s certificate</string>
 	<string name="SELECTCA">CA File</string>
+    <string name="INVALIDCA">Expired or unreadable/corrupted CA File</string>
 
 </resources>

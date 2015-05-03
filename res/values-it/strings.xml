@@ -171,5 +171,6 @@
 	<string name="SERVERRESUMED">Instance resumed</string>
 	<string name="HEAT">Orchestratore</string>
 	<string name="NOROUTERAVAIL">Nessun router disponibile</string>
-	<string name="INSECURE">Insicuro</string>
+	<string name="VERIFYSERVERCERT">Verifica certificato server</string>
+    <string name="INVALIDCA">Il file CA è scaduto, illeggibile o corrotto</string>
 </resources>

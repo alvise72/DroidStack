@@ -12,11 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
-
-//import org.stackdroid.R;
-
-
-
+import java.security.cert.*;
+import javax.net.ssl.HttpsURLConnection;
 
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
@@ -31,7 +28,27 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class Utils {
-	
+
+    public static boolean isValid( File x509file ) {
+        X509Certificate cert = null;
+        try {
+            FileInputStream inStream = new FileInputStream( x509file );
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            cert = (X509Certificate)cf.generateCertificate(inStream);
+        } catch (Exception io) {
+            return false;
+        }
+        boolean valid=true;
+        try {
+            cert.checkValidity( );
+        } catch(CertificateExpiredException e) {
+            valid=false;
+        } catch(CertificateNotYetValidException e) {
+            valid=false;
+        }
+        return valid;
+    }
+
     /**
      *
      *

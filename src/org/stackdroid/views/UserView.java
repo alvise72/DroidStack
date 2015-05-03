@@ -98,7 +98,7 @@ public class UserView extends LinearLayout {
 
 		textInsecure = new TextViewWithView( ctx, (UserView)this );
 		textInsecure.setOnClickListener(selectUserListener);
-		if(!U.getInsecure()) { // not insecure, Secure
+		if(U.getVerifyServerCert()) { //  secure
 			textInsecure.setTextColor(Color.parseColor("#FF0000"));
 			textInsecure.setText("Verify server's certificate: yes");
 			textInsecure.setTypeface(null, Typeface.BOLD);
@@ -109,7 +109,7 @@ public class UserView extends LinearLayout {
 		}
 		textCAFile=new TextViewWithView( ctx, (UserView)this );
 		textCAFile.setOnClickListener(selectUserListener);
-		if(U.getInsecure()) {
+		if(!U.getVerifyServerCert()) {
 			textCAFile.setTextColor( Color.parseColor("#BBBBBB"));
 			textCAFile.setText("CAFile: N/A");
 			textCAFile.setTypeface( null, Typeface.NORMAL );

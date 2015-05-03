@@ -35,7 +35,9 @@ import org.stackdroid.R;
 public class UserAddActivity extends Activity {
 
     private org.stackdroid.utils.CustomProgressDialog progressDialogWaitStop = null;
-      
+
+    private boolean m_validcafile = false;
+
     /**
      *
      *
@@ -59,21 +61,25 @@ public class UserAddActivity extends Activity {
     progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
     progressDialogWaitStop.setCancelable(false);
     progressDialogWaitStop.setCanceledOnTouchOutside(false);
-    String last_endpoint = Utils.getStringPreference("LAST_ENDPOINT", "", this);
-    String last_tenant   = Utils.getStringPreference("LAST_TENANT", "", this);
-    String last_username = Utils.getStringPreference("LAST_USERNAME", "", this);
-    String last_password = Utils.getStringPreference("LAST_PASSWORD", "", this);
-    boolean usessl       = Utils.getBoolPreference("LAST_USESSL", false, this);
-    boolean showPWD      = Utils.getBoolPreference("LAST_SHOWPWD", false, this);
-    boolean insecure     = Utils.getBoolPreference("INSECURE", false, this);
+
+    String last_endpoint     = Utils.getStringPreference("LAST_ENDPOINT", "", this);
+    String last_tenant       = Utils.getStringPreference("LAST_TENANT", "", this);
+    String last_username     = Utils.getStringPreference("LAST_USERNAME", "", this);
+    String last_password     = Utils.getStringPreference("LAST_PASSWORD", "", this);
+    boolean usessl           = Utils.getBoolPreference("LAST_USESSL", false, this);
+    boolean showPWD          = Utils.getBoolPreference("LAST_SHOWPWD", false, this);
+    boolean verifyservercert = Utils.getBoolPreference("LAST_VERIFYSERVERCERT", false, this);
+    String last_cafile       = Utils.getStringPreference("LAST_CAFILE", "", this);
+
     ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
     ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
     ((EditText)findViewById(R.id.usernameET)).setText( last_username );
     ((EditText)findViewById(R.id.passwordET)).setText( last_password );
-    ((CheckBox)findViewById(R.id.usesslCB)).setChecked( usessl );
+    ((CheckBox)findViewById(R.id.usesslCB)).setChecked(usessl);
     ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
-    ((CheckBox)findViewById(R.id.insecureCB)).setChecked( insecure );
-    ((Button)findViewById(R.id.selectCABT)).setEnabled( !insecure );
+    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked( verifyservercert );
+    ((Button)findViewById(R.id.selectCABT)).setEnabled(verifyservercert);
+    ((TextView)findViewById(R.id.CAFILE)).setText(last_cafile);
     
     EditText pwd = (EditText)this.findViewById(R.id.passwordET);
     CheckBox showpwd = (CheckBox)this.findViewById(R.id.checkBoxPWD);
@@ -124,13 +130,19 @@ public class UserAddActivity extends Activity {
   @Override
   public void onPause( ) {
     super.onPause( );
-      Utils.putStringPreference("LAST_ENDPOINT", ((EditText)findViewById(R.id.endpointET)).getText().toString().trim(), this);
-      Utils.putStringPreference("LAST_TENANT",   ((EditText)findViewById(R.id.tenantnameET)  ).getText().toString().trim(), this);
+      Utils.putStringPreference("LAST_ENDPOINT", ((EditText) findViewById(R.id.endpointET)).getText().toString().trim(), this);
+      Utils.putStringPreference("LAST_TENANT", ((EditText) findViewById(R.id.tenantnameET)).getText().toString().trim(), this);
       Utils.putStringPreference("LAST_USERNAME", ((EditText)findViewById(R.id.usernameET)).getText().toString().trim(), this);
-      Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);     
-      Utils.putBoolPreference("LAST_USESSL", ((CheckBox)findViewById(R.id.usesslCB)).isChecked( ), this);
-      Utils.putBoolPreference("LAST_SHOWPWD", ((CheckBox)findViewById(R.id.checkBoxPWD)).isChecked(), this);
-      Utils.putBoolPreference("INSECURE", ((CheckBox)findViewById(R.id.insecureCB)).isChecked(), this);
+      Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);
+      Utils.putBoolPreference("LAST_USESSL", ((CheckBox) findViewById(R.id.usesslCB)).isChecked(), this);
+      Utils.putBoolPreference("LAST_SHOWPWD", ((CheckBox) findViewById(R.id.checkBoxPWD)).isChecked(), this);
+      if(m_validcafile ) {
+        Utils.putBoolPreference("LAST_VERIFYSERVERCERT", ((CheckBox) findViewById(R.id.verifyServerCertCB)).isChecked(), this);
+        Utils.putStringPreference("LAST_CAFILE", ((TextView) findViewById(R.id.CAFILE)).getText().toString(), this);
+      } else {
+        Utils.putBoolPreference("LAST_VERIFYSERVERCERT", false, this);
+        Utils.putStringPreference("LAST_CAFILE", "", this);
+      }
   } 
   
     /**
@@ -251,9 +263,11 @@ public class UserAddActivity extends Activity {
     	((EditText)findViewById(org.stackdroid.R.id.tenantnameET)).setText("");
     	((EditText)findViewById(org.stackdroid.R.id.usernameET)).setText("");
     	((EditText)findViewById(org.stackdroid.R.id.passwordET)).setText("");
-    	((CheckBox)findViewById(org.stackdroid.R.id.usesslCB)).setChecked( false );
-    	((CheckBox)findViewById(org.stackdroid.R.id.insecureCB)).setChecked( true );
-    	((Button)findViewById(org.stackdroid.R.id.selectCABT)).setEnabled( false );
+    	((CheckBox)findViewById(org.stackdroid.R.id.usesslCB)).setChecked(false);
+    	((CheckBox)findViewById(org.stackdroid.R.id.verifyServerCertCB)).setChecked( false );
+    	((Button)findViewById(org.stackdroid.R.id.selectCABT)).setEnabled(false);
+        ((TextView)findViewById(R.id.CAFILE)).setText("");
+        m_validcafile=false;
     }
     
     /**
@@ -272,7 +286,7 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void toggleSelectCA( View v ) {
-	((Button)(findViewById(R.id.selectCABT))).setEnabled( !((CheckBox)v).isChecked() );
+	  ((Button)(findViewById(R.id.selectCABT))).setEnabled( ((CheckBox)v).isChecked() );
     }  
   
     /**
@@ -291,7 +305,7 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void selectCA( View v ) {
-	startActivityForResult( new Intent( UserAddActivity.this, (Class<?>)FilePickerActivity.class ), 1 );
+	  startActivityForResult( new Intent( UserAddActivity.this, (Class<?>)FilePickerActivity.class ), 1 );
     }
  
     /**
@@ -311,35 +325,18 @@ public class UserAddActivity extends Activity {
      */  
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+      m_validcafile=false;
 	  if(data!=null) {
 	    String result=data.getStringExtra("selectedcafile");
-	    Log.d("USERADDACTIVITY-onActivityResult", "result="+result);
-	    ((TextView)findViewById(R.id.CAFILE)).setText(result);
+        if(!Utils.isValid(new File(result))) {
+          ((TextView)findViewById(R.id.CAFILE)).setText("EXPIRED or unreadable/corrupted CA File");
+          ((CheckBox)findViewById(org.stackdroid.R.id.verifyServerCertCB)).setChecked(false);
+          m_validcafile = false;
+        } else {
+          ((TextView) findViewById(R.id.CAFILE)).setText(result);
+          m_validcafile = true;
+        }
 	  }
-
-      // String cafile = Utils.getStringPreference("CAFILE", null, this);
-      // Log.d("USERADDonActivityResult", "result="+cafile);
-    }
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */  
-    protected void completeUserAdd( User U ) {
-    	
-    	
     }
   
     /**

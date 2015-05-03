@@ -51,7 +51,7 @@ public class User implements Serializable, Comparable<User> {
     private String cinder2Endpoint;
     private String identityHostname;
 	private File   CAFile;
-	private boolean insecure;
+	private boolean verifyServerCert;
     //private URL    identityUrl;
     
     public User( String _userName, 
@@ -75,7 +75,7 @@ public class User implements Serializable, Comparable<User> {
     			 String cinder2Endpoint,
     			 String identityHostname,
 				 File CAFile,
-				 boolean insecure)
+				 boolean verifyServerCert)
     {
         userName       			 = _userName;
         userID         			 = _userID;
@@ -99,7 +99,7 @@ public class User implements Serializable, Comparable<User> {
         this.cinder2Endpoint	 = cinder2Endpoint;
         this.identityHostname    = identityHostname;
 		this.CAFile				 = CAFile;
-		this.insecure            = insecure;
+		this.verifyServerCert    = verifyServerCert;
     }
     
     public String getIdentityHostname( ) { 
@@ -109,7 +109,7 @@ public class User implements Serializable, Comparable<User> {
     public void setPassword( String _password ) { password = _password ;} 
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
 	public void setCAFile( File cafile ) { this.CAFile = cafile; }
-	public void setInsecure( boolean insecure ) { this.insecure=insecure; }
+	public void setVerifyServerCert( boolean verifyServerCert ) { this.verifyServerCert=verifyServerCert; }
     
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
@@ -134,7 +134,7 @@ public class User implements Serializable, Comparable<User> {
     public String getCinder1Endpoint( ) { return cinder1Endpoint; }
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
 	public File   getCAFile( ) { return CAFile; }
-	public boolean getInsecure( ) { return insecure; }
+	public boolean getVerifyServerCert( ) { return verifyServerCert; }
     
     public String getFilename( ) {
     	String filename = getUserID( );
@@ -168,7 +168,7 @@ public class User implements Serializable, Comparable<User> {
 	    ",password="+password+
 	    ",usessl="+usessl+
 	    ",role_admin="+role_admin+
-				",insecure="+insecure+
+				",Verify Server Cert="+verifyServerCert+
 				",CAFile="+CAFile+
 	    "}";
     }
@@ -342,16 +342,10 @@ public class User implements Serializable, Comparable<User> {
     			  			 cinder2EP,
     			  			 addrS,
 				  			 null,
-				             true);
+				             false);
     	  return U;
       } catch(org.json.JSONException je) {
     	  throw new ParseException( je.getMessage( ) );
       }
     }
-
-/*	public String getIdentityEndpointIP() {
-		// TODO Auto-generated method stub
-		return identityEndpointIP;
-	}
-*/
 }
