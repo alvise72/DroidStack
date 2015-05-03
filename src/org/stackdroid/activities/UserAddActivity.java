@@ -74,10 +74,10 @@ public class UserAddActivity extends Activity {
     ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
     ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
     ((EditText)findViewById(R.id.usernameET)).setText( last_username );
-    ((EditText)findViewById(R.id.passwordET)).setText( last_password );
+    ((EditText)findViewById(R.id.passwordET)).setText(last_password);
     ((CheckBox)findViewById(R.id.usesslCB)).setChecked(usessl);
     ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
-    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked( verifyservercert );
+    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(verifyservercert);
     ((Button)findViewById(R.id.selectCABT)).setEnabled(verifyservercert);
     ((TextView)findViewById(R.id.CAFILE)).setText(last_cafile);
     
@@ -182,17 +182,25 @@ public class UserAddActivity extends Activity {
      *
      */  
   public void add( View v ) {
-    EditText endpointET = (EditText)findViewById(org.stackdroid.R.id.endpointET);
-    EditText tenantET   = (EditText)findViewById(org.stackdroid.R.id.tenantnameET);
-    EditText usernameET = (EditText)findViewById(org.stackdroid.R.id.usernameET);
-    EditText passwordET = (EditText)findViewById(org.stackdroid.R.id.passwordET);
-    CheckBox usesslET   = (CheckBox)findViewById(org.stackdroid.R.id.usesslCB);
-    
+    EditText endpointET = (EditText)findViewById(R.id.endpointET);
+    EditText tenantET   = (EditText)findViewById(R.id.tenantnameET);
+    EditText usernameET = (EditText)findViewById(R.id.usernameET);
+    EditText passwordET = (EditText)findViewById(R.id.passwordET);
+    CheckBox usesslET   = (CheckBox)findViewById(R.id.usesslCB);
+    CheckBox verifyServerCert = (CheckBox)findViewById(R.id.verifyServerCertCB);
+    TextView CAFile = (TextView)findViewById(R.id.CAFILE);
+
+    if(!Utils.isValid(new File(CAFile.getText().toString()))) {
+      verifyServerCert.setChecked(false);
+      CAFile.setText("");
+    }
+
     String  endpoint = endpointET.getText().toString().trim();
     String  tenant   = tenantET.getText().toString().trim();
     String  username = usernameET.getText().toString().trim();
     String  password = passwordET.getText().toString().trim();
     boolean usessl   = usesslET.isChecked();
+
     
     if( endpoint.length()==0 ) {
       Utils.alert("Please fill the endpoint field.", this);
@@ -214,7 +222,7 @@ public class UserAddActivity extends Activity {
     progressDialogWaitStop.show();
 
     AsyncTaskRequestToken task = new AsyncTaskRequestToken();
-    task.execute(endpoint,tenant,username,password,""+usessl);
+    task.execute(endpoint,tenant,username,password,""+usessl,""+verifyServerCert.isChecked(),CAFile.getText().toString());
   }
 
     /**
@@ -374,9 +382,11 @@ public class UserAddActivity extends Activity {
      		String username = args[2];
      		password = args[3];
      		String s_usessl = args[4];
+            String s_verifyServerCert = args[5];
+            String s_CAFile = args[6];
      		
      		usessl = Boolean.parseBoolean( s_usessl );
-     		
+     		boolean verifyServerCert = Boolean.parseBoolean(s_verifyServerCert);
      		try {
      			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
      			//UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
@@ -389,6 +399,8 @@ public class UserAddActivity extends Activity {
      			U = User.parse( jsonBuf );
      			U.setPassword(password);
      			U.setSSL( usessl );
+              U.setVerifyServerCert(verifyServerCert);
+              U.setCAFile(s_CAFile);
      			
      				
      		} catch(Exception e) {

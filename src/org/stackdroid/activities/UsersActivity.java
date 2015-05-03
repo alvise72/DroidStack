@@ -155,14 +155,20 @@ public class UsersActivity extends Activity {
 		  TextView t22 = new TextView( UsersActivity.this );
 		  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y H:mm:ss");
 		  
-		  t22.setText("   "+sdf.format(new Date(U.getTokenExpireTime()*1000)) );
+		  t22.setText("   " + sdf.format(new Date(U.getTokenExpireTime() * 1000)));
 
 		  TextView t23 = new TextView( UsersActivity.this );
 		  t23.setText("Verify server's certificate");
 		  t23.setTypeface(null, Typeface.BOLD);
 		  TextView t24 = new TextView (UsersActivity.this );
-		  t24.setText( " "+(U.getVerifyServerCert() ? "yes" : "no"));
-		  
+		  //Log.d("USERSACTIVITY", "U.getVerifyServerCert()=" + U.getVerifyServerCert());
+		  t24.setText("   " + (U.getVerifyServerCert() ? "yes" : "no"));
+
+		  TextView t25 = new TextView(UsersActivity.this);
+		  t25.setText("CA File");
+		  t25.setTypeface(null, Typeface.BOLD);
+		  TextView t26 = new TextView(UsersActivity.this);
+		  t26.setText("   "+U.getCAFile());
 		  
 		  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.MATCH_PARENT,
@@ -199,6 +205,8 @@ public class UsersActivity extends Activity {
 		  l.addView( t22 );
 		  l.addView( t23 );
 		  l.addView( t24 );
+		  l.addView( t25 );
+		  l.addView( t26 );
 		  
 		  sv.addView(l);
 		  Utils.alertInfo(sv, UsersActivity.this.getString(R.string.USERINFO), UsersActivity.this);
@@ -231,7 +239,6 @@ public class UsersActivity extends Activity {
 	    			return;
 	    		}
 	    	} else {
-	    		//Log.d("USERS", "BAD file ["+users[i].getName( )+"]");
 	    		continue;
 	    	}
 	    }  catch(ClassNotFoundException cnfe) {

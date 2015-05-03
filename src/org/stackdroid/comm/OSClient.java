@@ -92,7 +92,7 @@ public class OSClient {
     					String  edp = U.getIdentityEndpoint();
     					boolean ssl = U.useSSL();
 						boolean verifyServerCert = U.getVerifyServerCert();
-						File CAFile = U.getCAFile();
+						String CAFile = U.getCAFile();
     					U = User.parse( jsonBuffer );
     					U.setPassword( pwd );
     					U.setSSL(ssl);

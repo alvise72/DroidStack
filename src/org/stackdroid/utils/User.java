@@ -23,36 +23,31 @@ import org.stackdroid.parse.ParseException;
 
 public class User implements Serializable, Comparable<User> {
 
-    private static final long serialVersionUID = 3000000000000000004L;
+    private static final long serialVersionUID = 3000000000000000005L;
 
-    private String  userName;
-    private String  userID;
-    private String  tenantName;
-    private String  tenantId;
-    private String  token;
-    private long    tokenExpireTime;
-    private String  password;
-    private boolean usessl;
-    private boolean role_admin;
-    
-    private boolean hasGlance;
-    private boolean hasNova;
-    private boolean hasNeutron;
-    private boolean hasCinder1;
-    private boolean hasCinder2;
-    
-    private String identityEndpoint;
-    //private String identityEndpointIP;
-    
-    private String novaEndpoint;
-    private String glanceEndpoint;
-    private String neutronEndpoint;
-    private String cinder1Endpoint;
-    private String cinder2Endpoint;
-    private String identityHostname;
-	private File   CAFile;
-	private boolean verifyServerCert;
-    //private URL    identityUrl;
+	protected String  userName;
+	protected String  userID;
+	protected String  tenantName;
+	protected String  tenantId;
+	protected String  token;
+	protected long    tokenExpireTime;
+	protected String  password;
+	protected boolean usessl;
+	protected boolean role_admin;
+	protected boolean hasGlance;
+	protected boolean hasNova;
+	protected boolean hasNeutron;
+    protected boolean hasCinder1;
+    protected boolean hasCinder2;
+	protected boolean verifyServerCert;
+	protected String  identityEndpoint;
+	protected String  novaEndpoint;
+	protected String  glanceEndpoint;
+	protected String  neutronEndpoint;
+	protected String  cinder1Endpoint;
+	protected String  cinder2Endpoint;
+	protected String  identityHostname;
+	protected String  CAFile;
     
     public User( String _userName, 
     			 String _userID, 
@@ -74,7 +69,7 @@ public class User implements Serializable, Comparable<User> {
     			 String cinder1Endpoint,
     			 String cinder2Endpoint,
     			 String identityHostname,
-				 File CAFile,
+				 String CAFile,
 				 boolean verifyServerCert)
     {
         userName       			 = _userName;
@@ -91,7 +86,6 @@ public class User implements Serializable, Comparable<User> {
         this.hasCinder1 		 = hasCinder1;
         this.hasCinder2 		 = hasCinder2;
         this.identityEndpoint 	 = identityEndpoint;
-        //this.identityEndpointIP  = identityEndpointIP;
         this.glanceEndpoint 	 = glanceEndpoint;
         this.novaEndpoint   	 = novaEndpoint;
         this.neutronEndpoint	 = neutronEndpoint;
@@ -108,7 +102,7 @@ public class User implements Serializable, Comparable<User> {
     
     public void setPassword( String _password ) { password = _password ;} 
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
-	public void setCAFile( File cafile ) { this.CAFile = cafile; }
+	public void setCAFile( String cafile ) { this.CAFile = cafile; }
 	public void setVerifyServerCert( boolean verifyServerCert ) { this.verifyServerCert=verifyServerCert; }
     
     public String getTenantName( ) { return tenantName; }
@@ -133,7 +127,7 @@ public class User implements Serializable, Comparable<User> {
     public String getNeutronEndpoint( ) { return neutronEndpoint; }
     public String getCinder1Endpoint( ) { return cinder1Endpoint; }
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
-	public File   getCAFile( ) { return CAFile; }
+	public String getCAFile( ) { return CAFile; }
 	public boolean getVerifyServerCert( ) { return verifyServerCert; }
     
     public String getFilename( ) {
@@ -168,8 +162,8 @@ public class User implements Serializable, Comparable<User> {
 	    ",password="+password+
 	    ",usessl="+usessl+
 	    ",role_admin="+role_admin+
-				",Verify Server Cert="+verifyServerCert+
-				",CAFile="+CAFile+
+		",Verify Server Cert="+verifyServerCert+
+		",CAFile="+CAFile+
 	    "}";
     }
 
@@ -300,7 +294,7 @@ public class User implements Serializable, Comparable<User> {
     	  boolean role_admin = false;
     	  for(int i = 0; i<roleArray.length(); ++i)
     		  if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
-		  role_admin = true;
+		  		role_admin = true;
 	  
     	  SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     	  timeFormatter.setTimeZone( TimeZone.getDefault( ) );

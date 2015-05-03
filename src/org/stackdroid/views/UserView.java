@@ -11,18 +11,18 @@ import org.stackdroid.utils.*;
 
 public class UserView extends LinearLayout {
 
-    private LinearLayoutWithView row            = null;
-    private LinearLayoutWithView buttonsLayout  = null;
-    private LinearLayoutWithView userLayout     = null;
-    private TextViewWithView     textUserName   = null;
-    private TextViewWithView     textTenantName = null;
-    private TextViewWithView     textEndpoint   = null;
-    private TextViewWithView	 textSSL        = null;
-	private TextViewWithView     textInsecure       = null;
-	private TextViewWithView     textCAFile         = null;
+    private LinearLayoutWithView row                  = null;
+    private LinearLayoutWithView buttonsLayout        = null;
+    private LinearLayoutWithView userLayout           = null;
+    private TextViewWithView     textUserName         = null;
+    private TextViewWithView     textTenantName       = null;
+    private TextViewWithView     textEndpoint         = null;
+    private TextViewWithView	 textSSL              = null;
+	private TextViewWithView     textVerifyServerCert = null;
+	private TextViewWithView     textCAFile           = null;
 
-    private ImageButtonWithView  deleteUser     = null;
-    private ImageButtonWithView  infoUser       = null;
+    private ImageButtonWithView  deleteUser           = null;
+    private ImageButtonWithView  infoUser             = null;
     
     private User user = null;
 
@@ -34,23 +34,20 @@ public class UserView extends LinearLayout {
 	user = U;
 
 	setOrientation( LinearLayout.HORIZONTAL );
-	LinearLayout.LayoutParams params1 
-	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+	LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	setLayoutParams( params1 );
 	int padding = Utils.getDisplayPixel( ctx, 2 );
 	setPadding( padding, padding, padding, padding );
 
 	row = new LinearLayoutWithView( ctx, this );
 	row.setOrientation( LinearLayout.HORIZONTAL );
-	LinearLayout.LayoutParams _params1
-	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	LinearLayout.LayoutParams _params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	row.setLayoutParams( _params1 );
 	row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
 	userLayout = new LinearLayoutWithView( ctx, this );
 	userLayout.setOrientation( LinearLayout.VERTICAL );
-	LinearLayout.LayoutParams params2 
-	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	userLayout.setLayoutParams( params2 );
 	
 	textUserName = new TextViewWithView( ctx, (UserView)this );
@@ -96,16 +93,16 @@ public class UserView extends LinearLayout {
 		textSSL.setTypeface( null, Typeface.NORMAL );
 	}
 
-		textInsecure = new TextViewWithView( ctx, (UserView)this );
-		textInsecure.setOnClickListener(selectUserListener);
+		textVerifyServerCert = new TextViewWithView( ctx, (UserView)this );
+		textVerifyServerCert.setOnClickListener(selectUserListener);
 		if(U.getVerifyServerCert()) { //  secure
-			textInsecure.setTextColor(Color.parseColor("#FF0000"));
-			textInsecure.setText("Verify server's certificate: yes");
-			textInsecure.setTypeface(null, Typeface.BOLD);
+			textVerifyServerCert.setTextColor(Color.parseColor("#FF0000"));
+			textVerifyServerCert.setText("Verify server's certificate: yes");
+			textVerifyServerCert.setTypeface(null, Typeface.BOLD);
 		} else { // Insecure
-			textInsecure.setTextColor( Color.parseColor("#BBBBBB"));
-			textInsecure.setText("Verify server's certificate: no");
-			textInsecure.setTypeface( null, Typeface.NORMAL );
+			textVerifyServerCert.setTextColor( Color.parseColor("#BBBBBB"));
+			textVerifyServerCert.setText("Verify server's certificate: no");
+			textVerifyServerCert.setTypeface( null, Typeface.NORMAL );
 		}
 		textCAFile=new TextViewWithView( ctx, (UserView)this );
 		textCAFile.setOnClickListener(selectUserListener);
@@ -115,21 +112,18 @@ public class UserView extends LinearLayout {
 			textCAFile.setTypeface( null, Typeface.NORMAL );
 		} else {
 			textCAFile.setTextColor(Color.parseColor("#FF0000"));
-			textCAFile.setText("CAFile: " + U.getCAFile().getPath() );
+			textCAFile.setText("CAFile: " + U.getCAFile() );
 			textCAFile.setTypeface(null, Typeface.BOLD);
 		}
 
-	userLayout.addView(textUserName);
-	userLayout.addView(textTenantName);
-	userLayout.addView(textEndpoint);
-	userLayout.addView(textSSL);
-		userLayout.addView(textInsecure);
+		userLayout.addView(textUserName);
+		userLayout.addView(textTenantName);
+		userLayout.addView(textEndpoint);
+		userLayout.addView(textSSL);
+		userLayout.addView(textVerifyServerCert);
 		userLayout.addView(textCAFile);
 
-	//userLayout.setOnClickListener( selectUserListener );
-
 	row.addView(userLayout);
-	//setOnClickListener( selectUserListener );
       
 	buttonsLayout = new LinearLayoutWithView( ctx, this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
@@ -146,8 +140,7 @@ public class UserView extends LinearLayout {
 	infoUser.setOnClickListener( infoUserListener );
 	buttonsLayout.addView( infoUser );
 	buttonsLayout.addView( deleteUser );
-	
-//	buttonsLayout.setOnClickListener( delete );
+
 	
 	row.addView( buttonsLayout );
 		addView( row );
