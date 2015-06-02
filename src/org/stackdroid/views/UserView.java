@@ -112,7 +112,7 @@ public class UserView extends LinearLayout {
 			textCAFile.setTypeface( null, Typeface.NORMAL );
 		} else {
 			textCAFile.setTextColor(Color.parseColor("#FF0000"));
-			textCAFile.setText("CAFile: " + U.getCAFile() );
+			textCAFile.setText("CAFile: " + U.getCAFile());
 			textCAFile.setTypeface(null, Typeface.BOLD);
 		}
 

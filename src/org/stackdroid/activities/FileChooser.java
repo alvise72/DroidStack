@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
-
+import android.os.Environment;
 
 import org.stackdroid.R;
 import org.stackdroid.utils.FileArrayAdapter;
@@ -24,7 +24,7 @@ public class FileChooser extends ListActivity {
 	private FileArrayAdapter adapter;
 	private FileFilter fileFilter;
 	private File fileSelected;
-	private ArrayList<String> extensions;
+	//private ArrayList<String> extensions;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,17 +32,22 @@ public class FileChooser extends ListActivity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			if (extras.getStringArrayList("filterFileExtension") != null) {
-				extensions = extras.getStringArrayList("filterFileExtension");				
+				//extensions = extras.getStringArrayList("filterFileExtension");
 				fileFilter = new FileFilter() {
 					@Override
-					public boolean accept(File pathname) {						
-						return ((pathname.isDirectory()) || (pathname.getName().contains(".")?extensions.contains(pathname.getName().substring(pathname.getName().lastIndexOf("."))):false));
+					public boolean accept(File pathname) {
+						// hide the hidden files but ".." which is the parent folder
+						if(pathname.getName().charAt(0)=='.' && pathname.getName().charAt(0)!='.') return false;
+						return true;
+						//return ((pathname.isDirectory()) || (pathname.getName().contains(".")?extensions.contains(pathname.getName().substring(pathname.getName().lastIndexOf("."))):false));
 					}
 				};
 			}
 		}
 		
-		currentDir = new File("/sdcard/");
+		//currentDir = new File("/sdcard/");
+		String root = Environment.getExternalStorageDirectory( ).getAbsolutePath();
+		currentDir = new File(root);
 		fill(currentDir);		
 	}
 	
@@ -72,7 +77,7 @@ public class FileChooser extends ListActivity {
 		try {
 			for (File ff : dirs) {
 				if (ff.isDirectory() && !ff.isHidden())
-					dir.add(new Option(ff.getName(), getString(R.string.FOLDER), ff
+					dir.add(new Option(ff.getName(), "folder", ff
 							.getAbsolutePath(), true, false));
 				else {
 					if (!ff.isHidden())
@@ -87,7 +92,7 @@ public class FileChooser extends ListActivity {
 		Collections.sort(fls);
 		dir.addAll(fls);
 		if (!f.getName().equalsIgnoreCase("sdcard")) {
-			if (f.getParentFile() != null) dir.add(0, new Option("..", getString(R.string.PARENTDIR), f.getParent(), false, true));
+			if (f.getParentFile() != null) dir.add(0, new Option("..", "parent folder", f.getParent(), false, true));
 		}
 		adapter = new FileArrayAdapter(FileChooser.this, R.layout.file_view,
 				dir);

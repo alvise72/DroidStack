@@ -1,6 +1,7 @@
 package org.stackdroid.activities;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,35 +45,36 @@ public class FilePickerActivity extends ListActivity {
      */
     private void getDir(String dirPath)
     {
-	myPath.setText("Location: " + dirPath);
-	item = new ArrayList<String>();
-	path = new ArrayList<String>();
-	File f = new File(dirPath);
-	File[] files = f.listFiles();
+		myPath.setText("Location: " + dirPath);
+		item = new ArrayList<String>();
+		path = new ArrayList<String>();
+		File f = new File(dirPath);
 
-	Arrays.sort(files);
+		File[] files = f.listFiles( );
+
+		Arrays.sort(files);
 	
-	if(!dirPath.equals(root))
+		if(!dirPath.equals(root))
 	    {
-		item.add(root);
-		path.add(root);
-		item.add("../");
-		path.add(f.getParent());
+			item.add(root);
+			path.add(root);
+			item.add("../");
+			path.add(f.getParent());
 		
 	    }
 
-	for(int i=0; i < files.length; i++)
-	    {		
-		File file = files[i];	
-		path.add(file.getPath());
-		if(file.isDirectory())
-		    item.add(file.getName() + "/");
-		else
-		    item.add(file.getName());		
-	    }
+		for(int i=0; i < files.length; i++)
+		{
+			File file = files[i];
+			path.add(file.getPath());
+			if(file.isDirectory())
+			    item.add(file.getName() + "/");
+			else
+		 	   item.add(file.getName());
+		}
 	
-	ArrayAdapter<String> fileList = new ArrayAdapter<String>(this, R.layout.filepicker_row, item);
-	setListAdapter(fileList);
+		ArrayAdapter<String> fileList = new ArrayAdapter<String>(this, R.layout.filepicker_row, item);
+		setListAdapter(fileList);
     }
 
     /**
@@ -83,7 +85,7 @@ public class FilePickerActivity extends ListActivity {
      */
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-	File file = new File(path.get(position));
+		File file = new File(path.get(position));
 	
 		if (file.isDirectory())
 	    {
@@ -100,8 +102,7 @@ public class FilePickerActivity extends ListActivity {
 				}).show();
 			}
 	    } else {
-			//Utils.putStringPreference("CAFILE", file.getAbsolutePath(), FilePickerActivity.this);
-	    	Intent returnIntent = getIntent();
+			Intent returnIntent = getIntent();
 			returnIntent.putExtra( "selectedcafile", file.getAbsolutePath() );
 	   	 	setResult(Activity.RESULT_OK, returnIntent);
 	   		finish();

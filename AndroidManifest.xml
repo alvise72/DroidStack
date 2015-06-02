@@ -55,6 +55,11 @@
 	  />
 
         <activity
+            android:name="org.stackdroid.activities.FileChooser"
+            android:label="@string/CAFILECHOOSER"
+          />
+
+        <activity
             android:name="org.stackdroid.activities.OverViewActivity" 
             android:launchMode="singleInstance" 
             android:label="@string/USAGEOVERVIEW"

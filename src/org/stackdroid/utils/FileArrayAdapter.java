@@ -46,10 +46,11 @@ public class FileArrayAdapter extends ArrayAdapter<Option> {
 			
 			if(o.getData().equalsIgnoreCase("folder")){
 				im.setImageResource(R.drawable.folder);
-			} else if (o.getData().equalsIgnoreCase("parent directory")) {
+			} else if (o.getData().equalsIgnoreCase("parent folder")) {
 				im.setImageResource(R.drawable.goup);
 			} else {
-				String name = o.getName().toLowerCase();
+				im.setImageResource(R.drawable.file_icon);
+				/*String name = o.getName().toLowerCase();
 				if (name.endsWith(".xls") ||  name.endsWith(".xlsx"))
 					im.setImageResource(R.drawable.file_icon);
 				else if (name.endsWith(".doc") ||  name.endsWith(".docx"))
@@ -73,11 +74,11 @@ public class FileArrayAdapter extends ArrayAdapter<Option> {
 				else if (name.endsWith(".gif"))
 					im.setImageResource(R.drawable.file_icon);
 				else
-					im.setImageResource(R.drawable.file_icon);					
+					im.setImageResource(R.drawable.file_icon);	*/
 			}
 
 			if (t1 != null)
-				t1.setText(o.getName());
+				t1.setText(o.get_name());
 			if (t2 != null)
 				t2.setText(o.getData());				
 

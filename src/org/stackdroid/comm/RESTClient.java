@@ -5,7 +5,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import java.security.cert.X509Certificate;
+import java.security.cert.*;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -37,7 +37,9 @@ public class RESTClient {
     								   String endpoint, 
     								   String tenantName, 
     								   String username, 
-    								   String password )
+    								   String password,
+									   boolean verifyServerCert,
+									   X509Certificate CA)
       throws IOException, ServerException, 
       		 NotFoundException, NotAuthorizedException, 
       		 ServiceUnAvailableOrInternalError, MalformedURLException,
@@ -62,25 +64,27 @@ public class RESTClient {
 	    };
 	    
 	    try {
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 	    } catch(java.security.NoSuchAlgorithmException e) {
 	    } catch(java.security.KeyManagementException e) {
 	    }
 	    
 	    try {
+			//Log.d("RESTCLIENT","url.openConnection");
 		  conn = (HttpsURLConnection)url.openConnection( );
+
 	    } catch(java.io.IOException ioe) {
-		throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+ioe.getMessage( ) );
+		  throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+ioe.getMessage( ) );
 	    }
-	} else {
-	    try {
-		  conn = (HttpURLConnection)url.openConnection();
-	    } catch(java.io.IOException ioe) {
-		  throw new IOException("RESTClient.requestToken.URL.openConnection http: "+ioe.getMessage());
-	    }
-	}
+		} else {
+	  	  	 try {
+			  conn = (HttpURLConnection)url.openConnection();
+	   		 } catch(java.io.IOException ioe) {
+			    throw new IOException("RESTClient.requestToken.URL.openConnection http: "+ioe.getMessage());
+	   		 }
+		}
 	
 	conn.setRequestProperty("Content-Type", "application/json");
 	conn.setRequestProperty("Accept", "application/json");
@@ -88,6 +92,7 @@ public class RESTClient {
 	conn.setDoInput(true);
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("POST");
+
 	} catch(java.net.ProtocolException pe ) {
 		if(usessl)
 		  ((HttpsURLConnection)conn).disconnect( );
@@ -101,6 +106,31 @@ public class RESTClient {
 			+ "\", \"passwordCredentials\": {\"username\": \"" 
 			+ username + "\", \"password\": \"" 
 			+ password + "\"}}}";
+
+		if(verifyServerCert) {
+			boolean validcertServer = false;
+
+			Certificate[] certs = (Certificate[]) ((HttpsURLConnection)conn).getServerCertificates();
+			Log.d("RESTCLIENT", "GOT SERVER CERTS");
+			for( Certificate cert : certs ) {
+				try {
+					((X509Certificate)cert).checkValidity();
+				} catch(CertificateExpiredException e) {
+					Log.d("RESTCLIENT", "CERT EXPIRED");
+					throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+e.getMessage( ) );
+				} catch(CertificateNotYetValidException e) {
+					Log.d("RESTCLIENT", "CERT NOT YET VALID");
+					throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+e.getMessage( ) );
+				}
+				if(((X509Certificate)cert).getIssuerX500Principal().getName().equals(CA.getIssuerX500Principal().getName())) {
+					validcertServer = true;
+					break;
+				}
+			}
+			if(!validcertServer) {
+				throw  new IOException("RESTClient.requestToken.URL.openConnection https: Cannot find a valid CA which signed the server's certificates!" );
+			}
+		}
 
 	OutputStream out = null;
 	try {

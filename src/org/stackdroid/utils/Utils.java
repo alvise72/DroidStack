@@ -1,8 +1,6 @@
 package org.stackdroid.utils;
 
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -13,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.security.cert.*;
-import javax.net.ssl.HttpsURLConnection;
 
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
@@ -47,6 +44,14 @@ public class Utils {
             valid=false;
         }
         return valid;
+    }
+
+    public static X509Certificate convertToX509( String file ) {
+        if( !isValid(new File(file))) return null;
+        try {
+            return (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream(file));
+        } catch(IOException ioe) { return null; }
+        catch(CertificateException e) { return null; }
     }
 
     /**

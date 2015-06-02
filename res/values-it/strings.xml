@@ -173,4 +173,10 @@
 	<string name="NOROUTERAVAIL">Nessun router disponibile</string>
 	<string name="VERIFYSERVERCERT">Verifica certificato server</string>
     <string name="INVALIDCA">Il file CA è scaduto, illeggibile o corrotto</string>
+    <string name="CURRENTDIR">Cartella corrente</string>
+    <string name="FOLDER">Cartella</string>
+    <string name="FILESIZE">Dimensione file</string>
+    <string name="PARENTDIR">Cartella superiore</string>
+    <string name="CAFILECHOOSER">Scegli CA File</string>
+
 </resources>

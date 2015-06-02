@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -47,7 +48,8 @@ public class User implements Serializable, Comparable<User> {
 	protected String  cinder1Endpoint;
 	protected String  cinder2Endpoint;
 	protected String  identityHostname;
-	protected String  CAFile;
+	//protected X509Certificate CA;
+	protected String CAFile;
     
     public User( String _userName, 
     			 String _userID, 
@@ -69,8 +71,8 @@ public class User implements Serializable, Comparable<User> {
     			 String cinder1Endpoint,
     			 String cinder2Endpoint,
     			 String identityHostname,
-				 String CAFile,
-				 boolean verifyServerCert)
+				 boolean verifyServerCert,
+				 String ca_file)
     {
         userName       			 = _userName;
         userID         			 = _userID;
@@ -92,8 +94,9 @@ public class User implements Serializable, Comparable<User> {
         this.cinder1Endpoint	 = cinder1Endpoint;
         this.cinder2Endpoint	 = cinder2Endpoint;
         this.identityHostname    = identityHostname;
-		this.CAFile				 = CAFile;
+		//this.CA  				 = CA;
 		this.verifyServerCert    = verifyServerCert;
+		this.CAFile			     = ca_file;
     }
     
     public String getIdentityHostname( ) { 
@@ -102,9 +105,10 @@ public class User implements Serializable, Comparable<User> {
     
     public void setPassword( String _password ) { password = _password ;} 
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
-	public void setCAFile( String cafile ) { this.CAFile = cafile; }
+	//public void setCA( X509Certificate ca ) { this.CA = ca; }
 	public void setVerifyServerCert( boolean verifyServerCert ) { this.verifyServerCert=verifyServerCert; }
-    
+    public void setCAFile( String ca_file) { this.CAFile=ca_file;}
+
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
     public String getToken( ) { return token; }
@@ -112,7 +116,9 @@ public class User implements Serializable, Comparable<User> {
     public String getUserName( ) { return userName; }
     public String getUserID( ) { return userID; }
     public String getPassword( ) { return password; }
-    public boolean useSSL( ) { return usessl; }
+	public String getCAFile( ) { return CAFile; }
+
+	public boolean useSSL( ) { return usessl; }
     public boolean isRoleAdmin( ) { return role_admin; }
     
     public boolean hasNova( ) { return hasNova; }
@@ -127,7 +133,7 @@ public class User implements Serializable, Comparable<User> {
     public String getNeutronEndpoint( ) { return neutronEndpoint; }
     public String getCinder1Endpoint( ) { return cinder1Endpoint; }
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
-	public String getCAFile( ) { return CAFile; }
+	//public X509Certificate getCA( ) { return CA; }
 	public boolean getVerifyServerCert( ) { return verifyServerCert; }
     
     public String getFilename( ) {
@@ -163,7 +169,7 @@ public class User implements Serializable, Comparable<User> {
 	    ",usessl="+usessl+
 	    ",role_admin="+role_admin+
 		",Verify Server Cert="+verifyServerCert+
-		",CAFile="+CAFile+
+		",CA="+CAFile+
 	    "}";
     }
 
@@ -335,8 +341,8 @@ public class User implements Serializable, Comparable<User> {
     			  			 cinder1EP,
     			  			 cinder2EP,
     			  			 addrS,
-				  			 null,
-				             false);
+				  			 false,
+				             null);
     	  return U;
       } catch(org.json.JSONException je) {
     	  throw new ParseException( je.getMessage( ) );

@@ -1,27 +1,21 @@
 package org.stackdroid.activities;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.CheckBox;
 import android.widget.Button;
-import android.widget.Toast;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.View;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import org.stackdroid.utils.Configuration;
@@ -37,8 +31,10 @@ public class UserAddActivity extends Activity {
     private org.stackdroid.utils.CustomProgressDialog progressDialogWaitStop = null;
 
     private boolean m_validcafile = false;
+    private static final int FILE_CHOOSER = 11;
 
-    /**
+
+  /**
      *
      *
      *
@@ -313,7 +309,14 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void selectCA( View v ) {
-	  startActivityForResult( new Intent( UserAddActivity.this, (Class<?>)FilePickerActivity.class ), 1 );
+      Intent intent = new Intent(this, FileChooser.class);
+      ArrayList<String> extensions = new ArrayList<String>();
+      extensions.add(".*");/*
+      extensions.add(".xls");
+      extensions.add(".xlsx"); */
+      intent.putStringArrayListExtra("filterFileExtension", extensions);
+      startActivityForResult(intent, FILE_CHOOSER);
+	  //startActivityForResult( new Intent( UserAddActivity.this, (Class<?>)FilePickerActivity.class ), 1 );
     }
  
     /**
@@ -335,7 +338,7 @@ public class UserAddActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       m_validcafile=false;
 	  if(data!=null) {
-	    String result=data.getStringExtra("selectedcafile");
+	    String result=data.getStringExtra("fileSelected");
         if(!Utils.isValid(new File(result))) {
           ((TextView)findViewById(R.id.CAFILE)).setText("EXPIRED or unreadable/corrupted CA File");
           ((CheckBox)findViewById(org.stackdroid.R.id.verifyServerCertCB)).setChecked(false);
@@ -388,8 +391,9 @@ public class UserAddActivity extends Activity {
      		usessl = Boolean.parseBoolean( s_usessl );
      		boolean verifyServerCert = Boolean.parseBoolean(s_verifyServerCert);
      		try {
-     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
-     			//UserAddActivity.this.completeUserAdd( jsonBuf, password, endpoint, usessl );
+                Log.d("USERADDACTIVITY", "Invoking RESTClient.requestToken");
+     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password,verifyServerCert,Utils.convertToX509(s_CAFile) );
+                Log.d("USERADDACTIVITY", "Invoking GOT RESTClient.requestToken");
      			if(jsonBuf == null || jsonBuf.length()==0) {
      				hasError = true;
      				errorMessage = "Server's response buffer is NULL or empty!";
@@ -398,9 +402,10 @@ public class UserAddActivity extends Activity {
      			
      			U = User.parse( jsonBuf );
      			U.setPassword(password);
-     			U.setSSL( usessl );
+     			U.setSSL(usessl);
               U.setVerifyServerCert(verifyServerCert);
               U.setCAFile(s_CAFile);
+
      			
      				
      		} catch(Exception e) {
@@ -428,7 +433,6 @@ public class UserAddActivity extends Activity {
      			;
      		}
      		UserAddActivity.this.progressDialogWaitStop.dismiss( );
-     		//UserAddActivity.this.completeUserAdd( U );
      	}
     }
 }

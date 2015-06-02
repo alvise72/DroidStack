@@ -182,5 +182,9 @@
 	<string name="VERIFYSERVERCERT">Verify server\'s certificate</string>
 	<string name="SELECTCA">CA File</string>
     <string name="INVALIDCA">Expired or unreadable/corrupted CA File</string>
-
+    <string name="CURRENTDIR">Current Folder</string>
+    <string name="FOLDER">Folder</string>
+    <string name="FILESIZE">File size</string>
+    <string name="PARENTDIR">Parent folder</string>
+    <string name="CAFILECHOOSER">Choose CA File</string>
 </resources>
