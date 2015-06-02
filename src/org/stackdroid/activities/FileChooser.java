@@ -1,4 +1,4 @@
-package org.stackdroid.utils;
+package org.stackdroid.activities;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -16,6 +16,8 @@ import android.widget.ListView;
 
 
 import org.stackdroid.R;
+import org.stackdroid.utils.FileArrayAdapter;
+import org.stackdroid.utils.Option;
 
 public class FileChooser extends ListActivity {
 	private File currentDir;
@@ -85,7 +87,7 @@ public class FileChooser extends ListActivity {
 		Collections.sort(fls);
 		dir.addAll(fls);
 		if (!f.getName().equalsIgnoreCase("sdcard")) {
-			if (f.getParentFile() != null) dir.add(0, new Option("..", getString(R.string.parentDirectory), f.getParent(), false, true));
+			if (f.getParentFile() != null) dir.add(0, new Option("..", getString(R.string.PARENTDIR), f.getParent(), false, true));
 		}
 		adapter = new FileArrayAdapter(FileChooser.this, R.layout.file_view,
 				dir);
@@ -109,9 +111,4 @@ public class FileChooser extends ListActivity {
 			finish();
 		}		
 	}
-//
-//	private void onFileClick(Option o) {
-//		Toast.makeText(this, "File Clicked: " + o.getName(), Toast.LENGTH_SHORT)
-//				.show();
-//	}		
 }
