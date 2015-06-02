@@ -17,9 +17,14 @@ import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -158,18 +163,37 @@ public class UsersActivity extends Activity {
 		  t22.setText("   " + sdf.format(new Date(U.getTokenExpireTime() * 1000)));
 
 		  TextView t23 = new TextView( UsersActivity.this );
-		  t23.setText("Verify server's certificate");
+		  t23.setText("Verify server's certificate:");
 		  t23.setTypeface(null, Typeface.BOLD);
 		  TextView t24 = new TextView (UsersActivity.this );
 		  //Log.d("USERSACTIVITY", "U.getVerifyServerCert()=" + U.getVerifyServerCert());
-		  t24.setText("   " + (U.getVerifyServerCert() ? "yes" : "no"));
+		  t24.setText("   " + (U.getVerifyServerCert() ? UsersActivity.this.getString(R.string.YES) : "no"));
 
-		  TextView t25 = new TextView(UsersActivity.this);
-		  t25.setText("CA File");
-		  t25.setTypeface(null, Typeface.BOLD);
-		  TextView t26 = new TextView(UsersActivity.this);
-		  t26.setText("   "+U.getCAFile());
-		  
+		  TextView t25 = null;
+		  TextView t26 = null;
+		  if(U.getVerifyServerCert()) {
+			  t25 = new TextView(UsersActivity.this);
+
+			  t25.setText("CA File:");
+			  t25.setTypeface(null, Typeface.BOLD);
+			  t26 = new TextView(UsersActivity.this);
+			  t26.setText("   " + U.getCAFile());
+		  }
+
+		  TextView t27 = null;
+		  TextView t28 = null;
+		  if(U.getVerifyServerCert()) {
+			  t27 = new TextView(UsersActivity.this);
+			  t27.setText("CA Issuer:");
+			  t27.setTypeface(null, Typeface.BOLD);
+
+			  t28 = new TextView(UsersActivity.this);
+			  try {
+				  t28.setText("   " + ((X509Certificate) (CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream(U.getCAFile()))).getIssuerX500Principal().getName());
+			  } catch(CertificateException ce) {t28.setText("");}
+			  catch (FileNotFoundException e) {t28.setText("");}
+		  }
+
 		  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.MATCH_PARENT,
 					LinearLayout.LayoutParams.MATCH_PARENT);
@@ -181,7 +205,7 @@ public class UsersActivity extends Activity {
 		  float density = Utils.getDisplayDensity( UsersActivity.this );
 		  int paddingDp = (int)(paddingPixel * density);
 		  l.setPadding(paddingDp, 0, 0, 0);
-		  l.addView( t1 );
+		  l.addView(t1);
 		  l.addView( t2 );
 		  l.addView( t3 );
 		  l.addView( t4 );
@@ -205,9 +229,15 @@ public class UsersActivity extends Activity {
 		  l.addView( t22 );
 		  l.addView( t23 );
 		  l.addView( t24 );
-		  l.addView( t25 );
-		  l.addView( t26 );
-		  
+		  if(t25!=null && t26!=null) {
+			  l.addView(t25);
+			  l.addView(t26);
+		  }
+		  if(t27!=null && t28!=null) {
+			  l.addView(t27);
+			  l.addView(t28);
+		  }
+
 		  sv.addView(l);
 		  Utils.alertInfo(sv, UsersActivity.this.getString(R.string.USERINFO), UsersActivity.this);
 		  //Utils.alertTitle(info, UsersActivity.this.getString(R.string.USERINFO), 12, UsersActivity.this);

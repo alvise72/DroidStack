@@ -175,10 +175,11 @@
                   <Button
                       android:id="@+id/ROUTER"
                       android:layout_width="match_parent"
-		      		  android:layout_height="match_parent"
+	     	      android:layout_height="match_parent"
                       android:onClick="routers"
                       android:layout_weight="1"
-		      		  android:drawableLeft="@drawable/router"
+		      android:drawableLeft="@drawable/router"
+		      android:enabled="false"
                       android:text="@string/ROUTERS" />
 
                   <Button

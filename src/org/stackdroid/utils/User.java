@@ -48,8 +48,7 @@ public class User implements Serializable, Comparable<User> {
 	protected String  cinder1Endpoint;
 	protected String  cinder2Endpoint;
 	protected String  identityHostname;
-	//protected X509Certificate CA;
-	protected String CAFile;
+	protected String  CAFile;
     
     public User( String _userName, 
     			 String _userID, 
@@ -64,7 +63,6 @@ public class User implements Serializable, Comparable<User> {
     			 boolean hasCinder1,
     			 boolean hasCinder2,
     			 String identityEndpoint,
-    			 //String identityEndpointIP,
     			 String glanceEndpoint,
     			 String novaEndpoint,
     			 String neutronEndpoint,
@@ -94,7 +92,6 @@ public class User implements Serializable, Comparable<User> {
         this.cinder1Endpoint	 = cinder1Endpoint;
         this.cinder2Endpoint	 = cinder2Endpoint;
         this.identityHostname    = identityHostname;
-		//this.CA  				 = CA;
 		this.verifyServerCert    = verifyServerCert;
 		this.CAFile			     = ca_file;
     }
@@ -105,7 +102,6 @@ public class User implements Serializable, Comparable<User> {
     
     public void setPassword( String _password ) { password = _password ;} 
     public void setSSL( boolean _usessl ) { usessl = _usessl; }
-	//public void setCA( X509Certificate ca ) { this.CA = ca; }
 	public void setVerifyServerCert( boolean verifyServerCert ) { this.verifyServerCert=verifyServerCert; }
     public void setCAFile( String ca_file) { this.CAFile=ca_file;}
 
@@ -133,7 +129,6 @@ public class User implements Serializable, Comparable<User> {
     public String getNeutronEndpoint( ) { return neutronEndpoint; }
     public String getCinder1Endpoint( ) { return cinder1Endpoint; }
     public String getCinder2Endpoint( ) { return cinder2Endpoint; }
-	//public X509Certificate getCA( ) { return CA; }
 	public boolean getVerifyServerCert( ) { return verifyServerCert; }
     
     public String getFilename( ) {

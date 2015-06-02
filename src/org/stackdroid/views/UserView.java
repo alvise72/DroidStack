@@ -19,7 +19,7 @@ public class UserView extends LinearLayout {
     private TextViewWithView     textEndpoint         = null;
     private TextViewWithView	 textSSL              = null;
 	private TextViewWithView     textVerifyServerCert = null;
-	private TextViewWithView     textCAFile           = null;
+	//private TextViewWithView     textCAFile           = null;
 
     private ImageButtonWithView  deleteUser           = null;
     private ImageButtonWithView  infoUser             = null;
@@ -104,24 +104,12 @@ public class UserView extends LinearLayout {
 			textVerifyServerCert.setText("Verify server's certificate: no");
 			textVerifyServerCert.setTypeface( null, Typeface.NORMAL );
 		}
-		textCAFile=new TextViewWithView( ctx, (UserView)this );
-		textCAFile.setOnClickListener(selectUserListener);
-		if(!U.getVerifyServerCert()) {
-			textCAFile.setTextColor( Color.parseColor("#BBBBBB"));
-			textCAFile.setText("CAFile: N/A");
-			textCAFile.setTypeface( null, Typeface.NORMAL );
-		} else {
-			textCAFile.setTextColor(Color.parseColor("#FF0000"));
-			textCAFile.setText("CAFile: " + U.getCAFile());
-			textCAFile.setTypeface(null, Typeface.BOLD);
-		}
-
 		userLayout.addView(textUserName);
 		userLayout.addView(textTenantName);
 		userLayout.addView(textEndpoint);
 		userLayout.addView(textSSL);
 		userLayout.addView(textVerifyServerCert);
-		userLayout.addView(textCAFile);
+		//userLayout.addView(textCAFile);
 
 	row.addView(userLayout);
       

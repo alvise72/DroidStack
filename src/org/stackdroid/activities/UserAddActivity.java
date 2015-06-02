@@ -1,8 +1,13 @@
 package org.stackdroid.activities;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+//import java.util.ArrayList;
 
 import android.os.Bundle; 
 import android.os.AsyncTask;
@@ -291,6 +296,7 @@ public class UserAddActivity extends Activity {
      */  
     public void toggleSelectCA( View v ) {
 	  ((Button)(findViewById(R.id.selectCABT))).setEnabled( ((CheckBox)v).isChecked() );
+      ((TextView)findViewById(R.id.CAFILE)).setText("");
     }  
   
     /**
@@ -310,13 +316,12 @@ public class UserAddActivity extends Activity {
      */  
     public void selectCA( View v ) {
       Intent intent = new Intent(this, FileChooser.class);
-      ArrayList<String> extensions = new ArrayList<String>();
+      /*ArrayList<String> extensions = new ArrayList<String>();
       extensions.add(".*");/*
       extensions.add(".xls");
       extensions.add(".xlsx"); */
-      intent.putStringArrayListExtra("filterFileExtension", extensions);
+      intent.putStringArrayListExtra("filterFileExtension", null);
       startActivityForResult(intent, FILE_CHOOSER);
-	  //startActivityForResult( new Intent( UserAddActivity.this, (Class<?>)FilePickerActivity.class ), 1 );
     }
  
     /**
@@ -342,6 +347,7 @@ public class UserAddActivity extends Activity {
         if(!Utils.isValid(new File(result))) {
           ((TextView)findViewById(R.id.CAFILE)).setText("EXPIRED or unreadable/corrupted CA File");
           ((CheckBox)findViewById(org.stackdroid.R.id.verifyServerCertCB)).setChecked(false);
+          ((Button)findViewById(R.id.selectCABT)).setEnabled(false);
           m_validcafile = false;
         } else {
           ((TextView) findViewById(R.id.CAFILE)).setText(result);
@@ -390,10 +396,31 @@ public class UserAddActivity extends Activity {
      		
      		usessl = Boolean.parseBoolean( s_usessl );
      		boolean verifyServerCert = Boolean.parseBoolean(s_verifyServerCert);
+            String caissuer = "";
+            if(verifyServerCert)
+              try {
+                caissuer = ((X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( s_CAFile ))).getIssuerX500Principal().getName();
+              } catch(CertificateException ce) {
+                hasError = true;
+                errorMessage = ce.getMessage();
+                return null;
+              } catch(FileNotFoundException fnfe) {
+                hasError = true;
+                errorMessage = fnfe.getMessage();
+                return null;
+              }
      		try {
-                Log.d("USERADDACTIVITY", "Invoking RESTClient.requestToken");
-     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password,verifyServerCert,Utils.convertToX509(s_CAFile) );
-                Log.d("USERADDACTIVITY", "Invoking GOT RESTClient.requestToken");
+                //Log.d("USERADDACTIVITY", "Invoking RESTClient.requestToken");
+                if(usessl)
+                  if(verifyServerCert)
+                    if(RESTClient.checkServerCert( "https://"+endpoint+":5000/v2.0", caissuer)==false)
+                    {
+                      hasError = true;
+                      errorMessage = "Server certificate's issuer doesn't match the CA ["+caissuer+"]";
+                      return null;
+                    }
+     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
+                //Log.d("USERADDACTIVITY", "Invoking GOT RESTClient.requestToken");
      			if(jsonBuf == null || jsonBuf.length()==0) {
      				hasError = true;
      				errorMessage = "Server's response buffer is NULL or empty!";
@@ -403,8 +430,8 @@ public class UserAddActivity extends Activity {
      			U = User.parse( jsonBuf );
      			U.setPassword(password);
      			U.setSSL(usessl);
-              U.setVerifyServerCert(verifyServerCert);
-              U.setCAFile(s_CAFile);
+                U.setVerifyServerCert(verifyServerCert);
+                U.setCAFile(s_CAFile);
 
      			
      				

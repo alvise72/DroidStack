@@ -51,14 +51,9 @@ public class OSClient {
      * 
      */
     synchronized public static OSClient getInstance( User U ) {
-    	
-    	
-    	
     	if(instanceArray==null) instanceArray = new Hashtable<String, OSClient>( );
-    	
     	if(instanceArray.containsKey(U.getFilename()))
     		return instanceArray.get( U.getFilename() );
-	
     	OSClient osc = new OSClient(U);
     	instanceArray.put(U.getFilename(), osc );
     	return osc;
@@ -86,28 +81,32 @@ public class OSClient {
      */
     private void checkToken( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException {
+		//Log.d("OSCLIENT", "Verify server's cert="+U.getVerifyServerCert());
+		if(U.getVerifyServerCert()) {
+			X509Certificate cert = null;
+			cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
+			if(RESTClient.checkServerCert(U.getIdentityEndpoint(), cert.getIssuerX500Principal().getName()) == false)
+				throw new CertificateException("Couldn't verify server's certificate. Please verify the correct CA selected.");
+
+		}
     	if(U.getTokenExpireTime() <= Utils.now() + 5) {
-				X509Certificate cert = null;
-				if(U.getVerifyServerCert()) {
-						cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
-				}
+
     			String jsonBuffer = RESTClient.requestToken(U.useSSL(),
 						U.getIdentityEndpoint() + "/tokens",
 						U.getTenantName(),
 						U.getUserName(),
-						U.getPassword(),U.getVerifyServerCert(),cert);
+						U.getPassword());
     					String  pwd = U.getPassword();
     					String  edp = U.getIdentityEndpoint();
     					boolean ssl = U.useSSL();
 						boolean verifyServerCert = U.getVerifyServerCert();
 						String CAFile = U.getCAFile();
     					U = User.parse( jsonBuffer );
-    					U.setPassword( pwd );
+						U.setPassword( pwd);
     					U.setSSL(ssl);
-    					U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
-						U.setVerifyServerCert(verifyServerCert);
+						U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+						//U.setVerifyServerCert(verifyServerCert);
 						U.setCAFile( CAFile );
-
 		}
     }
 
@@ -123,6 +122,18 @@ public class OSClient {
 	   ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
 	{
+
+		/*
+		if(U.getVerifyServerCert()) {
+
+			X509Certificate cert = null;
+			cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
+			if(RESTClient.checkServerCert(U.getIdentityEndpoint(), cert.getIssuerX500Principal().getName()) == false)
+			{
+				throw new CertificateException("Couldn't verify server's certificate. Please verify the correct CA selected.");
+			}
+		}
+		*/
     	checkToken( );
     	return RESTClient.sendGETRequest(U.useSSL(),
     									 U.getNeutronEndpoint()+"/v2.0/routers.json",
