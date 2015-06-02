@@ -13,10 +13,10 @@ public class Router {
     private Network gw;
     private String tenantID;
     
-    public Router( String name, String ID, Network gw, String tenantID ) {
+    public Router( String name, String ID, String tenantID ) {
 	  this.name     = name;
 	  this.ID       = ID;
-	  this.gw       = gw;
+	  //this.gw       = gw;
 	  this.tenantID = tenantID;
     }
 
@@ -28,9 +28,9 @@ public class Router {
     public String  getName( ) { return name; }
     public String  getID( ) { return ID; }
     public String  getTenantID( ) { return tenantID; }
-    public Network getGatewayNetwork( ) { return gw; }
+    //public Network getGatewayNetwork( ) { return gw; }
     
-    public static Vector<Router> parse ( String jsonBuf, Hashtable<String, Network> nets ) throws ParseException {
+    public static Vector<Router> parse ( String jsonBuf ) throws ParseException {
     	Vector<Router> VR = new Vector<Router>( );
     
     	try {
@@ -41,9 +41,7 @@ public class Router {
        			String name = routerObj.has("name") ? routerObj.getString("name") : "N/A";
        			String ID = routerObj.getString("id");
        			String tenantID = routerObj.getString("tenant_id");
-       			JSONObject gwObj = routerObj.getJSONObject("external_gateway_info");
-       			String gwnetID = gwObj.getString("network_id");
-       			VR.add(new Router(name, ID, nets.get(gwnetID), tenantID ));
+       			VR.add(new Router(name, ID, tenantID ));
        		}
        		return VR;
         } catch(org.json.JSONException je) {

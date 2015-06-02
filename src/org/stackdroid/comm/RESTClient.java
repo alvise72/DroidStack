@@ -137,10 +137,6 @@ public class RESTClient {
 
 			throw new IOException("RESTClient.checkServerCert.BufferedInputStream.read: " + ioe.getMessage( ) );
 		}
-
-		//((HttpsURLConnection)conn).disconnect( );
-
-		//return true;
 	}
 
     /**

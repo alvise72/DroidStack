@@ -6,13 +6,6 @@ import org.json.JSONException;
 public class ParseUtils {
 
     /**
-     *
-     *
-     *
-     *
-     */    
-
-    /**
      * @throws JSONException 
      *
      *
@@ -47,9 +40,6 @@ public class ParseUtils {
      *
      */
     public static String getErrorMessage ( String jsonBuf ) throws ParseException {
-    	
-    	//Log.d("PARSE.getErrorMessage", "jsonBuf="+jsonBuf);
-    	
       JSONObject jsonObject = null;
       String errorMessage = null;
       try {

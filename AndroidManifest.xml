@@ -124,12 +124,19 @@
            />
        
        <activity
-            android:name="org.stackdroid.activities.NeutronActivity"
+            android:name="org.stackdroid.activities.NeutronNetworkActivity"
             android:launchMode="singleInstance"
             android:label="@string/NETWORKS"            
 	    	android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
-       
+
+       <activity
+            android:name="org.stackdroid.activities.NeutronRouterActivity"
+            android:launchMode="singleInstance"
+            android:label="@string/ROUTERS"
+                android:parentActivityName="org.stackdroid.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+           /> 
     </application>
 </manifest> 
