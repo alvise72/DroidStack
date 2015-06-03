@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
@@ -26,6 +27,12 @@ public class LinearLayoutWithView extends LinearLayout implements GetView {
     private FloatingIPView relatedFloatingIPView = null;
 	private SecGroupView relatedSecGroupView = null;
 	private NetworkListView relatedNetworkListView = null;
+    private RouterView relatedRouterView = null;
+
+    public LinearLayoutWithView( Context ctx, RouterView rv ) {
+        super( ctx );
+        relatedRouterView = rv;
+    }
 
     public LinearLayoutWithView( Context ctx, UserView uv ) {
     	super( ctx );
@@ -94,4 +101,7 @@ public class LinearLayoutWithView extends LinearLayout implements GetView {
  	public SecGroupView getSecGroupView( ) { return relatedSecGroupView; }
     @Override
 	public NetworkListView getNetworkListView() {return relatedNetworkListView;}
+    @Override
+    public RouterView getRouterView() {return relatedRouterView;}
+
 };

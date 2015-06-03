@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
@@ -26,7 +27,13 @@ public class ButtonWithView extends Button implements GetView {
     private FloatingIPView relatedFloatingIPView = null;
     private NetworkListView relatedNetworkListView = null;
     private ListSecGroupView relatedListSecGroupView = null;
-    
+    private RouterView relatedRouterView = null;
+
+    public ButtonWithView( Context ctx, RouterView rv ) {
+        super( ctx );
+        relatedRouterView = rv;
+    }
+
     public ButtonWithView( Context ctx, UserView uv ) {
     	super( ctx );
     	relatedUserView = uv;
@@ -82,4 +89,6 @@ public class ButtonWithView extends Button implements GetView {
 	public VolumeView getVolumeView( ) { return relatedVolumeView; }
 	@Override
 	public NetworkListView getNetworkListView() { return relatedNetworkListView; }
+    @Override
+    public RouterView getRouterView() {return relatedRouterView;}
 };

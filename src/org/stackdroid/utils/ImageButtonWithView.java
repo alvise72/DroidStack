@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.UserView;
@@ -15,21 +16,6 @@ import org.stackdroid.views.NetworkView;
 import org.stackdroid.views.VolumeView;
 
 public class ImageButtonWithView extends ImageButton implements GetView {
-
-/*    public static final int BUTTON_MODIFY_USER   	   = 1;
-    public static final int BUTTON_DELETE_USER   	   = 2;
-    public static final int BUTTON_DELETE_SERVER 	   = 3;
-    public static final int BUTTON_DELETE_IMAGE  	   = 4;
-    public static final int BUTTON_LAUNCH_IMAGE  	   = 5;
-    public static final int BUTTON_SNAP_SERVER   	   = 6;
-    public static final int BUTTON_RELEASE_IP    	   = 7;
-    public static final int BUTTON_DISSOCIATE_IP 	   = 8;
-    public static final int BUTTON_DELETE_SECGRP 	   = 9;
-    public static final int BUTTON_EDIT_SECGRP   	   = 10;
-    public static final int BUTTON_CONSOLE_LOG   	   = 11;
-    public static final int BUTTON_ASSOCIATE_IP  	   = 12;
-    public static final int BUTTON_ATTACHDETACH_VOlUME = 13;
-    public static final int BUTTON_DELETE_RULE  	   = 14;*/
 	
     private RuleView relatedRuleView = null;
     private UserView relatedUserView = null;
@@ -41,6 +27,12 @@ public class ImageButtonWithView extends ImageButton implements GetView {
     private ListSecGroupView relatedListSecGroupView = null;
     private SecGroupView relatedSecGroupView = null;
     private NetworkListView relatedNetworkListView = null;
+    private RouterView relatedRouterView = null;
+
+    public ImageButtonWithView( Context ctx, RouterView rv ) {
+        super( ctx );
+        relatedRouterView = rv;
+    }
 
     public ImageButtonWithView( Context ctx, UserView uv ) {
     	super( ctx );
@@ -107,5 +99,6 @@ public class ImageButtonWithView extends ImageButton implements GetView {
 	public SecGroupView getSecGroupView( ) { return relatedSecGroupView ; }
     @Override
 	public NetworkListView getNetworkListView() { return relatedNetworkListView; }
-    
+    @Override
+    public RouterView getRouterView() {return relatedRouterView;}
 };

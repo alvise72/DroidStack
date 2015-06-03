@@ -164,7 +164,7 @@ public class FloatingIPActivity extends Activity {
 	            
 	            AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
 	            
-	            task.execute(FloatingIPActivity.this.selectedFIPObj.getID(), S.getPrivateIP()[0]);
+	            task.execute(FloatingIPActivity.this.selectedFIPObj.getID(), S.getPrivateIP().elementAt(0) );
 	    	}
 	  	 }	
 	}

@@ -63,23 +63,14 @@ public class Server implements Serializable {
     	secgrpNames    = secgroups;
     }
 
-    public String 	getName() { return name; }
-    public String	getID() { return ID; }
-    public String 	getStatus() { return status; }
-    public String 	getTask() { return task; }
-    public int    	getPowerState() { return powerstate; }
-    public String[] getPrivateIP() { 
-	String[] 		ips = new String[privIP.size()];
-	
-	privIP.toArray(ips);
-		return ips;
-    }
-    
-    public String[] getPublicIP() { 
-    	String[] ips = new String[pubIP.size()];
-    	pubIP.toArray(ips);
-    	return ips; 
-    }
+    public String 		  getName() { return name; }
+    public String		  getID() { return ID; }
+    public String 		  getStatus() { return status; }
+    public String 		  getTask() { return task; }
+    public int    		  getPowerState() { return powerstate; }
+    public Vector<String> getPrivateIP() { return privIP; }
+    public Vector<String> getPublicIP() { return pubIP; }
+
     public String getComputeNode() { return computeNode; }
     public String getKeyName() { return keyname; }
     public String getFlavorID() { return flavorID;}//flavorID; }

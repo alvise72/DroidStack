@@ -47,6 +47,7 @@ import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterView;
 import org.stackdroid.views.ServerView;
 
 import android.os.AsyncTask;
@@ -68,6 +69,19 @@ public class NeutronRouterActivity extends Activity {
 	 *
 	 */
 	protected class DeleteRouterListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class ModifyRouterListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
 			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
@@ -183,13 +197,13 @@ public class NeutronRouterActivity extends Activity {
     	}*/
 		Vector<Router> vr = Router.parse(jsonBufRouter);
 		Iterator<Router> rit = vr.iterator();
-    	while(nit.hasNext()) {
+    	while(rit.hasNext()) {
     		Router r = rit.next();
     		((LinearLayout)findViewById( R.id.routerLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.routerLayout)).addView( space );
-			((LinearLayout)findViewById(R.id.routerLayout)).addView( new RouterView( r ));
+			((LinearLayout)findViewById(R.id.routerLayout)).addView( new RouterView( r, new NeutronRouterActivity.DeleteRouterListener(), new NeutronRouterActivity.ModifyRouterListener(), NeutronRouterActivity.this ));
 		}
     }
 
@@ -236,7 +250,12 @@ public class NeutronRouterActivity extends Activity {
      	    }
 
     	    NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
-    	    NeutronRouterActivity.this.refreshView( jsonBufRouter );
+    	    try {
+				NeutronRouterActivity.this.refreshView( jsonBufRouter );
+			} catch(ParseException pe) {
+				Utils.alert("NeutronRouterActivity.AsyncTaskOSListRouters.onPostExecute: " + pe.getMessage( ),
+							NeutronRouterActivity.this);
+			}
     	}
     }
 }

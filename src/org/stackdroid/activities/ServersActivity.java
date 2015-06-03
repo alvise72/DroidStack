@@ -306,7 +306,8 @@ public class ServersActivity extends Activity {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
 			ServersActivity.this.progressDialogWaitStop.show();
-			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), server.getPrivateIP()[0] );
+			String ip = server.getPrivateIP().elementAt(0);
+			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), ip );
             ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 	}
@@ -549,15 +550,16 @@ public class ServersActivity extends Activity {
 			tv7.setText("Fixed IP(s):");
 			tv7.setTypeface( null, Typeface.BOLD );
 			TextView[] tv8_privip = null;
-			if(s.getPrivateIP().length==0) {
+			if(s.getPrivateIP().isEmpty()) {
 				tv8_privip = new TextView[1];
 				tv8_privip[0] = new TextView(ServersActivity.this);
 				tv8_privip[0].setText( "None" );
 			} else {
-				tv8_privip = new TextView[s.getPrivateIP().length];
-				for(int i = 0; i<s.getPrivateIP().length; i++) {
+				tv8_privip = new TextView[s.getPrivateIP().size()];
+				for(int i = 0; i<s.getPrivateIP().size(); i++) {
 					tv8_privip[i] = new TextView(ServersActivity.this);
-					tv8_privip[i].setText( s.getPrivateIP()[i] );
+					String ip = s.getPrivateIP().elementAt(i);
+					tv8_privip[i].setText( ip );
 				}
 			}
 
@@ -565,15 +567,15 @@ public class ServersActivity extends Activity {
 			tv9.setText("Floating IP(s):");
 			tv9.setTypeface( null, Typeface.BOLD );
 			TextView[] tv10_pubip = null;
-			if(s.getPublicIP().length==0) {
+			if(s.getPublicIP().isEmpty()) {
 				tv10_pubip =new TextView[1];
 				tv10_pubip[0] = new TextView(ServersActivity.this);
 				tv10_pubip[0].setText( "None" );
 			} else {
-				tv10_pubip = new TextView[s.getPublicIP().length];
-				for(int i = 0; i<s.getPublicIP().length; i++) {
+				tv10_pubip = new TextView[s.getPublicIP().size()];
+				for(int i = 0; i<s.getPublicIP().size(); i++) {
 					tv10_pubip[i] = new TextView(ServersActivity.this);
-					tv10_pubip[i].setText( s.getPublicIP( )[i]  );
+					tv10_pubip[i].setText( s.getPublicIP( ).elementAt(i)  );
 				}
 			}
 			TextView tv11 = new TextView( ServersActivity.this );
