@@ -71,7 +71,7 @@
     <string name="INPUTSNAPNAME">Inserisci il nome dello snapshot</string>
     <string name="SNAPCREATED">Snapshot creato. Attiva la finestra \'Immagini\' per vederlo.</string>
     <string name="INPUTSSECNAME">Inserisci il nome del Security Group</string>
-    <string name="VOLUMES">Gestisci Volumi</string>
+    <string name="VOLUMES">Volumi</string>
     <string name="NETWORKS">Reti</string>
     <string name="EDITSECGROUP">Modifica Regole per</string>
     <string name="ADDRULE">Aggiungi regola</string>

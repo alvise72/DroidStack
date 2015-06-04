@@ -73,7 +73,7 @@
     <string name="INPUTSNAPNAME">Insert the snapshot\'s name</string>
     <string name="SNAPCREATED">Snapshot created. Go to \'Images\' window to see it.</string>
     <string name="INPUTSSECNAME">Insert Security Group\'s name</string>
-    <string name="VOLUMES">Manage Volumes</string>
+    <string name="VOLUMES">Volumes</string>
     <string name="NETWORKS">Networks</string>
     <string name="EDITSECGROUP">Edit Rules for</string>
     <string name="ADDRULE">Add rule</string>
