@@ -73,15 +73,33 @@ public class UserAddActivity extends Activity {
     String last_cafile       = Utils.getStringPreference("LAST_CAFILE", "", this);
 
     ((EditText)findViewById(R.id.endpointET)).setText( last_endpoint );
-    ((EditText)findViewById(R.id.tenantnameET)).setText( last_tenant );
-    ((EditText)findViewById(R.id.usernameET)).setText( last_username );
+    ((EditText)findViewById(R.id.tenantnameET)).setText(last_tenant);
+    ((EditText)findViewById(R.id.usernameET)).setText(last_username);
     ((EditText)findViewById(R.id.passwordET)).setText(last_password);
     ((CheckBox)findViewById(R.id.usesslCB)).setChecked(usessl);
-    ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked( showPWD );
-    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(verifyservercert);
-    ((Button)findViewById(R.id.selectCABT)).setEnabled(verifyservercert);
-    ((TextView)findViewById(R.id.CAFILE)).setText(last_cafile);
-    
+    ((CheckBox)findViewById(R.id.checkBoxPWD)).setChecked(showPWD);
+
+
+    if(!usessl) {
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(false);
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setEnabled(false);
+      ((Button)findViewById(R.id.selectCABT)).setEnabled(false);
+      ((TextView)findViewById(R.id.CAFILE)).setText("");
+    } else {
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setEnabled(true);
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(verifyservercert);
+      ((Button)findViewById(R.id.selectCABT)).setEnabled(verifyservercert);
+      ((TextView)findViewById(R.id.CAFILE)).setText(last_cafile);
+      //((Button)findViewById(R.id.selectCABT)).setEnabled(true);
+    }
+
+    boolean verifyserverca = ((CheckBox)findViewById(R.id.verifyServerCertCB)).isEnabled() && ((CheckBox)findViewById(R.id.verifyServerCertCB)).isChecked();
+
+    if(usessl && verifyserverca)
+      ((Button)findViewById(R.id.selectCABT)).setEnabled(true);
+    else
+      ((Button)findViewById(R.id.selectCABT)).setEnabled(false);
+
     EditText pwd = (EditText)this.findViewById(R.id.passwordET);
     CheckBox showpwd = (CheckBox)this.findViewById(R.id.checkBoxPWD);
     if(showpwd.isChecked() == false) {
@@ -130,14 +148,15 @@ public class UserAddActivity extends Activity {
      */
   @Override
   public void onPause( ) {
-    super.onPause( );
+    super.onPause();
+      boolean usessl = ((CheckBox) findViewById(R.id.usesslCB)).isChecked();
       Utils.putStringPreference("LAST_ENDPOINT", ((EditText) findViewById(R.id.endpointET)).getText().toString().trim(), this);
       Utils.putStringPreference("LAST_TENANT", ((EditText) findViewById(R.id.tenantnameET)).getText().toString().trim(), this);
       Utils.putStringPreference("LAST_USERNAME", ((EditText)findViewById(R.id.usernameET)).getText().toString().trim(), this);
       Utils.putStringPreference("LAST_PASSWORD", ((EditText)findViewById(R.id.passwordET)).getText().toString().trim(), this);
-      Utils.putBoolPreference("LAST_USESSL", ((CheckBox) findViewById(R.id.usesslCB)).isChecked(), this);
+      Utils.putBoolPreference("LAST_USESSL", usessl, this);
       Utils.putBoolPreference("LAST_SHOWPWD", ((CheckBox) findViewById(R.id.checkBoxPWD)).isChecked(), this);
-      if(m_validcafile ) {
+      if(usessl) {
         Utils.putBoolPreference("LAST_VERIFYSERVERCERT", ((CheckBox) findViewById(R.id.verifyServerCertCB)).isChecked(), this);
         Utils.putStringPreference("LAST_CAFILE", ((TextView) findViewById(R.id.CAFILE)).getText().toString(), this);
       } else {
@@ -163,7 +182,7 @@ public class UserAddActivity extends Activity {
      */    
     @Override
     public void onDestroy( ) {
-      super.onDestroy( );
+      super.onDestroy();
       progressDialogWaitStop.dismiss();
     }
 
@@ -182,7 +201,7 @@ public class UserAddActivity extends Activity {
      *
      *
      */  
-  public void add( View v ) {
+    public void add( View v ) {
     EditText endpointET = (EditText)findViewById(R.id.endpointET);
     EditText tenantET   = (EditText)findViewById(R.id.tenantnameET);
     EditText usernameET = (EditText)findViewById(R.id.usernameET);
@@ -295,11 +314,41 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void toggleSelectCA( View v ) {
-	  ((Button)(findViewById(R.id.selectCABT))).setEnabled( ((CheckBox)v).isChecked() );
+	  ((Button)(findViewById(R.id.selectCABT))).setEnabled(((CheckBox) v).isChecked());
       ((TextView)findViewById(R.id.CAFILE)).setText("");
-    }  
-  
-    /**
+    }
+
+   /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+   public void toggleUseSSL( View v ) {
+    CheckBox ssl = (CheckBox)v;
+    if(!ssl.isChecked()) {
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(false);
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setEnabled(false);
+      ((Button)findViewById(R.id.selectCABT)).setEnabled(false);
+      ((TextView)findViewById(R.id.CAFILE)).setText("");
+      m_validcafile=false;
+    } else {
+      ((CheckBox)findViewById(R.id.verifyServerCertCB)).setEnabled(true);
+
+      //((Button)findViewById(R.id.selectCABT)).setEnabled(true);
+    }
+  }
+
+  /**
      *
      *
      *
@@ -316,10 +365,6 @@ public class UserAddActivity extends Activity {
      */  
     public void selectCA( View v ) {
       Intent intent = new Intent(this, FileChooser.class);
-      /*ArrayList<String> extensions = new ArrayList<String>();
-      extensions.add(".*");/*
-      extensions.add(".xls");
-      extensions.add(".xlsx"); */
       intent.putStringArrayListExtra("filterFileExtension", null);
       startActivityForResult(intent, FILE_CHOOSER);
     }

@@ -110,14 +110,15 @@
                         android:id="@+id/usesslCB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-			android:textSize="14sp"
+			            android:textSize="14sp"
+                        android:onClick="toggleUseSSL"
                         android:text="@string/USESSL" />
           <CheckBox
                         android:id="@+id/verifyServerCertCB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-			android:textSize="14sp"
-			android:onClick="toggleSelectCA"
+			            android:textSize="14sp"
+			            android:onClick="toggleSelectCA"
                         android:text="@string/VERIFYSERVERCERT" />
         </LinearLayout>
         <LinearLayout
