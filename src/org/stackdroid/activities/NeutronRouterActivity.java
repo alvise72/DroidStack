@@ -94,6 +94,19 @@ public class NeutronRouterActivity extends Activity {
 	 *
 	 *
 	 */
+	protected class InfoRouterListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
     public boolean onCreateOptionsMenu( Menu menu ) {
         
         super.onCreateOptionsMenu( menu );
@@ -156,7 +169,6 @@ public class NeutronRouterActivity extends Activity {
 		
         progressDialogWaitStop.show();
         (new AsyncTaskOSListRouters()).execute();
-        //(Toast.makeText(this, getString(R.string.TOUCHNETTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
     
 
@@ -168,7 +180,7 @@ public class NeutronRouterActivity extends Activity {
      */
     @Override
     public void onDestroy( ) {
-    	super.onDestroy( );
+    	super.onDestroy();
     	progressDialogWaitStop.dismiss();
     }
 
@@ -180,7 +192,7 @@ public class NeutronRouterActivity extends Activity {
 	 */
     public void update(View v) {
     	progressDialogWaitStop.show();
-        (new AsyncTaskOSListRouters()).execute( );
+        (new AsyncTaskOSListRouters()).execute();
     }
 
 	/**
@@ -191,10 +203,6 @@ public class NeutronRouterActivity extends Activity {
 	 */
     private void refreshView( String jsonBufRouter ) throws ParseException {
     	((LinearLayout)findViewById(R.id.routerLayout)).removeAllViews();
-    	/*if(routers==null || routers.size()==0) {
-    		Utils.alert(getString(R.string.NOROUTERAVAIL), this);	
-    		return;
-    	}*/
 		Vector<Router> vr = Router.parse(jsonBufRouter);
 		Iterator<Router> rit = vr.iterator();
     	while(rit.hasNext()) {
@@ -203,11 +211,31 @@ public class NeutronRouterActivity extends Activity {
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.routerLayout)).addView( space );
-			((LinearLayout)findViewById(R.id.routerLayout)).addView( new RouterView( r, new NeutronRouterActivity.DeleteRouterListener(), new NeutronRouterActivity.ModifyRouterListener(), NeutronRouterActivity.this ));
+			((LinearLayout)findViewById(R.id.routerLayout)).addView( new RouterView( r,
+					new NeutronRouterActivity.DeleteRouterListener(),
+					new NeutronRouterActivity.ModifyRouterListener(),
+					new NeutronRouterActivity.InfoRouterListener(),
+					NeutronRouterActivity.this ));
 		}
     }
 
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	public void createRouter( View v ) {
+
+	}
+
+
+
     //  ASYNC TASKS.....
+
+
+
+
 
 	/**
 	 *
@@ -226,8 +254,6 @@ public class NeutronRouterActivity extends Activity {
     		OSClient osc = OSClient.getInstance(U);
     		
     	    try {
-    	    	//jsonBufNet 		 = osc.requestNetworks( );
-    	    	//jsonBufSubnet    = osc.requestSubNetworks( );
     	    	jsonBufRouter    = osc.requestRouters( );
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
