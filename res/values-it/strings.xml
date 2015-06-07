@@ -178,5 +178,7 @@
     <string name="FILESIZE">Dimensione file</string>
     <string name="PARENTDIR">Cartella superiore</string>
     <string name="CAFILECHOOSER">Scegli CA File</string>
-
+    <string name="ROUTERHASGATEWAY">Il router ha un gateway impostato.</string>
+    <string name="AREYOUSURETODELETEROUTER">Sei sicuro di cancellare il router ?</string>
+    <string name="ROUTERNAME">Nome del router</string>
 </resources>

@@ -122,26 +122,61 @@ public class OSClient {
 	   ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
 	{
-
-		/*
-		if(U.getVerifyServerCert()) {
-
-			X509Certificate cert = null;
-			cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
-			if(RESTClient.checkServerCert(U.getIdentityEndpoint(), cert.getIssuerX500Principal().getName()) == false)
-			{
-				throw new CertificateException("Couldn't verify server's certificate. Please verify the correct CA selected.");
-			}
-		}
-		*/
     	checkToken( );
     	return RESTClient.sendGETRequest(U.useSSL(),
     									 U.getNeutronEndpoint()+"/v2.0/routers.json",
     									 U.getToken(),
     									 new Vector<Pair<String,String>>());
     }
-    
+
     /*
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+	public void deleteRouter( String routerID ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken( );
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add( p );
+		RESTClient.sendDELETERequest(U.useSSL(),
+				U.getNeutronEndpoint() + "/v2.0/routers/" + routerID + ".json",
+				U.getToken(),
+				vp);
+	}
+
+
+	/*
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+	public void createRouter( String routerName ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken();
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		String extradata = "{\"router\": {\"name\": \"" + routerName + "\", \"admin_state_up\": true}}";
+		vp.add( p );
+		RESTClient.sendPOSTRequest(U.useSSL(),
+				                   U.getNeutronEndpoint() + "/v2.0/routers.json",
+								   U.getToken(),
+								   extradata,
+								   vp);
+	}
+
+	/*
      * 
      * 
      * 

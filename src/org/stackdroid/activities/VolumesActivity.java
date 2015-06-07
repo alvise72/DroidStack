@@ -414,8 +414,6 @@ public class VolumesActivity extends Activity {
     	@Override
     	public void onClick( View v ) {
     		final Volume V = ((ImageButtonWithView)v).getVolumeView().getVolume();
-    		//Utils.alert(VolumesActivity.this.getString(R.string.NOTIMPLEMENTED), VolumesActivity.this);
-    		//Log.d("VOLUMES", "Vol="+V);
     		if(V.isAttached()) {
     			Utils.alert(VolumesActivity.this.getString(R.string.CANNOTDELETEATTACHEDVOL), VolumesActivity.this);
     			return;
@@ -450,11 +448,11 @@ public class VolumesActivity extends Activity {
     }
     
     /**
-    *
-    *
-    *
-    *
-    */
+     *
+     *
+     *
+     *
+     */
     public void createVolume( View v ) {
     	
     	LayoutInflater li = LayoutInflater.from(this);
@@ -464,8 +462,6 @@ public class VolumesActivity extends Activity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         alertDialogBuilder.setView(promptsView);
-
-        // set dialog message
 
         alertDialogBuilder.setTitle(getString(R.string.CREATEVOLUME) );
 

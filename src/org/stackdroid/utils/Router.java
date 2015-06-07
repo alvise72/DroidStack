@@ -16,7 +16,7 @@ public class Router {
     public Router( String name, String ID, String tenantID ) {
 	  this.name     = name;
 	  this.ID       = ID;
-	  //this.gw       = gw;
+	  this.gw       = null;
 	  this.tenantID = tenantID;
     }
 
@@ -29,7 +29,11 @@ public class Router {
     public String  getID( ) { return ID; }
     public String  getTenantID( ) { return tenantID; }
     //public Network getGatewayNetwork( ) { return gw; }
-    
+    public void setGateway( Network n ) { gw = n; }
+	public Network getGateway( ) { return gw; }
+	public boolean hasGateway( ) {return (gw!=null);}
+
+
     public static Vector<Router> parse ( String jsonBuf ) throws ParseException {
     	Vector<Router> VR = new Vector<Router>( );
     

@@ -187,4 +187,7 @@
     <string name="FILESIZE">File size</string>
     <string name="PARENTDIR">Parent folder</string>
     <string name="CAFILECHOOSER">Choose CA File</string>
+    <string name="ROUTERHASGATEWAY">The router has a gateway.</string>
+    <string name="AREYOUSURETODELETEROUTER">Are you sure to delete the router ?</string>
+    <string name="ROUTERNAME">Router\'s name</string>
 </resources>
