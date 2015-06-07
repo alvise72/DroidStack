@@ -28,6 +28,7 @@ import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.GetView;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Router;
 import org.stackdroid.utils.User;
@@ -110,6 +111,7 @@ public class NeutronRouterActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
+			Router V = (((GetView)v).getRouterView()).getRouter();
 		}
 	}
 
@@ -212,7 +214,7 @@ public class NeutronRouterActivity extends Activity {
 	 *
 	 *
 	 */
-    private void refreshView( String jsonBufRouter ) throws ParseException {
+    private void refreshView( String jsonBufRouter, String jsonNet, String jsonSubnet ) throws ParseException {
     	((LinearLayout)findViewById(R.id.routerLayout)).removeAllViews();
 		Vector<Router> vr = Router.parse(jsonBufRouter);
 		Iterator<Router> rit = vr.iterator();
@@ -223,10 +225,10 @@ public class NeutronRouterActivity extends Activity {
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.routerLayout)).addView( space );
 			((LinearLayout)findViewById(R.id.routerLayout)).addView( new RouterView( r,
-					new NeutronRouterActivity.DeleteRouterListener(),
-					new NeutronRouterActivity.ModifyRouterListener(),
-					new NeutronRouterActivity.InfoRouterListener(),
-					NeutronRouterActivity.this ));
+																					 new NeutronRouterActivity.DeleteRouterListener(),
+																					 new NeutronRouterActivity.ModifyRouterListener(),
+																					 new NeutronRouterActivity.InfoRouterListener(),
+																					 NeutronRouterActivity.this ));
 		}
     }
 
@@ -322,7 +324,7 @@ public class NeutronRouterActivity extends Activity {
     		
     	    try {
     	    	jsonBufRouter    = osc.requestRouters( );
-				jsonBufNet		 = osc.requestNetworks( );
+				jsonBufNet		 = osc.requestNetworks();
 				jsonBufSubnet	 = osc.requestSubNetworks( );
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError( se.getMessage() );
@@ -344,13 +346,15 @@ public class NeutronRouterActivity extends Activity {
      	    	return;
      	    }
 
-    	    NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
+
+
     	    try {
-				NeutronRouterActivity.this.refreshView( jsonBufRouter );
+				NeutronRouterActivity.this.refreshView( jsonBufRouter, jsonBufNet, jsonBufSubnet );
 			} catch(ParseException pe) {
 				Utils.alert("NeutronRouterActivity.AsyncTaskOSListRouters.onPostExecute: " + pe.getMessage( ),
 							NeutronRouterActivity.this);
 			}
+			NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
     	}
     }
 
