@@ -45,7 +45,7 @@
     <string name="PICKASERVERTOASSOCIATEFIP">Scegli un server a cui associare il floating IP</string>
     <string name="ALREADYASSOCIATEDWARN">Questo floating IP &#xe8; gi&#xe0; associato ad un server. Se continui, l\'associazione verr&#xe0; spostata al nuovo server che sceglierai.</string>
     <string name="ALREADYASSOCIATED">Floating IP gi&#xe0; associato a questo server.</string>
-    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP è ancora associato ad un server e non pu&#xf2; essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna.</string>
     <string name="NOINSTANCEAVAIL">Non ci sono istanze.</string>
     <string name="NOIMAGEAAVAIL">Non ci sono immagini.</string>
     <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
@@ -59,8 +59,8 @@
     <string name="LAUNCHIMAGE">Lancia immagine</string>
     <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
     <string name="SPECIFYOPTIP">Specifica IP (opzionale)</string>
-    <string name="FIPDISSOCIATED">Il floating IP è stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se continui a vedere il nome del server.</string>
-    <string name="FIPASSOCIATED">Il floating IP è stato associato al server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se ancora non vedi il nome del server.</string>
+    <string name="FIPDISSOCIATED">Il floating IP &#xe8; stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se continui a vedere il nome del server.</string>
+    <string name="FIPASSOCIATED">Il floating IP &#xe8; stato associato al server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se ancora non vedi il nome del server.</string>
     <string name="FIPONLYFROMEXTERNAL">La rete selezionata non &#xe8; di tipo External. Puoi allocarti un floating IP solo da una rete External.\nSeleziona un\'altra rete (se disponibile).</string>
     <string name="NONETSELECTED">Non hai selezionato una rete esterna (o non hai accesso ad alcuna).</string>
     <string name="FIPALLOCATED">Floating IP allocato. Premi su Menu-&gt;Aggiorna per aggiornare la finestra se ancora non lo vedi.</string>
@@ -172,7 +172,7 @@
 	<string name="HEAT">Orchestratore</string>
 	<string name="NOROUTERAVAIL">Nessun router disponibile</string>
 	<string name="VERIFYSERVERCERT">Verifica certificato server</string>
-    <string name="INVALIDCA">Il file CA è scaduto, illeggibile o corrotto</string>
+    <string name="INVALIDCA">Il file CA &#xe8; scaduto, illeggibile o corrotto</string>
     <string name="CURRENTDIR">Cartella corrente</string>
     <string name="FOLDER">Cartella</string>
     <string name="FILESIZE">Dimensione file</string>
@@ -181,4 +181,5 @@
     <string name="ROUTERHASGATEWAY">Il router ha un gateway impostato.</string>
     <string name="AREYOUSURETODELETEROUTER">Sei sicuro di cancellare il router ?</string>
     <string name="ROUTERNAME">Nome del router</string>
+    <string name="COULDNOTBEFOUND">non &#xe8; stato trovato</string>
 </resources>

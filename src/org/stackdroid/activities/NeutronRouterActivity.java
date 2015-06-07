@@ -41,13 +41,11 @@ public class NeutronRouterActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop     = null;
     private User 				 U 						    = null;
-	private AlertDialog 		 alertDialogDeleteRouter    = null;
-	private Vector<Router>		 routers					= null;
+	//private AlertDialog 		 alertDialogDeleteRouter    = null;
+	//private Vector<Router>		 routers					= null;
 	private AlertDialog 		 alertDialogCreateRouter;
 	private EditText 			 routername				    = null;
-	private AlertDialog 		 getAlertDialogCreateRouter    = null;
-
-
+	//private AlertDialog 		 getAlertDialogCreateRouter    = null;
 
 	/**
 	 *
@@ -68,7 +66,7 @@ public class NeutronRouterActivity extends Activity {
 			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					NeutronRouterActivity.this.progressDialogWaitStop.show( );
-					(new NeutronRouterActivity.AsyncTaskDeleteRouter()).execute(r.getID());
+					(new NeutronRouterActivity.AsyncTaskDeleteRouter()).execute( r.getID(), r.getName() );
 				}
 			};
 
@@ -184,7 +182,6 @@ public class NeutronRouterActivity extends Activity {
         progressDialogWaitStop.show();
         (new AsyncTaskOSListRouters()).execute();
     }
-    
 
     /**
      *
@@ -262,6 +259,41 @@ public class NeutronRouterActivity extends Activity {
 		alertDialogCreateRouter.show();
 	}
 
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class CreateRouterClickListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			String routerName = routername.getText().toString().trim();
+			if(routerName.length()==0) {
+				Utils.alert(getString(R.string.NOEMPTYNAME), NeutronRouterActivity.this);
+				return;
+			}
+
+			alertDialogCreateRouter.dismiss();
+			NeutronRouterActivity.this.progressDialogWaitStop.show( );
+			(new NeutronRouterActivity.AsyncTaskCreateRouter()).execute( routerName );
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class CreateRouterCancelClickListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogCreateRouter.dismiss();
+			return;
+		}
+	}
+
 
 
 
@@ -290,8 +322,10 @@ public class NeutronRouterActivity extends Activity {
     		
     	    try {
     	    	jsonBufRouter    = osc.requestRouters( );
+				jsonBufNet		 = osc.requestNetworks( );
+				jsonBufSubnet	 = osc.requestSubNetworks( );
     	    } catch(ServerException se) {
-    	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+    	    	errorMessage = ParseUtils.parseNeutronError( se.getMessage() );
     	    	hasError = true;
     	    } catch(Exception e) {
     	    	errorMessage = e.getMessage();
@@ -328,12 +362,13 @@ public class NeutronRouterActivity extends Activity {
 	 */
 	private class AsyncTaskDeleteRouter extends AsyncTask<String,Void,Void> {
 		private String errorMessage = "";
-		private boolean hasError = false;
+		private boolean hasError 	= false;
+		private String routerName 	= "";
 		@Override
 		protected Void doInBackground( String... v )
 		{
 			OSClient osc = OSClient.getInstance(U);
-
+			routerName = v[1] ;
 			try {
 				osc.deleteRouter( v[0] );
 			} catch(ServerException se) {
@@ -352,12 +387,17 @@ public class NeutronRouterActivity extends Activity {
 			super.onPostExecute(v);
 
 			if(hasError) {
-				Utils.alert( errorMessage, NeutronRouterActivity.this );
+				String err = "";
+				if(errorMessage.toLowerCase().contains("could not be found")==true) {
+					err = errorMessage;
+					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
+				} else err = errorMessage;
+				Utils.alert( err, NeutronRouterActivity.this );
 				NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
 				return;
 			}
-
-			NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
+			(new AsyncTaskOSListRouters()).execute();
+			NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
 			/*try {
 				//NeutronRouterActivity.this.refreshView( jsonBufRouter );
 			} catch(ParseException pe) {
@@ -404,7 +444,7 @@ public class NeutronRouterActivity extends Activity {
 				NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
 				return;
 			}
-
+			(new AsyncTaskOSListRouters()).execute();
 			NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
 			/*try {
 				//NeutronRouterActivity.this.refreshView( jsonBufRouter );
@@ -412,41 +452,6 @@ public class NeutronRouterActivity extends Activity {
 				Utils.alert("NeutronRouterActivity.AsyncTaskDeleteRouter.onPostExecute: " + pe.getMessage( ),
 							NeutronRouterActivity.this);
 			}*/
-		}
-	}
-
-	/**
-	 *
-	 *
-	 *
-	 *
-	 */
-	private class CreateRouterClickListener implements OnClickListener {
-		@Override
-		public void onClick( View v ) {
-			String routerName = routername.getText().toString().trim();
-			if(routerName.length()==0) {
-				Utils.alert(getString(R.string.NOEMPTYNAME), NeutronRouterActivity.this);
-				return;
-			}
-
-			alertDialogCreateRouter.dismiss();
-			NeutronRouterActivity.this.progressDialogWaitStop.show( );
-			(new NeutronRouterActivity.AsyncTaskCreateRouter()).execute( routerName );
-		}
-	}
-
-	/**
-	 *
-	 *
-	 *
-	 *
-	 */
-	private class CreateRouterCancelClickListener implements OnClickListener {
-		@Override
-		public void onClick( View v ) {
-			alertDialogCreateRouter.dismiss();
-			return;
 		}
 	}
 }

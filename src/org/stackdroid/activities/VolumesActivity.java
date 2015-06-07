@@ -132,13 +132,8 @@ public class VolumesActivity extends Activity {
         progressDialogWaitStop.show();
         (new AsyncTaskListVolumes()).execute( );
     }
-    
-    /**
-     * 
-     * @author dorigoa
-     * Is called when the user click on a volume item
-     *
-     */
+
+	//__________________________________________________________________________________
     protected class InfoVolumeClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
@@ -233,13 +228,8 @@ public class VolumesActivity extends Activity {
     		
     	}
     }
-    
-    /**
-     * 
-     * @author dorigoa
-     * Is called when the user click on Confirm button of the Volume Creation window
-     *
-     */
+
+	//__________________________________________________________________________________
     protected class CreateVolumeClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
@@ -265,11 +255,7 @@ public class VolumesActivity extends Activity {
     	}
     }
 
-    /**
-     * 
-     * @author dorigoa
-     * Is called when the user click on Cancel button of the Volume Creation window
-     */
+	//__________________________________________________________________________________
     protected class CreateVolumeCancelClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
@@ -277,11 +263,8 @@ public class VolumesActivity extends Activity {
     		return;
     	}
     }
-    /**
-     * 
-     * @author dorigoa
-     * Is called when the user click on Confirm button of the server selection windows (to attach the current volume)
-     */
+
+	//__________________________________________________________________________________
     protected class ConfirmButtonHandler implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
@@ -293,24 +276,15 @@ public class VolumesActivity extends Activity {
     	}
     }
 
-    /**
-     * 
-     * @author dorigoa
-     * Is called when the user click on Cancel button of the server selection windows (to attach the current volume)
-     */
+	//__________________________________________________________________________________
     protected class CancelButtonHandler implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
     		VolumesActivity.this.alertDialogSelectServer.dismiss( );
     	}
     }
-    
-    /**
-     * 
-     * 
-     * 
-     * 
-     */
+
+	//__________________________________________________________________________________
     protected class AttachVolClickListener implements OnClickListener {
 		@Override
     	public void onClick( View v ) {
@@ -356,14 +330,9 @@ public class VolumesActivity extends Activity {
 
     		
     }
-    
 
-    /**
-     * 
-     * 
-     * 
-     * 
-     */
+
+	//__________________________________________________________________________________
     protected class DetachVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
@@ -404,12 +373,7 @@ public class VolumesActivity extends Activity {
     	}
     }
 
-    /**
-     * 
-     * 
-     * 
-     * 
-     */
+	//__________________________________________________________________________________
     protected class DeleteVolClickListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
@@ -446,13 +410,8 @@ public class VolumesActivity extends Activity {
 			alert.show();
     	}
     }
-    
-    /**
-     *
-     *
-     *
-     *
-     */
+
+	//__________________________________________________________________________________
     public void createVolume( View v ) {
     	
     	LayoutInflater li = LayoutInflater.from(this);
@@ -478,25 +437,15 @@ public class VolumesActivity extends Activity {
         alertDialogCreateVolume.show();
         
     }
- 
-    /**
-     *
-     *
-     *
-     *
-     */
+
+	//__________________________________________________________________________________
     @Override
     public void onDestroy( ) {
     	super.onDestroy( );
     	progressDialogWaitStop.dismiss();
     }
 
-    /**
-     *
-     *
-     *
-     *
-     */
+	//__________________________________________________________________________________
     private void refreshView( Vector<Volume> volumes ) {
     	((LinearLayout)findViewById(R.id.volumeLayout)).removeAllViews();
     	if(volumes.size()==0) {
@@ -526,12 +475,7 @@ public class VolumesActivity extends Activity {
     //  ASYNC TASKS.....
 
 
-    /**
-     *
-     *
-     *
-     *
-     */
+	//__________________________________________________________________________________
     protected class AsyncTaskListVolumes extends AsyncTask< Void, Void, Void >
     {
      	private  String   errorMessage     = null;
@@ -576,14 +520,9 @@ public class VolumesActivity extends Activity {
      	}
     }
 
-    /**
-    *
-    *
-    *
-    *
-    */
-   protected class AsyncTaskCreateVolume extends AsyncTask< String, Void, Void >
-   {
+	//__________________________________________________________________________________
+    protected class AsyncTaskCreateVolume extends AsyncTask< String, Void, Void >
+    {
     	private  String   errorMessage     = null;
     	private  boolean  hasError         = false;
     	
@@ -615,131 +554,107 @@ public class VolumesActivity extends Activity {
     		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
     	}
    }
-   
 
-   /**
-   *
-   *
-   *
-   *
-   */
-  protected class AsyncTaskDeleteVolume extends AsyncTask< String, Void, Void >
-  {
-   	private  String   errorMessage     = null;
-   	private  boolean  hasError         = false;
-   	
-   	@Override
-   	protected Void doInBackground( String ... v ) 
-   	{
-   		OSClient osc = OSClient.getInstance( U );
-   		try {
-   			osc.deleteVolume( v[0] );
-   		} catch(Exception e) {
-   			errorMessage = e.getMessage();
-   			hasError = true;
-   		}
-			return null;
-   	}
-	
-   	@Override
-	    protected void onPostExecute( Void v ) {
-   		super.onPostExecute( v );
-	    
-   		if(hasError) {
-   			Utils.alert( errorMessage, VolumesActivity.this );
-   			VolumesActivity.this.progressDialogWaitStop.dismiss( );
-   			return;
-   		}
-   		
-   		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDELETED), VolumesActivity.this );
-   		(new AsyncTaskListVolumes()).execute( );
-   		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
-   	}
-  }
-  
-  
-
-  /**
-  *
-  *
-  *
-  *
-  */
- protected class AsyncTaskAttachVolume extends AsyncTask< String, Void, Void >
- {
-  	private  String   errorMessage     = null;
-  	private  boolean  hasError         = false;
-  	
-  	@Override
-  	protected Void doInBackground( String ... v ) 
+	//__________________________________________________________________________________
+    protected class AsyncTaskDeleteVolume extends AsyncTask< String, Void, Void >
   	{
-  		OSClient osc = OSClient.getInstance( U );
-  		try {
-  			osc.volumeAttach( v[0], v[1] );
-  		} catch(Exception e) {
-  			errorMessage = e.getMessage();
-  			hasError = true;
-  		}
-		return null;
-  	}
+   		private  String   errorMessage     = null;
+   		private  boolean  hasError         = false;
+   	
+   		@Override
+   		protected Void doInBackground( String ... v )
+   		{
+   			OSClient osc = OSClient.getInstance( U );
+   			try {
+   				osc.deleteVolume( v[0] );
+   			} catch(Exception e) {
+   				errorMessage = e.getMessage();
+   				hasError = true;
+   			}
+			return null;
+   		}
 	
-  	@Override
+   		@Override
 	    protected void onPostExecute( Void v ) {
-  		super.onPostExecute( v );
+   			super.onPostExecute( v );
 	    
-  		if(hasError) {
-  			Utils.alert( errorMessage, VolumesActivity.this );
-  			VolumesActivity.this.progressDialogWaitStop.dismiss( );
-  			return;
-  		}
-  		
-  		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEATTACHED), VolumesActivity.this );
-  		(new AsyncTaskListVolumes()).execute( );
-  		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
-  	}
- }
- 
+   			if(hasError) {
+   				Utils.alert( errorMessage, VolumesActivity.this );
+   				VolumesActivity.this.progressDialogWaitStop.dismiss( );
+   				return;
+   			}
+   		
+   			Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDELETED), VolumesActivity.this );
+   			(new AsyncTaskListVolumes()).execute( );
+   		}
+ 	}
 
- 
-
- /**
- *
- *
- *
- *
- */
-protected class AsyncTaskDetachVolume extends AsyncTask< String, Void, Void >
-{
- 	private  String   errorMessage     = null;
- 	private  boolean  hasError         = false;
- 	
- 	@Override
- 	protected Void doInBackground( String ... v ) 
+	//__________________________________________________________________________________
+ 	protected class AsyncTaskAttachVolume extends AsyncTask< String, Void, Void >
  	{
- 		OSClient osc = OSClient.getInstance( U );
- 		try {
- 			osc.volumeDetach( v[0], v[1] );
- 		} catch(Exception e) {
- 			Log.d("VOLUMEDETACH", "ECCEZIONE: "+e.getMessage());
- 			errorMessage = e.getMessage();;
- 			hasError = true;
- 		}
-		return null;
- 	}
+  		private  String   errorMessage     = null;
+  		private  boolean  hasError         = false;
+  	
+  		@Override
+  		protected Void doInBackground( String ... v )
+  		{
+  			OSClient osc = OSClient.getInstance( U );
+  			try {
+  				osc.volumeAttach( v[0], v[1] );
+  			} catch(Exception e) {
+  				errorMessage = e.getMessage();
+  				hasError = true;
+  			}
+			return null;
+  		}
 	
- 	@Override
-	    protected void onPostExecute( Void v ) {
- 		super.onPostExecute( v );
+  		@Override
+	   	 protected void onPostExecute( Void v ) {
+  			super.onPostExecute( v );
 	    
- 		if(hasError) {
- 			Utils.alert( errorMessage, VolumesActivity.this );
- 			VolumesActivity.this.progressDialogWaitStop.dismiss( );
- 			return;
- 		}
- 		
- 		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDETACHED), VolumesActivity.this );
- 		(new AsyncTaskListVolumes()).execute( );
- 		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
+  			if(hasError) {
+  				Utils.alert( errorMessage, VolumesActivity.this );
+  				VolumesActivity.this.progressDialogWaitStop.dismiss( );
+  				return;
+  			}
+  		
+  			Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEATTACHED), VolumesActivity.this );
+  			(new AsyncTaskListVolumes()).execute( );
+  		}
  	}
-}
+
+	//__________________________________________________________________________________
+	protected class AsyncTaskDetachVolume extends AsyncTask< String, Void, Void >
+	{
+ 		private  String   errorMessage     = null;
+ 		private  boolean  hasError         = false;
+ 	
+ 		@Override
+ 		protected Void doInBackground( String ... v )
+ 		{
+ 			OSClient osc = OSClient.getInstance( U );
+ 			try {
+				osc.volumeDetach( v[0], v[1] );
+ 			} catch(Exception e) {
+ 				Log.d("VOLUMEDETACH", "ECCEZIONE: "+e.getMessage());
+ 				errorMessage = e.getMessage();;
+ 				hasError = true;
+ 			}
+			return null;
+ 		}
+	
+ 		@Override
+	    	protected void onPostExecute( Void v ) {
+ 			super.onPostExecute( v );
+	    
+ 			if(hasError) {
+ 				Utils.alert( errorMessage, VolumesActivity.this );
+ 				VolumesActivity.this.progressDialogWaitStop.dismiss( );
+ 				return;
+ 			}
+ 		
+ 			Utils.alert(VolumesActivity.this.getString(R.string.VOLUMEDETACHED), VolumesActivity.this );
+ 			(new AsyncTaskListVolumes()).execute( );
+ 		}
+	}
 }
