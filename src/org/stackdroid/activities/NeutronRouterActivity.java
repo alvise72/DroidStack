@@ -398,12 +398,6 @@ public class NeutronRouterActivity extends Activity {
 			}
 			(new AsyncTaskOSListRouters()).execute();
 			NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
-			/*try {
-				//NeutronRouterActivity.this.refreshView( jsonBufRouter );
-			} catch(ParseException pe) {
-				Utils.alert("NeutronRouterActivity.AsyncTaskDeleteRouter.onPostExecute: " + pe.getMessage( ),
-							NeutronRouterActivity.this);
-			}*/
 		}
 	}
 
