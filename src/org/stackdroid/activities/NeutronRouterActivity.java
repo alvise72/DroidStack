@@ -99,6 +99,7 @@ public class NeutronRouterActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
+			Router V = (((GetView)v).getRouterView()).getRouter();
 		}
 	}
 
