@@ -182,4 +182,5 @@
     <string name="AREYOUSURETODELETEROUTER">Sei sicuro di cancellare il router ?</string>
     <string name="ROUTERNAME">Nome del router</string>
     <string name="COULDNOTBEFOUND">non &#xe8; stato trovato</string>
+    <string name="CREATEROUTER">Crea un nuovo router</string>
 </resources>

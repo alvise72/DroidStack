@@ -1,6 +1,7 @@
 package org.stackdroid.activities;
 
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -19,6 +21,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.os.AsyncTask;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -30,6 +33,7 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.GetView;
 import org.stackdroid.utils.ImageButtonWithView;
+import org.stackdroid.utils.Network;
 import org.stackdroid.utils.Router;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
@@ -42,11 +46,8 @@ public class NeutronRouterActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop     = null;
     private User 				 U 						    = null;
-	//private AlertDialog 		 alertDialogDeleteRouter    = null;
-	//private Vector<Router>		 routers					= null;
-	private AlertDialog 		 alertDialogCreateRouter;
+	private AlertDialog 		 alertDialogCreateRouter	= null;
 	private EditText 			 routername				    = null;
-	//private AlertDialog 		 getAlertDialogCreateRouter    = null;
 
 	/**
 	 *
@@ -112,6 +113,50 @@ public class NeutronRouterActivity extends Activity {
 		public void onClick( View v ) {
 			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
 			Router V = (((GetView)v).getRouterView()).getRouter();
+			TextView tv1 = new TextView(NeutronRouterActivity.this);
+			tv1.setText(getString(R.string.ROUTERNAME));
+			tv1.setTypeface( null, Typeface.BOLD );
+			TextView tv2 = new TextView(NeutronRouterActivity.this);
+			tv2.setText(V.getName());
+
+			TextView tv3 = new TextView(NeutronRouterActivity.this);
+			tv3.setText("Gateway");
+			tv3.setTypeface( null, Typeface.BOLD );
+			TextView tv4 = new TextView(NeutronRouterActivity.this);
+			Network gw = V.getGateway();
+			if(gw!=null) {
+				if (gw.getSubNetworks() != null)
+					if (gw.getSubNetworks().size()!=0 && gw.getSubNetworks().elementAt(0) != null)
+						if (gw.getSubNetworks().elementAt(0).getAddress() != null)
+							tv4.setText(gw.getName() + " (" + gw.getSubNetworks().elementAt(0).getAddress() + ")");
+			} else tv4.setText("N/A or privileges required");
+			ScrollView sv = new ScrollView(NeutronRouterActivity.this);
+			LinearLayout.LayoutParams lp
+					= new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.MATCH_PARENT);
+			sv.setLayoutParams( lp );
+			LinearLayout l = new LinearLayout(NeutronRouterActivity.this);
+			l.setLayoutParams( lp );
+			l.setOrientation( LinearLayout.VERTICAL );
+			int paddingPixel = 8;
+			float density = Utils.getDisplayDensity( NeutronRouterActivity.this );
+			int paddingDp = (int)(paddingPixel * density);
+			l.setPadding(paddingDp, 0, 0, 0);
+			l.addView( tv1 );
+			tv2.setPadding(2 * paddingDp, 0, 0, 0);
+			l.addView( tv2 );
+			tv4.setPadding(2 * paddingDp, 0, 0, 0);
+			l.addView( tv3 );
+			l.addView( tv4 );
+
+			sv.addView(l);
+			String name;
+			if(V.getName().length()>=16)
+				name = V.getName().substring(0,14) + "..";
+			else
+				name = V.getName();
+			Utils.alertInfo(sv, "Router information: " + name, NeutronRouterActivity.this);
 		}
 	}
 
@@ -215,8 +260,17 @@ public class NeutronRouterActivity extends Activity {
 	 *
 	 */
     private void refreshView( String jsonBufRouter, String jsonNet, String jsonSubnet ) throws ParseException {
-    	((LinearLayout)findViewById(R.id.routerLayout)).removeAllViews();
-		Vector<Router> vr = Router.parse(jsonBufRouter);
+
+		Vector<Network> netVec = Network.parse(jsonNet,jsonSubnet);
+		HashMap<String, Network> mapID_to_Net = new HashMap();
+		Iterator<Network> netIt = netVec.iterator();
+		while(netIt.hasNext()) {
+			Network thisNet = netIt.next();
+			mapID_to_Net.put(thisNet.getID(), thisNet);
+		}
+
+		((LinearLayout) findViewById(R.id.routerLayout)).removeAllViews();
+		Vector<Router> vr = Router.parse(jsonBufRouter, mapID_to_Net);
 		Iterator<Router> rit = vr.iterator();
     	while(rit.hasNext()) {
     		Router r = rit.next();
@@ -228,7 +282,9 @@ public class NeutronRouterActivity extends Activity {
 																					 new NeutronRouterActivity.DeleteRouterListener(),
 																					 new NeutronRouterActivity.ModifyRouterListener(),
 																					 new NeutronRouterActivity.InfoRouterListener(),
-																					 NeutronRouterActivity.this ));
+																					 NeutronRouterActivity.this
+																					)
+																	);
 		}
     }
 
@@ -247,7 +303,7 @@ public class NeutronRouterActivity extends Activity {
 
 		alertDialogBuilder.setView(promptsView);
 
-		alertDialogBuilder.setTitle(getString(R.string.CREATEVOLUME) );
+		alertDialogBuilder.setTitle(getString(R.string.CREATEROUTER) );
 
 		alertDialogCreateRouter = alertDialogBuilder.create();
 
@@ -276,7 +332,7 @@ public class NeutronRouterActivity extends Activity {
 				return;
 			}
 
-			alertDialogCreateRouter.dismiss();
+			if(alertDialogCreateRouter!=null) alertDialogCreateRouter.dismiss();
 			NeutronRouterActivity.this.progressDialogWaitStop.show( );
 			(new NeutronRouterActivity.AsyncTaskCreateRouter()).execute( routerName );
 		}
@@ -291,7 +347,7 @@ public class NeutronRouterActivity extends Activity {
 	private class CreateRouterCancelClickListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			alertDialogCreateRouter.dismiss();
+			if(alertDialogCreateRouter!=null) alertDialogCreateRouter.dismiss();
 			return;
 		}
 	}
@@ -401,7 +457,7 @@ public class NeutronRouterActivity extends Activity {
 				return;
 			}
 			(new AsyncTaskOSListRouters()).execute();
-			NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
+			//NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
 		}
 	}
 
@@ -443,7 +499,7 @@ public class NeutronRouterActivity extends Activity {
 				return;
 			}
 			(new AsyncTaskOSListRouters()).execute();
-			NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
+			//NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
 			/*try {
 				//NeutronRouterActivity.this.refreshView( jsonBufRouter );
 			} catch(ParseException pe) {

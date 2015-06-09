@@ -224,7 +224,7 @@ public class VolumesActivity extends Activity {
     	    	name = V.getName().substring(0,14) + "..";
     	    else
     	    	name = V.getName();
-    	    Utils.alertInfo( sv, "Image information: " + name, VolumesActivity.this );
+    	    Utils.alertInfo( sv, "Volume information: " + name, VolumesActivity.this );
     		
     	}
     }
