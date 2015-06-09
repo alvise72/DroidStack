@@ -124,12 +124,10 @@ public class NeutronRouterActivity extends Activity {
 			tv3.setTypeface( null, Typeface.BOLD );
 			TextView tv4 = new TextView(NeutronRouterActivity.this);
 			Network gw = V.getGateway();
-			if(gw!=null) {
-				if (gw.getSubNetworks() != null)
-					if (gw.getSubNetworks().size()!=0 && gw.getSubNetworks().elementAt(0) != null)
-						if (gw.getSubNetworks().elementAt(0).getAddress() != null)
-							tv4.setText(gw.getName() + " (" + gw.getSubNetworks().elementAt(0).getAddress() + ")");
-			} else tv4.setText("N/A or privileges required");
+			if(gw!=null && gw.getSubNetworks() != null && gw.getSubNetworks().size()!=0 && gw.getSubNetworks().elementAt(0) != null)
+				tv4.setText(gw.getName() + " (" + gw.getSubNetworks().elementAt(0).getAddress() + ")");
+			else tv4.setText("N/A or privileges required");
+
 			ScrollView sv = new ScrollView(NeutronRouterActivity.this);
 			LinearLayout.LayoutParams lp
 					= new LinearLayout.LayoutParams(
@@ -156,7 +154,7 @@ public class NeutronRouterActivity extends Activity {
 				name = V.getName().substring(0,14) + "..";
 			else
 				name = V.getName();
-			Utils.alertInfo(sv, "Router information: " + name, NeutronRouterActivity.this);
+			Utils.alertInfo(sv, "Router information", NeutronRouterActivity.this);
 		}
 	}
 
