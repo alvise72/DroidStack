@@ -1,6 +1,7 @@
 package org.stackdroid.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.stackdroid.MainActivity;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseUtils;
@@ -98,8 +100,13 @@ public class NeutronRouterActivity extends Activity {
 	protected class ModifyRouterListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			//NeutronRouterActivity.this.progressDialogWaitStop.show( );
 			Router V = (((GetView)v).getRouterView()).getRouter();
+			/*
+			Class<?> c = (Class<?>)ModifyRouterActivity.class;
+			Intent I = new Intent( NeutronRouterActivity.this, c );
+			I.putExtra( "ROUTERID", V.getID());
+			startActivity( I );
+			*/
 		}
 	}
 

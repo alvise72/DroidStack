@@ -365,8 +365,9 @@ public class ServersActivity extends Activity {
 	 */
 	public void createInstance( View v ) {
 		this.progressDialogWaitStop.show();
-		(new ServersActivity.AsyncTaskOSListImages()).execute();
-        ServersActivity.this.manageInstanceDialog.dismiss();		
+		( new ServersActivity.AsyncTaskOSListImages( ) ).execute();
+		if(ServersActivity.this.manageInstanceDialog!=null)
+	        ServersActivity.this.manageInstanceDialog.dismiss( );
 	}
 
 	/**

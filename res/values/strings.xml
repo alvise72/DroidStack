@@ -192,4 +192,5 @@
     <string name="ROUTERNAME">Router\'s name</string>
     <string name="COULDNOTBEFOUND">could not be found</string>
     <string name="CREATEROUTER">Create new router</string>
+    <string name="INTERFACES">Interfaces</string>
 </resources>
