@@ -7,9 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-public class Flavor  implements Comparable<Flavor>, Serializable {
+public class Flavor  implements Comparable<Flavor>{//}, Serializable {
 	
-	private static final long serialVersionUID = 2087368867376448461L;
+//	private static final long serialVersionUID = 2087368867376448461L;
 
 	
     private String name = null;

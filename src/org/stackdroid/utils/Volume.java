@@ -9,9 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-public class Volume implements Serializable {
+public class Volume {//implements Serializable {
 	
-	private static final long serialVersionUID = 2087368867376448461L;
+	//private static final long serialVersionUID = 2087368867376448461L;
 	
     private String name;
     private String ID;

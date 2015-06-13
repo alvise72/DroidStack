@@ -10,9 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-public class OSImage implements Serializable {
+public class OSImage {//implements Serializable {
 
-	private static final long serialVersionUID = 2087368867376448461L;
+	//private static final long serialVersionUID = 2087368867376448461L;
 	
     private String   name      = null;
     private long     size      = 0;

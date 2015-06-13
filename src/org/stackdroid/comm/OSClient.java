@@ -118,17 +118,35 @@ public class OSClient {
      * 
      * 
      */
-    public String requestRouters( ) throws NotAuthorizedException, NotFoundException, 
+    public String requestRouterPorts( String routerID ) throws NotAuthorizedException, NotFoundException,
 	   ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
 	{
     	checkToken( );
     	return RESTClient.sendGETRequest(U.useSSL(),
-    									 U.getNeutronEndpoint()+"/v2.0/routers.json",
+    									 U.getNeutronEndpoint()+"/v2.0/ports.json?device_id=" + routerID,
     									 U.getToken(),
     									 new Vector<Pair<String,String>>());
     }
 
+	/*
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+	public String requestRouters( ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken( );
+		return RESTClient.sendGETRequest(U.useSSL(),
+				U.getNeutronEndpoint()+"/v2.0/routers.json",
+				U.getToken(),
+				new Vector<Pair<String,String>>());
+	}
     /*
      *
      *

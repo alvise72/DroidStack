@@ -12,9 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-public class Server implements Serializable {
+public class Server {//implements Serializable {
 	
-	private static final long serialVersionUID = 2087368867376448461L;
+	//private static final long serialVersionUID = 2087368867376448461L;
 	
     public final static int POWER_RUNNING = 1;
     public final static int POWER_NOSTATE = 0;

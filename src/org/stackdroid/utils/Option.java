@@ -1,6 +1,6 @@
 package org.stackdroid.utils;
 
-public class Option implements Comparable<Option>{
+public class Option implements Comparable<Option> {
 	private String name;
 	private String rendername;
 	private String data;
