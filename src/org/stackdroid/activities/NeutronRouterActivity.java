@@ -397,6 +397,7 @@ public class NeutronRouterActivity extends Activity {
     	    	jsonBufRouter    = osc.requestRouters( );
 				jsonBufNet		 = osc.requestNetworks();
 				jsonBufSubnet	 = osc.requestSubNetworks( );
+//				jsonBufPorts     = osc.requestRouterPorts()
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError( se.getMessage() );
     	    	hasError = true;

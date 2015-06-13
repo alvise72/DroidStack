@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-public class Port {//implements Serializable {
+public class RouterPort {//implements Serializable {
 
 	private String id;
 	private String name;
@@ -20,7 +20,7 @@ public class Port {//implements Serializable {
 	private String deviceID;
 	private Vector<Pair<String, String>> subnets_fixedips;
 	
-	public Port( String id, String name, String networkID, String tenantID, String device_owner, String MAC, String deviceID, Vector<Pair<String,String>> subs ) {
+	public RouterPort( String id, String name, String networkID, String tenantID, String device_owner, String MAC, String deviceID, Vector<Pair<String,String>> subs ) {
 		this.id = id;
 		this.name = name;
 		this.networkID=networkID;
@@ -53,8 +53,8 @@ public class Port {//implements Serializable {
 
 	public String getID( ) { return id ; }
 	
-	public static Vector<Port> parse( String jsonPort ) throws ParseException {
-		Vector<Port> vecP = new Vector<Port>();
+	public static Vector<RouterPort> parse( String jsonPort ) throws ParseException {
+		Vector<RouterPort> vecP = new Vector<RouterPort>();
 		try {
 			JSONObject jsonObject = new JSONObject( jsonPort );
 			JSONArray ports = jsonObject.getJSONArray("ports");
@@ -79,8 +79,7 @@ public class Port {//implements Serializable {
 						subnets_ips.add(P);
 					}
 				}
-				//String fixedip = port.has("fixed_ips") ? port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") : "";
-				vecP.add(new Port(id, name, netid, tenantid,device_owner,mac,deviceid,subnets_ips));
+				vecP.add(new RouterPort(id, name, netid, tenantid,device_owner,mac,deviceid,subnets_ips));
 			}
 			return vecP;
 		} catch(org.json.JSONException je) {
