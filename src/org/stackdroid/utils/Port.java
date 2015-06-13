@@ -11,25 +11,24 @@ import org.stackdroid.parse.ParseException;
 
 public class Port {//implements Serializable {
 
-	//private static final long serialVersionUID = 8087367767376441461L;
-	
 	private String id;
-	//private String fixedIP;
 	private String name;
-	private Network network;
+	private String networkID;
 	private String tenantID;
 	private String device_owner;
 	private String MAC;
-	private Vector<Pair<SubNetwork, String>> subnets_fixedips;
+	private String deviceID;
+	private Vector<Pair<String, String>> subnets_fixedips;
 	
-	public Port( String id, String name, Network net, String tenantID, String device_owner, String MAC, Vector<Pair<SubNetwork,String>> subs ) {
+	public Port( String id, String name, String networkID, String tenantID, String device_owner, String MAC, String deviceID, Vector<Pair<String,String>> subs ) {
 		this.id = id;
 		this.name = name;
-		this.network=net;
+		this.networkID=networkID;
 		this.tenantID=tenantID;
 		this.device_owner=device_owner;
 		this.MAC=MAC;
 		this.subnets_fixedips=subs;
+		this.deviceID=deviceID;
 	}
 	
 	public String getFixedIP( ) {
@@ -39,7 +38,7 @@ public class Port {//implements Serializable {
 
 	public String getName( ) { return name; }
 
-	public Network getNetwork( ) { return network; }
+	public String getNetworkID( ) { return networkID; }
 
 	public String getTenantID( ) { return tenantID; }
 
@@ -47,12 +46,12 @@ public class Port {//implements Serializable {
 
 	public String getMAC( ) { return MAC; }
 
-	public Pair<SubNetwork,String> getSubnetInterface( ) {
+	public Pair<String,String> getSubnetInterface( ) {
 		if(subnets_fixedips.size()==0) return null;
 		return subnets_fixedips.elementAt(0);
 	}
 
-	public String get_ID( ) { return id ; }
+	public String getID( ) { return id ; }
 	
 	public static Vector<Port> parse( String jsonPort ) throws ParseException {
 		Vector<Port> vecP = new Vector<Port>();
@@ -62,8 +61,26 @@ public class Port {//implements Serializable {
 			for(int i = 0; i<ports.length(); ++i) {
 				JSONObject port = ports.getJSONObject(i);
 				String id = port.getString("id");
-				String fixedip = port.has("fixed_ips") ? port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") : "";
-				vecP.add(new Port(id, fixedip));
+				String deviceid = port.getString("device:id");
+				String device_owner = port.getString("device_owner");
+				String tenantid = port.getString("tenant_id");
+				String name = port.getString("name");
+				String netid = port.getString("network_id");
+				String mac = port.getString("mac_address");
+				Pair<String,String> P = null;
+				Vector<Pair<String,String>> subnets_ips = new Vector();
+				if(port.has("fixed_ips")) {
+					JSONArray fxips = port.getJSONArray("fixed_ips");
+					for(int j = 0; j<fxips.length(); j++) {
+						JSONObject fxip = fxips.getJSONObject(j);
+						String ipaddr = fxip.getString("ip_address");
+						String subnetid = fxip.getString("subnet_id");
+						P = new Pair<String,String>(subnetid,ipaddr);
+						subnets_ips.add(P);
+					}
+				}
+				//String fixedip = port.has("fixed_ips") ? port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") : "";
+				vecP.add(new Port(id, name, netid, tenantid,device_owner,mac,deviceid,subnets_ips));
 			}
 			return vecP;
 		} catch(org.json.JSONException je) {
