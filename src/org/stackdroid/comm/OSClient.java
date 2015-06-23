@@ -42,7 +42,7 @@ public class OSClient {
     
     User U = null;
     
-    /*
+    /**
      * 
      * 
      * 
@@ -59,7 +59,7 @@ public class OSClient {
     	return osc;
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -71,7 +71,7 @@ public class OSClient {
     	this.U = U;
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -110,7 +110,7 @@ public class OSClient {
 		}
     }
 
-    /*
+    /**
      * 
      * 
      * 
@@ -129,7 +129,7 @@ public class OSClient {
     									 new Vector<Pair<String,String>>());
     }
 
-	/*
+	/**
      *
      *
      *
@@ -147,7 +147,8 @@ public class OSClient {
 				U.getToken(),
 				new Vector<Pair<String,String>>());
 	}
-    /*
+
+    /**
      *
      *
      *
@@ -170,7 +171,7 @@ public class OSClient {
 	}
 
 
-	/*
+	/**
      *
      *
      *
@@ -194,7 +195,7 @@ public class OSClient {
 								   vp);
 	}
 
-	/*
+	/**
      * 
      * 
      * 
@@ -220,7 +221,7 @@ public class OSClient {
 									vp );
 	}
     
-    /*
+    /**
      * 
      * 
      * 
@@ -244,7 +245,7 @@ public class OSClient {
 									  vp );
 	}
     
-    /*
+    /**
      * 
      * 
      * 
@@ -275,7 +276,7 @@ public class OSClient {
 	   }
     
 
-    /*
+    /**
      * 
      * 
      * 
@@ -304,7 +305,7 @@ public class OSClient {
     								  vp );
 	   }
 
-    /*
+    /**
      * 
      * 
      * 
@@ -328,8 +329,9 @@ public class OSClient {
 										   U.getNeutronEndpoint() + "/v2.0/networks/"+netID, 
 										   U.getToken(), 
 										   vp );
-    }    
-    /*
+    }
+
+    /**
      * 
      * 
      * 
@@ -357,7 +359,7 @@ public class OSClient {
     }
     
 
-    /*
+    /**
      * 
      * 
      * 
@@ -384,7 +386,7 @@ public class OSClient {
 									vp );
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -410,7 +412,7 @@ public class OSClient {
 				    				vp );
     }
 
-    /*
+    /**
      * 
      * 
      * 
@@ -436,7 +438,7 @@ public class OSClient {
     								vp );
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -462,7 +464,7 @@ public class OSClient {
     								vp );
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -486,8 +488,9 @@ public class OSClient {
     								U.getToken(), 
     								extradata, 
     								vp );
-    }  
-    /*
+    }
+
+    /**
      * 
      * 
      * 
@@ -513,7 +516,7 @@ public class OSClient {
     								vp );
     }
     
-    /*
+    /**
      * 
      * 
      * 

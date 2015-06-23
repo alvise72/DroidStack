@@ -59,7 +59,7 @@ public class ImageLaunchActivity extends Activity {
     private LinearLayout 							  networksL 				  = null;
     HashSet<String> 							 	  selectedSecgroups 		  = null;
     private User 									  U 						  = null;
-    private Bundle 									  bundle 					  = null;
+    //private Bundle 									  bundle 					  = null;
     private String 									  imageID 					  = null;
     private String 									  imageNAME 				  = null;
     private Hashtable<Pair<String,String>, String> 	  selectedNetworks 			  = null;
@@ -137,7 +137,7 @@ public class ImageLaunchActivity extends Activity {
       super.onCreate(savedInstanceState);
       setContentView( org.stackdroid.R.layout.imagelaunch );
       
-      bundle = getIntent( ).getExtras( );
+      Bundle bundle = getIntent( ).getExtras( );
       imageID = bundle.getString("IMAGEID");
       imageNAME = bundle.getString("IMAGENAME");
       setTitle(getString(R.string.LAUNCHIMAGE)+ " "+imageNAME);

@@ -301,7 +301,7 @@ public class OSImagesActivity extends Activity {
     	}
     }
 
-    private  void deleteGlanceImage( String ID ) {
+    private   void  deleteGlanceImage( String ID ) {
     	progressDialogWaitStop.show();
     	AsyncTaskOSDelete task = new AsyncTaskOSDelete();
     	task.execute( ID );

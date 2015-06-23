@@ -101,12 +101,12 @@ public class NeutronRouterActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			Router V = (((GetView)v).getRouterView()).getRouter();
-			/*
-			Class<?> c = (Class<?>)ModifyRouterActivity.class;
+			Class<?> c = (Class<?>)RouterEditActivity.class;
 			Intent I = new Intent( NeutronRouterActivity.this, c );
 			I.putExtra( "ROUTERID", V.getID());
+			I.putExtra( "ROUTERNAME", V.getName());
 			startActivity( I );
-			*/
+
 		}
 	}
 
@@ -397,7 +397,6 @@ public class NeutronRouterActivity extends Activity {
     	    	jsonBufRouter    = osc.requestRouters( );
 				jsonBufNet		 = osc.requestNetworks();
 				jsonBufSubnet	 = osc.requestSubNetworks( );
-//				jsonBufPorts     = osc.requestRouterPorts()
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError( se.getMessage() );
     	    	hasError = true;

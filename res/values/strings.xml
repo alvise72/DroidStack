@@ -193,4 +193,5 @@
     <string name="COULDNOTBEFOUND">could not be found</string>
     <string name="CREATEROUTER">Create new router</string>
     <string name="INTERFACES">Interfaces</string>
+    <string name="EDITROUTER">Modify router</string>
 </resources>
