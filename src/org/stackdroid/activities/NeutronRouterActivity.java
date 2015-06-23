@@ -495,7 +495,7 @@ public class NeutronRouterActivity extends Activity {
 			try {
 				osc.createRouter(v[0]);
 			} catch(ServerException se) {
-				Log.e("NEUTRONROUTER", se.getMessage());
+				//Log.e("NEUTRONROUTER", se.getMessage());
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
 			} catch(Exception e) {
@@ -524,4 +524,6 @@ public class NeutronRouterActivity extends Activity {
 			}*/
 		}
 	}
+
+
 }

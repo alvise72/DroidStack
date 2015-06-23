@@ -1,5 +1,7 @@
 package org.stackdroid.utils;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -47,10 +49,16 @@ public class Router {
        			String ID = routerObj.getString("id");
        			String tenantID = routerObj.getString("tenant_id");
 				Network gwNet = null;
-				if(routerObj.has("external_gateway_info")) {
-					JSONObject gw = routerObj.getJSONObject("external_gateway_info");
-					gwNet = netMap.get(gw.getString("network_id"));
-				}
+
+					if (routerObj.has("external_gateway_info")) {
+						if ( !routerObj.isNull("external_gateway_info") ) {
+							//Log.d("ROUTER", "external_gateway_info=" + routerObj.getString("external_gateway_info"));
+							JSONObject gw = routerObj.getJSONObject("external_gateway_info");
+							gwNet = netMap.get(gw.getString("network_id"));
+						}
+					}
+
+				//Log.d("ROUTER", "external_gateway_info=" + routerObj.getString("external_gateway_info"));
        			VR.add(new Router(name, ID, tenantID, gwNet, null ));
        		}
        		return VR;
