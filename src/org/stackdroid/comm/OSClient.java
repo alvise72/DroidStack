@@ -110,6 +110,25 @@ public class OSClient {
 		}
     }
 
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	public String requestRouterShow( String routerID ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken( );
+		return RESTClient.sendGETRequest(U.useSSL(),
+				U.getNeutronEndpoint()+"/v2.0/routers/" + routerID + ".json",
+				U.getToken(),
+				new Vector<Pair<String,String>>());
+	}
+
     /**
      * 
      * 

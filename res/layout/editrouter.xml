@@ -10,6 +10,7 @@
         android:background="#f2f2f2"
         android:orientation="vertical" >
 
+        <!-- Selected user bar with hline -->
         <View
             android:layout_width="match_parent"
             android:layout_height="3sp"
@@ -34,13 +35,14 @@
             android:layout_height="3sp"
             />
 
-
+        <!-- Gateway text box -->
         <TextView
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:textAppearance="?android:attr/textAppearanceLarge"
          android:text="Gateway: " />
 
+        <!-- Interfaces Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,78 +50,29 @@
             android:text="@string/INTERFACES"
             android:id="@+id/textView" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollView" >
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/interfacesLayout"></LinearLayout>
-        </ScrollView>
-
-        <ScrollView
-            android:id="@+id/scrollView1"
+        <!-- Layout containing the scroller with the interfaces list -->
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/objectsL"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="3dp"
-                android:orientation="vertical">
-
-                <View
-                  android:layout_width="match_parent"
-                  android:layout_height="3sp" />
-
-                <View
-                  android:layout_width="match_parent"
-                  android:layout_height="3sp" />
-
-                <View
-                  android:layout_width="fill_parent"
-                 android:layout_height="3dp"
-                 android:background="#FF909090" />
-                <View
-              android:layout_width="match_parent"
-              android:layout_height="3sp"
-            />
-
-
-                <View
-                 android:layout_width="wrap_content"
-                 android:layout_height="5dip" />
+            <!-- Scroller with interfaces list -->
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/scrollView" >
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="91dp"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/interfacesLayout">
 
                 </LinearLayout>
+            </ScrollView>
 
-                <View
-                 android:layout_width="wrap_content"
-                 android:layout_height="3dip" />
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:id="@+id/layoutRuleList"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical" >
 
-               </LinearLayout>
-
-             </LinearLayout>
-
-         </ScrollView>
+        </LinearLayout>
     </LinearLayout>
-    </LinearLayout>
+
 </LinearLayout>

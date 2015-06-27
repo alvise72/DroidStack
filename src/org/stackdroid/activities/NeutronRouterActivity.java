@@ -106,7 +106,6 @@ public class NeutronRouterActivity extends Activity {
 			I.putExtra( "ROUTERID", V.getID());
 			I.putExtra( "ROUTERNAME", V.getName());
 			startActivity( I );
-
 		}
 	}
 
@@ -241,11 +240,23 @@ public class NeutronRouterActivity extends Activity {
 		else
 			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
-        progressDialogWaitStop.show();
-        (new AsyncTaskOSListRouters()).execute();
+
     }
 
-    /**
+	/**
+ 	 *
+ 	 *
+ 	 *
+ 	 *
+ 	 */
+	@Override
+	public void onResume( ) {
+		super.onResume( );
+		progressDialogWaitStop.show();
+		(new AsyncTaskOSListRouters()).execute();
+	}
+
+	/**
      *
      *
      *
@@ -285,7 +296,7 @@ public class NeutronRouterActivity extends Activity {
 		}
 
 		((LinearLayout) findViewById(R.id.routerLayout)).removeAllViews();
-		Vector<Router> vr = Router.parse(jsonBufRouter, mapID_to_Net);
+		Vector<Router> vr = Router.parseMultiple(jsonBufRouter, mapID_to_Net);
 		Iterator<Router> rit = vr.iterator();
     	while(rit.hasNext()) {
     		Router r = rit.next();

@@ -184,5 +184,5 @@
     <string name="COULDNOTBEFOUND">non &#xe8; stato trovato</string>
     <string name="CREATEROUTER">Crea un nuovo router</string>
     <string name="INTERFACES">Interfacce</string>
-    <string name="EDITROUTER">Modify router</string>
+    <string name="EDITROUTER">Modifica Router</string>
 </resources>

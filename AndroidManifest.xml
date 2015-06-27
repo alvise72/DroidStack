@@ -137,6 +137,15 @@
             android:label="@string/ROUTERS"
                 android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-           /> 
+           />
+
+       <activity
+            android:name="org.stackdroid.activities.RouterEditActivity"
+            android:launchMode="singleInstance"
+            android:label="@string/EDITROUTER"
+                android:parentActivityName="org.stackdroid.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+           />
+ 
     </application>
 </manifest> 

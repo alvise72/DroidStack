@@ -76,14 +76,17 @@ public class RouterEditActivity extends Activity {
 		Bundle bundle = getIntent( ).getExtras();
 		routerID = bundle.getString("ROUTERID");
 		routerName = bundle.getString("ROUTERNAME");
-		setTitle(getString(R.string.EDITROUTER)+ " "+imageName);
+		setTitle(getString(R.string.EDITROUTER)+ " "+routerName);
   }
   
   	//__________________________________________________________________________________
  	@Override
  	public void onResume( ) {
-    super.onResume( );
-  }
+    	super.onResume( );
+		// Fare il neutron router-show
+		// Fare il neutron router-port-list per avere le interfacce alle reti tenant
+
+  	}
 
   	/**
 	 *
@@ -94,6 +97,11 @@ public class RouterEditActivity extends Activity {
 	private class AsyncTaskGetRouterPorts extends AsyncTask<String, Void, Void> {
 		private String errorMessage = "";
 		private boolean hasError = false;
+		private String jsonBufRouterPorts = "";
+		private String jsonBufRouterShow = "";
+		private String jsonBufNetworks = "";
+		private String jsonBufNet = "";
+		private String jsonBufSubnet = "";
 
 		@Override
 		protected Void doInBackground( String... v )
@@ -101,7 +109,10 @@ public class RouterEditActivity extends Activity {
 			OSClient osc = OSClient.getInstance(U);
 
 			try {
-				osc.requestRouterPorts(v[0]);
+				jsonBufRouterPorts 	= osc.requestRouterPorts(v[0]);
+				jsonBufRouterShow  	= osc.requestRouterShow(v[0]);
+				jsonBufNet		 	= osc.requestNetworks();
+				jsonBufSubnet	 	= osc.requestSubNetworks( );
 			} catch(ServerException se) {
 				//Log.e("NEUTRONROUTER", se.getMessage());
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
