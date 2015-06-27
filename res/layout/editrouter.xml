@@ -37,10 +37,11 @@
 
         <!-- Gateway text box -->
         <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textAppearance="?android:attr/textAppearanceLarge"
-         android:text="Gateway: " />
+            android:id="@+id/GATEWAYSHOWTEXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Gateway: " />
 
         <!-- Interfaces Title -->
         <TextView

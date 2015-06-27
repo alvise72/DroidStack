@@ -21,6 +21,8 @@ import org.stackdroid.parse.ParseException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.Network;
+import org.stackdroid.utils.Router;
+import org.stackdroid.utils.RouterPort;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 /*
@@ -141,8 +143,6 @@ public class RouterEditActivity extends Activity {
 				return;
 			}
 			RouterEditActivity.this.putInfo( jsonBufRouterShow, jsonBufRouterPorts, jsonBufNet, jsonBufSubnet );
-
-			//(new AsyncTaskOSListRouters()).execute();
 		}
 	}
 
@@ -155,9 +155,27 @@ public class RouterEditActivity extends Activity {
 				Network thisNet = netIt.next();
 				mapID_to_Net.put(thisNet.getID(), thisNet);
 			}
+			Router router = Router.parseSingle(jsonBufRouterShow, mapID_to_Net);
+			String gwname = "";
+			if(router.hasGateway()) {
+				gwname = "Gateway: " + router.getGateway().getName();
+				if(router.getGateway().getSubNetworks().size()!=0)
+					gwname = gwname + " ("+router.getGateway().getSubNetworks().elementAt(0).getAddress() + ")";
+			}
+			((TextView)findViewById(R.id.GATEWAYSHOWTEXT)).setText(gwname);
+
+			Vector<RouterPort> ports = RouterPort.parse(jsonBufRouterPorts);
+			LinearLayout iL = (LinearLayout)findViewById(R.id.interfacesLayout);
+			Iterator<RouterPort> portIterator = ports.iterator();
+			while( portIterator.hasNext()) {
+				RouterPort rp = portIterator.next();
+
+			}
+
 		} catch (ParseException pe) {
 			RouterEditActivity.this.progressDialogWaitStop.dismiss();
-			return
+			Utils.alert(pe.getMessage(), this);
+			return;
 		}
 		RouterEditActivity.this.progressDialogWaitStop.dismiss();
 	}
