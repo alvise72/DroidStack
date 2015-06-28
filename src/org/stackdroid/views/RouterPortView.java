@@ -4,7 +4,6 @@ package org.stackdroid.views;
 
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.LinearLayoutWithView;
-import org.stackdroid.utils.Router;
 import org.stackdroid.utils.RouterPort;
 import org.stackdroid.utils.Utils;
 
@@ -19,14 +18,12 @@ import org.stackdroid.R;
 
 public class RouterPortView extends LinearLayout {
     
-    RouterPort routerPort                      = null;
-    private LinearLayoutWithView row           = null;
-    private LinearLayoutWithView buttonsLayout = null;
-    private LinearLayoutWithView nameLayout    = null;
-    //TextView routerName                        = null;
-    private ImageButtonWithView deleteButton   = null;
-    //private ImageButtonWithView modifyButton   = null;
-    //private ImageButtonWithView infoButton     = null;
+    private  RouterPort           routerPort         = null;
+    private LinearLayoutWithView row                 = null;
+    private LinearLayoutWithView buttonsLayout       = null;
+    private LinearLayoutWithView nameLayout          = null;
+    private ImageButtonWithView  deleteButton        = null;
+    private TextView             routerPortIPAddress = null;
 
     /**
      *
@@ -36,14 +33,12 @@ public class RouterPortView extends LinearLayout {
      *
      *
      */
-    public RouterView( Router router,
-                       OnClickListener deleteListener,
-                       OnClickListener modifyListener,
-                       OnClickListener infoListener,
-                       Context ctx )
+    public RouterPortView( RouterPort routerPort,
+                           OnClickListener deleteListener,
+                           Context ctx )
     {
 	    super(ctx);
-        this.router = router;
+        this.routerPort = routerPort;
         setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         setLayoutParams(params1);
@@ -55,46 +50,33 @@ public class RouterPortView extends LinearLayout {
         row.setLayoutParams(_params1);
         row.setBackgroundResource(R.drawable.rounded_corner_thin);
 
-        routerName = new TextView(ctx);
-        String rname = router.getName();
-        if(rname.length()>30) {
-            rname = rname.substring(0,29) + "...";
-        }
-        routerName.setText(router.getName());
-        routerName.setTextColor(Color.parseColor("#333333"));
-        routerName.setTypeface(null, Typeface.BOLD);
+        routerPortIPAddress = new TextView(ctx);
+        String IP = routerPort.getFixedIP();//.getName();
+        routerPortIPAddress.setText(IP);
+        routerPortIPAddress.setTextColor(Color.parseColor("#333333"));
+        routerPortIPAddress.setTypeface(null, Typeface.BOLD);
 
-        nameLayout = new LinearLayoutWithView( ctx, (RouterView)this );
+        nameLayout = new LinearLayoutWithView( ctx, (RouterPortView)this );
         nameLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params2
                 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params2.gravity=Gravity.LEFT|Gravity.CENTER_VERTICAL;
         nameLayout.setLayoutParams(params2);
 
-        nameLayout.addView(routerName);
+        nameLayout.addView(routerPortIPAddress);
 
-        buttonsLayout = new LinearLayoutWithView( ctx, (RouterView)this );
-        buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
+        buttonsLayout = new LinearLayoutWithView( ctx, (RouterPortView)this );
+        buttonsLayout.setOrientation(LinearLayout.HORIZONTAL );
         LinearLayout.LayoutParams params4
                 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
         params4.gravity= Gravity.RIGHT|Gravity.CENTER_VERTICAL;
         buttonsLayout.setLayoutParams( params4 );
         buttonsLayout.setGravity(Gravity.RIGHT);
 
-        infoButton = new ImageButtonWithView( ctx, (RouterView)this );
-        infoButton.setImageResource(android.R.drawable.ic_dialog_info);
-        infoButton.setOnClickListener(infoListener);
-
-        deleteButton = new ImageButtonWithView( ctx, (RouterView)this );
+        deleteButton = new ImageButtonWithView( ctx, (RouterPortView)this );
         deleteButton.setImageResource(android.R.drawable.ic_menu_delete);
         deleteButton.setOnClickListener(deleteListener);
 
-        modifyButton = new ImageButtonWithView( ctx, (RouterView)this );
-        modifyButton.setImageResource(android.R.drawable.ic_menu_edit);
-        modifyButton.setOnClickListener(modifyListener);
-
-        buttonsLayout.addView(infoButton);
-        buttonsLayout.addView(modifyButton);
         buttonsLayout.addView(deleteButton);
 
 
@@ -111,6 +93,6 @@ public class RouterPortView extends LinearLayout {
      *
      *
      */
-    public Router getRouter( ) { return router; }
+    public RouterPort getRouterPort( ) { return routerPort; }
     
 }

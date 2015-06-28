@@ -7,6 +7,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterPortView;
 import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
@@ -29,6 +30,7 @@ public class CheckBoxWithView extends CheckBox implements GetView {
     private NetworkListView relatedNetworkListView = null;
     private ListSecGroupView relatedListSecGroupView = null;
     private RouterView relatedRouterView = null;
+    private RouterPortView relatedRouterPortView   = null;
 
     public CheckBoxWithView( Context ctx, RouterView rv ) {
         super( ctx );
@@ -84,6 +86,10 @@ public class CheckBoxWithView extends CheckBox implements GetView {
     	super( ctx );
     	relatedFloatingIPView = nv;
     }
+    public CheckBoxWithView( Context ctx, RouterPortView rv ) {
+        super( ctx );
+        relatedRouterPortView = rv;
+    }
     
     
     @Override
@@ -108,4 +114,6 @@ public class CheckBoxWithView extends CheckBox implements GetView {
 	public NetworkListView getNetworkListView() { return relatedNetworkListView; }
     @Override
     public RouterView getRouterView() {return relatedRouterView;}
+    @Override
+    public RouterPortView getRouterPortView( ) { return relatedRouterPortView; }
 };

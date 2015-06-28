@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterPortView;
 import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
@@ -28,6 +29,8 @@ public class ImageButtonWithView extends ImageButton implements GetView {
     private SecGroupView relatedSecGroupView = null;
     private NetworkListView relatedNetworkListView = null;
     private RouterView relatedRouterView = null;
+    private RouterPortView relatedRouterPortView   = null;
+
 
     public ImageButtonWithView( Context ctx, RouterView rv ) {
         super( ctx );
@@ -78,7 +81,10 @@ public class ImageButtonWithView extends ImageButton implements GetView {
    	    super( ctx );
    	    relatedNetworkListView = rv;
     }
-    
+    public ImageButtonWithView( Context ctx, RouterPortView rv ) {
+        super( ctx );
+        relatedRouterPortView = rv;
+    }
     @Override
 	public RuleView getRuleView( ) { return relatedRuleView; }
     @Override
@@ -101,4 +107,6 @@ public class ImageButtonWithView extends ImageButton implements GetView {
 	public NetworkListView getNetworkListView() { return relatedNetworkListView; }
     @Override
     public RouterView getRouterView() {return relatedRouterView;}
+    @Override
+    public RouterPortView getRouterPortView( ) { return relatedRouterPortView; }
 };

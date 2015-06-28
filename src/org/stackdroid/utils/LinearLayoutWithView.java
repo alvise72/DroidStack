@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterPortView;
 import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
@@ -17,29 +18,30 @@ import org.stackdroid.views.VolumeView;
 
 public class LinearLayoutWithView extends LinearLayout implements GetView {
 
-	private RuleView relatedRuleView = null;
-    private UserView relatedUserView = null;
-    private ServerView relatedServerView = null;
-    private VolumeView relatedVolumeView = null;
-    private OSImageView relatedOSImageView = null;
-    private NetworkView relatedNetworkView = null;
-    private ListSecGroupView relatedListSecGroupView = null;
-    private FloatingIPView relatedFloatingIPView = null;
-	private SecGroupView relatedSecGroupView = null;
-	private NetworkListView relatedNetworkListView = null;
-    private RouterView relatedRouterView = null;
+     private VolumeView         relatedVolumeView       = null;
+     private RuleView           relatedRuleView         = null;
+     private UserView           relatedUserView         = null;
+     private ServerView         relatedServerView       = null;
+     private OSImageView        relatedOSImageView      = null;
+     private NetworkView        relatedNetworkView      = null;
+     private ListSecGroupView   relatedListSecGroupView = null;
+     private FloatingIPView     relatedFloatingIPView   = null;
+	 private SecGroupView       relatedSecGroupView     = null;
+     private NetworkListView    relatedNetworkListView  = null;
+     private RouterView         relatedRouterView       = null;
+     private RouterPortView     relatedRouterPortView   = null;
 
-    public LinearLayoutWithView( Context ctx, RouterView rv ) {
+     public LinearLayoutWithView( Context ctx, RouterView rv ) {
         super( ctx );
         relatedRouterView = rv;
     }
 
-    public LinearLayoutWithView( Context ctx, UserView uv ) {
+     public LinearLayoutWithView( Context ctx, UserView uv ) {
     	super( ctx );
     	relatedUserView = uv;
     }
 
-    public LinearLayoutWithView( Context ctx, ServerView sv ) {
+     public LinearLayoutWithView( Context ctx, ServerView sv ) {
     	super( ctx );
     	relatedServerView = sv;
     }
@@ -58,7 +60,6 @@ public class LinearLayoutWithView extends LinearLayout implements GetView {
    	    super( ctx );
      	relatedFloatingIPView = nv;
      }   
-        
 
      public LinearLayoutWithView( Context ctx, ListSecGroupView nv ) {
    	    super( ctx );
@@ -75,12 +76,16 @@ public class LinearLayoutWithView extends LinearLayout implements GetView {
     	    relatedRuleView = rv;
      }
 
-     public LinearLayoutWithView(Context ctx, NetworkListView nv ){
+     public LinearLayoutWithView(Context ctx, NetworkListView nv ) {
      	super( ctx );
     	relatedNetworkListView = nv;
      }
-     
-     
+
+     public LinearLayoutWithView(Context ctx, RouterPortView rpv ) {
+        super( ctx );
+        relatedRouterPortView = rpv;
+    }
+
     @Override
  	public RuleView getRuleView( ) { return relatedRuleView; }
     @Override
@@ -103,5 +108,7 @@ public class LinearLayoutWithView extends LinearLayout implements GetView {
 	public NetworkListView getNetworkListView() {return relatedNetworkListView;}
     @Override
     public RouterView getRouterView() {return relatedRouterView;}
+    @Override
+    public RouterPortView getRouterPortView( ) { return relatedRouterPortView; }
 
 };

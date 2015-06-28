@@ -5,6 +5,7 @@ import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
 import org.stackdroid.views.NetworkView;
 import org.stackdroid.views.OSImageView;
+import org.stackdroid.views.RouterPortView;
 import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
@@ -25,5 +26,6 @@ public interface GetView {
     public SecGroupView getSecGroupView( );
     public NetworkListView getNetworkListView( );
     public RouterView getRouterView( );
+    public RouterPortView getRouterPortView( );
     
 };

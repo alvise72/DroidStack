@@ -6,6 +6,7 @@ import android.content.Context;
 import org.stackdroid.views.FloatingIPView;
 import org.stackdroid.views.ListSecGroupView;
 import org.stackdroid.views.NetworkListView;
+import org.stackdroid.views.RouterPortView;
 import org.stackdroid.views.RouterView;
 import org.stackdroid.views.RuleView;
 import org.stackdroid.views.SecGroupView;
@@ -28,6 +29,8 @@ public class EditTextWithView extends EditText implements GetView {
     private ListSecGroupView relatedListSecGroupView = null;
     private NetworkListView relatedNetworkListView = null;
     private RouterView relatedRouterView = null;
+    private RouterPortView relatedRouterPortView   = null;
+
 
     public EditTextWithView( Context ctx, RouterView rv ) {
         super( ctx );
@@ -83,6 +86,10 @@ public class EditTextWithView extends EditText implements GetView {
    	    super( ctx );
    	    relatedRuleView = rv;
     }
+    public EditTextWithView( Context ctx, RouterPortView rv ) {
+        super( ctx );
+        relatedRouterPortView = rv;
+    }
     
     @Override
 	public RuleView getRuleView( ) { return relatedRuleView; }
@@ -106,4 +113,6 @@ public class EditTextWithView extends EditText implements GetView {
 	public NetworkListView getNetworkListView() { return relatedNetworkListView; }
     @Override
     public RouterView getRouterView() {return relatedRouterView;}
+    @Override
+    public RouterPortView getRouterPortView( ) { return relatedRouterPortView; }
 };
