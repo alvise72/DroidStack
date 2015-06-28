@@ -61,7 +61,7 @@ public class RouterPort {//implements Serializable {
 			for(int i = 0; i<ports.length(); ++i) {
 				JSONObject port = ports.getJSONObject(i);
 				String id = port.getString("id");
-				String deviceid = port.getString("device:id");
+				String deviceid = port.getString("device_id");
 				String device_owner = port.getString("device_owner");
 				String tenantid = port.getString("tenant_id");
 				String name = port.getString("name");

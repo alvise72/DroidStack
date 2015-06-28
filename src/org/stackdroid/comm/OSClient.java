@@ -142,6 +142,7 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
 	{
     	checkToken( );
+		Log.d("OSCLIENT", "routerID="+routerID);
     	return RESTClient.sendGETRequest(U.useSSL(),
     									 U.getNeutronEndpoint()+"/v2.0/ports.json?device_id=" + routerID,
     									 U.getToken(),

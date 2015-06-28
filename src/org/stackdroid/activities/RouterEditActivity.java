@@ -45,6 +45,7 @@ import java.util.Vector;
 //import org.stackdroid.views.UserView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.views.RouterPortView;
 //import org.stackdroid.utils.NotExistingFileException;
 //import org.stackdroid.utils.TextViewWithView;
 //import org.stackdroid.utils.ImageButtonWithView;
@@ -169,7 +170,8 @@ public class RouterEditActivity extends Activity {
 			Iterator<RouterPort> portIterator = ports.iterator();
 			while( portIterator.hasNext()) {
 				RouterPort rp = portIterator.next();
-
+				RouterPortView rpv = new RouterPortView( rp, null, this );
+				iL.addView(rpv);
 			}
 
 		} catch (ParseException pe) {
