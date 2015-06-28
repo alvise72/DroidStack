@@ -24,6 +24,8 @@ public class RouterPortView extends LinearLayout {
     private LinearLayoutWithView nameLayout          = null;
     private ImageButtonWithView  deleteButton        = null;
     private TextView             routerPortIPAddress = null;
+    private TextView             routerPortStatus    = null;
+    private TextView             routerPortMAC       = null;
 
     /**
      *
@@ -56,14 +58,25 @@ public class RouterPortView extends LinearLayout {
         routerPortIPAddress.setTextColor(Color.parseColor("#333333"));
         routerPortIPAddress.setTypeface(null, Typeface.BOLD);
 
+        routerPortStatus = new TextView(ctx);
+        String status = " (" + (routerPort.getStatus() != null ? routerPort.getStatus() : "Status N/A" ) + " )";
+        routerPortStatus.setText(status);
+
+        routerPortMAC = new TextView(ctx);
+        String mac = " - MAC = " + (routerPort.getMAC() != null ? routerPort.getMAC().toUpperCase() : "N/A" ) ;
+        routerPortMAC.setText(mac);
+
+
         nameLayout = new LinearLayoutWithView( ctx, (RouterPortView)this );
-        nameLayout.setOrientation(LinearLayout.VERTICAL);
+        nameLayout.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams params2
                 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params2.gravity=Gravity.LEFT|Gravity.CENTER_VERTICAL;
         nameLayout.setLayoutParams(params2);
 
         nameLayout.addView(routerPortIPAddress);
+        nameLayout.addView(routerPortStatus);
+        nameLayout.addView(routerPortMAC);
 
         buttonsLayout = new LinearLayoutWithView( ctx, (RouterPortView)this );
         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL );

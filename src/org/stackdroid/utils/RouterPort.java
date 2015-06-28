@@ -18,23 +18,27 @@ public class RouterPort {//implements Serializable {
 	private String device_owner;
 	private String MAC;
 	private String deviceID;
+	private String status;
 	private Vector<Pair<String, String>> subnets_fixedips;
 	
-	public RouterPort( String id, String name, String networkID, String tenantID, String device_owner, String MAC, String deviceID, Vector<Pair<String,String>> subs ) {
-		this.id = id;
-		this.name = name;
-		this.networkID=networkID;
-		this.tenantID=tenantID;
-		this.device_owner=device_owner;
-		this.MAC=MAC;
-		this.subnets_fixedips=subs;
-		this.deviceID=deviceID;
+	public RouterPort( String id, String name, String status, String networkID, String tenantID, String device_owner, String MAC, String deviceID, Vector<Pair<String,String>> subs ) {
+		this.id 				= id;
+		this.name 				= name;
+		this.networkID			= networkID;
+		this.tenantID			= tenantID;
+		this.device_owner		= device_owner;
+		this.MAC				= MAC;
+		this.subnets_fixedips 	= subs;
+		this.deviceID			= deviceID;
+		this.status 			= status;
 	}
 	
 	public String getFixedIP( ) {
 		if(subnets_fixedips.size()==0) return null;
 		return subnets_fixedips.elementAt(0).second;
 	}
+
+	public String getStatus( ) { return status; }
 
 	public String getName( ) { return name; }
 
@@ -67,6 +71,7 @@ public class RouterPort {//implements Serializable {
 				String name = port.getString("name");
 				String netid = port.getString("network_id");
 				String mac = port.getString("mac_address");
+				String status = port.getString("status");
 				Pair<String,String> P = null;
 				Vector<Pair<String,String>> subnets_ips = new Vector();
 				if(port.has("fixed_ips")) {
@@ -79,7 +84,7 @@ public class RouterPort {//implements Serializable {
 						subnets_ips.add(P);
 					}
 				}
-				vecP.add(new RouterPort(id, name, netid, tenantid,device_owner,mac,deviceid,subnets_ips));
+				vecP.add(new RouterPort(id, name, status, netid, tenantid,device_owner,mac,deviceid,subnets_ips));
 			}
 			return vecP;
 		} catch(org.json.JSONException je) {
