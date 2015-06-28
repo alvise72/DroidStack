@@ -4,15 +4,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.LinearLayout;
-//import android.widget.ScrollView;
 import android.widget.TextView;
-//import android.widget.Toast;
-//import android.content.Intent;
-//import android.graphics.Typeface;
 import android.app.Activity;
-import android.util.Log;
-//import android.view.View.OnClickListener;
-//import android.view.View;
 
 import org.stackdroid.R;
 import org.stackdroid.comm.OSClient;
@@ -25,30 +18,14 @@ import org.stackdroid.utils.Router;
 import org.stackdroid.utils.RouterPort;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
-/*
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-*/
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-//import org.stackdroid.views.UserView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.views.RouterPortView;
-//import org.stackdroid.utils.NotExistingFileException;
-//import org.stackdroid.utils.TextViewWithView;
-//import org.stackdroid.utils.ImageButtonWithView;
 
 public class RouterEditActivity extends Activity {
 	private User 				 U 						    = null;
@@ -56,7 +33,12 @@ public class RouterEditActivity extends Activity {
 	private String				 routerID					= null;
 	private String				 routerName					= null;
 
-	//__________________________________________________________________________________
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
   	@Override
   	public void onCreate(Bundle savedInstanceState) {
    	  super.onCreate(savedInstanceState);
@@ -86,17 +68,32 @@ public class RouterEditActivity extends Activity {
 		routerID = bundle.getString("ROUTERID");
 		routerName = bundle.getString("ROUTERNAME");
 		setTitle(getString(R.string.EDITROUTER) + " " + routerName);
-  }
-  
-  	//__________________________________________________________________________________
+		progressDialogWaitStop.show();
+		(new AsyncTaskGetRouterInfo()).execute(routerID);
+    }
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
  	@Override
  	public void onResume( ) {
     	super.onResume( );
-		// Fare il neutron router-show
-		// Fare il neutron router-port-list per avere le interfacce alle reti tenant
-		progressDialogWaitStop.show();
-		(new AsyncTaskGetRouterInfo()).execute(routerID);
   	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	@Override
+	public void onDestroy( ) {
+		super.onDestroy();
+		progressDialogWaitStop.dismiss();
+	}
 
   	/**
 	 *
@@ -147,7 +144,15 @@ public class RouterEditActivity extends Activity {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
 	private void putInfo(String jsonBufRouterShow, String jsonBufRouterPorts, String jsonBufNet, String jsonBufSubnet) {
+		LinearLayout iL = (LinearLayout)findViewById(R.id.interfacesLayout);
+		iL.removeAllViews();
 		try {
 			Vector<Network> netVec = Network.parse(jsonBufNet, jsonBufSubnet);
 			HashMap<String, Network> mapID_to_Net = new HashMap();
@@ -166,7 +171,7 @@ public class RouterEditActivity extends Activity {
 			((TextView)findViewById(R.id.GATEWAYSHOWTEXT)).setText(gwname);
 
 			Vector<RouterPort> ports = RouterPort.parse(jsonBufRouterPorts);
-			LinearLayout iL = (LinearLayout)findViewById(R.id.interfacesLayout);
+
 			Iterator<RouterPort> portIterator = ports.iterator();
 			while( portIterator.hasNext()) {
 				RouterPort rp = portIterator.next();

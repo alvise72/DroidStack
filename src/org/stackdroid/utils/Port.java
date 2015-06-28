@@ -30,8 +30,12 @@ public class Port implements Serializable {
 			JSONArray ports = jsonObject.getJSONArray("ports");
 			for(int i = 0; i<ports.length(); ++i) {
 				JSONObject port = ports.getJSONObject(i);
-				String id = port.getString("id");
-				String fixedip = port.has("fixed_ips") ? port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") : "";
+				String id = port.has("id") ? port.getString("id") : "N/A";
+				String fixedip = "";
+				if(port.has("fixed_ips")) {
+					fixedip = port.getJSONArray("fixed_ips").length() > 0 ? port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") : "";
+				}
+				//String fixedip = port.has("fixed_ips") ? (port.getJSONArray("fixed_ips").getJSONObject(0).getString("ip_address") ) : "";
 				vecP.add(new Port(id, fixedip));
 			}
 			return vecP;

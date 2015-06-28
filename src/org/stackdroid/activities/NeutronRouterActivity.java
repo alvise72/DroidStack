@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.stackdroid.MainActivity;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseUtils;
@@ -50,6 +49,7 @@ public class NeutronRouterActivity extends Activity {
     private User 				 U 						    = null;
 	private AlertDialog 		 alertDialogCreateRouter	= null;
 	private EditText 			 routername				    = null;
+	private boolean				 mustRefresh				= false;
 
 	/**
 	 *
@@ -238,22 +238,21 @@ public class NeutronRouterActivity extends Activity {
         if(selectedUser.length()!=0)
         	((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
 		else
-			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-		
+			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE));
 
+		progressDialogWaitStop.show();
+		(new AsyncTaskOSListRouters()).execute();
     }
 
 	/**
  	 *
- 	 *
+	 *
  	 *
  	 *
  	 */
 	@Override
 	public void onResume( ) {
-		super.onResume( );
-		progressDialogWaitStop.show();
-		(new AsyncTaskOSListRouters()).execute();
+		super.onResume();
 	}
 
 	/**
@@ -261,7 +260,7 @@ public class NeutronRouterActivity extends Activity {
      *
      *
      *
-     */
+	 */
     @Override
     public void onDestroy( ) {
     	super.onDestroy();
