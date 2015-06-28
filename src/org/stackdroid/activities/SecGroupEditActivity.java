@@ -41,7 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class EditSecGroupActivity extends Activity implements OnItemSelectedListener {
+public class SecGroupEditActivity extends Activity implements OnItemSelectedListener {
 
     private String secgrpID   = null;
 	private String secgrpName = null;
@@ -189,7 +189,7 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
      * 
      * 
      */    
-    public EditSecGroupActivity( ) {
+    public SecGroupEditActivity( ) {
     	predefinedRules = new Vector<String>( );
     	predefinedRules.add("SSH");
     	predefinedRules.add("HTTP(80)");
@@ -262,10 +262,10 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
      */
     public void addRule( View v ) { 
     	
-    	spinnerRulesAdapter = new ArrayAdapter<String>(EditSecGroupActivity.this, android.R.layout.simple_spinner_item, predefinedRules.subList(0,predefinedRules.size()) );
+    	spinnerRulesAdapter = new ArrayAdapter<String>(SecGroupEditActivity.this, android.R.layout.simple_spinner_item, predefinedRules.subList(0,predefinedRules.size()) );
     	spinnerRulesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
-    	spinnerProtoAdapter = new ArrayAdapter<String>(EditSecGroupActivity.this, android.R.layout.simple_spinner_item, protocols.subList(0,protocols.size()) );
+    	spinnerProtoAdapter = new ArrayAdapter<String>(SecGroupEditActivity.this, android.R.layout.simple_spinner_item, protocols.subList(0,protocols.size()) );
     	spinnerProtoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
     	
@@ -291,8 +291,8 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
         ( (Spinner)promptsView.findViewById(R.id.protoSpinner) ).setAdapter(spinnerProtoAdapter);
         
         //(Button)promptsView.findViewById(R.id.confirmRuleAdd);
-        ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener( new EditSecGroupActivity.ConfirmRuleAddClickListener( ) );
-        ((Button)promptsView.findViewById(R.id.cancelRuleAdd)).setOnClickListener( new EditSecGroupActivity.CancelRuleAddClickListener( ) );
+        ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener( new SecGroupEditActivity.ConfirmRuleAddClickListener( ) );
+        ((Button)promptsView.findViewById(R.id.cancelRuleAdd)).setOnClickListener( new SecGroupEditActivity.CancelRuleAddClickListener( ) );
         
         fromPort = (EditText)promptsView.findViewById(R.id.fromPortET);
         toPort = (EditText)promptsView.findViewById(R.id.toPortET);
@@ -416,17 +416,17 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
 	    	super.onPostExecute(v);
 	    
 	    	if(hasError) {
-	    		Utils.alert( errorMessage, EditSecGroupActivity.this );
-	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    		Utils.alert( errorMessage, SecGroupEditActivity.this );
+				SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    		return;
 	    	}
 	    	try {
 	    		Vector<SimpleSecGroupRule> rules = SimpleSecGroupRule.parse(jsonBuf);
-	    		EditSecGroupActivity.this.update( rules );
+				SecGroupEditActivity.this.update( rules );
 	    	} catch(ParseException pe) {
-	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
+	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), SecGroupEditActivity.this );
 	    	}
-	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+			SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    }
     }	
     
@@ -464,18 +464,18 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
 	    	super.onPostExecute(v);
 	    
 	    	if(hasError) {
-	    		Utils.alert( errorMessage, EditSecGroupActivity.this );
-	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    		Utils.alert( errorMessage, SecGroupEditActivity.this );
+				SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    		return;
 	    	}
 	    	try {
 	    		Vector<SimpleSecGroupRule> rules = SimpleSecGroupRule.parse(jsonBuf);
-	    		EditSecGroupActivity.this.update( rules );
+				SecGroupEditActivity.this.update( rules );
 	    	} catch(ParseException pe) {
-	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), EditSecGroupActivity.this );
+	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), SecGroupEditActivity.this );
 	    	}
-	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULEDELETED), EditSecGroupActivity.this);
-	    	EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULEDELETED), SecGroupEditActivity.this);
+			SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    }
     }
     /*
@@ -515,11 +515,11 @@ public class EditSecGroupActivity extends Activity implements OnItemSelectedList
 	    	super.onPostExecute(v);
 	    
 	    	if(hasError) {
-	    		Utils.alert( errorMessage, EditSecGroupActivity.this );
-	    		EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
+	    		Utils.alert( errorMessage, SecGroupEditActivity.this );
+				SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    		return;
 	    	}
-	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULECREATED), EditSecGroupActivity.this);
+	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULECREATED), SecGroupEditActivity.this);
 	    	(new AsyncTaskListRules()).execute( secgrpID );
 	    	//EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }
