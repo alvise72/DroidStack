@@ -99,12 +99,12 @@ public class RESTClient {
 
 
 			boolean validcertServer = false;
-			Log.d("RESTCLIENT", "getServerCertificates");
+			//Log.d("RESTCLIENT", "getServerCertificates");
 			//String pageResult = convertInputStreamToString(conn.getInputStream());
 			//conn.getInputStream();
 			Certificate[] certs = (Certificate[]) ((HttpsURLConnection)conn).getServerCertificates();
 			//Log.d("RESTCLIENT", "GOT THEM!");
-			Log.d("RESTCLIENT", "GOT SERVER CERTS");
+			//Log.d("RESTCLIENT", "GOT SERVER CERTS");
 			//Log.d("RESTCLIENT", "GOT SERVER CERTS");
 			for( Certificate cert : certs ) {
 				try {
@@ -658,8 +658,8 @@ public class RESTClient {
 	  		 ServerException, ServiceUnAvailableOrInternalError, 
 	  		 MalformedURLException, IOException, ProtocolException
    {
-   	//Log.d("REST", "sURL="+sURL);
-   	//Log.d("REST", "extradata="+extradata);
+   	Log.d("REST", "sURL="+sURL);
+   	Log.d("REST", "extradata="+extradata);
    	if(sURL.startsWith("https://")) usessl=true;
    	if(sURL.startsWith("http://")) usessl=false;
    	
@@ -753,7 +753,7 @@ public class RESTClient {
    		throw new IOException("RESTClient.sendPUTRequest.getResponseCode: "+ioe.getMessage( ) );
    	}
 	
-   	Log.d("REST", "status="+status);
+   	//Log.d("REST", "status="+status);
    	
    	/*if( status >= 500 ) {
    		throw(new ServiceUnAvailableOrInternalError());

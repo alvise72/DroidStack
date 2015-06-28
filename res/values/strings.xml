@@ -194,4 +194,5 @@
     <string name="CREATEROUTER">Create new router</string>
     <string name="INTERFACES">Interfaces:</string>
     <string name="EDITROUTER">Modify Router</string>
+    <string name="AREYOUSURETODELETEINTERFACE">Are you sure you want to delete the interface ?</string>
 </resources>

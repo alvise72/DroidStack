@@ -44,9 +44,7 @@ import android.widget.TextView;
 public class SecGroupEditActivity extends Activity implements OnItemSelectedListener {
 
     private String secgrpID   = null;
-	private String secgrpName = null;
-	private String secgrpDesc = null;
-    private User   U          = null;
+	private User   U          = null;
     private ArrayAdapter<String> spinnerRulesAdapter  = null;
     private Spinner ruleSpinner = null;
     //private Spinner protoSpinner = null;
@@ -77,12 +75,19 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         //menu.add(GROUP, 2, order++, getString(R.string.MENUDELETEALL) ).setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
-    public void update(View v) {
+
+	/**
+	 *
+	 * @author dorigoa
+	 *
+	 */
+	public void update(View v) {
     	progressDialogWaitStop.setCancelable(false);
 		progressDialogWaitStop.setCanceledOnTouchOutside(false);
 		progressDialogWaitStop.show( );
     	(new AsyncTaskListRules()).execute( secgrpID );
     }
+	
 	/**
 	 * 
 	 * @author dorigoa
@@ -98,7 +103,8 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         }
         return super.onOptionsItemSelected( item );
     }
-    /*
+	
+    /**
      * 
      * 
      * 
@@ -169,7 +175,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
 		}
 	}
 	
-    /*
+    /**
      * 
      * 
      * 
@@ -181,7 +187,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
 	public void onNothingSelected(AdapterView<?> parent) {
 	}	
 	
-    /*
+    /**
      * 
      * 
      * 
@@ -205,7 +211,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	protocols.add("ICMP");
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -220,9 +226,9 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         
 
         secgrpID   = this.getIntent().getStringExtra("SECGRPID");
-        secgrpName = this.getIntent().getStringExtra("SECGRPNAME");
+		String secgrpName = this.getIntent().getStringExtra("SECGRPNAME");
         setTitle(getString(R.string.EDITSECGROUP) + " " + secgrpName);
-        secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
+		String secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
         //((EditText)findViewById(R.id.secgrpName)).setText(secgrpName);
         //((EditText)findViewById(R.id.secgrpDesc)).setText(secgrpDesc);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -252,7 +258,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	(new AsyncTaskListRules()).execute( secgrpID );
     }
 
-    /*
+    /**
      * 
      * 
      * 
@@ -306,7 +312,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         alertDialogSelectRule.show();
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -329,7 +335,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	}
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -349,7 +355,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	}
     }
 
-    /*
+    /**
      * 
      * 
      * 
@@ -363,7 +369,8 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     		alertDialogSelectRule.dismiss();
     	}
     }
-    /*
+	
+    /**
      * 
      * 
      * 
@@ -382,7 +389,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	}
     }
     
-    /*
+    /**
      * 
      * 
      * 
@@ -430,7 +437,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
 	    }
     }	
     
-    /*
+    /**
      * 
      * 
      * 
@@ -472,13 +479,14 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
 	    		Vector<SimpleSecGroupRule> rules = SimpleSecGroupRule.parse(jsonBuf);
 				SecGroupEditActivity.this.update( rules );
 	    	} catch(ParseException pe) {
-	    		Utils.alert("EditSecGroupActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), SecGroupEditActivity.this );
+	    		Utils.alert("SecGroupEditActivity.AsyncTaskListRules.onPostExecute: " + pe.getMessage( ), SecGroupEditActivity.this );
 	    	}
-	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULEDELETED), SecGroupEditActivity.this);
+	    	Utils.alert(SecGroupEditActivity.this.getString(R.string.RULEDELETED), SecGroupEditActivity.this);
 			SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    }
     }
-    /*
+	
+    /**
      * 
      * 
      * 
@@ -519,7 +527,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
 				SecGroupEditActivity.this.progressDialogWaitStop.dismiss( );
 	    		return;
 	    	}
-	    	Utils.alert(EditSecGroupActivity.this.getString(R.string.RULECREATED), SecGroupEditActivity.this);
+	    	Utils.alert(SecGroupEditActivity.this.getString(R.string.RULECREATED), SecGroupEditActivity.this);
 	    	(new AsyncTaskListRules()).execute( secgrpID );
 	    	//EditSecGroupActivity.this.progressDialogWaitStop.dismiss( );
 	    }

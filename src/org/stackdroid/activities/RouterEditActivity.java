@@ -1,8 +1,13 @@
 package org.stackdroid.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.Activity;
@@ -13,6 +18,7 @@ import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.CustomProgressDialog;
+import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Network;
 import org.stackdroid.utils.Router;
 import org.stackdroid.utils.RouterPort;
@@ -31,7 +37,46 @@ public class RouterEditActivity extends Activity {
 	private User 				 U 						    = null;
 	private CustomProgressDialog progressDialogWaitStop     = null;
 	private String				 routerID					= null;
-	private String				 routerName					= null;
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class DeleteRouterPortListener implements View.OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			ImageButtonWithView bt = (ImageButtonWithView)v;
+			final RouterPort rp = bt.getRouterPortView().getRouterPort();
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(RouterEditActivity.this);
+			builder.setMessage( getString(R.string.AREYOUSURETODELETEINTERFACE));
+			builder.setCancelable(false);
+
+			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					RouterEditActivity.this.progressDialogWaitStop.show( );
+					(new RouterEditActivity.AsyncTaskDeleteRouterInterface()).execute( rp.getID(), rp.getSubnetID() );
+				}
+			};
+
+			DialogInterface.OnClickListener noHandler = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel( );
+				}
+			};
+
+			builder.setPositiveButton(getString(R.string.YES), yesHandler );
+			builder.setNegativeButton(getString(R.string.NO), noHandler );
+
+			AlertDialog alert = builder.create();
+			alert.getWindow( ).setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+			alert.setCancelable(false);
+			alert.setCanceledOnTouchOutside(false);
+			alert.show();
+		}
+	}
 
 	/**
 	 *
@@ -66,8 +111,8 @@ public class RouterEditActivity extends Activity {
 
 		Bundle bundle = getIntent( ).getExtras();
 		routerID = bundle.getString("ROUTERID");
-		routerName = bundle.getString("ROUTERNAME");
-		setTitle(getString(R.string.EDITROUTER) + " " + routerName);
+		//String routerName = ;
+		setTitle(getString(R.string.EDITROUTER) + " " + bundle.getString("ROUTERNAME"));
 		progressDialogWaitStop.show();
 		(new AsyncTaskGetRouterInfo()).execute(routerID);
     }
@@ -106,7 +151,7 @@ public class RouterEditActivity extends Activity {
 		private boolean hasError = false;
 		private String jsonBufRouterPorts = "";
 		private String jsonBufRouterShow = "";
-		private String jsonBufNetworks = "";
+		//private String jsonBufNetworks = "";
 		private String jsonBufNet = "";
 		private String jsonBufSubnet = "";
 
@@ -150,6 +195,53 @@ public class RouterEditActivity extends Activity {
 	 *
 	 *
 	 */
+	private class AsyncTaskDeleteRouterInterface extends AsyncTask<String,Void,Void> {
+		private String errorMessage = "";
+		private boolean hasError 	= false;
+		private String routerName 	= "";
+		@Override
+		protected Void doInBackground( String... v )
+		{
+			OSClient osc = OSClient.getInstance(U);
+			routerName = v[1] ;
+			try {
+				osc.deleteRouterInterface(v[0], v[1]);
+			} catch(ServerException se) {
+				//Log.e("NEUTRONROUTER", se.getMessage());
+				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+				hasError = true;
+			} catch(Exception e) {
+				errorMessage = e.getMessage();
+				hasError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				String err = "";
+				if(errorMessage.toLowerCase().contains("could not be found")==true) {
+					err = errorMessage;
+					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
+				} else err = errorMessage;
+				Utils.alert( err, RouterEditActivity.this );
+				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID);
+			//NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
 	private void putInfo(String jsonBufRouterShow, String jsonBufRouterPorts, String jsonBufNet, String jsonBufSubnet) {
 		LinearLayout iL = (LinearLayout)findViewById(R.id.interfacesLayout);
 		iL.removeAllViews();
@@ -175,7 +267,7 @@ public class RouterEditActivity extends Activity {
 			Iterator<RouterPort> portIterator = ports.iterator();
 			while( portIterator.hasNext()) {
 				RouterPort rp = portIterator.next();
-				RouterPortView rpv = new RouterPortView( rp, null, this );
+				RouterPortView rpv = new RouterPortView( rp, new RouterEditActivity.DeleteRouterPortListener( ), this );
 				iL.addView(rpv);
 			}
 

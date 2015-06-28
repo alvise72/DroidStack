@@ -168,7 +168,7 @@ public class SecGrpActivity extends Activity {
     protected class SecGroupEditListener implements OnClickListener {
     	@Override
         public void onClick( View v ) {
-    		Class<?> c = (Class<?>)EditSecGroupActivity.class;
+    		Class<?> c = (Class<?>)SecGroupEditActivity.class;
 	        Intent I = new Intent( SecGrpActivity.this, c );
 	        SecGroup sv = ((ImageButtonWithView)v).getListSecGroupView().getSecGroup();
 	        I.putExtra( "SECGRPNAME", sv.getName());

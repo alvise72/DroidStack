@@ -176,6 +176,30 @@ public class OSClient {
      *
      *
      */
+	public void deleteRouterInterface( String routerID, String subnetID ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken( );
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add( p );
+		String extradata = "{\"subnet_id\": \"" + subnetID + "\"}";
+		RESTClient.sendPUTRequest(U.useSSL(),
+				U.getNeutronEndpoint() + "/v2.0/routers/" + routerID + "/remove_router_interface.json",
+				U.getToken(),
+				extradata,
+				vp);
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
 	public void deleteRouter( String routerID ) throws NotAuthorizedException, NotFoundException,
 			ServerException, ServiceUnAvailableOrInternalError,
 			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
@@ -189,7 +213,6 @@ public class OSClient {
 				U.getToken(),
 				vp);
 	}
-
 
 	/**
      *
@@ -631,17 +654,18 @@ public class OSClient {
 	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError ,
 	   IOException, MalformedURLException, ProtocolException, ParseException, CertificateException
     {
-    	checkToken( );
+    	checkToken();
     	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-    	vp.add( p );
+    	vp.add(p);
     	String extradata = "{\"floatingip\": {\"port_id\": \"" + portid + "\"}}";
-    	RESTClient.sendPUTRequest( U.useSSL(), 
+    	RESTClient.sendPUTRequest( U.useSSL(),
 				    			   U.getNeutronEndpoint() + "/v2.0/floatingips/" + fipid + ".json",
-				    			   U.getToken(), 
-				    			   extradata, 
-				    			   vp );   	
+				    			   U.getToken(),
+				    			   extradata,
+				    			   vp );
+
     }
     
     /**
@@ -729,7 +753,7 @@ public class OSClient {
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	   checkToken( );
-	   Log.d("requestServerLog", "serverid="+serverid+" - maxlines="+maxlines);
+	   //Log.d("requestServerLog", "serverid="+serverid+" - maxlines="+maxlines);
 	   Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 	   Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	   vp.add( p );

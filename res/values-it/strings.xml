@@ -185,4 +185,6 @@
     <string name="CREATEROUTER">Crea un nuovo router</string>
     <string name="INTERFACES">Interfacce:</string>
     <string name="EDITROUTER">Modifica Router</string>
+    <string name="AREYOUSURETODELETEINTERFACE">Sei sicuro di cancellare l\'interfaccia ?</string>
+
 </resources>
