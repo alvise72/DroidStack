@@ -80,33 +80,36 @@ public class OSClient {
      * 
      */
     private void checkToken( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException {
-		//Log.d("OSCLIENT", "Verify server's cert="+U.getVerifyServerCert());
+	   IOException, ParseException,CertificateException {
+
 		if(U.getVerifyServerCert()) {
+			//Log.d("OSCLIENT", "Verify server's cert="+U.getVerifyServerCert());
 			X509Certificate cert = null;
 			cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
 			if(RESTClient.checkServerCert(U.getIdentityEndpoint(), cert.getIssuerX500Principal().getName()) == false)
 				throw new CertificateException("Couldn't verify server's certificate. Please verify the correct CA selected.");
 
 		}
+		//Log.d("OSCLIENT", "Checking token....");
     	if(U.getTokenExpireTime() <= Utils.now() + 5) {
-
-    			String jsonBuffer = RESTClient.requestToken(U.useSSL(),
-						U.getIdentityEndpoint() + "/tokens",
-						U.getTenantName(),
-						U.getUserName(),
-						U.getPassword());
-    					String  pwd = U.getPassword();
-    					String  edp = U.getIdentityEndpoint();
-    					boolean ssl = U.useSSL();
-						boolean verifyServerCert = U.getVerifyServerCert();
-						String CAFile = U.getCAFile();
-    					U = User.parse( jsonBuffer );
-						U.setPassword( pwd);
-    					U.setSSL(ssl);
-						U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
-						//U.setVerifyServerCert(verifyServerCert);
-						U.setCAFile( CAFile );
+			//Log.d("OSCLIENT", "Requesting token....");
+			String jsonBuffer = RESTClient.requestToken(U.useSSL(),
+														U.getIdentityEndpoint() + "/tokens",
+														U.getTenantName(),
+														U.getUserName(),
+														U.getPassword());
+    		String  pwd = U.getPassword();
+    		String  edp = U.getIdentityEndpoint();
+    		boolean ssl = U.useSSL();
+			boolean verifyServerCert = U.getVerifyServerCert();
+			String CAFile = U.getCAFile();
+    		U = User.parse( jsonBuffer );
+			U.setPassword( pwd);
+    		U.setSSL(ssl);
+			U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+			//U.setVerifyServerCert(verifyServerCert);
+			U.setCAFile( CAFile );
+			//Log.d("OSCCLIENT", "Token ok");
 		}
     }
 
@@ -120,7 +123,7 @@ public class OSClient {
 	 */
 	public String requestRouterShow( String routerID ) throws NotAuthorizedException, NotFoundException,
 			ServerException, ServiceUnAvailableOrInternalError,
-			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+			IOException, ParseException,CertificateException
 	{
 		checkToken( );
 		return RESTClient.sendGETRequest(U.useSSL(),
@@ -139,7 +142,7 @@ public class OSClient {
      */
     public String requestRouterPorts( String routerID ) throws NotAuthorizedException, NotFoundException,
 	   ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	   IOException, ParseException,CertificateException
 	{
     	checkToken( );
 		//Log.d("OSCLIENT", "routerID="+routerID);
@@ -159,13 +162,17 @@ public class OSClient {
      */
 	public String requestRouters( ) throws NotAuthorizedException, NotFoundException,
 			ServerException, ServiceUnAvailableOrInternalError,
-			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+			IOException, ParseException,CertificateException
 	{
 		checkToken( );
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add(p);
+		//Log.d("OSC", "Calling sedGETRequest...");
 		return RESTClient.sendGETRequest(U.useSSL(),
 				U.getNeutronEndpoint()+"/v2.0/routers.json",
 				U.getToken(),
-				new Vector<Pair<String,String>>());
+				vp );
 	}
 
     /**
@@ -178,13 +185,14 @@ public class OSClient {
      */
 	public void deleteRouterInterface( String routerID, String subnetID ) throws NotAuthorizedException, NotFoundException,
 			ServerException, ServiceUnAvailableOrInternalError,
-			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+			IOException, ParseException,CertificateException
 	{
 		checkToken( );
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 		vp.add( p );
 		String extradata = "{\"subnet_id\": \"" + subnetID + "\"}";
+		Log.d("OSC","routerID="+routerID);
 		RESTClient.sendPUTRequest(U.useSSL(),
 				U.getNeutronEndpoint() + "/v2.0/routers/" + routerID + "/remove_router_interface.json",
 				U.getToken(),
@@ -202,7 +210,7 @@ public class OSClient {
 	 */
 	public void deleteRouter( String routerID ) throws NotAuthorizedException, NotFoundException,
 			ServerException, ServiceUnAvailableOrInternalError,
-			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+			IOException, ParseException,CertificateException
 	{
 		checkToken( );
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -224,7 +232,7 @@ public class OSClient {
      */
 	public void createRouter( String routerName ) throws NotAuthorizedException, NotFoundException,
 			ServerException, ServiceUnAvailableOrInternalError,
-			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+			IOException, ParseException,CertificateException
 	{
 		checkToken();
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -249,7 +257,7 @@ public class OSClient {
     public void volumeAttach( String volumeID, String serverID ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	   IOException, ParseException,CertificateException
 	{
     	checkToken( );
     	
@@ -275,7 +283,7 @@ public class OSClient {
     public void volumeDetach( String volumeID, String serverID ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	   IOException, ParseException,CertificateException
 	{
     	checkToken( );
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
@@ -299,7 +307,7 @@ public class OSClient {
     public void createVolume( String volname, int size_in_GB ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	   IOException, ParseException,CertificateException
 	   {
     		checkToken( );
     		String cinderEP = null;
@@ -330,7 +338,7 @@ public class OSClient {
     public void deleteVolume( String volID ) 
     		throws NotAuthorizedException, NotFoundException, 
 	   ServerException, ServiceUnAvailableOrInternalError,
-	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	   IOException, ParseException,CertificateException
 	   {
     	checkToken( );
     	String cinderEP = null;
@@ -359,7 +367,7 @@ public class OSClient {
     public void deleteNetwork( String netID ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   ServerException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+		   IOException, ParseException,CertificateException
     {
     	checkToken( );
 	
@@ -382,10 +390,10 @@ public class OSClient {
      * 
      * 
      */
-    public String createNetwork( String netname, boolean shared ) 
-	throws NotAuthorizedException, NotFoundException, 
+    public String createNetwork( String netname, boolean shared )
+	throws NotAuthorizedException, NotFoundException,
 		   ServerException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+		   IOException, ParseException,CertificateException
     {
     	checkToken( );
 	
@@ -413,7 +421,7 @@ public class OSClient {
     public void createSubnetwork( String netID, String CIDR, String DNS, String startIP, String endIP, String gatewayIP ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   ServerException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+		   IOException, ParseException,CertificateException
     {
     	checkToken( );
 	
@@ -440,7 +448,7 @@ public class OSClient {
     public void createInstanceSnapshot( String serverID, String snapshotName ) 
 	throws NotAuthorizedException, NotFoundException, 
 		   ServerException, ServiceUnAvailableOrInternalError,
-		   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+		   IOException, ParseException,CertificateException
     {
     	checkToken( );
 	
@@ -466,7 +474,7 @@ public class OSClient {
     public void softReboot( String serverid )
     throws NotAuthorizedException, NotFoundException, 
  		   ServerException, ServiceUnAvailableOrInternalError,
- 		   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+ 		   IOException, ParseException,CertificateException
     {
     	checkToken( );
     	

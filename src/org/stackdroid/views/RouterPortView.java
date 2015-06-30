@@ -10,6 +10,7 @@ import org.stackdroid.utils.Utils;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ import org.stackdroid.R;
 
 public class RouterPortView extends LinearLayout {
     
-    private  RouterPort           routerPort         = null;
+    private RouterPort           routerPort          = null;
     private LinearLayoutWithView row                 = null;
     private LinearLayoutWithView buttonsLayout       = null;
     private LinearLayoutWithView nameLayout          = null;
@@ -63,8 +64,9 @@ public class RouterPortView extends LinearLayout {
         routerPortStatus.setText(status);
 
         routerPortMAC = new TextView(ctx);
-        String mac = " - MAC = " + (routerPort.getMAC() != null ? routerPort.getMAC().toUpperCase() : "N/A" ) ;
+        String mac = " - MAC=" + (routerPort.getMAC() != null ? routerPort.getMAC().toUpperCase() : "N/A" ) ;
         routerPortMAC.setText(mac);
+        routerPortMAC.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);;
 
 
         nameLayout = new LinearLayoutWithView( ctx, (RouterPortView)this );

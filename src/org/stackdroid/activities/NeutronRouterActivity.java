@@ -402,7 +402,7 @@ public class NeutronRouterActivity extends Activity {
     	protected Void doInBackground( Void... v )
     	{
     		OSClient osc = OSClient.getInstance(U);
-    		
+    		//Log.d("NEUTRONROUTER", "doInBackground");
     	    try {
     	    	jsonBufRouter    = osc.requestRouters( );
 				jsonBufNet		 = osc.requestNetworks();
@@ -422,7 +422,7 @@ public class NeutronRouterActivity extends Activity {
     	    super.onPostExecute(v);
     	    
      	    if(hasError) {
-     	    	Utils.alert( errorMessage, NeutronRouterActivity.this );
+     	    	Utils.alert(errorMessage, NeutronRouterActivity.this );
      	    	NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
      	    	return;
      	    }

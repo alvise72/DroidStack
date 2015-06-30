@@ -57,7 +57,7 @@ public class RouterEditActivity extends Activity {
 			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					RouterEditActivity.this.progressDialogWaitStop.show( );
-					(new RouterEditActivity.AsyncTaskDeleteRouterInterface()).execute( rp.getID(), rp.getSubnetID() );
+					(new RouterEditActivity.AsyncTaskDeleteRouterInterface()).execute( routerID, rp.getSubnetID() );
 				}
 			};
 
@@ -207,7 +207,6 @@ public class RouterEditActivity extends Activity {
 			try {
 				osc.deleteRouterInterface(v[0], v[1]);
 			} catch(ServerException se) {
-				//Log.e("NEUTRONROUTER", se.getMessage());
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
 			} catch(Exception e) {
@@ -256,11 +255,11 @@ public class RouterEditActivity extends Activity {
 			Router router = Router.parseSingle(jsonBufRouterShow, mapID_to_Net);
 			String gwname = "";
 			if(router.hasGateway()) {
-				gwname = "Gateway: " + router.getGateway().getName();
+				gwname = router.getGateway().getName();
 				if(router.getGateway().getSubNetworks().size()!=0)
 					gwname = gwname + " ("+router.getGateway().getSubNetworks().elementAt(0).getAddress() + ")";
 			}
-			((TextView)findViewById(R.id.GATEWAYSHOWTEXT)).setText(gwname);
+			((TextView)findViewById(R.id.GATEWAYNAMETEXT)).setText(gwname);
 
 			Vector<RouterPort> ports = RouterPort.parse(jsonBufRouterPorts);
 

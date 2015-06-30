@@ -34,15 +34,25 @@
             android:layout_width="match_parent"
             android:layout_height="3sp"
             />
-
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#f2f2f2"
+            android:orientation="horizontal" >
         <!-- Gateway text box -->
         <TextView
-            android:id="@+id/GATEWAYSHOWTEXT"
+            android:id="@+id/GATEWAYLABEL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Gateway: " />
-
+            <TextView
+                android:id="@+id/GATEWAYNAMETEXT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text=" " />
+        </LinearLayout>
         <!-- Interfaces Title -->
         <TextView
             android:layout_width="wrap_content"

@@ -99,13 +99,9 @@ public class RESTClient {
 
 
 			boolean validcertServer = false;
-			//Log.d("RESTCLIENT", "getServerCertificates");
-			//String pageResult = convertInputStreamToString(conn.getInputStream());
-			//conn.getInputStream();
+
 			Certificate[] certs = (Certificate[]) ((HttpsURLConnection)conn).getServerCertificates();
-			//Log.d("RESTCLIENT", "GOT THEM!");
-			//Log.d("RESTCLIENT", "GOT SERVER CERTS");
-			//Log.d("RESTCLIENT", "GOT SERVER CERTS");
+
 			for( Certificate cert : certs ) {
 				try {
 					((X509Certificate)cert).checkValidity();
@@ -116,12 +112,6 @@ public class RESTClient {
 					//Log.d("RESTCLIENT", "CERT NOT YET VALID");
 					throw  new IOException("RESTClient.checkServerCert.URL.openConnection https: "+e.getMessage( ) );
 				}
-				//if(((X509Certificate)cert).getIssuerX500Principal().getName().equals(CA.getIssuerX500Principal().getName())) {
-				//	validcertServer = true;
-				//	break;
-				//}
-				//Log.d("RESTCLIENT", "ISSUER: "+((X509Certificate)cert).getIssuerX500Principal().getName());
-				//CAIssuer = "pippo";
 				if(((X509Certificate)cert).getIssuerX500Principal().getName().equals(CAIssuer) == true) {
 					//Log.d("RESTCLIENT","Certificates' issuers match: ["+CAIssuer+"] vs. ["+((X509Certificate)cert).getIssuerX500Principal().getName()+"]");
 					return true;
@@ -154,9 +144,7 @@ public class RESTClient {
     								   String password)
       throws IOException, ServerException, 
       		 NotFoundException, NotAuthorizedException, 
-      		 ServiceUnAvailableOrInternalError, MalformedURLException,
-      		 ProtocolException
-    {
+      		 ServiceUnAvailableOrInternalError {
 
     	URL url = new URL(endpoint);
 	
@@ -284,18 +272,7 @@ public class RESTClient {
 			else
 				((HttpURLConnection)conn).disconnect( );
 	    }
-	    
-	    /*String errorMessage;
-    	try {
-    		errorMessage = ParseUtils.getErrorMessage(buf);
-    	} catch( ParseException pe) {
-    		errorMessage = buf;
-    	}
-    	if(status == HttpStatus.SC_UNAUTHORIZED)
-			throw new NotAuthorizedException( "RESTClient.requestToken - Not Authorized: " + errorMessage );
-		if(status == HttpStatus.SC_NOT_FOUND)
-			throw new NotFoundException( "RESTClient.requestToken - Not Found: " + errorMessage );
-		*/
+
 		throw new ServerException( buf );
 	}
 	
@@ -326,8 +303,7 @@ public class RESTClient {
 	      ((HttpsURLConnection)conn).disconnect( );
 		else
 		  ((HttpURLConnection)conn).disconnect( );
-	
-	//Log.d("RESTClient", "res="+res);
+
 	return res;
     }
 
@@ -343,11 +319,8 @@ public class RESTClient {
 					 					 String sURL, 
 					 					 String token,
 					 					 Vector<Pair<String,String>> properties ) 
-		throws IOException, ServiceUnAvailableOrInternalError, MalformedURLException, ProtocolException
-    {
-    	
-    	//Log.d("RESTClient", "sURL="+sURL);
-    	
+		throws IOException, ServiceUnAvailableOrInternalError {
+		//Log.d("REST", "sURL="+sURL);
     	if(sURL.startsWith("https://")) usessl=true;
     	if(sURL.startsWith("http://")) usessl=false;
     	
@@ -442,7 +415,6 @@ public class RESTClient {
 			  ((HttpsURLConnection)conn).disconnect( );
 			else
 			  ((HttpURLConnection)conn).disconnect( );
-		//System.out.println("D/REST"+"\tbuf="+buf);
 		return buf.toString( );    	
     } 
     
@@ -560,12 +532,6 @@ public class RESTClient {
     			((HttpURLConnection)conn).disconnect( );
     		throw new IOException("RESTClient.sendPOSTRequest.getResponseCode: "+ioe.getMessage( ) );
     	}
-	
-    	//Log.d("REST", "status="+status);
-    	
-    	/*if( status >= 500 ) {
-    		throw(new ServiceUnAvailableOrInternalError());
-    	}*/
     	
     	if( status >= 400 ) {
     		String buf = "";
@@ -591,25 +557,6 @@ public class RESTClient {
     			else
     				((HttpURLConnection)conn).disconnect( );
     		}
-	    
-    		//Log.d("REST", "buf="+buf);
-    		//Log.d("REST", "status code="+status);
-    		/*String errorMessage;
-    		try {
-    			errorMessage = ParseUtils.getErrorMessage( buf );
-    		} catch(ParseException pe) {
-    			errorMessage = buf;
-    		}
-	    
-    		if(status == HttpStatus.SC_UNAUTHORIZED)
-    			throw new NotAuthorizedException( errorMessage );
-    		if(status == HttpStatus.SC_NOT_FOUND)
-    			throw new NotFoundException( errorMessage );
-    		//if(status == HttpStatus.SC_CONFLICT || status == HttpStatus.SC_BAD_REQUEST)
-    		//	throw new ServerErrorException( buf );
-	    */
-    		
-    		
     		throw new ServerException( buf );
     	}
 	
@@ -632,7 +579,6 @@ public class RESTClient {
 			  ((HttpURLConnection)conn).disconnect( );
     		throw new IOException("RESTClient.sendPOSTRequest.read: " + ioe.getMessage( ) );
     	}
-    	//	Log.d("RESTClient", "3 Disconnecting...");
     	if(usessl)
 		  ((HttpsURLConnection)conn).disconnect( );
 		else
