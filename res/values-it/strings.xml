@@ -186,5 +186,7 @@
     <string name="INTERFACES">Interfacce:</string>
     <string name="EDITROUTER">Modifica Router</string>
     <string name="AREYOUSURETODELETEINTERFACE">Sei sicuro di cancellare l\'interfaccia ?</string>
-
+    <string name="CLEARGATEWAY">Clear Gateway</string>
+    <string name="SETGATEWAY">Set Gateway</string>
+    <string name="ADDINTERFACE">Add Interface</string>
 </resources>

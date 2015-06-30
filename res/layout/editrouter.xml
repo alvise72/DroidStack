@@ -35,6 +35,36 @@
             android:layout_height="3sp"
             />
         <LinearLayout
+            android:id="@+id/LAYOUTBUTTONS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#f2f2f2"
+            android:orientation="horizontal" >
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/CLEARGATEWAY"
+                android:textSize="12sp"
+                android:id="@+id/button" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/SETGATEWAY"
+                android:textSize="12sp"
+                android:id="@+id/button3" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/ADDINTERFACE"
+                android:textSize="12sp"
+                android:id="@+id/button4" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#f2f2f2"
