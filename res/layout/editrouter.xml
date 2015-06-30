@@ -36,31 +36,36 @@
             />
         <LinearLayout
             android:id="@+id/LAYOUTBUTTONS"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="#f2f2f2"
             android:orientation="horizontal" >
 
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="40sp"
+                android:textColor="#FFFFFF"
+                android:background="@android:color/holo_red_dark"
                 android:text="@+string/CLEARGATEWAY"
                 android:textSize="12sp"
+                android:layout_weight="1"
                 android:id="@+id/button" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="40sp"
                 android:text="@+string/SETGATEWAY"
                 android:textSize="12sp"
+                android:layout_weight="1"
                 android:id="@+id/button3" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="40sp"
                 android:text="@+string/ADDINTERFACE"
                 android:textSize="12sp"
+                android:layout_weight="1"
                 android:id="@+id/button4" />
         </LinearLayout>
 
