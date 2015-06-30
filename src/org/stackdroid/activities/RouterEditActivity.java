@@ -3,6 +3,7 @@ package org.stackdroid.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -260,6 +261,7 @@ public class RouterEditActivity extends Activity {
 					gwname = gwname + " ("+router.getGateway().getSubNetworks().elementAt(0).getAddress() + ")";
 			}
 			((TextView)findViewById(R.id.GATEWAYNAMETEXT)).setText(gwname);
+			((TextView)findViewById(R.id.GATEWAYNAMETEXT)).setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
 			Vector<RouterPort> ports = RouterPort.parse(jsonBufRouterPorts);
 

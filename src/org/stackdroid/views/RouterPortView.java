@@ -66,7 +66,8 @@ public class RouterPortView extends LinearLayout {
         routerPortMAC = new TextView(ctx);
         String mac = " - MAC=" + (routerPort.getMAC() != null ? routerPort.getMAC().toUpperCase() : "N/A" ) ;
         routerPortMAC.setText(mac);
-        routerPortMAC.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);;
+        routerPortMAC.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
+        //routerPortMAC.setTypeface(null, Typeface.BOLD);
 
 
         nameLayout = new LinearLayoutWithView( ctx, (RouterPortView)this );
