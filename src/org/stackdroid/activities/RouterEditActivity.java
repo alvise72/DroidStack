@@ -60,7 +60,9 @@ public class RouterEditActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			Network net = (Network)netsSpinner.getSelectedItem();
-
+			alertDialogSelectNetwork.dismiss();
+			progressDialogWaitStop.show();
+			(new RouterEditActivity.AsyncTaskSetRouterGateway()).execute( net.getID());
 		}
 	}
 
@@ -250,7 +252,7 @@ public class RouterEditActivity extends Activity {
 				jsonBufRouterPorts 	= osc.requestRouterPorts( routerID );
 				jsonBufRouterShow  	= osc.requestRouterShow( routerID );
 				jsonBufNet		 	= osc.requestNetworks( );
-				jsonBufSubnet	 	= osc.requestSubNetworks( );
+				jsonBufSubnet	 	= osc.requestSubNetworks();
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
@@ -270,7 +272,7 @@ public class RouterEditActivity extends Activity {
 				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
 				return;
 			}
-			RouterEditActivity.this.putInfo( jsonBufRouterShow, jsonBufRouterPorts, jsonBufNet, jsonBufSubnet );
+			RouterEditActivity.this.putInfo(jsonBufRouterShow, jsonBufRouterPorts, jsonBufNet, jsonBufSubnet);
 		}
 	}
 
@@ -346,7 +348,53 @@ public class RouterEditActivity extends Activity {
 			//routerName = v[0] ;
 
 			try {
-				osc.clearRouterGateway( routerID );
+				osc.clearRouterGateway(routerID);
+			} catch(ServerException se) {
+				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+				hasError = true;
+			} catch(Exception e) {
+				errorMessage = e.getMessage();
+				hasError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				String err = "";
+				if(errorMessage.toLowerCase().contains("could not be found")==true) {
+					err = errorMessage;
+					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
+				} else err = errorMessage;
+				Utils.alert( err, RouterEditActivity.this );
+				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID );
+		}
+	}
+
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class AsyncTaskSetRouterGateway extends AsyncTask<String,Void,Void> {
+		private String errorMessage = "";
+		private boolean hasError 	= false;
+		private String routerName 	= "";
+		@Override
+		protected Void doInBackground( String... v )
+		{
+			OSClient osc = OSClient.getInstance(U);
+
+			try {
+				osc.setRouterGateway( routerID, v[0] );
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;

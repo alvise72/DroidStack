@@ -160,6 +160,30 @@ public class OSClient {
 	}
 
 	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	public String setRouterGateway( String routerID, String netID ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, ParseException,CertificateException
+	{
+		checkToken( );
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add(p);
+		String extradata = "{\"router\": {\"external_gateway_info\": {\"network_id\": \"" + netID + "\"}}}";
+		return RESTClient.sendPUTRequest(U.useSSL(),
+				U.getNeutronEndpoint() + "/v2.0/routers/" + routerID + ".json",
+				U.getToken(),
+				extradata,
+				vp);
+	}
+
+	/**
      *
      *
      *
