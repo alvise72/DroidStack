@@ -669,8 +669,7 @@ public class ServersActivity extends Activity {
 	        input.setKeyListener(SimpleNumberKeyListener.getInstance());
 	        
 	        alert.setView(input);
-	        alert.setPositiveButton("Ok",
-	                new DialogInterface.OnClickListener() {
+	        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 	                    public void onClick(DialogInterface dialog, int whichButton) {
 	                    	if(input.getText().toString().trim().length()==0)
 	                    		return;

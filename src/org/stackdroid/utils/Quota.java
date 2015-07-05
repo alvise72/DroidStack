@@ -1,5 +1,7 @@
 package org.stackdroid.utils;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
@@ -59,6 +61,7 @@ public class Quota {
 
     public static Quota parse( String jsonBuf )  throws ParseException {
     	try {
+			Log.d("QUOTA", "jsonBuf=" + jsonBuf);
     	    JSONObject jsonObject = new JSONObject( jsonBuf );
     	    JSONObject limits     = (JSONObject)jsonObject.getJSONObject("limits");
     	    JSONObject absolute   = (JSONObject)limits.getJSONObject("absolute");

@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import org.stackdroid.R;
 import org.stackdroid.comm.OSClient;
-import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
@@ -18,15 +17,14 @@ import org.stackdroid.utils.QuotaVol;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.User;
-import org.stackdroid.utils.Utils;
-import org.stackdroid.utils.Volume;
+import org.stackdroid.utils.Utils;;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-//import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.util.Log;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +48,6 @@ public class OverViewActivity extends Activity {
         int order = Menu.FIRST;
         int GROUP = 0;
         menu.add(GROUP, 0, order++, getString(R.string.MENUHELP)    ).setIcon(android.R.drawable.ic_menu_help);
-        //menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         return true;
     }
 
@@ -150,12 +147,10 @@ public class OverViewActivity extends Activity {
     	Iterator<Flavor> fit = flavors.iterator();
     	while( fit.hasNext( ) ) {
     		Flavor f = fit.next();
-    		//		Log.d("OVERVIEW","Putting "+f.getID( ) + " -> "+f.toString());
     		flavHash.put( f.getID(), f );
     	}
     	while( it.hasNext( ) ) {
     		Server S = it.next( );
-    		//	    Log.d("OVERVIEW", "FlavorID for Server " + S.getName( ) + " = "+S.getFlavorID( ) + " - MEM=" + flavHash.get( S.getFlavorID( ) ).getRAM( ) );
     		Flavor F = flavHash.get( S.getFlavorID( ) );
     		if(F!=null) {
     			totMem += F.getRAM( );
@@ -165,8 +160,11 @@ public class OverViewActivity extends Activity {
     		}
     		totInstances++;
     	}
-    
-    	((TextView)findViewById(R.id.vmusageTV)).setText("" + totInstances );
+
+		//Log.d("OVERVIEW", "Max Sec Groups="+Q.getMaxSecurityGroups());
+		//Log.d("OVERVIEW", QV.toString());
+
+		((TextView)findViewById(R.id.vmusageTV)).setText("" + totInstances );
     	((TextView)findViewById(R.id.vmusageMAXTV)).setText("/" + Q.getMaxInstances() );
     	((ProgressBar)findViewById(R.id.vmusagePB)).setMax( Q.getMaxInstances() );
     	((ProgressBar)findViewById(R.id.vmusagePB)).setProgress( totInstances);
@@ -186,10 +184,10 @@ public class OverViewActivity extends Activity {
     	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
     	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips!=null ? fips.size() : 0 );
 	
-    	((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.size() : 0) );
+    	/* ((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.size() : 0) );
     	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
     	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-    	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.size() : 0 );
+    	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.size() : 0 ); */
     	
     	((TextView)findViewById(R.id.volusageTV)).setText("" + QV.getVolumeUsage() );
     	((TextView)findViewById(R.id.volusageMAXTV)).setText("/" + QV.getMaxVolumes() );
@@ -272,7 +270,7 @@ public class OverViewActivity extends Activity {
      			//		Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
      			Quota Q = Quota.parse( jsonBufQuota );
      			QuotaVol QV = QuotaVol.parse(jsonBufferQuotaVols);
-     			OverViewActivity.this.refreshView( Q,//ParseUtils.parseQuota( jsonBufQuota ),
+     			OverViewActivity.this.refreshView( Q,
      											   QV,
      											   Server.parse( jsonBuf ), 
      											   Flavor.parse( jsonBufferFlavor ),

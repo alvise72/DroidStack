@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:background="#f2f2f2"
-  android:orientation="vertical">
-<LinearLayout 
- 	 android:layout_width="match_parent"
-	 android:layout_height="wrap_content"
- 	 android:orientation="vertical">
-     <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />	  
-          <TextView
-              android:id="@+id/selected_user"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingLeft="10dp"
-              android:text="@string/SELECTEDUSER"
-          />
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f2f2f2"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
-        <View   
-          android:layout_width="fill_parent"
-          android:layout_height="3dp"
-          android:background="#FF909090" />  
-        
-        <LinearLayout 
- 			 android:layout_width="match_parent"
-			 android:layout_height="wrap_content"
- 			 android:orientation="vertical"
- 	 		 android:layout_gravity="center_horizontal|center_vertical">
+            android:layout_width="match_parent"
+            android:layout_height="3sp"
+            />
+        <TextView
+            android:id="@+id/selected_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="@string/SELECTEDUSER"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3sp"
+            />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="#FF909090" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal|center_vertical">
 
             <ImageButton
                 android:id="@+id/updateButton"
@@ -44,480 +44,426 @@
                 android:gravity="center_vertical"
                 android:layout_weight="1"
                 android:onClick="update" />
- 	 		 
-            </LinearLayout>
-            <View   
-          android:layout_width="fill_parent"
-          android:layout_height="3dp"
-          android:background="#FF909090" /> 
- </LinearLayout>
-        
-  <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-
-  <ScrollView
-      android:id="@+id/scrollerST"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      >
-      
-       
-  <LinearLayout 
- 	 android:layout_width="match_parent"
-	 android:layout_height="wrap_content"
- 	 android:orientation="vertical"
- 	 android:paddingLeft="5dip">
-     
-     
-        
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-	    
-	<ProgressBar
-            android:id="@+id/vmusagePB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            
-            android:progressDrawable="@drawable/progressbar" />
-
-        <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-            <TextView
-                    android:id="@+id/vmusageLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/INSTANCES"
-		            android:textColor="#555555"
-                    android:textSize="16sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                 <TextView
-                    android:id="@+id/vmusageTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		            android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/vmusageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		            android:textColor="#555555"
-                    android:text="/10" />                 
-            </LinearLayout>
 
         </LinearLayout>
-
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="#FF909090" />
     </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-
-<!-- 
-     *************************************************************************************
--->
-
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-
-	<ProgressBar
-            android:id="@+id/cpuusagePB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            
-            android:progressDrawable="@drawable/progressbar" />
-
-        <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-            <TextView
-                    android:id="@+id/cpuusageLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Virtual CPU"
-		            android:textColor="#555555"
-                    android:textSize="16sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                 <TextView
-                    android:id="@+id/cpuusageTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		            android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/cpuusageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		            android:textColor="#555555"
-                    android:text="/10" />                 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-<!-- 
-     *************************************************************************************
--->
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-	<ProgressBar
-            android:id="@+id/ramusagePB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            
-            android:progressDrawable="@drawable/progressbar" />
-	   
-        <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-            <TextView
-                    android:id="@+id/ramusageLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/MEMORY"
-		    android:textColor="#555555"
-                    android:textSize="16sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                 <TextView
-                    android:id="@+id/ramusageTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/ramusageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    android:textColor="#555555"
-                    android:text="/10" />                 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-<!-- 
-     *************************************************************************************
--->
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-	<ProgressBar
-            android:id="@+id/fipusagePB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            
-            android:progressDrawable="@drawable/progressbar" />
-	   
-        <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-            <TextView
-                    android:id="@+id/fipusageLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Floating IP"
-		    android:textColor="#555555"
-                    android:textSize="16sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                 <TextView
-                    android:id="@+id/fipusageTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/fipusageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    android:textColor="#555555"
-                    android:text="/10" />                 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-<!-- 
-     *************************************************************************************
--->
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-	<ProgressBar
-            android:id="@+id/segusagePB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            android:textSize="14sp"
-            android:progressDrawable="@drawable/progressbar" />
-
-        <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-            <TextView
-                    android:id="@+id/segusageLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Security Groups"
-		    android:textColor="#555555"
-		    android:textSize="16sp"
-                    />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                 <TextView
-                    android:id="@+id/segusageTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/segusageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    android:textColor="#555555"
-                    android:text="/10" />                 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
     <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-	<ProgressBar
-            android:id="@+id/volumesPB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            android:textSize="14sp"
-            android:progressDrawable="@drawable/progressbar" />
+        android:layout_width="wrap_content"
+        android:layout_height="5dip" />
+
+    <ScrollView
+        android:id="@+id/scrollerST"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dip">
+
+
+
+            <LinearLayout
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/rounded_corner"
+                android:orientation="horizontal" >
+
+                <ProgressBar
+                    android:id="@+id/vmusagePB"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="false"
+                    android:max="40"
+                    android:progress="0"
+
+                    android:progressDrawable="@drawable/progressbar" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
-            <TextView
-                    android:id="@+id/volusageLabelTV"
+                    <TextView
+                        android:id="@+id/vmusageLabelTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/INSTANCES"
+                        android:textColor="#555555"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dip" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/vmusageTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="0" />
+                        <TextView
+                            android:id="@+id/vmusageMAXTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="/10" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+
+            <!--
+                 *************************************************************************************
+            -->
+
+            <LinearLayout
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/rounded_corner"
+                android:orientation="horizontal" >
+
+                <ProgressBar
+                    android:id="@+id/cpuusagePB"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="false"
+                    android:max="40"
+                    android:progress="0"
+
+                    android:progressDrawable="@drawable/progressbar" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/VOLUMES_LAB"
-		   			android:textColor="#555555"
-		   			android:textSize="16sp"
-                    />
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/cpuusageLabelTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Virtual CPU"
+                        android:textColor="#555555"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dip" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/cpuusageTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="0" />
+                        <TextView
+                            android:id="@+id/cpuusageMAXTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="/10" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--
+                 *************************************************************************************
+            -->
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+
+            <LinearLayout
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/rounded_corner"
+                android:orientation="horizontal" >
+                <ProgressBar
+                    android:id="@+id/ramusagePB"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="false"
+                    android:max="40"
+                    android:progress="0"
+
+                    android:progressDrawable="@drawable/progressbar" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/ramusageLabelTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/MEMORY"
+                        android:textColor="#555555"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dip" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/ramusageTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="0" />
+                        <TextView
+                            android:id="@+id/ramusageMAXTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="/10" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--
+                 *************************************************************************************
+            -->
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+
+            <LinearLayout
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/rounded_corner"
+                android:orientation="horizontal" >
+                <ProgressBar
+                    android:id="@+id/fipusagePB"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="false"
+                    android:max="40"
+                    android:progress="0"
+
+                    android:progressDrawable="@drawable/progressbar" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/fipusageLabelTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Floating IP"
+                        android:textColor="#555555"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dip" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/fipusageTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="0" />
+                        <TextView
+                            android:id="@+id/fipusageMAXTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="/10" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--
+                 *************************************************************************************
+            -->
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="5dip" />
+
+
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/rounded_corner"
+                android:orientation="horizontal" >
+                <ProgressBar
+                    android:id="@+id/volumesPB"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="false"
+                    android:max="40"
+                    android:progress="0"
+                    android:textSize="14sp"
+                    android:progressDrawable="@drawable/progressbar" />
 
-                 <TextView
-                    android:id="@+id/volusageTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		    		android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/volusageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		   			android:textColor="#555555"
-                    android:text="/10" />                 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-  <View
-                android:layout_width="wrap_content"
-                android:layout_height="5dip" />
-  <LinearLayout
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/rounded_corner"
-            android:orientation="horizontal" >
-	<ProgressBar
-            android:id="@+id/gigaPB"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="10"
-            android:progress="0"
-            android:textSize="14sp"
-            android:progressDrawable="@drawable/progressbar" />
-
-        <LinearLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
-            <TextView
-                    android:id="@+id/gigausageLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/VOLUMEGIGA"
-		   			android:textColor="#555555"
-		   			android:textSize="16sp"
-                    />
+                    <TextView
+                        android:id="@+id/volusageLabelTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/VOLUMES_LAB"
+                        android:textColor="#555555"
+                        android:textSize="16sp"
+                        />
 
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dip" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/volusageTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="0" />
+                        <TextView
+                            android:id="@+id/volusageMAXTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="/10" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
             <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/rounded_corner"
+                android:orientation="horizontal" >
+                <ProgressBar
+                    android:id="@+id/gigaPB"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="false"
+                    android:max="40"
+                    android:progress="0"
+                    android:textSize="14sp"
+                    android:progressDrawable="@drawable/progressbar" />
 
-                 <TextView
-                    android:id="@+id/gigausageTV"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-		    		android:textColor="#555555"
-                    android:text="0" />
-                 <TextView
-                    android:id="@+id/gigausageMAXTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-		   			android:textColor="#555555"
-                    android:text="/10" />                 
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/gigausageLabelTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/VOLUMEGIGA"
+                        android:textColor="#555555"
+                        android:textSize="16sp"
+                        />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dip" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/gigausageTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="0" />
+                        <TextView
+                            android:id="@+id/gigausageMAXTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#555555"
+                            android:text="/10" />
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="5dip" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-  
-    </LinearLayout>
-    
-  </ScrollView>
+    </ScrollView>
 </LinearLayout>
-
