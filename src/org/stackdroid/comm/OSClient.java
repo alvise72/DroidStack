@@ -178,9 +178,9 @@ public class OSClient {
 
 		//Log.d("OSC", "Calling sedGETRequest...");
 		return RESTClient.sendGETRequest(U.useSSL(),
-				U.getNeutronEndpoint()+"/v2.0/routers.json",
+				U.getNeutronEndpoint() + "/v2.0/routers.json",
 				U.getToken(),
-				vp );
+				vp);
 	}
 
 	/**
@@ -195,12 +195,12 @@ public class OSClient {
 			ServerException, ServiceUnAvailableOrInternalError,
 			IOException, ParseException,CertificateException
 	{
-		checkToken( );
+		checkToken();
 		//Log.d("OSCLIENT", "routerID="+routerID);
 		return RESTClient.sendGETRequest(U.useSSL(),
-				U.getNeutronEndpoint()+"/v2.0/ports.json?device_id=" + routerID,
+				U.getNeutronEndpoint() + "/v2.0/ports.json?device_id=" + routerID,
 				U.getToken(),
-				new Vector<Pair<String,String>>());
+				new Vector<Pair<String, String>>());
 	}
 
     /**
@@ -215,7 +215,7 @@ public class OSClient {
 			ServerException, ServiceUnAvailableOrInternalError,
 			IOException, ParseException,CertificateException
 	{
-		checkToken( );
+		checkToken();
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 		vp.add( p );
@@ -268,10 +268,10 @@ public class OSClient {
 		String extradata = "{\"router\": {\"name\": \"" + routerName + "\", \"admin_state_up\": true}}";
 		vp.add( p );
 		RESTClient.sendPOSTRequest(U.useSSL(),
-				                   U.getNeutronEndpoint() + "/v2.0/routers.json",
-								   U.getToken(),
-								   extradata,
-								   vp);
+				U.getNeutronEndpoint() + "/v2.0/routers.json",
+				U.getToken(),
+				extradata,
+				vp);
 	}
 
 	/**
@@ -318,10 +318,10 @@ public class OSClient {
 		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 		vp.add( p );
 		//String extradata = "{\"volumeAttachment\": {\"device\": null, \"volumeId\": \"" + volumeID + "\"}}";
-		RESTClient.sendDELETERequest( U.useSSL(), 
-									  U.getNovaEndpoint() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID, 
-									  U.getToken(), 
-									  vp );
+		RESTClient.sendDELETERequest(U.useSSL(),
+				U.getNovaEndpoint() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID,
+				U.getToken(),
+				vp);
 	}
     
     /**
@@ -347,11 +347,11 @@ public class OSClient {
     		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     		vp.add( p );
     		String extradata = "{\"volume\": {\"display_name\": \"" + volname + "\", \"imageRef\": null, \"availability_zone\": null, \"volume_type\": null, \"display_description\": null, \"snapshot_id\": null, \"size\": " + size_in_GB + "}}";
-    		RESTClient.sendPOSTRequest( U.useSSL(), 
-    									cinderEP + "/volumes", 
-    									U.getToken(), 
-    									extradata, 
-    									vp );
+    		RESTClient.sendPOSTRequest(U.useSSL(),
+					cinderEP + "/volumes",
+					U.getToken(),
+					extradata,
+					vp);
 	   }
     
 
@@ -378,11 +378,13 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	//Log.d("OSC", "endpoint="+U.getCinder2Endpoint() + "/volumes/" + volID);
-    	RESTClient.sendDELETERequest( U.useSSL(), 
-    								  cinderEP + "/volumes/" + volID, 
-    								  U.getToken(), 
-    								  vp );
+    	RESTClient.sendDELETERequest(U.useSSL(),
+				cinderEP + "/volumes/" + volID,
+				U.getToken(),
+				vp);
 	   }
+
+
 
     /**
      * 
@@ -671,7 +673,7 @@ public class OSClient {
     	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-    	vp.add( p );
+    	vp.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(), 
     									  cinderEP + "/volumes/detail", 
     									  U.getToken( ), 
@@ -696,11 +698,11 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add(p);
     	String extradata = "{\"floatingip\": {\"port_id\": \"" + portid + "\"}}";
-    	RESTClient.sendPUTRequest( U.useSSL(),
-				    			   U.getNeutronEndpoint() + "/v2.0/floatingips/" + fipid + ".json",
-				    			   U.getToken(),
-				    			   extradata,
-				    			   vp );
+    	RESTClient.sendPUTRequest(U.useSSL(),
+				U.getNeutronEndpoint() + "/v2.0/floatingips/" + fipid + ".json",
+				U.getToken(),
+				extradata,
+				vp);
 
     }
     
@@ -715,11 +717,11 @@ public class OSClient {
     public String requestPortList( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
 	{
-    	checkToken( );
+    	checkToken();
     	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-    	vp.add( p );
+    	vp.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(), 
     									  U.getNeutronEndpoint() + "/v2.0/ports.json", 
     									  U.getToken( ), 
@@ -743,10 +745,10 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	RESTClient.sendDELETERequest( U.useSSL(), 
-				      				  U.getNovaEndpoint() + "/os-floating-ips/" + fip, 
-				      				  U.getToken(), 
-				      				  vp );
+    	RESTClient.sendDELETERequest(U.useSSL(),
+				U.getNovaEndpoint() + "/os-floating-ips/" + fip,
+				U.getToken(),
+				vp);
     }
     
     /**
@@ -769,11 +771,11 @@ public class OSClient {
        
        String extradata = "{\"removeFloatingIp\": {\"address\": \"" + floatingip + "\"}}";
        
-       RESTClient.sendPOSTRequest( U.useSSL(), 
-    		   					   U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
-    		   					   U.getToken(), 
-    		   					   extradata, 
-    		   					   vp );
+       RESTClient.sendPOSTRequest(U.useSSL(),
+			   U.getNovaEndpoint() + "/servers/" + serverid + "/action",
+			   U.getToken(),
+			   extradata,
+			   vp);
    }
 
    /**
@@ -792,7 +794,7 @@ public class OSClient {
 	   //Log.d("requestServerLog", "serverid="+serverid+" - maxlines="+maxlines);
 	   Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 	   Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	   vp.add( p );
+	   vp.add(p);
 	
 	   return RESTClient.sendPOSTRequest( U.useSSL(), 
 			   							  U.getNovaEndpoint() + "/servers/"+serverid+"/action",
@@ -823,10 +825,10 @@ public class OSClient {
  	   if(glanceEP.matches("http.+:\\d+$"))
  		  glanceEP += "/v2/images";
  	   
- 	   return RESTClient.sendGETRequest( U.useSSL(), 
-    		   							 glanceEP, 
-    		   							 U.getToken(), 
-    		   							 null );   
+ 	   return RESTClient.sendGETRequest(U.useSSL(),
+			   glanceEP,
+			   U.getToken(),
+			   null);
     }
     
     /**
@@ -915,11 +917,11 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
   	   	v.add(p);
   	    String extradata = "{\"server\": {\"name\": \"" + newServerName + "\"}}";
-  	    RESTClient.sendPUTRequest( U.useSSL(),
-  	    						   U.getNovaEndpoint() + "/servers/"+serverid,
-  	    						   U.getToken(), 
-  	    						   extradata, 
-  	    						   v );
+  	    RESTClient.sendPUTRequest(U.useSSL(),
+				U.getNovaEndpoint() + "/servers/" + serverid,
+				U.getToken(),
+				extradata,
+				v);
 	}
     
     /**
@@ -933,7 +935,7 @@ public class OSClient {
     public String requestServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
- 	   checkToken( );
+ 	   checkToken();
  		
  	   Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
  	   Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
@@ -982,10 +984,10 @@ public class OSClient {
     {
  	   checkToken( );
  		
- 	   RESTClient.sendDELETERequest(  U.useSSL(),
-					   				  U.getNovaEndpoint() + "/images/" + imageID, 
-					   				  U.getToken( ),
-					   				  null );
+ 	   RESTClient.sendDELETERequest(U.useSSL(),
+			   U.getNovaEndpoint() + "/images/" + imageID,
+			   U.getToken(),
+			   null);
     }
 
 
@@ -1051,6 +1053,28 @@ public class OSClient {
     									  U.getToken(), 
     									  v );
     }
+
+	/**
+	 * @throws ParseException
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	public String requestExternalNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken( );
+
+		Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+		v.add(p);
+		return RESTClient.sendGETRequest( U.useSSL(),
+				U.getNeutronEndpoint() + "/v2.0/networks.json?router%3Aexternal=True",
+				U.getToken(),
+				v );
+	}
 
     /**
      * @throws ParseException 

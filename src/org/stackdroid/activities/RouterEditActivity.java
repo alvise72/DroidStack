@@ -3,14 +3,18 @@ package org.stackdroid.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.app.Activity;
 
@@ -22,6 +26,7 @@ import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Network;
+import org.stackdroid.utils.OSImage;
 import org.stackdroid.utils.Router;
 import org.stackdroid.utils.RouterPort;
 import org.stackdroid.utils.User;
@@ -40,6 +45,37 @@ public class RouterEditActivity extends Activity {
 	private CustomProgressDialog progressDialogWaitStop     = null;
 	private String				 routerID					= null;
 	private String				 routerName					= null;
+	private Vector<Network>		 externalNets			    = null;
+	private Spinner 			 netsSpinner			    = null;
+	private ArrayAdapter<Network> spinnerNetsArrayAdapter   = null;
+	private AlertDialog 		 alertDialogSelectNetwork   = null;
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class ConfirmButtonHandler implements View.OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			Network net = (Network)netsSpinner.getSelectedItem();
+
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class CancelButtonHandler implements View.OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogSelectNetwork.dismiss();
+		}
+	}
 
 	/**
 	 *
@@ -141,6 +177,54 @@ public class RouterEditActivity extends Activity {
 	public void onDestroy( ) {
 		super.onDestroy();
 		progressDialogWaitStop.dismiss();
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class AsyncTaskGetExternalNets extends AsyncTask<Void, Void, Void> {
+		private String errorMessage = "";
+		private boolean hasError = false;
+		private String jsonBufNet = "";
+
+		@Override
+		protected Void doInBackground( Void... v )
+		{
+			OSClient osc = OSClient.getInstance(U);
+
+			try {
+				jsonBufNet		 	= osc.requestExternalNetworks();
+			} catch(ServerException se) {
+				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+				hasError = true;
+			} catch(Exception e) {
+				errorMessage = e.getMessage();
+				hasError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				Utils.alert( errorMessage, RouterEditActivity.this );
+				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+			try {
+				externalNets = Network.parse(jsonBufNet, null);
+			} catch(ParseException pe) {
+				Utils.alert("Error parsing external networks", RouterEditActivity.this) ;
+				progressDialogWaitStop.dismiss();
+			}
+			pickANetworkAsGateway( );
+			//RouterEditActivity.this.putInfo( jsonBufRouterShow, jsonBufRouterPorts, jsonBufNet, jsonBufSubnet );
+		}
 	}
 
   	/**
@@ -326,13 +410,13 @@ public class RouterEditActivity extends Activity {
 				RouterPortView rpv = new RouterPortView( rp, new RouterEditActivity.DeleteRouterPortListener( ), this );
 				iL.addView(rpv);
 			}
-/*			if(router.hasGateway()) {
+			if(router.hasGateway()) {
 				((Button)findViewById(R.id.SETGATEWAY)).setEnabled(false);
 				((Button)findViewById(R.id.CLEARGATEWAY)).setEnabled(true);
 			} else {
 				((Button)findViewById(R.id.SETGATEWAY)).setEnabled(true);
 				((Button)findViewById(R.id.CLEARGATEWAY)).setEnabled(false);
-			}*/
+			}
 		} catch (ParseException pe) {
 			RouterEditActivity.this.progressDialogWaitStop.dismiss();
 			Utils.alert(pe.getMessage(), this);
@@ -351,7 +435,7 @@ public class RouterEditActivity extends Activity {
 	 */
 	public void clearGateway(View v) {
 		progressDialogWaitStop.show();
-		(new RouterEditActivity.AsyncTaskClearRouterGateway( )).execute( );
+		(new RouterEditActivity.AsyncTaskClearRouterGateway( )).execute();
 	}
 
 	/**
@@ -361,6 +445,40 @@ public class RouterEditActivity extends Activity {
 	 *
 	 */
 	public void setGateway(View v) {
+		(new RouterEditActivity.AsyncTaskGetExternalNets()).execute();
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected void pickANetworkAsGateway( ) {
+		progressDialogWaitStop.dismiss();
+		spinnerNetsArrayAdapter = new ArrayAdapter<Network>(RouterEditActivity.this, android.R.layout.simple_spinner_item,externalNets.subList(0,externalNets.size()) );
+		spinnerNetsArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		LayoutInflater li = LayoutInflater.from(this);
+
+		View promptsView = li.inflate(R.layout.my_dialog_create_instance, null);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+		alertDialogBuilder.setView(promptsView);
+
+		alertDialogBuilder.setTitle("Choose a Network");
+		alertDialogSelectNetwork = alertDialogBuilder.create();
+
+		netsSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseImage);
+		netsSpinner.setAdapter(spinnerNetsArrayAdapter);
+		final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
+		final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
+		mButton.setOnClickListener(new RouterEditActivity.ConfirmButtonHandler());
+		mButtonCancel.setOnClickListener(new RouterEditActivity.CancelButtonHandler());
+		alertDialogSelectNetwork.setCanceledOnTouchOutside(false);
+		alertDialogSelectNetwork.setCancelable(false);
+		alertDialogSelectNetwork.show();
 
 	}
 }

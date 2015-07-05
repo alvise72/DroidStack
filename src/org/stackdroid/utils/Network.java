@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
 public class Network {
-    //private String status;
     private String 				name;
     private String 				ID;
     private Vector<SubNetwork> 	subnets;
@@ -18,7 +17,6 @@ public class Network {
     private String 				tenantID;
     
     public Network( String status, String name, String ID, Vector<SubNetwork> subnets, boolean shared, boolean up, boolean ext, String tenantID ) {
-    	//this.status = status;
     	this.name = name;
     	this.ID   = ID;
     	this.subnets = subnets;
@@ -26,16 +24,12 @@ public class Network {
     	this.up = up;
     	this.ext = ext;
     	this.tenantID = tenantID;
-    	//fixedIP = "";
     }
 
     @Override
     public String toString( ) {
 	  return name;
     }
-
-    //public void setFixedIP( String IP ) { fixedIP = IP; }
-
     public String getName( ) { return name; }
     public String getID( ) { return ID; }
     public Vector<SubNetwork> getSubNetworks( ) { return subnets; }
@@ -43,7 +37,6 @@ public class Network {
     public boolean isUp( ) { return up; }
     public boolean isExt( ) { return ext; }
     public String getTenantID() { return tenantID; }
-    //public String getFixedIP( ) { return fixedIP; }
     
     
     /**
@@ -53,9 +46,11 @@ public class Network {
     *
     */    
    public static Vector<Network> parse( String jsonBuf, String jsonBufSubnet )  throws ParseException  {
-   	Hashtable<String, SubNetwork> subnetsTable = SubNetwork.parse( jsonBufSubnet );
-   	Vector<Network> nets = new Vector<Network>();
-   	try {
+
+	   if(jsonBuf==null) return new Vector<Network>();
+	   Hashtable<String, SubNetwork> subnetsTable = SubNetwork.parse( jsonBufSubnet );
+	   Vector<Network> nets = new Vector<Network>();
+	   try {
    		JSONObject jsonObject = new JSONObject( jsonBuf );
    		JSONArray networks = (JSONArray)jsonObject.getJSONArray("networks");
    		for(int i =0; i<networks.length(); ++i) {
@@ -78,10 +73,10 @@ public class Network {
    					_subnets.add( subnetsTable.get(arraySubnetID[j]) );
    			nets.add( new Network(status, name, ID, _subnets, shared, up, ext, tenantID ) );
    		}
-   	} catch(org.json.JSONException je) {
-   		throw new ParseException( je.getMessage( ) );
-   	}
-   	return nets;
+	   } catch(org.json.JSONException je) {
+   		 throw new ParseException( je.getMessage( ) );
+	   }
+	   return nets;
    }
 
 }

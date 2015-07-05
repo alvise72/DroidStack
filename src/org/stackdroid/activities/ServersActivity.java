@@ -75,17 +75,17 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
-	protected class ResizeInstance implements OnClickListener {
-		@Override
-		public void onClick(View v) {
-			server  = ((ButtonWithView)v).getServerView().getServer();
+	//protected class ResizeInstance implements OnClickListener {
+	//	@Override
+	//	public void onClick(View v) {
+	//		server  = ((ButtonWithView)v).getServerView().getServer();
 			//ServersActivity.this.progressDialogWaitStop.show();
             //(new AsyncTaskPauseInstance( )).execute( server.getID() );
             //ServersActivity.this.manageInstanceDialog.dismiss();
 			
-		}
+	//	}
 		
-	}
+	//}
 	
 	/**
 	 * 
@@ -1219,7 +1219,7 @@ public class ServersActivity extends Activity {
 	}
     }
     
-    /*
+    /**
      * 
      * 
      * 
