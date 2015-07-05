@@ -201,4 +201,6 @@
     <string name="NOMOREIPAVAIL">No more IP addresses available on network </string>
     <string name="STILLHASPORTS">still has ports</string>
     <string name="INSUFFICIENTPRIVILEGES">or insufficient privileges</string>
+    <string name="HOSTEDBY">Hosted by:</string>
+    <string name="INSTANCEINFO">Instance info</string>
 </resources>

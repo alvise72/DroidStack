@@ -192,4 +192,6 @@
     <string name="NOMOREIPAVAIL">Non ci sono pi&#xf9; indirizzi IP disponibili sulla rete </string>
     <string name="STILLHASPORTS">ha ancora delle interfacce</string>
     <string name="INSUFFICIENTPRIVILEGES">o privilegi insufficienti</string>
+    <string name="HOSTEDBY">Ospitato da:</string>
+    <string name="INSTANCEINFO">Info istanza</string>
 </resources>

@@ -71,9 +71,9 @@ public class Server {//implements Serializable {
     public Vector<String> getPrivateIP() { return privIP; }
     public Vector<String> getPublicIP() { return pubIP; }
 
-    public String getComputeNode() { return computeNode; }
+    public String getComputeNode2() { return computeNode; }
     public String getKeyName() { return keyname; }
-    public String getFlavorID() { return flavorID;}//flavorID; }
+    public String getFlavorID() { return flavorID;}
     public String[] getSecurityGroupNames() { return secgrpNames; }
 
     public long getCreationTime() { return creationTime; }
@@ -121,7 +121,7 @@ public class Server {//implements Serializable {
 		if(server.has("OS-EXT-SRV-ATTR:hypervisor_hostname"))
 		    computeNode = server.getString("OS-EXT-SRV-ATTR:hypervisor_hostname");
 		else
-		    computeNode = "N/A (admin privilege required)";
+		    computeNode = null;
 		name = (String)server.getString("name");
 		if(server.has("OS-EXT-STS:task_state"))
 			task = (String)server.getString("OS-EXT-STS:task_state");

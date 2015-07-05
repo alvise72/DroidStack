@@ -6,7 +6,7 @@
               android:orientation="vertical" >
 
   <LinearLayout
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical" >
     
@@ -34,6 +34,11 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal|center_vertical"
+          android:orientation="vertical" >
         <ImageButton
                 android:id="@+id/updateButton"
                 android:layout_width="wrap_content"
@@ -42,7 +47,7 @@
                 android:background="#f2f2f2"
                 android:text="@string/UPDATE"
                 android:onClick="update" />
-        
+        </LinearLayout>
   <ScrollView
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"

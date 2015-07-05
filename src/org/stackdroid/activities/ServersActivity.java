@@ -533,7 +533,7 @@ public class ServersActivity extends Activity {
 			String[] secgrps = s.getSecurityGroupNames( );
 
 			TextView tv1 = new TextView(ServersActivity.this);
-			tv1.setText("Instance name:");
+			tv1.setText(getString(R.string.INSTANCENAME));
 			tv1.setTypeface( null, Typeface.BOLD );
 			TextView tv2 = new TextView(ServersActivity.this);
 			tv2.setText(s.getName());
@@ -554,7 +554,7 @@ public class ServersActivity extends Activity {
 			if(s.getPrivateIP().isEmpty()) {
 				tv8_privip = new TextView[1];
 				tv8_privip[0] = new TextView(ServersActivity.this);
-				tv8_privip[0].setText( "None" );
+				tv8_privip[0].setText( getString(R.string.NONE) );
 			} else {
 				tv8_privip = new TextView[s.getPrivateIP().size()];
 				for(int i = 0; i<s.getPrivateIP().size(); i++) {
@@ -565,13 +565,13 @@ public class ServersActivity extends Activity {
 			}
 
 			TextView tv9 = new TextView(ServersActivity.this);
-			tv9.setText("Floating IP(s):");
+			tv9.setText("Floating IP:");
 			tv9.setTypeface( null, Typeface.BOLD );
 			TextView[] tv10_pubip = null;
 			if(s.getPublicIP().isEmpty()) {
 				tv10_pubip =new TextView[1];
 				tv10_pubip[0] = new TextView(ServersActivity.this);
-				tv10_pubip[0].setText( "None" );
+				tv10_pubip[0].setText( getString(R.string.NONE) );
 			} else {
 				tv10_pubip = new TextView[s.getPublicIP().size()];
 				for(int i = 0; i<s.getPublicIP().size(); i++) {
@@ -583,7 +583,7 @@ public class ServersActivity extends Activity {
 			tv11.setText("Key name:");
 			tv11.setTypeface( null, Typeface.BOLD );
 			TextView tv12 = new TextView( ServersActivity.this );
-			tv12.setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : "None" );
+			tv12.setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : getString(R.string.NONE) );
 			TextView tv13 = new TextView( ServersActivity.this );
 			tv13.setText("Security groups:");
 			tv13.setTypeface( null, Typeface.BOLD );
@@ -591,12 +591,12 @@ public class ServersActivity extends Activity {
 			if(secgrps != null && secgrps.length!=0)
 				tv14.setText( Utils.join(s.getSecurityGroupNames(),", ") );
 			else
-				tv14.setText( "None" );
+				tv14.setText( getString(R.string.NONE) );
 			TextView tv15 = new TextView( ServersActivity.this );
-			tv15.setText("Hosted by:");
+			tv15.setText(getString(R.string.HOSTEDBY));
 			tv15.setTypeface( null, Typeface.BOLD );
 			TextView tv16 = new TextView( ServersActivity.this );
-			tv16.setText( s.getComputeNode( ) );
+			tv16.setText( s.getComputeNode2( ) != null ? s.getComputeNode2( ) : "N/A (" + getString(R.string.INSUFFICIENTPRIVILEGES)+")");
 	    
 	    
 			ScrollView sv = new ScrollView(ServersActivity.this);
@@ -645,7 +645,7 @@ public class ServersActivity extends Activity {
 				name = s.getName().substring(0,14) + "..";
 			else
 				name = s.getName();
-			Utils.alertInfo( sv, "Instance information: "+name, ServersActivity.this );
+			Utils.alertInfo( sv, getString(R.string.INSTANCEINFO)+": "+name, ServersActivity.this );
 		}
 	}
 
@@ -664,6 +664,8 @@ public class ServersActivity extends Activity {
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));
 	        final EditText input = new EditText(ServersActivity.this);
+			input.setText("15");
+			//input.setSelection(0, 2);
 	        input.setKeyListener(SimpleNumberKeyListener.getInstance());
 	        
 	        alert.setView(input);
@@ -778,7 +780,7 @@ public class ServersActivity extends Activity {
 		
         progressDialogWaitStop.show();
         (new AsyncTaskOSListServers()).execute( );
-        (Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
+        //(Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
 
 	/**
