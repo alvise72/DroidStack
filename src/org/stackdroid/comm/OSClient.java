@@ -126,10 +126,13 @@ public class OSClient {
 			IOException, ParseException,CertificateException
 	{
 		checkToken( );
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add(p);
 		return RESTClient.sendGETRequest(U.useSSL(),
 				U.getNeutronEndpoint()+"/v2.0/routers/" + routerID + ".json",
 				U.getToken(),
-				new Vector<Pair<String,String>>());
+				vp );
 	}
 
     /**
@@ -140,17 +143,21 @@ public class OSClient {
      * 
      * 
      */
-    public String requestRouterPorts( String routerID ) throws NotAuthorizedException, NotFoundException,
+    public String clearRouterGateway( String routerID ) throws NotAuthorizedException, NotFoundException,
 	   ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, ParseException,CertificateException
 	{
-    	checkToken( );
-		//Log.d("OSCLIENT", "routerID="+routerID);
-    	return RESTClient.sendGETRequest(U.useSSL(),
-    									 U.getNeutronEndpoint()+"/v2.0/ports.json?device_id=" + routerID,
-    									 U.getToken(),
-    									 new Vector<Pair<String,String>>());
-    }
+		checkToken( );
+		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		vp.add(p);
+		String extradata = "{\"router\": {\"external_gateway_info\": {}}}";
+		return RESTClient.sendPUTRequest(U.useSSL(),
+				U.getNeutronEndpoint() + "/v2.0/routers/" + routerID + ".json",
+				U.getToken(),
+				extradata,
+				vp);
+	}
 
 	/**
      *
@@ -164,15 +171,36 @@ public class OSClient {
 			ServerException, ServiceUnAvailableOrInternalError,
 			IOException, ParseException,CertificateException
 	{
-		checkToken( );
+		checkToken();
 		Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 		vp.add(p);
+
 		//Log.d("OSC", "Calling sedGETRequest...");
 		return RESTClient.sendGETRequest(U.useSSL(),
 				U.getNeutronEndpoint()+"/v2.0/routers.json",
 				U.getToken(),
 				vp );
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	public String requestRouterPorts( String routerID ) throws NotAuthorizedException, NotFoundException,
+			ServerException, ServiceUnAvailableOrInternalError,
+			IOException, ParseException,CertificateException
+	{
+		checkToken( );
+		//Log.d("OSCLIENT", "routerID="+routerID);
+		return RESTClient.sendGETRequest(U.useSSL(),
+				U.getNeutronEndpoint()+"/v2.0/ports.json?device_id=" + routerID,
+				U.getToken(),
+				new Vector<Pair<String,String>>());
 	}
 
     /**
@@ -192,7 +220,7 @@ public class OSClient {
 		Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 		vp.add( p );
 		String extradata = "{\"subnet_id\": \"" + subnetID + "\"}";
-		Log.d("OSC","routerID="+routerID);
+		//Log.d("OSC","routerID="+routerID);
 		RESTClient.sendPUTRequest(U.useSSL(),
 				U.getNeutronEndpoint() + "/v2.0/routers/" + routerID + "/remove_router_interface.json",
 				U.getToken(),

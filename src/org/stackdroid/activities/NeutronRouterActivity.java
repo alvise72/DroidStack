@@ -240,8 +240,8 @@ public class NeutronRouterActivity extends Activity {
 		else
 			((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE));
 
-		progressDialogWaitStop.show();
-		(new AsyncTaskOSListRouters()).execute();
+		//progressDialogWaitStop.show();
+		//(new AsyncTaskOSListRouters()).execute();
     }
 
 	/**
@@ -253,6 +253,8 @@ public class NeutronRouterActivity extends Activity {
 	@Override
 	public void onResume( ) {
 		super.onResume();
+		progressDialogWaitStop.show();
+		(new AsyncTaskOSListRouters()).execute();
 	}
 
 	/**
@@ -478,7 +480,8 @@ public class NeutronRouterActivity extends Activity {
 					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
 				} else err = errorMessage;
 				Utils.alert( err, NeutronRouterActivity.this );
-				NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
+				(new AsyncTaskOSListRouters()).execute();
+//				NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
 				return;
 			}
 			(new AsyncTaskOSListRouters()).execute();

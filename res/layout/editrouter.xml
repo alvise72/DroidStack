@@ -43,6 +43,7 @@
 
 
             <Button
+                android:id="@+id/CLEARGATEWAY"
                 android:layout_width="fill_parent"
                 android:layout_height="40sp"
                 android:textColor="#FFFFFF"
@@ -50,23 +51,25 @@
                 android:text="@+string/CLEARGATEWAY"
                 android:textSize="12sp"
                 android:layout_weight="1"
-                android:id="@+id/button" />
+                android:onClick="clearGateway" />
 
             <Button
+                android:id="@+id/SETGATEWAY"
                 android:layout_width="fill_parent"
                 android:layout_height="40sp"
                 android:text="@+string/SETGATEWAY"
                 android:textSize="12sp"
                 android:layout_weight="1"
-                android:id="@+id/button3" />
+                android:onClick="setGateway" />
 
             <Button
+                android:id="@+id/ADDINTERFACE"
                 android:layout_width="fill_parent"
                 android:layout_height="40sp"
                 android:text="@+string/ADDINTERFACE"
                 android:textSize="12sp"
                 android:layout_weight="1"
-                android:id="@+id/button4" />
+                android:onClick="addInterface" />
         </LinearLayout>
 
         <LinearLayout

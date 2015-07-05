@@ -29,8 +29,6 @@ public class RouterPort {//implements Serializable {
 		this.tenantID			= tenantID;
 		this.device_owner		= device_owner;
 		this.MAC				= MAC;
-		//this.subnets_fixedips 	= subs;
-		// deviceID1 = deviceID;
 		this.status 			= status;
 		this.subnetID			= subnetID;
 		this.fixedIP			= fixedIP;
@@ -55,12 +53,6 @@ public class RouterPort {//implements Serializable {
 	public String getDeviceOwner( ) { return device_owner; }
 
 	public String getMAC( ) { return MAC; }
-
-/*	public Pair<String,String> getSubnetInterface( ) {
-		if(subnets_fixedips.size()==0) return null;
-		return subnets_fixedips.elementAt(0);
-	}
-*/
 
 	public String getID( ) { return id ; }
 	

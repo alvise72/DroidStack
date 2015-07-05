@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.Activity;
@@ -38,6 +39,7 @@ public class RouterEditActivity extends Activity {
 	private User 				 U 						    = null;
 	private CustomProgressDialog progressDialogWaitStop     = null;
 	private String				 routerID					= null;
+	private String				 routerName					= null;
 
 	/**
 	 *
@@ -58,7 +60,7 @@ public class RouterEditActivity extends Activity {
 			DialogInterface.OnClickListener yesHandler = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					RouterEditActivity.this.progressDialogWaitStop.show( );
-					(new RouterEditActivity.AsyncTaskDeleteRouterInterface()).execute( routerID, rp.getSubnetID() );
+					(new RouterEditActivity.AsyncTaskDeleteRouterInterface()).execute( routerID, rp.getSubnetID(), rp.getFixedIP() );
 				}
 			};
 
@@ -112,8 +114,8 @@ public class RouterEditActivity extends Activity {
 
 		Bundle bundle = getIntent( ).getExtras();
 		routerID = bundle.getString("ROUTERID");
-		//String routerName = ;
-		setTitle(getString(R.string.EDITROUTER) + " " + bundle.getString("ROUTERNAME"));
+		routerName = bundle.getString("ROUTERNAME");
+		setTitle(getString(R.string.EDITROUTER) + " " + routerName );
 		progressDialogWaitStop.show();
 		(new AsyncTaskGetRouterInfo()).execute(routerID);
     }
@@ -152,7 +154,6 @@ public class RouterEditActivity extends Activity {
 		private boolean hasError = false;
 		private String jsonBufRouterPorts = "";
 		private String jsonBufRouterShow = "";
-		//private String jsonBufNetworks = "";
 		private String jsonBufNet = "";
 		private String jsonBufSubnet = "";
 
@@ -162,12 +163,11 @@ public class RouterEditActivity extends Activity {
 			OSClient osc = OSClient.getInstance(U);
 
 			try {
-				jsonBufRouterPorts 	= osc.requestRouterPorts(v[0]);
-				jsonBufRouterShow  	= osc.requestRouterShow(v[0]);
-				jsonBufNet		 	= osc.requestNetworks();
+				jsonBufRouterPorts 	= osc.requestRouterPorts( routerID );
+				jsonBufRouterShow  	= osc.requestRouterShow( routerID );
+				jsonBufNet		 	= osc.requestNetworks( );
 				jsonBufSubnet	 	= osc.requestSubNetworks( );
 			} catch(ServerException se) {
-				//Log.e("NEUTRONROUTER", se.getMessage());
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
 			} catch(Exception e) {
@@ -199,14 +199,70 @@ public class RouterEditActivity extends Activity {
 	private class AsyncTaskDeleteRouterInterface extends AsyncTask<String,Void,Void> {
 		private String errorMessage = "";
 		private boolean hasError 	= false;
-		private String routerName 	= "";
+		//private String routerName 	= "";
+		private String subnetID = "";
+		private String subnetIP = "";
 		@Override
 		protected Void doInBackground( String... v )
 		{
 			OSClient osc = OSClient.getInstance(U);
-			routerName = v[1] ;
+			//routerName = v[1] ;
+			subnetID = v[1];
+			subnetIP = v[2];
 			try {
 				osc.deleteRouterInterface(v[0], v[1]);
+			} catch(ServerException se) {
+				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+				hasError = true;
+			} catch(Exception e) {
+				errorMessage = e.getMessage();
+				hasError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				String err = "";
+				if(errorMessage.toLowerCase().contains("could not be found")==true) {
+					err = errorMessage;
+					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
+				} else {
+					err = errorMessage;
+					//Log.d("ROUTEREDIT", "err="+err);
+					err = err.replace( routerID, routerName );
+					err = err.replace( subnetID, subnetIP );
+				}
+				Utils.alert( err, RouterEditActivity.this );
+				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID);
+			//NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class AsyncTaskClearRouterGateway extends AsyncTask<Void,Void,Void> {
+		private String errorMessage = "";
+		private boolean hasError 	= false;
+		private String routerName 	= "";
+		@Override
+		protected Void doInBackground( Void... v )
+		{
+			OSClient osc = OSClient.getInstance(U);
+			//routerName = v[0] ;
+
+			try {
+				osc.clearRouterGateway( routerID );
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
@@ -231,8 +287,7 @@ public class RouterEditActivity extends Activity {
 				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
 				return;
 			}
-			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID);
-			//NeutronRouterActivity.this.progressDialogWaitStop.dismiss();
+			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID );
 		}
 	}
 
@@ -271,12 +326,40 @@ public class RouterEditActivity extends Activity {
 				RouterPortView rpv = new RouterPortView( rp, new RouterEditActivity.DeleteRouterPortListener( ), this );
 				iL.addView(rpv);
 			}
-
+			if(router.hasGateway()) {
+				((Button)findViewById(R.id.SETGATEWAY)).setEnabled(false);
+				((Button)findViewById(R.id.CLEARGATEWAY)).setEnabled(true);
+			} else {
+				((Button)findViewById(R.id.SETGATEWAY)).setEnabled(true);
+				((Button)findViewById(R.id.CLEARGATEWAY)).setEnabled(false);
+			}
 		} catch (ParseException pe) {
 			RouterEditActivity.this.progressDialogWaitStop.dismiss();
 			Utils.alert(pe.getMessage(), this);
 			return;
 		}
+
 		RouterEditActivity.this.progressDialogWaitStop.dismiss();
+
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private void clearGateway(View v) {
+
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private void setGateway(View v) {
+
 	}
 }
