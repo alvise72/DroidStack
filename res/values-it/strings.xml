@@ -189,4 +189,5 @@
     <string name="CLEARGATEWAY">Clear Gateway</string>
     <string name="SETGATEWAY">Set Gateway</string>
     <string name="ADDINTERFACE">Add Interface</string>
+    <string name="NOMOREIPAVAIL">Non ci sono pi&#xf9; indirizzi IP disponibili sulla rete </string>
 </resources>

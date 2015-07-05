@@ -62,7 +62,7 @@ public class RouterEditActivity extends Activity {
 			Network net = (Network)netsSpinner.getSelectedItem();
 			alertDialogSelectNetwork.dismiss();
 			progressDialogWaitStop.show();
-			(new RouterEditActivity.AsyncTaskSetRouterGateway()).execute( net.getID());
+			(new RouterEditActivity.AsyncTaskSetRouterGateway()).execute( net.getID(), net.getName());
 		}
 	}
 
@@ -388,13 +388,16 @@ public class RouterEditActivity extends Activity {
 		private String errorMessage = "";
 		private boolean hasError 	= false;
 		private String routerName 	= "";
+		private String networkID = "";
+		private String networkName = "";
 		@Override
 		protected Void doInBackground( String... v )
 		{
 			OSClient osc = OSClient.getInstance(U);
-
+			networkID = v[0];
+			networkName = v[1];
 			try {
-				osc.setRouterGateway( routerID, v[0] );
+				osc.setRouterGateway( routerID, networkID );
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
@@ -411,10 +414,15 @@ public class RouterEditActivity extends Activity {
 
 			if(hasError) {
 				String err = "";
+
 				if(errorMessage.toLowerCase().contains("could not be found")==true) {
 					err = errorMessage;
 					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
-				} else err = errorMessage;
+				} else {
+					err = errorMessage;
+					err=err.replace( networkID, networkName);
+					err = err.replace( "No more IP addresses available on network ", getString(R.string.NOMOREIPAVAIL));
+				}
 				Utils.alert( err, RouterEditActivity.this );
 				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
 				return;
