@@ -190,4 +190,6 @@
     <string name="SETGATEWAY">Set Gateway</string>
     <string name="ADDINTERFACE">Add Interface</string>
     <string name="NOMOREIPAVAIL">Non ci sono pi&#xf9; indirizzi IP disponibili sulla rete </string>
+    <string name="STILLHASPORTS">ha ancora delle interfacce</string>
+    <string name="INSUFFICIENTPRIVILEGES">o privilegi insufficienti</string>
 </resources>

@@ -3,7 +3,6 @@ package org.stackdroid.activities;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Network;
-import org.stackdroid.utils.OSImage;
 import org.stackdroid.utils.Router;
 import org.stackdroid.utils.RouterPort;
 import org.stackdroid.utils.SubNetwork;
@@ -94,10 +92,10 @@ public class RouterEditActivity extends Activity {
 	protected class ConfirmButtonHandlerPriv implements View.OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			Network net = (Network)netsSpinner.getSelectedItem();
-			alertDialogSelectNetwork.dismiss();
+			SubNetwork net = (SubNetwork)netsPrivSpinner.getSelectedItem();
+			alertDialogSelectNetworkPriv.dismiss();
 			progressDialogWaitStop.show();
-			(new RouterEditActivity.AsyncTaskSetRouterGateway()).execute( net.getID(), net.getName());
+			(new RouterEditActivity.AsyncTaskAddRouterInterface()).execute(  net.getID(), net.getName() );
 		}
 	}
 
@@ -525,6 +523,62 @@ public class RouterEditActivity extends Activity {
 		}
 	}
 
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class AsyncTaskAddRouterInterface extends AsyncTask<String,Void,Void> {
+		private String errorMessage = "";
+		private boolean hasError 	= false;
+		private String subnetID = "";
+		private String subnetName = "";
+		//private String routerName 	= "";
+		//private String networkID = "";
+		//private String networkName = "";
+		@Override
+		protected Void doInBackground( String... v )
+		{
+			OSClient osc = OSClient.getInstance(U);
+			subnetID = v[0];
+			//networkName = v[1];
+			subnetName = v[1];
+			try {
+				osc.addRouterInterface(routerID, subnetID);
+			} catch(ServerException se) {
+				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+				hasError = true;
+			} catch(Exception e) {
+				errorMessage = e.getMessage();
+				hasError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				String err = "";
+
+				if(errorMessage.toLowerCase().contains("could not be found")==true) {
+					err = errorMessage;
+					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
+				} else {
+					err = errorMessage;
+					err=err.replace( subnetID, subnetName);
+					err = err.replace( "No more IP addresses available on network ", getString(R.string.NOMOREIPAVAIL));
+				}
+				Utils.alert( err, RouterEditActivity.this );
+				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID);
+		}
+	}
 
 	/**
 	 *

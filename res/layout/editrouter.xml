@@ -73,7 +73,18 @@
                 android:onClick="addInterface" />
 
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3sp"
+            />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="#FF909090" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3sp"
+            />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,6 +104,18 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text=" " />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3sp"
+            />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#FF909090" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3sp"
+            />
         <!-- Interfaces Title -->
         <TextView
             android:layout_width="wrap_content"

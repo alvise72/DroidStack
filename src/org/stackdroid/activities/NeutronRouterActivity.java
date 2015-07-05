@@ -131,7 +131,7 @@ public class NeutronRouterActivity extends Activity {
 			tv3.setTypeface( null, Typeface.BOLD );
 			TextView tv4 = new TextView(NeutronRouterActivity.this);
 			Network gw = V.getGateway();
-			String routerInfo = "N/A or privileges required";
+			String routerInfo = "N/A (" + getString(R.string.INSUFFICIENTPRIVILEGES)+")";
 			if(gw!=null) {
 				routerInfo=gw.getName();
 				if(gw.getSubNetworks() != null && gw.getSubNetworks().size()!=0 && gw.getSubNetworks().elementAt(0) != null)
@@ -451,13 +451,15 @@ public class NeutronRouterActivity extends Activity {
 		private String errorMessage = "";
 		private boolean hasError 	= false;
 		private String routerName 	= "";
+		private String routerID = "";
 		@Override
 		protected Void doInBackground( String... v )
 		{
 			OSClient osc = OSClient.getInstance(U);
 			routerName = v[1] ;
+			routerID = v[0];
 			try {
-				osc.deleteRouter( v[0] );
+				osc.deleteRouter( routerID );
 			} catch(ServerException se) {
 				//Log.e("NEUTRONROUTER", se.getMessage());
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
@@ -478,7 +480,11 @@ public class NeutronRouterActivity extends Activity {
 				if(errorMessage.toLowerCase().contains("could not be found")==true) {
 					err = errorMessage;
 					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
-				} else err = errorMessage;
+				} else {
+					err = errorMessage;
+					err = err.replace( routerID, routerName);
+					err = err.replace("still has ports", NeutronRouterActivity.this.getString(R.string.STILLHASPORTS));
+				}
 				Utils.alert( err, NeutronRouterActivity.this );
 				(new AsyncTaskOSListRouters()).execute();
 //				NeutronRouterActivity.this.progressDialogWaitStop.dismiss( );
