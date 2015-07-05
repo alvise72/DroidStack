@@ -49,7 +49,7 @@ public class NeutronRouterActivity extends Activity {
     private User 				 U 						    = null;
 	private AlertDialog 		 alertDialogCreateRouter	= null;
 	private EditText 			 routername				    = null;
-	private boolean				 mustRefresh				= false;
+	//private boolean				 mustRefresh				= false;
 
 	/**
 	 *

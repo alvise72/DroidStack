@@ -326,13 +326,13 @@ public class RouterEditActivity extends Activity {
 				RouterPortView rpv = new RouterPortView( rp, new RouterEditActivity.DeleteRouterPortListener( ), this );
 				iL.addView(rpv);
 			}
-			if(router.hasGateway()) {
+/*			if(router.hasGateway()) {
 				((Button)findViewById(R.id.SETGATEWAY)).setEnabled(false);
 				((Button)findViewById(R.id.CLEARGATEWAY)).setEnabled(true);
 			} else {
 				((Button)findViewById(R.id.SETGATEWAY)).setEnabled(true);
 				((Button)findViewById(R.id.CLEARGATEWAY)).setEnabled(false);
-			}
+			}*/
 		} catch (ParseException pe) {
 			RouterEditActivity.this.progressDialogWaitStop.dismiss();
 			Utils.alert(pe.getMessage(), this);
@@ -349,8 +349,9 @@ public class RouterEditActivity extends Activity {
 	 *
 	 *
 	 */
-	private void clearGateway(View v) {
-
+	public void clearGateway(View v) {
+		progressDialogWaitStop.show();
+		(new RouterEditActivity.AsyncTaskClearRouterGateway( )).execute( );
 	}
 
 	/**
@@ -359,7 +360,7 @@ public class RouterEditActivity extends Activity {
 	 *
 	 *
 	 */
-	private void setGateway(View v) {
+	public void setGateway(View v) {
 
 	}
 }
