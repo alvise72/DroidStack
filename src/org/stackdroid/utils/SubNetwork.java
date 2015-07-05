@@ -37,7 +37,8 @@ public class SubNetwork {
 
     @Override
     public String toString() {
-	return "Subnet{name=" + name
+		return name + " (" + cidr+")";
+/*	return "Subnet{name=" + name
 	    + ",ID="+ID
 	    + ",cidr="+cidr
 	    + ",gateway="+gw
@@ -45,7 +46,7 @@ public class SubNetwork {
 	    + ",end=" + allocPools[0].getEndIP( ) 
 	    + ",dns=" + dns[0]
 	    + ",dhcp=" + dhcp
-	    +"}";
+	    +"}";*/
     }
     
    public static Hashtable<String, SubNetwork> parse( String jsonBuf )  throws ParseException  {

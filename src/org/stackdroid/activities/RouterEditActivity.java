@@ -29,10 +29,12 @@ import org.stackdroid.utils.Network;
 import org.stackdroid.utils.OSImage;
 import org.stackdroid.utils.Router;
 import org.stackdroid.utils.RouterPort;
+import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -41,14 +43,18 @@ import org.stackdroid.utils.Defaults;
 import org.stackdroid.views.RouterPortView;
 
 public class RouterEditActivity extends Activity {
-	private User 				 U 						    = null;
-	private CustomProgressDialog progressDialogWaitStop     = null;
-	private String				 routerID					= null;
-	private String				 routerName					= null;
-	private Vector<Network>		 externalNets			    = null;
-	private Spinner 			 netsSpinner			    = null;
-	private ArrayAdapter<Network> spinnerNetsArrayAdapter   = null;
-	private AlertDialog 		 alertDialogSelectNetwork   = null;
+	private User 				 U 						   		= null;
+	private CustomProgressDialog progressDialogWaitStop    		= null;
+	private String				 routerID						= null;
+	private String				 routerName						= null;
+	private Vector<Network>		 externalNets			   		= null;
+	private Hashtable<String, SubNetwork> subnets    			= null;
+	private Spinner 			 netsSpinner			   		= null;
+	private Spinner 			 netsPrivSpinner				= null;
+	private ArrayAdapter<SubNetwork> spinnerNetsPrivArrayAdapter= null;
+	private ArrayAdapter<Network> spinnerNetsArrayAdapter   	= null;
+	private AlertDialog 		 alertDialogSelectNetwork   	= null;
+	private AlertDialog 		 alertDialogSelectNetworkPriv   = null;
 
 	/**
 	 *
@@ -76,6 +82,35 @@ public class RouterEditActivity extends Activity {
 		@Override
 		public void onClick( View v ) {
 			alertDialogSelectNetwork.dismiss();
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class ConfirmButtonHandlerPriv implements View.OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			Network net = (Network)netsSpinner.getSelectedItem();
+			alertDialogSelectNetwork.dismiss();
+			progressDialogWaitStop.show();
+			(new RouterEditActivity.AsyncTaskSetRouterGateway()).execute( net.getID(), net.getName());
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class CancelButtonHandlerPriv implements View.OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogSelectNetworkPriv.dismiss();
 		}
 	}
 
@@ -377,7 +412,6 @@ public class RouterEditActivity extends Activity {
 		}
 	}
 
-
 	/**
 	 *
 	 *
@@ -397,7 +431,7 @@ public class RouterEditActivity extends Activity {
 			networkID = v[0];
 			networkName = v[1];
 			try {
-				osc.setRouterGateway( routerID, networkID );
+				osc.setRouterGateway(routerID, networkID);
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
@@ -430,6 +464,67 @@ public class RouterEditActivity extends Activity {
 			( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID );
 		}
 	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private class AsyncTaskRequestSubnets extends AsyncTask<String,Void,Void> {
+		private String errorMessage = "";
+		private boolean hasError 	= false;
+		private String routerName 	= "";
+		private String subnetID = "";
+		private String jsonSubnetBuf = "";
+		@Override
+		protected Void doInBackground( String... v )
+		{
+			OSClient osc = OSClient.getInstance(U);
+			//subnetID = v[0];
+			//networkName = v[1];
+			try {
+				jsonSubnetBuf = osc.requestSubNetworks( );
+			} catch(ServerException se) {
+				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
+				hasError = true;
+			} catch(Exception e) {
+				errorMessage = e.getMessage();
+				hasError = true;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				String err = "";
+
+				if(errorMessage.toLowerCase().contains("could not be found")==true) {
+					err = errorMessage;
+					err="Router " + routerName + " " + getString(R.string.COULDNOTBEFOUND);
+				} else {
+					err = errorMessage;
+					//err=err.replace( networkID, networkName);
+					//err = err.replace( "No more IP addresses available on network ", getString(R.string.NOMOREIPAVAIL));
+				}
+				Utils.alert( err, RouterEditActivity.this );
+				RouterEditActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+			try {
+				subnets = SubNetwork.parse(jsonSubnetBuf);
+			} catch(ParseException pe) {
+				Utils.alert("Error parsing sub-networks", RouterEditActivity.this) ;
+				progressDialogWaitStop.dismiss();
+			}
+			//( new AsyncTaskGetRouterInfo( ) ).execute(RouterEditActivity.this.routerID );
+			pickASubNetworkAsInterface();
+		}
+	}
+
 
 	/**
 	 *
@@ -510,6 +605,16 @@ public class RouterEditActivity extends Activity {
 	 *
 	 *
 	 */
+	public void addInterface( View v ) {
+		( new RouterEditActivity.AsyncTaskRequestSubnets( ) ).execute( );
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
 	protected void pickANetworkAsGateway( ) {
 		progressDialogWaitStop.dismiss();
 		spinnerNetsArrayAdapter = new ArrayAdapter<Network>(RouterEditActivity.this, android.R.layout.simple_spinner_item,externalNets.subList(0,externalNets.size()) );
@@ -536,5 +641,43 @@ public class RouterEditActivity extends Activity {
 		alertDialogSelectNetwork.setCancelable(false);
 		alertDialogSelectNetwork.show();
 
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected void pickASubNetworkAsInterface( ) {
+		progressDialogWaitStop.dismiss();
+		Vector<SubNetwork> subnetVec = new Vector<SubNetwork>();
+		for (String item : subnets.keySet()) {
+			//SubNetwork sb = subnets.get(item);
+			subnetVec.add(subnets.get(item));
+		}
+		spinnerNetsPrivArrayAdapter = new ArrayAdapter<SubNetwork>(RouterEditActivity.this, android.R.layout.simple_spinner_item, subnetVec.subList(0, subnetVec.size()) );
+		spinnerNetsPrivArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		LayoutInflater li = LayoutInflater.from(this);
+
+		View promptsView = li.inflate(R.layout.my_dialog_create_instance, null);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+		alertDialogBuilder.setView(promptsView);
+
+		alertDialogBuilder.setTitle("Choose a Network");
+		alertDialogSelectNetworkPriv = alertDialogBuilder.create();
+
+		netsPrivSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseImage);
+		netsPrivSpinner.setAdapter(spinnerNetsPrivArrayAdapter);
+		final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
+		final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
+		mButton.setOnClickListener(new RouterEditActivity.ConfirmButtonHandlerPriv());
+		mButtonCancel.setOnClickListener(new RouterEditActivity.CancelButtonHandlerPriv());
+		alertDialogSelectNetworkPriv.setCanceledOnTouchOutside(false);
+		alertDialogSelectNetworkPriv.setCancelable(false);
+		alertDialogSelectNetworkPriv.show();
 	}
 }

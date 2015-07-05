@@ -46,11 +46,11 @@
                 android:id="@+id/CLEARGATEWAY"
                 android:layout_width="fill_parent"
                 android:layout_height="40sp"
-                android:textColor="#FFFFFF"
-                android:background="@android:color/holo_red_dark"
+
                 android:text="@+string/CLEARGATEWAY"
                 android:textSize="12sp"
                 android:layout_weight="1"
+
                 android:onClick="clearGateway" />
 
             <Button
@@ -59,6 +59,7 @@
                 android:layout_height="40sp"
                 android:text="@+string/SETGATEWAY"
                 android:textSize="12sp"
+
                 android:layout_weight="1"
                 android:onClick="setGateway" />
 
