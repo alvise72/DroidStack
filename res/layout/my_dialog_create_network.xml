@@ -8,9 +8,18 @@
 	<View
         android:layout_width="wrap_content"
         android:layout_height="5dip" />
-    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical" >
     <TextView
-             android:layout_width="wrap_content"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="@string/NETNAME" />
     
@@ -25,7 +34,7 @@
          </EditText>
     
      <TextView
-             android:layout_width="wrap_content"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="CIDR" />
 
@@ -62,7 +71,7 @@
      </LinearLayout>
 	
      <TextView
-             android:layout_width="wrap_content"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="Start IP / End IP" />
 
@@ -98,7 +107,7 @@
      </LinearLayout>
      
      <TextView
-             android:layout_width="wrap_content"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="Gateway IP" />
 
@@ -112,7 +121,7 @@
          </EditText>
          
      <TextView
-             android:layout_width="wrap_content"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="DNS hostname/IP" />
 
@@ -124,26 +133,37 @@
              android:ems="10"
              android:text="8.8.8.8" >
          </EditText>
-         
 
-     
-	<LinearLayout
-  		android:layout_width="match_parent"
-   		android:layout_height="wrap_content"
-   	 	android:gravity="center_horizontal"
-   	 	android:orientation="horizontal" >
-    
-   		 <Button
-	      	  android:id="@+id/myButtonCreateNet"
-      		  android:layout_width="wrap_content"
-      		  android:layout_height="wrap_content"
-      	  	  android:text="@string/CONFIRM" />
 
-	         <Button
-              android:id="@+id/myButtonCreateNetCancel"
-	          android:layout_width="wrap_content"
-	          android:layout_height="wrap_content"
-	          android:text="@string/CANCEL" />
 
-	</LinearLayout>
+    <CheckBox
+        android:id="@+id/useDHCP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+string/USEDHCP"
+        />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/myButtonCreateNet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CONFIRM" />
+
+                <Button
+                    android:id="@+id/myButtonCreateNetCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CANCEL" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+</ScrollView>
+
+
 </LinearLayout>

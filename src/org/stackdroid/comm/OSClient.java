@@ -497,7 +497,7 @@ public class OSClient {
      * 
      * 
      */
-    public void createSubnetwork( String netID, String CIDR, String DNS, String startIP, String endIP, String gatewayIP ) 
+    public void createSubnetwork( String netID, String CIDR, String DNS, String startIP, String endIP, String gatewayIP, boolean enableDHCP )
 	throws NotAuthorizedException, NotFoundException, 
 		   ServerException, ServiceUnAvailableOrInternalError,
 		   IOException, ParseException,CertificateException
@@ -507,8 +507,8 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"gateway_ip\":\"" + gatewayIP + "\", \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
-    	//Log.d("REST/createSubnetwork", "extradata="+extradata);
+    	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"enable_dhcp\": " + enableDHCP  + ", \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"gateway_ip\":\"" + gatewayIP + "\", \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
+    	//Log.d("OSC", "extradata="+extradata);
     	RESTClient.sendPOSTRequest( U.useSSL(), 
 									U.getNeutronEndpoint() + "/v2.0/subnets.json", 
 									U.getToken(), 

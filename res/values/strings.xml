@@ -203,4 +203,5 @@
     <string name="INSUFFICIENTPRIVILEGES">or insufficient privileges</string>
     <string name="HOSTEDBY">Hosted by:</string>
     <string name="INSTANCEINFO">Instance info</string>
+    <string name="USEDHCP">Abilita DHCP</string>
 </resources>

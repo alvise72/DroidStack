@@ -194,4 +194,5 @@
     <string name="INSUFFICIENTPRIVILEGES">o privilegi insufficienti</string>
     <string name="HOSTEDBY">Ospitato da:</string>
     <string name="INSTANCEINFO">Info istanza</string>
+    <string name="USEDHCP">Enable DHCP</string>
 </resources>

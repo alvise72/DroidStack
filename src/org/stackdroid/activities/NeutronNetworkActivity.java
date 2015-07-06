@@ -1,7 +1,9 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -55,6 +57,7 @@ public class NeutronNetworkActivity extends Activity {
 	private EditText startIP;
 	private EditText endIP;
 	private EditText gatewayIP;
+	private CheckBox useDHCP;
 
     //__________________________________________________________________________________
 	protected class DeleteNetworkListener implements OnClickListener {
@@ -289,10 +292,12 @@ public class NeutronNetworkActivity extends Activity {
 				gatewayIP.requestFocus();
 			    return;
 			}
+			String use_dhcp = "" + useDHCP.isChecked();
+
 			
 			//alertDialogCreateNetwork.dismiss();
 			NeutronNetworkActivity.this.progressDialogWaitStop.show( );
-			(new AsyncTaskOSCreateNetwork()).execute(netnameS, netAddr + "/" + netMask, DNS.getText().toString().trim(), startIPAddr, endIPAddr, gatewayIPAddr);
+			(new AsyncTaskOSCreateNetwork()).execute(netnameS, netAddr + "/" + netMask, DNS.getText().toString().trim(), startIPAddr, endIPAddr, gatewayIPAddr, use_dhcp );
 		}
     	
     }
@@ -333,6 +338,8 @@ public class NeutronNetworkActivity extends Activity {
         endIP.setKeyListener(IPv4AddressKeyListener.getInstance());
         gatewayIP   = (EditText)promptsView.findViewById(R.id.gatewayIPET);
         gatewayIP.setKeyListener(IPv4AddressKeyListener.getInstance());
+		useDHCP     = (CheckBox)promptsView.findViewById(R.id.useDHCP);
+		//useDHCP.setKeyListener();
         
         DNS 		= (EditText)promptsView.findViewById(R.id.dnsET);
         DNS.setKeyListener(IPv4AddressKeyListener.getInstance());
@@ -453,17 +460,19 @@ public class NeutronNetworkActivity extends Activity {
     	protected Void doInBackground( String... v ) 
     	{
     		OSClient osc = OSClient.getInstance(U);
-    		String netname = v[0];
-    		String CIDR    = v[1];
-    		String DNS	   = v[2];
-    		String startIP = v[3];
-    		String endIP   = v[4];
+    		String netname   = v[0];
+    		String CIDR      = v[1];
+    		String DNS	     = v[2];
+    		String startIP   = v[3];
+    		String endIP     = v[4];
     		String gatewayIP = v[5];
-    		
+			boolean use_dhcp = Boolean.parseBoolean(v[6]);
+			//Log.d("OSC", "v[6]=" + v[6]);
+    		//Log.d("OSC", "use_dhcp=" + use_dhcp);
     	    try {
     	    	jsonBufNet 		 = osc.createNetwork(netname, false);
     	    	netID 		     = ParseUtils.parseSingleNetwork(jsonBufNet);
-    	    	osc.createSubnetwork(netID, CIDR, DNS, startIP, endIP, gatewayIP);
+    	    	osc.createSubnetwork(netID, CIDR, DNS, startIP, endIP, gatewayIP, use_dhcp);
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
     	    	hasError = true;
