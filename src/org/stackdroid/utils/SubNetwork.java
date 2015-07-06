@@ -34,6 +34,7 @@ public class SubNetwork {
     public IPAllocationPool[] getIPAllocationPools( ) { return allocPools; }
     public String[] getDNS( ) { return dns; }
     public String getIPVersion( ) { return ipv; }
+	public boolean getEnableDHCP( ) { return dhcp; }
 
     @Override
     public String toString() {

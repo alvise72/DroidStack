@@ -204,4 +204,6 @@
     <string name="HOSTEDBY">Hosted by:</string>
     <string name="INSTANCEINFO">Instance info</string>
     <string name="USEDHCP">Abilita DHCP</string>
+    <string name="NONAME">No name</string>
+    <string name="DHCPENABLED">DHCP Enabled</string>
 </resources>

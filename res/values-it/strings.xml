@@ -195,4 +195,6 @@
     <string name="HOSTEDBY">Ospitato da:</string>
     <string name="INSTANCEINFO">Info istanza</string>
     <string name="USEDHCP">Enable DHCP</string>
+    <string name="NONAME">Nessun nome</string>
+    <string name="DHCPENABLED">DHCP Abilitato</string>
 </resources>

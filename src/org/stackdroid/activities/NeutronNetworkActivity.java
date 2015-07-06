@@ -85,19 +85,22 @@ public class NeutronNetworkActivity extends Activity {
 			
 			TextView tv1 = new TextView(NeutronNetworkActivity.this);
 			tv1.setText("Network name:");
-			tv1.setTypeface( null, Typeface.BOLD );
+			tv1.setTypeface(null, Typeface.BOLD);
 			TextView tv2 = new TextView(NeutronNetworkActivity.this);
 			tv2.setText(N.getName());
 			TextView tv3 = new TextView(NeutronNetworkActivity.this);
 			tv3.setText("Shared:");
-			tv3.setTypeface( null, Typeface.BOLD );
+			tv3.setTypeface(null, Typeface.BOLD);
 			TextView tv4 = new TextView(NeutronNetworkActivity.this);
-			tv4.setText( N.isShared( ) ? NeutronNetworkActivity.this.getString(R.string.YES) : NeutronNetworkActivity.this.getString(R.string.NO));
+			tv4.setText(N.isShared() ? NeutronNetworkActivity.this.getString(R.string.YES) : NeutronNetworkActivity.this.getString(R.string.NO));
 			TextView tv5 = new TextView(NeutronNetworkActivity.this);
 			tv5.setText("External: ");
-			tv5.setTypeface( null, Typeface.BOLD );
+			tv5.setTypeface(null, Typeface.BOLD);
 			TextView tv6 = new TextView(NeutronNetworkActivity.this);
 			tv6.setText( N.isExt() ? NeutronNetworkActivity.this.getString(R.string.YES) : NeutronNetworkActivity.this.getString(R.string.NO));
+
+
+
 	    
 			
 			
@@ -110,7 +113,8 @@ public class NeutronNetworkActivity extends Activity {
 					TextView t = new  TextView(NeutronNetworkActivity.this);
 					String subnetname = sn.getName();
 					if(subnetname.trim().length()==0)
-						subnetname = "No name";
+						subnetname = getString(R.string.NONAME);
+
 					t.setText( "- "+subnetname );
 					t.setTypeface( null, Typeface.BOLD );
 					t.setPadding(5, 0,0,0);
@@ -128,18 +132,28 @@ public class NeutronNetworkActivity extends Activity {
 					for(int i = 0; i<pools.length; i++) {
 						allocPool[i] = pools[i].getStartIP() + "-" + pools[i].getEndIP();
 					}
+
+
 					TextView ttttt = null;
 
+					TextView dhcpLabel = new TextView(NeutronNetworkActivity.this);
+					//TextView dhcpStatus = new TextView(NeutronNetworkActivity.this);
+					dhcpLabel.setText(getString(R.string.DHCPENABLED)+": " + (sn.getEnableDHCP() == true ? getString(R.string.YES) : "NO") );
+					//dhcpStatus.setText( sn.getEnableDHCP() == true ? getString(R.string.YES) : "NO");
+					dhcpLabel.setPadding(15, 0,0,0);
 					subnetinfo.add(t);
 					subnetinfo.add(tt);
 					subnetinfo.add(ttt);
 					subnetinfo.add(tttt);
+					subnetinfo.add(dhcpLabel);
+					//subnetinfo.add(dhcpStatus);
 					if(allocPool.length>0) {
 						ttttt = new TextView(NeutronNetworkActivity.this);
 						ttttt.setText("IP pool: "+Utils.join(allocPool, "\n"));
 						ttttt.setPadding(15, 0,0,0);
 						subnetinfo.add(ttttt);
 					}
+
 				}
 			}
 			
