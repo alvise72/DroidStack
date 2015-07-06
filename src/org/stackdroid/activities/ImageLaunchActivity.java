@@ -132,8 +132,8 @@ public class ImageLaunchActivity extends Activity {
      *
      *
      */
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView( org.stackdroid.R.layout.imagelaunch );
       
@@ -178,7 +178,6 @@ public class ImageLaunchActivity extends Activity {
       (new AsyncTaskGetOptions()).execute( );
   }
   
-  
     /**
      *
      *
@@ -194,12 +193,12 @@ public class ImageLaunchActivity extends Activity {
      *
      *
      */
-  public void onResume( ) {
+    public void onResume( ) {
     super.onResume( );
     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
   }
   
-  /**
+    /**
    *
    *
    *
@@ -214,8 +213,8 @@ public class ImageLaunchActivity extends Activity {
    *
    *
    */    
-   @Override
-   public void onDestroy( ) {
+    @Override
+    public void onDestroy( ) {
       super.onDestroy( );
       progressDialogWaitStop.dismiss();
    }
@@ -235,7 +234,7 @@ public class ImageLaunchActivity extends Activity {
      *
      *
      */  
-  public void launch( View v ) {
+    public void launch( View v ) {
 	  String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
 	  instanceName.trim();
       if(instanceName.length()==0) {

@@ -259,7 +259,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
-	protected void pickAFloatingIP( ) {
+	protected void  pickAFloatingIP( ) {
 		if(fips==null) {
 			Utils.alert("Severe: FIPS is NULL !!", this);
 			return;
@@ -777,10 +777,22 @@ public class ServersActivity extends Activity {
 		else
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 		
-        progressDialogWaitStop.show();
-        (new AsyncTaskOSListServers()).execute( );
+        //progressDialogWaitStop.show();
+        //(new AsyncTaskOSListServers()).execute();
         //(Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
+
+    /**
+     *
+     * @author dorigoa
+     *
+     */
+	@Override
+	public void onResume( ) {
+		super.onResume( );
+		progressDialogWaitStop.show();
+		(new AsyncTaskOSListServers()).execute( );
+	}
 
 	/**
 	 * 
@@ -921,8 +933,7 @@ public class ServersActivity extends Activity {
     		(new AsyncTaskOSListServers()).execute( );
     	}
     }
-    
-    
+
     //__________________________________________________________________________________
     protected class AsyncTaskSoftReboot extends AsyncTask<String, String, String> {
     	private  String   errorMessage     = null;

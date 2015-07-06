@@ -45,10 +45,12 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
+      <!--
         <View   
           android:layout_width="fill_parent"
           android:layout_height="3dp"
           android:background="#FF909090" />  
+      -->
         <View
           android:layout_width="match_parent"
           android:layout_height="3sp"

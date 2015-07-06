@@ -46,10 +46,12 @@
                 android:onClick="update" />
 
         </LinearLayout>
+        <!--
         <View
             android:layout_width="fill_parent"
             android:layout_height="3dp"
             android:background="#FF909090" />
+        -->
     </LinearLayout>
 
     <View
