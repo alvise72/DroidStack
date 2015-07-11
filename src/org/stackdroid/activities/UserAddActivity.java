@@ -127,7 +127,7 @@ public class UserAddActivity extends Activity {
      *
      */
   public void onResume( ) {
-    super.onResume( );
+    super.onResume();
     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
   }
  
@@ -456,15 +456,20 @@ public class UserAddActivity extends Activity {
               }
      		try {
                 //Log.d("USERADDACTIVITY", "Invoking RESTClient.requestToken");
+                if(!endpoint.matches(".+:[0-9]+$")) {
+                  endpoint = endpoint + ":5000";
+                }
+   		Log.d("USERADD", "endpoint="+endpoint);
                 if(usessl)
-                  if(verifyServerCert)
-                    if(RESTClient.checkServerCert( "https://"+endpoint+":5000/v2.0", caissuer)==false)
-                    {
+                  if(verifyServerCert) {
+//                    if (RESTClient.checkServerCert("https://" + endpoint + ":5000/v2.0", caissuer) == false) {
+                    if (RESTClient.checkServerCert("https://" + endpoint + "/v2.0", caissuer) == false) {
                       hasError = true;
-                      errorMessage = "Server certificate's issuer doesn't match the CA ["+caissuer+"]";
+                      errorMessage = "Server certificate's issuer doesn't match the CA [" + caissuer + "]";
                       return null;
                     }
-     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + ":5000/v2.0/tokens", tenant, username, password );
+                  }
+     			jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + "/v2.0/tokens", tenant, username, password );
                 //Log.d("USERADDACTIVITY", "Invoking GOT RESTClient.requestToken");
      			if(jsonBuf == null || jsonBuf.length()==0) {
      				hasError = true;

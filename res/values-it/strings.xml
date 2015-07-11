@@ -11,7 +11,7 @@
     <string name="CURRENTUSER">Utente corrente</string>
     <string name="ADDNEWUSER">Aggiungi nuovo utente</string>
     <string name="ENDPOINT">Endpoint</string>
-    <string name="ONLYHOSTNAME">Endpoint (solo hostname)</string>
+    <string name="ONLYHOSTNAME">Endpoint (hostname[:PORT])</string>
     <string name="PROJECTNAME">Nome progetto</string>
     <string name="USERNAME">Username</string>
     <string name="PASSWORD">Password</string>

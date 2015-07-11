@@ -87,6 +87,7 @@ public class MainActivity extends Activity
   	  ((Button)this.findViewById(R.id.SECG)).setEnabled(false);
   	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(false);
   	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(false);
+		((Button)this.findViewById(R.id.ROUTER)).setEnabled(false);
     }
     
     private void enableButtons( ) {
@@ -97,6 +98,7 @@ public class MainActivity extends Activity
   	  ((Button)this.findViewById(R.id.SECG)).setEnabled(true);
   	  ((Button)this.findViewById(R.id.FIPS)).setEnabled(true);
   	  ((Button)this.findViewById(R.id.OVERVIEW)).setEnabled(true);
+		((Button)this.findViewById(R.id.ROUTER)).setEnabled(true);
     }
     
     /**
