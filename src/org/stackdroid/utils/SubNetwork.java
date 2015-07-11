@@ -18,6 +18,8 @@ public class SubNetwork {
     
     public SubNetwork( String name, String ID, String cidr, String gatewayIP, IPAllocationPool[] allocPools, String[] dns, boolean dhcp, String ipv ) {
     	this.name       = name;
+		if(this.name.isEmpty())
+			this.name="N/A";
     	this.ID         = ID;
     	this.cidr       = cidr;
     	this.gw         = gatewayIP;

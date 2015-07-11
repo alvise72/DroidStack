@@ -24,7 +24,7 @@
     <string name="MENUABOUT">About</string>
     <string name="MENUHELP">Help</string>
     <string name="MENUUPDATE">Update</string>
-    <string name="TOUCHUSERTOSELECT">Touch a use to select it</string>
+    <string name="TOUCHUSERTOSELECT">Touch a user to select it</string>
     <string name="MUSTSELECTNET">You haven\'t selected any network. Cannot start an instance without a network to attach.</string>
     <string name="MUSTSETNAME">You must put a name for the instance.</string>
     <string name="FIXEDIPLIST">Comma separated Fixed IPs (optional):</string>
@@ -67,7 +67,7 @@
     <string name="NONETSELECTED">You haven\'t selected any external network (or you cannot access to any one).</string>
     <string name="FIPALLOCATED">Floating IP allocated. Press on Menu-&gt;Update to refresh window if you do not see it yet.</string>
     <string name="FIPRELEASED">Floating IP released. Press on Menu-&gt;Update to refresh window if you still see it.</string>
-    <string name="SHOWPWD">Show</string>
+    <string name="SHOWPWD">Show password</string>
     <string name="NOSERVERTOASSOCIATEFIP">There\'re no instance to associate this floating IP.</string>
     <string name="AREYOUSURETODELETESECGRP">Are you sure to delete this Security Group ?</string>
     <string name="INPUTSNAPNAME">Insert the snapshot\'s name</string>

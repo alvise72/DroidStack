@@ -46,12 +46,7 @@
                 android:onClick="update" />
 
         </LinearLayout>
-        <!--
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="3dp"
-            android:background="#FF909090" />
-        -->
+
     </LinearLayout>
 
     <View
@@ -203,6 +198,7 @@
             <!--
                  *************************************************************************************
             -->
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
@@ -268,6 +264,7 @@
             <!--
                  *************************************************************************************
             -->
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />
@@ -333,6 +330,7 @@
             <!--
                  *************************************************************************************
             -->
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="5dip" />

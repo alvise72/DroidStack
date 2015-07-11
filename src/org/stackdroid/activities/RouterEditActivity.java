@@ -650,6 +650,7 @@ public class RouterEditActivity extends Activity {
 	 *
 	 */
 	public void setGateway(View v) {
+		progressDialogWaitStop.show();
 		(new RouterEditActivity.AsyncTaskGetExternalNets()).execute();
 	}
 
@@ -660,6 +661,7 @@ public class RouterEditActivity extends Activity {
 	 *
 	 */
 	public void addInterface( View v ) {
+		progressDialogWaitStop.show();
 		( new RouterEditActivity.AsyncTaskRequestSubnets( ) ).execute( );
 	}
 

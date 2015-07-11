@@ -1,5 +1,6 @@
 package org.stackdroid.views;
 
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.graphics.Typeface;
 import android.graphics.Color;
@@ -19,7 +20,6 @@ public class UserView extends LinearLayout {
     private TextViewWithView     textEndpoint         = null;
     private TextViewWithView	 textSSL              = null;
 	private TextViewWithView     textVerifyServerCert = null;
-	//private TextViewWithView     textCAFile           = null;
 
     private ImageButtonWithView  deleteUser           = null;
     private ImageButtonWithView  infoUser             = null;
@@ -52,18 +52,19 @@ public class UserView extends LinearLayout {
 	
 	textUserName = new TextViewWithView( ctx, (UserView)this );
 	String uname = "User: "+user.getUserName() ;
-	if(uname.length()>35) {
-		uname = uname.substring(0, 31) + "...";
+	if(uname.length()>30) {
+		uname = uname.substring(0, 26) + "...";
 	}
 	textUserName.setText(uname);
-	textUserName.setTextColor( Color.parseColor("#333333") );
-	textUserName.setOnClickListener( selectUserListener );
+	textUserName.setTextColor(Color.parseColor("#333333"));
+	textUserName.setOnClickListener(selectUserListener);
 	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
 
 	textTenantName = new TextViewWithView( ctx, (UserView)this );
 	String tname = "Tenant: "+user.getTenantName();
-	if(tname.length()>35) {
-		tname = tname.substring(0, 31) + "...";
+		//TextUtils.ellipsize( )
+	if(tname.length()>30) {
+		tname = tname.substring(0, 26) + "...";
 	}
 	textTenantName.setText(tname);
 	textTenantName.setTextColor( Color.parseColor("#333333") );
@@ -72,8 +73,8 @@ public class UserView extends LinearLayout {
 
 	textEndpoint = new TextViewWithView( ctx, (UserView)this );
 	String ename = "Endpoint: "+U.getIdentityHostname( );
-	if(ename.length()>35) {
-		ename = ename.substring(0,31)+"...";
+	if(ename.length()>30) {
+		ename = ename.substring(0, 26)+"...";
 	}
 	textEndpoint.setText(ename);
 	textEndpoint.setTextColor(Color.parseColor("#333333"));
