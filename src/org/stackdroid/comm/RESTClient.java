@@ -65,13 +65,13 @@ public class RESTClient {
 
 		try {
 			conn = (HttpsURLConnection)url.openConnection( );
-			conn.setConnectTimeout(15000);
+			conn.setConnectTimeout(10000);
 		} catch(java.io.IOException ioe) {
 			throw new IOException("RESTClient.checkServerCert.URL.openConnection https: " + ioe.getMessage());
 		}
 
 		conn.setReadTimeout(20000 /* milliseconds */);
-		//conn.setConnectTimeout(15000 /* milliseconds */);
+		//conn.setConnectTimeout(10000 /* milliseconds */);
 		try {
 			((HttpURLConnection)conn).setRequestMethod("GET");
 		} catch(java.net.ProtocolException pe ) {
@@ -177,7 +177,7 @@ public class RESTClient {
 			//Log.d("RESTCLIENT","url.openConnection");
 
 		  conn = (HttpsURLConnection)url.openConnection( );
-			conn.setConnectTimeout(15000);
+			conn.setConnectTimeout(10000);
 
 	    } catch(java.io.IOException ioe) {
 		  throw  new IOException("RESTClient.requestToken.URL.openConnection https: "+ioe.getMessage( ) );
@@ -185,7 +185,7 @@ public class RESTClient {
 		} else {
 	  	  	 try {
 			  conn = (HttpURLConnection)url.openConnection();
-				 conn.setConnectTimeout(15000);
+				 conn.setConnectTimeout(10000);
 	   		 } catch(java.io.IOException ioe) {
 			    throw new IOException("RESTClient.requestToken.URL.openConnection http: "+ioe.getMessage());
 	   		 }
@@ -216,6 +216,7 @@ public class RESTClient {
 
 	OutputStream out = null;
 	try {
+		conn.setReadTimeout(10000);
 	    out = new BufferedOutputStream( conn.getOutputStream() );
 	    out.write( data.getBytes( ) );
 	    out.flush( );
@@ -355,7 +356,7 @@ public class RESTClient {
 	    
     		try {
     			conn = (HttpsURLConnection)url.openConnection( );
-				conn.setConnectTimeout(15000);
+				conn.setConnectTimeout(10000);
     		} catch(java.io.IOException ioe) {
     			throw  new IOException("RESTClient.sendGETRequest.URL.openConnection https: "+ioe.getMessage( ) );
     		}
@@ -363,7 +364,7 @@ public class RESTClient {
 	
     		try {
     			conn = (HttpURLConnection)url.openConnection();
-				conn.setConnectTimeout(15000);
+				conn.setConnectTimeout(10000);
     		} catch(java.io.IOException ioe) {
 	    			throw new IOException("RESTClient.sendGETRequest.URL.openConnection http: "+ioe.getMessage());
 		    }
@@ -380,7 +381,7 @@ public class RESTClient {
 		    }
 		}
 		conn.setReadTimeout(20000 /* milliseconds */);
-	    //conn.setConnectTimeout(15000 /* milliseconds */);
+	    //conn.setConnectTimeout(10000 /* milliseconds */);
 		try {
 		    ((HttpURLConnection)conn).setRequestMethod("GET");
 		} catch(java.net.ProtocolException pe ) {
@@ -473,7 +474,7 @@ public class RESTClient {
 	    
     		try {
     			conn = (HttpsURLConnection)url.openConnection( );
-				conn.setConnectTimeout(15000);
+				conn.setConnectTimeout(10000);
     		} catch(java.io.IOException ioe) {
     			throw  new IOException("RESTClient.sendPOSTRequest.URL.openConnection https: "+ioe.getMessage( ) );
     		}
@@ -481,7 +482,7 @@ public class RESTClient {
 	
     		try {
     			conn = (HttpURLConnection)url.openConnection();
-				conn.setConnectTimeout(15000);
+				conn.setConnectTimeout(10000);
     		} catch(java.io.IOException ioe) {
     			throw new IOException("RESTClient.sendPOSTRequest.URL.openConnection http: "+ioe.getMessage());
     		}
@@ -498,8 +499,8 @@ public class RESTClient {
 			   conn.setRequestProperty( pair.first, pair.second );
 		   }
     	}
-    	conn.setReadTimeout( 20000 );
-    	conn.setConnectTimeout( 15000 );
+    	conn.setReadTimeout( 10000 );
+    	conn.setConnectTimeout( 10000 );
     	try {
     		((HttpURLConnection)conn).setRequestMethod("POST");
     	} catch(java.net.ProtocolException pe ) {
@@ -644,7 +645,7 @@ public class RESTClient {
 	    
    		try {
    			conn = (HttpsURLConnection)url.openConnection( );
-			conn.setConnectTimeout(15000);
+			conn.setConnectTimeout(10000);
    		} catch(java.io.IOException ioe) {
    			throw  new IOException("RESTClient.sendPUTRequest.URL.openConnection https: "+ioe.getMessage( ) );
    		}
@@ -652,7 +653,7 @@ public class RESTClient {
 	
    		try {
    			conn = (HttpURLConnection)url.openConnection();
-			conn.setConnectTimeout(15000);
+			conn.setConnectTimeout(10000);
    		} catch(java.io.IOException ioe) {
    			throw new IOException("RESTClient.sendPUTRequest.URL.openConnection http: "+ioe.getMessage());
    		}
@@ -669,8 +670,8 @@ public class RESTClient {
 			   conn.setRequestProperty( pair.first, pair.second );
 		   }
    	}
-   	conn.setReadTimeout( 20000 );
-   	conn.setConnectTimeout( 15000 );
+   	conn.setReadTimeout( 10000 );
+   	conn.setConnectTimeout( 10000 );
    	try {
    		((HttpURLConnection)conn).setRequestMethod("PUT");
    	} catch(java.net.ProtocolException pe ) {
@@ -785,7 +786,7 @@ public class RESTClient {
 	
 	try {
 	    conn = (HttpURLConnection)url.openConnection();
-		conn.setConnectTimeout(15000);
+		conn.setConnectTimeout(10000);
 	} catch(java.io.IOException ioe) {
 	    throw new IOException("RESTClient.sendDELETERequest.URL.openConnection http: "+ioe.getMessage( ) );
 	}
