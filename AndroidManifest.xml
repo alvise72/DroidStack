@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.stackdroid"
-      android:versionCode="21"
-      android:versionName="0.55 beta">
+      android:versionCode="22"
+      android:versionName="0.60 beta">
 
     <uses-sdk android:minSdkVersion="10"/>
 
@@ -108,7 +108,7 @@
            />
        
        <activity
-            android:name="org.stackdroid.activities.EditSecGroupActivity"
+            android:name="org.stackdroid.activities.SecGroupEditActivity"
             android:launchMode="singleInstance"
             android:label="@string/EDITSECGROUP"            
 	    	android:parentActivityName="org.stackdroid.MainActivity"
@@ -135,7 +135,7 @@
             android:name="org.stackdroid.activities.NeutronRouterActivity"
             android:launchMode="singleInstance"
             android:label="@string/ROUTERS"
-                android:parentActivityName="org.stackdroid.MainActivity"
+            android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
 
@@ -143,7 +143,7 @@
             android:name="org.stackdroid.activities.RouterEditActivity"
             android:launchMode="singleInstance"
             android:label="@string/EDITROUTER"
-                android:parentActivityName="org.stackdroid.MainActivity"
+            android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
            />
  

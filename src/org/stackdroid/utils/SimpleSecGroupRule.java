@@ -14,11 +14,6 @@ public class SimpleSecGroupRule {
   private String protocol;
   private String IPRange;
   private Hashtable<Integer, String> PROTO = new Hashtable<Integer, String>();
-
-/*  private final static int TCP = 0;
-  private final static int UDP = 1;
-  private final static int ICMP = 2;
-*/
   
   public SimpleSecGroupRule( String ID, int fromPort, int toPort, String protocol, String IPRange ) {
     this.ID = ID;

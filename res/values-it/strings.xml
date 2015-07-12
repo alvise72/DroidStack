@@ -5,6 +5,7 @@
     <string name="USERS">Utenti</string>
     <string name="OVERVIEW">Quote</string>
     <string name="IMAGES">Immagini</string>
+    <string name="TOUCHIMAGEFORINFO">Tocca un\'immagine per info</string>
     <string name="IMAGENAME">Nome immagine</string>
     <string name="INSTANCES">Istanze</string>
     <string name="MEMORY">Memoria (MB)</string>
@@ -197,4 +198,6 @@
     <string name="USEDHCP">Enable DHCP</string>
     <string name="NONAME">Nessun nome</string>
     <string name="DHCPENABLED">DHCP Abilitato</string>
+    <string name="IMAGEINFO">Info immagine</string>
+
 </resources>

@@ -202,16 +202,13 @@ public class OSImagesActivity extends Activity {
     	public void onClick( View v ) {
     		OSImage osi = null;
     	    if(v instanceof OSImageView) {
-    		//		Utils.alert("Toccato OSImageView", this);
-    		osi = ((OSImageView)v).getOSImage();
+    			osi = ((OSImageView)v).getOSImage();
     	    }
     	    if(v instanceof TextViewWithView) {
-    		//		Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
-    		osi = ((TextViewWithView)v).getOSImageView().getOSImage();
+    			osi = ((TextViewWithView)v).getOSImageView().getOSImage();
     	    }
     	    if(v instanceof LinearLayoutWithView) {
-    		//Utils.alert("Toccato TextViewNames: "+((TextViewNamed)v).getText().toString(), this);
-    		osi = ((LinearLayoutWithView)v).getOSImageView().getOSImage();
+    			osi = ((LinearLayoutWithView)v).getOSImageView().getOSImage();
     	    }
     	    TextView tv1 = new TextView(OSImagesActivity.this);
     	    tv1.setText(getString(R.string.IMAGENAME));
@@ -290,14 +287,13 @@ public class OSImagesActivity extends Activity {
     	    l.addView( tv15 );
     	    tv16.setPadding(2*paddingDp, 0, 0, 0);
     	    l.addView( tv16 );
-    	    //sv.setOrientation( LinearLayout.VERTICAL );
     	    sv.addView(l);
     	    String name;
-    	    if(osi.getName().length()>=16)
-    		name = osi.getName().substring(0,14) + "..";
+    	    if(osi.getName().length()>=30)
+    			name = osi.getName().substring(0,27) + "...";
     	    else
-    		name = osi.getName();
-    	    Utils.alertInfo( sv, "Image information: " + name, OSImagesActivity.this );
+    			name = osi.getName();
+    	    Utils.alertInfo( sv, getString(R.string.IMAGEINFO)+": \n" + name, OSImagesActivity.this );
     	}
     }
 

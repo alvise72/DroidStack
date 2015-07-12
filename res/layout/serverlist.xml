@@ -52,7 +52,9 @@
                 android:id="@+id/touchInstance"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/TOUCHINSTANCE"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+
+            android:text="@string/TOUCHINSTANCE"
                 android:gravity="center_vertical|center_horizontal"
                 />
         

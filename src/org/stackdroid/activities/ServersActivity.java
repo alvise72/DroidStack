@@ -641,11 +641,11 @@ public class ServersActivity extends Activity {
 			l.addView( tv16 );
 			sv.addView(l);
 			String name;
-			if(s.getName().length()>=16)
-				name = s.getName().substring(0,14) + "..";
+			if(s.getName().length()>=30)
+				name = s.getName().substring(0,27) + "...";
 			else
 				name = s.getName();
-			Utils.alertInfo( sv, getString(R.string.INSTANCEINFO)+": "+name, ServersActivity.this );
+			Utils.alertInfo( sv, getString(R.string.INSTANCEINFO)+": \n"+name, ServersActivity.this );
 		}
 	}
 
