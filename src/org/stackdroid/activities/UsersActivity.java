@@ -95,7 +95,7 @@ public class UsersActivity extends Activity {
 		  User U = ((ImageButtonWithView)v).getUserView( ).getUser();
 		  ScrollView sv = new ScrollView( UsersActivity.this );
 		  TextView t1 = new TextView( UsersActivity.this );
-		  t1.setText(getString(R.string.USERNAME+": ");
+		  t1.setText(getString(R.string.USERNAME)+": ");
 		  t1.setTypeface( null, Typeface.BOLD );
 		  TextView t2 = new TextView( UsersActivity.this );
 		  t2.setText("   " + U.getUserName());

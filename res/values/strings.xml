@@ -209,5 +209,4 @@
     <string name="DHCPENABLED">DHCP Enabled</string>
     <string name="IMAGEINFO">Image info</string>
     <string name="TOKENEXPIRATION">Token\'s expiration</string>
-    <string name="VERIFYSERVERCERT">Verify server\'s certificate</string>
 </resources>
