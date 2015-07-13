@@ -61,7 +61,7 @@ public class RuleView extends LinearLayout {
     	
 
     	ruleInfo3 = new TextViewWithView( ctx, this );
-		if(Rl.getFromPort() != Rl.getToPort()) 
+		if(Rl.getFromPort() != Rl.getToPort())
 	    	ruleInfo3.setText("Port range: " + Rl.getFromPort()+"/"+Rl.getToPort() + (Rl.getProtoName()!=null && Rl.getProtoName().length()!=0 ? " ("+Rl.getProtoName()+")" : "") );
 		else
 			ruleInfo3.setText("Port: " + Rl.getFromPort() + (Rl.getProtoName()!=null && Rl.getProtoName().length()!=0 ? " ("+Rl.getProtoName()+")" : "") );

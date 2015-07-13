@@ -43,20 +43,19 @@ import android.widget.TextView;
 
 public class SecGroupEditActivity extends Activity implements OnItemSelectedListener {
 
-    private String secgrpID   = null;
-	private User   U          = null;
-    private ArrayAdapter<String> spinnerRulesAdapter  = null;
-    private Spinner ruleSpinner = null;
-    //private Spinner protoSpinner = null;
-    private Vector<String> predefinedRules = null;
-    private AlertDialog alertDialogSelectRule = null;
+    private String secgrpID   						    = null;
+	private User   U          						    = null;
+    private ArrayAdapter<String> spinnerRulesAdapter    = null;
+    private Spinner ruleSpinner 						= null;
+    private Vector<String> predefinedRules 				= null;
+    private AlertDialog alertDialogSelectRule 			= null;
     private CustomProgressDialog progressDialogWaitStop = null;
-    private EditText fromPort = null;
-    private EditText toPort = null;
-    private EditText CIDR = null;
-    private Spinner PROTO = null;
-	private ArrayAdapter<String> spinnerProtoAdapter = null;
-	private Vector<String> protocols = null;
+    private EditText fromPort 							= null;
+    private EditText toPort 							= null;
+    private EditText CIDR 								= null;
+    private Spinner PROTO 								= null;
+	private ArrayAdapter<String> spinnerProtoAdapter 	= null;
+	private Vector<String> protocols 					= null;
 
 	/**
 	 * 
@@ -202,7 +201,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	predefinedRules.add("HTTP(8080)");
     	predefinedRules.add("HTTPS(443)");
     	predefinedRules.add("HTTPS(8443)");
-    	predefinedRules.add("FTP(21)");
+    	predefinedRules.add("FTP");
     	predefinedRules.add("PING");
     	predefinedRules.add("Custom");
     	protocols = new Vector<String>( );
@@ -292,11 +291,8 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         ruleSpinner = (Spinner)promptsView.findViewById(R.id.mySpinner);
         ruleSpinner.setAdapter(spinnerRulesAdapter);
         
-        //protoSpinner = (Spinner)promptsView.findViewById(R.id.protoSpinner);
-        //protoSpinner.setAdapter(spinnerProtoAdapter);
         ( (Spinner)promptsView.findViewById(R.id.protoSpinner) ).setAdapter(spinnerProtoAdapter);
         
-        //(Button)promptsView.findViewById(R.id.confirmRuleAdd);
         ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener( new SecGroupEditActivity.ConfirmRuleAddClickListener( ) );
         ((Button)promptsView.findViewById(R.id.cancelRuleAdd)).setOnClickListener( new SecGroupEditActivity.CancelRuleAddClickListener( ) );
         
