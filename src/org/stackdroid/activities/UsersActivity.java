@@ -95,54 +95,54 @@ public class UsersActivity extends Activity {
 		  User U = ((ImageButtonWithView)v).getUserView( ).getUser();
 		  ScrollView sv = new ScrollView( UsersActivity.this );
 		  TextView t1 = new TextView( UsersActivity.this );
-		  t1.setText("Username:");
+		  t1.setText(getString(R.string.USERNAME+": ");
 		  t1.setTypeface( null, Typeface.BOLD );
 		  TextView t2 = new TextView( UsersActivity.this );
 		  t2.setText("   " + U.getUserName());
 		  TextView t3 = new TextView( UsersActivity.this );
-		  t3.setText("Tenant:");
+		  t3.setText(getString(R.string.PROJECT)+": ");
 		  t3.setTypeface(null, Typeface.BOLD);
 		  TextView t4 = new TextView( UsersActivity.this );
 		  t4.setText("   "+U.getTenantName());
 		  TextView t5 = new TextView( UsersActivity.this );
 		  
-		  t5.setText("Identity hostname:");
+		  t5.setText("Keystone hostname:");
 		  t5.setTypeface(null, Typeface.BOLD);
 		  TextView t6 = new TextView( UsersActivity.this );
 		  t6.setText("   " + U.getIdentityHostname() );
 		  
 		  TextView t7 = new TextView( UsersActivity.this );
-		  t7.setText("Identity endpoint:");
+		  t7.setText("Keystone URL:");
 		  t7.setTypeface(null, Typeface.BOLD);
 		  TextView t8 = new TextView( UsersActivity.this );
 		  t8.setText("   "+U.getIdentityEndpoint());
 		  
 		  TextView t9 = new TextView( UsersActivity.this );
-		  t9.setText("Compute endpoint:");
+		  t9.setText("Nova URL:");
 		  t9.setTypeface(null, Typeface.BOLD);
 		  TextView t10 = new TextView( UsersActivity.this );
 		  t10.setText("   "+U.getNovaEndpoint());
 		  
 		  TextView t11 = new TextView( UsersActivity.this );
-		  t11.setText("Network endpoint:");
+		  t11.setText("Neutron URL:");
 		  t11.setTypeface(null, Typeface.BOLD);
 		  TextView t12 = new TextView( UsersActivity.this );
 		  t12.setText("   " + (U.getNeutronEndpoint()!=null ? U.getNeutronEndpoint() : "N/A"));
 		  
 		  TextView t13 = new TextView( UsersActivity.this );
-		  t13.setText("Image endpoint:");
+		  t13.setText("Glance URL:");
 		  t13.setTypeface(null, Typeface.BOLD);
 		  TextView t14 = new TextView( UsersActivity.this );
 		  t14.setText("   " + (U.getGlanceEndpoint() != null ? U.getGlanceEndpoint(): "N/A"));
 		  
 		  TextView t15 = new TextView( UsersActivity.this );
-		  t15.setText("Cinder v1 endpoint:");
+		  t15.setText("Cinder v1 URL:");
 		  t15.setTypeface(null, Typeface.BOLD);
 		  TextView t16 = new TextView( UsersActivity.this );
 		  t16.setText("   " + (U.getCinder1Endpoint()!=null ? U.getCinder1Endpoint() : "N/A") );
 
 		  TextView t17 = new TextView( UsersActivity.this );
-		  t17.setText("Cinder v2 endpoint:");
+		  t17.setText("Cinder v2 URL:");
 		  t17.setTypeface(null, Typeface.BOLD);
 		  TextView t18 = new TextView( UsersActivity.this );
 		  t18.setText("   " + (U.getCinder2Endpoint()!=null ? U.getCinder2Endpoint() : "N/A") );
@@ -155,7 +155,7 @@ public class UsersActivity extends Activity {
 		  
 
 		  TextView t21 = new TextView( UsersActivity.this );
-		  t21.setText("Token expiration:");
+		  t21.setText(getString(R.string.TOKENEXPIRATION)+":");
 		  t21.setTypeface(null, Typeface.BOLD);
 		  TextView t22 = new TextView( UsersActivity.this );
 		  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y H:mm:ss");
@@ -163,7 +163,7 @@ public class UsersActivity extends Activity {
 		  t22.setText("   " + sdf.format(new Date(U.getTokenExpireTime() * 1000)));
 
 		  TextView t23 = new TextView( UsersActivity.this );
-		  t23.setText("Verify server's certificate:");
+		  t23.setText(getString(R.string.VERIFYSERVERCERT)+":");
 		  t23.setTypeface(null, Typeface.BOLD);
 		  TextView t24 = new TextView (UsersActivity.this );
 		  //Log.d("USERSACTIVITY", "U.getVerifyServerCert()=" + U.getVerifyServerCert());
