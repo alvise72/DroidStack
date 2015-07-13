@@ -100,7 +100,7 @@ public class UsersActivity extends Activity {
 		  TextView t2 = new TextView( UsersActivity.this );
 		  t2.setText("   " + U.getUserName());
 		  TextView t3 = new TextView( UsersActivity.this );
-		  t3.setText(getString(R.string.PROJECT)+": ");
+		  t3.setText(getString(R.string.PROJECTNAME)+": ");
 		  t3.setTypeface(null, Typeface.BOLD);
 		  TextView t4 = new TextView( UsersActivity.this );
 		  t4.setText("   "+U.getTenantName());
