@@ -199,5 +199,6 @@
     <string name="NONAME">Nessun nome</string>
     <string name="DHCPENABLED">DHCP Abilitato</string>
     <string name="IMAGEINFO">Info immagine</string>
+    <string name="TOKENEXPIRATION">Scadenza del token</string>
 
 </resources>
