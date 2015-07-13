@@ -1,5 +1,6 @@
 package org.stackdroid.views;
 
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 
 import android.graphics.Typeface;
@@ -47,17 +48,19 @@ public class ListSecGroupView extends LinearLayout {
 	text = new LinearLayoutWithView( ctx, (ListSecGroupView)this );
 	text.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 = 
-	    new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.5f);
 	text.setLayoutParams( params2 );
 	text.setGravity( Gravity.CENTER_VERTICAL);
 
 	Name = new TextViewWithView( ctx, (ListSecGroupView)this );
 	String servName = S.getName();
-	if(servName.length()>16)
-	    servName = servName.substring(0,14) + "..";
+	//if(servName.length()>16)
+	    //servName = servName.substring(0,14) + "..";
 	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
-	Name.setTypeface( null, Typeface.BOLD );
+	Name.setTypeface(null, Typeface.BOLD);
+		Name.setEllipsize(TextUtils.TruncateAt.END);
+		Name.setSingleLine();
 	
 	text.addView(Name);
 	row.addView(text);
@@ -73,7 +76,7 @@ public class ListSecGroupView extends LinearLayout {
 	info = new LinearLayoutWithView( ctx, (ListSecGroupView)this );
 	info.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params3 = 
-	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	    new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f);
 	info.setLayoutParams( params3 );
 	info.setGravity( Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 	

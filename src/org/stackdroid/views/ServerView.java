@@ -1,5 +1,6 @@
 package org.stackdroid.views;
 
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 
 import android.graphics.Typeface;
@@ -61,24 +62,31 @@ public class ServerView extends LinearLayout {
 
 	Name = new TextViewWithView( ctx, (ServerView)this );
 	String servName = S.getName();
-	if(servName.length()>16)
-	    servName = servName.substring(0,14) + "..";
+	//if(servName.length()>16)
+	//    servName = servName.substring(0,14) + "..";
 	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
-	Name.setOnClickListener( infoListener );
-	Name.setTypeface( null, Typeface.BOLD );
+	Name.setOnClickListener(infoListener);
+	Name.setTypeface(null, Typeface.BOLD);
+		Name.setEllipsize(TextUtils.TruncateAt.END);
+		Name.setSingleLine();
 	
 	Flavor = new TextViewWithView( ctx, (ServerView)this );
 	
 	String flavName = S.getFlavor( )!=null ? S.getFlavor().getName() : "N/A";// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
-	if(flavName.length()>30)
-	    flavName = flavName.substring(0,28) + "..";
+	//if(flavName.length()>30)
+	//    flavName = flavName.substring(0,28) + "..";
+
 	Flavor.setText( "Flavor: "+flavName );
 	Flavor.setOnClickListener( infoListener );
-	Flavor.setTextColor( Color.parseColor("#999999"));
+	Flavor.setTextColor(Color.parseColor("#999999"));
+		Flavor.setEllipsize(TextUtils.TruncateAt.END);
+		Flavor.setSingleLine();
+
 	Status = new TextViewWithView( ctx, (ServerView)this );
 	Status.setText("Status: "+S.getStatus( ) );
 	Status.setOnClickListener( infoListener );
+
 
 	if(S.getStatus( ).compareToIgnoreCase("active")==0)
 	    Status.setTextColor( Color.parseColor("#00AA00") );

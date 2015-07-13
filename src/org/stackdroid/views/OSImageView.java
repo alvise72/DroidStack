@@ -1,6 +1,7 @@
 package org.stackdroid.views;
 
 //import android.widget.LinearLayout.LayoutParams;
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 //import android.widget.ImageButton;
 //import android.widget.ImageView;
@@ -46,7 +47,6 @@ public class OSImageView extends LinearLayout {
 	LinearLayout.LayoutParams params1 
 	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	setLayoutParams( params1 );
-	//setBackgroundResource(R.drawable.rounded_corner_thin);
 	int padding = Utils.getDisplayPixel( ctx, 2 );
 	setPadding( padding, padding, padding, padding );
 	setOnClickListener( infoListener );
@@ -61,18 +61,21 @@ public class OSImageView extends LinearLayout {
 	nameLayout = new LinearLayoutWithView( ctx, (OSImageView)this );
 	nameLayout.setOrientation( LinearLayout.VERTICAL );
 	LinearLayout.LayoutParams params2 
-	    = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.6f);
 	nameLayout.setLayoutParams( params2 );
+	//nameLayout.setWeightSum(1);
 	
 	textImageName = new TextViewWithView( ctx, (OSImageView)this );
 	String name = image.getName( );
-	if(name.length()>20) {
+	/* if(name.length()>20) {
 	    name = name.substring(0,17) + "..";
-	}
+	}*/
 	textImageName.setText( name );
 	textImageName.setTextColor( Color.parseColor("#333333") );
-	textImageName.setTypeface( null, Typeface.BOLD );
-	textImageName.setOnClickListener( infoListener );
+	textImageName.setTypeface(null, Typeface.BOLD);
+	textImageName.setOnClickListener(infoListener);
+	textImageName.setEllipsize(TextUtils.TruncateAt.END);
+	textImageName.setSingleLine();
 	
 	textSize = new TextViewWithView( ctx, (OSImageView)this );
 	textSize.setText( "Size: " + image.getSizeMB() + " MB" );
@@ -95,11 +98,12 @@ public class OSImageView extends LinearLayout {
 	buttonsLayout = new LinearLayoutWithView( ctx, (OSImageView)this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
 	LinearLayout.LayoutParams params4 
-	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
+	    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f );
 	params4.gravity=Gravity.RIGHT|Gravity.CENTER_VERTICAL;
 	buttonsLayout.setLayoutParams( params4 );
 	buttonsLayout.setGravity( Gravity.RIGHT );
 	buttonsLayout.setOnClickListener( infoListener );
+	buttonsLayout.setWeightSum(1);
 
 	launchImage = new ImageButtonWithView( ctx, (OSImageView)this );
 	launchImage.setImageResource(R.drawable.ic_menu_play_clip );

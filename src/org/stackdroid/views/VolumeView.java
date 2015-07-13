@@ -1,5 +1,6 @@
 package org.stackdroid.views;
 
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.graphics.Typeface;
 import android.graphics.Color;
@@ -57,13 +58,15 @@ public class VolumeView extends LinearLayout {
 		
 		Name = new TextViewWithView( ctx, (VolumeView)this );
 		String volName = V.getName();
-		if( volName.length() > 16 )
-			volName = volName.substring(0,14) + "..";
+		//if( volName.length() > 16 )
+		//	volName = volName.substring(0,14) + "..";
 		Name.setText( volName );
 		Name.setTextColor( Color.parseColor("#333333") );
 		//Name.setOnClickListener( (OnClickListener)ctx );
-		Name.setTypeface( null, Typeface.BOLD );
+		Name.setTypeface(null, Typeface.BOLD);
 		Name.setOnClickListener(infoVol);
+		Name.setEllipsize(TextUtils.TruncateAt.END);
+		Name.setSingleLine();
 		
 		Status_and_Size = new TextViewWithView( ctx, (VolumeView)this );
 		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatus()+")" );

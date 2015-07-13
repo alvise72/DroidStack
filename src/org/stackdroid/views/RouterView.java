@@ -10,6 +10,7 @@ import org.stackdroid.utils.Utils;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,17 +57,19 @@ public class RouterView extends LinearLayout {
 
         routerName = new TextView(ctx);
         String rname = router.getName();
-        if(rname.length()>30) {
-            rname = rname.substring(0,29) + "...";
-        }
+        //if(rname.length()>30) {
+        //    rname = rname.substring(0,29) + "...";
+        //}
         routerName.setText(router.getName());
         routerName.setTextColor(Color.parseColor("#333333"));
         routerName.setTypeface(null, Typeface.BOLD);
+        routerName.setEllipsize(TextUtils.TruncateAt.END);
+        routerName.setSingleLine();
 
         nameLayout = new LinearLayoutWithView( ctx, (RouterView)this );
         nameLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params2
-                = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
         params2.gravity=Gravity.LEFT|Gravity.CENTER_VERTICAL;
         nameLayout.setLayoutParams(params2);
 
@@ -75,7 +78,7 @@ public class RouterView extends LinearLayout {
         buttonsLayout = new LinearLayoutWithView( ctx, (RouterView)this );
         buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
         LinearLayout.LayoutParams params4
-                = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
+                = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
         params4.gravity= Gravity.RIGHT|Gravity.CENTER_VERTICAL;
         buttonsLayout.setLayoutParams( params4 );
         buttonsLayout.setGravity(Gravity.RIGHT);

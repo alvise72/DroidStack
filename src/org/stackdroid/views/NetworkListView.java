@@ -9,6 +9,7 @@ import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.Utils;
 
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,28 +39,30 @@ public class NetworkListView extends LinearLayout {
 	    this.net = net;
 	    //this.subnet = subnet;
 	    this.setOnClickListener(infoNetListener);
-	    setOrientation( LinearLayout.HORIZONTAL );
+	    setOrientation(LinearLayout.HORIZONTAL);
 	    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		setLayoutParams( params1 );
+		setLayoutParams(params1);
 		int padding = Utils.getDisplayPixel( ctx, 2 );
 		setPadding( padding, padding, padding, padding );
 		
 		row = new LinearLayoutWithView( ctx, (NetworkListView)this );
-		row.setOrientation( LinearLayout.HORIZONTAL );
+		row.setOrientation(LinearLayout.HORIZONTAL);
 		LinearLayout.LayoutParams _params1
 		    = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		row.setLayoutParams( _params1 );
 		row.setBackgroundResource(R.drawable.rounded_corner_thin);
 		row.setOnClickListener(infoNetListener);
 		nameLayout = new LinearLayoutWithView( ctx, (NetworkListView)this  );
-		nameLayout.setOrientation( LinearLayout.VERTICAL );
-		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
+		nameLayout.setOrientation(LinearLayout.VERTICAL);
+		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.3f);
 		nameLayout.setLayoutParams( params2 );
 		nameLayout.setOnClickListener(infoNetListener);
 		name = new TextViewWithView( ctx, (NetworkListView)this  );
-		name.setText( net.getName() );
+		name.setText(net.getName());
 		name.setTextColor( Color.parseColor("#333333") );
-		name.setTypeface( null, Typeface.BOLD );
+		name.setTypeface(null, Typeface.BOLD);
+		name.setEllipsize(TextUtils.TruncateAt.END);
+		name.setSingleLine();
 		
 		/*subnetView = new TextViewWithView( ctx, (NetworkListView)this  );
 		subnetView.setText( net.getSubNetworks()!=null && net.getSubNetworks().size()!=0 ? net.getSubNetworks().elementAt(0).getAddress() : "" );

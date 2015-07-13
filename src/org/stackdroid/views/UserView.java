@@ -47,39 +47,46 @@ public class UserView extends LinearLayout {
 
 	userLayout = new LinearLayoutWithView( ctx, this );
 	userLayout.setOrientation( LinearLayout.VERTICAL );
-	LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.6f);
 	userLayout.setLayoutParams( params2 );
 	
 	textUserName = new TextViewWithView( ctx, (UserView)this );
 	String uname = "User: "+user.getUserName() ;
-	if(uname.length()>30) {
+	/*if(uname.length()>30) {
 		uname = uname.substring(0, 26) + "...";
-	}
+	}*/
 	textUserName.setText(uname);
 	textUserName.setTextColor(Color.parseColor("#333333"));
 	textUserName.setOnClickListener(selectUserListener);
 	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
+		textUserName.setEllipsize(TextUtils.TruncateAt.END);
+		textUserName.setSingleLine();
 
 	textTenantName = new TextViewWithView( ctx, (UserView)this );
 	String tname = "Tenant: "+user.getTenantName();
 		//TextUtils.ellipsize( )
-	if(tname.length()>30) {
+	/*if(tname.length()>30) {
 		tname = tname.substring(0, 26) + "...";
-	}
+	}*/
 	textTenantName.setText(tname);
 	textTenantName.setTextColor( Color.parseColor("#333333") );
-	textTenantName.setOnClickListener( selectUserListener );
+	textTenantName.setOnClickListener(selectUserListener);
 	textTenantName.setTextColor( Color.parseColor("#BBBBBB"));
+		textTenantName.setEllipsize(TextUtils.TruncateAt.END);
+		textTenantName.setSingleLine();
 
 	textEndpoint = new TextViewWithView( ctx, (UserView)this );
 	String ename = "Endpoint: "+U.getIdentityHostname( );
-	if(ename.length()>30) {
+	/*if(ename.length()>30) {
+
 		ename = ename.substring(0, 26)+"...";
-	}
+	}*/
 	textEndpoint.setText(ename);
 	textEndpoint.setTextColor(Color.parseColor("#333333"));
 	textEndpoint.setOnClickListener(selectUserListener);
 	textEndpoint.setTextColor(Color.parseColor("#BBBBBB"));
+		textEndpoint.setEllipsize(TextUtils.TruncateAt.END);
+		textEndpoint.setSingleLine();
 
 	textSSL = new TextViewWithView( ctx, (UserView)this );
 	//textSSL.setText("SSL: ");
@@ -116,7 +123,7 @@ public class UserView extends LinearLayout {
       
 	buttonsLayout = new LinearLayoutWithView( ctx, this );
 	buttonsLayout.setOrientation( LinearLayout.HORIZONTAL );
-	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
+	LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f );
 	params3.gravity=Gravity.RIGHT;
 	buttonsLayout.setLayoutParams( params3 );
 	buttonsLayout.setGravity( Gravity.RIGHT|Gravity.CENTER_VERTICAL );

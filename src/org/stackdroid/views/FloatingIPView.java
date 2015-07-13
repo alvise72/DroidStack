@@ -6,6 +6,7 @@ import org.stackdroid.utils.FloatingIP;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.Utils;
 
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -72,9 +73,10 @@ public class FloatingIPView extends LinearLayout {
 		String serverText = "Server: "+(fip.getServerName()!=null && fip.getServerName().length()!=0 ? fip.getServerName() : "None");
 		if( serverText.length() >30 )
 			serverText = serverText.substring(0,27) + "...";
-		textServer.setText( serverText ); 
-		
+		textServer.setText( serverText );
 		textServer.setTextColor( Color.parseColor("#333333") );
+		textServer.setEllipsize(TextUtils.TruncateAt.END);
+		textServer.setSingleLine();
 		
 		nameLayout.addView(textIP);
 		nameLayout.addView(textPool);
