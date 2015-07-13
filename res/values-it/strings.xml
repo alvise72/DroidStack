@@ -200,5 +200,5 @@
     <string name="DHCPENABLED">DHCP Abilitato</string>
     <string name="IMAGEINFO">Info immagine</string>
     <string name="TOKENEXPIRATION">Scadenza del token</string>
-
+    <string name="VERIFYSERVERCERT">Verfica certificato server</string>
 </resources>
