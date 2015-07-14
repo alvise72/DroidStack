@@ -195,7 +195,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
      * 
      */    
     public SecGroupEditActivity( ) {
-    	predefinedRules = new Vector<String>( );
+    	predefinedRules = new Vector<String>();
     	predefinedRules.add("SSH");
     	predefinedRules.add("HTTP(80)");
     	predefinedRules.add("HTTP(8080)");
@@ -204,7 +204,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     	predefinedRules.add("FTP");
     	predefinedRules.add("PING");
     	predefinedRules.add("Custom");
-    	protocols = new Vector<String>( );
+    	protocols = new Vector<String>();
     	protocols.add("TCP");
     	protocols.add("UDP");
     	protocols.add("ICMP");
@@ -228,8 +228,6 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
 		String secgrpName = this.getIntent().getStringExtra("SECGRPNAME");
         setTitle(getString(R.string.EDITSECGROUP) + " " + secgrpName);
 		String secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
-        //((EditText)findViewById(R.id.secgrpName)).setText(secgrpName);
-        //((EditText)findViewById(R.id.secgrpDesc)).setText(secgrpDesc);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
@@ -267,10 +265,10 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
      */
     public void addRule( View v ) { 
     	
-    	spinnerRulesAdapter = new ArrayAdapter<String>(SecGroupEditActivity.this, android.R.layout.simple_spinner_item, predefinedRules.subList(0,predefinedRules.size()) );
+    	spinnerRulesAdapter = new ArrayAdapter<String>(SecGroupEditActivity.this, android.R.layout.simple_spinner_item, predefinedRules.subList(0, predefinedRules.size()));
     	spinnerRulesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
-    	spinnerProtoAdapter = new ArrayAdapter<String>(SecGroupEditActivity.this, android.R.layout.simple_spinner_item, protocols.subList(0,protocols.size()) );
+    	spinnerProtoAdapter = new ArrayAdapter<String>(SecGroupEditActivity.this, android.R.layout.simple_spinner_item, protocols.subList(0, protocols.size()));
     	spinnerProtoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
     	
@@ -293,7 +291,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         
         ( (Spinner)promptsView.findViewById(R.id.protoSpinner) ).setAdapter(spinnerProtoAdapter);
         
-        ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener( new SecGroupEditActivity.ConfirmRuleAddClickListener( ) );
+        ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener(new SecGroupEditActivity.ConfirmRuleAddClickListener());
         ((Button)promptsView.findViewById(R.id.cancelRuleAdd)).setOnClickListener( new SecGroupEditActivity.CancelRuleAddClickListener( ) );
         
         fromPort = (EditText)promptsView.findViewById(R.id.fromPortET);
