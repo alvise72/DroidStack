@@ -1,6 +1,9 @@
 package org.stackdroid.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -37,7 +40,10 @@ import org.stackdroid.utils.ImageButtonWithView;
 
 public class UsersActivity extends Activity {
 
-  //__________________________________________________________________________________
+	private AlertDialog 		 alertDialogUserInfo	    = null;
+
+
+	//__________________________________________________________________________________
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -87,12 +93,53 @@ public class UsersActivity extends Activity {
 		  refreshUserViews();
 	  }
   }
-  
+
+	//__________________________________________________________________________________
+	protected class OkUserInfoListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogUserInfo.dismiss();
+		}
+	}
+
 //__________________________________________________________________________________
   protected class UserInfoListener implements OnClickListener {
 	  @Override
 	  public void onClick( View v ) {
 		  User U = ((ImageButtonWithView)v).getUserView( ).getUser();
+
+		  LayoutInflater li = LayoutInflater.from(UsersActivity.this);
+
+		  View promptsView = li.inflate(R.layout.my_dialog_user_info, null);
+
+		  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(UsersActivity.this);
+
+		  alertDialogBuilder.setView(promptsView);
+
+		  alertDialogBuilder.setTitle(getString(R.string.USERINFO));
+		  alertDialogUserInfo = alertDialogBuilder.create();
+
+		  ((TextView)promptsView.findViewById(R.id.userName)).setText(U.getUserName());
+		  ((TextView)promptsView.findViewById(R.id.projectName)).setText(U.getTenantName());
+		  ((TextView)promptsView.findViewById(R.id.keystoneHostname)).setText(U.getIdentityHostname());
+		  ((TextView)promptsView.findViewById(R.id.keystoneURL)).setText(U.getIdentityEndpoint());
+		  ((TextView)promptsView.findViewById(R.id.novaURL)).setText(U.getNovaEndpoint());
+		  ((TextView)promptsView.findViewById(R.id.neutronURL)).setText(U.getNeutronEndpoint());
+		  ((TextView)promptsView.findViewById(R.id.glanceURL)).setText(U.getGlanceEndpoint());
+		  ((TextView)promptsView.findViewById(R.id.cinder1URL)).setText(U.getCinder1Endpoint());
+		  ((TextView)promptsView.findViewById(R.id.cinder2URL)).setText(U.getCinder2Endpoint());
+		  ((TextView)promptsView.findViewById(R.id.SSL)).setText(U.useSSL() ? getString(R.string.YES) : "No");
+		  //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y H:mm:ss");
+		  Date d = new Date(U.getTokenExpireTime() * 1000);
+		  String hd = d.toString();
+		  ((TextView)promptsView.findViewById(R.id.tokenExpiration)).setText(hd);
+		  ((TextView)promptsView.findViewById(R.id.verifyServerCert)).setText(U.getVerifyServerCert() ? getString(R.string.YES) : "No");
+
+		  ((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new UsersActivity.OkUserInfoListener());
+		  alertDialogUserInfo.setCanceledOnTouchOutside(false);
+		  alertDialogUserInfo.setCancelable(false);
+		  alertDialogUserInfo.show();
+		  /*
 		  ScrollView sv = new ScrollView( UsersActivity.this );
 		  TextView t1 = new TextView( UsersActivity.this );
 		  t1.setText(getString(R.string.USERNAME)+": ");
@@ -240,6 +287,7 @@ public class UsersActivity extends Activity {
 
 		  sv.addView(l);
 		  Utils.alertInfo(sv, UsersActivity.this.getString(R.string.USERINFO), UsersActivity.this);
+		  */
 		  //Utils.alertTitle(info, UsersActivity.this.getString(R.string.USERINFO), 12, UsersActivity.this);
 	  }
   }

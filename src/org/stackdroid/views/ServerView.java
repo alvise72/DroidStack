@@ -62,8 +62,6 @@ public class ServerView extends LinearLayout {
 
 	Name = new TextViewWithView( ctx, (ServerView)this );
 	String servName = S.getName();
-	//if(servName.length()>16)
-	//    servName = servName.substring(0,14) + "..";
 	Name.setText( servName );
 	Name.setTextColor( Color.parseColor("#333333") );
 	Name.setOnClickListener(infoListener);
@@ -74,8 +72,6 @@ public class ServerView extends LinearLayout {
 	Flavor = new TextViewWithView( ctx, (ServerView)this );
 	
 	String flavName = S.getFlavor( )!=null ? S.getFlavor().getName() : "N/A";// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
-	//if(flavName.length()>30)
-	//    flavName = flavName.substring(0,28) + "..";
 
 	Flavor.setText( "Flavor: "+flavName );
 	Flavor.setOnClickListener( infoListener );

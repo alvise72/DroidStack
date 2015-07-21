@@ -59,8 +59,8 @@ public class UserView extends LinearLayout {
 	textUserName.setTextColor(Color.parseColor("#333333"));
 	textUserName.setOnClickListener(selectUserListener);
 	textUserName.setTextColor( Color.parseColor("#BBBBBB"));
-		textUserName.setEllipsize(TextUtils.TruncateAt.END);
-		textUserName.setSingleLine();
+	textUserName.setEllipsize(TextUtils.TruncateAt.END);
+	textUserName.setSingleLine();
 
 	textTenantName = new TextViewWithView( ctx, (UserView)this );
 	String tname = "Tenant: "+user.getTenantName();

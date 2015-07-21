@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:layout_weight="7"
+        android:layout_gravity="left">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+string/USERNAME"
+            android:id="@+id/textView3"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:typeface="sans"
+            android:paddingLeft="3dp" />
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/userName"
+            android:textStyle="italic"
+            android:textSize="14sp"
+            android:typeface="sans"
+            android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/PROJECTNAME"
+                android:id="@+id/textView4"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/projectName"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keystone hostname"
+                android:id="@+id/textView5"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/keystoneHostname"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keystone URL"
+                android:id="@+id/textView6"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/keystoneURL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nova URL"
+                android:id="@+id/textView7"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/novaURL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Neutron URL"
+                android:id="@+id/textView8"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp"
+                android:ellipsize="none" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/neutronURL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Glance URL"
+                android:id="@+id/textView9"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/glanceURL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cinder v1 URL"
+                android:id="@+id/textView10"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/cinder1URL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cinder v2 URL"
+                android:id="@+id/textView11"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/cinder2URL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SSL"
+                android:id="@+id/textView13"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/SSL"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/TOKENEXPIRATION"
+                android:id="@+id/textView15"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/tokenExpiration"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/VERIFYSERVERCERT"
+                android:id="@+id/textView17"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/verifyServerCert"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#FF909090" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <Button
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/buttonOk"
+        android:layout_gravity="center_horizontal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+    </LinearLayout>
+
+</LinearLayout>
