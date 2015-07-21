@@ -69,8 +69,8 @@ public class OSImagesActivity extends Activity {
         //menu.add(GROUP, 1, order++, getString(R.string.MENUUPDATE) ).setIcon(R.drawable.ic_menu_refresh);
         return true;
     }
-    
-     public boolean onOptionsItemSelected( MenuItem item ) {
+
+	public boolean onOptionsItemSelected( MenuItem item ) {
 	 
         int id = item.getItemId();     
         
@@ -86,7 +86,15 @@ public class OSImagesActivity extends Activity {
     	progressDialogWaitStop.show();
 		(new AsyncTaskOSListImages()).execute( );
     }
-     
+
+	//__________________________________________________________________________________
+	protected class OkImageInfoListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogImageInfo.dismiss();
+		}
+	}
+
     //__________________________________________________________________________________
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -226,8 +234,15 @@ public class OSImagesActivity extends Activity {
 			alertDialogBuilder.setTitle(getString(R.string.IMAGEINFO));
 			alertDialogImageInfo = alertDialogBuilder.create();
 
-			final TextView imageName = (TextView)promptsView.findViewById(R.id.imageName);
-			imageName.setText(osi.getName());
+			((TextView)promptsView.findViewById(R.id.imageName)).setText(osi.getName());
+			((TextView)promptsView.findViewById(R.id.imageStatus)).setText(osi.getStatus());
+			((TextView)promptsView.findViewById(R.id.imageSize)).setText(osi.getSizeMB()+" MBytes");
+			((TextView)promptsView.findViewById(R.id.imagePublic)).setText(osi.isPublic() ? getString(R.string.YES) : "No");
+			((TextView)promptsView.findViewById(R.id.imageFormat)).setText(osi.getFormat());
+			((TextView)promptsView.findViewById(R.id.imageID)).setText(osi.getID());
+			((TextView)promptsView.findViewById(R.id.imageMinDisk)).setText(osi.getMinDISK()+" GBytes");
+			((TextView)promptsView.findViewById(R.id.imageMinRAM)).setText(osi.getMinRAM()+" MBytes");
+			((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new OSImagesActivity.OkImageInfoListener());
 			alertDialogImageInfo.setCanceledOnTouchOutside(false);
 			alertDialogImageInfo.setCancelable(false);
 			alertDialogImageInfo.show();
