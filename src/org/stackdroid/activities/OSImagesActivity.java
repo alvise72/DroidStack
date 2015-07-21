@@ -2,8 +2,11 @@ package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -43,11 +46,12 @@ import android.graphics.Typeface;
 
 public class OSImagesActivity extends Activity {
     
-    private Vector<OSImage> OS;
-    private CustomProgressDialog progressDialogWaitStop = null;
-    private String ID = null;
-    private String NAME = null;
-    User U = null;
+    private Vector<OSImage> 	 OS;
+    private CustomProgressDialog progressDialogWaitStop 	= null;
+	private AlertDialog 		 alertDialogImageInfo	    = null;
+	private String 				 ID 						= null;
+    private String 				 NAME 						= null;
+    		User 				 U 							= null;
     
     /**
      *
@@ -200,16 +204,35 @@ public class OSImagesActivity extends Activity {
     protected class imageInfoListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		OSImage osi = null;
-    	    if(v instanceof OSImageView) {
-    			osi = ((OSImageView)v).getOSImage();
-    	    }
-    	    if(v instanceof TextViewWithView) {
-    			osi = ((TextViewWithView)v).getOSImageView().getOSImage();
-    	    }
-    	    if(v instanceof LinearLayoutWithView) {
-    			osi = ((LinearLayoutWithView)v).getOSImageView().getOSImage();
-    	    }
+			OSImage osi = null;
+			if(v instanceof OSImageView) {
+				osi = ((OSImageView)v).getOSImage();
+			}
+			if(v instanceof TextViewWithView) {
+				osi = ((TextViewWithView)v).getOSImageView().getOSImage();
+			}
+			if(v instanceof LinearLayoutWithView) {
+				osi = ((LinearLayoutWithView)v).getOSImageView().getOSImage();
+			}
+
+			LayoutInflater li = LayoutInflater.from(OSImagesActivity.this);
+
+			View promptsView = li.inflate(R.layout.my_dialog_image_info, null);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OSImagesActivity.this);
+
+			alertDialogBuilder.setView(promptsView);
+
+			alertDialogBuilder.setTitle(getString(R.string.IMAGEINFO));
+			alertDialogImageInfo = alertDialogBuilder.create();
+
+			final TextView imageName = (TextView)promptsView.findViewById(R.id.imageName);
+			imageName.setText(osi.getName());
+			alertDialogImageInfo.setCanceledOnTouchOutside(false);
+			alertDialogImageInfo.setCancelable(false);
+			alertDialogImageInfo.show();
+			/*
+
     	    TextView tv1 = new TextView(OSImagesActivity.this);
     	    tv1.setText(getString(R.string.IMAGENAME));
     	    tv1.setTypeface( null, Typeface.BOLD );
@@ -293,7 +316,8 @@ public class OSImagesActivity extends Activity {
     			name = osi.getName().substring(0,27) + "...";
     	    else
     			name = osi.getName();
-    	    Utils.alertInfo( sv, getString(R.string.IMAGEINFO)+": \n" + name, OSImagesActivity.this );
+    			*/
+    	    //Utils.alertInfo( sv, getString(R.string.IMAGEINFO)+": \n" + name, OSImagesActivity.this );
     	}
     }
 
