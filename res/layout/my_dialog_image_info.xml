@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:layout_weight="0.4"
+        android:layout_gravity="left">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+string/IMAGENAME"
+            android:id="@+id/textView3"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:typeface="sans"
+            android:paddingLeft="3dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/imageName"
+            android:textStyle="italic"
+            android:textSize="14sp"
+            android:typeface="sans"
+            android:paddingLeft="6dp" />
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Ok"
+        android:layout_weight="1"
+        android:id="@+id/buttonOk" />
+</LinearLayout>

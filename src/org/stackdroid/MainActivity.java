@@ -36,7 +36,7 @@ import org.stackdroid.activities.VolumesActivity;
 
 public class MainActivity extends Activity
 {
-    private int    SCREENW 		= 0;
+    //private int    SCREENW 		= 0;
     private String selectedUser = null;
 
     /**
@@ -62,7 +62,7 @@ public class MainActivity extends Activity
         
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        SCREENW = dm.widthPixels;
+        //SCREENW = dm.widthPixels;
         int density = (int)this.getResources().getDisplayMetrics().density;
         
         Configuration.getInstance().setValue( "DISPLAYDENSITY", ""+density );
