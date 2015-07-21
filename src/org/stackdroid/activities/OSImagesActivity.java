@@ -247,7 +247,6 @@ public class OSImagesActivity extends Activity {
 			alertDialogImageInfo.setCancelable(false);
 			alertDialogImageInfo.show();
 			/*
-
     	    TextView tv1 = new TextView(OSImagesActivity.this);
     	    tv1.setText(getString(R.string.IMAGENAME));
     	    tv1.setTypeface( null, Typeface.BOLD );

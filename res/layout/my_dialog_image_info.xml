@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView2"
-        android:layout_weight="6"
+        android:layout_weight="7"
         android:layout_gravity="left">
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,9 @@
             android:textStyle="italic"
             android:textSize="14sp"
             android:typeface="sans"
-            android:paddingLeft="12dp" />
+            android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -125,7 +127,8 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:typeface="sans"
-                android:paddingLeft="3dp" />
+                android:paddingLeft="3dp"
+                android:ellipsize="none" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -135,7 +138,9 @@
                 android:textStyle="italic"
                 android:textSize="14sp"
                 android:typeface="sans"
-                android:paddingLeft="12dp" />
+                android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
