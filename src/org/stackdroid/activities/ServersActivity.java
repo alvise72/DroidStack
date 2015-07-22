@@ -249,7 +249,8 @@ public class ServersActivity extends Activity {
 			ServersActivity.this.progressDialogWaitStop.show();
 			server = ( (ButtonWithView)v ).getServerView().getServer();
 			(new ServersActivity.AsyncTaskFIPList()).execute( );
-            ServersActivity.this.manageInstanceDialog.dismiss();
+            if(ServersActivity.this.manageInstanceDialog!=null)
+				ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 	}
 	

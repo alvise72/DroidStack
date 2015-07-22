@@ -130,9 +130,9 @@ public class UsersActivity extends Activity {
 		  ((TextView)promptsView.findViewById(R.id.cinder2URL)).setText(U.getCinder2Endpoint());
 		  ((TextView)promptsView.findViewById(R.id.SSL)).setText(U.useSSL() ? getString(R.string.YES) : "No");
 		  //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/y H:mm:ss");
-		  Date d = new Date(U.getTokenExpireTime() * 1000);
-		  String hd = d.toString();
-		  ((TextView)promptsView.findViewById(R.id.tokenExpiration)).setText(hd);
+		  //Date d = new Date(U.getTokenExpireTime() * 1000);
+		  //String hd = d.toString();
+		  //((TextView)promptsView.findViewById(R.id.tokenExpiration)).setText(hd);
 		  ((TextView)promptsView.findViewById(R.id.verifyServerCert)).setText(U.getVerifyServerCert() ? getString(R.string.YES) : "No");
 
 		  ((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new UsersActivity.OkUserInfoListener());
