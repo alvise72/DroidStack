@@ -38,7 +38,9 @@
     <string name="NONE">None</string>
     <string name="MANAGENOVAINST">Manage Nova instances</string>
     <string name="MANAGEGLANCEIMG">Manage Glance images</string>
+<!--
     <string name="SELECTOSUSER">Select an OpenStack user</string>
+-->
     <string name="NOCUSTOMIPWITHMOREVM">You cannot specify custom IP address with more than one instance to launch.</string>
     <string name="INCORRECTIPFORMAT">Incorrect IPv4/IPv6 address format</string>
     <string name="FLOATINGIP">Manage Floating IP</string>
@@ -209,4 +211,5 @@
     <string name="DHCPENABLED">DHCP Enabled</string>
     <string name="IMAGEINFO">Image info</string>
     <string name="TOKENEXPIRATION">Token\'s expiration</string>
+    <string name="MANAGEUSERS">User Management</string>
 </resources>

@@ -41,7 +41,7 @@
 	<activity
 	    android:name="org.stackdroid.activities.UsersActivity" 
 	    android:launchMode="singleInstance" 
-	    android:label="@string/SELECTOSUSER" 
+	    android:label="@string/MANAGEUSERS"
 	    android:parentActivityName="org.stackdroid.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
 	  />
