@@ -69,12 +69,23 @@ public class ServersActivity extends Activity {
 	public  ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter    = null;
 	private Spinner                  fipSpinner                = null;
 	private AlertDialog 			 manageInstanceDialog      = null;
+    private AlertDialog 		     alertDialogServerInfo	   = null;
 
-	/**
-	 * 
-	 * @author dorigoa
-	 *
-	 */
+
+    //__________________________________________________________________________________
+    protected class OkImageServerListener implements OnClickListener {
+        @Override
+        public void onClick( View v ) {
+            if(alertDialogServerInfo!=null)
+                alertDialogServerInfo.dismiss();
+        }
+    }
+
+    /**
+     *
+     * @author dorigoa
+     *
+     */
 	//protected class ResizeInstance implements OnClickListener {
 	//	@Override
 	//	public void onClick(View v) {
@@ -533,6 +544,54 @@ public class ServersActivity extends Activity {
 			
 			String[] secgrps = s.getSecurityGroupNames( );
 
+            LayoutInflater li = LayoutInflater.from(ServersActivity.this);
+
+            View promptsView = li.inflate(R.layout.my_dialog_server_info, null);
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ServersActivity.this);
+
+            alertDialogBuilder.setView(promptsView);
+
+            alertDialogBuilder.setTitle(getString(R.string.IMAGEINFO));
+            alertDialogServerInfo = alertDialogBuilder.create();
+
+            String fxip = "";
+            if(s.getPrivateIP().isEmpty()) {
+                fxip = getString(R.string.NONE);
+            } else {
+
+                for(int i = 0; i<s.getPrivateIP().size(); i++) {
+                    String ip = s.getPrivateIP().elementAt(i);
+                    fxip += ip + "\n";
+                }
+            }
+            String fip = "";
+            if(s.getPublicIP().isEmpty()) {
+                fip = getString(R.string.NONE);
+            } else {
+                for(int i = 0; i<s.getPublicIP().size(); i++) {
+                    fip += s.getPublicIP( ).elementAt(i) + "\n";
+                }
+            }
+            if(fip.endsWith("\n"))
+                fip = fip.substring(0, fip.length() - 2);
+            if(fxip.endsWith("\n"))
+                fxip = fxip.substring(0,fxip.length()-2);
+
+            ((TextView)promptsView.findViewById(R.id.serverName)).setText(s.getName());
+            ((TextView)promptsView.findViewById(R.id.serverID)).setText(s.getID());
+            ((TextView)promptsView.findViewById(R.id.serverStatus)).setText(s.getStatus() + (s.getTask()!=null && s.getTask().length()!=0 && s.getTask().equalsIgnoreCase("null")==false ? " (" + s.getTask()+")" : ""));
+            ((TextView)promptsView.findViewById(R.id.serverFlavor)).setText(s.getFlavor()!=null ? s.getFlavor().getFullInfo() : "N/A");
+            ((TextView)promptsView.findViewById(R.id.serverIP)).setText( fxip );
+            ((TextView)promptsView.findViewById(R.id.serverFIP)).setText( fip );
+            ((TextView)promptsView.findViewById(R.id.serverKeyName)).setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : getString(R.string.NONE) );
+            ((TextView)promptsView.findViewById(R.id.secGroups)).setText( secgrps != null && secgrps.length!=0 ? Utils.join(s.getSecurityGroupNames(),", ") : getString(R.string.NONE) );
+            ((TextView)promptsView.findViewById(R.id.hostedBy)).setText( s.getComputeNode2( ) != null ? s.getComputeNode2( ) : "N/A (" + getString(R.string.INSUFFICIENTPRIVILEGES)+")" );
+            ((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new ServersActivity.OkImageServerListener());
+            alertDialogServerInfo.setCanceledOnTouchOutside(false);
+            alertDialogServerInfo.setCancelable(false);
+            alertDialogServerInfo.show();
+            /*
 			TextView tv1 = new TextView(ServersActivity.this);
 			tv1.setText(getString(R.string.INSTANCENAME));
 			tv1.setTypeface( null, Typeface.BOLD );
@@ -647,6 +706,7 @@ public class ServersActivity extends Activity {
 			else
 				name = s.getName();
 			Utils.alertInfo( sv, getString(R.string.INSTANCEINFO)+": \n"+name, ServersActivity.this );
+			*/
 		}
 	}
 

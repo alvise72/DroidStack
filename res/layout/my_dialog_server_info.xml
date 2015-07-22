@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:layout_weight="7"
+        android:layout_gravity="left">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+string/INSTANCENAME"
+            android:id="@+id/textView3"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:typeface="sans"
+            android:paddingLeft="3dp" />
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/serverName"
+            android:textStyle="italic"
+            android:textSize="14sp"
+            android:typeface="sans"
+            android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/STATUS"
+                android:id="@+id/textView4"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/serverStatus"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID"
+                android:id="@+id/textView4"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/serverID"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/FLAVOR"
+                android:id="@+id/textView5"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/serverFlavor"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fixed IP(s)"
+                android:id="@+id/textView6"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/serverIP"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Floating IP"
+                android:id="@+id/textView7"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/serverFIP"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Key name"
+                android:id="@+id/textView8"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp"
+                android:ellipsize="none" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/serverKeyName"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Security Group"
+                android:id="@+id/textView9"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/secGroups"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/HOSTEDBY"
+                android:id="@+id/textView10"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/hostedBy"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#FF909090" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <Button
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/buttonOk"
+        android:layout_gravity="center_horizontal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+    </LinearLayout>
+
+</LinearLayout>

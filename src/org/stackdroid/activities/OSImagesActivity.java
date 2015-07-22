@@ -91,7 +91,8 @@ public class OSImagesActivity extends Activity {
 	protected class OkImageInfoListener implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
-			alertDialogImageInfo.dismiss();
+			if(alertDialogImageInfo!=null)
+				alertDialogImageInfo.dismiss();
 		}
 	}
 
