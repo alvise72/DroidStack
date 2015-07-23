@@ -49,16 +49,16 @@ public class Volume {//implements Serializable {
 	  attachedto_device     = _device;
     }
 
-    public String getName() { return name; }
-    public String getID() { return ID; }
-    public String getStatus() { return status; }
-    public boolean isBootable( ) { return bootable; }
-    public boolean isReadOnly( ) { return readonly; }
-    public String getAttachMod( ) { return attachmode; }
-    public int getSize( ) { return gigabyte; }
-    public String getAttachedServerID( ) { return attachedto_serverid; }
-    public String getAttachedServerName( ) { return attachedto_servername; }
-    public String getAttachedDevice( ) { return attachedto_device; }
+    public String 	getName() { return name; }
+    public String 	getID() { return ID; }
+    public String 	getStatus() { return status; }
+    public boolean 	isBootable( ) { return bootable; }
+    public boolean 	isReadOnly( ) { return readonly; }
+    public String 	getAttachMod( ) { return attachmode; }
+    public int 		getSize( ) { return gigabyte; }
+    public String 	getAttachedServerID( ) { return attachedto_serverid; }
+    public String 	getAttachedServerName( ) { return attachedto_servername; }
+    public String 	getAttachedDevice( ) { return attachedto_device; }
     
     @Override
     public String toString( ) {
