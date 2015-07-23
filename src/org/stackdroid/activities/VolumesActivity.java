@@ -62,11 +62,23 @@ public class VolumesActivity extends Activity {
 	private Spinner 			 serverSpinner				= null;
 	private AlertDialog 		 alertDialogSelectServer    = null;
 	private ArrayAdapter<Server> spinnerServersArrayAdapter = null;
-	
+	private AlertDialog 		 alertDialogVolumeInfo	    = null;
+
+
 	private String 				 currentVolToAttach			= null;
 	//private String				 currentSrvToAttach			= null;
 	public String currentVolToDetach;
-    
+
+
+	//__________________________________________________________________________________
+	protected class OkImageServerListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			if(alertDialogVolumeInfo!=null)
+				alertDialogVolumeInfo.dismiss();
+		}
+	}
+
     //__________________________________________________________________________________
     public boolean onCreateOptionsMenu( Menu menu ) {
         
@@ -139,8 +151,30 @@ public class VolumesActivity extends Activity {
     	public void onClick( View v ) {
     		
     		Volume V = (((GetView)v).getVolumeView()).getVolume();
-    		
-    	    TextView tv1 = new TextView(VolumesActivity.this);
+
+			LayoutInflater li = LayoutInflater.from(VolumesActivity.this);
+
+			View promptsView = li.inflate(R.layout.my_dialog_volume_info, null);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VolumesActivity.this);
+
+			alertDialogBuilder.setView(promptsView);
+
+			alertDialogBuilder.setTitle(getString(R.string.IMAGEINFO));
+			alertDialogVolumeInfo = alertDialogBuilder.create();
+
+
+			((TextView)promptsView.findViewById(R.id.volumeName)).setText( V.getName() );
+			((TextView)promptsView.findViewById(R.id.volumeSize)).setText( "" + V.getSize() + " GB" );
+			((TextView)promptsView.findViewById(R.id.volumeStatus)).setText( V.getStatus() );
+			((TextView)promptsView.findViewById(R.id.volumeBootable)).setText( V.isBootable() ? getString(R.string.YES) : "No");
+			((TextView)promptsView.findViewById(R.id.volumeReadonly)).setText( V.isReadOnly() ? getString(R.string.YES) : "No" );
+			((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new VolumesActivity.OkImageServerListener());
+			alertDialogVolumeInfo.setCanceledOnTouchOutside(false);
+			alertDialogVolumeInfo.setCancelable(false);
+			alertDialogVolumeInfo.show();
+
+    	    /*TextView tv1 = new TextView(VolumesActivity.this);
     	    tv1.setText(getString(R.string.VOLNAME));
     	    tv1.setTypeface( null, Typeface.BOLD );
     	    TextView tv2 = new TextView(VolumesActivity.this);
@@ -225,7 +259,7 @@ public class VolumesActivity extends Activity {
     	    else
     	    	name = V.getName();
     	    Utils.alertInfo( sv, "Volume information", VolumesActivity.this );
-    		
+    		*/
     	}
     }
 
