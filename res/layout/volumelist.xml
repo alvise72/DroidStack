@@ -37,7 +37,30 @@
           android:layout_width="match_parent"
           android:layout_height="3sp"
         />
-        <LinearLayout
+
+      <TextView
+
+          android:text="@+string/TOUCHUVOLTOVIEWINFO"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+
+          android:gravity="center_vertical|center_horizontal"
+          android:id="@+id/textView12" />
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+          />
+      <View
+          android:layout_width="fill_parent"
+          android:layout_height="3dp"
+          android:background="#FF909090" />
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="3sp"
+          />
+      <LinearLayout
      	 android:layout_width="fill_parent"
      	 android:layout_height="wrap_content"
      	 android:gravity="center_vertical"

@@ -5,7 +5,7 @@
     <string name="USERS">Utenti</string>
     <string name="OVERVIEW">Quote</string>
     <string name="IMAGES">Immagini</string>
-    <string name="TOUCHIMAGEFORINFO">Tocca un\'immagine per info</string>
+    <string name="TOUCHIMAGEFORINFO">Tocca un\'immagine per vedere pi&#xf9; informazioni</string>
     <string name="IMAGENAME">Nome immagine</string>
     <string name="INSTANCES">Istanze</string>
     <string name="MEMORY">Memoria (MB)</string>
@@ -160,7 +160,7 @@
 	<string name="ALREADYCHOOSENNET">Hai gi&#xe0; selezionato questa rete</string>
 	<string name="ROUTERS">Router</string>
 	<string name="USERINFO">Informazioni utente</string>
-	<string name="TOUCHINSTANCE">Tocca un\'istanza per info</string>
+	<string name="TOUCHINSTANCE">Tocca un\'istanza per vedere pi&#xf9; informazioni</string>
 	<string name="MANAGESERVERS">Gestisci istanze</string>
 	<string name="CHANGENAMESERVER">Cambia nome</string>
 	<string name="MAKESNAP">Crea snapshot</string>
