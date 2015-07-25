@@ -70,6 +70,7 @@ public class ServersActivity extends Activity {
 	private Spinner                  fipSpinner                = null;
 	private AlertDialog 			 manageInstanceDialog      = null;
     private AlertDialog 		     alertDialogServerInfo	   = null;
+	private Hashtable<String,ServerView> mapID_to_ServerView   = null;
 
 
     //__________________________________________________________________________________
@@ -837,7 +838,9 @@ public class ServersActivity extends Activity {
 		  ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
 		else
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-		
+
+		mapID_to_ServerView = new Hashtable<String, ServerView>();
+
         //progressDialogWaitStop.show();
         //(new AsyncTaskOSListServers()).execute();
         //(Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
@@ -864,6 +867,7 @@ public class ServersActivity extends Activity {
     public void onDestroy( ) {
     	super.onDestroy( );
     	progressDialogWaitStop.dismiss();
+		mapID_to_ServerView.clear();
     }
 
 	/**
@@ -906,10 +910,13 @@ public class ServersActivity extends Activity {
     										  new ServersActivity.ServerManageClickListener(),
     										  this);
     		((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
-    		((LinearLayout)findViewById( R.id.serverLayout) ).setGravity( Gravity.CENTER_HORIZONTAL );
+			//sv.activateStatusUpdatePB();
+			mapID_to_ServerView.put(sv.getServer().getID(), sv);
+    		((LinearLayout)findViewById( R.id.serverLayout) ).setGravity(Gravity.CENTER_HORIZONTAL);
     		View space = new View( this );
     		space.setMinimumHeight(10);
-    		((LinearLayout)findViewById(R.id.serverLayout)).addView( space );
+    		((LinearLayout)findViewById(R.id.serverLayout)).addView(space);
+			//(new ServersActivity.AsyncTaskServerStatusUpdate()).execute(sv.getServer().getID());
     	}
     }
 
@@ -1064,6 +1071,7 @@ public class ServersActivity extends Activity {
     	}
     	
     }
+
     //__________________________________________________________________________________
     protected class AsyncTaskChangeInstanceName extends AsyncTask<String, String, String> {
     	private  String   errorMessage     = null;
@@ -1115,7 +1123,7 @@ public class ServersActivity extends Activity {
 		    OSClient osc = OSClient.getInstance( U );
 
      		try {
-     			osc.createInstanceSnapshot( serverid, snapname );
+     			osc.createInstanceSnapshot(serverid, snapname);
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;
@@ -1134,7 +1142,7 @@ public class ServersActivity extends Activity {
  	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
  	    	return;
  	    }
-		ServersActivity.this.progressDialogWaitStop.dismiss( );
+		ServersActivity.this.progressDialogWaitStop.dismiss();
 		Utils.alert(ServersActivity.this.getString(R.string.SNAPCREATED), ServersActivity.this);
 	}
     }
@@ -1190,7 +1198,7 @@ public class ServersActivity extends Activity {
 			} catch(ParseException pe) {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 			}
-			ServersActivity.this.progressDialogWaitStop.dismiss( );
+			ServersActivity.this.progressDialogWaitStop.dismiss();
 			//(new AsyncTaskOSListServers()).execute( );
 		}
     }
@@ -1311,7 +1319,7 @@ public class ServersActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 
      		try {
-     			jsonBuf = osc.requestImages( );
+     			jsonBuf = osc.requestImages();
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = ServersActivity.this.getString(R.string.SERVICEUNAVAILABLE);
      			hasError = true;
@@ -1362,7 +1370,7 @@ public class ServersActivity extends Activity {
 	    OSClient osc = OSClient.getInstance(U);
 
 	    try {
-		  jsonBuf         = osc.requestFloatingIPs( );
+		  jsonBuf         = osc.requestFloatingIPs();
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -1385,7 +1393,7 @@ public class ServersActivity extends Activity {
 	    	ServersActivity.this.fips = FloatingIP.parse(jsonBuf, only_unassigned );
 	    } catch(ParseException pe) {
 		    Utils.alert("ServersActivity.AsyncTaskFIPList.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
-		    ServersActivity.this.progressDialogWaitStop.dismiss( );
+		    ServersActivity.this.progressDialogWaitStop.dismiss();
 		    return;
 	    }
 	    ServersActivity.this.progressDialogWaitStop.dismiss( );
@@ -1398,8 +1406,8 @@ public class ServersActivity extends Activity {
  	 * 
  	 *
  	 */
-     protected class AsyncTaskFIPAssociate extends AsyncTask<String, Void, Void>
-     {
+    protected class AsyncTaskFIPAssociate extends AsyncTask<String, Void, Void>
+    {
        private  String   errorMessage     = null;
    	   private  boolean  hasError         = false;
        private  String   jsonPort		  = null;
@@ -1449,9 +1457,55 @@ public class ServersActivity extends Activity {
   		  ServersActivity.this.progressDialogWaitStop.dismiss( );
   		  return;
   	    }
-  	    Utils.alert( getString(R.string.FIPASSOCIATED2), ServersActivity.this );
-  	    (new AsyncTaskOSListServers()).execute( );
+  	    Utils.alert(getString(R.string.FIPASSOCIATED2), ServersActivity.this);
+  	    (new AsyncTaskOSListServers()).execute();
   	    
  	  }
      }
+
+	/**
+	 *
+	 *
+	 *
+	 */
+	protected class AsyncTaskServerStatusUpdate extends AsyncTask<String, Void, Void>
+	{
+		private  String   errorMessage     = null;
+		private  boolean  hasError         = false;
+		private String    status           = "";
+
+		@Override
+		protected Void doInBackground( String... serverid )
+		{
+
+			OSClient osc = OSClient.getInstance(U);
+			while(status.compareToIgnoreCase("ACTIVE")==0 || status.compareToIgnoreCase("ERROR")==0) {
+				try {
+					String jsonBuf = osc.requestInstanceDetails(serverid[0]);
+					Server s = Server.parseSingle(jsonBuf);
+					status = s.getStatus();
+					mapID_to_ServerView.get(serverid[0]).getServer().setStatus(status);
+					Thread.sleep(2000);
+				} catch (Exception e) {
+					//errorMessage = e.getMessage();
+					//hasError = true;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute( v );
+
+			/*if(hasError) {
+				Utils.alert( errorMessage, ServersActivity.this );
+				ServersActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}*/
+
+
+
+		}
+	}
 }

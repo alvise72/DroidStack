@@ -1180,7 +1180,7 @@ public class OSClient {
     public String requestSecGroups( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
- 	   checkToken( );
+ 	   checkToken();
  		
        return RESTClient.sendGETRequest( U.useSSL(), 
 										 U.getNovaEndpoint() + "/os-security-groups",
@@ -1224,10 +1224,10 @@ public class OSClient {
     	Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName( ) );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
-    	RESTClient.sendDELETERequest( U.useSSL(), 
-    								  U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
-    								  U.getToken(),
-    								  v );
+    	RESTClient.sendDELETERequest(U.useSSL(),
+				U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
+				U.getToken(),
+				v);
     }    
 
     /**
@@ -1296,11 +1296,11 @@ public class OSClient {
     	
     	data = obj.toString( );
     	//Log.d("OSC","data="+data);
-    	 RESTClient.sendPOSTRequest( U.useSSL(), 
-		     						 U.getNovaEndpoint() + "/servers",
-				  					 U.getToken(), 
-				  					 data, 
-				  					 v );
+    	 RESTClient.sendPOSTRequest(U.useSSL(),
+				 U.getNovaEndpoint() + "/servers",
+				 U.getToken(),
+				 data,
+				 v);
     }
 
     /**
@@ -1326,5 +1326,27 @@ public class OSClient {
     								U.getToken(), 
     								extradata, 
     								vp );
+	}
+
+	/**
+	 * @throws ParseException
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	public String requestInstanceDetails(String servertID) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+			IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+	{
+		checkToken();
+
+		Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+		Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
+		v.add(p);
+		return RESTClient.sendGETRequest( U.useSSL(),
+				U.getNovaEndpoint() + "/servers/" + servertID,
+				U.getToken(),
+				v );
 	}
 }

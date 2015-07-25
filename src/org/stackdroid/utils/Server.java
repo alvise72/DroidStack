@@ -76,6 +76,10 @@ public class Server {//implements Serializable {
     public String getFlavorID() { return flavorID;}
     public String[] getSecurityGroupNames() { return secgrpNames; }
 
+	public void setStatus( String status ) {
+		this.status = status;
+	}
+
     public long getCreationTime() { return creationTime; }
 
     public void setFlavor( Flavor f ) { flavor = f; }
@@ -172,6 +176,105 @@ public class Server {//implements Serializable {
  	    throw new ParseException( je.getMessage( ) );
  	}
 	return serverVector;
-    }   
+    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public static Server parseSingle( String jsonBuf )  throws ParseException {
+
+		//Server serverVector = null;
+		String status        = "N/A";
+		String keyname       = "N/A";
+		String[] secgrpNames = null;
+		String flavorID      = "N/A";
+		String ID            = "N/A";
+		String computeNode   = "N/A";
+		String name          = "N/A";
+		String task          = "N/A";
+		long creationTime    = 0;
+		int power            = -1;
+
+		try {
+			JSONObject jsonObject = new JSONObject( jsonBuf );
+			JSONObject server     = jsonObject.getJSONObject("server");
+
+				status = (String)server.getString("status");
+				try{keyname = (String)server.getString("key_name");} catch(JSONException je) {}
+				try{
+					JSONArray secgarray  =  ((JSONArray)server.getJSONArray("security_groups"));
+					secgrpNames = new String[secgarray.length()];
+					for(int j=0; j<secgarray.length(); j++)
+						secgrpNames[j] = secgarray.getJSONObject(j).getString("name");
+
+				} catch(JSONException je) { secgrpNames = null; }
+				JSONObject flavObj = server.getJSONObject("flavor");
+				flavorID = flavObj.getString("id");
+				ID = server.getString("id");
+				if(server.has("OS-EXT-SRV-ATTR:hypervisor_hostname"))
+					computeNode = server.getString("OS-EXT-SRV-ATTR:hypervisor_hostname");
+				else
+					computeNode = null;
+				name = (String)server.getString("name");
+				if(server.has("OS-EXT-STS:task_state"))
+					task = (String)server.getString("OS-EXT-STS:task_state");
+				else
+					task = null;
+				Vector<String> fixedIP = new Vector<String>();
+				Vector<String> floatingIP = new Vector<String>();
+				try {
+					JSONObject addresses = server.getJSONObject("addresses");
+
+					Iterator<String> keys = addresses.keys( );
+					while( keys.hasNext( ) ) {
+						String key = keys.next();
+						JSONArray arrayAddr = addresses.getJSONArray( key );
+
+						floatingIP.clear();
+						for(int j = 0; j < arrayAddr.length(); ++j) {
+
+							String ip = arrayAddr.getJSONObject(j).getString("addr");
+							String type = arrayAddr.getJSONObject(j).getString("OS-EXT-IPS:type");
+
+							if(type.compareTo("fixed")==0)
+								fixedIP.add(ip);
+							if(type.compareTo("floating")==0)
+								floatingIP.add(ip);
+						}
+					}
+
+				} catch(JSONException je) {}
+				try {
+					String creation = (String)server.getString("created");
+					SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+					timeFormatter.setTimeZone( TimeZone.getDefault( ) );
+					Calendar calendar = Calendar.getInstance();
+					try {
+						calendar.setTime(timeFormatter.parse(creation));
+					} catch(java.text.ParseException pe) {
+						throw new ParseException( "Error parsing the creation date ["+creation+"]" );
+					}
+					creationTime = calendar.getTimeInMillis() / 1000;
+				} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
+
+				try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
+				return new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
+				//serverVector.add(S);
+
+		} catch(org.json.JSONException je) {
+			throw new ParseException( je.getMessage( ) );
+		}
+		//return serverVector;
+
+	}
 }

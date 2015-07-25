@@ -1,6 +1,7 @@
 package org.stackdroid.views;
 
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import android.graphics.Typeface;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import org.stackdroid.R;
 import org.stackdroid.utils.*;
@@ -25,10 +27,26 @@ public class ServerView extends LinearLayout {
     private ImageButtonWithView manageServer = null;
     private ImageButtonWithView deleteServer = null;
     private ButtonWithView addIPToServer = null;
-    
-    private ButtonWithView consoleLog = null;
 
-    private Server S = null;
+	private LinearLayoutWithView btns2 = null;
+    private ButtonWithView consoleLog = null;
+	private ProgressBar serverUpdateProgress = null;
+
+
+	private Server S = null;
+
+	public void setStatus( String status ) {
+		S.setStatus(status);
+		Status.setText("Status: " + status);
+		if(status.compareToIgnoreCase("active")==0) {
+			Status.setTextColor(Color.parseColor("#00AA00"));
+			serverUpdateProgress.setVisibility(View.INVISIBLE);
+		}
+		if(status.compareToIgnoreCase("error")==0) {
+			Status.setTextColor(Color.parseColor("#AA0000"));
+			serverUpdateProgress.setVisibility(View.INVISIBLE);
+		}
+	}
 
     public ServerView( Server s, 
     				   OnClickListener infoListener, 
@@ -103,13 +121,25 @@ public class ServerView extends LinearLayout {
 	if(dispDensity!=null)
 		density = Integer.parseInt(dispDensity);
 	consoleLog.setPadding(10 * density, 2 * density, 10 * density, 2 * density);
-	consoleLog.setOnClickListener( consoleLogListener );
+	consoleLog.setOnClickListener(consoleLogListener);
 	consoleLog.setLayoutParams(params5);
-	
+
+	serverUpdateProgress = new ProgressBar( ctx, null, android.R.attr.progressBarStyleSmall );
+	serverUpdateProgress.setIndeterminate(true);
+	LayoutParams params7 = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	serverUpdateProgress.setLayoutParams(params7);
+	serverUpdateProgress.setVisibility(View.INVISIBLE);
+
+	btns2 = new LinearLayoutWithView( ctx, (ServerView)this );
+	btns2.setOrientation(LinearLayout.HORIZONTAL);
+	LinearLayout.LayoutParams params6 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	btns2.addView(consoleLog);
+	btns2.addView(serverUpdateProgress);
+
 	text.addView(Name);
 	text.addView(Flavor);
 	text.addView(Status);
-	text.addView(consoleLog);
+	text.addView(btns2);
 	text.setOnClickListener( infoListener );
 	row.addView(text);
 	setOnClickListener( infoListener );
@@ -143,5 +173,13 @@ public class ServerView extends LinearLayout {
     }
 
     public Server getServer( ) { return S; }
-    
+
+	public void activateStatusUpdatePB() {
+		serverUpdateProgress.setVisibility(View.VISIBLE);
+	}
+
+	public void deactivateStatusUpdatePB() {
+		serverUpdateProgress.setVisibility(View.INVISIBLE);
+	}
+
 }
