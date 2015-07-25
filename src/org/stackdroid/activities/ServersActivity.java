@@ -86,16 +86,16 @@ public class ServersActivity extends Activity {
     private AlertDialog 		     alertDialogServerInfo	   = null;
 	private Hashtable<String,ServerView> mapID_to_ServerView   = null;
 
-    private Vector<Flavor>     flavors;
-    private Vector<KeyPair>    keypairs;
-    private Vector<Network>    networks;
-    private Vector<SecGroup>   secgroups;
-    public  Vector<OSImage>    images;
-    public  Vector<FloatingIP> fips					   = null;
+    private Vector<Flavor>           flavors;
+    private Vector<KeyPair>          keypairs;
+    private Vector<Network>          networks;
+    private Vector<SecGroup>         secgroups;
+    public  Vector<OSImage>          images;
+    public  Vector<FloatingIP>       fips					   = null;
 
-    private Vector<NetworkView>						  netViewList				  = null;
-    Hashtable<String, String> 						  netids 					  = null;
-    HashSet<String> selectedSecgroups 		  = null;
+    private Vector<NetworkView>		 netViewList			   = null;
+    Hashtable<String, String> 		 netids 				   = null;
+    HashSet<String>                  selectedSecgroups 		   = null;
 
     //__________________________________________________________________________________
     protected class ServerLaunchListener implements OnClickListener {
@@ -482,7 +482,6 @@ public class ServersActivity extends Activity {
         alertDialogBuilder.setTitle(getString(R.string.CREATESERVER));
         alertDialogServerLaunch = alertDialogBuilder.create();
 
-        //((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new ServersActivity.OkImageServerListener());
         spinnerFlavorArrayAdapter = new ArrayAdapter<Flavor>(ServersActivity.this, android.R.layout.simple_spinner_item,flavors.subList(0,flavors.size()) );
         spinnerFlavorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner)promptsView.findViewById(R.id.spinnerFlavor)).setAdapter(spinnerFlavorArrayAdapter);
@@ -508,8 +507,6 @@ public class ServersActivity extends Activity {
             while(subnetsIT.hasNext()) {
                 SubNetwork sn = subnetsIT.next();
                 NetworkView nv = new NetworkView( net, sn, new ServersActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), getString(R.string.SPECIFYOPTIP), ServersActivity.this );
-                //networksL.addView( nv );
-                //netViewList.add(nv);
                 ((LinearLayout)promptsView.findViewById(R.id.networksLayer)).addView( nv );
                 netViewList.add( nv );
             }
@@ -1074,19 +1071,9 @@ public class ServersActivity extends Activity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     //  ASYNC TASKS.....
-    
+
+
     //__________________________________________________________________________________
     protected class AsyncTaskPauseInstance extends AsyncTask<String, String, String> {
     	private  String   errorMessage     = null;
@@ -1300,13 +1287,6 @@ public class ServersActivity extends Activity {
 	}
     }
 
-
-
-
-
-
-
-    
     //__________________________________________________________________________________
     protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
     {
