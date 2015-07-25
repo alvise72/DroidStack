@@ -1,12 +1,14 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.DialogInterface;
@@ -22,6 +24,7 @@ import android.view.WindowManager;
 import android.view.Gravity;
 import android.view.View;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -33,19 +36,27 @@ import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.R;
+import org.stackdroid.utils.CheckBoxWithView;
 import org.stackdroid.utils.FloatingIP;
+import org.stackdroid.utils.IPv4AddressKeyListener;
 import org.stackdroid.utils.ImageButtonWithView;
 import org.stackdroid.utils.ButtonWithView;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.KeyPair;
 import org.stackdroid.utils.LinearLayoutWithView;
+import org.stackdroid.utils.Network;
 import org.stackdroid.utils.OSImage;
 import org.stackdroid.utils.Port;
+import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.SimpleNumberKeyListener;
+import org.stackdroid.utils.SubNetwork;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Server;
 import org.stackdroid.utils.Flavor;
+import org.stackdroid.views.NetworkView;
+import org.stackdroid.views.SecGroupView;
 import org.stackdroid.views.ServerView;
 import org.stackdroid.utils.TextViewWithView;
 
@@ -61,17 +72,48 @@ public class ServersActivity extends Activity {
     private User 				     U 						   = null;
 	private Server 				     server    				   = null;
 	private ArrayAdapter<OSImage>    spinnerImagesArrayAdapter = null;
-	private AlertDialog 		     alertDialogSelectImage    = null;
+    private ArrayAdapter<Flavor>     spinnerFlavorArrayAdapter = null;
+    private ArrayAdapter<KeyPair>    spinnerKeyPairArrayAdapter = null;
+
+    private AlertDialog 		     alertDialogSelectImage    = null;
+	private AlertDialog 		     alertDialogServerLaunch   = null;
 	private AlertDialog 		     alertDialogSelectFIP      = null;	
-	private Spinner 			     imageSpinner			   = null;
-	public  Vector<OSImage> 	     images					   = null;
-	public  Vector<FloatingIP>       fips					   = null;
+
+
 	public  ArrayAdapter<FloatingIP> spinnerFIPArrayAdapter    = null;
 	private Spinner                  fipSpinner                = null;
 	private AlertDialog 			 manageInstanceDialog      = null;
     private AlertDialog 		     alertDialogServerInfo	   = null;
 	private Hashtable<String,ServerView> mapID_to_ServerView   = null;
 
+    private Vector<Flavor>     flavors;
+    private Vector<KeyPair>    keypairs;
+    private Vector<Network>    networks;
+    private Vector<SecGroup>   secgroups;
+    public  Vector<OSImage>    images;
+    public  Vector<FloatingIP> fips					   = null;
+
+    private Vector<NetworkView>						  netViewList				  = null;
+    Hashtable<String, String> 						  netids 					  = null;
+    HashSet<String> selectedSecgroups 		  = null;
+
+    //__________________________________________________________________________________
+    protected class ServerLaunchListener implements OnClickListener {
+        @Override
+        public void onClick( View v ) {
+            if(alertDialogServerLaunch!=null)
+                alertDialogServerLaunch.dismiss();
+        }
+    }
+
+    //__________________________________________________________________________________
+    protected class ServerCancelListener implements OnClickListener {
+        @Override
+        public void onClick( View v ) {
+            if(alertDialogServerLaunch!=null)
+                alertDialogServerLaunch.dismiss();
+        }
+    }
 
     //__________________________________________________________________________________
     protected class OkImageServerListener implements OnClickListener {
@@ -79,6 +121,53 @@ public class ServersActivity extends Activity {
         public void onClick( View v ) {
             if(alertDialogServerInfo!=null)
                 alertDialogServerInfo.dismiss();
+        }
+    }
+
+    //__________________________________________________________________________________
+    protected class NetworkViewListener implements OnClickListener {
+        @Override
+        public void onClick( View v ) {
+            CheckBoxWithView cb = (CheckBoxWithView)v;
+            NetworkView nv = cb.getNetworkView();
+            //Log.d("IMAGELAUNCH", "NetworkID=" + nv.getNetwork().getID());
+
+            if(cb.isChecked() && netids.containsKey(nv.getNetwork().getID())) {
+                cb.setChecked(false);
+                Utils.alert(getString(R.string.ALREADYCHOOSENNET) + ": "+nv.getNetwork().getName(), ServersActivity.this);
+                return;
+            }
+
+            if(cb.isChecked()) {
+                netids.put(nv.getNetwork().getID(), "1");
+            }
+            if(!cb.isChecked()) {
+                netids.remove(nv.getNetwork().getID());
+            }
+
+            if(cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
+                nv.getNetworkIP().setEnabled(true);
+                //netids.put(nv.getNetwork().getID(), "1");
+                return;
+            }
+            if(!cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
+                nv.getNetworkIP().setEnabled(false);
+                //netids.remove(nv.getNetwork().getID());
+                return;
+            }
+        }
+    }
+
+    //__________________________________________________________________________________
+    protected class SecGroupListener implements OnClickListener {
+        @Override
+        public void onClick( View v ) {
+            SecGroupView s = (SecGroupView)v;
+            if(s.isChecked())
+                selectedSecgroups.add( s.getSecGroup().getID() );
+            else
+                selectedSecgroups.remove( s.getSecGroup().getID() );
+            return;
         }
     }
 
@@ -199,7 +288,7 @@ public class ServersActivity extends Activity {
 	         AlertDialog dia = alert.create();
 	         dia.setCancelable(false);
 	         dia.setCanceledOnTouchOutside(false);
-	         dia.show( );
+	         dia.show();
 		    	
 		     return;
 		}
@@ -243,7 +332,7 @@ public class ServersActivity extends Activity {
 	         AlertDialog dia = alert.create();
 	         dia.setCancelable(false);
 	         dia.setCanceledOnTouchOutside(false);
-	         dia.show( );
+	         dia.show();
 		    	
 		     return;
 		}
@@ -260,7 +349,7 @@ public class ServersActivity extends Activity {
 		public void onClick( View v ) {
 			ServersActivity.this.progressDialogWaitStop.show();
 			server = ( (ButtonWithView)v ).getServerView().getServer();
-			(new ServersActivity.AsyncTaskFIPList()).execute( );
+			(new ServersActivity.AsyncTaskFIPList()).execute();
             if(ServersActivity.this.manageInstanceDialog!=null)
 				ServersActivity.this.manageInstanceDialog.dismiss();
 		}
@@ -344,7 +433,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
-	protected class ConfirmButtonHandler implements OnClickListener {
+/*	protected class ConfirmButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
 			OSImage osi = (OSImage)imageSpinner.getSelectedItem();
@@ -353,9 +442,9 @@ public class ServersActivity extends Activity {
     		I.putExtra( "IMAGEID", osi.getID() );
     	    I.putExtra("IMAGENAME", osi.getName());
     	    ServersActivity.this.alertDialogSelectImage.dismiss();
-    		startActivity( I );
+    		startActivity(I);
 		}
-	}
+	} */
 
 	/**
 	 * 
@@ -363,12 +452,12 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
-	protected class CancelButtonHandler implements OnClickListener {
+/*	protected class CancelButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
 			alertDialogSelectImage.dismiss();
 		}
-	}
+	} */
 
 	/**
 	 * 
@@ -377,11 +466,71 @@ public class ServersActivity extends Activity {
 	 * 
 	 */
 	public void createInstance( View v ) {
-		this.progressDialogWaitStop.show();
-		( new ServersActivity.AsyncTaskOSListImages( ) ).execute();
-		if(ServersActivity.this.manageInstanceDialog!=null)
-	        ServersActivity.this.manageInstanceDialog.dismiss( );
+		progressDialogWaitStop.show();
+        ( new ServersActivity.AsyncTaskPrepareServerLaunch( ) ).execute();
 	}
+
+    private void displayDialogServerCreate( ) {
+        LayoutInflater li = LayoutInflater.from(ServersActivity.this);
+
+        View promptsView = li.inflate(R.layout.imagelaunch, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ServersActivity.this);
+
+        alertDialogBuilder.setView(promptsView);
+
+        alertDialogBuilder.setTitle(getString(R.string.CREATESERVER));
+        alertDialogServerLaunch = alertDialogBuilder.create();
+
+        //((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new ServersActivity.OkImageServerListener());
+        spinnerFlavorArrayAdapter = new ArrayAdapter<Flavor>(ServersActivity.this, android.R.layout.simple_spinner_item,flavors.subList(0,flavors.size()) );
+        spinnerFlavorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner)promptsView.findViewById(R.id.spinnerFlavor)).setAdapter(spinnerFlavorArrayAdapter);
+
+        spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(ServersActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
+        spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner)promptsView.findViewById(R.id.spinnerImages)).setAdapter(spinnerImagesArrayAdapter);
+
+        spinnerKeyPairArrayAdapter = new ArrayAdapter<KeyPair>(ServersActivity.this, android.R.layout.simple_spinner_item,keypairs.subList(0,keypairs.size()) );
+        spinnerKeyPairArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner)promptsView.findViewById(R.id.keypairSP)).setAdapter(spinnerKeyPairArrayAdapter);
+
+        Iterator<Network> nit = networks.iterator();
+        while(nit.hasNext()) {
+            Network net = nit.next();
+            if(U.getTenantID().compareTo( net.getTenantID() )!=0) {
+                if(net.isShared()==false) {
+                    continue;
+                }
+            }
+
+            Iterator<SubNetwork> subnetsIT = net.getSubNetworks().iterator();
+            while(subnetsIT.hasNext()) {
+                SubNetwork sn = subnetsIT.next();
+                NetworkView nv = new NetworkView( net, sn, new ServersActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), getString(R.string.SPECIFYOPTIP), ServersActivity.this );
+                //networksL.addView( nv );
+                //netViewList.add(nv);
+                ((LinearLayout)promptsView.findViewById(R.id.networksLayer)).addView( nv );
+                netViewList.add( nv );
+            }
+        }
+
+        Iterator<SecGroup> sit = secgroups.iterator();
+        while(sit.hasNext()) {
+            SecGroupView sgv = new SecGroupView( sit.next(), new ServersActivity.SecGroupListener(),ServersActivity.this );
+            sgv.setOnClickListener( new ServersActivity.SecGroupListener() );
+            ((LinearLayout)promptsView.findViewById(R.id.secgroupsLayer)).addView(sgv);
+            if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
+        }
+
+        ((Button)promptsView.findViewById(R.id.launchButton)).setOnClickListener( new ServersActivity.ServerLaunchListener());
+        ((Button)promptsView.findViewById(R.id.cancelButton)).setOnClickListener( new ServersActivity.ServerLaunchListener());
+
+        alertDialogServerLaunch.setCanceledOnTouchOutside(false);
+        alertDialogServerLaunch.setCancelable(false);
+        ServersActivity.this.progressDialogWaitStop.dismiss();
+        alertDialogServerLaunch.show();
+    }
 
 	/**
 	 * 
@@ -389,7 +538,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
-	protected void pickAnImageToLaunch( ) {
+/*	protected void pickAnImageToLaunch( ) {
 		if(images.size()==0) {
 			Utils.alert(getString(R.string.NOIMAGETOASSOCIATE), this);
 			return;
@@ -418,7 +567,7 @@ public class ServersActivity extends Activity {
 	    alertDialogSelectImage.setCanceledOnTouchOutside(false);
 	    alertDialogSelectImage.setCancelable(false);
 	    alertDialogSelectImage.show();
-	}
+	}*/
 	
 	/**
 	 * 
@@ -840,7 +989,11 @@ public class ServersActivity extends Activity {
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 
 		mapID_to_ServerView = new Hashtable<String, ServerView>();
+        //images = new Vector<OSImage>();
 
+        netViewList = new Vector<NetworkView>( );
+        netids = new Hashtable<String, String>();
+        selectedSecgroups = new HashSet<String>();
         //progressDialogWaitStop.show();
         //(new AsyncTaskOSListServers()).execute();
         //(Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
@@ -909,7 +1062,7 @@ public class ServersActivity extends Activity {
     										  new ServersActivity.AddIPButtonHandler(),
     										  new ServersActivity.ServerManageClickListener(),
     										  this);
-    		((LinearLayout)findViewById( R.id.serverLayout) ).addView( sv );
+    		((LinearLayout)findViewById( R.id.serverLayout) ).addView(sv);
 			//sv.activateStatusUpdatePB();
 			mapID_to_ServerView.put(sv.getServer().getID(), sv);
     		((LinearLayout)findViewById( R.id.serverLayout) ).setGravity(Gravity.CENTER_HORIZONTAL);
@@ -1307,19 +1460,29 @@ public class ServersActivity extends Activity {
      * 
      * 
      */
-    protected class AsyncTaskOSListImages extends AsyncTask<Void, Void, Void>
+    protected class AsyncTaskPrepareServerLaunch extends AsyncTask<Void, Void, Void>
     {
-     	private  String   errorMessage  =  null;
-     	private  boolean  hasError      =  false;
-     	private  String   jsonBuf       = null;
+     	private  String   errorMessage   = null;
+     	private  boolean  hasError       = false;
+     	private  String   jsonImageBuf   = null;
+        private  String   jsonFlavorBuf  = null;
+        private  String   jsonKeyPairBuf = null;
+        private  String   jsonNetworkBuf = null;
+        private  String   jsonSubNetBuf  = null;
+        private  String   jsonSecGrpsBuf = null;
 
-     	@Override
+        @Override
      	protected Void doInBackground(Void ... voids ) 
      	{
      		OSClient osc = OSClient.getInstance(U);
 
      		try {
-     			jsonBuf = osc.requestImages();
+                jsonImageBuf   = osc.requestImages();
+                jsonFlavorBuf  = osc.requestFlavors();
+                jsonKeyPairBuf = osc.requestKeypairs();
+                jsonNetworkBuf = osc.requestNetworks();
+                jsonSubNetBuf  = osc.requestSubNetworks();
+                jsonSecGrpsBuf = osc.requestSecGroups();
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = ServersActivity.this.getString(R.string.SERVICEUNAVAILABLE);
      			hasError = true;
@@ -1328,7 +1491,7 @@ public class ServersActivity extends Activity {
      			hasError = true;
      		} 
 	    
-	    return null;
+	        return null;
      	}		
 	
      	@Override
@@ -1342,14 +1505,19 @@ public class ServersActivity extends Activity {
      		}
 	    
      		try {
-     			ServersActivity.this.images = OSImage.parse(jsonBuf);
-     			ServersActivity.this.pickAnImageToLaunch();
+     			ServersActivity.this.images    = OSImage.parse(jsonImageBuf);
+                ServersActivity.this.flavors   = Flavor.parse(jsonFlavorBuf);
+                ServersActivity.this.keypairs  = KeyPair.parse(jsonKeyPairBuf);
+                ServersActivity.this.networks  = Network.parse(jsonNetworkBuf,jsonSubNetBuf);
+                ServersActivity.this.secgroups = SecGroup.parse(jsonSecGrpsBuf);
+     			//ServersActivity.this.pickAnImageToLaunch();
      		} catch(ParseException pe) {
-     			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+     			Utils.alert("OSImagesActivity.AsyncTaskPrepareServerLaunch.onPostExecute: " + pe.getMessage( ),
      					ServersActivity.this);
      		}
-     		
-     		ServersActivity.this.progressDialogWaitStop.dismiss( );
+            displayDialogServerCreate();
+
+
      	}
     }
     

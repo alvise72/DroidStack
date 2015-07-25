@@ -90,7 +90,7 @@
     <string name="AVAILRULES">Regole d\'ingresso disponibili:</string>
     <string name="LAUNCH">Lancia</string>
     <string name="NETWORKS2">Reti:</string>
-    <string name="NUMOFINSTANCES">Numero di istance:</string>
+    <string name="NUMOFINSTANCES">Numero di istanze:</string>
     <string name="INSTANCENAME">Nome dell\'istanza:</string>
     <string name="FROMPORT">Da porta</string>
     <string name="TOPORT">A porta</string>
@@ -203,4 +203,6 @@
     <string name="IMAGEINFO">Info immagine</string>
     <string name="TOKENEXPIRATION">Scadenza del token</string>
     <string name="MANAGEUSERS">Gestione Utenti</string>
+    <string name="CREATESERVER">Crea Istanza</string>
+    <string name="SELECTIMAGE">Seleziona Immagine</string>
 </resources>

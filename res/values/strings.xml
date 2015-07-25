@@ -165,7 +165,7 @@
 	<string name="MYNET">myNet</string>	
 	<string name="ROUTERS">Router</string>
 	<string name="USERINFO">User Information</string>
-	<string name="TOUCHINSTANCE">Touch an instance to get info</string>
+	<string name="TOUCHINSTANCE">Touch an instance to view extended info</string>
 	<string name="MANAGESERVERS">Manage instances</string>
 	<string name="CHANGENAMESERVER">Change name</string>
 	<string name="MAKESNAP">Take snapshot</string>
@@ -212,4 +212,6 @@
     <string name="IMAGEINFO">Image info</string>
     <string name="TOKENEXPIRATION">Token\'s expiration</string>
     <string name="MANAGEUSERS">User Management</string>
+    <string name="CREATESERVER">Create Instance</string>
+    <string name="SELECTIMAGE">Select Image</string>
 </resources>

@@ -3,31 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />	  
-          <TextView
-              android:id="@+id/selected_user"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingLeft="10dp"
-              android:text="@string/SELECTEDUSER"
-          />
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
-        <View   
-          android:layout_width="fill_parent"
-          android:layout_height="3dp"
-          android:background="#FF909090" />  
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="3sp"
-        />
-        
-    <ScrollView
+
+	<ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
@@ -48,8 +25,8 @@
 		android:textSize="14sp"
 		android:textStyle="bold"
 		android:ems="10" />
-		
-        <EditText
+
+		  <EditText
                 android:id="@+id/vmnameET"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +36,22 @@
                 android:ems="10" >
                 <requestFocus />
         </EditText>
-	<TextView
+
+		  <TextView
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:text="@string/SELECTIMAGE"
+			  android:textSize="14sp"
+			  android:textStyle="bold"
+			  android:ems="10"
+			  android:id="@+id/textView14" />
+
+		  <Spinner
+			  android:id="@+id/spinnerImages"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content" />
+
+		  <TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="Flavor:"
@@ -67,7 +59,7 @@
 		android:textStyle="bold"
 		android:ems="10" />
 	<Spinner
-	    android:id="@+id/flavorSP"
+	    android:id="@+id/spinnerFlavor"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" />
 	<TextView
@@ -149,8 +141,21 @@
      	    android:text="@string/LAUNCH"
 	    android:textSize="14sp"
 	    android:onClick="launch" />
-	    
-        </LinearLayout>
+
+			<Button
+				android:id="@+id/cancelButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:fadingEdge="horizontal"
+				android:shadowDx="3"
+				android:shadowDy="3"
+				android:shadowRadius="3"
+				android:text="@string/CANCEL"
+				android:textSize="14sp"
+				android:onClick="launch" />
+
+		</LinearLayout>
       </LinearLayout>
     </ScrollView>
 </LinearLayout>

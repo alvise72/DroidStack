@@ -147,8 +147,8 @@ public class ImageLaunchActivity extends Activity {
       progressDialogWaitStop.setCancelable(false);
       progressDialogWaitStop.setCanceledOnTouchOutside(false);
       
-      spinnerFlavors = (Spinner)findViewById(R.id.flavorSP);
-      spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
+      //netViewList = (Spinner)findViewById(R.id.flavorSP);
+      //spinnerKeypairs = (Spinner)findViewById(R.id.keypairSP);
       
       options = (LinearLayout)findViewById( R.id.secgroupsLayer );
       networksL = (LinearLayout)findViewById( R.id.networksLayer );
