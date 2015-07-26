@@ -214,4 +214,5 @@
     <string name="MANAGEUSERS">User Management</string>
     <string name="CREATESERVER">Create Instance</string>
     <string name="SELECTIMAGE">Select Image</string>
+    <string name="MUSTSETNUMSERVERS">Number of instances must be equal or greater than 1</string>
 </resources>

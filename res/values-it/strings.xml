@@ -205,4 +205,5 @@
     <string name="MANAGEUSERS">Gestione Utenti</string>
     <string name="CREATESERVER">Crea Istanza</string>
     <string name="SELECTIMAGE">Seleziona Immagine</string>
+    <string name="MUSTSETNUMSERVERS">Il numero di istanze deve essere maggiore o uguale a 1</string>
 </resources>

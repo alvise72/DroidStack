@@ -117,6 +117,19 @@ public class ServersActivity extends Activity {
 				//Log.d("SERVERLAUNCH", "serverName="+serverName + " - imageName="+imageName+" - flavor="+flavor+" - number="+number+" - keypair="+keypair);
                 String secgroups  = Utils.join(selectedSecgroups, ",");
 
+                if(serverName.isEmpty()) {
+
+                    Utils.alert(getString(R.string.MUSTSETNAME), ServersActivity.this);
+                    return;
+                }
+
+                if(number.isEmpty()) {
+                    Utils.alert(getString(R.string.MUSTSETNUMSERVERS), ServersActivity.this);
+                    return;
+                }
+
+
+
                 int count = Integer.parseInt(number);
 
                 Iterator<NetworkView> nvit = netViewList.iterator();
@@ -131,14 +144,14 @@ public class ServersActivity extends Activity {
                             netIP = nv.getNetworkIP().getText().toString().trim();
                             if(netIP != null && netIP.length()!=0 && count>1) {
                                 Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), ServersActivity.this);
-                                if(alertDialogServerLaunch!=null)
-                                    alertDialogServerLaunch.dismiss();
+                                //if(alertDialogServerLaunch!=null)
+                                //    alertDialogServerLaunch.dismiss();
                                 return;
                             }
                             if(netIP != null && netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
                                 Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, ServersActivity.this);
-                                if(alertDialogServerLaunch!=null)
-                                    alertDialogServerLaunch.dismiss();
+                                //if(alertDialogServerLaunch!=null)
+                                //    alertDialogServerLaunch.dismiss();
                                 return;
                             }
                             if(netIP != null && netIP.length()!=0) { // Let's check only if the user specified the custom IP
@@ -148,8 +161,8 @@ public class ServersActivity extends Activity {
                                 SubnetUtils.SubnetInfo si = su.getInfo();
                                 if(!si.isInRange(netIP)) {
                                     Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+sn.getAddress(), ServersActivity.this);
-                                    if(alertDialogServerLaunch!=null)
-                                        alertDialogServerLaunch.dismiss();
+                                    //if(alertDialogServerLaunch!=null)
+                                    //    alertDialogServerLaunch.dismiss();
                                     return;
                                 }
                             }
@@ -162,10 +175,14 @@ public class ServersActivity extends Activity {
 
                     }
                 }
+                if(selectedNetworks.isEmpty()) {
+                    Utils.alert(getString(R.string.MUSTSELECTNET), ServersActivity.this);
+                    return;
+                }
                 //Log.d("SERVERLAUNCH", Utils.join())
 			}
-			if(alertDialogServerLaunch!=null)
-				alertDialogServerLaunch.dismiss();
+            if(alertDialogServerLaunch!=null)
+                alertDialogServerLaunch.dismiss();
         }
     }
 
@@ -545,7 +562,7 @@ public class ServersActivity extends Activity {
     private void displayDialogServerCreate( ) {
         LayoutInflater li = LayoutInflater.from(ServersActivity.this);
 
-         promptsViewLaunch = li.inflate(R.layout.imagelaunch, null);
+        promptsViewLaunch = li.inflate(R.layout.my_dialog_server_launch, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ServersActivity.this);
 

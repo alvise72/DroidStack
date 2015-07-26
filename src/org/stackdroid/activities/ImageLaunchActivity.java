@@ -135,7 +135,7 @@ public class ImageLaunchActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView( org.stackdroid.R.layout.imagelaunch );
+      setContentView( R.layout.my_dialog_server_launch );
       
       Bundle bundle = getIntent( ).getExtras( );
       imageID = bundle.getString("IMAGEID");
