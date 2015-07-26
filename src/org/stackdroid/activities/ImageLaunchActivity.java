@@ -235,14 +235,14 @@ public class ImageLaunchActivity extends Activity {
      *
      */  
     public void launch( View v ) {
-	  String instanceName = ((EditText)findViewById(R.id.vmnameET)).getText().toString();
+	  String instanceName = ((EditText)findViewById(R.id.serverName)).getText().toString();
 	  instanceName.trim();
       if(instanceName.length()==0) {
     	  Utils.alert(getString(R.string.MUSTSETNAME) , this);
     	  return;
       }
  
-      int count = Integer.parseInt( ((EditText)findViewById(R.id.countET)).getText().toString() );
+      int count = Integer.parseInt( ((EditText)findViewById(R.id.instanceNum)).getText().toString() );
 
       Iterator<NetworkView> nvit = netViewList.iterator();
       /*int netcount = 0;

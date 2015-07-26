@@ -2,6 +2,7 @@ package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.comm.ServerException;
@@ -51,6 +53,7 @@ import org.stackdroid.utils.Port;
 import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.SimpleNumberKeyListener;
 import org.stackdroid.utils.SubNetwork;
+import org.stackdroid.utils.SubnetUtils;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.Server;
@@ -93,16 +96,76 @@ public class ServersActivity extends Activity {
     public  Vector<OSImage>          images;
     public  Vector<FloatingIP>       fips					   = null;
 
+    private Hashtable<Pair<String,String>, String> 	  selectedNetworks 			  = null;
     private Vector<NetworkView>		 netViewList			   = null;
     Hashtable<String, String> 		 netids 				   = null;
     HashSet<String>                  selectedSecgroups 		   = null;
+
+	View							 promptsViewLaunch		   = null;
 
     //__________________________________________________________________________________
     protected class ServerLaunchListener implements OnClickListener {
         @Override
         public void onClick( View v ) {
-            if(alertDialogServerLaunch!=null)
-                alertDialogServerLaunch.dismiss();
+
+			if(promptsViewLaunch!=null) {
+				String serverName = ((EditText)promptsViewLaunch.findViewById(R.id.serverName)).getText().toString();
+				String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
+				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
+				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
+				String keypair	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+				//Log.d("SERVERLAUNCH", "serverName="+serverName + " - imageName="+imageName+" - flavor="+flavor+" - number="+number+" - keypair="+keypair);
+                String secgroups  = Utils.join(selectedSecgroups, ",");
+
+                int count = Integer.parseInt(number);
+
+                Iterator<NetworkView> nvit = netViewList.iterator();
+                //Hashtable<Pair<String,String>, String> selectedNetworks = new Hashtable<Pair<String,String>, String>();
+                selectedNetworks.clear();
+
+                while(nvit.hasNext()) {
+                    NetworkView nv = nvit.next();
+                    if(nv.isChecked()) {
+                        String netIP = "";
+                        if(nv.getSubNetwork().getIPVersion().compareTo("4") == 0) {
+                            netIP = nv.getNetworkIP().getText().toString().trim();
+                            if(netIP != null && netIP.length()!=0 && count>1) {
+                                Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), ServersActivity.this);
+                                if(alertDialogServerLaunch!=null)
+                                    alertDialogServerLaunch.dismiss();
+                                return;
+                            }
+                            if(netIP != null && netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
+                                Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, ServersActivity.this);
+                                if(alertDialogServerLaunch!=null)
+                                    alertDialogServerLaunch.dismiss();
+                                return;
+                            }
+                            if(netIP != null && netIP.length()!=0) { // Let's check only if the user specified the custom IP
+                                SubnetUtils su = null;
+                                SubNetwork sn = nv.getSubNetwork();
+                                su = new SubnetUtils( sn.getAddress() ); // let's take only the first one
+                                SubnetUtils.SubnetInfo si = su.getInfo();
+                                if(!si.isInRange(netIP)) {
+                                    Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+sn.getAddress(), ServersActivity.this);
+                                    if(alertDialogServerLaunch!=null)
+                                        alertDialogServerLaunch.dismiss();
+                                    return;
+                                }
+                            }
+                        }
+
+                        Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
+                        if(netIP==null) netIP = "";
+                        selectedNetworks.put(net_subnet, netIP);
+                        Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
+
+                    }
+                }
+                //Log.d("SERVERLAUNCH", Utils.join())
+			}
+			if(alertDialogServerLaunch!=null)
+				alertDialogServerLaunch.dismiss();
         }
     }
 
@@ -130,7 +193,6 @@ public class ServersActivity extends Activity {
         public void onClick( View v ) {
             CheckBoxWithView cb = (CheckBoxWithView)v;
             NetworkView nv = cb.getNetworkView();
-            //Log.d("IMAGELAUNCH", "NetworkID=" + nv.getNetwork().getID());
 
             if(cb.isChecked() && netids.containsKey(nv.getNetwork().getID())) {
                 cb.setChecked(false);
@@ -147,12 +209,10 @@ public class ServersActivity extends Activity {
 
             if(cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
                 nv.getNetworkIP().setEnabled(true);
-                //netids.put(nv.getNetwork().getID(), "1");
                 return;
             }
             if(!cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
                 nv.getNetworkIP().setEnabled(false);
-                //netids.remove(nv.getNetwork().getID());
                 return;
             }
         }
@@ -466,33 +526,45 @@ public class ServersActivity extends Activity {
 	 * 
 	 */
 	public void createInstance( View v ) {
+        netids.clear();
+        mapID_to_ServerView.clear();
+        netViewList.clear();
+        selectedSecgroups.clear();
+        selectedNetworks.clear();
+
 		progressDialogWaitStop.show();
         ( new ServersActivity.AsyncTaskPrepareServerLaunch( ) ).execute();
 	}
 
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
     private void displayDialogServerCreate( ) {
         LayoutInflater li = LayoutInflater.from(ServersActivity.this);
 
-        View promptsView = li.inflate(R.layout.imagelaunch, null);
+         promptsViewLaunch = li.inflate(R.layout.imagelaunch, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ServersActivity.this);
 
-        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder.setView(promptsViewLaunch);
 
         alertDialogBuilder.setTitle(getString(R.string.CREATESERVER));
         alertDialogServerLaunch = alertDialogBuilder.create();
 
         spinnerFlavorArrayAdapter = new ArrayAdapter<Flavor>(ServersActivity.this, android.R.layout.simple_spinner_item,flavors.subList(0,flavors.size()) );
         spinnerFlavorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ((Spinner)promptsView.findViewById(R.id.spinnerFlavor)).setAdapter(spinnerFlavorArrayAdapter);
+        ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).setAdapter(spinnerFlavorArrayAdapter);
 
         spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(ServersActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
         spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ((Spinner)promptsView.findViewById(R.id.spinnerImages)).setAdapter(spinnerImagesArrayAdapter);
+        ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).setAdapter(spinnerImagesArrayAdapter);
 
         spinnerKeyPairArrayAdapter = new ArrayAdapter<KeyPair>(ServersActivity.this, android.R.layout.simple_spinner_item,keypairs.subList(0,keypairs.size()) );
         spinnerKeyPairArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ((Spinner)promptsView.findViewById(R.id.keypairSP)).setAdapter(spinnerKeyPairArrayAdapter);
+        ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerKeypair)).setAdapter(spinnerKeyPairArrayAdapter);
 
         Iterator<Network> nit = networks.iterator();
         while(nit.hasNext()) {
@@ -507,7 +579,7 @@ public class ServersActivity extends Activity {
             while(subnetsIT.hasNext()) {
                 SubNetwork sn = subnetsIT.next();
                 NetworkView nv = new NetworkView( net, sn, new ServersActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), getString(R.string.SPECIFYOPTIP), ServersActivity.this );
-                ((LinearLayout)promptsView.findViewById(R.id.networksLayer)).addView( nv );
+                ((LinearLayout)promptsViewLaunch.findViewById(R.id.networksLayer)).addView( nv );
                 netViewList.add( nv );
             }
         }
@@ -516,12 +588,12 @@ public class ServersActivity extends Activity {
         while(sit.hasNext()) {
             SecGroupView sgv = new SecGroupView( sit.next(), new ServersActivity.SecGroupListener(),ServersActivity.this );
             sgv.setOnClickListener( new ServersActivity.SecGroupListener() );
-            ((LinearLayout)promptsView.findViewById(R.id.secgroupsLayer)).addView(sgv);
+            ((LinearLayout)promptsViewLaunch.findViewById(R.id.secgroupsLayer)).addView(sgv);
             if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
         }
 
-        ((Button)promptsView.findViewById(R.id.launchButton)).setOnClickListener( new ServersActivity.ServerLaunchListener());
-        ((Button)promptsView.findViewById(R.id.cancelButton)).setOnClickListener( new ServersActivity.ServerLaunchListener());
+        ((Button)promptsViewLaunch.findViewById(R.id.launchButton)).setOnClickListener( new ServersActivity.ServerLaunchListener() );
+        ((Button)promptsViewLaunch.findViewById(R.id.cancelButton)).setOnClickListener( new ServersActivity.ServerCancelListener() );
 
         alertDialogServerLaunch.setCanceledOnTouchOutside(false);
         alertDialogServerLaunch.setCancelable(false);
@@ -989,8 +1061,10 @@ public class ServersActivity extends Activity {
         //images = new Vector<OSImage>();
 
         netViewList = new Vector<NetworkView>( );
+
         netids = new Hashtable<String, String>();
         selectedSecgroups = new HashSet<String>();
+        selectedNetworks = new Hashtable<Pair<String,String>, String>();
         //progressDialogWaitStop.show();
         //(new AsyncTaskOSListServers()).execute();
         //(Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();

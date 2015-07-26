@@ -7,7 +7,8 @@
 	<ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+		android:layout_weight="7">
       <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -24,13 +25,14 @@
 		android:text="@string/INSTANCENAME"
 		android:textSize="14sp"
 		android:textStyle="bold"
-		android:ems="10" />
+		android:ems="10"
+		android:id="@+id/serverNameLabel" />
 
 		  <EditText
-                android:id="@+id/vmnameET"
+                android:id="@+id/serverName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="myServer"
 				android:textSize="14sp"
 				android:inputType="textNoSuggestions"
                 android:ems="10" >
@@ -44,7 +46,7 @@
 			  android:textSize="14sp"
 			  android:textStyle="bold"
 			  android:ems="10"
-			  android:id="@+id/textView14" />
+			  android:id="@+id/imageNameLabel" />
 
 		  <Spinner
 			  android:id="@+id/spinnerImages"
@@ -57,7 +59,8 @@
 		android:text="Flavor:"
 		android:textSize="14sp"
 		android:textStyle="bold"
-		android:ems="10" />
+		android:ems="10"
+			  android:id="@+id/flavorNameLabel" />
 	<Spinner
 	    android:id="@+id/spinnerFlavor"
 	    android:layout_width="fill_parent"
@@ -68,9 +71,10 @@
 		android:text="@string/NUMOFINSTANCES"
 		android:textStyle="bold"
 		android:textSize="14sp"
-		android:ems="10" />	    
+		android:ems="10"
+		android:id="@+id/instanceNumLabel" />
         <EditText
-                    android:id="@+id/countET"
+                    android:id="@+id/instanceNum"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="1"
@@ -84,9 +88,10 @@
 		android:text="KeyPair:"
 		android:textSize="14sp"
 		android:textStyle="bold"
-		android:ems="10" />
+		android:ems="10"
+		android:id="@+id/keypairLabel" />
 	<Spinner
-	    android:id="@+id/keypairSP"
+	    android:id="@+id/spinnerKeypair"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" />
         
@@ -123,39 +128,41 @@
 	
         </LinearLayout>
 
-        <LinearLayout
-   	  android:layout_width="fill_parent"
-    	  android:layout_height="wrap_content"
-   	  android:layout_gravity="center_horizontal"
-  	  android:gravity="center_horizontal" >
-          
-	  <Button
-   	    android:id="@+id/launchButton"
-   	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-   	    android:layout_gravity="center_horizontal"
-   	    android:fadingEdge="horizontal"
-  	    android:shadowDx="3"
-     	    android:shadowDy="3"
-     	    android:shadowRadius="3"
-     	    android:text="@string/LAUNCH"
-	    android:textSize="14sp"
-	    android:onClick="launch" />
-
-			<Button
-				android:id="@+id/cancelButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:fadingEdge="horizontal"
-				android:shadowDx="3"
-				android:shadowDy="3"
-				android:shadowRadius="3"
-				android:text="@string/CANCEL"
-				android:textSize="14sp"
-				android:onClick="launch" />
-
-		</LinearLayout>
-      </LinearLayout>
+	  </LinearLayout>
     </ScrollView>
+
+	<LinearLayout
+     android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+     android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"
+		android:layout_weight="1">
+
+  <Button
+       android:id="@+id/launchButton"
+       android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal"
+       android:fadingEdge="horizontal"
+      android:shadowDx="3"
+         android:shadowDy="3"
+         android:shadowRadius="3"
+         android:text="@string/LAUNCH"
+    android:textSize="14sp"
+    android:onClick="launch" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fadingEdge="horizontal"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="3"
+            android:text="@string/CANCEL"
+            android:textSize="14sp"
+            android:onClick="launch" />
+
+    </LinearLayout>
 </LinearLayout>
