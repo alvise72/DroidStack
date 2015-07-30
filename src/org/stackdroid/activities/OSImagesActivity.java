@@ -88,6 +88,8 @@ public class OSImagesActivity extends Activity {
     private ArrayAdapter<Flavor>     spinnerFlavorArrayAdapter = null;
     private ArrayAdapter<KeyPair>    spinnerKeyPairArrayAdapter = null;
 
+    private OSImage imageToLaunch;
+
 	//__________________________________________________________________________________
 	protected class ServerLaunchListener implements OnClickListener {
 		@Override
@@ -362,8 +364,18 @@ public class OSImagesActivity extends Activity {
     	if(selectedUser.length()!=0)
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
     	else
-    		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
-	   
+    		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE));
+
+        mapID_to_ServerView = new Hashtable<String, ServerView>();
+        //images = new Vector<OSImage>();
+
+        netViewList = new Vector<NetworkView>( );
+
+        netids = new Hashtable<String, String>();
+        selectedSecgroups = new HashSet<String>();
+        selectedNetworks = new Hashtable<Pair<String,String>, String>();
+        images = new Vector<OSImage>();
+
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage(getString(R.string.PLEASEWAITCONNECTING));
         progressDialogWaitStop.setCancelable(false);
@@ -445,6 +457,9 @@ public class OSImagesActivity extends Activity {
     protected class imageLaunchListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
+
+            imageToLaunch = ((ImageButtonWithView)v).getOSImageView( ).getOSImage();
+
 /*    		ID = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getID();
     		NAME = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getName();
     		Class<?> c = (Class<?>)ImageLaunchActivity.class;
@@ -767,7 +782,7 @@ public class OSImagesActivity extends Activity {
 			OSClient osc = OSClient.getInstance(U);
 
 			try {
-				jsonImageBuf   = osc.requestImages();
+				//jsonImageBuf   = osc.requestImages();
 				jsonFlavorBuf  = osc.requestFlavors();
 				jsonKeyPairBuf = osc.requestKeypairs();
 				jsonNetworkBuf = osc.requestNetworks();
@@ -795,7 +810,9 @@ public class OSImagesActivity extends Activity {
 			}
 
 			try {
-				OSImagesActivity.this.images    = OSImage.parse(jsonImageBuf);
+                images.clear();
+                images.add(imageToLaunch);
+				//OSImagesActivity.this.images    = OSImage.parse(jsonImageBuf);
 				OSImagesActivity.this.flavors   = Flavor.parse(jsonFlavorBuf);
 				OSImagesActivity.this.keypairs  = KeyPair.parse(jsonKeyPairBuf);
 				OSImagesActivity.this.networks  = Network.parse(jsonNetworkBuf, jsonSubNetBuf);
