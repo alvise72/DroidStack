@@ -123,7 +123,7 @@ public class OSImagesActivity extends Activity {
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
         progressDialogWaitStop.setCancelable(false);
         progressDialogWaitStop.setCanceledOnTouchOutside(false);
-        (Toast.makeText(this, getString(R.string.TOUCHUIMGTOVIEWINFO), Toast.LENGTH_LONG)).show();
+        //(Toast.makeText(this, getString(R.string.TOUCHUIMGTOVIEWINFO), Toast.LENGTH_LONG)).show();
         this.update( );
     }
     
