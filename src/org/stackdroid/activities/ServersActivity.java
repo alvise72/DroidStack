@@ -1381,7 +1381,7 @@ public class ServersActivity extends Activity {
     //__________________________________________________________________________________
     protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
     {
-     	private  String   errorMessage     = null;
+     	private  String   errorMessage = null;
 	private  boolean  hasError         = false;
 	private  String   jsonBuf          = null;
 	private  String   jsonBufferFlavor = null;
@@ -1735,7 +1735,7 @@ public class ServersActivity extends Activity {
 
 		@Override
 		protected void onPostExecute( Void v ) {
-			super.onPostExecute( v );
+			super.onPostExecute(v);
 
 			/*if(hasError) {
 				Utils.alert( errorMessage, ServersActivity.this );
@@ -1744,6 +1744,66 @@ public class ServersActivity extends Activity {
 			}*/
 
 
+
+		}
+	}
+
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
+	{
+		private  String  errorMessage  = null;
+		private  boolean hasError      = false;
+
+		@Override
+		protected Void doInBackground( String... args )
+		{
+			OSClient osc = OSClient.getInstance( U );
+
+
+
+			try {
+				osc.createInstance( args[0],
+						args[1],
+						args[2],
+						args[3],
+						Integer.parseInt(args[4]),
+						args[5],
+                        ServersActivity.this.selectedNetworks );
+			} catch(Exception e) {
+				e.printStackTrace( );
+				errorMessage = e.getMessage();
+				hasError = true;
+				return null;
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute( v );
+			if(hasError) {
+				Utils.alert( errorMessage, ServersActivity.this );
+			} else {
+                (new ServersActivity.AsyncTaskOSListServers()).execute( );
+			}
+
+            //ServersActivity.this.progressDialogWaitStop.dismiss();
 
 		}
 	}

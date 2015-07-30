@@ -158,7 +158,7 @@ public class OSImagesActivity extends Activity {
 						Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
 						if(netIP==null) netIP = "";
 						selectedNetworks.put(net_subnet, netIP);
-						Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
+						//Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
 
 					}
 				}
@@ -167,6 +167,7 @@ public class OSImagesActivity extends Activity {
 					return;
 				}
 				//Log.d("SERVERLAUNCH", Utils.join())
+
 			}
 			if(alertDialogServerLaunch!=null)
 				alertDialogServerLaunch.dismiss();
@@ -826,4 +827,67 @@ public class OSImagesActivity extends Activity {
 
 		}
 	}
+
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
+    {
+        private  String  errorMessage  = null;
+        private  boolean hasError      = false;
+
+        @Override
+        protected Void doInBackground( String... args )
+        {
+            OSClient osc = OSClient.getInstance( U );
+
+
+
+            try {
+                osc.createInstance( args[0],
+                        args[1],
+                        args[2],
+                        args[3],
+                        Integer.parseInt(args[4]),
+                        args[5],
+                        OSImagesActivity.this.selectedNetworks );
+            } catch(Exception e) {
+                e.printStackTrace( );
+                errorMessage = e.getMessage();
+                hasError = true;
+                return null;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute( Void v ) {
+            super.onPostExecute( v );
+            if(hasError) {
+                Utils.alert( errorMessage, OSImagesActivity.this );
+            } else {
+                //(new OSImagesActivity.AsyncTaskOSListServers()).execute( );
+                Class<?> c = (Class<?>)ServersActivity.class;
+                Intent I = new Intent( OSImagesActivity.this, c );
+                startActivity( I );
+            }
+
+            //OSImagesActivity.this.progressDialogWaitStop.dismiss();
+
+        }
+    }
 }
