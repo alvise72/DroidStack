@@ -78,7 +78,7 @@ public class ServersActivity extends Activity {
     private ArrayAdapter<Flavor>     spinnerFlavorArrayAdapter = null;
     private ArrayAdapter<KeyPair>    spinnerKeyPairArrayAdapter = null;
 
-    private AlertDialog 		     alertDialogSelectImage    = null;
+//    private AlertDialog 		     alertDialogSelectImage    = null;
 	private AlertDialog 		     alertDialogServerLaunch   = null;
 	private AlertDialog 		     alertDialogSelectFIP      = null;	
 

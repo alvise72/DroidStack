@@ -2,8 +2,12 @@ package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -22,25 +26,39 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
+import org.stackdroid.utils.CheckBoxWithView;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.R;
 import org.stackdroid.utils.Defaults;
+import org.stackdroid.utils.Flavor;
+import org.stackdroid.utils.IPv4AddressKeyListener;
+import org.stackdroid.utils.KeyPair;
 import org.stackdroid.utils.LinearLayoutWithView;
+import org.stackdroid.utils.Network;
+import org.stackdroid.utils.SecGroup;
+import org.stackdroid.utils.SubNetwork;
+import org.stackdroid.utils.SubnetUtils;
 import org.stackdroid.utils.TextViewWithView;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
 import org.stackdroid.utils.OSImage;
 import org.stackdroid.utils.ImageButtonWithView;
+import org.stackdroid.views.NetworkView;
 import org.stackdroid.views.OSImageView;
+import org.stackdroid.views.SecGroupView;
+import org.stackdroid.views.ServerView;
 
 import android.graphics.Typeface;
 
@@ -52,7 +70,234 @@ public class OSImagesActivity extends Activity {
 	private String 				 ID 						= null;
     private String 				 NAME 						= null;
     		User 				 U 							= null;
-    
+	View						 promptsViewLaunch			= null;
+	private Hashtable<Pair<String,String>, String> selectedNetworks = null;
+	private Vector<NetworkView>		 netViewList			= null;
+	Hashtable<String, String> 		 netids 				= null;
+	HashSet<String> selectedSecgroups 		   				= null;
+	public  Vector<OSImage>          images;
+	private AlertDialog 		     alertDialogServerInfo	   = null;
+	private AlertDialog 		     alertDialogServerLaunch   = null;
+	private Vector<Flavor>           flavors;
+	private Vector<KeyPair>          keypairs;
+	private Vector<Network>          networks;
+	private Vector<SecGroup>         secgroups;
+    private Hashtable<String,ServerView> mapID_to_ServerView   = null;
+
+    private ArrayAdapter<OSImage>    spinnerImagesArrayAdapter = null;
+    private ArrayAdapter<Flavor>     spinnerFlavorArrayAdapter = null;
+    private ArrayAdapter<KeyPair>    spinnerKeyPairArrayAdapter = null;
+
+	//__________________________________________________________________________________
+	protected class ServerLaunchListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+
+			if(promptsViewLaunch!=null) {
+				String serverName = ((EditText)promptsViewLaunch.findViewById(R.id.serverName)).getText().toString();
+				String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
+				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
+				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
+				String keypair	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+				//Log.d("SERVERLAUNCH", "serverName="+serverName + " - imageName="+imageName+" - flavor="+flavor+" - number="+number+" - keypair="+keypair);
+				String secgroups  = Utils.join(selectedSecgroups, ",");
+
+				if(serverName.isEmpty()) {
+
+					Utils.alert(getString(R.string.MUSTSETNAME), OSImagesActivity.this);
+					return;
+				}
+
+				if(number.isEmpty()) {
+					Utils.alert(getString(R.string.MUSTSETNUMSERVERS), OSImagesActivity.this);
+					return;
+				}
+
+
+
+				int count = Integer.parseInt(number);
+
+				Iterator<NetworkView> nvit = netViewList.iterator();
+				//Hashtable<Pair<String,String>, String> selectedNetworks = new Hashtable<Pair<String,String>, String>();
+				selectedNetworks.clear();
+
+				while(nvit.hasNext()) {
+					NetworkView nv = nvit.next();
+					if(nv.isChecked()) {
+						String netIP = "";
+						if(nv.getSubNetwork().getIPVersion().compareTo("4") == 0) {
+							netIP = nv.getNetworkIP().getText().toString().trim();
+							if(netIP != null && netIP.length()!=0 && count>1) {
+								Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), OSImagesActivity.this);
+								//if(alertDialogServerLaunch!=null)
+								//    alertDialogServerLaunch.dismiss();
+								return;
+							}
+							if(netIP != null && netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
+								Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, OSImagesActivity.this);
+								//if(alertDialogServerLaunch!=null)
+								//    alertDialogServerLaunch.dismiss();
+								return;
+							}
+							if(netIP != null && netIP.length()!=0) { // Let's check only if the user specified the custom IP
+								SubnetUtils su = null;
+								SubNetwork sn = nv.getSubNetwork();
+								su = new SubnetUtils( sn.getAddress() ); // let's take only the first one
+								SubnetUtils.SubnetInfo si = su.getInfo();
+								if(!si.isInRange(netIP)) {
+									Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+sn.getAddress(), OSImagesActivity.this);
+									//if(alertDialogServerLaunch!=null)
+									//    alertDialogServerLaunch.dismiss();
+									return;
+								}
+							}
+						}
+
+						Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
+						if(netIP==null) netIP = "";
+						selectedNetworks.put(net_subnet, netIP);
+						Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
+
+					}
+				}
+				if(selectedNetworks.isEmpty()) {
+					Utils.alert(getString(R.string.MUSTSELECTNET), OSImagesActivity.this);
+					return;
+				}
+				//Log.d("SERVERLAUNCH", Utils.join())
+			}
+			if(alertDialogServerLaunch!=null)
+				alertDialogServerLaunch.dismiss();
+		}
+	}
+
+	//__________________________________________________________________________________
+	protected class ServerCancelListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			if(alertDialogServerLaunch!=null)
+				alertDialogServerLaunch.dismiss();
+		}
+	}
+
+	//__________________________________________________________________________________
+	protected class OkImageServerListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			if(alertDialogServerInfo!=null)
+				alertDialogServerInfo.dismiss();
+		}
+	}
+
+	//__________________________________________________________________________________
+	protected class NetworkViewListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			CheckBoxWithView cb = (CheckBoxWithView)v;
+			NetworkView nv = cb.getNetworkView();
+
+			if(cb.isChecked() && netids.containsKey(nv.getNetwork().getID())) {
+				cb.setChecked(false);
+				Utils.alert(getString(R.string.ALREADYCHOOSENNET) + ": "+nv.getNetwork().getName(), OSImagesActivity.this);
+				return;
+			}
+
+			if(cb.isChecked()) {
+				netids.put(nv.getNetwork().getID(), "1");
+			}
+			if(!cb.isChecked()) {
+				netids.remove(nv.getNetwork().getID());
+			}
+
+			if(cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
+				nv.getNetworkIP().setEnabled(true);
+				return;
+			}
+			if(!cb.isChecked() && nv.getSubNetwork().getIPVersion().compareTo("4")==0) {
+				nv.getNetworkIP().setEnabled(false);
+				return;
+			}
+		}
+	}
+
+	//__________________________________________________________________________________
+	protected class SecGroupListener implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			SecGroupView s = (SecGroupView)v;
+			if(s.isChecked())
+				selectedSecgroups.add( s.getSecGroup().getID() );
+			else
+				selectedSecgroups.remove(s.getSecGroup().getID());
+			return;
+		}
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	private void displayDialogServerCreate( ) {
+		LayoutInflater li = LayoutInflater.from(OSImagesActivity.this);
+
+		promptsViewLaunch = li.inflate(R.layout.my_dialog_server_launch, null);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OSImagesActivity.this);
+
+		alertDialogBuilder.setView(promptsViewLaunch);
+
+		alertDialogBuilder.setTitle(getString(R.string.CREATESERVER));
+		alertDialogServerLaunch = alertDialogBuilder.create();
+
+		spinnerFlavorArrayAdapter = new ArrayAdapter<Flavor>(OSImagesActivity.this, android.R.layout.simple_spinner_item,flavors.subList(0,flavors.size()) );
+		spinnerFlavorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).setAdapter(spinnerFlavorArrayAdapter);
+
+		spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(OSImagesActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
+		spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).setAdapter(spinnerImagesArrayAdapter);
+
+		spinnerKeyPairArrayAdapter = new ArrayAdapter<KeyPair>(OSImagesActivity.this, android.R.layout.simple_spinner_item,keypairs.subList(0,keypairs.size()) );
+		spinnerKeyPairArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		((Spinner)promptsViewLaunch.findViewById(R.id.spinnerKeypair)).setAdapter(spinnerKeyPairArrayAdapter);
+
+		Iterator<Network> nit = networks.iterator();
+		while(nit.hasNext()) {
+			Network net = nit.next();
+			if(U.getTenantID().compareTo( net.getTenantID() )!=0) {
+				if(net.isShared()==false) {
+					continue;
+				}
+			}
+
+			Iterator<SubNetwork> subnetsIT = net.getSubNetworks().iterator();
+			while(subnetsIT.hasNext()) {
+				SubNetwork sn = subnetsIT.next();
+				NetworkView nv = new NetworkView( net, sn, new OSImagesActivity.NetworkViewListener(), IPv4AddressKeyListener.getInstance(), getString(R.string.SPECIFYOPTIP), OSImagesActivity.this );
+				((LinearLayout)promptsViewLaunch.findViewById(R.id.networksLayer)).addView( nv );
+				netViewList.add( nv );
+			}
+		}
+
+		Iterator<SecGroup> sit = secgroups.iterator();
+		while(sit.hasNext()) {
+			SecGroupView sgv = new SecGroupView( sit.next(), new OSImagesActivity.SecGroupListener(), OSImagesActivity.this );
+			sgv.setOnClickListener( new OSImagesActivity.SecGroupListener() );
+			((LinearLayout)promptsViewLaunch.findViewById(R.id.secgroupsLayer)).addView(sgv);
+			if(sgv.isChecked()) selectedSecgroups.add( sgv.getSecGroup( ).getID() );
+		}
+
+		((Button)promptsViewLaunch.findViewById(R.id.launchButton)).setOnClickListener( new OSImagesActivity.ServerLaunchListener() );
+		((Button)promptsViewLaunch.findViewById(R.id.cancelButton)).setOnClickListener( new OSImagesActivity.ServerCancelListener() );
+
+		alertDialogServerLaunch.setCanceledOnTouchOutside(false);
+		alertDialogServerLaunch.setCancelable(false);
+        OSImagesActivity.this.progressDialogWaitStop.dismiss();
+		alertDialogServerLaunch.show();
+	}
+
     /**
      *
      *
@@ -120,7 +365,7 @@ public class OSImagesActivity extends Activity {
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 	   
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
-        progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
+        progressDialogWaitStop.setMessage(getString(R.string.PLEASEWAITCONNECTING));
         progressDialogWaitStop.setCancelable(false);
         progressDialogWaitStop.setCanceledOnTouchOutside(false);
         //(Toast.makeText(this, getString(R.string.TOUCHUIMGTOVIEWINFO), Toast.LENGTH_LONG)).show();
@@ -200,13 +445,21 @@ public class OSImagesActivity extends Activity {
     protected class imageLaunchListener implements OnClickListener {
     	@Override
     	public void onClick( View v ) {
-    		ID = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getID();
+/*    		ID = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getID();
     		NAME = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getName();
     		Class<?> c = (Class<?>)ImageLaunchActivity.class;
     		Intent I = new Intent( OSImagesActivity.this, c );
     		I.putExtra( "IMAGEID", ID );
     	    I.putExtra("IMAGENAME", NAME);
-    		startActivity( I );
+    		startActivity( I );*/
+            netids.clear();
+            mapID_to_ServerView.clear();
+            netViewList.clear();
+            selectedSecgroups.clear();
+            selectedNetworks.clear();
+
+            progressDialogWaitStop.show();
+            ( new OSImagesActivity.AsyncTaskPrepareServerLaunch( ) ).execute();
     	}
     }
 
@@ -486,7 +739,74 @@ public class OSImagesActivity extends Activity {
      			Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
      					    OSImagesActivity.this);
      		}
-     		OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+     		OSImagesActivity.this.progressDialogWaitStop.dismiss();
      	}
     }
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+	protected class AsyncTaskPrepareServerLaunch extends AsyncTask<Void, Void, Void>
+	{
+		private  String   errorMessage   = null;
+		private  boolean  hasError       = false;
+		private  String   jsonImageBuf   = null;
+		private  String   jsonFlavorBuf  = null;
+		private  String   jsonKeyPairBuf = null;
+		private  String   jsonNetworkBuf = null;
+		private  String   jsonSubNetBuf  = null;
+		private  String   jsonSecGrpsBuf = null;
+
+		@Override
+		protected Void doInBackground(Void ... voids )
+		{
+			OSClient osc = OSClient.getInstance(U);
+
+			try {
+				jsonImageBuf   = osc.requestImages();
+				jsonFlavorBuf  = osc.requestFlavors();
+				jsonKeyPairBuf = osc.requestKeypairs();
+				jsonNetworkBuf = osc.requestNetworks();
+				jsonSubNetBuf  = osc.requestSubNetworks();
+				jsonSecGrpsBuf = osc.requestSecGroups();
+			} catch(ServiceUnAvailableOrInternalError se) {
+				errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
+				hasError = true;
+			} catch (Exception e) {
+				errorMessage = e.getMessage( );
+				hasError = true;
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute( Void v ) {
+			super.onPostExecute(v);
+
+			if(hasError) {
+				Utils.alert( errorMessage, OSImagesActivity.this );
+				OSImagesActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+			}
+
+			try {
+				OSImagesActivity.this.images    = OSImage.parse(jsonImageBuf);
+				OSImagesActivity.this.flavors   = Flavor.parse(jsonFlavorBuf);
+				OSImagesActivity.this.keypairs  = KeyPair.parse(jsonKeyPairBuf);
+				OSImagesActivity.this.networks  = Network.parse(jsonNetworkBuf, jsonSubNetBuf);
+				OSImagesActivity.this.secgroups = SecGroup.parse(jsonSecGrpsBuf);
+				//ServersActivity.this.pickAnImageToLaunch();
+			} catch(ParseException pe) {
+				Utils.alert("OSImagesActivity.AsyncTaskPrepareServerLaunch.onPostExecute: " + pe.getMessage( ),
+						OSImagesActivity.this);
+			}
+			displayDialogServerCreate();
+
+		}
+	}
 }
