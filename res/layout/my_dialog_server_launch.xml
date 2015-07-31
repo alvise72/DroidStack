@@ -33,9 +33,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="myServer"
+			    android:selectAllOnFocus="true"
 				android:textSize="14sp"
 				android:inputType="textNoSuggestions"
-                android:ems="10" >
+                android:ems="10"
+			  android:focusable="true"
+			  android:focusableInTouchMode="true"
+			  android:singleLine="true">
                 <requestFocus />
         </EditText>
 
