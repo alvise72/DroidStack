@@ -38,7 +38,27 @@
             android:paddingLeft="12dp"
                 android:ellipsize="none"
                 android:paddingRight="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/IMAGENAME"
+                android:id="@+id/textView3"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/imageName"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp"
+                android:ellipsize="none"
+                android:paddingRight="12dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

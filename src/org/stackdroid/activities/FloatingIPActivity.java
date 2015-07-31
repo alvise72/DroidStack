@@ -372,7 +372,7 @@ public class FloatingIPActivity extends Activity {
 	    
 	    try {
 	    	Vector<FloatingIP> fips = FloatingIP.parse(jsonBuf, false);
-	    	Vector<Server> servers = Server.parse( jsonBufServers );
+	    	Vector<Server> servers = Server.parse( jsonBufServers,null );
 	    	networks = Network.parse( jsonBufNetworks, jsonBufSubNets );
 	    	Iterator<Server> it = servers.iterator();
 	    	Hashtable<String,String> mappingServerIDName = new Hashtable<String,String>();
@@ -652,7 +652,7 @@ public class FloatingIPActivity extends Activity {
  	    }
 	    
 	    try {
-	    	FloatingIPActivity.this.servers = Server.parse( jsonBuf );
+	    	FloatingIPActivity.this.servers = Server.parse( jsonBuf,null );
 	    	FloatingIPActivity.this.pickAServerToAssociateFIP();
 	    } catch(ParseException pe) {
 	    	Utils.alert("NeutronActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), FloatingIPActivity.this );

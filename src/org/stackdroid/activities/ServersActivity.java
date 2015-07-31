@@ -1,6 +1,7 @@
 package org.stackdroid.activities;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ArrayAdapter;
@@ -749,7 +750,7 @@ public class ServersActivity extends Activity {
 
             alertDialogBuilder.setView(promptsView);
 
-            alertDialogBuilder.setTitle(getString(R.string.IMAGEINFO));
+            alertDialogBuilder.setTitle(getString(R.string.INSTANCEINFO));
             alertDialogServerInfo = alertDialogBuilder.create();
 
             String fxip = "";
@@ -776,16 +777,43 @@ public class ServersActivity extends Activity {
                 fxip = fxip.substring(0,fxip.length()-2);
 
             ((TextView)promptsView.findViewById(R.id.serverName)).setText(s.getName());
+            ((TextView)promptsView.findViewById(R.id.imageName)).setText( s.getOSImage()!=null ? s.getOSImage().getName() : "N/A");
             ((TextView)promptsView.findViewById(R.id.serverID)).setText(s.getID());
             ((TextView)promptsView.findViewById(R.id.serverStatus)).setText(s.getStatus() + (s.getTask()!=null && s.getTask().length()!=0 && s.getTask().equalsIgnoreCase("null")==false ? " (" + s.getTask()+")" : ""));
             ((TextView)promptsView.findViewById(R.id.serverFlavor)).setText(s.getFlavor()!=null ? s.getFlavor().getFullInfo() : "N/A");
             ((TextView)promptsView.findViewById(R.id.serverIP)).setText( fxip );
             ((TextView)promptsView.findViewById(R.id.serverFIP)).setText( fip );
             ((TextView)promptsView.findViewById(R.id.serverKeyName)).setText( s.getKeyName( ).length() != 0 ? s.getKeyName( ) : getString(R.string.NONE) );
-            ((TextView)promptsView.findViewById(R.id.secGroups)).setText( secgrps != null && secgrps.length!=0 ? Utils.join(s.getSecurityGroupNames(),", ") : getString(R.string.NONE) );
-            ((TextView)promptsView.findViewById(R.id.hostedBy)).setText( s.getComputeNode2( ) != null ? s.getComputeNode2( ) : "N/A (" + getString(R.string.INSUFFICIENTPRIVILEGES)+")" );
+            ((TextView)promptsView.findViewById(R.id.secGroups)).setText( secgrps != null && secgrps.length!=0 ? Utils.join(s.getSecurityGroupNames(), ", ") : getString(R.string.NONE) );
+            ((TextView)promptsView.findViewById(R.id.hostedBy)).setText( s.getComputeNode2() != null ? s.getComputeNode2() : "N/A (" + getString(R.string.INSUFFICIENTPRIVILEGES)+")" );
+
+        /*    ((TextView)promptsView.findViewById(R.id.serverName)).setEllipsize(TextUtils.TruncateAt.END);
+		    ((TextView)promptsView.findViewById(R.id.serverName)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.serverID)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.serverID)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.serverStatus)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.serverStatus)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.serverIP)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.serverIP)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.serverFIP)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.serverFIP)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.serverKeyName)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.serverKeyName)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.secGroups)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.secGroups)).setSingleLine();
+            ((TextView)promptsView.findViewById(R.id.hostedBy)).setEllipsize(TextUtils.TruncateAt.END);
+            ((TextView)promptsView.findViewById(R.id.hostedBy)).setSingleLine(); */
+
+
+
+
             ((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new ServersActivity.OkImageServerListener());
             alertDialogServerInfo.setCanceledOnTouchOutside(false);
+
+
+
             alertDialogServerInfo.setCancelable(false);
             alertDialogServerInfo.show();
             /*
@@ -1352,7 +1380,7 @@ public class ServersActivity extends Activity {
 	private  boolean  hasError         = false;
 	private  String   jsonBuf          = null;
 	private  String   jsonBufferFlavor = null;
-	//private  String   username         = null;
+    private  String jsonBufferImages   = null;
 
 	@Override
 	protected String doInBackground( Void... v ) 
@@ -1363,7 +1391,8 @@ public class ServersActivity extends Activity {
 
 	      try {
 	    	  jsonBuf 	    = osc.requestServers( );
-	    	  jsonBufferFlavor  = osc.requestFlavors( );
+	    	  jsonBufferFlavor  = osc.requestFlavors();
+              jsonBufferImages = osc.requestImages();
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
 	    	  hasError = true;
@@ -1384,8 +1413,15 @@ public class ServersActivity extends Activity {
 			}
 	    
 			try {
-				Vector<Server> servers = Server.parse( jsonBuf );
-				ServersActivity.this.refreshView( servers, Flavor.parse( jsonBufferFlavor ) );
+                Hashtable<String, OSImage> map_id_to_osimage = new Hashtable<String, OSImage>();
+                Vector<OSImage> osImages = OSImage.parse(jsonBufferImages)     ;
+                Iterator<OSImage> osit = osImages.iterator();
+                while(osit.hasNext()) {
+                    OSImage img = osit.next();
+                    map_id_to_osimage.put(img.getID(),img);
+                }
+				Vector<Server> servers = Server.parse(jsonBuf, map_id_to_osimage);
+				ServersActivity.this.refreshView( servers, Flavor.parse( jsonBufferFlavor )  );
 			} catch(ParseException pe) {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 			}
@@ -1688,7 +1724,7 @@ public class ServersActivity extends Activity {
 			while(status.compareToIgnoreCase("ACTIVE")==0 || status.compareToIgnoreCase("ERROR")==0) {
 				try {
 					String jsonBuf = osc.requestInstanceDetails(serverid[0]);
-					Server s = Server.parseSingle(jsonBuf);
+					Server s = Server.parseSingle(jsonBuf,null);
 					status = s.getStatus();
 					mapID_to_ServerView.get(serverid[0]).getServer().setStatus(status);
 					Thread.sleep(2000);

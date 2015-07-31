@@ -85,7 +85,7 @@ public class Volume {//implements Serializable {
     
 	public static Vector<Volume> parse( String volumesJson, String serversJson)  throws ParseException  {
 		
-		Vector<Server> servs = Server.parse( serversJson );
+		Vector<Server> servs = Server.parse( serversJson, null );
 		Hashtable<String, String> server_id_to_name_mapping = new Hashtable<String, String>();
 		Iterator<Server> sit = servs.iterator();
 		while(sit.hasNext()) {

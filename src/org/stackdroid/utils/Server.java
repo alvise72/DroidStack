@@ -3,6 +3,7 @@ package org.stackdroid.utils;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -22,7 +23,7 @@ public class Server {//implements Serializable {
 
     public final static String[] POWER_STRING = {"No State", "Running", "", "", "Shutdown"};
 
-    private String			 name;
+    private String			name;
     private String 			ID;
     private String 			status;
     private String 			task;
@@ -35,19 +36,21 @@ public class Server {//implements Serializable {
     private String[] 		secgrpNames;
     private long 			creationTime;
     private Flavor 			flavor;
+	private OSImage			osImage;
     
     public Server( String _name,
-		   String _ID,
-		   String _status,
-		   String _task,
-		   int _power,
-		   Vector<String> _privIP,
-		   Vector<String> _pubIP,
-		   String _computeNode,
-		   String _keyname,
-		   String _flavorID,
-		   long _creationTime,
-		   String[] secgroups ) 
+				   String _ID,
+		   		   String _status,
+		   		   String _task,
+		   		   int _power,
+		   		   Vector<String> _privIP,
+		   		   Vector<String> _pubIP,
+		   		   String _computeNode,
+		   		   String _keyname,
+		   		   String _flavorID,
+		   		   long _creationTime,
+		   		   String[] secgroups,
+				   OSImage _osImage)
     {
     	name           = _name;
     	ID             = _ID;
@@ -61,6 +64,7 @@ public class Server {//implements Serializable {
     	flavorID       = _flavorID;
     	creationTime   = _creationTime;
     	secgrpNames    = secgroups;
+		osImage		   = _osImage;
     }
 
     public String 		  getName() { return name; }
@@ -70,7 +74,7 @@ public class Server {//implements Serializable {
     public int    		  getPowerState() { return powerstate; }
     public Vector<String> getPrivateIP() { return privIP; }
     public Vector<String> getPublicIP() { return pubIP; }
-
+    public OSImage        getOSImage( ) { return osImage; }
     public String getComputeNode2() { return computeNode; }
     public String getKeyName() { return keyname; }
     public String getFlavorID() { return flavorID;}
@@ -90,7 +94,7 @@ public class Server {//implements Serializable {
 	return name;
     }
     
-    public static Vector<Server> parse( String jsonBuf )  throws ParseException {
+    public static Vector<Server> parse( String jsonBuf, Hashtable<String, OSImage> osImages )  throws ParseException {
         
     Vector<Server> serverVector = new Vector<Server>();
 	String status        = "N/A";
@@ -101,6 +105,7 @@ public class Server {//implements Serializable {
 	String computeNode   = "N/A";
 	String name          = "N/A";
 	String task          = "N/A";
+
 	long creationTime    = 0;
 	int power            = -1;
 	
@@ -110,6 +115,18 @@ public class Server {//implements Serializable {
 
 	    for(int i=0; i<servers.length( ); ++i) {
 		JSONObject server = (JSONObject)servers.getJSONObject(i);
+
+
+		JSONObject imageid = null;
+        OSImage osimage = null;
+		if(server.has("image") && osImages!=null) {
+			imageid = server.getJSONObject("image");
+			if(imageid!=null) {
+				if(imageid.has("id"))
+					osimage = osImages.get(imageid.getString("id"));
+			}
+		}
+
 		status = (String)server.getString("status");
 		try{keyname = (String)server.getString("key_name");} catch(JSONException je) {}
 		try{
@@ -169,7 +186,7 @@ public class Server {//implements Serializable {
 		} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
 
 		try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
-		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
+		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames, osimage);
 		serverVector.add(S);
 	    }
  	} catch(org.json.JSONException je) {
@@ -191,7 +208,7 @@ public class Server {//implements Serializable {
 
 
 
-	public static Server parseSingle( String jsonBuf )  throws ParseException {
+	public static Server parseSingle( String jsonBuf, Hashtable<String, OSImage> osImages )  throws ParseException {
 
 		//Server serverVector = null;
 		String status        = "N/A";
@@ -208,6 +225,16 @@ public class Server {//implements Serializable {
 		try {
 			JSONObject jsonObject = new JSONObject( jsonBuf );
 			JSONObject server     = jsonObject.getJSONObject("server");
+
+            JSONObject imageid = null;
+            OSImage osimage = null;
+            if(server.has("image") && osImages!=null) {
+                imageid = server.getJSONObject("image");
+                if(imageid!=null) {
+                    if(imageid.has("id"))
+                        osimage = osImages.get(imageid.getString("id"));
+                }
+            }
 
 				status = (String)server.getString("status");
 				try{keyname = (String)server.getString("key_name");} catch(JSONException je) {}
@@ -268,7 +295,7 @@ public class Server {//implements Serializable {
 				} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
 
 				try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
-				return new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames);
+				return new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames, osimage);
 				//serverVector.add(S);
 
 		} catch(org.json.JSONException je) {

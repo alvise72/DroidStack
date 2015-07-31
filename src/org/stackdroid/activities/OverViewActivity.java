@@ -272,7 +272,7 @@ public class OverViewActivity extends Activity {
      			QuotaVol QV = QuotaVol.parse(jsonBufferQuotaVols);
      			OverViewActivity.this.refreshView( Q,
      											   QV,
-     											   Server.parse( jsonBuf ), 
+     											   Server.parse( jsonBuf, null ),
      											   Flavor.parse( jsonBufferFlavor ),
      											   FloatingIP.parse( jsonBufFIPs, false ),
      											   SecGroup.parse( jsonBufSecgs )

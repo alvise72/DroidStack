@@ -544,7 +544,7 @@ public class VolumesActivity extends Activity {
 	    
      		try {
      			Vector<Volume> volumes = Volume.parse( jsonBufVols, jsonBufServers );
-     			servers = Server.parse(jsonBufServers);
+     			servers = Server.parse(jsonBufServers,null);
      			VolumesActivity.this.refreshView( volumes );
      		} catch(ParseException pe) {
      			

@@ -2,6 +2,7 @@ package org.stackdroid.activities;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -539,6 +540,22 @@ public class OSImagesActivity extends Activity {
 			((TextView)promptsView.findViewById(R.id.imageID)).setText(osi.getID());
 			((TextView)promptsView.findViewById(R.id.imageMinDisk)).setText(osi.getMinDISK()+" GBytes");
 			((TextView)promptsView.findViewById(R.id.imageMinRAM)).setText(osi.getMinRAM()+" MBytes");
+
+		/*	((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine();
+			((TextView)promptsView.findViewById(R.id.imageStatus)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imageStatus)).setSingleLine();
+			((TextView)promptsView.findViewById(R.id.imageSize)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imageSize)).setSingleLine();
+			((TextView)promptsView.findViewById(R.id.imagePublic)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imagePublic)).setSingleLine();
+			((TextView)promptsView.findViewById(R.id.imageFormat)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imageID)).setSingleLine();
+			((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine();
+			((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
+			((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine(); */
+
 			((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new OSImagesActivity.OkImageInfoListener());
 			alertDialogImageInfo.setCanceledOnTouchOutside(false);
 			alertDialogImageInfo.setCancelable(false);
