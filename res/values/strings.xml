@@ -215,4 +215,6 @@
     <string name="CREATESERVER">Create Instance</string>
     <string name="SELECTIMAGE">Select Image</string>
     <string name="MUSTSETNUMSERVERS">Number of instances must be equal or greater than 1</string>
+    <string name="NOIMAGEAVAILABLEFIXPROBLEM">No image available. Quit this window and upload at least on image into your OpenStack infrastructure.</string>
+    <string name="NOFLAVORAVAILABLEFIXPROBLEM">No flavor available. Quit this window and create at least one flavor in your OpenStack infrastructure.</string>
 </resources>

@@ -206,4 +206,6 @@
     <string name="CREATESERVER">Crea Istanza</string>
     <string name="SELECTIMAGE">Seleziona Immagine</string>
     <string name="MUSTSETNUMSERVERS">Il numero di istanze deve essere maggiore o uguale a 1</string>
+    <string name="NOIMAGEAVAILABLEFIXPROBLEM">Nessuna immagine disponibile. Abbandona questa finestra e carica almeno un\'immagine nella tua infrastruttura OpenStack.</string>
+    <string name="NOFLAVORAVAILABLEFIXPROBLEM">Nessun flavor disponibile. Abbandona questa finestra e crea almeno un flavor nella tua infrastruttura OpenStack.</string>
 </resources>

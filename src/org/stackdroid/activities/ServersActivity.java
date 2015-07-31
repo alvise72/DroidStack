@@ -116,8 +116,16 @@ public class ServersActivity extends Activity {
         public void onClick( View v ) {
 
 			if(promptsViewLaunch!=null) {
+                if( ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getCount() == 0) {
+                    Utils.alert(getString(R.string.NOIMAGEAVAILABLEFIXPROBLEM),ServersActivity.this);
+                    return;
+                }
+                if( ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getCount() == 0) {
+                    Utils.alert(getString(R.string.NOFLAVORAVAILABLEFIXPROBLEM),ServersActivity.this);
+                    return;
+                }
 				String serverName = ((EditText)promptsViewLaunch.findViewById(R.id.serverName)).getText().toString();
-				String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
+                String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
 				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
 				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
 				String keypair;//	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();

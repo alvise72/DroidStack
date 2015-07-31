@@ -102,6 +102,14 @@ public class OSImagesActivity extends Activity {
 		public void onClick( View v ) {
 
 			if(promptsViewLaunch!=null) {
+                if( ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getCount() == 0) {
+                    Utils.alert(getString(R.string.NOIMAGEAVAILABLEFIXPROBLEM),OSImagesActivity.this);
+                    return;
+                }
+                if( ((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getCount() == 0) {
+                    Utils.alert(getString(R.string.NOFLAVORAVAILABLEFIXPROBLEM),OSImagesActivity.this);
+                    return;
+                }
 				String serverName = ((EditText)promptsViewLaunch.findViewById(R.id.serverName)).getText().toString();
 				String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
 				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
@@ -863,26 +871,26 @@ public class OSImagesActivity extends Activity {
      *
      *
      */
-    protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
+    protected class AsyncTaskLaunch extends AsyncTask<Void, Void, Void>
     {
         private  String  errorMessage  = null;
         private  boolean hasError      = false;
 
         @Override
-        protected Void doInBackground( String... args )
+        protected Void doInBackground( Void... args )
         {
             OSClient osc = OSClient.getInstance( U );
 
 
 
             try {
-                osc.createInstance( args[0],
-                        args[1],
-                        args[2],
-                        args[3],
-                        Integer.parseInt(args[4]),
-                        args[5],
-                        OSImagesActivity.this.selectedNetworks );
+                osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
+                                    imageID_InstanceToLaunch, //args[1], // imageID
+                                    keyname_InstanceToLaunch, // key_name
+                                    flavorID_InstanceToLaunch, // flavorID
+                                    Integer.parseInt(count_InstanceToLaunch), // count
+                                    secgrpID_InstanceToLaunch, // sec group ID
+                                    OSImagesActivity.this.selectedNetworks );
             } catch(Exception e) {
                 e.printStackTrace( );
                 errorMessage = e.getMessage();
