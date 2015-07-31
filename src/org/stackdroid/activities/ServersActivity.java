@@ -103,6 +103,13 @@ public class ServersActivity extends Activity {
 
 	View							 promptsViewLaunch		   = null;
 
+    private String name_InstanceToLaunch;//args[0], // instance name
+    private String imageID_InstanceToLaunch; //args[1], // imageID
+    private String keyname_InstanceToLaunch; // key_name
+    private String flavorID_InstanceToLaunch; // flavorID
+    private String count_InstanceToLaunch; // count
+    private String secgrpID_InstanceToLaunch;
+
     //__________________________________________________________________________________
     protected class ServerLaunchListener implements OnClickListener {
         @Override
@@ -113,7 +120,11 @@ public class ServersActivity extends Activity {
 				String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
 				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
 				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
-				String keypair	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+				String keypair;//	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+                if( ((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getCount() > 0)
+                    keypair= ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+                else
+                    keypair = "";
 				//Log.d("SERVERLAUNCH", "serverName="+serverName + " - imageName="+imageName+" - flavor="+flavor+" - number="+number+" - keypair="+keypair);
                 String secgroups  = Utils.join(selectedSecgroups, ",");
 
@@ -179,8 +190,18 @@ public class ServersActivity extends Activity {
                     Utils.alert(getString(R.string.MUSTSELECTNET), ServersActivity.this);
                     return;
                 }
-                //Log.d("SERVERLAUNCH", Utils.join())
-			}
+                Log.d("SERVERLAUNCH", "name="+serverName+" - image="+imageName+" - key="+keypair+" - flavor="+flavor+" - num="+number+" - sec="+secgroups );
+                name_InstanceToLaunch = serverName;
+                imageID_InstanceToLaunch = imageName;
+                keyname_InstanceToLaunch = keypair;
+                flavorID_InstanceToLaunch = flavor;
+                count_InstanceToLaunch = number;
+                secgrpID_InstanceToLaunch = secgroups;
+                progressDialogWaitStop.show();
+                if(alertDialogServerLaunch!=null)
+                    alertDialogServerLaunch.dismiss();
+                (new ServersActivity.AsyncTaskLaunch()).execute();
+            }
             if(alertDialogServerLaunch!=null)
                 alertDialogServerLaunch.dismiss();
         }
@@ -201,6 +222,7 @@ public class ServersActivity extends Activity {
         public void onClick( View v ) {
             if(alertDialogServerInfo!=null)
                 alertDialogServerInfo.dismiss();
+
         }
     }
 
@@ -510,38 +532,6 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
-/*	protected class ConfirmButtonHandler implements OnClickListener {
-		@Override
-		public void onClick( View v ) {
-			OSImage osi = (OSImage)imageSpinner.getSelectedItem();
-			Class<?> c = (Class<?>)ImageLaunchActivity.class;
-    		Intent I = new Intent( ServersActivity.this, c );
-    		I.putExtra( "IMAGEID", osi.getID() );
-    	    I.putExtra("IMAGENAME", osi.getName());
-    	    ServersActivity.this.alertDialogSelectImage.dismiss();
-    		startActivity(I);
-		}
-	} */
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-/*	protected class CancelButtonHandler implements OnClickListener {
-		@Override
-		public void onClick( View v ) {
-			alertDialogSelectImage.dismiss();
-		}
-	} */
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	public void createInstance( View v ) {
         netids.clear();
         mapID_to_ServerView.clear();
@@ -617,43 +607,6 @@ public class ServersActivity extends Activity {
         ServersActivity.this.progressDialogWaitStop.dismiss();
         alertDialogServerLaunch.show();
     }
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-/*	protected void pickAnImageToLaunch( ) {
-		if(images.size()==0) {
-			Utils.alert(getString(R.string.NOIMAGETOASSOCIATE), this);
-			return;
-		}
-		spinnerImagesArrayAdapter = new ArrayAdapter<OSImage>(ServersActivity.this, android.R.layout.simple_spinner_item,images.subList(0,images.size()) );
-		spinnerImagesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		
-		
-		LayoutInflater li = LayoutInflater.from(this);
-
-	    View promptsView = li.inflate(R.layout.my_dialog_create_instance, null);
-
-	    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-	    alertDialogBuilder.setView(promptsView);
-
-	    alertDialogBuilder.setTitle("Choose an image");
-	    alertDialogSelectImage = alertDialogBuilder.create();
-
-	    imageSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseImage);
-	    imageSpinner.setAdapter(spinnerImagesArrayAdapter);
-	    final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
-	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
-		mButton.setOnClickListener(new ServersActivity.ConfirmButtonHandler());
-	    mButtonCancel.setOnClickListener(new ServersActivity.CancelButtonHandler());
-	    alertDialogSelectImage.setCanceledOnTouchOutside(false);
-	    alertDialogSelectImage.setCancelable(false);
-	    alertDialogSelectImage.show();
-	}*/
 	
 	/**
 	 * 
@@ -1159,6 +1112,7 @@ public class ServersActivity extends Activity {
     		((LinearLayout)findViewById(R.id.serverLayout)).addView(space);
 			//(new ServersActivity.AsyncTaskServerStatusUpdate()).execute(sv.getServer().getID());
     	}
+        progressDialogWaitStop.dismiss();
     }
 
 
@@ -1166,7 +1120,8 @@ public class ServersActivity extends Activity {
 
 
     //__________________________________________________________________________________
-    protected class AsyncTaskPauseInstance extends AsyncTask<String, String, String> {
+    protected class AsyncTaskPauseInstance extends AsyncTask<String, String, String>
+    {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
@@ -1200,7 +1155,8 @@ public class ServersActivity extends Activity {
     }
     
     //__________________________________________________________________________________
-    protected class AsyncTaskResumeInstance extends AsyncTask<String, String, String> {
+    protected class AsyncTaskResumeInstance extends AsyncTask<String, String, String>
+    {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
@@ -1234,7 +1190,8 @@ public class ServersActivity extends Activity {
     }
 
     //__________________________________________________________________________________
-    protected class AsyncTaskSoftReboot extends AsyncTask<String, String, String> {
+    protected class AsyncTaskSoftReboot extends AsyncTask<String, String, String>
+    {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
@@ -1268,7 +1225,8 @@ public class ServersActivity extends Activity {
     }
     
     //__________________________________________________________________________________
-    protected class AsyncTaskHardReboot extends AsyncTask<String, String, String> {
+    protected class AsyncTaskHardReboot extends AsyncTask<String, String, String>
+    {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
@@ -1304,7 +1262,8 @@ public class ServersActivity extends Activity {
     }
 
     //__________________________________________________________________________________
-    protected class AsyncTaskChangeInstanceName extends AsyncTask<String, String, String> {
+    protected class AsyncTaskChangeInstanceName extends AsyncTask<String, String, String>
+    {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
@@ -1422,7 +1381,7 @@ public class ServersActivity extends Activity {
 			} catch(ParseException pe) {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 			}
-			ServersActivity.this.progressDialogWaitStop.dismiss();
+			//ServersActivity.this.progressDialogWaitStop.dismiss();
 			//(new AsyncTaskOSListServers()).execute( );
 		}
     }
@@ -1764,26 +1723,26 @@ public class ServersActivity extends Activity {
 	 *
 	 *
 	 */
-	protected class AsyncTaskLaunch extends AsyncTask<String, Void, Void>
+	protected class AsyncTaskLaunch extends AsyncTask<Void, Void, Void>
 	{
 		private  String  errorMessage  = null;
 		private  boolean hasError      = false;
 
 		@Override
-		protected Void doInBackground( String... args )
+		protected Void doInBackground( Void... args )
 		{
 			OSClient osc = OSClient.getInstance( U );
 
 
 
 			try {
-				osc.createInstance( args[0],
-						args[1],
-						args[2],
-						args[3],
-						Integer.parseInt(args[4]),
-						args[5],
-                        ServersActivity.this.selectedNetworks );
+				osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
+						            imageID_InstanceToLaunch, //args[1], // imageID
+						            keyname_InstanceToLaunch, // key_name
+						            flavorID_InstanceToLaunch, // flavorID
+						            Integer.parseInt(count_InstanceToLaunch), // count
+						            secgrpID_InstanceToLaunch, // sec group ID
+                                    ServersActivity.this.selectedNetworks );
 			} catch(Exception e) {
 				e.printStackTrace( );
 				errorMessage = e.getMessage();

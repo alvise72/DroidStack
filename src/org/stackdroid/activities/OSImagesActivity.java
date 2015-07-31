@@ -89,6 +89,12 @@ public class OSImagesActivity extends Activity {
     private ArrayAdapter<KeyPair>    spinnerKeyPairArrayAdapter = null;
 
     private OSImage imageToLaunch;
+    private String name_InstanceToLaunch;//args[0], // instance name
+    private String imageID_InstanceToLaunch; //args[1], // imageID
+    private String keyname_InstanceToLaunch; // key_name
+    private String flavorID_InstanceToLaunch; // flavorID
+    private String count_InstanceToLaunch; // count
+    private String secgrpID_InstanceToLaunch;
 
 	//__________________________________________________________________________________
 	protected class ServerLaunchListener implements OnClickListener {
@@ -100,7 +106,11 @@ public class OSImagesActivity extends Activity {
 				String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
 				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
 				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
-				String keypair	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+				String keypair;
+                if( ((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getCount() > 0)
+                    keypair= ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+                else
+                    keypair = "";
 				//Log.d("SERVERLAUNCH", "serverName="+serverName + " - imageName="+imageName+" - flavor="+flavor+" - number="+number+" - keypair="+keypair);
 				String secgroups  = Utils.join(selectedSecgroups, ",");
 
@@ -167,7 +177,16 @@ public class OSImagesActivity extends Activity {
 					return;
 				}
 				//Log.d("SERVERLAUNCH", Utils.join())
-
+                name_InstanceToLaunch = serverName;
+                imageID_InstanceToLaunch = imageName;
+                keyname_InstanceToLaunch = keypair;
+                flavorID_InstanceToLaunch = flavor;
+                count_InstanceToLaunch = number;
+                secgrpID_InstanceToLaunch = secgroups;
+                progressDialogWaitStop.show();
+                if(alertDialogServerLaunch!=null)
+                    alertDialogServerLaunch.dismiss();
+                (new OSImagesActivity.AsyncTaskLaunch()).execute();
 			}
 			if(alertDialogServerLaunch!=null)
 				alertDialogServerLaunch.dismiss();

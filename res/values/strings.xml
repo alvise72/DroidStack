@@ -50,11 +50,11 @@
     <string name="ALREADYASSOCIATED">Floating IP already associated to this server.</string>
 
     <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window pressing Menu-&gt;Update.</string>
-    <string name="NOINSTANCEAVAIL">There aren\'t instances.</string>
-    <string name="NOIMAGEAAVAIL">There aren\'t images.</string>
-    <string name="NOSECGRPSAVAIL">There aren\'t security groups.</string>
+    <string name="NOINSTANCEAVAIL">There are not any instance.</string>
+    <string name="NOIMAGEAAVAIL">There aren\'t any image.</string>
+    <string name="NOSECGRPSAVAIL">There aren\'t any security group.</string>
     <string name="SECGROUP">Manage Security Groups</string>
-    <string name="NOTFIPAVAIL">There aren\'t allocated floating IP.</string>
+    <string name="NOTFIPAVAIL">There aren\'t any allocated floating IP.</string>
     <string name="PLEASEWAITCONNECTING">Please wait: connecting to remote server&#8230;</string>
     <string name="AREYOUSURETODELETEVM">Are you sure to delete this instance ?</string>
     <string name="AREYOUSURETODELETEVMS">Are you sure to delete all instances ?</string>
