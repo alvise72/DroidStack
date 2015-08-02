@@ -195,7 +195,7 @@
     <string name="NOMOREIPAVAIL">Non ci sono pi&#xf9; indirizzi IP disponibili sulla rete </string>
     <string name="STILLHASPORTS">ha ancora delle interfacce</string>
     <string name="INSUFFICIENTPRIVILEGES">o privilegi insufficienti</string>
-    <string name="HOSTEDBY">Ospitato da:</string>
+    <string name="HOSTEDBY">Hypervisor:</string>
     <string name="INSTANCEINFO">Info istanza</string>
     <string name="USEDHCP">Enable DHCP</string>
     <string name="NONAME">Nessun nome</string>

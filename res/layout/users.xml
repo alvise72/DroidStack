@@ -22,7 +22,7 @@
           android:text="@+string/TOUCHUSERTOSELECT"
           android:id="@+id/textTouchUser"
           android:gravity="center_vertical|left"
-          android:layout_gravity="bottom|left"
+          android:layout_gravity="center_vertical|bottom|left"
           android:layout_marginLeft="12sp"
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:layout_marginBottom="10sp" />
