@@ -1264,30 +1264,30 @@ public class ServersActivity extends Activity {
 	      return jsonBuf;
 	}
 	
-		@Override
-	    protected void onPostExecute( String result ) {
-			super.onPostExecute(result);
+	@Override
+	protected void onPostExecute( String result ) {
+		super.onPostExecute(result);
 	    
-			if(hasError) {
+		if(hasError) {
 				Utils.alert( errorMessage, ServersActivity.this );
 				ServersActivity.this.progressDialogWaitStop.dismiss( );
 				return;
-			}
+		}
 	    
-			try {
-                Hashtable<String, OSImage> map_id_to_osimage = new Hashtable<String, OSImage>();
-                Vector<OSImage> osImages = OSImage.parse(jsonBufferImages)     ;
-                Iterator<OSImage> osit = osImages.iterator();
-                while(osit.hasNext()) {
+		try {
+                  Hashtable<String, OSImage> map_id_to_osimage = new Hashtable<String, OSImage>();
+                  Vector<OSImage> osImages = OSImage.parse(jsonBufferImages)     ;
+                  Iterator<OSImage> osit = osImages.iterator();
+                  while(osit.hasNext()) {
                     OSImage img = osit.next();
                     map_id_to_osimage.put(img.getID(),img);
-                }
+                  }
 				Vector<Server> servers = Server.parse(jsonBuf, map_id_to_osimage);
 				ServersActivity.this.refreshView( servers, Flavor.parse( jsonBufferFlavor )  );
-			} catch(ParseException pe) {
+		} catch(ParseException pe) {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
-			}
-			//ServersActivity.this.progressDialogWaitStop.dismiss();
+		}
+			ServersActivity.this.progressDialogWaitStop.dismiss();
 			//(new AsyncTaskOSListServers()).execute( );
 		}
     }
