@@ -567,7 +567,58 @@ public class OSClient {
     								extradata, 
     								vp );
     }
-    
+ 
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void startInstance( String serverid )
+    throws NotAuthorizedException, NotFoundException, 
+ 		   ServerException, ServiceUnAvailableOrInternalError,
+ 		   IOException, ParseException,CertificateException
+    {
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"os-start\": null}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+    }
+ 
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    public void stopInstance( String serverid )
+    throws NotAuthorizedException, NotFoundException, 
+ 		   ServerException, ServiceUnAvailableOrInternalError,
+ 		   IOException, ParseException,CertificateException
+    {
+    	checkToken( );
+    	
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	String extradata = "{\"os-stop\": null}";
+    	RESTClient.sendPOSTRequest( U.useSSL(), 
+    								U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
+    								U.getToken(), 
+    								extradata, 
+    								vp );
+    }    
     /**
      * 
      * 

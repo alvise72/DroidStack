@@ -177,7 +177,11 @@
 	<string name="SERVERNAMECHANGED">Instance name changed</string>
 	<string name="HARDREBOOT">Hard reboot (power reset)</string>
 	<string name="SOFTREBOOT">Reboot Operating System</string>
+	<string name="STARTSERVER">Start shutted off instance</string>
+	<string name="STOPSERVER">Shut off instance</string>
 	<string name="SERVERREBOOTED">Instance rebooted</string>
+	<string name="SERVERSTARTED">Instance started</string>
+	<string name="SERVERSTOPPED">Instance shutted off</string>
 	<string name="SERVERRPAUSED">Instanced paused</string>
 	<string name="SERVERRESUMED">Instance resumed</string>
 	<string name="HEAT">Orchestrator</string>

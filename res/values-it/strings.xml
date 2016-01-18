@@ -169,9 +169,14 @@
 	<string name="SERVERNAMECHANGED">Nome istanza cambiato</string>
 	<string name="HARDREBOOT">Hard reboot (power reset)</string>
 	<string name="SOFTREBOOT">Reboot Sistema Operativo</string>
+	<string name="STARTSERVER">Avvia istanza spenta</string>
+	<string name="STOPSERVER">Spegni istanza</string>
 	<string name="SERVERREBOOTED">Istanza riavviata</string>
+	<string name="SERVERSTARTED">Istanza avviata</string>
+	<string name="SERVERSTOPPED">Istanza spenta</string>
 	<string name="SERVERRPAUSED">Istanza in pausa</string>
 	<string name="SERVERRESUMED">Instance resumed</string>
+	
 	<string name="HEAT">Orchestratore</string>
 	<string name="NOROUTERAVAIL">Nessun router disponibile</string>
 	<string name="VERIFYSERVERCERT">Verifica certificato server</string>
