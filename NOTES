@@ -1,0 +1,4 @@
+aggiunta possibilità di rimuovere il FIP nel pannello di modifica di un server
+fix della visualizzazione del FIP troppo lungo nelle info di un server
+aggiunto supporto per autenticazione V3/Keystone
+aggiunta visualizzazione dell'IP dell'host che runna Keystone nella message text che fornisce le info dell'Utente.
