@@ -1,0 +1,21 @@
+# TEST WITH: curl -g -i -k -d @test.json -X POST https://cloud-areapd-test.pd.infn.it:5000/v3/auth/tokens -H "Content-Type: application/json"
+{ 
+  "auth": {
+    "identity": {
+      "methods": ["password"],
+      "password": {
+        "user": {
+          "name": "alvise",
+          "domain": { "id": "default" },
+          "password": "XXXXXX"
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "AlviseDorigo",
+        "domain": { "id": "default" }
+      }
+    }
+  }
+}
