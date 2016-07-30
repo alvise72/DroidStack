@@ -85,6 +85,12 @@ public class OSImageView extends LinearLayout {
 	testStatus = new TextViewWithView( ctx, (OSImageView)this );
 	testStatus.setText( "Status: " + image.getStatus() );
 	testStatus.setTextColor( Color.parseColor("#BBBBBB") );
+	if(image.isSaving())
+	  testStatus.setTextColor( Color.parseColor("#AA0000") );
+	if(image.isActive())
+	  testStatus.setTextColor( Color.parseColor("#00AA00") );
+	  
+	
 	testStatus.setOnClickListener( infoListener );
 
 	nameLayout.addView(textImageName);

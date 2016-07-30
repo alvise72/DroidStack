@@ -443,7 +443,7 @@ public class ImageLaunchActivity extends Activity {
 	    	jsonBufNetwork   = osc.requestNetworks( );
 	    	jsonBufSubnet    = osc.requestSubNetworks( );
 	    	jsonBufKeypairs  = osc.requestKeypairs( );
-	    	jsonBufSecgroups = osc.requestSecGroups( );
+	    	jsonBufSecgroups = osc.listSecGroups( );
 	    } catch(Exception e) {
 	    	errorMessage = e.getMessage();
 	    	hasError = true;

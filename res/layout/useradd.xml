@@ -110,16 +110,29 @@
                         android:id="@+id/usesslCB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-			            android:textSize="14sp"
+			android:textSize="14sp"
                         android:onClick="toggleUseSSL"
                         android:text="@string/USESSL" />
           <CheckBox
                         android:id="@+id/verifyServerCertCB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-			            android:textSize="14sp"
-			            android:onClick="toggleSelectCA"
+			android:textSize="14sp"
+			android:onClick="toggleSelectCA"
                         android:text="@string/VERIFYSERVERCERT" />
+        </LinearLayout>
+        <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+          <CheckBox
+                        android:id="@+id/useV3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:onClick="toggleV3"
+                        android:text="@string/USEv3" />
+
         </LinearLayout>
         <LinearLayout
                     android:layout_width="fill_parent"
@@ -142,6 +155,7 @@
         	android:paddingLeft="4dp"
                 android:ems="10"	
 	 	   />
+
         </LinearLayout>
         <View
           android:layout_width="match_parent"

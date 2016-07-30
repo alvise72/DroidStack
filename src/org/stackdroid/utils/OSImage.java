@@ -10,9 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
-public class OSImage {//implements Serializable {
-
-	//private static final long serialVersionUID = 2087368867376448461L;
+public class OSImage {
 	
     private String   name      = null;
     private long     size      = 0;
@@ -61,6 +59,14 @@ public class OSImage {//implements Serializable {
     	return name;
     }
     
+    public boolean isSaving( ) {
+      return status.compareToIgnoreCase("saving")==0;
+    }
+    
+    public boolean isActive( ) {
+      return status.compareToIgnoreCase("active")==0;
+    }
+    
     /**
     *
     *
@@ -73,18 +79,37 @@ public class OSImage {//implements Serializable {
    		Vector<OSImage> result = new Vector<OSImage>();
        
    		JSONObject jsonObject = new JSONObject( jsonString );
+   		
+   		  
    		JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
      
    		for(int i=0; i<images.length( ); ++i ) {
    			String name         = images.getJSONObject(i).has("name") ? images.getJSONObject(i).getString("name") : "N/A";
-   			long   size         = images.getJSONObject(i).has("size") ? (long)images.getJSONObject(i).getLong("size") : 0L;
+   			long size = 0L;
+   			if(images.getJSONObject(i).has("size") )
+   			  size = (long)images.getJSONObject(i).getLong("size") ;
+   			if(images.getJSONObject(i).has("OS-EXT-IMG-SIZE:size") )
+   			  size = (long)images.getJSONObject(i).getLong("OS-EXT-IMG-SIZE:size") ;
+   			//long   size         = images.getJSONObject(i).has("size") ? (long)images.getJSONObject(i).getLong("size") : 0L;
    			String format       = images.getJSONObject(i).has("disk_format") ? images.getJSONObject(i).getString("disk_format") : "N/A";
    			String creationDate = images.getJSONObject(i).has("created_at") ? images.getJSONObject(i).getString("created_at") : "N/A";
    			String visibility   = images.getJSONObject(i).has("visibility") ? images.getJSONObject(i).getString("visibility") : "N/A";
    			String status       = images.getJSONObject(i).has("status") ? images.getJSONObject(i).getString("status") : "N/A";
    			String ID           = images.getJSONObject(i).has("id") ? images.getJSONObject(i).getString("id") : "N/A";
-   			int    mindisk      = images.getJSONObject(i).has("min_disk") ? images.getJSONObject(i).getInt("min_disk") : 0;
-   			int    minram       = images.getJSONObject(i).has("min_ram") ? images.getJSONObject(i).getInt("min_ram") : 0;
+   			int    mindisk      = 0;
+   			if( images.getJSONObject(i).has("min_disk") )
+   				mindisk = images.getJSONObject(i).getInt("min_disk");
+   			if( images.getJSONObject(i).has("minDisk") )
+   				mindisk = images.getJSONObject(i).getInt("minDisk");
+   			
+   			
+   			int    minram       = 0;
+   			if(images.getJSONObject(i).has("min_ram"))
+   			  minram = images.getJSONObject(i).getInt("min_ram");
+   			if(images.getJSONObject(i).has("minRam"))
+   			  minram = images.getJSONObject(i).getInt("minRam");
+   			
+   			
 
    			SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
    			timeFormatter.setTimeZone( TimeZone.getDefault( ) );

@@ -22,10 +22,16 @@
     android:gravity="center_horizontal"
     android:orientation="horizontal" >
     <Button
-        android:id="@+id/myButton"
+        android:id="@+id/myButtonConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/CONFIRM" />
+<!--    <Button
+        android:id="@+id/myButtonRemove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/REMOVECURRENTFIP" />
+-->
     <Button
         android:id="@+id/myButtonCancel"
         android:layout_width="wrap_content"

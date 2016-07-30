@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="CONFIRM">Conferma</string>
+    <string name="DIRECTION">Direzione</string>
+    <string name="USEv3">Usa API Keystone v3</string>
+    <string name="INGRESS">Ingresso</string>
+    <string name="EGRESS">Uscita</string>
+    <string name="REMOVECURRENTFIP">Rimuovi il Floating IP</string>
+    <string name="FIPREMOVED">Il Floating IP è stato rimosso</string>
     <string name="CONTINUE">Continua</string>
     <string name="USERS">Utenti</string>
     <string name="OVERVIEW">Quote</string>

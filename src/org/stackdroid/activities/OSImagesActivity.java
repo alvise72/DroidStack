@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
+import android.graphics.Color;
 
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -534,6 +535,15 @@ public class OSImagesActivity extends Activity {
 
 			((TextView)promptsView.findViewById(R.id.imageName)).setText(osi.getName());
 			((TextView)promptsView.findViewById(R.id.imageStatus)).setText(osi.getStatus());
+			Log.v("OSImagesActivity.imageInfoListener", "STATUS=["+osi.getStatus()+"]");
+			if(osi.isSaving()) {
+			  ((TextView)promptsView.findViewById(R.id.imageStatus)).setTextColor( Color.parseColor("#AA0000") );
+			  ((TextView)promptsView.findViewById(R.id.imageStatus)).setTypeface(null, Typeface.BOLD);
+			}
+			if(osi.isActive()) {
+			  ((TextView)promptsView.findViewById(R.id.imageStatus)).setTextColor( Color.parseColor("#00AA00") );
+			  ((TextView)promptsView.findViewById(R.id.imageStatus)).setTypeface(null, Typeface.BOLD);
+			}
 			((TextView)promptsView.findViewById(R.id.imageSize)).setText(osi.getSizeMB()+" MBytes");
 			((TextView)promptsView.findViewById(R.id.imagePublic)).setText(osi.isPublic() ? getString(R.string.YES) : "No");
 			((TextView)promptsView.findViewById(R.id.imageFormat)).setText(osi.getFormat());
@@ -541,111 +551,12 @@ public class OSImagesActivity extends Activity {
 			((TextView)promptsView.findViewById(R.id.imageMinDisk)).setText(osi.getMinDISK()+" GBytes");
 			((TextView)promptsView.findViewById(R.id.imageMinRAM)).setText(osi.getMinRAM()+" MBytes");
 
-		/*	((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine();
-			((TextView)promptsView.findViewById(R.id.imageStatus)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imageStatus)).setSingleLine();
-			((TextView)promptsView.findViewById(R.id.imageSize)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imageSize)).setSingleLine();
-			((TextView)promptsView.findViewById(R.id.imagePublic)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imagePublic)).setSingleLine();
-			((TextView)promptsView.findViewById(R.id.imageFormat)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imageID)).setSingleLine();
-			((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine();
-			((TextView)promptsView.findViewById(R.id.imageName)).setEllipsize(TextUtils.TruncateAt.END);
-			((TextView)promptsView.findViewById(R.id.imageName)).setSingleLine(); */
+		
 
 			((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new OSImagesActivity.OkImageInfoListener());
 			alertDialogImageInfo.setCanceledOnTouchOutside(false);
 			alertDialogImageInfo.setCancelable(false);
 			alertDialogImageInfo.show();
-			/*
-    	    TextView tv1 = new TextView(OSImagesActivity.this);
-    	    tv1.setText(getString(R.string.IMAGENAME));
-    	    tv1.setTypeface( null, Typeface.BOLD );
-    	    TextView tv2 = new TextView(OSImagesActivity.this);
-    	    tv2.setText(osi.getName());
-    	    TextView tv3 = new TextView(OSImagesActivity.this);
-    	    tv3.setText(getString(R.string.STATUS));
-    	    tv3.setTypeface( null, Typeface.BOLD );
-    	    TextView tv4 = new TextView(OSImagesActivity.this);
-    	    tv4.setText(osi.getStatus());
-    	    TextView tv5 = new TextView(OSImagesActivity.this);
-    	    tv5.setText(getString(R.string.SIZE));
-    	    tv5.setTypeface( null, Typeface.BOLD );
-    	    TextView tv6 = new TextView(OSImagesActivity.this);
-    	    tv6.setText(""+osi.getSize() + " (" + osi.getSize()/1048576 + " MB)");
-    	    TextView tv7 = new TextView(OSImagesActivity.this);
-    	    tv7.setText(getString(R.string.PUBLIC));
-    	    tv7.setTypeface( null, Typeface.BOLD );
-    	    TextView tv8 = new TextView(OSImagesActivity.this);
-    	    tv8.setText(""+ (osi.isPublic() ? getString(R.string.YES) : getString(R.string.NO)));
-    	    TextView tv9 = new TextView(OSImagesActivity.this);
-    	    tv9.setText(getString(R.string.FORMAT));
-    	    tv9.setTypeface( null, Typeface.BOLD );
-    	    TextView tv10 = new TextView(OSImagesActivity.this);
-    	    tv10.setText(osi.getFormat());
-    	    TextView tv11 = new TextView( OSImagesActivity.this );
-    	    tv11.setText("ID:");
-    	    tv11.setTypeface( null, Typeface.BOLD );
-    	    TextView tv12 = new TextView( OSImagesActivity.this );
-    	    tv12.setText(osi.getID());
-    	    TextView tv13 = new TextView( OSImagesActivity.this );
-    	    tv13.setText(getString(R.string.MINDISK));
-    	    tv13.setTypeface( null, Typeface.BOLD );
-    	    TextView tv14 = new TextView( OSImagesActivity.this );
-    	    tv14.setText(osi.getMinDISK( ) + " GB");
-    	    TextView tv15 = new TextView( OSImagesActivity.this );
-    	    tv15.setText(getString(R.string.MINRAM));
-    	    tv15.setTypeface( null, Typeface.BOLD );
-    	    TextView tv16 = new TextView( OSImagesActivity.this );
-    	    tv16.setText(osi.getMinRAM( ) + " MB");
-    	    ScrollView sv = new ScrollView(OSImagesActivity.this);
-    	    LinearLayout.LayoutParams lp 
-    		= new LinearLayout.LayoutParams(
-    						LinearLayout.LayoutParams.MATCH_PARENT,
-    						LinearLayout.LayoutParams.MATCH_PARENT);
-    	    sv.setLayoutParams( lp );
-    	    LinearLayout l = new LinearLayout(OSImagesActivity.this);
-    	    l.setLayoutParams( lp );
-    	    l.setOrientation( LinearLayout.VERTICAL );
-    	    int paddingPixel = 8;
-    	    float density = Utils.getDisplayDensity( OSImagesActivity.this );
-    	    int paddingDp = (int)(paddingPixel * density);
-    	    l.setPadding(paddingDp, 0, 0, 0);
-    	    l.addView( tv1 );
-    	    tv2.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv2 );
-    	    l.addView( tv3 );
-    	    tv4.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv4 );
-    	    l.addView( tv5 );
-    	    tv6.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv6 );
-    	    l.addView( tv7 );
-    	    tv8.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv8 );
-    	    l.addView( tv9 );
-    	    tv10.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv10 );
-    	    l.addView( tv11 );
-    	    tv12.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv12 );
-    	    l.addView( tv13 );
-    	    tv14.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv14 );
-    	    l.addView( tv15 );
-    	    tv16.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv16 );
-    	    sv.addView(l);
-    	    String name;
-    	    if(osi.getName().length()>=30)
-    			name = osi.getName().substring(0,27) + "...";
-    	    else
-    			name = osi.getName();
-    			*/
-    	    //Utils.alertInfo( sv, getString(R.string.IMAGEINFO)+": \n" + name, OSImagesActivity.this );
     	}
     }
 
@@ -665,11 +576,13 @@ public class OSImagesActivity extends Activity {
     	((LinearLayout)findViewById(R.id.osimagesLayout)).removeAllViews();
     	while( sit.hasNext( )) {
     		OSImage os = sit.next();
-    		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( new OSImageView(os, 
-    																				   new OSImagesActivity.imageInfoListener(),
-    																				   new OSImagesActivity.imageLaunchListener(),
-    																				   new OSImagesActivity.imageDeleteListener(),
-    																				   this) );
+    		OSImageView osiview = new OSImageView(os, 
+    							new OSImagesActivity.imageInfoListener(),
+    							new OSImagesActivity.imageLaunchListener(),
+    							new OSImagesActivity.imageDeleteListener(),
+    							this);
+    		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( osiview );
+    		
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.osimagesLayout)).addView( space );
@@ -699,8 +612,8 @@ public class OSImagesActivity extends Activity {
 	    OSClient osc = OSClient.getInstance(U);
 	    
 	    try {
-	    	osc.deleteGlanceImage( imagetodel );
-	    	jsonBuf = osc.requestImages( );
+	    	osc.deleteImage( imagetodel );
+	    	jsonBuf = osc.listImages( );
 	    } catch(NotFoundException nfe) {
 	    	errorMessage = getString(R.string.NOTFOUND)+": " + nfe.getMessage();
 	    	hasError = true;
@@ -770,7 +683,7 @@ public class OSImagesActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 
      		try {
-     			jsonBuf = osc.requestImages( );
+     			jsonBuf = osc.listImages( );
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
      			hasError = true;
@@ -832,7 +745,7 @@ public class OSImagesActivity extends Activity {
 				jsonKeyPairBuf = osc.requestKeypairs();
 				jsonNetworkBuf = osc.requestNetworks();
 				jsonSubNetBuf  = osc.requestSubNetworks();
-				jsonSecGrpsBuf = osc.requestSecGroups();
+				jsonSecGrpsBuf = osc.listSecGroups();
 			} catch(ServiceUnAvailableOrInternalError se) {
 				errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
 				hasError = true;

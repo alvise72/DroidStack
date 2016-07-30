@@ -23,20 +23,20 @@ public class Server {//implements Serializable {
 
     public final static String[] POWER_STRING = {"No State", "Running", "", "", "Shutdown"};
 
-    private String			name;
-    private String 			ID;
-    private String 			status;
-    private String 			task;
-    private int 			powerstate;
+    private String		name;
+    private String 		ID;
+    private String 		status;
+    private String 		task;
+    private int 		powerstate;
     private Vector<String> 	privIP;
     private Vector<String> 	pubIP;
-    private String 			computeNode;
-    private String 			keyname;
-    private String 			flavorID;
+    private String 		computeNode;
+    private String 		keyname;
+    private String 		flavorID;
     private String[] 		secgrpNames;
-    private long 			creationTime;
-    private Flavor 			flavor;
-	private OSImage			osImage;
+    private long 		creationTime;
+    private Flavor 		flavor;
+    private OSImage		osImage;
     
     public Server( String _name,
 				   String _ID,

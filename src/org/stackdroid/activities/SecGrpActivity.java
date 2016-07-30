@@ -341,7 +341,7 @@ public class SecGrpActivity extends Activity {
 		      OSClient osc = OSClient.getInstance( U );
 
 		      try {
-		    	  jsonBuf = osc.requestSecGroups( );
+		    	  jsonBuf = osc.listSecGroups( );
 		      } catch(Exception e) {
 		    	  errorMessage = e.getMessage();
 		    	  hasError = true;

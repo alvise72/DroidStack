@@ -72,14 +72,13 @@ import org.stackdroid.utils.CustomProgressDialog;
 
 public class ServersActivity extends Activity {
 
-	private CustomProgressDialog     progressDialogWaitStop    = null;
-    private User 				     U 						   = null;
-	private Server 				     server    				   = null;
+    private CustomProgressDialog     progressDialogWaitStop    = null;
+    private User 		     U                         = null;
+	private Server 		     server                    = null;
 	private ArrayAdapter<OSImage>    spinnerImagesArrayAdapter = null;
     private ArrayAdapter<Flavor>     spinnerFlavorArrayAdapter = null;
     private ArrayAdapter<KeyPair>    spinnerKeyPairArrayAdapter = null;
 
-//    private AlertDialog 		     alertDialogSelectImage    = null;
 	private AlertDialog 		     alertDialogServerLaunch   = null;
 	private AlertDialog 		     alertDialogSelectFIP      = null;	
 
@@ -129,12 +128,11 @@ public class ServersActivity extends Activity {
                 String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
 				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
 				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
-				String keypair;//	  = ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
+				String keypair;
                 if( ((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getCount() > 0)
                     keypair= ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
                 else
                     keypair = "";
-				//Log.d("SERVERLAUNCH", "serverName="+serverName + " - imageName="+imageName+" - flavor="+flavor+" - number="+number+" - keypair="+keypair);
                 String secgroups  = Utils.join(selectedSecgroups, ",");
 
                 if(serverName.isEmpty()) {
@@ -153,7 +151,7 @@ public class ServersActivity extends Activity {
                 int count = Integer.parseInt(number);
 
                 Iterator<NetworkView> nvit = netViewList.iterator();
-                //Hashtable<Pair<String,String>, String> selectedNetworks = new Hashtable<Pair<String,String>, String>();
+                
                 selectedNetworks.clear();
 
                 while(nvit.hasNext()) {
@@ -164,14 +162,12 @@ public class ServersActivity extends Activity {
                             netIP = nv.getNetworkIP().getText().toString().trim();
                             if(netIP != null && netIP.length()!=0 && count>1) {
                                 Utils.alert(getString(R.string.NOCUSTOMIPWITHMOREVM), ServersActivity.this);
-                                //if(alertDialogServerLaunch!=null)
-                                //    alertDialogServerLaunch.dismiss();
+                                
                                 return;
                             }
                             if(netIP != null && netIP.length()!=0 && InetAddressUtils.isIPv4Address(netIP) == false) {
                                 Utils.alert(getString(R.string.INCORRECTIPFORMAT)+ ": " + netIP, ServersActivity.this);
-                                //if(alertDialogServerLaunch!=null)
-                                //    alertDialogServerLaunch.dismiss();
+                                
                                 return;
                             }
                             if(netIP != null && netIP.length()!=0) { // Let's check only if the user specified the custom IP
@@ -181,8 +177,7 @@ public class ServersActivity extends Activity {
                                 SubnetUtils.SubnetInfo si = su.getInfo();
                                 if(!si.isInRange(netIP)) {
                                     Utils.alert("IP "+netIP+" "+getString(R.string.NOTINRANGE) + " "+sn.getAddress(), ServersActivity.this);
-                                    //if(alertDialogServerLaunch!=null)
-                                    //    alertDialogServerLaunch.dismiss();
+                                    
                                     return;
                                 }
                             }
@@ -191,7 +186,7 @@ public class ServersActivity extends Activity {
                         Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
                         if(netIP==null) netIP = "";
                         selectedNetworks.put(net_subnet, netIP);
-                        Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
+                        //Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
 
                     }
                 }
@@ -199,7 +194,7 @@ public class ServersActivity extends Activity {
                     Utils.alert(getString(R.string.MUSTSELECTNET), ServersActivity.this);
                     return;
                 }
-                Log.d("SERVERLAUNCH", "name="+serverName+" - image="+imageName+" - key="+keypair+" - flavor="+flavor+" - num="+number+" - sec="+secgroups );
+                //Log.d("SERVERLAUNCH", "name="+serverName+" - image="+imageName+" - key="+keypair+" - flavor="+flavor+" - num="+number+" - sec="+secgroups );
                 name_InstanceToLaunch = serverName;
                 imageID_InstanceToLaunch = imageName;
                 keyname_InstanceToLaunch = keypair;
@@ -391,7 +386,22 @@ public class ServersActivity extends Activity {
 		}
 		
 	}
-	
+
+	/**
+	 * 
+	 * @author dorigoa
+	 *
+	 */
+	protected class removeFIP implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			server  = ((ButtonWithView)v).getServerView().getServer();
+			ServersActivity.this.progressDialogWaitStop.show();
+                        (new AsyncTaskRemoveFIP( )).execute( server.getID(), server.getPublicIP().elementAt( 0 ) );
+                        ServersActivity.this.manageInstanceDialog.dismiss();
+		}
+		
+	}	
 	/**
 	 * 
 	 * @author dorigoa
@@ -526,11 +536,14 @@ public class ServersActivity extends Activity {
 
 	    fipSpinner = (Spinner) promptsView.findViewById(R.id.mySpinnerChooseIP);
 	    fipSpinner.setAdapter(spinnerFIPArrayAdapter);
-	    final Button mButton = (Button) promptsView.findViewById(R.id.myButton);
+	    final Button mButtonConfirm = (Button) promptsView.findViewById(R.id.myButtonConfirm);
 	    final Button mButtonCancel = (Button)promptsView.findViewById(R.id.myButtonCancel);
-		
-	    mButton.setOnClickListener(new ServersActivity.ConfirmButtonHandlerForFIP());
+	    //final Button mButtonRemove = (Button)promptsView.findViewById(R.id.myButtonRemove);
+	    
+	    mButtonConfirm.setOnClickListener(new ServersActivity.ConfirmButtonHandlerForFIP());
 	    mButtonCancel.setOnClickListener(new ServersActivity.CancelButtonHandlerForFIP());
+	    //mButtonRemove.setOnClickListener(new ServersActivity.RemoveButtonHandlerForFIP());
+	    
 	    alertDialogSelectFIP.setCanceledOnTouchOutside(false);
 	    alertDialogSelectFIP.setCancelable(false);
 	    alertDialogSelectFIP.show();
@@ -567,6 +580,20 @@ public class ServersActivity extends Activity {
 		}
 	}
 
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+/*	protected class RemoveButtonHandlerForFIP implements OnClickListener {
+		@Override
+		public void onClick( View v ) {
+			alertDialogSelectFIP.dismiss();
+		}
+	}*/
+	
 	/**
 	 * 
 	 * 
@@ -712,9 +739,10 @@ public class ServersActivity extends Activity {
 			final ButtonWithView softReboot    = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView startInstance = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView stopInstance = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
-			
 			final ButtonWithView pauseServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView resumeServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView removeFip = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			
 			//final Button resizeServer = new Button( ServersActivity.this );
 			changeName.setText(getString(R.string.CHANGENAMESERVER));
 			makeSnap.setText(getString(R.string.MAKESNAP));
@@ -724,6 +752,7 @@ public class ServersActivity extends Activity {
 			resumeServer.setText(getString(R.string.RESUMESERVER));
 			startInstance.setText(getString(R.string.STARTSERVER));
 			stopInstance.setText(getString(R.string.STOPSERVER));
+			removeFip.setText(getString(R.string.REMOVECURRENTFIP));
 			//resizeServer.setText(getString(R.string.RESIZESERVER));
 			
 			changeName.setOnClickListener( new ServersActivity.ChangeInstanceNameHandler( ) ) ;
@@ -734,6 +763,13 @@ public class ServersActivity extends Activity {
 			resumeServer.setOnClickListener( new ServersActivity.ResumeInstance( ) );
 			startInstance.setOnClickListener( new ServersActivity.StartInstance( ) );
 			stopInstance.setOnClickListener( new ServersActivity.StopInstance( ) );
+			Server server = ((ImageButtonWithView)v).getServerView().getServer();
+			if( server.getPublicIP() == null || server.getPublicIP().size() == 0 ) {
+			  removeFip.setEnabled( false );
+			} else {
+			  removeFip.setEnabled( true );
+			  removeFip.setOnClickListener( new ServersActivity.removeFIP( ) );
+			}
 			
 			L.addView(changeName);
 			L.addView(makeSnap);
@@ -741,11 +777,9 @@ public class ServersActivity extends Activity {
 			L.addView(softReboot);
 			L.addView(startInstance);
 			L.addView(stopInstance);
-			
-			//L.addView(startUp);
 			L.addView(pauseServer);
 			L.addView(resumeServer);
-			//L.addView(resizeServer);
+			L.addView(removeFip);
 			sv.addView( L );
 			alert.setView(sv);
 			
@@ -813,9 +847,9 @@ public class ServersActivity extends Activity {
                 }
             }
             if(fip.endsWith("\n"))
-                fip = fip.substring(0, fip.length() - 2);
+                fip = fip.substring(0, fip.length() - 1);
             if(fxip.endsWith("\n"))
-                fxip = fxip.substring(0,fxip.length()-2);
+                fxip = fxip.substring(0,fxip.length() - 1);
 
             ((TextView)promptsView.findViewById(R.id.serverName)).setText(s.getName());
             ((TextView)promptsView.findViewById(R.id.imageName)).setText( s.getOSImage()!=null ? s.getOSImage().getName() : "N/A");
@@ -1057,6 +1091,42 @@ public class ServersActivity extends Activity {
 
     //  ASYNC TASKS.....
 
+    //__________________________________________________________________________________
+    protected class AsyncTaskRemoveFIP extends AsyncTask<String, String, String>
+    {
+    	private  String   errorMessage     = null;
+     	private  boolean  hasError         = false;
+     	
+    	protected String doInBackground( String... v ) 
+     	{
+     		String serverid = v[0];
+     		String fip      = v[1];
+     		OSClient osc    = OSClient.getInstance( U );
+     		try {
+     			osc.removeFIP(serverid, fip);
+     		} catch(Exception e) {
+     			errorMessage = e.getMessage();
+     			hasError = true;
+     			return "";
+     		}
+     		return "";
+     	}
+    	
+    	@Override
+    	protected void onPostExecute( String result ) {
+    		super.onPostExecute(result);
+    	    
+     	    if(hasError) {
+     	    	Utils.alert( errorMessage, ServersActivity.this );
+     	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
+     	    	return;
+     	    }
+    		ServersActivity.this.progressDialogWaitStop.dismiss( );
+    		Utils.alert(ServersActivity.this.getString(R.string.FIPREMOVED), ServersActivity.this);
+    		(new AsyncTaskOSListServers()).execute( );
+    	}
+    }
+    
 
     //__________________________________________________________________________________
     protected class AsyncTaskPauseInstance extends AsyncTask<String, String, String>
@@ -1364,7 +1434,7 @@ public class ServersActivity extends Activity {
 	      try {
 	    	  jsonBuf 	    = osc.requestServers( );
 	    	  jsonBufferFlavor  = osc.requestFlavors();
-              jsonBufferImages = osc.requestImages();
+              jsonBufferImages = osc.listImages();
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
 	    	  hasError = true;
@@ -1386,7 +1456,7 @@ public class ServersActivity extends Activity {
 	    
 		try {
                   Hashtable<String, OSImage> map_id_to_osimage = new Hashtable<String, OSImage>();
-                  Vector<OSImage> osImages = OSImage.parse(jsonBufferImages)     ;
+                  Vector<OSImage> osImages = OSImage.parse(jsonBufferImages);
                   Iterator<OSImage> osit = osImages.iterator();
                   while(osit.hasNext()) {
                     OSImage img = osit.next();
@@ -1523,12 +1593,12 @@ public class ServersActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 
      		try {
-                jsonImageBuf   = osc.requestImages();
+                jsonImageBuf   = osc.listImages();
                 jsonFlavorBuf  = osc.requestFlavors();
                 jsonKeyPairBuf = osc.requestKeypairs();
                 jsonNetworkBuf = osc.requestNetworks();
                 jsonSubNetBuf  = osc.requestSubNetworks();
-                jsonSecGrpsBuf = osc.requestSecGroups();
+                jsonSecGrpsBuf = osc.listSecGroups();
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = ServersActivity.this.getString(R.string.SERVICEUNAVAILABLE);
      			hasError = true;

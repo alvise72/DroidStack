@@ -34,7 +34,7 @@ import android.widget.TextView;
 public class OverViewActivity extends Activity {
 
     private CustomProgressDialog progressDialogWaitStop = null;
-    private User 				 U 						= null;
+    private User 		 U 			= null;
  
     /**
      *
@@ -183,11 +183,6 @@ public class OverViewActivity extends Activity {
     	((TextView)findViewById(R.id.fipusageMAXTV)).setText("/" + Q.getMaxFloatingIP( ) );
     	((ProgressBar)findViewById(R.id.fipusagePB)).setMax( Q.getMaxFloatingIP( ) );
     	((ProgressBar)findViewById(R.id.fipusagePB)).setProgress( fips!=null ? fips.size() : 0 );
-	
-    	/* ((TextView)findViewById(R.id.segusageTV)).setText("" + (secgs != null ? secgs.size() : 0) );
-    	((TextView)findViewById(R.id.segusageMAXTV)).setText("/" + Q.getMaxSecurityGroups( ) );
-    	((ProgressBar)findViewById(R.id.segusagePB)).setMax( Q.getMaxSecurityGroups( ) );
-    	((ProgressBar)findViewById(R.id.segusagePB)).setProgress( secgs != null ? secgs.size() : 0 ); */
     	
     	((TextView)findViewById(R.id.volusageTV)).setText("" + QV.getVolumeUsage() );
     	((TextView)findViewById(R.id.volusageMAXTV)).setText("/" + QV.getMaxVolumes() );
@@ -238,7 +233,7 @@ public class OverViewActivity extends Activity {
 	    		jsonBufQuota 	    = osc.requestQuota( );
 	    		jsonBuf 	 	    = osc.requestServers( );
 	    		jsonBufFIPs 	    = osc.requestFloatingIPs( );
-	    		jsonBufSecgs 	    = osc.requestSecGroups( );
+	    		jsonBufSecgs 	    = osc.listSecGroups( );
 	    		jsonBufferFlavor    = osc.requestFlavors( );
 	    		jsonBufferVolumes   = osc.requestVolumes( );
 	    		jsonBufferQuotaVols = osc.requestVolQuota( );
@@ -267,16 +262,15 @@ public class OverViewActivity extends Activity {
      		}
 	    
      		try {
-     			//		Log.d("OVERVIEW", "jsonBufQuota="+jsonBufQuota);
      			Quota Q = Quota.parse( jsonBufQuota );
      			QuotaVol QV = QuotaVol.parse(jsonBufferQuotaVols);
      			OverViewActivity.this.refreshView( Q,
-     											   QV,
-     											   Server.parse( jsonBuf, null ),
-     											   Flavor.parse( jsonBufferFlavor ),
-     											   FloatingIP.parse( jsonBufFIPs, false ),
-     											   SecGroup.parse( jsonBufSecgs )
-     											 );
+     							   QV,
+     							   Server.parse( jsonBuf, null ),
+     							   Flavor.parse( jsonBufferFlavor ),
+     							   FloatingIP.parse( jsonBufFIPs, false ),
+     							   SecGroup.parse( jsonBufSecgs )
+     							 );
      		} catch(ParseException pe) {
      			Utils.alert( pe.getMessage( ), OverViewActivity.this );
      		}
