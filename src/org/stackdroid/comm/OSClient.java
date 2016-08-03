@@ -93,21 +93,43 @@ public class OSClient {
 		    + U.getUserName( ) + "\", \"password\": \"" 
 		    + U.getPassword() + "\"}}}";
 	    
-	    String jsonBuffer = RESTClient.requestToken(U.useSSL(),
-							U.getIdentityEndpoint() + "/tokens",
-							payload);
+	    String identityEP = U.getIdentityEndpoint();
+	    if(U.useV3() )
+	    	identityEP += "/auth";
+	    identityEP += "/tokens";
+	    //Log.v("OSClient.checkToken", "identityEP="+identityEP);
+	    //Log.v("OSClient.checkToken", "payload=["+payload+"]");
+	    Pair<String,String> jsonBuffer_Token = RESTClient.requestToken(U.useSSL(),
+							       		   identityEP,
+									   payload);
 	    String  pwd = U.getPassword();
 	    String  edp = U.getIdentityEndpoint();
 	    boolean ssl = U.useSSL();
 	    boolean verifyServerCert = U.getVerifyServerCert();
 	    String CAFile = U.getCAFile();
-	    Log.v("OSClient.checkToken", "jsonBuffer="+jsonBuffer);
-	    U = User.parse( jsonBuffer, U.useV3( ) );
+	    //Log.v("OSClient.checkToken", "jsonBuffer="+jsonBuffer);
+	    U = User.parse( jsonBuffer_Token.first, U.useV3( ), jsonBuffer_Token.second );
 	    U.setPassword( pwd);
 	    U.setSSL(ssl);
 	    U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
 	    U.setCAFile( CAFile );
 	}
+    }
+    
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+    public String getCurrentAPIVersion( String endpoint ) throws NotAuthorizedException, NotFoundException,
+								ServerException, ServiceUnAvailableOrInternalError,
+								IOException, ParseException,CertificateException
+    {
+      return RESTClient.sendGETRequestWithoutToken(U.useSSL(),
+				       		   endpoint );
     }
     
     /**
@@ -951,21 +973,14 @@ public class OSClient {
     {
 	checkToken( );
 
- 		
-	String glanceEP = U.getGlanceEndpoint();
-	if(glanceEP.endsWith("v2"))
-	    glanceEP += "/images";
-	if(glanceEP.endsWith("v1"))
-	    glanceEP += "/images/detail";
- 	  
-	if(glanceEP.matches("http.+:\\d+$"))
-	    glanceEP += "/v2/images";
- 	   
+	String endpoint = U.getGlanceEndpoint() + "/images/detail";
+	Log.d("OSClient.listImages", "EP=[" + endpoint + "]");
 	String listResult = RESTClient.sendGETRequest(U.useSSL(),
-						      glanceEP ,
+						      endpoint ,
 						      U.getToken(),
 						      null);
-	Log.v("OSClient.listImages", "listResult=["+listResult+"]");
+						      
+	Log.d("OSClient.listImages", "listResult=["+listResult+"]");
 	return listResult;
     }
     
@@ -977,7 +992,7 @@ public class OSClient {
      *
      *
      */
-    public String requestQuota( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listQuotas( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					 IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
@@ -999,7 +1014,7 @@ public class OSClient {
      *
      *
      */
-    public String requestVolQuota( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listVolQuotas( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					    IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
@@ -1025,7 +1040,7 @@ public class OSClient {
      *
      *
      */
-    public String requestFloatingIPs( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listFloatingIPs( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
@@ -1070,7 +1085,7 @@ public class OSClient {
      *
      *
      */
-    public String requestServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken();
@@ -1093,7 +1108,7 @@ public class OSClient {
      *
      *
      */
-    public String requestFlavors( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listFlavors( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
@@ -1178,7 +1193,7 @@ public class OSClient {
      *
      *
      */
-    public String requestNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					    IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
@@ -1222,7 +1237,7 @@ public class OSClient {
      *
      *
      */
-    public String requestSubNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listSubNetworks( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );

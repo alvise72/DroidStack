@@ -407,8 +407,8 @@ public class NeutronRouterActivity extends Activity {
     		//Log.d("NEUTRONROUTER", "doInBackground");
     	    try {
     	    	jsonBufRouter    = osc.requestRouters( );
-				jsonBufNet		 = osc.requestNetworks();
-				jsonBufSubnet	 = osc.requestSubNetworks( );
+				jsonBufNet		 = osc.listNetworks();
+				jsonBufSubnet	 = osc.listSubNetworks( );
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError( se.getMessage() );
     	    	hasError = true;

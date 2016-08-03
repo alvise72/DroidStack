@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Pair;
 import android.view.WindowManager;
 import android.view.View;
 import android.content.Intent;
@@ -27,9 +28,15 @@ import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
 import org.stackdroid.utils.User;
 import org.stackdroid.utils.Utils;
+import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.utils.CustomProgressDialog;
 import org.stackdroid.comm.RESTClient;
+import org.stackdroid.comm.OSClient;
 import org.stackdroid.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class UserAddActivity extends Activity {
 
@@ -94,7 +101,7 @@ public class UserAddActivity extends Activity {
 	    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(verifyservercert);
 	    ((Button)findViewById(R.id.selectCABT)).setEnabled(verifyservercert);
 	    ((TextView)findViewById(R.id.CAFILE)).setText(last_cafile);
-	    //((Button)findViewById(R.id.selectCABT)).setEnabled(true);
+	    ((Button)findViewById(R.id.selectCABT)).setEnabled(true);
 	}
 	
 	boolean verifyserverca = ((CheckBox)findViewById(R.id.verifyServerCertCB)).isEnabled() && ((CheckBox)findViewById(R.id.verifyServerCertCB)).isChecked();
@@ -225,7 +232,7 @@ public class UserAddActivity extends Activity {
 	String  username = usernameET.getText().toString().trim();
 	String  password = passwordET.getText().toString().trim();
 	boolean usessl   = usesslET.isChecked();
-	
+	m_useV3          = ((CheckBox)findViewById(R.id.useV3)).isChecked();
 	
 	if( endpoint.length()==0 ) {
 	    Utils.alert("Please fill the endpoint field.", this);
@@ -322,7 +329,6 @@ public class UserAddActivity extends Activity {
     public void toggleSelectCA( View v ) {
 	((Button)(findViewById(R.id.selectCABT))).setEnabled(((CheckBox) v).isChecked());
 	((TextView)findViewById(R.id.CAFILE)).setText("");
-	//((CheckBox)findViewById(R.id.useV3)).setEnabled(false);
     }
      
     /**
@@ -341,8 +347,6 @@ public class UserAddActivity extends Activity {
      *
      */  
     public void toggleV3( View v ) {
-	//	((Button)(findViewById(R.id.useV3))).setEnabled(((CheckBox) v).isChecked());
-	//	((TextView)findViewById(R.id.CAFILE)).setText("");
 	if( ((CheckBox)v).isChecked())
 	    m_useV3 = true;
 	else
@@ -368,15 +372,12 @@ public class UserAddActivity extends Activity {
 	if(!ssl.isChecked()) {
 	    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setChecked(false);
 	    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setEnabled(false);
-	    ((CheckBox)findViewById(R.id.useV3)).setEnabled(false);
+	    //((CheckBox)findViewById(R.id.useV3)).setEnabled(false);
 	    ((Button)findViewById(R.id.selectCABT)).setEnabled(false);
 	    ((TextView)findViewById(R.id.CAFILE)).setText("");
-	    
 	    m_validcafile=false;
 	} else {
 	    ((CheckBox)findViewById(R.id.verifyServerCertCB)).setEnabled(true);
-	    
-	    //((Button)findViewById(R.id.selectCABT)).setEnabled(true);
 	}
     }
     
@@ -452,7 +453,7 @@ public class UserAddActivity extends Activity {
     {
      	private  String   errorMessage  = null;
      	private  boolean  hasError      = false;
-     	private  String   jsonBuf       = null;
+     	private  Pair<String,String>   jsonBuf_Token       = null;
 	
      	private String endpoint = null;
      	private String password = null;
@@ -508,34 +509,65 @@ public class UserAddActivity extends Activity {
 		} else
 		    payload = "{ \"auth\": { \"identity\": { \"methods\": [\"password\"],\"password\": { \"user\": { \"name\": \"" + username + "\",\"domain\": { \"id\": \"default\" }, \"password\": \"" + password + "\" } } }, \"scope\": { \"project\": { \"name\": \"" + tenant + "\", \"domain\": { \"id\": \"default\" } }}}}";
 		
-		jsonBuf = RESTClient.requestToken( usessl, (usessl ? "https://" : "http://") + endpoint + (m_useV3 ? "/v3/auth/tokens" : "/v2.0/tokens") , payload );
-                if(jsonBuf == null || jsonBuf.length()==0) {
+		endpoint = (usessl ? "https://" : "http://") + endpoint + (m_useV3 ? "/v3/auth/tokens" : "/v2.0/tokens");
+		
+		//Log.v("UserAddActivity.AsyncTaskRequestToken.doInBackground", "endpoint=["+endpoint+"]");
+		
+		jsonBuf_Token = RESTClient.requestToken( usessl, endpoint , payload );
+		
+                if(jsonBuf_Token == null || jsonBuf_Token.first.length()==0) {
 		    hasError = true;
 		    errorMessage = "Server's response buffer is NULL or empty!";
 		    return null;
 		}
-		    if (jsonBuf.length() > 1000) {
-		      Log.v("UserAddActivity.doInBackgroud", "jsonBuf.length = " + jsonBuf.length());
-		      int chunkCount = jsonBuf.length() / 1000;     // integer division
+		    if (jsonBuf_Token.first.length() > 1000) {
+		      //Log.v("UserAddActivity.doInBackgroud", "jsonBuf.length = " + jsonBuf.length());
+		      int chunkCount = jsonBuf_Token.first.length() / 1000;     // integer division
 		      for (int i = 0; i <= chunkCount; i++) {
 		      int max = 1000 * (i + 1);
-		      if (max >= jsonBuf.length()) {
-		      Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i));
+		      if (max >= jsonBuf_Token.first.length()) {
+		      //Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i));
 		      } else {
-		      Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i, max));
+		      //Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i, max));
 		      }
 		      }
 		      } else {
-		      Log.v("UserAddActivity.doInBackgroud", jsonBuf.toString());
+		      //Log.v("UserAddActivity.doInBackgroud", jsonBuf.toString());
 		      }
 		      //Log.d("UserAddActivity.doInBackgroud", "JSON=["+jsonString+"]" );
 		       
 		//     		Log.v("UserAddActivity.doInBackgroud", "jsonBuf="+jsonBuf);
-		U = User.parse( jsonBuf, m_useV3 );
+		U = User.parse( jsonBuf_Token.first, m_useV3, jsonBuf_Token.second );
+		
 		U.setPassword(password);
 		U.setSSL(usessl);
                 U.setVerifyServerCert(verifyServerCert);
                 U.setCAFile(s_CAFile);
+     		
+     		String jsonBufGlanceAPIVer = OSClient.getInstance( U ).getCurrentAPIVersion( U.getGlanceEndpoint( ) ); 
+     		String jsonBufNeutronAPIVer = OSClient.getInstance( U ).getCurrentAPIVersion( U.getNeutronEndpoint( ) ); 
+     		
+     		String _glanceAPI = ParseUtils.getCurrentAPI(jsonBufGlanceAPIVer);
+     		String _neutronAPI = ParseUtils.getCurrentAPI(jsonBufNeutronAPIVer);
+     		
+     		String glanceAPI = _glanceAPI != null ? _glanceAPI :  U.getGlanceEndpoint( ) + "/v2";
+     		String neutronAPI = _neutronAPI != null ? _neutronAPI :  U.getGlanceEndpoint( ) + "/v2";
+     		
+     		if(U.useSSL( ) ) {
+     			Log.v("UserAddActivity", "FIX TO SSL");
+     			if(glanceAPI.startsWith("http://"))
+     			  glanceAPI = "https://" + glanceAPI.substring(7, glanceAPI.length());
+     			if(neutronAPI.startsWith("http://"))
+     			  neutronAPI = "https://" + neutronAPI.substring(7, neutronAPI.length());
+     			
+     			//glanceAPI.replaceAll("http:", "https:");
+     			//neutronAPI.replace("http:", "https:");
+     		}
+     		
+     		//Log.d("UserAddActivity", "GLANCE API VER=[" + glanceAPI + "]");
+     		//Log.d("UserAddActivity", "NEUTRON API VER=[" + neutronAPI + "]");
+     		U.setGlanceEndpoint( glanceAPI );
+     		U.setNeutronEndpoint( neutronAPI );
      		
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();

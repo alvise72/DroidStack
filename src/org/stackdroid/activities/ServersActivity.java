@@ -1432,8 +1432,8 @@ public class ServersActivity extends Activity {
 	    
 
 	      try {
-	    	  jsonBuf 	    = osc.requestServers( );
-	    	  jsonBufferFlavor  = osc.requestFlavors();
+	    	  jsonBuf 	    = osc.listServers( );
+	    	  jsonBufferFlavor  = osc.listFlavors();
               jsonBufferImages = osc.listImages();
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
@@ -1594,10 +1594,10 @@ public class ServersActivity extends Activity {
 
      		try {
                 jsonImageBuf   = osc.listImages();
-                jsonFlavorBuf  = osc.requestFlavors();
+                jsonFlavorBuf  = osc.listFlavors();
                 jsonKeyPairBuf = osc.requestKeypairs();
-                jsonNetworkBuf = osc.requestNetworks();
-                jsonSubNetBuf  = osc.requestSubNetworks();
+                jsonNetworkBuf = osc.listNetworks();
+                jsonSubNetBuf  = osc.listSubNetworks();
                 jsonSecGrpsBuf = osc.listSecGroups();
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = ServersActivity.this.getString(R.string.SERVICEUNAVAILABLE);
@@ -1654,7 +1654,7 @@ public class ServersActivity extends Activity {
 	    OSClient osc = OSClient.getInstance(U);
 
 	    try {
-		  jsonBuf         = osc.requestFloatingIPs();
+		  jsonBuf         = osc.listFloatingIPs();
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;

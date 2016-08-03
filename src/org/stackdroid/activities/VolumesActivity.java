@@ -524,7 +524,7 @@ public class VolumesActivity extends Activity {
 
      		try {
      			jsonBufVols		= osc.requestVolumes( );
-     			jsonBufServers	= osc.requestServers( );
+     			jsonBufServers	= osc.listServers( );
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;

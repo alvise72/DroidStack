@@ -284,8 +284,8 @@ public class RouterEditActivity extends Activity {
 			try {
 				jsonBufRouterPorts 	= osc.requestRouterPorts( routerID );
 				jsonBufRouterShow  	= osc.requestRouterShow( routerID );
-				jsonBufNet		 	= osc.requestNetworks( );
-				jsonBufSubnet	 	= osc.requestSubNetworks();
+				jsonBufNet		 	= osc.listNetworks( );
+				jsonBufSubnet	 	= osc.listSubNetworks();
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;
@@ -482,7 +482,7 @@ public class RouterEditActivity extends Activity {
 			//subnetID = v[0];
 			//networkName = v[1];
 			try {
-				jsonSubnetBuf = osc.requestSubNetworks( );
+				jsonSubnetBuf = osc.listSubNetworks( );
 			} catch(ServerException se) {
 				errorMessage = ParseUtils.parseNeutronError(se.getMessage());
 				hasError = true;

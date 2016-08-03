@@ -427,8 +427,8 @@ public class NeutronNetworkActivity extends Activity {
     		OSClient osc = OSClient.getInstance(U);
     		
     	    try {
-    	    	jsonBufNet 		 = osc.requestNetworks();
-    	    	jsonBufSubnet    = osc.requestSubNetworks();
+    	    	jsonBufNet 		 = osc.listNetworks();
+    	    	jsonBufSubnet    = osc.listSubNetworks();
     	    } catch(ServerException se) {
     	    	errorMessage = ParseUtils.parseNeutronError(se.getMessage());
     	    	hasError = true;

@@ -2,6 +2,7 @@ package org.stackdroid.parse;
 
 import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONArray;
 
 public class ParseUtils {
 
@@ -114,4 +115,34 @@ public class ParseUtils {
 		return consoleLog;
 	}
 	
+	
+	
+    /**
+     *
+     *
+     *
+     *
+     */  
+	public static String getCurrentAPI( String jsonBuffer )  throws ParseException  {
+	  try {
+   			JSONObject jsonObject = new JSONObject( jsonBuffer );
+   			JSONArray versions = jsonObject.getJSONArray("versions");
+   			
+   			for(int i = 0; i<versions.length(); ++i ) {
+   			  JSONObject element = versions.getJSONObject( i );
+   			  if(element.getString("status").compareTo("CURRENT")==0) {
+   			    JSONObject link = element.getJSONArray("links").getJSONObject(0);
+   			    String api = link.getString("href");
+   			    if(api.endsWith("/"))
+   			      api = api.substring(0, api.length()-1);
+   			    return api;
+   			  }
+   			}
+   			
+   			//return jsonObject.getJSONObject("network").getString("id");   		
+   		} catch(org.json.JSONException je) {
+   			throw new ParseException( je.getMessage( ) );
+   		}
+   	  return null;
+	}
 }

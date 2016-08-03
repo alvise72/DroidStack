@@ -123,15 +123,13 @@ public class UsersActivity extends Activity {
 		  ((TextView)promptsView.findViewById(R.id.projectName)).setText(U.getTenantName());
 		  
 		  String IP = "";
-/*		  try {
-		    InetAddress addrs[] = InetAddress.getAllByName( U.getIdentityHostname() );
-		    if(addrs!=null && addrs.length>0)
-		      IP = addrs[0].getHostAddress();
-		  } catch(UnknownHostException e) {
-		  
-		  }*/
+		  if(U.getIdentityIP( ).length()>0)
+		    IP = "\n(" + U.getIdentityIP( ) + ")";
+
 		  ((TextView)promptsView.findViewById(R.id.keystoneHostname)).setText(U.getIdentityHostname() + IP );
 		  ((TextView)promptsView.findViewById(R.id.keystoneURL)).setText(U.getIdentityEndpoint());
+		  ((TextView)promptsView.findViewById(R.id.keystoneUseV3)).setText(U.useV3( ) ? R.string.YES : R.string.NO);
+		  
 		  ((TextView)promptsView.findViewById(R.id.novaURL)).setText(U.getNovaEndpoint());
 		  ((TextView)promptsView.findViewById(R.id.neutronURL)).setText(U.getNeutronEndpoint());
 		  ((TextView)promptsView.findViewById(R.id.glanceURL)).setText(U.getGlanceEndpoint());

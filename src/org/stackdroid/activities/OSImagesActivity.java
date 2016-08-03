@@ -326,7 +326,7 @@ public class OSImagesActivity extends Activity {
 
 		alertDialogServerLaunch.setCanceledOnTouchOutside(false);
 		alertDialogServerLaunch.setCancelable(false);
-        OSImagesActivity.this.progressDialogWaitStop.dismiss();
+        	OSImagesActivity.this.progressDialogWaitStop.dismiss();
 		alertDialogServerLaunch.show();
 	}
 
@@ -397,8 +397,7 @@ public class OSImagesActivity extends Activity {
     		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE));
 
         mapID_to_ServerView = new Hashtable<String, ServerView>();
-        //images = new Vector<OSImage>();
-
+        
         netViewList = new Vector<NetworkView>( );
 
         netids = new Hashtable<String, String>();
@@ -410,7 +409,6 @@ public class OSImagesActivity extends Activity {
         progressDialogWaitStop.setMessage(getString(R.string.PLEASEWAITCONNECTING));
         progressDialogWaitStop.setCancelable(false);
         progressDialogWaitStop.setCanceledOnTouchOutside(false);
-        //(Toast.makeText(this, getString(R.string.TOUCHUIMGTOVIEWINFO), Toast.LENGTH_LONG)).show();
         this.update( );
     }
     
@@ -489,14 +487,6 @@ public class OSImagesActivity extends Activity {
     	public void onClick( View v ) {
 
             imageToLaunch = ((ImageButtonWithView)v).getOSImageView( ).getOSImage();
-
-/*    		ID = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getID();
-    		NAME = ((ImageButtonWithView)v).getOSImageView( ).getOSImage().getName();
-    		Class<?> c = (Class<?>)ImageLaunchActivity.class;
-    		Intent I = new Intent( OSImagesActivity.this, c );
-    		I.putExtra( "IMAGEID", ID );
-    	    I.putExtra("IMAGENAME", NAME);
-    		startActivity( I );*/
             netids.clear();
             mapID_to_ServerView.clear();
             netViewList.clear();
@@ -741,10 +731,10 @@ public class OSImagesActivity extends Activity {
 
 			try {
 				//jsonImageBuf   = osc.requestImages();
-				jsonFlavorBuf  = osc.requestFlavors();
+				jsonFlavorBuf  = osc.listFlavors();
 				jsonKeyPairBuf = osc.requestKeypairs();
-				jsonNetworkBuf = osc.requestNetworks();
-				jsonSubNetBuf  = osc.requestSubNetworks();
+				jsonNetworkBuf = osc.listNetworks();
+				jsonSubNetBuf  = osc.listSubNetworks();
 				jsonSecGrpsBuf = osc.listSecGroups();
 			} catch(ServiceUnAvailableOrInternalError se) {
 				errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);

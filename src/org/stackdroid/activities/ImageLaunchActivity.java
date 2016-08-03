@@ -439,9 +439,9 @@ public class ImageLaunchActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 
 	    try {
-	    	jsonBufFlavor    = osc.requestFlavors( );
-	    	jsonBufNetwork   = osc.requestNetworks( );
-	    	jsonBufSubnet    = osc.requestSubNetworks( );
+	    	jsonBufFlavor    = osc.listFlavors( );
+	    	jsonBufNetwork   = osc.listNetworks( );
+	    	jsonBufSubnet    = osc.listSubNetworks( );
 	    	jsonBufKeypairs  = osc.requestKeypairs( );
 	    	jsonBufSecgroups = osc.listSecGroups( );
 	    } catch(Exception e) {

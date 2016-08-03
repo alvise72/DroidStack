@@ -15,6 +15,8 @@ import java.io.*;
 import java.net.*;
 import java.util.Vector;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.List;
 
 import org.apache.http.HttpStatus;
 import org.stackdroid.parse.ParseException;
@@ -134,7 +136,7 @@ public class RESTClient {
      *
      *
      */
-    public static String requestToken( boolean usessl, 
+    public static Pair<String,String> requestToken( boolean usessl, 
 				       String endpoint, 
 				       String requestPayload)
 	throws IOException, ServerException, 
@@ -146,8 +148,8 @@ public class RESTClient {
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
 
-	Log.v("RESTClient.requestToken", "url="+url);
-	Log.v("RESTClient.requestToken", "payload="+requestPayload);
+	//Log.v("RESTClient.requestToken", "url="+url);
+	//Log.v("RESTClient.requestToken", "payload="+requestPayload);
     	if(usessl) {
 	    trustAllCerts = new TrustManager[] {
 		new X509TrustManager() {
@@ -280,7 +282,7 @@ public class RESTClient {
 	 * 2xx are all for OK
 	 * 3xx redirection (we assume that the cloud doesn't have this feature)
 	 */
-	Log.v("RESTClient.requestToken", "status="+status);
+	//Log.v("RESTClient.requestToken", "status="+status);
 	String res = "";
 	try {
 	    InputStream in = new BufferedInputStream( conn.getInputStream( ) );
@@ -296,13 +298,123 @@ public class RESTClient {
 	    else
 		((HttpURLConnection)conn).disconnect( );
 	    throw new IOException("RESTClient.requestToken.BufferedInputStream.read: " + ioe.getMessage( ) );
-	}    
+	}   
+	String v3Token = null;
+	Map<String, List<String>> headers = conn.getHeaderFields( );
+	for( String elem : headers.keySet( ) ) {
+	  if(elem!=null && elem.compareTo("X-Subject-Token")==0)
+	  	v3Token = headers.get(elem).get(0);
+	}
+	//Log.v("RESTClient.requestToken", "v3Token="+v3Token);
+	
 	if(usessl)
 	    ((HttpsURLConnection)conn).disconnect( );
 	else
 	    ((HttpURLConnection)conn).disconnect( );
+	Pair<String,String> resP = new Pair<String,String>(res, v3Token);
 	
-	return res;
+	return resP;
+    }
+    
+    /**
+     *
+     *
+     * 
+     *
+     *
+     *
+     */
+    public static String sendGETRequestWithoutToken( boolean usessl,
+					 	     String sURL ) 
+    throws IOException, ServiceUnAvailableOrInternalError {
+      URL url = new URL(sURL);
+      
+      
+      
+    	URLConnection conn = null;
+    	TrustManager[] trustAllCerts = null;
+    	if(usessl) {
+	    trustAllCerts = new TrustManager[] {
+		new X509TrustManager() {
+		    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			return null;
+		    }
+		    
+		    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+		    
+		    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+		    
+		}
+	    };
+	    
+	    try {
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+	    } catch(java.security.NoSuchAlgorithmException e) {
+	    } catch(java.security.KeyManagementException e) {
+	    }
+	    
+	    try {
+		conn = (HttpsURLConnection)url.openConnection( );
+		conn.setConnectTimeout(10000);
+	    } catch(java.io.IOException ioe) {
+		throw  new IOException("RESTClient.sendGETRequest.URL.openConnection https: "+ioe.getMessage( ) );
+	    }
+    	} else {
+	    
+	    try {
+		conn = (HttpURLConnection)url.openConnection();
+		conn.setConnectTimeout(10000);
+	    } catch(java.io.IOException ioe) {
+		throw new IOException("RESTClient.sendGETRequest.URL.openConnection http: "+ioe.getMessage());
+	    }
+    	}
+	conn.setReadTimeout(20000 /* milliseconds */);
+	
+	try {
+	    ((HttpURLConnection)conn).setRequestMethod("GET");
+	} catch(java.net.ProtocolException pe ) {
+	    
+	    if(usessl)
+		((HttpsURLConnection)conn).disconnect( );
+	    else
+		((HttpURLConnection)conn).disconnect( );
+	    throw new ProtocolException( "RESTClient.sendGETRequestWithoutToken.setRequestMethod(GET): " + pe.getMessage( ) );
+	}
+	
+	conn.setDoInput(true);
+	conn.setDoOutput(false);
+	
+	BufferedInputStream inStream = null;
+	String buf = "";
+	
+	try {
+	    inStream = new BufferedInputStream( conn.getInputStream() );
+	    
+	    byte[] b = new byte[ 2048 ];
+	    int res = 0;
+	    
+	    while( (res = inStream.read( b, 0, 2048 )) != -1 )
+		if( res>0 )
+		    buf += new String( b, 0, res );
+	} catch(java.io.IOException ioe) {
+	    
+	    if(usessl)
+		((HttpsURLConnection)conn).disconnect( );
+	    else
+		((HttpURLConnection)conn).disconnect( );
+	    
+	    throw new IOException("RESTClient.sendGETRequest.BufferedInputStream.read: " + ioe.getMessage( ) );
+	}
+	
+	
+	
+	if(usessl)
+	    ((HttpsURLConnection)conn).disconnect( );
+	else
+	    ((HttpURLConnection)conn).disconnect( );
+	return buf.toString( ); 
     }
     
     /**
@@ -319,6 +431,7 @@ public class RESTClient {
 					 Vector<Pair<String,String>> properties ) 
 	throws IOException, ServiceUnAvailableOrInternalError {
 	//Log.d("REST", "sURL="+sURL);
+	//Log.v("RESTClient.sendGETRequest", "sURL=["+sURL+"]");
     	if(sURL.startsWith("https://")) usessl=true;
     	if(sURL.startsWith("http://")) usessl=false;
     	
@@ -606,8 +719,8 @@ public class RESTClient {
 	       ServerException, ServiceUnAvailableOrInternalError, 
 	       MalformedURLException, IOException, ProtocolException
     {
-   	Log.d("REST", "sURL="+sURL);
-   	Log.d("REST", "extradata="+extradata);
+   	//Log.d("REST", "sURL="+sURL);
+   	//Log.d("REST", "extradata="+extradata);
    	if(sURL.startsWith("https://")) usessl=true;
    	if(sURL.startsWith("http://")) usessl=false;
    	
@@ -852,7 +965,7 @@ public class RESTClient {
 			else
 			  ((HttpURLConnection)conn).disconnect( );
 	    }
-	    Log.v("RESTClient.sendDELETERequest", "BUF="+buf);
+	    //Log.v("RESTClient.sendDELETERequest", "BUF="+buf);
 	    throw new ServerException( buf );
 	}
 	if(usessl)

@@ -102,6 +102,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Keystone V3 API"
+                android:id="@+id/textView6"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="no"
+                android:id="@+id/keystoneUseV3"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Nova URL"
                 android:id="@+id/textView7"
                 android:textStyle="bold"

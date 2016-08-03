@@ -346,10 +346,10 @@ public class FloatingIPActivity extends Activity {
 	    OSClient osc = OSClient.getInstance(U);
 
 	    try {
-		  jsonBuf         = osc.requestFloatingIPs( );
-		  jsonBufServers  = osc.requestServers( );
-		  jsonBufNetworks = osc.requestNetworks( );
-		  jsonBufSubNets  = osc.requestSubNetworks( );
+		  jsonBuf         = osc.listFloatingIPs( );
+		  jsonBufServers  = osc.listServers( );
+		  jsonBufNetworks = osc.listNetworks( );
+		  jsonBufSubNets  = osc.listSubNetworks( );
 	    } catch(Exception e) {
 		  errorMessage = e.getMessage();
 		  hasError = true;
@@ -630,8 +630,8 @@ public class FloatingIPActivity extends Activity {
 		OSClient osc = OSClient.getInstance(U);
 		
 	    try {
-	    	jsonBuf 		 = osc.requestServers( );
-	    	//jsonBufferFlavor = osc.requestFlavors( );
+	    	jsonBuf 		 = osc.listServers( );
+	    	//jsonBufferFlavor = osc.listFlavors( );
 	    } catch(Exception e) {
 	    	errorMessage = e.getMessage();
 	    	hasError = true;

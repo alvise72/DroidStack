@@ -110,6 +110,10 @@ public class User implements Serializable, Comparable<User> {
     public void setVerifyServerCert( boolean verifyServerCert ) { this.verifyServerCert=verifyServerCert; }
     public void setCAFile( String ca_file) { this.CAFile=ca_file;}
     
+    public void setGlanceEndpoint( String ep ) { glanceEndpoint = ep; }
+    public void setNeutronEndpoint( String ep ) { neutronEndpoint = ep; }
+    
+    
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
     public String getToken( ) { return token; }
@@ -153,7 +157,6 @@ public class User implements Serializable, Comparable<User> {
     @Override
     public String toString( ) {
     	return "User{identityEndpoint="+identityEndpoint+
-	    //",identityEndpointIP="+identityEndpointIP+
 	    ",novaEndpoint="+novaEndpoint+
 	    ",glanceEndpoint="+glanceEndpoint+
 	    ",neutronEndpoint="+neutronEndpoint+
@@ -245,30 +248,21 @@ public class User implements Serializable, Comparable<User> {
      *
      *
      */
-    public static User parse( String jsonString, boolean useV3 ) throws ParseException
+    public static User parse( String jsonString, boolean useV3, String _stoken ) throws ParseException
     {    
 	try {
-	    JSONObject jsonObject = null;
-	    jsonObject = new JSONObject( jsonString );
+	    JSONObject jsonObject = new JSONObject( jsonString );
 
-	    // if(useV3){ 
-	    // 	return parseV3( jsonObject );
-	    // }
-	    //JSONObject token = null;
-//	    if(useV3)
-//	    	token = (JSONObject)jsonObject.getJSONObject("token");
-//	    else
-//	    	token = (JSONObject)jsonObject.getJSONObject("access").getJSONObject("token");
-	        //JSONObject token = (useV3 ? (JSONObject)jsonObject.getJSONObject("token") : ((JSONObject)((JSONObject)jsonObject.getJSONObject("access"))).get("token"));
-	    
 	    JSONObject token = useV3 ? (JSONObject)jsonObject.getJSONObject("token") : (JSONObject)jsonObject.getJSONObject("access").getJSONObject("token");
 	    
-	    String stoken = useV3 ? (String)((JSONArray)token.get("audit_ids")).get(0) : (String)token.get("id") ;
+	    String stoken = useV3 ? _stoken : (String)token.get("id") ;
 	    String expires = useV3 ? (String)token.get("expires_at") : (String)token.get("expires");
 	    
 	    JSONObject tenant = useV3 ? (JSONObject)token.getJSONObject("project") : (JSONObject)token.getJSONObject("tenant");
-	    String tenantid = useV3 ? (String)tenant.getJSONObject("project").getString("id") : (String)tenant.getString("id") ;
-	    String tenantname = useV3 ? (String)tenant.getJSONObject("project").getString("name") : (String)tenant.getString("name") ;
+	    
+	    String tenantid = (String)tenant.getString("id") ;
+	    
+	    String tenantname = (String)tenant.getString("name") ;
 	    
 	    String username = useV3 ? (String)token.getJSONObject("user").getString("name") : (String)((JSONObject)jsonObject.getJSONObject("access").getJSONObject("user")).getString("username") ;
 	    String userID = useV3 ? (String)token.getJSONObject("user").getString("id") : (String)((JSONObject)jsonObject.getJSONObject("access").getJSONObject("user")).getString("id") ;
@@ -361,6 +355,17 @@ public class User implements Serializable, Comparable<User> {
 		    else identityEP = endpoint.getString("publicURL");
 		}
 	    }
+	    
+	    /**
+	     If user requested to first connect to NON-V3 API, but the service returns a V3 API for keystone
+	     must force useV3 for current user anyway
+	     */
+	    boolean forceUseV3 = useV3;
+	    Log.v("User.parse", "identityEP="+identityEP);
+	    if(identityEP.contains("/v3"))
+	      forceUseV3 = true;
+	    else
+	      forceUseV3 = false;
 	    boolean role_admin = false;
 	    for(int i = 0; i<roleArray.length(); ++i)
 		if(roleArray.getJSONObject(i).getString("name").compareTo("admin")==0)
@@ -409,7 +414,7 @@ public class User implements Serializable, Comparable<User> {
 			      addrIP,
 			      false,
 			      null,
-			      useV3);
+			      forceUseV3);
 	    //Log.v("User.parse", "USER=["+U);
 	    return U;
 	} catch(org.json.JSONException je) {
