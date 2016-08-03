@@ -270,7 +270,7 @@ public class User implements Serializable, Comparable<User> {
 	    JSONArray roleArray = useV3 ? token.getJSONArray("roles") : jsonObject.getJSONObject("access").getJSONObject("user").getJSONArray("roles");
 	    JSONArray serviceArray = useV3 ? token.getJSONArray("catalog") : ((JSONObject)jsonObject.getJSONObject("access")).getJSONArray("serviceCatalog");
 
-	    //Log.v("User.parse","jsonString="+jsonString);
+	    //Log.v("User.parse","User TOKEN=["+stoken+"]");
 	    
 	    boolean nova=false, glance=false, neutron=false, cinder1=false, cinder2=false;
 	    String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null, identityEP = null;
@@ -361,7 +361,7 @@ public class User implements Serializable, Comparable<User> {
 	     must force useV3 for current user anyway
 	     */
 	    boolean forceUseV3 = useV3;
-	    Log.v("User.parse", "identityEP="+identityEP);
+	    //Log.v("User.parse", "identityEP="+identityEP);
 	    if(identityEP.contains("/v3"))
 	      forceUseV3 = true;
 	    else

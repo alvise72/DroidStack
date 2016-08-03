@@ -137,8 +137,8 @@ public class RESTClient {
      *
      */
     public static Pair<String,String> requestToken( boolean usessl, 
-				       String endpoint, 
-				       String requestPayload)
+				       		    String endpoint, 
+				       		    String requestPayload)
 	throws IOException, ServerException, 
 	       NotFoundException, NotAuthorizedException, 
 	       ServiceUnAvailableOrInternalError {
@@ -430,11 +430,9 @@ public class RESTClient {
 					 String token,
 					 Vector<Pair<String,String>> properties ) 
 	throws IOException, ServiceUnAvailableOrInternalError {
-	//Log.d("REST", "sURL="+sURL);
-	//Log.v("RESTClient.sendGETRequest", "sURL=["+sURL+"]");
-    	if(sURL.startsWith("https://")) usessl=true;
+	/*if(sURL.startsWith("https://")) usessl=true;
     	if(sURL.startsWith("http://")) usessl=false;
-    	
+    	*/
     	URL url = new URL(sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
@@ -487,7 +485,7 @@ public class RESTClient {
 	    }
 	}
 	conn.setReadTimeout(20000 /* milliseconds */);
-	//conn.setConnectTimeout(10000 /* milliseconds */);
+	
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("GET");
 	} catch(java.net.ProtocolException pe ) {
