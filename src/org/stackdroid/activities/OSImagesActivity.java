@@ -525,7 +525,7 @@ public class OSImagesActivity extends Activity {
 
 			((TextView)promptsView.findViewById(R.id.imageName)).setText(osi.getName());
 			((TextView)promptsView.findViewById(R.id.imageStatus)).setText(osi.getStatus());
-			Log.v("OSImagesActivity.imageInfoListener", "STATUS=["+osi.getStatus()+"]");
+			//Log.v("OSImagesActivity.imageInfoListener", "STATUS=["+osi.getStatus()+"]");
 			if(osi.isSaving()) {
 			  ((TextView)promptsView.findViewById(R.id.imageStatus)).setTextColor( Color.parseColor("#AA0000") );
 			  ((TextView)promptsView.findViewById(R.id.imageStatus)).setTypeface(null, Typeface.BOLD);
@@ -635,10 +635,11 @@ public class OSImagesActivity extends Activity {
  	    }
 	    
 	    try {
+	        
 	    	OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
 	    	OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
-	    	Utils.alert("OSImagesActivity.AsyncTaskOSListImages.onPostExecute: " + pe.getMessage( ), 
+	    	Utils.alert("OSImagesActivity.AsyncTaskOSDelete.onPostExecute: " + pe.getMessage( ), 
 	    				OSImagesActivity.this);
 	    }
 
@@ -696,6 +697,7 @@ public class OSImagesActivity extends Activity {
      		}
 	    
      		try {
+     			//Log.v("OSImagesActivity.AsyncTaskOSListImages.onPostExecute", "jsonBuf=["+jsonBuf+"]");
      			OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
      			OSImagesActivity.this.refreshView( );
      		} catch(ParseException pe) {

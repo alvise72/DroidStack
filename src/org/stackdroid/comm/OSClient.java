@@ -785,7 +785,7 @@ public class OSClient {
     	checkToken( );
     	//Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
     	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length() > 1) {
-	    Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
+	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
 	    Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
 	    Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	    vp.add( p );
@@ -1284,18 +1284,20 @@ public class OSClient {
 					  IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken();
-	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
+	//if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
 	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
-	    return RESTClient.sendGETRequest( U.useSSL(), 
+	    
+/*	    return RESTClient.sendGETRequest( U.useSSL(), 
 					      U.getNeutronEndpoint() + "/security-groups",
 					      U.getToken(), 
-					      null );
-	} else {     	
+					      null );*/
+					      
+	/*} else {*/     	
 	    return RESTClient.sendGETRequest( U.useSSL(), 
 					      U.getNovaEndpoint() + "/os-security-groups",
 					      U.getToken(), 
 					      null );
-	}
+	/*}*/
     }
 
     /**
@@ -1311,9 +1313,9 @@ public class OSClient {
     {
 	checkToken( );
 	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
-	    Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
+	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
 	    String API = U.getNeutronEndpoint() + "/security-group-rules.json";
-	    Log.v("OSClient.createSecGroup", "Calling API (" + API + ")");
+	    //Log.v("OSClient.createSecGroup", "Calling API (" + API + ")");
 	    return RESTClient.sendGETRequest( U.useSSL(), 
 					      API,
 					      U.getToken(), 
@@ -1450,7 +1452,7 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"security_group_rule\": {\"from_port\": " + fromPort + ", \"ip_protocol\": \"" + protocol + "\", \"to_port\": " + toPort + ", \"parent_group_id\": \"" + secgrpID + "\", \"cidr\": \"" + cidr + "\", \"group_id\": null}}";
     	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
-	    Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
+	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
 	    RESTClient.sendPOSTRequest( U.useSSL(), 
 					//U.getNovaEndpoint() + "/os-security-group-rules", 
 					U.getNeutronEndpoint( ) + "/security-groups.json",

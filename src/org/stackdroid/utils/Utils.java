@@ -684,42 +684,30 @@ public class Utils {
 		//return null;
 	}
     
+
     /**
      *
      *
      *
      *
      */    
-    // public static void userToFile( User U ) throws Exception, IOException {
-    // 	String filename = Environment.getExternalStorageDirectory() + "/AndroStack/users/" + U.getUserID( ) + "." + U.getTenantID( );
-    // 	File f = new File( filename );
-    // 	if(f.exists()) f.delete();
-
-    // 	OutputStream os = new FileOutputStream( filename );
-    // 	ObjectOutputStream oos = new ObjectOutputStream( os );
-    // 	oos.writeObject( U );
-    // 	oos.close( );
-    // }
-    
-    /**
-     *
-     *
-     *
-     *
-     */        
-     // public static User userFromFile( String filename ) throws Exception, IOException {
-     // 	 if(false == (new File(filename)).exists())
-     // 	     throw new IOException( "File ["+filename+"] doesn't exist" );
-	 
-     // 	 InputStream is = new FileInputStream( filename );
-     // 	 ObjectInputStream ois = new ObjectInputStream( is );
-     // 	 User U = (User)ois.readObject( );
-
-     // 	 //	 Log.d("Utils.userFromFile", "USERID="+U.getUserID() );
-
-     // 	 ois.close( );
-     // 	 return U;
-     // }
- 
+    public static void longLog(String location, String buffer) {
+      	//int chunkCount = buffer.length() / 1000;     // integer division
+      	//Log.v("Utils.longLog", "buffer.length = " + buffer.length());
+      	//int chunkCount = buffer.length() / 1000;
+	if (buffer.length() > 1000) {
+		int chunkCount = buffer.length() / 1000;
+		for (int i = 0; i <= chunkCount; i++) {
+			int max = 1000 * (i + 1);
+		      	if (max >= buffer.length()) {
+		      		Log.v(location, "chunk " + i + " of " + chunkCount + ":" + buffer.substring(1000 * i));
+		      	} else {
+		      		Log.v(location, "chunk " + i + " of " + chunkCount + ":" + buffer.substring(1000 * i, max));
+		      	}
+		}
+	} else {
+		Log.v(location, buffer);
+	}
+    }
 
 }

@@ -524,16 +524,16 @@ public class UserAddActivity extends Activity {
 		      //Log.v("UserAddActivity.doInBackgroud", "jsonBuf.length = " + jsonBuf.length());
 		      int chunkCount = jsonBuf_Token.first.length() / 1000;     // integer division
 		      for (int i = 0; i <= chunkCount; i++) {
-		      int max = 1000 * (i + 1);
-		      if (max >= jsonBuf_Token.first.length()) {
-		      //Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i));
-		      } else {
-		      //Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i, max));
+		        int max = 1000 * (i + 1);
+		        if (max >= jsonBuf_Token.first.length()) {
+		          //Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i));
+		        } else {
+		          //Log.v("UserAddActivity.doInBackgroud", "chunk " + i + " of " + chunkCount + ":" + jsonBuf.substring(1000 * i, max));
+		        }
 		      }
-		      }
-		      } else {
+		    } else {
 		      //Log.v("UserAddActivity.doInBackgroud", jsonBuf.toString());
-		      }
+		    }
 		      //Log.d("UserAddActivity.doInBackgroud", "JSON=["+jsonString+"]" );
 		       
 		//     		Log.v("UserAddActivity.doInBackgroud", "jsonBuf="+jsonBuf);

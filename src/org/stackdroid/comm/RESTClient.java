@@ -433,6 +433,7 @@ public class RESTClient {
 	/*if(sURL.startsWith("https://")) usessl=true;
     	if(sURL.startsWith("http://")) usessl=false;
     	*/
+    	//Log.v("RESTClient.sedGETRequest", "sURL=["+sURL+"]");
     	URL url = new URL(sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;

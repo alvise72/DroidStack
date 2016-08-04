@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.stackdroid.parse.ParseException;
 
+import android.util.Log;
+
 public class SecGroup {
     private String name;
     private String id;
@@ -27,7 +29,7 @@ public class SecGroup {
     public String toString( ) { return name; }
     
     public static Vector<SecGroup> parse( String jsonBuf ) throws ParseException  {
-	//SecGroup secg[] = null;
+	//Utils.longLog("SecGroup.parse", "JSONBUF=["+jsonBuf+"]");
     	Vector<SecGroup> secg = new Vector<SecGroup>();
 	try{
 	    JSONObject jsonObject = new JSONObject( jsonBuf );

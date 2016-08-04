@@ -23,8 +23,6 @@ import org.stackdroid.comm.OSClient;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
 
-
-
 import org.stackdroid.R;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.Defaults;
@@ -37,7 +35,6 @@ import org.stackdroid.views.ListSecGroupView;
 import android.os.AsyncTask;
 
 import org.stackdroid.utils.CustomProgressDialog;
-
 
 public class SecGrpActivity extends Activity {
 
@@ -99,7 +96,6 @@ public class SecGrpActivity extends Activity {
      * 
      */
     public void createSecGroup( View v ) {
-    	//Utils.alert(getString(R.string.NOTIMPLEMENTED), this);
     	final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage(getString(R.string.INPUTSSECNAME));
         final EditText input = new EditText(this);
@@ -128,7 +124,6 @@ public class SecGrpActivity extends Activity {
         dia.setCancelable(false);
         dia.setCanceledOnTouchOutside(false);
         dia.show( );
-        //alert.create().show();
     }
     
     protected class SecGroupDeleteListener implements OnClickListener {
@@ -332,7 +327,6 @@ public class SecGrpActivity extends Activity {
      	private  String   errorMessage     = null;
 	    private  boolean  hasError         = false;
 	    private  String   jsonBuf          = null;
-	    //private  String   jsonBufferFlavor = null;
 	
 	    @Override
 	    protected String doInBackground( Void... v ) 
