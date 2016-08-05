@@ -1612,7 +1612,7 @@ public class ServersActivity extends Activity {
 		} catch(ParseException pe) {
 		  Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 		}
-		currentTask.setText("STANDBY");
+		currentTask.setText("Standby (5 secs...)");
 		//progressDialogWaitStop.dismiss();
 	}
     }

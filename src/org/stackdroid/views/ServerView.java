@@ -92,7 +92,7 @@ public class ServerView extends LinearLayout {
 	
 	Flavor = new TextViewWithView( ctx, (ServerView)this );
 	
-	String flavName = S.getFlavor( )!=null ? S.getFlavor().getName() : "N/A";// + " (" + (int)(S.getFlavor( ).getDISK()) + "GB, " + S.getFlavor( ).getVCPU( )+ " cpu, " + S.getFlavor( ).getRAM( ) + " ram)";
+	String flavName = S.getFlavor( )!=null ? S.getFlavor().getName() : "N/A";
 
 	Flavor.setText( "Flavor: "+flavName );
 	Flavor.setOnClickListener( infoListener );
