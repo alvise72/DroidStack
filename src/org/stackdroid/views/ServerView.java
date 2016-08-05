@@ -2,6 +2,7 @@ package org.stackdroid.views;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.LinearLayout;
 
 import android.graphics.Typeface;
@@ -34,6 +35,8 @@ public class ServerView extends LinearLayout {
 
 
 	private Server S = null;
+
+	public TextView getStatusTextView( ) { return Status; }
 
 	public void setStatus( String status ) {
 		S.setStatus(status);

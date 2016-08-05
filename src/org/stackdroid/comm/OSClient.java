@@ -1180,9 +1180,10 @@ public class OSClient {
 							 IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
- 		
+ 	String ep = U.getNovaEndpoint() + "/servers/" + serverID;
+ 	Log.v("OSClient.deleteInstance", "EP=["+ep+"]");
     	RESTClient.sendDELETERequest( U.useSSL(), 
-				      U.getNovaEndpoint() + "/servers/" + serverID, 
+				      ep, 
 				      U.getToken(),
 				      null );
     }

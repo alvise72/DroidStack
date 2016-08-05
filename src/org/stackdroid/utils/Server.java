@@ -72,13 +72,13 @@ public class Server {//implements Serializable {
     public String 		  getStatus() { return status; }
     public String 		  getTask() { return task; }
     public int    		  getPowerState() { return powerstate; }
-    public Vector<String> getPrivateIP() { return privIP; }
-    public Vector<String> getPublicIP() { return pubIP; }
-    public OSImage        getOSImage( ) { return osImage; }
-    public String getComputeNode2() { return computeNode; }
-    public String getKeyName() { return keyname; }
-    public String getFlavorID() { return flavorID;}
-    public String[] getSecurityGroupNames() { return secgrpNames; }
+    public Vector<String> 	  getPrivateIP() { return privIP; }
+    public Vector<String> 	  getPublicIP() { return pubIP; }
+    public OSImage        	  getOSImage( ) { return osImage; }
+    public String 		  getComputeNode2() { return computeNode; }
+    public String 		  getKeyName() { return keyname; }
+    public String 		  getFlavorID() { return flavorID;}
+    public String[] 		  getSecurityGroupNames() { return secgrpNames; }
 
 	public void setStatus( String status ) {
 		this.status = status;

@@ -549,8 +549,8 @@ public class RESTClient {
 	       MalformedURLException, IOException, ProtocolException
     {
 	
-    	if(sURL.startsWith("https://")) usessl=true;
-    	if(sURL.startsWith("http://")) usessl=false;
+    	//if(sURL.startsWith("https://")) usessl=true;
+    	//if(sURL.startsWith("http://")) usessl=false;
     	
     	URL url = new URL(sURL);
     	URLConnection conn = null;
@@ -720,8 +720,8 @@ public class RESTClient {
     {
    	//Log.d("REST", "sURL="+sURL);
    	//Log.d("REST", "extradata="+extradata);
-   	if(sURL.startsWith("https://")) usessl=true;
-   	if(sURL.startsWith("http://")) usessl=false;
+   	//if(sURL.startsWith("https://")) usessl=true;
+   	//if(sURL.startsWith("http://")) usessl=false;
    	
    	URL url = new URL(sURL);
    	URLConnection conn = null;
@@ -882,8 +882,8 @@ public class RESTClient {
 	throws NotFoundException, NotAuthorizedException, ServiceUnAvailableOrInternalError, IOException, ServerException, MalformedURLException, ProtocolException
     {
 
-    	if(sURL.startsWith("https://")) usessl=true;
-    	if(sURL.startsWith("http://")) usessl=false;
+    	//if(sURL.startsWith("https://")) usessl=true;
+    	//if(sURL.startsWith("http://")) usessl=false;
     	
 	URL url = new URL(sURL);
 	
@@ -896,8 +896,9 @@ public class RESTClient {
 	    throw new IOException("RESTClient.sendDELETERequest.URL.openConnection http: "+ioe.getMessage( ) );
 	}
     
-	conn.setRequestProperty("Content-Type", "application/octet-stream");
+//	conn.setRequestProperty("Content-Type", "application/octet-stream");
 	conn.setRequestProperty("X-Auth-Token", token);
+   	conn.setRequestProperty("Content-Type", "application/json");
     
 	try {
 	    ((HttpURLConnection)conn).setRequestMethod("DELETE");
@@ -923,6 +924,7 @@ public class RESTClient {
 	int status = HttpStatus.SC_OK;
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
+	    Log.v("RESTClient.sendDELETERequest", "status="+status);
 	} catch(IOException ioe) {
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );
