@@ -163,8 +163,13 @@ public class FloatingIPActivity extends Activity {
 	            FloatingIPActivity.this.progressDialogWaitStop.show();
 	            
 	            AsyncTaskFIPAssociate task = new AsyncTaskFIPAssociate( );
-	            
-	            task.execute(FloatingIPActivity.this.selectedFIPObj.getID(), S.getPrivateIP().elementAt(0) );
+	            if(S.getPrivateIP().size()>0)
+	              task.execute(FloatingIPActivity.this.selectedFIPObj.getID(), S.getPrivateIP().elementAt(0) );
+	            else {
+	              Utils.alert(getString(R.string.NOFIXEDIPTOASSOCIATEFIP), FloatingIPActivity.this);
+	              //Utils.alert("Selected server "+S.getName( ), this);
+	              FloatingIPActivity.this.progressDialogWaitStop.dismiss( );
+	            }
 	    	}
 	  	 }	
 	}
@@ -277,8 +282,14 @@ public class FloatingIPActivity extends Activity {
 	 * 
 	 *
 	 */
-    private void refreshView( Vector<FloatingIP> fips, Vector<Network> nets ) {
-      spinnerNetworksArrayAdapter = new ArrayAdapter<Network>(FloatingIPActivity.this, android.R.layout.simple_spinner_item, nets.subList(0, nets.size()));
+    private void refreshView( Vector<FloatingIP> fips, Vector<Network> _nets ) {
+    
+      Vector<Network> only_external = new Vector<Network>();
+      for(Network net : _nets)
+        if(net.isExt())
+          only_external.add(net);
+    
+      spinnerNetworksArrayAdapter = new ArrayAdapter<Network>(FloatingIPActivity.this, android.R.layout.simple_spinner_item, only_external.subList(0, only_external.size()));
   	  spinnerNetworksArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
   	  spinnerNetworks.setAdapter(spinnerNetworksArrayAdapter);
   	  

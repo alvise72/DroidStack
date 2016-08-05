@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.json.JSONArray;
 
+import android.util.Log;
+
 public class ParseUtils {
 
     /**
@@ -14,6 +16,8 @@ public class ParseUtils {
      *
      */ 
     public static String parseNeutronError( String buffer ) {
+    	
+    	//Log.v("ParseUtils.parseNeutronError", "buffer=["+buffer+"]");
     	
       JSONObject jsonObject = null;
   	  try {

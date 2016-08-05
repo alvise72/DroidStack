@@ -5,7 +5,7 @@
     <string name="DIRECTION">Direction</string>
     <string name="INGRESS">Ingress</string>
     <string name="EGRESS">Egress</string>
-    
+    <string name="NOFIXEDIPTOASSOCIATEFIP">No fixed IP to associate the Floating IP to (check the server\'s status)</string>
     <string name="REMOVECURRENTFIP">Remove current Floating IP</string>
     <string name="FIPREMOVED">Floating IP has been removed</string>
     <string name="CONTINUE">Continue</string>

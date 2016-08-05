@@ -902,8 +902,10 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
+    	String ep = U.getNeutronEndpoint() + "/floatingips/" + fip + ".json";
+    	//Log.v("OSClient.requestFloatingIPRelease", "ep=["+ep+"]");
     	RESTClient.sendDELETERequest(U.useSSL(),
-				     U.getNovaEndpoint() + "/os-floating-ips/" + fip,
+				     ep,
 				     U.getToken(),
 				     vp);
     }
@@ -1025,7 +1027,8 @@ public class OSClient {
 	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return RESTClient.sendGETRequest( U.useSSL(), 
-					  U.getNovaEndpoint() + "/os-floating-ips", 
+					  //U.getNeutronEndpoint() + "/floatingips.json", 
+					  U.getNovaEndpoint()+"/os-floating-ips",
 					  U.getToken(), 
 					  v );
     }

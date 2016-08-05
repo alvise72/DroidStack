@@ -26,6 +26,12 @@ import android.widget.TextView;
 
 public class Utils {
 
+    /**
+     *
+     *
+     *
+     *
+     */
     public static boolean isValid( File x509file ) {
         X509Certificate cert = null;
         try {
@@ -46,6 +52,12 @@ public class Utils {
         return valid;
     }
 
+    /**
+     *
+     *
+     *
+     *
+     */
     public static X509Certificate convertToX509( String file ) {
         if( !isValid(new File(file))) return null;
         try {

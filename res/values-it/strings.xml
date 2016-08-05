@@ -4,6 +4,7 @@
     <string name="DIRECTION">Direzione</string>
     <string name="USEv3">Usa API Keystone v3</string>
     <string name="INGRESS">Ingresso</string>
+    <string name="NOFIXEDIPTOASSOCIATEFIP">Nessun IP fisso a cui associare il Floating IP (controlla lo stato del server)</string>
     <string name="EGRESS">Uscita</string>
     <string name="REMOVECURRENTFIP">Rimuovi il Floating IP</string>
     <string name="FIPREMOVED">Il Floating IP è stato rimosso</string>

@@ -59,10 +59,11 @@ public class FloatingIP {
     *
     */    
    public static Vector<FloatingIP> parse( String jsonBuf, boolean only_unassigned ) throws ParseException {
+   	
 	  try {
 	    JSONObject jsonObject = new JSONObject( jsonBuf );
 	    JSONArray fips = jsonObject.getJSONArray( "floating_ips" );
-	    
+	    //JSONArray fips = jsonObject.getJSONArray( "floatingips" ); // string floatingips if neutron endpoint is used
 	    Vector<FloatingIP> res = new Vector<FloatingIP>();
 	    for(int i = 0; i<fips.length(); ++i) {
 	    	JSONObject fip = fips.getJSONObject( i );
@@ -83,7 +84,7 @@ public class FloatingIP {
 	    }
 	    return res;
      } catch(org.json.JSONException je) {
-	    throw new ParseException( je.getMessage( ) );
+	    throw new ParseException( "FloatingIP.parse: "+je.getMessage( ) );
  	  }
    }
 }

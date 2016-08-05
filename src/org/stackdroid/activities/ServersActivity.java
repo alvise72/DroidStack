@@ -400,7 +400,6 @@ public class ServersActivity extends Activity {
                         (new AsyncTaskRemoveFIP( )).execute( server.getID(), server.getPublicIP().elementAt( 0 ) );
                         ServersActivity.this.manageInstanceDialog.dismiss();
 		}
-		
 	}	
 	/**
 	 * 
@@ -561,9 +560,18 @@ public class ServersActivity extends Activity {
 			FloatingIP fip = (FloatingIP)fipSpinner.getSelectedItem();
 			ServersActivity.this.alertDialogSelectFIP.dismiss();
 			ServersActivity.this.progressDialogWaitStop.show();
-			String ip = server.getPrivateIP().elementAt(0);
-			(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), ip );
-            ServersActivity.this.manageInstanceDialog.dismiss();
+			//ServersActivity.this.manageInstanceDialog.dismiss();
+			if(server.getPrivateIP().size()>0) {
+				String ip = server.getPrivateIP().elementAt(0);
+				(new ServersActivity.AsyncTaskFIPAssociate()).execute( fip.getID(), ip );
+				//ServersActivity.this.manageInstanceDialog.dismiss();
+				
+			} else {
+				Utils.alert(getString(R.string.NOFIXEDIPTOASSOCIATEFIP), ServersActivity.this);
+				ServersActivity.this.progressDialogWaitStop.dismiss();
+			}
+			
+            		
 		}
 	}
 
@@ -579,20 +587,6 @@ public class ServersActivity extends Activity {
 			alertDialogSelectFIP.dismiss();
 		}
 	}
-
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-/*	protected class RemoveButtonHandlerForFIP implements OnClickListener {
-		@Override
-		public void onClick( View v ) {
-			alertDialogSelectFIP.dismiss();
-		}
-	}*/
 	
 	/**
 	 * 
@@ -617,7 +611,7 @@ public class ServersActivity extends Activity {
 	 *
 	 *
 	 */
-    private void displayDialogServerCreate( ) {
+        private void displayDialogServerCreate( ) {
         LayoutInflater li = LayoutInflater.from(ServersActivity.this);
 
         promptsViewLaunch = li.inflate(R.layout.my_dialog_server_launch, null);
@@ -1468,7 +1462,6 @@ public class ServersActivity extends Activity {
 				Utils.alert("ServersActivity.AsyncTaskOSListServers.onPostExecute: "+pe.getMessage( ), ServersActivity.this );
 		}
 			ServersActivity.this.progressDialogWaitStop.dismiss();
-			//(new AsyncTaskOSListServers()).execute( );
 		}
     }
     

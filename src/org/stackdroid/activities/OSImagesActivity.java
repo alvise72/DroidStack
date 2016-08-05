@@ -637,7 +637,8 @@ public class OSImagesActivity extends Activity {
 	    try {
 	        
 	    	OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
-	    	OSImagesActivity.this.refreshView( );
+	    	//Log.v("OSImagesActivity.AsyncTaskOSDelete.onPostExecute: ", "JSONBUF=["+jsonBuf+"]");
+	    	//OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
 	    	Utils.alert("OSImagesActivity.AsyncTaskOSDelete.onPostExecute: " + pe.getMessage( ), 
 	    				OSImagesActivity.this);
