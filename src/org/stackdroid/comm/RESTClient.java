@@ -327,7 +327,7 @@ public class RESTClient {
     public static String sendGETRequestWithoutToken( boolean usessl,
 					 	     String sURL ) 
     throws IOException, ServiceUnAvailableOrInternalError {
-      URL url = new URL(sURL);
+        URL url = new URL(sURL);
       
       
       
@@ -430,10 +430,8 @@ public class RESTClient {
 					 String token,
 					 Vector<Pair<String,String>> properties ) 
 	throws IOException, ServiceUnAvailableOrInternalError {
-	/*if(sURL.startsWith("https://")) usessl=true;
-    	if(sURL.startsWith("http://")) usessl=false;
-    	*/
-    	//Log.v("RESTClient.sedGETRequest", "sURL=["+sURL+"]");
+	
+    	Log.v("RESTClient.sedGETRequest", "sURL=["+sURL+"]");
     	URL url = new URL(sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;

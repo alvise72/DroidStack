@@ -73,16 +73,22 @@ public class OSClient {
     private void checkToken( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 				      IOException, ParseException,CertificateException {
 	
+	String gapiver = U.getGlanceEndpointAPIVER( );
+	String napiver = U.getNeutronEndpointAPIVER( );
+	    
+	//Log.d("OSClient.checkToken", "GLANCEAPIVER="+gapiver+" - NEUTRONAPIVER="+napiver);
+	
 	if(U.getVerifyServerCert()) {
 	    //Log.d("OSCLIENT", "Verify server's cert="+U.getVerifyServerCert());
 	    X509Certificate cert = null;
 	    cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
 	    if(RESTClient.checkServerCert(U.getIdentityEndpoint(), cert.getIssuerX500Principal().getName()) == false)
 		throw new CertificateException("Couldn't verify server's certificate. Please verify the correct CA selected.");
-	    
 	}
 
-    	if(U.getTokenExpireTime() <= Utils.now() + 5) {
+	long exp_time = U.getTokenExpireTime();
+
+    	if(exp_time <= Utils.now() + 5) {
 	    String payload = null;
 	    if(U.useV3())
 		payload = "{ \"auth\": { \"identity\": { \"methods\": [\"password\"],\"password\": { \"user\": { \"name\": \"" + U.getUserName() + "\",\"domain\": { \"id\": \"default\" }, \"password\": \"" + U.getPassword() + "\" } } }, \"scope\": { \"project\": { \"name\": \"" +  U.getTenantName() + "\", \"domain\": { \"id\": \"default\" } }}}}";
@@ -97,22 +103,29 @@ public class OSClient {
 	    if(U.useV3() )
 	    	identityEP += "/auth";
 	    identityEP += "/tokens";
-	    //Log.v("OSClient.checkToken", "identityEP="+identityEP);
-	    //Log.v("OSClient.checkToken", "payload=["+payload+"]");
+	    
 	    Pair<String,String> jsonBuffer_Token = RESTClient.requestToken(U.useSSL(),
-							       		   identityEP,
-									   payload);
+				      												   identityEP,
+									   								   payload);
+	    
 	    String  pwd = U.getPassword();
 	    String  edp = U.getIdentityEndpoint();
 	    boolean ssl = U.useSSL();
 	    boolean verifyServerCert = U.getVerifyServerCert();
 	    String CAFile = U.getCAFile();
-	    //Log.v("OSClient.checkToken", "jsonBuffer="+jsonBuffer);
+
+
+		//Log.d("OSClient.checkToken", "BEFORE PARSE GLANCEAPIVER="+U.getGlanceEndpointAPIVER()+" - NEUTRONAPIVER="+U.getNeutronEndpointAPIVER());
 	    U = User.parse( jsonBuffer_Token.first, U.useV3( ), jsonBuffer_Token.second );
 	    U.setPassword( pwd);
 	    U.setSSL(ssl);
-	    U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+	    //U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
 	    U.setCAFile( CAFile );
+	    //Log.d("OSClient.checkToken", "SETTING GLANCEAPIVER="+gapiver+" - NEUTRONAPIVER="+napiver);
+	    U.setGlanceEndpointAPIVER( gapiver );
+     	U.setNeutronEndpointAPIVER( napiver );
+		U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
+		//Log.d("OSClient.checkToken", "AFTER PARSE GLANCEAPIVER="+U.getGlanceEndpointAPIVER()+" - NEUTRONAPIVER="+U.getNeutronEndpointAPIVER());
 	}
     }
     
@@ -174,7 +187,7 @@ public class OSClient {
 	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	vp.add(p);
 	return RESTClient.sendGETRequest(U.useSSL(),
-					 U.getNeutronEndpoint()+"/routers/" + routerID + ".json",
+					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER() + "/routers/" + routerID + ".json",
 					 U.getToken(),
 					 vp );
     }
@@ -197,7 +210,7 @@ public class OSClient {
 	vp.add(p);
 	String extradata = "{\"router\": {\"external_gateway_info\": {}}}";
 	return RESTClient.sendPUTRequest(U.useSSL(),
-					 U.getNeutronEndpoint() + "/routers/" + routerID + ".json",
+					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers/" + routerID + ".json",
 					 U.getToken(),
 					 extradata,
 					 vp);
@@ -221,7 +234,7 @@ public class OSClient {
 	vp.add(p);
 	String extradata = "{\"router\": {\"external_gateway_info\": {\"network_id\": \"" + netID + "\"}}}";
 	return RESTClient.sendPUTRequest(U.useSSL(),
-					 U.getNeutronEndpoint() + "/routers/" + routerID + ".json",
+					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers/" + routerID + ".json",
 					 U.getToken(),
 					 extradata,
 					 vp);
@@ -246,7 +259,7 @@ public class OSClient {
 	
 	//Log.d("OSC", "Calling sedGETRequest...");
 	return RESTClient.sendGETRequest(U.useSSL(),
-					 U.getNeutronEndpoint() + "/routers.json",
+					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers.json",
 					 U.getToken(),
 					 vp);
     }
@@ -266,7 +279,7 @@ public class OSClient {
 	checkToken();
 	//Log.d("OSCLIENT", "routerID="+routerID);
 	return RESTClient.sendGETRequest(U.useSSL(),
-					 U.getNeutronEndpoint() + "/ports.json?device_id=" + routerID,
+					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/ports.json?device_id=" + routerID,
 					 U.getToken(),
 					 new Vector<Pair<String, String>>());
     }
@@ -290,7 +303,7 @@ public class OSClient {
 	String extradata = "{\"subnet_id\": \"" + subnetID + "\"}";
 	//Log.d("OSC","routerID="+routerID);
 	RESTClient.sendPUTRequest(U.useSSL(),
-				  U.getNeutronEndpoint() + "/routers/" + routerID + "/remove_router_interface.json",
+				  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers/" + routerID + "/remove_router_interface.json",
 				  U.getToken(),
 				  extradata,
 				  vp);
@@ -315,7 +328,7 @@ public class OSClient {
 	String extradata = "{\"subnet_id\": \"" + subnetID + "\"}";
 	//Log.d("OSC","routerID="+routerID);
 	RESTClient.sendPUTRequest(U.useSSL(),
-				  U.getNeutronEndpoint() + "/routers/" + routerID + "/add_router_interface.json",
+				  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers/" + routerID + "/add_router_interface.json",
 				  U.getToken(),
 				  extradata,
 				  vp);
@@ -338,7 +351,7 @@ public class OSClient {
 	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
 	vp.add( p );
 	RESTClient.sendDELETERequest(U.useSSL(),
-				     U.getNeutronEndpoint() + "/routers/" + routerID + ".json",
+				     U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers/" + routerID + ".json",
 				     U.getToken(),
 				     vp);
     }
@@ -361,7 +374,7 @@ public class OSClient {
 	String extradata = "{\"router\": {\"name\": \"" + routerName + "\", \"admin_state_up\": true}}";
 	vp.add( p );
 	RESTClient.sendPOSTRequest(U.useSSL(),
-				   U.getNeutronEndpoint() + "/routers.json",
+				   U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers.json",
 				   U.getToken(),
 				   extradata,
 				   vp);
@@ -500,7 +513,7 @@ public class OSClient {
     	//String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"" + netname + "\", \"admin_state_up\": true}}";
     	//Log.d("REST/createNetwork", "extradata="+extradata);
     	RESTClient.sendDELETERequest( U.useSSL(), 
-				      U.getNeutronEndpoint() + "/networks/"+netID, 
+				      U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/networks/"+netID, 
 				      U.getToken(), 
 				      vp );
     }
@@ -526,7 +539,7 @@ public class OSClient {
     	String extradata = "{\"network\": {\"shared\": " + shared + ", \"name\": \"" + netname + "\", \"admin_state_up\": true}}";
     	//Log.d("REST/createNetwork", "extradata="+extradata);
     	return RESTClient.sendPOSTRequest( U.useSSL(), 
-					   U.getNeutronEndpoint() + "/networks.json", 
+					   U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/networks.json", 
 					   U.getToken(), 
 					   extradata, 
 					   vp );
@@ -554,7 +567,7 @@ public class OSClient {
     	String extradata = "{\"subnet\": {\"network_id\": \"" + netID + "\", \"ip_version\": 4, \"enable_dhcp\": " + enableDHCP  + ", \"cidr\": \"" + CIDR + "\", \"dns_nameservers\": [\"" + DNS + "\"], \"gateway_ip\":\"" + gatewayIP + "\", \"allocation_pools\": [{\"start\": \"" + startIP + "\", \"end\": \"" + endIP + "\"}]}}";
     	//Log.d("OSC", "extradata="+extradata);
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-				    U.getNeutronEndpoint() + "/subnets.json", 
+				    U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/subnets.json", 
 				    U.getToken(), 
 				    extradata, 
 				    vp );
@@ -762,7 +775,7 @@ public class OSClient {
     	vp.add( p );
     	String extradata = "{\"floatingip\": {\"floating_network_id\": \"" + externalNetworkID + "\"}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
-				    U.getNeutronEndpoint() + "/floatingips.json",//os-floating-ips", 
+				    U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/floatingips.json",//os-floating-ips", 
 				    U.getToken(), 
 				    extradata, 
 				    vp );
@@ -791,7 +804,7 @@ public class OSClient {
 	    vp.add( p );
 	    String extradata = "{\"security_group\": {\"name\": \"" + secgrpName + "\", \"description\": \"" + desc + "\"}}";
 	    RESTClient.sendPOSTRequest( U.useSSL(), 
-    					U.getNeutronEndpoint()  + "/security-groups.json", 
+    					U.getNeutronEndpoint()  + "/" + U.getNeutronEndpointAPIVER( ) + "/security-groups.json", 
     					U.getToken(), 
     					extradata, 
     					vp );
@@ -856,7 +869,7 @@ public class OSClient {
     	vp.add(p);
     	String extradata = "{\"floatingip\": {\"port_id\": \"" + portid + "\"}}";
     	RESTClient.sendPUTRequest(U.useSSL(),
-				  U.getNeutronEndpoint() + "/floatingips/" + fipid + ".json",
+				  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/floatingips/" + fipid + ".json",
 				  U.getToken(),
 				  extradata,
 				  vp);
@@ -880,7 +893,7 @@ public class OSClient {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(), 
-					  U.getNeutronEndpoint() + "/ports.json", 
+					  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/ports.json", 
 					  U.getToken( ), 
 					  vp );
     	
@@ -902,7 +915,7 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String ep = U.getNeutronEndpoint() + "/floatingips/" + fip + ".json";
+    	String ep = U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/floatingips/" + fip + ".json";
     	//Log.v("OSClient.requestFloatingIPRelease", "ep=["+ep+"]");
     	RESTClient.sendDELETERequest(U.useSSL(),
 				     ep,
@@ -1113,10 +1126,14 @@ public class OSClient {
     public String listImages( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 				       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
+        //Log.d("OSClient.listImages", "Calling checkToken");
 	checkToken( );
-
+	//Log.d("OSClient.listImages", "CheckToken returned");
+	String EP =  U.getGlanceEndpoint() + "/" + U.getGlanceEndpointAPIVER() + "/images" ;
+	//Log.d("OSClient.listImages", "EP="+EP);
+	//Log.d("OSClient.listImages", "Calling sendGETRequest");
 	String listResult = RESTClient.sendGETRequest(U.useSSL(),
-						      U.getGlanceEndpoint() + "/images" ,
+						      EP,
 						      U.getToken(),
 						      null);
 						      
@@ -1140,7 +1157,7 @@ public class OSClient {
 	checkToken( );
 	//Log.v("OSClient.deleteImage", "deleting Image ["+imageID+"] EP=["+U.getNovaEndpoint() + "/images/" + imageID+"]");
 	RESTClient.sendDELETERequest(U.useSSL(),
-				     U.getGlanceEndpoint() + "/images/" + imageID,
+				     U.getGlanceEndpoint() + "/" + U.getGlanceEndpointAPIVER() + "/images/" + imageID,
 				     U.getToken(),
 				     null);
     }
@@ -1205,7 +1222,7 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(),  
-					  U.getNeutronEndpoint() + "/networks",
+					  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/networks",
 					  U.getToken(), 
 					  v );
     }
@@ -1227,7 +1244,7 @@ public class OSClient {
 	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
 	v.add(p);
 	return RESTClient.sendGETRequest( U.useSSL(),
-					  U.getNeutronEndpoint() + "/networks.json?router%3Aexternal=True",
+					  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/networks.json?router%3Aexternal=True",
 					  U.getToken(),
 					  v );
     }
@@ -1249,7 +1266,7 @@ public class OSClient {
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(), 
-					  U.getNeutronEndpoint() + "/subnets",
+					  U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/subnets",
 					  U.getToken(), 
 					  v );
     }
@@ -1318,7 +1335,7 @@ public class OSClient {
 	checkToken( );
 	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
 	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
-	    String API = U.getNeutronEndpoint() + "/security-group-rules.json";
+	    String API = U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/security-group-rules.json";
 	    //Log.v("OSClient.createSecGroup", "Calling API (" + API + ")");
 	    return RESTClient.sendGETRequest( U.useSSL(), 
 					      API,
@@ -1353,7 +1370,7 @@ public class OSClient {
     	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
 	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
 	    RESTClient.sendDELETERequest(U.useSSL(),
-					 U.getNeutronEndpoint() + "/security-groups/" + secgrpID + ".json",
+					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/security-groups/" + secgrpID + ".json",
 					 U.getToken(),
 					 v);
     	} else {
@@ -1459,7 +1476,7 @@ public class OSClient {
 	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
 	    RESTClient.sendPOSTRequest( U.useSSL(), 
 					//U.getNovaEndpoint() + "/os-security-group-rules", 
-					U.getNeutronEndpoint( ) + "/security-groups.json",
+					U.getNeutronEndpoint( ) + "/" + U.getNeutronEndpointAPIVER( ) + "/security-groups.json",
 					U.getToken(), 
 					extradata, 
 					vp );

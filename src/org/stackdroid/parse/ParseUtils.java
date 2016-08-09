@@ -128,6 +128,7 @@ public class ParseUtils {
      *
      */  
 	public static String getCurrentAPI( String jsonBuffer )  throws ParseException  {
+	  //Log.d("ParseUtils.getCurrentAPI", "jsonBuffer="+jsonBuffer);
 	  try {
    			JSONObject jsonObject = new JSONObject( jsonBuffer );
    			JSONArray versions = jsonObject.getJSONArray("versions");
@@ -136,10 +137,13 @@ public class ParseUtils {
    			  JSONObject element = versions.getJSONObject( i );
    			  if(element.getString("status").compareTo("CURRENT")==0) {
    			    JSONObject link = element.getJSONArray("links").getJSONObject(0);
-   			    String api = link.getString("href");
-   			    if(api.endsWith("/"))
-   			      api = api.substring(0, api.length()-1);
-   			    return api;
+   			    String url = link.getString("href");
+   			    if(url.endsWith("/"))
+   			      url = url.substring(0, url.length()-1);
+   			     
+   			    String[] pieces = url.split("/");
+   			     
+   			    return pieces[pieces.length-1];
    			  }
    			}
    			

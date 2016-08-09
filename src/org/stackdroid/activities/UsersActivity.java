@@ -131,8 +131,8 @@ public class UsersActivity extends Activity {
 		  ((TextView)promptsView.findViewById(R.id.keystoneUseV3)).setText(U.useV3( ) ? R.string.YES : R.string.NO);
 		  
 		  ((TextView)promptsView.findViewById(R.id.novaURL)).setText(U.getNovaEndpoint());
-		  ((TextView)promptsView.findViewById(R.id.neutronURL)).setText(U.getNeutronEndpoint());
-		  ((TextView)promptsView.findViewById(R.id.glanceURL)).setText(U.getGlanceEndpoint());
+		  ((TextView)promptsView.findViewById(R.id.neutronURL)).setText(U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER(  ) );
+		  ((TextView)promptsView.findViewById(R.id.glanceURL)).setText(U.getGlanceEndpoint() + "/" + U.getGlanceEndpointAPIVER() );
 		  ((TextView)promptsView.findViewById(R.id.cinder1URL)).setText(U.getCinder1Endpoint());
 		  ((TextView)promptsView.findViewById(R.id.cinder2URL)).setText(U.getCinder2Endpoint());
 		  ((TextView)promptsView.findViewById(R.id.SSL)).setText(U.useSSL() ? getString(R.string.YES) : "No");
@@ -167,6 +167,7 @@ public class UsersActivity extends Activity {
 	    	if(users[i].getName( ).matches("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[-]?[0-9]+")) {
 	    		//Log.d("USERS", "OK file ["+users[i].getName( )+"]");
 	    		U = User.fromFileID( users[i].getName( ), Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+	    		Log.d("UsersActivity.refreshUserViews", "glance api ver="+U.getGlanceEndpointAPIVER() + " - neutron api ver="+U.getNeutronEndpointAPIVER( ) );
 	    		if(U==null) {
 	    			Utils.alert(getString(R.string.RECREATEUSERS), this);
 	    			return;

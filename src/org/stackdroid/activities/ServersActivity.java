@@ -1915,7 +1915,7 @@ public class ServersActivity extends Activity {
   	    }
   	    Utils.alert(getString(R.string.FIPASSOCIATED2), ServersActivity.this);
   	    //(new AsyncTaskOSListServers()).execute();
-  	    
+  	    progressDialogWaitStop.dismiss();
  	  }
      }
 
@@ -1924,6 +1924,7 @@ public class ServersActivity extends Activity {
 	 *
 	 *
 	 */
+/*
 	protected class AsyncTaskServerStatusUpdate extends AsyncTask<String, Void, Void>
 	{
 		private  String   errorMessage     = null;
@@ -1958,17 +1959,17 @@ public class ServersActivity extends Activity {
 		protected void onPostExecute( Void v ) {
 			super.onPostExecute(v);
 
-			/*if(hasError) {
-				Utils.alert( errorMessage, ServersActivity.this );
-				ServersActivity.this.progressDialogWaitStop.dismiss( );
-				return;
-			}*/
+			//if(hasError) {
+			//	Utils.alert( errorMessage, ServersActivity.this );
+			//	ServersActivity.this.progressDialogWaitStop.dismiss( );
+			//	return;
+			//}
 
 
 
 		}
 	}
-
+*/
 
 	/**
 	 *
@@ -2028,7 +2029,7 @@ public class ServersActivity extends Activity {
                 //(new ServersActivity.AsyncTaskOSListServers()).execute( );
 			}
 
-            //ServersActivity.this.progressDialogWaitStop.dismiss();
+            ServersActivity.this.progressDialogWaitStop.dismiss();
 
 		}
 	}

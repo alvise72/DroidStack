@@ -593,8 +593,8 @@ public class OSImagesActivity extends Activity {
     protected class AsyncTaskOSDelete extends AsyncTask<String, Void, Void>
     {
       private  String   errorMessage  =  null;
-	  private  boolean  hasError      =  false;
-	  private  String   jsonBuf       = null;
+	  private  boolean  hasError  =  false;
+	  private  String   jsonBuf   = null;
 	
 	  protected Void doInBackground(String... u ) 
 	  {
@@ -675,6 +675,7 @@ public class OSImagesActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 
      		try {
+     			//Log.d("OSImagesActivity", "calling listImages...");
      			jsonBuf = osc.listImages( );
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Vector;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,7 +81,7 @@ public class OSImage {
        
    		JSONObject jsonObject = new JSONObject( jsonString );
    		
-   		  
+   		Log.d("OSImage.parse", "jsonString="+jsonString);
    		JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
      
    		for(int i=0; i<images.length( ); ++i ) {

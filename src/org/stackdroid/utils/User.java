@@ -25,7 +25,7 @@ import org.stackdroid.parse.ParseException;
 
 public class User implements Serializable, Comparable<User> {
     
-    private static final long serialVersionUID = 3000000000000000006L;
+    private static final long serialVersionUID = 3000000000000000007L;
     
     protected String  userName;
     protected String  userID;
@@ -52,6 +52,8 @@ public class User implements Serializable, Comparable<User> {
     protected String  identityIP;
     protected String  CAFile;
     protected boolean useV3;
+    protected String  gapiver;
+    protected String  napiver;
     
     public User( String _userName, 
 		 String _userID, 
@@ -75,7 +77,9 @@ public class User implements Serializable, Comparable<User> {
 		 String identityIP,
 		 boolean verifyServerCert,
 		 String ca_file,
-		 boolean useV3)
+		 boolean useV3,
+		 String gapiver,
+		 String napiver)
     {
         userName       	       = _userName;
         userID         	       = _userID;
@@ -98,9 +102,11 @@ public class User implements Serializable, Comparable<User> {
         this.cinder2Endpoint   = cinder2Endpoint;
         this.identityHostname  = identityHostname;
         this.identityIP        = identityIP;
-	this.verifyServerCert  = verifyServerCert;
-	this.CAFile	       = ca_file;
-	this.useV3             = useV3;
+		this.verifyServerCert  = verifyServerCert;
+		this.CAFile	       	   = ca_file;
+		this.useV3             = useV3;
+		this.gapiver		   = gapiver;
+		this.napiver		   = napiver;
     }
     
     public String getIdentityHostname( ) { return identityHostname; }
@@ -110,10 +116,13 @@ public class User implements Serializable, Comparable<User> {
     public void setVerifyServerCert( boolean verifyServerCert ) { this.verifyServerCert=verifyServerCert; }
     public void setCAFile( String ca_file) { this.CAFile=ca_file;}
     
-    public void setGlanceEndpoint( String ep ) { glanceEndpoint = ep; }
-    public void setNeutronEndpoint( String ep ) { neutronEndpoint = ep; }
-    
-    
+    //public void setGlanceEndpoint( String ep ) { glanceEndpoint = ep; }
+    //public void setNeutronEndpoint( String ep ) { neutronEndpoint = ep; }
+    public void setGlanceEndpointAPIVER( String apiver ) { this.gapiver = apiver; }
+    public void setNeutronEndpointAPIVER( String apiver ) { this.napiver = apiver; }
+    public String getNeutronEndpointAPIVER( ) { return napiver; }
+    public String getGlanceEndpointAPIVER( ) { return gapiver; }
+        
     public String getTenantName( ) { return tenantName; }
     public String getTenantID( ) { return tenantId; }
     public String getToken( ) { return token; }
@@ -174,6 +183,8 @@ public class User implements Serializable, Comparable<User> {
 	    ",Verify Server Cert="+verifyServerCert+
 	    ",CA="+CAFile+
 	    ",use V3 API=" + (useV3 ? "yes" : "no(v2)")+
+		",GlanceAPI_Version="+gapiver+
+		",NeutronAPI_Version="+napiver+
 	    "}";
     }
     
@@ -202,21 +213,21 @@ public class User implements Serializable, Comparable<User> {
     	if(false == (new File(filename)).exists())
 	    throw new NotExistingFileException( "File [" + filename + "] doesn't exist" );
     	try {
-	    InputStream is = new FileInputStream( filename );
-	    ObjectInputStream ois = new ObjectInputStream( is );
-	    User U = (User)ois.readObject( );
-	    ois.close( );
-	    return U;
+	    	InputStream is = new FileInputStream( filename );
+	    	ObjectInputStream ois = new ObjectInputStream( is );
+	    	User U = (User)ois.readObject( );
+	    	ois.close( );
+	    	return U;
     	} catch(IOException ioe) {
-	    (new File(filename)).delete( );
+	    	(new File(filename)).delete( );
 	    
-	    if(ioe.getMessage( ).contains("Incompatible class (SUID")) {
-		return null;
-	    }
+	    	if(ioe.getMessage( ).contains("Incompatible class (SUID")) {
+				return null;
+	    	}
 	    
-	    throw new IOException( "User.fromFileID.InputStream.readObject: " + ioe.getMessage( ) );
+	    	throw new IOException( "User.fromFileID.InputStream.readObject: " + ioe.getMessage( ) );
     	} catch(ClassNotFoundException cnfe) {
-	    throw new ClassNotFoundException( "User.fromFileID.ObjectInputStream.readObject: " + cnfe.getMessage( ) );
+	    	throw new ClassNotFoundException( "User.fromFileID.ObjectInputStream.readObject: " + cnfe.getMessage( ) );
     	}
     }
     
@@ -228,17 +239,17 @@ public class User implements Serializable, Comparable<User> {
      * 
      */
     public void toFile( String filesDir ) throws IOException {
-    	String filename = filesDir + "/users/" + getFilename( );// getUserID( ) + "." + getTenantID( ) + "." + endpoint.hashCode();
+    	String filename = filesDir + "/users/" + getFilename( );
     	File f = new File( filename );
     	if(f.exists()) f.delete();
     	try {
-	    OutputStream os = new FileOutputStream( filename );
-	    ObjectOutputStream oos = new ObjectOutputStream( os );
-	    oos.writeObject( this );
-	    oos.close( );
+	    	OutputStream os = new FileOutputStream( filename );
+	    	ObjectOutputStream oos = new ObjectOutputStream( os );
+	    	oos.writeObject( this );
+	    	oos.close( );
     	} catch(IOException ioe) {
-	    throw new IOException("User.toFile.OutputStream.write/close: "+ioe.getMessage() );
-	}
+	    	throw new IOException("User.toFile.OutputStream.write/close: "+ioe.getMessage() );
+		}
     }
     
     /**
@@ -269,8 +280,6 @@ public class User implements Serializable, Comparable<User> {
 		      
 	    JSONArray roleArray = useV3 ? token.getJSONArray("roles") : jsonObject.getJSONObject("access").getJSONObject("user").getJSONArray("roles");
 	    JSONArray serviceArray = useV3 ? token.getJSONArray("catalog") : ((JSONObject)jsonObject.getJSONObject("access")).getJSONArray("serviceCatalog");
-
-	    //Log.v("User.parse","User TOKEN=["+stoken+"]");
 	    
 	    boolean nova=false, glance=false, neutron=false, cinder1=false, cinder2=false;
 	    String novaEP=null, glanceEP=null, neutronEP=null, cinder1EP=null, cinder2EP=null, identityEP = null;
@@ -284,7 +293,6 @@ public class User implements Serializable, Comparable<User> {
 		    endpoint = endpoints.getJSONObject(0);
 		if(type.compareTo("compute")==0) {
 		    nova=true;
-		    //novaEP = endpoint.getString("publicURL");
 		    if(useV3) {
 		    for(int j = 0; j<endpoints.length(); j++) {
 		    	JSONObject thisEndpoint = endpoints.getJSONObject(j);
@@ -296,7 +304,6 @@ public class User implements Serializable, Comparable<User> {
 		}
 		if(type.compareTo("network")==0) {
 		    neutron=true;
-		    //neutronEP = endpoint.getString("publicURL");
 		    if(useV3) {
 		    for(int j = 0; j<endpoints.length(); j++) {
 		    	JSONObject thisEndpoint = endpoints.getJSONObject(j);
@@ -316,7 +323,6 @@ public class User implements Serializable, Comparable<User> {
 		    }
 		    }
 		    else cinder2EP = endpoint.getString("publicURL");
-		    //cinder2EP = endpoint.getString("publicURL");
 		}
 		if(type.compareTo("volume")==0) {
 		    cinder1=true;
@@ -328,29 +334,25 @@ public class User implements Serializable, Comparable<User> {
 		    }
 		    }
 		    else cinder1EP = endpoint.getString("publicURL");
-		    //cinder1EP = endpoint.getString("publicURL");
-		    
 		}
 		if(type.compareTo("image")==0) {
 		    glance=true;
-		    //glanceEP = endpoint.getString("publicURL");
 		    if(useV3) {
-		    for(int j = 0; j<endpoints.length(); j++) {
-		    	JSONObject thisEndpoint = endpoints.getJSONObject(j);
-		    	if(thisEndpoint.getString("interface").compareTo("public")==0)
-		    		glanceEP = thisEndpoint.getString("url");
-		    }
+		    	for(int j = 0; j<endpoints.length(); j++) {
+		    		JSONObject thisEndpoint = endpoints.getJSONObject(j);
+		    		if(thisEndpoint.getString("interface").compareTo("public")==0)
+		    			glanceEP = thisEndpoint.getString("url");
+		   		}
 		    }
 		    else glanceEP = endpoint.getString("publicURL");
 		}
 		if(type.compareTo("identity") == 0) {
-		    //identityEP = endpoint.getString("publicURL");
 		    if(useV3) {
-		    for(int j = 0; j<endpoints.length(); j++) {
-		    	JSONObject thisEndpoint = endpoints.getJSONObject(j);
-		    	if(thisEndpoint.getString("interface").compareTo("public")==0)
-		    		identityEP = thisEndpoint.getString("url");
-		    }
+		    	for(int j = 0; j<endpoints.length(); j++) {
+		    		JSONObject thisEndpoint = endpoints.getJSONObject(j);
+		    		if(thisEndpoint.getString("interface").compareTo("public")==0)
+		    			identityEP = thisEndpoint.getString("url");
+		    	}
 		    }
 		    else identityEP = endpoint.getString("publicURL");
 		}
@@ -375,20 +377,20 @@ public class User implements Serializable, Comparable<User> {
 	    timeFormatter.setTimeZone( TimeZone.getDefault( ) );
 	    Calendar calendar = Calendar.getInstance();
 	    try {
-		calendar.setTime(timeFormatter.parse(expires));
+			calendar.setTime(timeFormatter.parse(expires));
 	    } catch(java.text.ParseException pe) {
-		throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
+			throw new ParseException( "Error parsing the expiration date ["+expires+"]" );
 	    }
 	    long expireTimestamp = calendar.getTimeInMillis() / 1000;
 	    String addrS = "";
 	    String addrIP = "";
 	    try {
-		URL identityUrl = new URL(identityEP);
-		InetAddress addr = InetAddress.getByName(identityUrl.getHost());
-		addrS = addr.getCanonicalHostName();//.getHostName();
-		addrIP = addr.getHostAddress();
+			URL identityUrl = new URL(identityEP);
+			InetAddress addr = InetAddress.getByName(identityUrl.getHost());
+			addrS = addr.getCanonicalHostName();//.getHostName();
+			addrIP = addr.getHostAddress();
 	    } catch(Exception e) {
-		addrS = identityEP;
+			addrS = identityEP;
 	    }
 	    
 	    User U = new User( 
@@ -414,7 +416,8 @@ public class User implements Serializable, Comparable<User> {
 			      addrIP,
 			      false,
 			      null,
-			      forceUseV3);
+			      forceUseV3,
+				  "", "");
 	    //Log.v("User.parse", "USER=["+U);
 	    return U;
 	} catch(org.json.JSONException je) {
@@ -422,15 +425,4 @@ public class User implements Serializable, Comparable<User> {
 	}
     }
 
-    /**
-     *
-     *
-     *
-     *
-     *
-     */
-    // public static User parseV3( JSONObject jsonObject ) throws ParseException
-    // {
-    // 	JSONObject access = (JSONObject)jsonObject.get("tokens");
-    // }	
 }

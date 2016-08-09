@@ -547,11 +547,11 @@ public class UserAddActivity extends Activity {
      		String jsonBufGlanceAPIVer = OSClient.getInstance( U ).getCurrentAPIVersion( U.getGlanceEndpoint( ) ); 
      		String jsonBufNeutronAPIVer = OSClient.getInstance( U ).getCurrentAPIVersion( U.getNeutronEndpoint( ) ); 
      		
-     		String _glanceAPI = ParseUtils.getCurrentAPI(jsonBufGlanceAPIVer);
-     		String _neutronAPI = ParseUtils.getCurrentAPI(jsonBufNeutronAPIVer);
+     		String glanceAPI = ParseUtils.getCurrentAPI(jsonBufGlanceAPIVer);
+     		String neutronAPI = ParseUtils.getCurrentAPI(jsonBufNeutronAPIVer);
      		
-     		String glanceAPI = _glanceAPI != null ? _glanceAPI :  U.getGlanceEndpoint( ) + "/v2";
-     		String neutronAPI = _neutronAPI != null ? _neutronAPI :  U.getGlanceEndpoint( ) + "/v2";
+     		//String glanceAPI = _glanceAPI != null ? _glanceAPI :  U.getGlanceEndpoint( ) + "/v2";
+     		//String neutronAPI = _neutronAPI != null ? _neutronAPI :  U.getGlanceEndpoint( ) + "/v2";
      		
      		if(U.useSSL( ) ) {
      			Log.v("UserAddActivity", "FIX TO SSL");
@@ -566,8 +566,8 @@ public class UserAddActivity extends Activity {
      		
      		//Log.d("UserAddActivity", "GLANCE API VER=[" + glanceAPI + "]");
      		//Log.d("UserAddActivity", "NEUTRON API VER=[" + neutronAPI + "]");
-     		U.setGlanceEndpoint( glanceAPI );
-     		U.setNeutronEndpoint( neutronAPI );
+     		U.setGlanceEndpointAPIVER( glanceAPI );
+     		U.setNeutronEndpointAPIVER( neutronAPI );
      		
 	    } catch(Exception e) {
 		errorMessage = e.getMessage();
@@ -577,23 +577,23 @@ public class UserAddActivity extends Activity {
      	}
 	
      	@Override
-	protected void onPostExecute( Void v ) {
-	    super.onPostExecute( v );
+		protected void onPostExecute( Void v ) {
+	    	super.onPostExecute( v );
 	    
-	    if(hasError) {	
-		UserAddActivity.this.progressDialogWaitStop.dismiss( );
-		Utils.alert( errorMessage, UserAddActivity.this );
-		UserAddActivity.this.progressDialogWaitStop.dismiss( );
-		return;
-	    }
-	    // se metto questo in doInBackgroud genera il problema di Looper.prepare()
-	    Utils.alert(getString(R.string.ADDSUCCESS), UserAddActivity.this);
-	    try {
-		U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	    } catch(IOException ioe) {
-		;
-	    }
-	    UserAddActivity.this.progressDialogWaitStop.dismiss( );
+	    	if(hasError) {
+				UserAddActivity.this.progressDialogWaitStop.dismiss( );
+				Utils.alert( errorMessage, UserAddActivity.this );
+				UserAddActivity.this.progressDialogWaitStop.dismiss( );
+				return;
+	   		}
+	    	// se metto questo in doInBackgroud genera il problema di Looper.prepare()
+	   		Utils.alert(getString(R.string.ADDSUCCESS), UserAddActivity.this);
+	    	try {
+				U.toFile( Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+	    	} catch(IOException ioe) {
+				;
+	    	}
+	    	UserAddActivity.this.progressDialogWaitStop.dismiss( );
      	}
     }
 }
