@@ -1331,7 +1331,7 @@ public class OSClient {
 							      IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken( );
-	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
+/*	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
 	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
 	    String API = U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/security-group-rules.json";
 	    //Log.v("OSClient.createSecGroup", "Calling API (" + API + ")");
@@ -1340,12 +1340,12 @@ public class OSClient {
 					      U.getToken(), 
 					      null );
 	} else {
- 	   
+*/ 	   
 	    return RESTClient.sendGETRequest( U.useSSL(), 
 					      U.getNovaEndpoint() + "/os-security-groups/" + secgrpID,
 					      U.getToken(), 
 					      null );
-	}
+	//}
     }
 
     /**
@@ -1378,6 +1378,49 @@ public class OSClient {
 					 v);
         }
     }    
+
+    /**
+     * @throws ParseException 
+     *
+     *
+     *
+     * 
+     *
+     */
+    public void createRule(String secgrpID, int fromPort, int toPort, String protocol, String cidr, String direction) 
+	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+	       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
+    {
+    	checkToken( );
+		boolean useNeutron = U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1;
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add( p );
+    	//{"security_group_rule": {"direction": "egress", "port_range_min": "22", "remote_ip_prefix": "0.0.0.0/24", "ethertype": "IPv4", "port_range_max": "23", "protocol": "TCP", "security_group_id": "c903b316-cf00-460a-9fd7-d1661e0c4583"}
+    	
+/*    	if(useNeutron) {
+    		String extradata = "{\"security_group_rule\": {\"direction\":\"" + direction + "\",\"port_range_min\": " + fromPort + ", \"protocol\": \"" 
+    		+ protocol + "\", \"port_range_max\": " + toPort + ", \"remote_ip_prefix\": \"" 
+    		+ cidr + "\", \"security_group_id\": \"" + secgrpID + "\"}}";
+    		String url = U.getNeutronEndpoint( ) + "/" + U.getNeutronEndpointAPIVER( ) + "/security-group-rules.json";
+    		Log.v("OSClient.createRule", "extradata=["+extradata+"]");
+    		Log.v("OSClient.createRule", "URL="+url);
+    		
+    		
+    		RESTClient.sendPOSTRequest( U.useSSL(), 
+					url,
+					U.getToken(), 
+					extradata, 
+					vp );
+		} else {*/
+    	  String extradata = "{\"security_group_rule\": {\"from_port\": " + fromPort + ", \"ip_protocol\": \"" + protocol + "\", \"to_port\": " + toPort + ", \"parent_group_id\": \"" + secgrpID + "\", \"cidr\": \"" + cidr + "\", \"group_id\": null}}";
+			RESTClient.sendPOSTRequest( U.useSSL(), 
+					U.getNovaEndpoint() + "/os-security-group-rules", 
+					U.getToken(), 
+					extradata, 
+					vp );
+		/*}*/
+    }
 
     /**
      * @throws ParseException 
@@ -1450,43 +1493,6 @@ public class OSClient {
 				   U.getToken(),
 				   data,
 				   v);
-    }
-
-    /**
-     * @throws ParseException 
-     *
-     *
-     *
-     * 
-     *
-     */
-    public void createRule(String secgrpID, int fromPort, int toPort, String protocol, String cidr, String direction) 
-	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
-	       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
-    {
-	checkToken( );
-		
-	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
-    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-    	vp.add( p );
-    	String extradata = "{\"security_group_rule\": {\"from_port\": " + fromPort + ", \"ip_protocol\": \"" + protocol + "\", \"to_port\": " + toPort + ", \"parent_group_id\": \"" + secgrpID + "\", \"cidr\": \"" + cidr + "\", \"group_id\": null}}";
-    	if(U.getNeutronEndpoint()!=null && U.getNeutronEndpoint().length()>1) {
-	    //Log.v("OSClient.createSecGroup", "USING NEUTRON SEC GROUP");
-	    RESTClient.sendPOSTRequest( U.useSSL(), 
-					//U.getNovaEndpoint() + "/os-security-group-rules", 
-					U.getNeutronEndpoint( ) + "/" + U.getNeutronEndpointAPIVER( ) + "/security-groups.json",
-					U.getToken(), 
-					extradata, 
-					vp );
-	} else {
-    	  
-	    RESTClient.sendPOSTRequest( U.useSSL(), 
-					U.getNovaEndpoint() + "/os-security-group-rules", 
-					//U.getNeutronEndpoint( ) + "/security-groups.json"
-					U.getToken(), 
-					extradata, 
-					vp );
-	}
     }
 
     /**

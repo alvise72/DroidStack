@@ -231,44 +231,39 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.editsecgroup );
-        
 	
         secgrpID   = this.getIntent().getStringExtra("SECGRPID");
-	String secgrpName = this.getIntent().getStringExtra("SECGRPNAME");
+        String secgrpName = this.getIntent().getStringExtra("SECGRPNAME");
         setTitle(getString(R.string.EDITSECGROUP) + " " + secgrpName);
-	String secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
+        String secgrpDesc = this.getIntent().getStringExtra("SECGRPDESC");
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
     	try {
-	    U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
-	    if(U==null) {
-		Utils.alert(getString(R.string.RECREATEUSERS), this);
-		return;
-	    }
+    		U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
+    		if(U==null) {
+    			Utils.alert(getString(R.string.RECREATEUSERS), this);
+    			return;
+    		}
     	} catch(Exception re) {
-	    Utils.alert("OSImagesActivity.onCreate: "+re.getMessage(), this );
-	    return;
+    		Utils.alert("OSImagesActivity.onCreate: "+re.getMessage(), this );
+    		return;
     	} 
 	
     	if(selectedUser.length()!=0)
-	    ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
+    		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+U.getUserName() + " (" + U.getTenantName() + ")"); 
     	else
-	    ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
+    		((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
     	
-    	dirs.add(getString(R.string.INGRESS));
-    	dirs.add(getString(R.string.EGRESS));
+    	dirs.add("ingress");
+    	dirs.add("egress");
     	
     	progressDialogWaitStop = new CustomProgressDialog( this, ProgressDialog.STYLE_SPINNER );
         progressDialogWaitStop.setMessage( getString(R.string.PLEASEWAITCONNECTING) );
         progressDialogWaitStop.setCancelable(false);
-	progressDialogWaitStop.setCanceledOnTouchOutside(false);
-    	
-    	
+        progressDialogWaitStop.setCanceledOnTouchOutside(false);
     	
     	this.progressDialogWaitStop.show( );
-    	
-    	
     	(new AsyncTaskListRules()).execute( secgrpID );
     }
     
@@ -310,7 +305,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         
         ( (Spinner)promptsView.findViewById(R.id.protoSpinner) ).setAdapter(spinnerProtoAdapter);
         
-        ( (Spinner)promptsView.findViewById(R.id.mySpinnerDir) ).setAdapter(spinnerDirectionAdapter);
+        //( (Spinner)promptsView.findViewById(R.id.mySpinnerDir) ).setAdapter(spinnerDirectionAdapter);
         
         ((Button)promptsView.findViewById(R.id.confirmRuleAdd)).setOnClickListener(new SecGroupEditActivity.ConfirmRuleAddClickListener());
         ((Button)promptsView.findViewById(R.id.cancelRuleAdd)).setOnClickListener( new SecGroupEditActivity.CancelRuleAddClickListener( ) );
@@ -319,7 +314,7 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
         toPort = (EditText)promptsView.findViewById(R.id.toPortET);
         PROTO = (Spinner)promptsView.findViewById(R.id.protoSpinner);
         CIDR = (EditText)promptsView.findViewById(R.id.cidrET);
-	DIR = (Spinner)promptsView.findViewById(R.id.mySpinnerDir );
+        //DIR = (Spinner)promptsView.findViewById(R.id.mySpinnerDir );
         ruleSpinner.setOnItemSelectedListener((OnItemSelectedListener)this);
         
         alertDialogSelectRule.setCanceledOnTouchOutside(false);
@@ -346,7 +341,12 @@ public class SecGroupEditActivity extends Activity implements OnItemSelectedList
             String toPortS = toPort.getText().toString();
             String cidrS = CIDR.getText().toString();
             String protoS = PROTO.getSelectedItem().toString().toLowerCase();
-            String direction = DIR.getSelectedItem().toString().toLowerCase();
+            //String direction = DIR.getSelectedItem().toString().toLowerCase();
+            /*if(direction.compareTo(getString(R.string.INGRESS))==0)
+            	direction = "ingress";
+            if(direction.compareTo(getString(R.string.EGRESS))==0)
+            	direction = "egress";
+            */
             ( new AsyncTaskCreateRule( ) ).execute( secgrpID, fromPortS, toPortS, cidrS, protoS, direction );
     	}
     }

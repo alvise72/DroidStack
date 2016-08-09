@@ -18,7 +18,7 @@
     <Space
         android:layout_width="wrap_content"
         android:layout_height="5dip" />
-
+<!--
     <Spinner
         android:id="@+id/mySpinnerDir"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="@string/DIRECTION" />
-	
+-->	
     <Spinner
         android:id="@+id/mySpinner"
         android:layout_width="match_parent"

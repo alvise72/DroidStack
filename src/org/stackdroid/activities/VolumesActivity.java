@@ -169,7 +169,7 @@ public class VolumesActivity extends Activity {
 			((TextView)promptsView.findViewById(R.id.volumeStatus)).setText( V.getStatus() );
 			((TextView)promptsView.findViewById(R.id.volumeBootable)).setText( V.isBootable() ? getString(R.string.YES) : "No");
 			((TextView)promptsView.findViewById(R.id.volumeReadonly)).setText( V.isReadOnly() ? getString(R.string.YES) : "No" );
-			if(V.isAttached)
+			if(V.isAttached())
 				((TextView)promptsView.findViewById(R.id.volumeAttachInfo)).setText( V.getAttachedServerName() + " ("+V.getAttachedDevice() + ")" );
 			else
 				((TextView)promptsView.findViewById(R.id.volumeAttachInfo)).setText( "-" );
@@ -177,93 +177,6 @@ public class VolumesActivity extends Activity {
 			alertDialogVolumeInfo.setCanceledOnTouchOutside(false);
 			alertDialogVolumeInfo.setCancelable(false);
 			alertDialogVolumeInfo.show();
-
-    	    /*TextView tv1 = new TextView(VolumesActivity.this);
-    	    tv1.setText(getString(R.string.VOLNAME));
-    	    tv1.setTypeface( null, Typeface.BOLD );
-    	    TextView tv2 = new TextView(VolumesActivity.this);
-    	    tv2.setText(V.getName());
-    	    
-    	    TextView tv3 = new TextView(VolumesActivity.this);
-    	    tv3.setText(getString(R.string.SIZE));
-    	    tv3.setTypeface( null, Typeface.BOLD );
-    	    TextView tv4 = new TextView(VolumesActivity.this);
-    	    tv4.setText(""+V.getSize() + " GB");
-    	    
-    	    TextView tv5 = new TextView(VolumesActivity.this);
-    	    tv5.setText(getString(R.string.STATUS));
-    	    tv5.setTypeface( null, Typeface.BOLD );
-    	    TextView tv6 = new TextView(VolumesActivity.this);
-    	    tv6.setText(V.isAttached() ? getString(R.string.INUSE) : getString(R.string.AVAILABLE));
-    	    
-    	    TextView tv7 = new TextView(VolumesActivity.this);
-    	    tv7.setText(getString(R.string.BOOTABLE));
-    	    tv7.setTypeface( null, Typeface.BOLD );
-    	    TextView tv8 = new TextView(VolumesActivity.this);
-    	    tv8.setText(V.isBootable() ? getString(R.string.YES) : getString(R.string.NO));
-    	    
-    	    TextView tv9 = new TextView(VolumesActivity.this);
-    	    tv9.setText(getString(R.string.READONLY));
-    	    tv9.setTypeface( null, Typeface.BOLD );
-    	    TextView tv10 = new TextView(VolumesActivity.this);
-    	    tv10.setText(V.isReadOnly() ? getString(R.string.YES) : getString(R.string.NO));
-    	    
-    	    TextView tv11 = null, tv12 = null, tv13 = null;
-    	    
-    	    if(V.isAttached()) {
-    	    	tv11 = new TextView(VolumesActivity.this);
-        	    tv11.setText(getString(R.string.ATTACHMENT));
-        	    tv11.setTypeface( null, Typeface.BOLD );
-        	    tv12 = new TextView(VolumesActivity.this);
-        	    tv12.setText(V.getAttachedServerName());
-        	    tv13 = new TextView(VolumesActivity.this);
-        	    tv13.setText(V.getAttachedDevice());
-        	    
-    	    }
-    	    
-    	    ScrollView sv = new ScrollView(VolumesActivity.this);
-    	    LinearLayout.LayoutParams lp 
-    		= new LinearLayout.LayoutParams(
-    						LinearLayout.LayoutParams.MATCH_PARENT,
-    						LinearLayout.LayoutParams.MATCH_PARENT);
-    	    sv.setLayoutParams( lp );
-    	    LinearLayout l = new LinearLayout(VolumesActivity.this);
-    	    l.setLayoutParams( lp );
-    	    l.setOrientation( LinearLayout.VERTICAL );
-    	    int paddingPixel = 8;
-    	    float density = Utils.getDisplayDensity( VolumesActivity.this );
-    	    int paddingDp = (int)(paddingPixel * density);
-    	    l.setPadding(paddingDp, 0, 0, 0);
-    	    l.addView( tv1 );
-    	    tv2.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv2 );
-    	    l.addView( tv3 );
-    	    tv4.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv4 );
-    	    l.addView( tv5 );
-    	    tv6.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv6 );
-    	    l.addView( tv7 );
-    	    tv8.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv8 );
-    	    l.addView( tv9 );
-    	    tv10.setPadding(2*paddingDp, 0, 0, 0);
-    	    l.addView( tv10 );
-    	    if(V.isAttached()) {
-    	    	l.addView( tv11 );
-    	    	tv12.setPadding(2*paddingDp, 0, 0, 0);
-    	    	l.addView( tv12 );
-    	    	l.addView( tv13 );
-    	    }
-    	    
-    	    sv.addView(l);
-    	    String name;
-    	    if(V.getName().length()>=16)
-    	    	name = V.getName().substring(0,14) + "..";
-    	    else
-    	    	name = V.getName();
-    	    Utils.alertInfo( sv, "Volume information", VolumesActivity.this );
-    		*/
     	}
     }
 
