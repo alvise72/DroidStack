@@ -3,6 +3,7 @@
     <string name="CONFIRM">Conferma</string>
     <string name="DIRECTION">Direzione</string>
     <string name="USEv3">Usa API Keystone v3</string>
+    <string name="ATTACHINFO">Info di collegamento</string>
     <string name="INGRESS">Ingresso</string>
     <string name="NOFIXEDIPTOASSOCIATEFIP">Nessun IP fisso a cui associare il Floating IP (controlla lo stato del server)</string>
     <string name="EGRESS">Uscita</string>

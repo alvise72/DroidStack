@@ -829,25 +829,23 @@ public class OSClient {
      * 
      * 
      */
-    public String requestVolumes( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+    public String listVolumes( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
     	checkToken( );
     	String cinderEP = null;
     	if(U.getCinder2Endpoint()!=null)
-	    cinderEP = U.getCinder2Endpoint();
+    		cinderEP = U.getCinder2Endpoint();
     	else
-	    cinderEP = U.getCinder1Endpoint();
-    	
-    	
+    		cinderEP = U.getCinder1Endpoint();
     	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add(p);
     	return RESTClient.sendGETRequest( U.useSSL(), 
-					  cinderEP + "/volumes/detail", 
-					  U.getToken( ), 
-					  vp );
+					  					  cinderEP + "/volumes/detail", 
+					  					  U.getToken( ), 
+					  					  vp );
     }
 
     /**

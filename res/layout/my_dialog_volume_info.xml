@@ -118,6 +118,25 @@
                 android:typeface="sans"
                 android:paddingLeft="12dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@+string/ATTACHINFO"
+                android:id="@+id/textView5"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/volumeAttachInfo"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:typeface="sans"
+                android:paddingLeft="12dp" />
 
         </LinearLayout>
     </ScrollView>

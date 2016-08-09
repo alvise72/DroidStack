@@ -431,7 +431,7 @@ public class RESTClient {
 					 Vector<Pair<String,String>> properties ) 
 	throws IOException, ServiceUnAvailableOrInternalError {
 	
-    	Log.v("RESTClient.sedGETRequest", "sURL=["+sURL+"]");
+    	//Log.v("RESTClient.sedGETRequest", "sURL=["+sURL+"]");
     	URL url = new URL(sURL);
     	URLConnection conn = null;
     	TrustManager[] trustAllCerts = null;
@@ -922,7 +922,7 @@ public class RESTClient {
 	int status = HttpStatus.SC_OK;
 	try {
 	    status = ((HttpURLConnection)conn).getResponseCode();
-	    Log.v("RESTClient.sendDELETERequest", "status="+status);
+	    //Log.v("RESTClient.sendDELETERequest", "status="+status);
 	} catch(IOException ioe) {
 		if(usessl)
 		      ((HttpsURLConnection)conn).disconnect( );

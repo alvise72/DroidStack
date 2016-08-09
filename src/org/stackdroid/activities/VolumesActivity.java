@@ -169,6 +169,10 @@ public class VolumesActivity extends Activity {
 			((TextView)promptsView.findViewById(R.id.volumeStatus)).setText( V.getStatus() );
 			((TextView)promptsView.findViewById(R.id.volumeBootable)).setText( V.isBootable() ? getString(R.string.YES) : "No");
 			((TextView)promptsView.findViewById(R.id.volumeReadonly)).setText( V.isReadOnly() ? getString(R.string.YES) : "No" );
+			if(V.isAttached)
+				((TextView)promptsView.findViewById(R.id.volumeAttachInfo)).setText( V.getAttachedServerName() + " ("+V.getAttachedDevice() + ")" );
+			else
+				((TextView)promptsView.findViewById(R.id.volumeAttachInfo)).setText( "-" );
 			((Button)promptsView.findViewById(R.id.buttonOk)).setOnClickListener( new VolumesActivity.OkImageServerListener());
 			alertDialogVolumeInfo.setCanceledOnTouchOutside(false);
 			alertDialogVolumeInfo.setCancelable(false);
@@ -523,7 +527,7 @@ public class VolumesActivity extends Activity {
   	      OSClient osc = OSClient.getInstance( U );
 
      		try {
-     			jsonBufVols		= osc.requestVolumes( );
+     			jsonBufVols		= osc.listVolumes( );
      			jsonBufServers	= osc.listServers( );
      		} catch(Exception e) {
      			errorMessage = e.getMessage();

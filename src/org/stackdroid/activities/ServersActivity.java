@@ -1121,12 +1121,12 @@ public class ServersActivity extends Activity {
         LinearLayout layout = ((LinearLayout)findViewById(R.id.serverLayout));
         if(layout!=null)
     		layout.removeAllViews();
-    	
+/*    	
     	if(servers.size()==0) {
     		Utils.alert(getString(R.string.NOINSTANCEAVAIL), this);	
     		return;
     	}
-	
+*/	
     	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
     	Iterator<Flavor> fit = flavors.iterator();
     	while( fit.hasNext( ) ) {

@@ -2,6 +2,7 @@
 <resources>
     <string name="CONFIRM">Confirm</string>
     <string name="USEv3">Use v3 Keystone API</string>
+    <string name="ATTACHINFO">Attach Info</string>
     <string name="DIRECTION">Direction</string>
     <string name="INGRESS">Ingress</string>
     <string name="EGRESS">Egress</string>

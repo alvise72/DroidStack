@@ -231,11 +231,11 @@ public class OverViewActivity extends Activity {
 	    
 	    	try {
 	    		jsonBufQuota 	    = osc.listQuotas( );
-	    		jsonBuf 	    = osc.listServers( );
+	    		jsonBuf 	    	= osc.listServers( );
 	    		jsonBufFIPs 	    = osc.listFloatingIPs( );
 	    		jsonBufSecgs 	    = osc.listSecGroups( );
 	    		jsonBufferFlavor    = osc.listFlavors( );
-	    		jsonBufferVolumes   = osc.requestVolumes( );
+	    		jsonBufferVolumes   = osc.listVolumes( );
 	    		jsonBufferQuotaVols = osc.listVolQuotas( );
 	    	} catch(Exception e) {
 	    		errorMessage = e.getMessage();
