@@ -8,3 +8,4 @@ Eliminato un bug che produceva una doppia entry nella lista immagini quando se n
 Aggiunto lampeggio alle istanza non in stato ACTIVE, che indica all'utente la necessità di aggiornare periodicamente
 Aggiornamento continuo ogni 5 secondi per la lista delle istanze
 Volume info adesso mostra servername e device name dell'eventuale collegamento
+Nella lista dei server si vede anche lo stato del task in corso

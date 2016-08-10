@@ -684,7 +684,7 @@ public class OSClient {
      * 
      * 
      */
-    public void pauseServer( String serverid )
+    public void suspendServer( String serverid )
 	throws NotAuthorizedException, NotFoundException, 
 	       ServerException, ServiceUnAvailableOrInternalError,
 	       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
@@ -694,7 +694,7 @@ public class OSClient {
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
-    	String extradata = "{\"pause\": \"null\"}";
+    	String extradata = "{\"suspend\": \"null\"}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
 				    U.getNovaEndpoint() + "/servers/" + serverid + "/action", 
 				    U.getToken(), 

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="INSTANCEALREADYSUSPENDED">Istanza gi&#xe0; sospesa</string>
+	<string name="INSTANCEALREADYACTIVE">Istanza gi&#xe0; attiva</string>
+	<string name="INSTANCEALREADYSHUTOFF">Istanza gi&#xe0; spenta</string>
+	<string name="INSTANCESHUTOFF">L\'istanza &#xe8; spenta</string>
+	<string name="INSTANCESUSPENDED">L\'istanza &#xe8; sospesa</string>
+    <string name="INSTANCETASKNOTNULL">Impossibile operare su un\'istanza con un task attivo</string>
     <string name="CONFIRM">Conferma</string>
     <string name="DIRECTION">Direzione</string>
     <string name="USEv3">Usa API Keystone v3</string>
+    <string name="SUSPENDSERVER">Sospendi istanza</string>
+    <string name="RESUMESERVER">Ripristina istanza sospesa</string>
     <string name="ATTACHINFO">Info di collegamento</string>
     <string name="INGRESS">Ingresso</string>
     <string name="NOFIXEDIPTOASSOCIATEFIP">Nessun IP fisso a cui associare il Floating IP (controlla lo stato del server)</string>
@@ -183,7 +191,7 @@
 	<string name="SERVERSTARTED">Istanza avviata</string>
 	<string name="SERVERSTOPPED">Istanza spenta</string>
 	<string name="SERVERRPAUSED">Istanza in pausa</string>
-	<string name="SERVERRESUMED">Instance resumed</string>
+	<string name="SERVERRESUMED">Istanza ripristinata</string>
 	
 	<string name="HEAT">Orchestratore</string>
 	<string name="NOROUTERAVAIL">Nessun router disponibile</string>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="INSTANCEALREADYSUSPENDED">The server is already suspended</string>
+	<string name="INSTANCEALREADYACTIVE">The server is already active</string>
+	<string name="INSTANCEALREADYSHUTOFF">The server is already shutoff</string>
+	<string name="INSTANCESHUTOFF">The server is shutoff</string>
+	<string name="INSTANCESUSPENDED">The server is suspended</string>
+    <string name="INSTANCETASKNOTNULL">Cannot operate on server with an active task</string>
     <string name="CONFIRM">Confirm</string>
+    <string name="SUSPENDSERVER">Suspend server</string>
     <string name="USEv3">Use v3 Keystone API</string>
     <string name="ATTACHINFO">Attach Info</string>
     <string name="DIRECTION">Direction</string>
@@ -180,7 +187,7 @@
 	<string name="SHUTOFF">Shutdown</string>
 	<string name="STARTUP">Boot</string>
 	<string name="PAUSESERVER">Pause</string>
-	<string name="RESUMESERVER">Resume</string>
+	<string name="RESUMESERVER">Resume server</string>
 	<string name="RESIZESERVER">Resize instance</string>
 	<string name="SERVERNAMECHANGED">Instance name changed</string>
 	<string name="HARDREBOOT">Hard reboot (power reset)</string>

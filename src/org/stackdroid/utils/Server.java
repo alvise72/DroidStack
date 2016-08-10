@@ -17,40 +17,40 @@ public class Server {//implements Serializable {
 	
 	//private static final long serialVersionUID = 2087368867376448461L;
 	
-    public final static int POWER_RUNNING = 1;
-    public final static int POWER_NOSTATE = 0;
+    public final static int POWER_RUNNING  = 1;
+    public final static int POWER_NOSTATE  = 0;
     public final static int POWER_SHUTDOWN = 4;
 
     public final static String[] POWER_STRING = {"No State", "Running", "", "", "Shutdown"};
 
-    private String		name;
-    private String 		ID;
-    private String 		status;
-    private String 		task;
-    private int 		powerstate;
+    private String			name;
+    private String 			ID;
+    private String 			status;
+    private String 			task;
+    private int 			powerstate;
     private Vector<String> 	privIP;
     private Vector<String> 	pubIP;
-    private String 		computeNode;
-    private String 		keyname;
-    private String 		flavorID;
+    private String 			computeNode;
+    private String 			keyname;
+    private String 			flavorID;
     private String[] 		secgrpNames;
-    private long 		creationTime;
-    private Flavor 		flavor;
-    private OSImage		osImage;
+    private long 			creationTime;
+    private Flavor 			flavor;
+    private OSImage			osImage;
     
-    public Server( String _name,
-				   String _ID,
-		   		   String _status,
-		   		   String _task,
-		   		   int _power,
-		   		   Vector<String> _privIP,
-		   		   Vector<String> _pubIP,
-		   		   String _computeNode,
-		   		   String _keyname,
-		   		   String _flavorID,
-		   		   long _creationTime,
-		   		   String[] secgroups,
-				   OSImage _osImage)
+    public Server( String 			_name,
+				   String 			_ID,
+		   		   String 			_status,
+		   		   String 			_task,
+		   		   int 				_power,
+		   		   Vector<String> 	_privIP,
+		   		   Vector<String> 	_pubIP,
+		   		   String 			_computeNode,
+		   		   String 			_keyname,
+		   		   String 			_flavorID,
+		   		   long 			_creationTime,
+		   		   String[] 		secgroups,
+				   OSImage 			_osImage)
     {
     	name           = _name;
     	ID             = _ID;
@@ -72,13 +72,13 @@ public class Server {//implements Serializable {
     public String 		  getStatus() { return status; }
     public String 		  getTask() { return task; }
     public int    		  getPowerState() { return powerstate; }
-    public Vector<String> 	  getPrivateIP() { return privIP; }
-    public Vector<String> 	  getPublicIP() { return pubIP; }
-    public OSImage        	  getOSImage( ) { return osImage; }
+    public Vector<String> getPrivateIP() { return privIP; }
+    public Vector<String> getPublicIP() { return pubIP; }
+    public OSImage        getOSImage( ) { return osImage; }
     public String 		  getComputeNode2() { return computeNode; }
     public String 		  getKeyName() { return keyname; }
     public String 		  getFlavorID() { return flavorID;}
-    public String[] 		  getSecurityGroupNames() { return secgrpNames; }
+    public String[] 	  getSecurityGroupNames() { return secgrpNames; }
 
 	public void setStatus( String status ) {
 		this.status = status;

@@ -102,9 +102,6 @@ public class ServersActivity extends Activity {
     public  Vector<OSImage>          images;
     public  Vector<FloatingIP>       fips					   = null;
 
-//	private boolean firstUpdate = true;
-//	private boolean autoupdate = true;
-	
     protected boolean runningListServers = false;	
     protected boolean exit = false;
     protected TextView currentTask = null;
@@ -312,35 +309,30 @@ public class ServersActivity extends Activity {
             return;
         }
     }
-
-    /**
-     *
-     * @author dorigoa
-     *
-     */
-	//protected class ResizeInstance implements OnClickListener {
-	//	@Override
-	//	public void onClick(View v) {
-	//		server  = ((ButtonWithView)v).getServerView().getServer();
-			//ServersActivity.this.progressDialogWaitStop.show();
-            //(new AsyncTaskPauseInstance( )).execute( server.getID() );
-            //ServersActivity.this.manageInstanceDialog.dismiss();
-			
-	//	}
-		
-	//}
 	
 	/**
 	 * 
 	 * @author dorigoa
 	 *
 	 */
-	protected class PauseInstance implements OnClickListener {
+	protected class SuspendInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
+			
 			server  = ((ButtonWithView)v).getServerView().getServer();
-			//ServersActivity.this.progressDialogWaitStop.show();
-            (new AsyncTaskPauseInstance( )).execute( server.getID() );
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
+			if(server.getStatus().compareTo("SUSPENDED")==0){
+			    Utils.alert(getString(R.string.INSTANCEALREADYSUSPENDED), ServersActivity.this);
+				return;	
+			}
+			if(server.getStatus().compareTo("SHUTOFF")==0){
+			    Utils.alert(getString(R.string.INSTANCESHUTOFF), ServersActivity.this);
+				return;	
+			}
+			(new AsyncTaskSuspendInstance( )).execute( server.getID() );
             ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 		
@@ -355,8 +347,21 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
-			//ServersActivity.this.progressDialogWaitStop.show();
-            (new AsyncTaskResumeInstance( )).execute( server.getID() );
+			
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
+			
+			if(server.getStatus().compareTo("ACTIVE")==0){
+			    Utils.alert(getString(R.string.INSTANCEALREADYACTIVE), ServersActivity.this);
+				return;	
+			}
+			if(server.getStatus().compareTo("SHUTOFF")==0){
+			    Utils.alert(getString(R.string.INSTANCESHUTOFF), ServersActivity.this);
+				return;	
+			}
+			(new AsyncTaskResumeInstance( )).execute( server.getID() );
             ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 		
@@ -371,8 +376,13 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
-			//ServersActivity.this.progressDialogWaitStop.show();
-            (new AsyncTaskHardReboot( )).execute( server.getID() );
+			
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
+			
+			(new AsyncTaskHardReboot( )).execute( server.getID() );
             ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 		
@@ -387,8 +397,19 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
-			//ServersActivity.this.progressDialogWaitStop.show();
-            (new AsyncTaskSoftReboot( )).execute( server.getID() );
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
+			if(server.getStatus().compareTo("SUSPENDED")==0) {
+				Utils.alert(getString(R.string.INSTANCESUSPENDED), ServersActivity.this);
+				return;
+			}
+			if(server.getStatus().compareTo("SHUTOFF")==0) {
+				Utils.alert(getString(R.string.INSTANCESHUTOFF), ServersActivity.this);
+				return;
+			}
+			(new AsyncTaskSoftReboot( )).execute( server.getID() );
             ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 		
@@ -403,9 +424,20 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
-			//ServersActivity.this.progressDialogWaitStop.show();
-                        (new AsyncTaskStartInstance( )).execute( server.getID() );
-                        ServersActivity.this.manageInstanceDialog.dismiss();
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
+			if(server.getStatus().compareTo("ACTIVE") == 0) {
+				Utils.alert(getString(R.string.INSTANCEALREADYACTIVE), ServersActivity.this);
+				return;
+			}
+			if(server.getStatus().compareTo("SUSPENDED")==0) {
+				Utils.alert(getString(R.string.INSTANCESUSPENDED), ServersActivity.this);
+				return;
+			}
+			(new AsyncTaskStartInstance( )).execute( server.getID() );
+            ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 		
 	}
@@ -419,9 +451,21 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
+			if(server.getStatus().compareTo("SHUTOFF")==0) {
+				Utils.alert(getString(R.string.INSTANCEALREADYSHUTOFF), ServersActivity.this);
+				return;
+			}
+			if(server.getStatus().compareTo("SUSPENDED")==0) {
+				Utils.alert(getString(R.string.INSTANCESUSPENDED), ServersActivity.this);
+				return;
+			}
 			//ServersActivity.this.progressDialogWaitStop.show();
-                        (new AsyncTaskStopInstance( )).execute( server.getID() );
-                        ServersActivity.this.manageInstanceDialog.dismiss();
+            (new AsyncTaskStopInstance( )).execute( server.getID() );
+            ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 		
 	}
@@ -436,8 +480,8 @@ public class ServersActivity extends Activity {
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
 			//ServersActivity.this.progressDialogWaitStop.show();
-                        (new AsyncTaskRemoveFIP( )).execute( server.getID(), server.getPublicIP().elementAt( 0 ) );
-                        ServersActivity.this.manageInstanceDialog.dismiss();
+            (new AsyncTaskRemoveFIP( )).execute( server.getID(), server.getPublicIP().elementAt( 0 ) );
+            ServersActivity.this.manageInstanceDialog.dismiss();
 		}
 	}	
 	/**
@@ -450,6 +494,10 @@ public class ServersActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			server  = ((ButtonWithView)v).getServerView().getServer();
+			if(server.getTask().compareTo("null")!=0) {
+	            Utils.alert(getString(R.string.INSTANCETASKNOTNULL), ServersActivity.this);
+				return;	
+			}
 		   	final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTSNAPNAME));
 	        final EditText input = new EditText(ServersActivity.this);
@@ -633,18 +681,6 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
-	public void togglePeriodicalUpdate( View v ) {
-		//periodicalupdate
-		//YYUtils.putBoolPreference( "LAST_AUTOUPDATE", ((ToggleButton)v).isChecked(), this );
-		//autoupdate = ((ToggleButton)v).isChecked();
-		//((ImageButton)findViewById(R.id.updateButton)).setEnabled( !((ToggleButton)v).isChecked() );
-	}
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	public void createInstance( View v ) {
         netids.clear();
         mapID_to_ServerView.clear();
@@ -778,22 +814,22 @@ public class ServersActivity extends Activity {
 			
 			L.setLayoutParams( lp );
 			L.setOrientation(LinearLayout.VERTICAL);
-			final ButtonWithView changeName    = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView() );
-			final ButtonWithView makeSnap      = new ButtonWithView( ServersActivity.this, ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView changeName    = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView makeSnap      = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView hardReboot    = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView softReboot    = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView startInstance = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
-			final ButtonWithView stopInstance = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
-			final ButtonWithView pauseServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
-			final ButtonWithView resumeServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
-			final ButtonWithView removeFip = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView stopInstance  = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView suspendServer = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView resumeServer  = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
+			final ButtonWithView removeFip     = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			
 			//final Button resizeServer = new Button( ServersActivity.this );
 			changeName.setText(getString(R.string.CHANGENAMESERVER));
 			makeSnap.setText(getString(R.string.MAKESNAP));
 			hardReboot.setText(getString(R.string.HARDREBOOT));
 			softReboot.setText(getString(R.string.SOFTREBOOT));
-			pauseServer.setText(getString(R.string.PAUSESERVER));
+			suspendServer.setText(getString(R.string.SUSPENDSERVER));
 			resumeServer.setText(getString(R.string.RESUMESERVER));
 			startInstance.setText(getString(R.string.STARTSERVER));
 			stopInstance.setText(getString(R.string.STOPSERVER));
@@ -804,7 +840,7 @@ public class ServersActivity extends Activity {
 			makeSnap.setOnClickListener( new ServersActivity.MakeInstanceSnapshot( ) );
 			hardReboot.setOnClickListener( new ServersActivity.HardRebootInstance( ) );
 			softReboot.setOnClickListener( new ServersActivity.SoftRebootInstance( ) );
-			pauseServer.setOnClickListener( new ServersActivity.PauseInstance( ) );
+			suspendServer.setOnClickListener( new ServersActivity.SuspendInstance( ) );
 			resumeServer.setOnClickListener( new ServersActivity.ResumeInstance( ) );
 			startInstance.setOnClickListener( new ServersActivity.StartInstance( ) );
 			stopInstance.setOnClickListener( new ServersActivity.StopInstance( ) );
@@ -822,7 +858,7 @@ public class ServersActivity extends Activity {
 			L.addView(softReboot);
 			L.addView(startInstance);
 			L.addView(stopInstance);
-			L.addView(pauseServer);
+			L.addView(suspendServer);
 			L.addView(resumeServer);
 			L.addView(removeFip);
 			sv.addView( L );
@@ -900,6 +936,8 @@ public class ServersActivity extends Activity {
             ((TextView)promptsView.findViewById(R.id.imageName)).setText( s.getOSImage()!=null ? s.getOSImage().getName() : "N/A");
             ((TextView)promptsView.findViewById(R.id.serverID)).setText(s.getID());
             ((TextView)promptsView.findViewById(R.id.serverStatus)).setText(s.getStatus() + (s.getTask()!=null && s.getTask().length()!=0 && s.getTask().equalsIgnoreCase("null")==false ? " (" + s.getTask()+")" : ""));
+            //((TextView)promptsView.findViewById(R.id.serverTask)).setText(s.getTask() + (s.getTask()!=null && s.getTask().length()!=0 && s.getTask().equalsIgnoreCase("null")==false ? " (" + s.getTask()+")" : ""));
+            	
             ((TextView)promptsView.findViewById(R.id.serverFlavor)).setText(s.getFlavor()!=null ? s.getFlavor().getFullInfo() : "N/A");
             ((TextView)promptsView.findViewById(R.id.serverIP)).setText( fxip );
             ((TextView)promptsView.findViewById(R.id.serverFIP)).setText( fip );
@@ -1139,10 +1177,10 @@ public class ServersActivity extends Activity {
     	while(it.hasNext()) {
     		Server s = it.next();
 		
-		Iterator<Flavor> flvIt = flavors.iterator( );
-		while(flvIt.hasNext( ) ) {
-			Flavor f = flvIt.next( );
-		}
+    		Iterator<Flavor> flvIt = flavors.iterator( );
+    		while(flvIt.hasNext( ) ) {
+    			Flavor f = flvIt.next( );
+			}
 
 		
     		Flavor F = flavHash.get( s.getFlavorID( ) );
@@ -1154,14 +1192,18 @@ public class ServersActivity extends Activity {
     										  new ServersActivity.AddIPButtonHandler(),
     										  new ServersActivity.ServerManageClickListener(),
     										  this);
-    		if(sv.getServer().getStatus().compareTo("ACTIVE")!=0) {
+    		if(sv.getServer().getStatus().compareTo("ACTIVE")!=0 
+    			&& sv.getServer().getStatus().compareTo("SHUTOFF")!=0 
+    			&& sv.getServer().getStatus().compareTo("PAUSED")!=0 
+    			&& sv.getServer().getStatus().compareTo("SUSPENDED")!=0) 
+    		{
     		  Animation anim = new AlphaAnimation(0.0f, 0.5f);
     		  anim.setDuration(200); //You can manage the blinking time with this parameter
-		  anim.setStartOffset(20);
-		  anim.setRepeatMode(Animation.REVERSE);
-		  anim.setRepeatCount(Animation.INFINITE);
-		  sv.getStatusTextView().startAnimation(anim);
-		}
+    		  anim.setStartOffset(20);
+    		  anim.setRepeatMode(Animation.REVERSE);
+    		  anim.setRepeatCount(Animation.INFINITE);
+    		  sv.getStatusTextView().startAnimation(anim);
+    		}
     		((LinearLayout)findViewById( R.id.serverLayout) ).addView(sv);
 			//sv.activateStatusUpdatePB();
 			mapID_to_ServerView.put(sv.getServer().getID(), sv);
@@ -1220,22 +1262,22 @@ public class ServersActivity extends Activity {
     
 
     //__________________________________________________________________________________
-    protected class AsyncTaskPauseInstance extends AsyncTask<String, String, String>
+    protected class AsyncTaskSuspendInstance extends AsyncTask<String, String, String>
     {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
      		String serverid = v[0];
      		OSClient osc = OSClient.getInstance( U );
      		try {
-     			osc.pauseServer(serverid);
+     			osc.suspendServer(serverid);
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;
