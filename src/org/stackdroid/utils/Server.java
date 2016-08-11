@@ -81,8 +81,10 @@ public class Server {//implements Serializable {
     public String[] 	  getSecurityGroupNames() { return secgrpNames; }
 
     public boolean		  hasStableState( ) {
-      if( task!=null && (task.compareTo("null") != 0) ) return false;
-      if (status.compareTo("ACTIVE")==0	|| status.compareTo("SUSPENDED")==0 || status.compareTo("SHUTOFF")==0 ) return true;
+      if( task!=null && (task.compareTo("null") != 0) )
+      	  return false;
+      if (status.compareTo("ACTIVE")==0	|| status.compareTo("SUSPENDED")==0 || status.compareTo("SHUTOFF")==0 )
+      	  return true;
       return false;
     }
     
