@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="INSTANCEALREADYSUSPENDED">Istanza gi&#xe0; sospesa</string>
-	<string name="INSTANCEALREADYACTIVE">Istanza gi&#xe0; attiva</string>
-	<string name="INSTANCEALREADYSHUTOFF">Istanza gi&#xe0; spenta</string>
-	<string name="INSTANCESHUTOFF">L\'istanza &#xe8; spenta</string>
-	<string name="INSTANCESUSPENDED">L\'istanza &#xe8; sospesa</string>
+<string name="INSTANCEALREADYSUSPENDED">Istanza gi&#xe0; sospesa</string>
+<string name="INSTANCEALREADYACTIVE">Istanza gi&#xe0; attiva</string>
+<string name="INSTANCEALREADYSHUTOFF">Istanza gi&#xe0; spenta</string>
+<string name="INSTANCESHUTOFF">L\'istanza &#xe8; spenta</string>
+<string name="INSTANCESUSPENDED">L\'istanza &#xe8; sospesa</string>
+<string name="NOTREADYINSTANCE">L\'istanza non &#xe8; ancora pronta per mostrare la console</string>
+
     <string name="INSTANCETASKNOTNULL">Impossibile operare su un\'istanza con un task attivo</string>
     <string name="CONFIRM">Conferma</string>
     <string name="DIRECTION">Direzione</string>

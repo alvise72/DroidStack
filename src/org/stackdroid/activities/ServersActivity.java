@@ -698,7 +698,7 @@ public class ServersActivity extends Activity {
 	 *
 	 *
 	 */
-        private void displayDialogServerCreate( ) {
+    private void displayDialogServerCreate( ) {
         LayoutInflater li = LayoutInflater.from(ServersActivity.this);
 
         promptsViewLaunch = li.inflate(R.layout.my_dialog_server_launch, null);
@@ -824,7 +824,6 @@ public class ServersActivity extends Activity {
 			final ButtonWithView resumeServer  = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			final ButtonWithView removeFip     = new ButtonWithView( ServersActivity.this,  ((ImageButtonWithView)v).getServerView()  );
 			
-			//final Button resizeServer = new Button( ServersActivity.this );
 			changeName.setText(getString(R.string.CHANGENAMESERVER));
 			makeSnap.setText(getString(R.string.MAKESNAP));
 			hardReboot.setText(getString(R.string.HARDREBOOT));
@@ -834,7 +833,6 @@ public class ServersActivity extends Activity {
 			startInstance.setText(getString(R.string.STARTSERVER));
 			stopInstance.setText(getString(R.string.STOPSERVER));
 			removeFip.setText(getString(R.string.REMOVECURRENTFIP));
-			//resizeServer.setText(getString(R.string.RESIZESERVER));
 			
 			changeName.setOnClickListener( new ServersActivity.ChangeInstanceNameHandler( ) ) ;
 			makeSnap.setOnClickListener( new ServersActivity.MakeInstanceSnapshot( ) );
@@ -868,14 +866,14 @@ public class ServersActivity extends Activity {
 	                public void onClick(DialogInterface dialog, int whichButton) {
 	                    
 	                }
-	         });
-	         alert.setCancelable(false);
-	         manageInstanceDialog = alert.create();
-	         manageInstanceDialog.setCancelable(false);
-	         manageInstanceDialog.setCanceledOnTouchOutside(false);
-	         manageInstanceDialog.show( );
+	        });
+	        alert.setCancelable(false);
+	        manageInstanceDialog = alert.create();
+	        manageInstanceDialog.setCancelable(false);
+	        manageInstanceDialog.setCanceledOnTouchOutside(false);
+	        manageInstanceDialog.show( );
 		    	
-		     return;
+		    return;
 		 }
 			
 	}
@@ -964,8 +962,13 @@ public class ServersActivity extends Activity {
 		@Override
 	    public void onClick( View v ) {
 			
-			ButtonWithView btv = (ButtonWithView)v;
+	    	ButtonWithView btv = (ButtonWithView)v;
 			server = btv.getServerView().getServer();
+			
+			if(!server.hasStableState()) {
+			  Utils.alert(getString(R.string.NOTREADYINSTANCE), ServersActivity.this);
+			  return;
+			}
 			
 			final AlertDialog.Builder alert = new AlertDialog.Builder(ServersActivity.this);
 	        alert.setMessage(getString(R.string.INPUTNUMLOGLINES));

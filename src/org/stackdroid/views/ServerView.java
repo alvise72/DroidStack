@@ -119,7 +119,9 @@ public class ServerView extends LinearLayout {
 		if(S.getTask( ).compareToIgnoreCase("deleting")==0) 
 			Status.setTextColor( Color.parseColor("#000000") );
 		}
-
+		if(S.getTask( ).compareToIgnoreCase("none")==0) 
+			Status.setText(ctx.getString(R.string.NONE));
+		
 		LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		consoleLog = new ButtonWithView(ctx, this);
 		consoleLog.setText("Console Log");
