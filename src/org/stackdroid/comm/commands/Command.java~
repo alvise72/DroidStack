@@ -1,0 +1,7 @@
+package org.stackdroid.comm.commands;
+
+public abstract class Command {
+   // declare fields
+   // declare nonabstract methods
+   abstract void execute( );
+}
