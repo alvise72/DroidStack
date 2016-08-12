@@ -33,15 +33,15 @@ public class OSImage {
 		    int mindisk,
 		    int minram) 
     {
-  	this.name = name;
-	this.ID = ID;
-	this.size = size;
-  	this.status = status;
-  	this.is_public = _pub;
-  	this.createdAt = createdAt;
-	this.format = format;
-	this.minDisk = mindisk;
-	this.minRAM = minram;
+    	this.name = name;
+    	this.ID = ID;
+    	this.size = size;
+    	this.status = status;
+    	this.is_public = _pub;
+    	this.createdAt = createdAt;
+    	this.format = format;
+    	this.minDisk = mindisk;
+    	this.minRAM = minram;
     } 
     
     public String getName( ) { return name; }

@@ -1,11 +1,2 @@
-aggiunta possibilità di rimuovere il FIP nel pannello di modifica di un server
-fix della visualizzazione del FIP troppo lungo nelle info di un server
-aggiunto supporto per autenticazione V3/Keystone
-aggiunta visualizzazione dell'IP dell'host che runna Keystone nella message text che fornisce le info dell'Utente.
-Fissato crash quando si tenta di associare un FIP ad un server in errore privo di FixedIP
-Nell'activity FloatingIP mostra solo le reti di tipo external come pool da cui creare nuovi FIP
-Eliminato un bug che produceva una doppia entry nella lista immagini quando se ne cancellava una
-Aggiunto lampeggio alle istanza non in stato ACTIVE, che indica all'utente la necessità di aggiornare periodicamente
-Aggiornamento continuo ogni 5 secondi per la lista delle istanze
-Volume info adesso mostra servername e device name dell'eventuale collegamento
-Nella lista dei server si vede anche lo stato del task in corso
+ristrutturazione codice
+errore nel launch di una VM se il flavor è troppo piccolo

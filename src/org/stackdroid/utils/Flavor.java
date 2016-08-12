@@ -28,13 +28,13 @@ public class Flavor  implements Comparable<Flavor>{//}, Serializable {
 		   int _ephemeral,
 		   int _disk )
     {
-	name = _name;
-	ID = _ID;
-	ram = _ram;
-	vcpus = _vcpus;
-	swap = _swap;
-	ephemeral = _ephemeral;
-	disk = _disk;
+    	name = _name;
+    	ID = _ID;
+    	ram = _ram;
+    	vcpus = _vcpus;
+    	swap = _swap;
+    	ephemeral = _ephemeral;
+    	disk = _disk;
     }
 
     public String getName( ) { return name; }

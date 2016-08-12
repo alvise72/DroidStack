@@ -6,7 +6,7 @@
 <string name="INSTANCESHUTOFF">L\'istanza &#xe8; spenta</string>
 <string name="INSTANCESUSPENDED">L\'istanza &#xe8; sospesa</string>
 <string name="NOTREADYINSTANCE">L\'istanza non &#xe8; ancora pronta per mostrare la console</string>
-
+<string name="FLAVORTOOSMALL">Il flavor &#xe8; troppo piccolo per l\'immagine selezionata</string>
     <string name="INSTANCETASKNOTNULL">Impossibile operare su un\'istanza con un task attivo</string>
     <string name="CONFIRM">Conferma</string>
     <string name="DIRECTION">Direzione</string>

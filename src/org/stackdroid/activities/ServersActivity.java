@@ -120,6 +120,7 @@ public class ServersActivity extends Activity {
     private String count_InstanceToLaunch; // count
     private String secgrpID_InstanceToLaunch;
 
+    //__________________________________________________________________________________
     private void periodicalUpdate(){
     	final Handler handler = new Handler();
     	new Thread(new Runnable() {
@@ -161,9 +162,23 @@ public class ServersActivity extends Activity {
                     return;
                 }
 				String serverName = ((EditText)promptsViewLaunch.findViewById(R.id.serverName)).getText().toString();
-                String imageName  = ((OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem()).getID();
-				String flavor	  = ((Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem()).getID();
+				OSImage osi = (OSImage)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerImages)).getSelectedItem();
+				Flavor flv  = (Flavor)((Spinner)promptsViewLaunch.findViewById(R.id.spinnerFlavor)).getSelectedItem();
+				
+				Log.d("ServersActivity.ServerLaunchListener", "FLAVOR DISK="+flv.getDISK()+" - IMAGE MIN DISK="+osi.getMinDISK() );
+				
+				if(osi.getMinDISK()>0) {
+					if(flv.getDISK()<osi.getMinDISK())
+						{
+							Utils.alert(getString(R.string.FLAVORTOOSMALL), ServersActivity.this);
+							return;
+						}
+				}
+                String imageName  = osi.getID();
+				String flavor	  = flv.getID();
 				String number	  = ((EditText)promptsViewLaunch.findViewById(R.id.instanceNum)).getText().toString();
+				
+				
 				String keypair;
                 if( ((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getCount() > 0)
                     keypair= ((KeyPair)((Spinner) promptsViewLaunch.findViewById(R.id.spinnerKeypair)).getSelectedItem()).getName();
@@ -315,6 +330,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class SuspendInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -343,6 +359,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class ResumeInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -372,6 +389,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class HardRebootInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -393,6 +411,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class SoftRebootInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -420,6 +439,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class StartInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -447,6 +467,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class StopInstance implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -475,6 +496,7 @@ public class ServersActivity extends Activity {
 	 * @author dorigoa
 	 *
 	 */
+    //__________________________________________________________________________________
 	protected class removeFIP implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -488,7 +510,8 @@ public class ServersActivity extends Activity {
 	 * 
 	 * @author dorigoa
 	 *
-	 */	
+	 */
+    //__________________________________________________________________________________
 	protected class MakeInstanceSnapshot implements OnClickListener {
 
 		@Override
@@ -537,6 +560,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+    //__________________________________________________________________________________
 	protected class ChangeInstanceNameHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -580,6 +604,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+    //__________________________________________________________________________________
 	protected class AddIPButtonHandler implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -597,6 +622,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+    //__________________________________________________________________________________
 	protected void  pickAFloatingIP( ) {
 		if(fips==null) {
 			Utils.alert("Severe: FIPS is NULL !!", this);
@@ -641,6 +667,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+    //__________________________________________________________________________________
 	protected class ConfirmButtonHandlerForFIP implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -668,6 +695,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+    //__________________________________________________________________________________
 	protected class CancelButtonHandlerForFIP implements OnClickListener {
 		@Override
 		public void onClick( View v ) {
@@ -681,6 +709,7 @@ public class ServersActivity extends Activity {
 	 * 
 	 * 
 	 */
+    //__________________________________________________________________________________
 	public void createInstance( View v ) {
         netids.clear();
         mapID_to_ServerView.clear();
@@ -698,6 +727,7 @@ public class ServersActivity extends Activity {
 	 *
 	 *
 	 */
+    //__________________________________________________________________________________
     private void displayDialogServerCreate( ) {
         LayoutInflater li = LayoutInflater.from(ServersActivity.this);
 
@@ -1020,11 +1050,6 @@ public class ServersActivity extends Activity {
         return true;
     }
 
-/*    public void update(View v) {
-    	//progressDialogWaitStop.show();
-		(new AsyncTaskOSListServers()).execute( );
-    }
-  */  
 	/**
 	 * 
 	 * @author dorigoa
@@ -1072,8 +1097,6 @@ public class ServersActivity extends Activity {
         progressDialogWaitStop.setCanceledOnTouchOutside(false);
         String selectedUser = Utils.getStringPreference("SELECTEDUSER", "", this);
         
-        
-        
         try {
         	U = User.fromFileID( selectedUser, Configuration.getInstance().getValue("FILESDIR",Defaults.DEFAULTFILESDIR) );
         	if(U==null) {
@@ -1090,7 +1113,6 @@ public class ServersActivity extends Activity {
 	      ((TextView)findViewById(R.id.selected_user)).setText(getString(R.string.SELECTEDUSER)+": "+getString(R.string.NONE)); 
 
 		mapID_to_ServerView = new Hashtable<String, ServerView>();
-        //images = new Vector<OSImage>();
 
         netViewList = new Vector<NetworkView>( );
 
@@ -1100,9 +1122,6 @@ public class ServersActivity extends Activity {
         
         currentTask = (TextView)findViewById(R.id.asynctask);
         
-        //progressDialogWaitStop.show();
-        //(new AsyncTaskOSListServers()).execute();
-        //(Toast.makeText(this, getString(R.string.TOUCHUSERTOVIEWINFO), Toast.LENGTH_LONG)).show();
     }
 
     /**
@@ -1113,17 +1132,6 @@ public class ServersActivity extends Activity {
 	@Override
 	public void onResume( ) {
 		super.onResume( );
-		//progressDialogWaitStop.show();
-		//(new AsyncTaskOSListServers()).execute( );
-//		if(firstUpdate) {
-//		  
-//		  progressDialogWaitStop.show();
-//		  (new AsyncTaskOSListServers()).execute( );
-//		} else
-
-		  
-		//((ToggleButton)findViewById(R.id.periodicalupdate)).setChecked( autoupdate );  
-		//((ImageButton)findViewById(R.id.updateButton)).setEnabled( !autoupdate );
 		exit = false;
 		periodicalUpdate();
 	}
@@ -1146,9 +1154,7 @@ public class ServersActivity extends Activity {
 	@Override
 	public void onPause( ) {
 	  super.onPause( );
-    	  //progressDialogWaitStop.dismiss();
-		//mapID_to_ServerView.clear();
-		exit = true;
+   	  exit = true;
 	}
 	
 	
@@ -1162,12 +1168,7 @@ public class ServersActivity extends Activity {
         LinearLayout layout = ((LinearLayout)findViewById(R.id.serverLayout));
         if(layout!=null)
     		layout.removeAllViews();
-/*    	
-    	if(servers.size()==0) {
-    		Utils.alert(getString(R.string.NOINSTANCEAVAIL), this);	
-    		return;
-    	}
-*/	
+
     	Hashtable<String, Flavor> flavHash = new Hashtable<String, Flavor>();
     	Iterator<Flavor> fit = flavors.iterator();
     	while( fit.hasNext( ) ) {
@@ -1214,9 +1215,7 @@ public class ServersActivity extends Activity {
     		View space = new View( this );
     		space.setMinimumHeight(10);
     		((LinearLayout)findViewById(R.id.serverLayout)).addView(space);
-			//(new ServersActivity.AsyncTaskServerStatusUpdate()).execute(sv.getServer().getID());
     	}
-        //progressDialogWaitStop.dismiss(); // this dismiss is already done in the onPostExecute of the calling task
     }
 
 
@@ -1228,10 +1227,10 @@ public class ServersActivity extends Activity {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1300,7 +1299,6 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERRPAUSED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
     }
     
@@ -1310,10 +1308,10 @@ public class ServersActivity extends Activity {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1340,7 +1338,6 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERRESUMED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
     }
 
@@ -1350,10 +1347,10 @@ public class ServersActivity extends Activity {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1380,7 +1377,6 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERREBOOTED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
     }
 
@@ -1390,10 +1386,10 @@ public class ServersActivity extends Activity {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1420,7 +1416,6 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERSTARTED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
     }
 
@@ -1430,10 +1425,10 @@ public class ServersActivity extends Activity {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1460,19 +1455,19 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERSTOPPED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
-    }    
+    }
+    
     //__________________________________________________________________________________
     protected class AsyncTaskHardReboot extends AsyncTask<String, String, String>
     {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1500,7 +1495,6 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERREBOOTED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
     	
     }
@@ -1511,10 +1505,10 @@ public class ServersActivity extends Activity {
     	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
 	
     	protected String doInBackground( String... v ) 
      	{
@@ -1544,7 +1538,6 @@ public class ServersActivity extends Activity {
      	    }
     		ServersActivity.this.progressDialogWaitStop.dismiss( );
     		Utils.alert(ServersActivity.this.getString(R.string.SERVERNAMECHANGED), ServersActivity.this);
-    		//(new AsyncTaskOSListServers()).execute( );
     	}
     }
     
@@ -1554,11 +1547,11 @@ public class ServersActivity extends Activity {
      	private  String   errorMessage     = null;
      	private  boolean  hasError         = false;
      	
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
-	
+     	@Override
+     	protected void onPreExecute() {
+     		progressDialogWaitStop.show();
+     	}
+		
      	@Override
      	protected String doInBackground( String... v ) 
      	{
@@ -1577,39 +1570,39 @@ public class ServersActivity extends Activity {
      		return "";
      	}
 	
-	@Override
-	protected void onPostExecute( String result ) {
-	    super.onPostExecute(result);
+     	@Override
+     	protected void onPostExecute( String result ) {
+     		super.onPostExecute(result);
 	    
- 	    if(hasError) {
- 	    	Utils.alert( errorMessage, ServersActivity.this );
- 	    	ServersActivity.this.progressDialogWaitStop.dismiss( );
- 	    	return;
- 	    }
-		ServersActivity.this.progressDialogWaitStop.dismiss();
-		Utils.alert(ServersActivity.this.getString(R.string.SNAPCREATED), ServersActivity.this);
-	}
+     		if(hasError) {
+     			Utils.alert( errorMessage, ServersActivity.this );
+     			ServersActivity.this.progressDialogWaitStop.dismiss( );
+     			return;
+     		}
+     		ServersActivity.this.progressDialogWaitStop.dismiss();
+     		Utils.alert(ServersActivity.this.getString(R.string.SNAPCREATED), ServersActivity.this);
+     	}
     }
 
     //__________________________________________________________________________________
     protected class AsyncTaskOSListServers extends AsyncTask<Void, String, String>
     {
      	private  String   errorMessage     = null;
-	private  boolean  hasError         = false;
-	private  String   jsonBuf          = null;
-	private  String   jsonBufferFlavor = null;
-   	private  String   jsonBufferImages = null;
+     	private  boolean  hasError         = false;
+     	private  String   jsonBuf          = null;
+     	private  String   jsonBufferFlavor = null;
+     	private  String   jsonBufferImages = null;
 
-	@Override
-	protected void onPreExecute() {
-		//progressDialogWaitStop.show();
-		if(runningListServers) return;
-		currentTask.setText("Retrieving server list...");
-	}
+     	@Override
+     	protected void onPreExecute() {
+     		//progressDialogWaitStop.show();
+     		if(runningListServers) return;
+     		currentTask.setText("Retrieving server list...");
+     	}
 
-	@Override
-	protected String doInBackground( Void... v ) 
-	{
+     	@Override
+     	protected String doInBackground( Void... v ) 
+     	{
 	      if(runningListServers) return null;
 	      
 	      OSClient osc = OSClient.getInstance( U );
