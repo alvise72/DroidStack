@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.stackdroid.comm.OSClient;
+import org.stackdroid.comm.commands.Command;
 import org.stackdroid.comm.ServerException;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
@@ -358,7 +359,15 @@ public class FloatingIPActivity extends Activity {
 
 	    try {
 		  jsonBuf         = osc.listFloatingIPs( );
-		  jsonBufServers  = osc.listServers( );
+		  //jsonBufServers  = osc.listServers( );
+		  Command cmd = Command.commandFactory(Command.commandType.LISTSERVERS, U );
+		  if(cmd!=null)
+		  	  cmd.execute();
+		  else {
+		  	Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", FloatingIPActivity.this);
+     		return null;
+     	  }
+     	  jsonBufServers = cmd.getRESTResponse();
 		  jsonBufNetworks = osc.listNetworks( );
 		  jsonBufSubNets  = osc.listSubNetworks( );
 	    } catch(Exception e) {
@@ -638,10 +647,18 @@ public class FloatingIPActivity extends Activity {
 	@Override
 	protected String doInBackground( Void... v ) 
 	{
-		OSClient osc = OSClient.getInstance(U);
+		//OSClient osc = OSClient.getInstance(U);
 		
 	    try {
-	    	jsonBuf 		 = osc.listServers( );
+	    	//jsonBuf 		 = osc.listServers( );
+	    	Command cmd = Command.commandFactory(Command.commandType.LISTSERVERS, U );
+	    	if(cmd!=null)
+	    		cmd.execute();
+	    	else {
+	    		Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", FloatingIPActivity.this);
+	    		return null;
+	    	}
+	    	jsonBuf = cmd.getRESTResponse();
 	    	//jsonBufferFlavor = osc.listFlavors( );
 	    } catch(Exception e) {
 	    	errorMessage = e.getMessage();

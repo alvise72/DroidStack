@@ -827,13 +827,28 @@ public class OSImagesActivity extends Activity {
 
 
             try {
-                osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
+            	Command cmd = Command.commandFactory( Command.commandType.CREATESERVER, U );
+				if(cmd!=null) {
+					cmd.setup( name_InstanceToLaunch,//args[0], // instance name
                                     imageID_InstanceToLaunch, //args[1], // imageID
                                     keyname_InstanceToLaunch, // key_name
                                     flavorID_InstanceToLaunch, // flavorID
                                     Integer.parseInt(count_InstanceToLaunch), // count
                                     secgrpID_InstanceToLaunch, // sec group ID
                                     OSImagesActivity.this.selectedNetworks );
+					cmd.execute( );
+				} else {
+					Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+     				return null;
+     			}
+     			
+                /* osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
+                                    imageID_InstanceToLaunch, //args[1], // imageID
+                                    keyname_InstanceToLaunch, // key_name
+                                    flavorID_InstanceToLaunch, // flavorID
+                                    Integer.parseInt(count_InstanceToLaunch), // count
+                                    secgrpID_InstanceToLaunch, // sec group ID
+                                    OSImagesActivity.this.selectedNetworks ); */
             } catch(Exception e) {
                 e.printStackTrace( );
                 errorMessage = e.getMessage();

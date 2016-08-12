@@ -1611,9 +1611,17 @@ public class ServersActivity extends Activity {
 	    
 
 	      try {
-	    	  jsonBuf 	       = osc.listServers( );
+	    	  //jsonBuf 	       = osc.listServers( );
+	    	  Command cmd = Command.commandFactory(Command.commandType.LISTSERVERS, U );
+	    	  if(cmd!=null)
+	    			cmd.execute();
+	    		else {
+	    			Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this);
+	    			return null;
+	    		}
+	    	  jsonBuf = cmd.getRESTResponse();
 	    	  jsonBufferFlavor = osc.listFlavors();
-	    	  Command cmd      = Command.commandFactory(Command.commandType.LISTIMAGES, U);
+	    	  cmd      = Command.commandFactory(Command.commandType.LISTIMAGES, U);
 	    	  if(cmd!=null)
 	    	  	  cmd.execute( );
 	    	  else {
@@ -2053,18 +2061,33 @@ public class ServersActivity extends Activity {
 		@Override
 		protected Void doInBackground( Void... args )
 		{
-			OSClient osc = OSClient.getInstance( U );
+			//OSClient osc = OSClient.getInstance( U );
 
 
 
 			try {
-				osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
-						            imageID_InstanceToLaunch, //args[1], // imageID
-						            keyname_InstanceToLaunch, // key_name
-						            flavorID_InstanceToLaunch, // flavorID
-						            Integer.parseInt(count_InstanceToLaunch), // count
-						            secgrpID_InstanceToLaunch, // sec group ID
-                                    ServersActivity.this.selectedNetworks );
+				Command cmd = Command.commandFactory( Command.commandType.CREATESERVER, U );
+				if(cmd!=null) {
+					cmd.setup( name_InstanceToLaunch, 
+							   imageID_InstanceToLaunch,
+							   keyname_InstanceToLaunch,
+							   flavorID_InstanceToLaunch,
+							   Integer.parseInt(count_InstanceToLaunch),
+							   secgrpID_InstanceToLaunch,
+							   ServersActivity.this.selectedNetworks );
+					cmd.execute( );
+				} else {
+					Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this);
+     				return null;
+     			}
+     			
+				//osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
+				//		            imageID_InstanceToLaunch, //args[1], // imageID
+				//		            keyname_InstanceToLaunch, // key_name
+				//		            flavorID_InstanceToLaunch, // flavorID
+				//		            Integer.parseInt(count_InstanceToLaunch), // count
+				//		            secgrpID_InstanceToLaunch, // sec group ID
+                 //                   ServersActivity.this.selectedNetworks );
 			} catch(Exception e) {
 				e.printStackTrace( );
 				errorMessage = e.getMessage();

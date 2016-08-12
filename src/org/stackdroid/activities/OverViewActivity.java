@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import org.stackdroid.R;
 import org.stackdroid.comm.OSClient;
+import org.stackdroid.comm.commands.Command;
 import org.stackdroid.parse.ParseException;
 import org.stackdroid.utils.Configuration;
 import org.stackdroid.utils.CustomProgressDialog;
@@ -231,7 +232,15 @@ public class OverViewActivity extends Activity {
 	    
 	    	try {
 	    		jsonBufQuota 	    = osc.listQuotas( );
-	    		jsonBuf 	    	= osc.listServers( );
+	    		//jsonBuf 	    	= osc.listServers( );
+	    		Command cmd = Command.commandFactory(Command.commandType.LISTSERVERS, U );
+	    		if(cmd!=null)
+	    			cmd.execute();
+	    		else {
+	    			Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OverViewActivity.this);
+	    			return null;
+	    		}
+	    		jsonBuf = cmd.getRESTResponse();
 	    		jsonBufFIPs 	    = osc.listFloatingIPs( );
 	    		jsonBufSecgs 	    = osc.listSecGroups( );
 	    		jsonBufferFlavor    = osc.listFlavors( );

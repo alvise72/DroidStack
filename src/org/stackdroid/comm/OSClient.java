@@ -1075,7 +1075,8 @@ public class OSClient {
      *
      *
      */
-    public String listServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+/*
+     public String listServers( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 					   IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
 	checkToken();
@@ -1088,7 +1089,7 @@ public class OSClient {
 					  U.getToken(), 
 					  v );
     }
-
+*/
 
     /**
      * @throws ParseException 
@@ -1432,7 +1433,8 @@ public class OSClient {
      * 
      *
      */
-    public void createInstance( String instanceName, 
+/*
+     public void createInstance( String instanceName, 
 				String imageID,
 				String key_name,
 				String flavorID,
@@ -1496,7 +1498,7 @@ public class OSClient {
 				   data,
 				   v);
     }
-
+*/
     /**
      * @throws ParseException
      *

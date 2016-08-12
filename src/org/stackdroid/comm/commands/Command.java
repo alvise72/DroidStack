@@ -18,12 +18,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.util.Hashtable;
 
 public abstract class Command {
 	
    public enum commandType {
    	   LISTIMAGES,
-   	   DELETEIMAGE
+   	   DELETEIMAGE,
+   	   LISTSERVERS,
+   	   CREATESERVER
    }
    
    protected User U;
@@ -48,7 +51,13 @@ public abstract class Command {
     * 
     */    
    public abstract void setup( String imageid );
-   
+   public abstract void setup(String serverName, 
+					  		  String imageID,
+					  		  String key_name,
+					  		  String flavorID,
+					  		  int count,
+					  		  String securityGroupID,
+					  		  Hashtable<Pair<String,String>, String> netID_to_netIP);
    /**
     * 
     * 
@@ -72,7 +81,9 @@ public abstract class Command {
    	   case LISTIMAGES:
    	   	   return new ListImagesCommand( U );
    	   case DELETEIMAGE:
-   	   	   return new DeleteImageCommand( U );   	   	   
+   	   	   return new DeleteImageCommand( U );
+   	   case LISTSERVERS:
+   	   	   return new ListServersCommand( U );
    	   default:
    	   	   return null;
    	   }

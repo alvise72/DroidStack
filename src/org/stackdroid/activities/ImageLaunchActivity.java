@@ -37,6 +37,7 @@ import org.stackdroid.utils.SecGroup;
 import org.stackdroid.utils.Network;
 import org.stackdroid.parse.ParseUtils;
 import org.stackdroid.parse.ParseException;
+import org.stackdroid.comm.commands.Command;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -508,18 +509,28 @@ public class ImageLaunchActivity extends Activity {
 	@Override
 	protected Void doInBackground( String... args ) 
 	{
-	    OSClient osc = OSClient.getInstance( U );
+	    //OSClient osc = OSClient.getInstance( U );
 
 	    
 
 	    try {
-		   osc.createInstance( args[0],
+	    	Command cmd = Command.commandFactory( Command.commandType.CREATESERVER, U );
+				if(cmd!=null) {
+					cmd.setup( args[0], args[1], args[2], args[3],
+							   Integer.parseInt(args[4]), args[5],
+							   ImageLaunchActivity.this.selectedNetworks );
+					cmd.execute( );
+				} else {
+					Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ImageLaunchActivity.this);
+     				return null;
+     			}
+		   /*osc.createInstance( args[0],
 				   				args[1],
 				   				args[2],
 				   				args[3],
 				   				Integer.parseInt(args[4]),
 				   				args[5],
-				   				ImageLaunchActivity.this.selectedNetworks );
+				   				ImageLaunchActivity.this.selectedNetworks );*/
 	    } catch(Exception e) {
 		   e.printStackTrace( );
 		   errorMessage = e.getMessage();

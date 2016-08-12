@@ -46,6 +46,7 @@ import org.stackdroid.utils.Volume;
 import org.stackdroid.views.OSImageView;
 import org.stackdroid.views.VolumeView;
 import org.stackdroid.utils.ImageButtonWithView;
+import org.stackdroid.comm.commands.Command;
 
 import android.os.AsyncTask;
 
@@ -441,7 +442,15 @@ public class VolumesActivity extends Activity {
 
      		try {
      			jsonBufVols		= osc.listVolumes( );
-     			jsonBufServers	= osc.listServers( );
+     			//jsonBufServers	= osc.listServers( );
+     			Command cmd = Command.commandFactory(Command.commandType.LISTSERVERS, U );
+     			if(cmd!=null)
+	    			cmd.execute();
+	    		else {
+	    			Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", VolumesActivity.this);
+	    			return null;
+	    		}
+	    		jsonBufServers = cmd.getRESTResponse();
      		} catch(Exception e) {
      			errorMessage = e.getMessage();
      			hasError = true;
