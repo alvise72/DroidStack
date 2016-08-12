@@ -1121,7 +1121,8 @@ public class OSClient {
      *
      *
      */
-    public String listImages( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
+/*
+     public String listImages( ) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 				       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
         //Log.d("OSClient.listImages", "Calling checkToken");
@@ -1137,7 +1138,7 @@ public class OSClient {
 						      
 	return listResult;
     }
-    
+*/  
 
     /**
      * @throws ParseException 
@@ -1148,7 +1149,8 @@ public class OSClient {
      *
      *
      */
-    public void deleteImage( String imageID ) 
+/*
+     public void deleteImage( String imageID ) 
     	throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 	       IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
@@ -1159,7 +1161,7 @@ public class OSClient {
 				     U.getToken(),
 				     null);
     }
-
+*/
 
     /**
      * @throws ParseException 

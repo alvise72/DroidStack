@@ -34,6 +34,8 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
+
+import org.stackdroid.comm.commands.Command;
 import org.stackdroid.comm.NotAuthorizedException;
 import org.stackdroid.comm.OSClient;
 import org.stackdroid.comm.NotFoundException;
@@ -193,13 +195,14 @@ public class OSImagesActivity extends Activity {
                 flavorID_InstanceToLaunch = flavor;
                 count_InstanceToLaunch = number;
                 secgrpID_InstanceToLaunch = secgroups;
-                progressDialogWaitStop.show();
+                //progressDialogWaitStop.show();
                 if(alertDialogServerLaunch!=null)
                     alertDialogServerLaunch.dismiss();
                 (new OSImagesActivity.AsyncTaskLaunch()).execute();
 			}
 			if(alertDialogServerLaunch!=null)
 				alertDialogServerLaunch.dismiss();
+			
 		}
 	}
 
@@ -594,16 +597,19 @@ public class OSImagesActivity extends Activity {
     {
       private  String   errorMessage  =  null;
 	  private  boolean  hasError  =  false;
-	  private  String   jsonBuf   = null;
+	  //private  String   jsonBuf   = null;
 	
 	  protected Void doInBackground(String... u ) 
 	  {
 	    String imagetodel = u[0];
-	    OSClient osc = OSClient.getInstance(U);
+	    //OSClient osc = OSClient.getInstance(U);
 	    
 	    try {
-	    	osc.deleteImage( imagetodel );
-	    	jsonBuf = osc.listImages( );
+	    	//osc.deleteImage( imagetodel );
+			Command cmd = Command.commandFactory( Command.commandType.DELETEIMAGE, U );
+			cmd.setup( imagetodel );
+			cmd.execute( );
+	    	//jsonBuf = cmd.getRESTResponse( );
 	    } catch(NotFoundException nfe) {
 	    	errorMessage = getString(R.string.NOTFOUND)+": " + nfe.getMessage();
 	    	hasError = true;
@@ -633,17 +639,17 @@ public class OSImagesActivity extends Activity {
  	    	OSImagesActivity.this.progressDialogWaitStop.dismiss( );
  	    	return;
  	    }
-	    
+/*	    
 	    try {
 	        
-	    	OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
+	    	//OSImagesActivity.this.OS = OSImage.parse(jsonBuf);
 	    	//Log.v("OSImagesActivity.AsyncTaskOSDelete.onPostExecute: ", "JSONBUF=["+jsonBuf+"]");
 	    	//OSImagesActivity.this.refreshView( );
 	    } catch(ParseException pe) {
 	    	Utils.alert("OSImagesActivity.AsyncTaskOSDelete.onPostExecute: " + pe.getMessage( ), 
 	    				OSImagesActivity.this);
 	    }
-
+*/
 	    OSImagesActivity.this.update( );
 	}
     }
@@ -672,11 +678,19 @@ public class OSImagesActivity extends Activity {
      	@Override
      	protected Void doInBackground(Void ... voids ) 
      	{
-     		OSClient osc = OSClient.getInstance(U);
+     		//OSClient osc = OSClient.getInstance(U);
 
      		try {
      			//Log.d("OSImagesActivity", "calling listImages...");
-     			jsonBuf = osc.listImages( );
+     			Command cmd = Command.commandFactory( Command.commandType.LISTIMAGES, U );
+     			if(cmd!=null)
+     				cmd.execute( );
+     			else {
+     				Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+     				return null;
+     			}
+     			jsonBuf = cmd.getRESTResponse( );
+//     			jsonBuf = osc.listImages( );
      		} catch(ServiceUnAvailableOrInternalError se) {
      			errorMessage = OSImagesActivity.this.getString(R.string.SERVICEUNAVAILABLE);
      			hasError = true;
@@ -801,6 +815,11 @@ public class OSImagesActivity extends Activity {
         private  boolean hasError      = false;
 
         @Override
+        protected void onPreExecute( ) {
+        	progressDialogWaitStop.show();
+        }
+        
+        @Override
         protected Void doInBackground( Void... args )
         {
             OSClient osc = OSClient.getInstance( U );
@@ -835,8 +854,9 @@ public class OSImagesActivity extends Activity {
                 Class<?> c = (Class<?>)ServersActivity.class;
                 Intent I = new Intent( OSImagesActivity.this, c );
                 startActivity( I );
+                OSImagesActivity.this.progressDialogWaitStop.dismiss();
             }
-
+            progressDialogWaitStop.dismiss( );
             //OSImagesActivity.this.progressDialogWaitStop.dismiss();
 
         }

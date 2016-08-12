@@ -39,6 +39,7 @@ import java.util.Vector;
 
 import org.apache.http.conn.util.InetAddressUtils;
 import org.stackdroid.comm.OSClient;
+import org.stackdroid.comm.commands.Command;
 import org.stackdroid.comm.NotFoundException;
 import org.stackdroid.comm.ServerException;
 import org.stackdroid.comm.ServiceUnAvailableOrInternalError;
@@ -1610,9 +1611,17 @@ public class ServersActivity extends Activity {
 	    
 
 	      try {
-	    	  jsonBuf 	    = osc.listServers( );
-	    	  jsonBufferFlavor  = osc.listFlavors();
-              jsonBufferImages = osc.listImages();
+	    	  jsonBuf 	       = osc.listServers( );
+	    	  jsonBufferFlavor = osc.listFlavors();
+	    	  Command cmd      = Command.commandFactory(Command.commandType.LISTIMAGES, U);
+	    	  if(cmd!=null)
+	    	  	  cmd.execute( );
+	    	  else {
+	    	  	  Utils.alert( "SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this );
+     			  return null;
+	    	  }	  
+	    	  jsonBufferImages = cmd.getRESTResponse( );
+              //jsonBufferImages = osc.listImages();
 	      } catch(Exception e) {
 	    	  errorMessage = e.getMessage();
 	    	  hasError = true;
@@ -1782,10 +1791,10 @@ public class ServersActivity extends Activity {
         private  String   jsonSubNetBuf  = null;
         private  String   jsonSecGrpsBuf = null;
 
-	@Override
-	protected void onPreExecute() {
-		progressDialogWaitStop.show();
-	}
+        @Override
+        protected void onPreExecute() {
+        	progressDialogWaitStop.show();
+		}
 	
         @Override
      	protected Void doInBackground(Void ... voids ) 
@@ -1793,7 +1802,15 @@ public class ServersActivity extends Activity {
      		OSClient osc = OSClient.getInstance(U);
 
      		try {
-                jsonImageBuf   = osc.listImages();
+     			Command cmd = Command.commandFactory( Command.commandType.LISTIMAGES, U );
+     			if(cmd!=null)
+     				cmd.execute( );
+     			else {
+     				Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this);
+     				return null;
+     			}
+     			jsonImageBuf = cmd.getRESTResponse( );
+//                jsonImageBuf   = osc.listImages();
                 jsonFlavorBuf  = osc.listFlavors();
                 jsonKeyPairBuf = osc.requestKeypairs();
                 jsonNetworkBuf = osc.listNetworks();
