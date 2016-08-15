@@ -115,12 +115,12 @@ public class ServerView extends LinearLayout {
 		if(S.getStatus( ).compareToIgnoreCase("error")==0)
 			Status.setTextColor( Color.parseColor("#AA0000") );
 		if(S.getStatus( ).compareToIgnoreCase("build")==0) {
-			Status.setText("Status: " + S.getStatus( ) +" (" + (S.getTask( )!=null || S.getTask().compareTo("null")==0 ? S.getTask() : getContext().getString(R.string.NONE)) + ")");
-		if(S.getTask( ).compareToIgnoreCase("deleting")==0) 
-			Status.setTextColor( Color.parseColor("#000000") );
+			Status.setText("Status: " + S.getStatus( )) ;//+" (" + (S.getTask( )!=null || S.getTask().compareTo("null")==0 ? S.getTask() : getContext().getString(R.string.NONE)) + ")");
+		//if(S.getTask( ).compareToIgnoreCase("deleting")==0) 
+		//	Status.setTextColor( Color.parseColor("#000000") );
 		}
-		if(S.getTask( ).compareToIgnoreCase("none")==0) 
-			Status.setText(ctx.getString(R.string.NONE));
+		if(S.getTask( ).compareToIgnoreCase("null")==0) 
+			Task.setText("Task: " + ctx.getString(R.string.NONE));
 		
 		LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		consoleLog = new ButtonWithView(ctx, this);

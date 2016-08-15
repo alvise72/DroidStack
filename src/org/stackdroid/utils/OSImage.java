@@ -81,7 +81,7 @@ public class OSImage {
        
    		JSONObject jsonObject = new JSONObject( jsonString );
    		
-   		Log.d("OSImage.parse", "jsonString="+jsonString);
+   		//Log.d("OSImage.parse", "jsonString="+jsonString);
    		JSONArray images      = (JSONArray)jsonObject.getJSONArray("images");
      
    		for(int i=0; i<images.length( ); ++i ) {

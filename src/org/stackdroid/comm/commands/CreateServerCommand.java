@@ -37,7 +37,7 @@ public class CreateServerCommand extends Command {
 	
 	public void setup(String serverName, 
 					  String imageID,
-					  String key_name,
+					  String keyName,
 					  String flavorID,
 					  int count,
 					  String securityGroupID,
@@ -59,55 +59,53 @@ public class CreateServerCommand extends Command {
 		Pair<String, String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName( ) );
     	Vector<Pair<String, String>> v = new Vector<Pair<String, String>>();
     	v.add(p);
-    	String data = "{\"server\": {\"name\": \"" + serverName + 
-	    	"\", \"imageRef\": \"" + imageID + 
-	    	"\", " + (keyName != null ? "\"key_name\": \"" + keyName : "") + 
-	    	"\", \"flavorRef\": \"" + flavorID + 
-	    	"\", \"max_count\": " + count + 
-	    	", \"min_count\": " + count + "}}";
-	    	
-    	JSONObject obj = null;
+    	
+    	JSONObject data = new JSONObject( );
+    	JSONObject serverDesc = new JSONObject( );
+    	serverDesc.put("name", serverName).put("imageRef", imageID);
+    	if(keyName!=null)
+    		serverDesc.put("key_name", keyName);
+    	serverDesc.put("flavorRef", flavorID).put("max_count", count).put("min_count", count);
     	
     	String[] secgrpIDs = securityGroupID.split(",");
     	
+    	Log.d("CreateServerCommand","data="+data);
+    	
     	try {
-    	    obj = new JSONObject( data );
     	    JSONArray secgs = new JSONArray();
     	    JSONArray nets = new JSONArray();
     	    if(securityGroupID.length()!=0) 
     		for(int i = 0; i<secgrpIDs.length; ++i)
     		    secgs.put( new JSONObject("{\"name\": \"" + secgrpIDs[i] + "\"}") );
-
-
     	    
-	    Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
+    		Iterator<Pair<String,String>> it = netID_to_netIP.keySet().iterator();
     	    while( it.hasNext() ) {
     	    	Pair<String,String> thisNet = it.next();
     	    	String netID = thisNet.first;
     	    	String netIP = netID_to_netIP.get( thisNet );
     	    	
     	    	if( netIP != null && netIP.length()!=0) 
-		    nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
+    	    		nets.put( new JSONObject("{\"uuid\": \"" + netID + "\", \"fixed_ip\":\"" + netIP + "\"}") );
     	    	else {
-    	    		
-		    nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
+    	    		nets.put( new JSONObject("{\"uuid\": \"" + netID + "\"}") );
     	    	}
     	    }
     	    
-    	    obj.getJSONObject("server").put("security_groups", secgs);
-    	    obj.getJSONObject("server").put("networks", nets);
+    	    serverDesc.put("security_groups", secgs).put("networks", nets);
     	    
     	} catch(JSONException je) {
-	    throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
+    		throw new RuntimeException("JSON parsing: "+je.getMessage( ) );
     	}
     	
-    	data = obj.toString( );
-    	//Log.d("OSC","data="+data);
+    	data.put("server", serverDesc);
+    	
+    	Log.d("CreateServerCommand","data="+data.toString());
+    	
     	RESTClient.sendPOSTRequest(U.useSSL(),
-				   U.getNovaEndpoint() + "/servers",
-				   U.getToken(),
-				   data,
-				   v);
+				   				   U.getNovaEndpoint() + "/servers",
+				   				   U.getToken(),
+				   				   data.toString(),
+				   				   v);
 	}
 	
 }

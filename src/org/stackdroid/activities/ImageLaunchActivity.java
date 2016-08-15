@@ -521,7 +521,9 @@ public class ImageLaunchActivity extends Activity {
 							   ImageLaunchActivity.this.selectedNetworks );
 					cmd.execute( );
 				} else {
-					Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ImageLaunchActivity.this);
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;
      			}
 		   /*osc.createInstance( args[0],

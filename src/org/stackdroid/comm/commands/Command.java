@@ -84,6 +84,8 @@ public abstract class Command {
    	   	   return new DeleteImageCommand( U );
    	   case LISTSERVERS:
    	   	   return new ListServersCommand( U );
+   	   case CREATESERVER:
+   	   	   return new CreateServerCommand( U );
    	   default:
    	   	   return null;
    	   }

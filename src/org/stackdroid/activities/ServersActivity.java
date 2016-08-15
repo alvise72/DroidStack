@@ -1616,8 +1616,10 @@ public class ServersActivity extends Activity {
 	    	  if(cmd!=null)
 	    			cmd.execute();
 	    		else {
-	    			Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this);
-	    			return null;
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
 	    		}
 	    	  jsonBuf = cmd.getRESTResponse();
 	    	  jsonBufferFlavor = osc.listFlavors();
@@ -1625,8 +1627,10 @@ public class ServersActivity extends Activity {
 	    	  if(cmd!=null)
 	    	  	  cmd.execute( );
 	    	  else {
-	    	  	  Utils.alert( "SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this );
-     			  return null;
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
 	    	  }	  
 	    	  jsonBufferImages = cmd.getRESTResponse( );
               //jsonBufferImages = osc.listImages();
@@ -1814,7 +1818,9 @@ public class ServersActivity extends Activity {
      			if(cmd!=null)
      				cmd.execute( );
      			else {
-     				Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this);
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;
      			}
      			jsonImageBuf = cmd.getRESTResponse( );
@@ -2077,7 +2083,9 @@ public class ServersActivity extends Activity {
 							   ServersActivity.this.selectedNetworks );
 					cmd.execute( );
 				} else {
-					Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", ServersActivity.this);
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;
      			}
      			

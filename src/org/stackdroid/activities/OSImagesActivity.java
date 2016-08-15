@@ -607,8 +607,15 @@ public class OSImagesActivity extends Activity {
 	    try {
 	    	//osc.deleteImage( imagetodel );
 			Command cmd = Command.commandFactory( Command.commandType.DELETEIMAGE, U );
-			cmd.setup( imagetodel );
-			cmd.execute( );
+			if(cmd!=null) {
+				cmd.setup( imagetodel );
+				cmd.execute( );
+			} else {
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
+     		}
 	    	//jsonBuf = cmd.getRESTResponse( );
 	    } catch(NotFoundException nfe) {
 	    	errorMessage = getString(R.string.NOTFOUND)+": " + nfe.getMessage();
@@ -686,7 +693,9 @@ public class OSImagesActivity extends Activity {
      			if(cmd!=null)
      				cmd.execute( );
      			else {
-     				Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;
      			}
      			jsonBuf = cmd.getRESTResponse( );
@@ -830,25 +839,19 @@ public class OSImagesActivity extends Activity {
             	Command cmd = Command.commandFactory( Command.commandType.CREATESERVER, U );
 				if(cmd!=null) {
 					cmd.setup( name_InstanceToLaunch,//args[0], // instance name
-                                    imageID_InstanceToLaunch, //args[1], // imageID
-                                    keyname_InstanceToLaunch, // key_name
-                                    flavorID_InstanceToLaunch, // flavorID
-                                    Integer.parseInt(count_InstanceToLaunch), // count
-                                    secgrpID_InstanceToLaunch, // sec group ID
-                                    OSImagesActivity.this.selectedNetworks );
+                               imageID_InstanceToLaunch, //args[1], // imageID
+                               keyname_InstanceToLaunch, // key_name
+                               flavorID_InstanceToLaunch, // flavorID
+                               Integer.parseInt(count_InstanceToLaunch), // count
+                               secgrpID_InstanceToLaunch, // sec group ID
+                               OSImagesActivity.this.selectedNetworks );
 					cmd.execute( );
 				} else {
-					Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;
      			}
-     			
-                /* osc.createInstance( name_InstanceToLaunch,//args[0], // instance name
-                                    imageID_InstanceToLaunch, //args[1], // imageID
-                                    keyname_InstanceToLaunch, // key_name
-                                    flavorID_InstanceToLaunch, // flavorID
-                                    Integer.parseInt(count_InstanceToLaunch), // count
-                                    secgrpID_InstanceToLaunch, // sec group ID
-                                    OSImagesActivity.this.selectedNetworks ); */
             } catch(Exception e) {
                 e.printStackTrace( );
                 errorMessage = e.getMessage();
