@@ -19,6 +19,7 @@ public class DeleteImageCommand extends Command {
 		this.U = U;
 	}
 	
+	public void setup(String a, int b) {}
 	public void setup(String imageID) { this.imageID = imageID; }
 	public void setup(String serverName, 
 					  String imageID,

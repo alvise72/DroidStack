@@ -26,7 +26,10 @@ public abstract class Command {
    	   LISTIMAGES,
    	   DELETEIMAGE,
    	   LISTSERVERS,
-   	   CREATESERVER
+   	   CREATESERVER,
+   	   SERVERINFO,
+   	   DELETEVOLUME,
+   	   CREATEVOLUME
    }
    
    protected User U;
@@ -50,7 +53,8 @@ public abstract class Command {
     * 
     * 
     */    
-   public abstract void setup( String imageid );
+   public abstract void setup( String id );
+   public abstract void setup( String id, int integer);
    public abstract void setup(String serverName, 
 					  		  String imageID,
 					  		  String key_name,
@@ -86,6 +90,12 @@ public abstract class Command {
    	   	   return new ListServersCommand( U );
    	   case CREATESERVER:
    	   	   return new CreateServerCommand( U );
+   	   case SERVERINFO:
+   	   	   return new ServerInfoCommand( U );
+   	   case DELETEVOLUME:
+   	   	   return new DeleteVolumeCommand( U );
+   	   case CREATEVOLUME:
+   	   	   return new CreateVolumeCommand( U );
    	   default:
    	   	   return null;
    	   }
@@ -104,10 +114,7 @@ public abstract class Command {
    	   String gapiver = U.getGlanceEndpointAPIVER( );
    	   String napiver = U.getNeutronEndpointAPIVER( );
 	    
-   	   //Log.d("OSClient.checkToken", "GLANCEAPIVER="+gapiver+" - NEUTRONAPIVER="+napiver);
-	
    	   if(U.getVerifyServerCert()) {
-   	   	   //Log.d("OSCLIENT", "Verify server's cert="+U.getVerifyServerCert());
    	   	   X509Certificate cert = null;
    	   	   cert = (X509Certificate)(CertificateFactory.getInstance("X.509")).generateCertificate(new FileInputStream( U.getCAFile() ));
    	   	   if(RESTClient.checkServerCert(U.getIdentityEndpoint(), cert.getIssuerX500Principal().getName()) == false)
@@ -133,8 +140,8 @@ public abstract class Command {
 		  	  identityEP += "/tokens";
 	    
 		  	  Pair<String,String> jsonBuffer_Token = RESTClient.requestToken(U.useSSL(),
-				      												   identityEP,
-									   								   payload);
+				      												   		 identityEP,
+				      												   		 payload);
 	    
 			  String  pwd = U.getPassword();
 			  String  edp = U.getIdentityEndpoint();
@@ -143,17 +150,13 @@ public abstract class Command {
 			  String CAFile = U.getCAFile();
 
 
-			  //Log.d("OSClient.checkToken", "BEFORE PARSE GLANCEAPIVER="+U.getGlanceEndpointAPIVER()+" - NEUTRONAPIVER="+U.getNeutronEndpointAPIVER());
 			  U = User.parse( jsonBuffer_Token.first, U.useV3( ), jsonBuffer_Token.second );
 			  U.setPassword( pwd);
 			  U.setSSL(ssl);
-			  //U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
 			  U.setCAFile( CAFile );
-			  //Log.d("OSClient.checkToken", "SETTING GLANCEAPIVER="+gapiver+" - NEUTRONAPIVER="+napiver);
 			  U.setGlanceEndpointAPIVER( gapiver );
 			  U.setNeutronEndpointAPIVER( napiver );
 			  U.toFile(Configuration.getInstance().getValue("FILESDIR", Defaults.DEFAULTFILESDIR));
-			  //Log.d("OSClient.checkToken", "AFTER PARSE GLANCEAPIVER="+U.getGlanceEndpointAPIVER()+" - NEUTRONAPIVER="+U.getNeutronEndpointAPIVER());
 		}
     }
     

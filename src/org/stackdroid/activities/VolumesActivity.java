@@ -526,9 +526,18 @@ public class VolumesActivity extends Activity {
    		@Override
    		protected Void doInBackground( String ... v )
    		{
-   			OSClient osc = OSClient.getInstance( U );
+   			//OSClient osc = OSClient.getInstance( U );
    			try {
-   				osc.deleteVolume( v[0] );
+   				//osc.deleteVolume( v[0] );
+   				Command cmd = Command.commandFactory(Command.commandType.DELETEVOLUME, U );
+   				if(cmd!=null) {
+   					cmd.setup( v[0] );
+	    			cmd.execute();
+	    		} else {
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
+	    		}
    			} catch(Exception e) {
    				errorMessage = e.getMessage();
    				hasError = true;

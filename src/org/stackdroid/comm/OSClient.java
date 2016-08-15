@@ -157,7 +157,7 @@ public class OSClient {
 								ServerException, ServiceUnAvailableOrInternalError,
 								IOException, ParseException,CertificateException
     {
-	checkToken( );
+    	checkToken( );
   	
     	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
@@ -252,13 +252,13 @@ public class OSClient {
 					   ServerException, ServiceUnAvailableOrInternalError,
 					   IOException, ParseException,CertificateException
     {
-	checkToken();
-	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
-	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
-	vp.add(p);
+    	checkToken();
+    	Vector<Pair<String,String>> vp = new Vector<Pair<String,String>>();
+    	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
+    	vp.add(p);
 	
-	//Log.d("OSC", "Calling sedGETRequest...");
-	return RESTClient.sendGETRequest(U.useSSL(),
+    	//Log.d("OSC", "Calling sedGETRequest...");
+    	return RESTClient.sendGETRequest(U.useSSL(),
 					 U.getNeutronEndpoint() + "/" + U.getNeutronEndpointAPIVER( ) + "/routers.json",
 					 U.getToken(),
 					 vp);
@@ -469,7 +469,8 @@ public class OSClient {
      * 
      * 
      */
-    public void deleteVolume( String volID ) 
+/*
+     public void deleteVolume( String volID ) 
 	throws NotAuthorizedException, NotFoundException, 
 	       ServerException, ServiceUnAvailableOrInternalError,
 	       IOException, ParseException,CertificateException
@@ -489,7 +490,7 @@ public class OSClient {
 				     U.getToken(),
 				     vp);
     }
-
+*/
 
 
     /**
@@ -1507,6 +1508,7 @@ public class OSClient {
      *
      *
      */
+/*
     public String requestInstanceDetails(String servertID) throws NotAuthorizedException, NotFoundException, ServerException, ServiceUnAvailableOrInternalError,
 								  IOException, MalformedURLException, ProtocolException, ParseException,CertificateException
     {
@@ -1520,4 +1522,5 @@ public class OSClient {
 					  U.getToken(),
 					  v );
     }
+    */
 }

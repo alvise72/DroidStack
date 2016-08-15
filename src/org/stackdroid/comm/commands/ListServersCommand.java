@@ -19,6 +19,7 @@ public class ListServersCommand extends Command {
 		this.U = U;
 	}
 	
+	public void setup(String a, int b) {}
 	public void setup(String a) {}
 	public void setup(String serverName, 
 					  String imageID,
