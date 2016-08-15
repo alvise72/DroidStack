@@ -22,6 +22,7 @@ public class ServerInfoCommand extends Command {
 	private String serverID;
 	
 	public void setup(String a, int b) {}
+	public void setup(String a, String b) {}
 	public void setup(String a) { serverID = a; }
 	public void setup(String serverName, 
 					  String imageID,

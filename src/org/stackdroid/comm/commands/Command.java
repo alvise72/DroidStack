@@ -29,7 +29,8 @@ public abstract class Command {
    	   CREATESERVER,
    	   SERVERINFO,
    	   DELETEVOLUME,
-   	   CREATEVOLUME
+   	   CREATEVOLUME,
+   	   DETACHVOLUME
    }
    
    protected User U;
@@ -54,6 +55,7 @@ public abstract class Command {
     * 
     */    
    public abstract void setup( String id );
+   public abstract void setup( String id, String id2 );
    public abstract void setup( String id, int integer);
    public abstract void setup(String serverName, 
 					  		  String imageID,

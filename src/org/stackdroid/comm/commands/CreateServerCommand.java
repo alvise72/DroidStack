@@ -35,6 +35,7 @@ public class CreateServerCommand extends Command {
 	
 	public void setup(String a) {}
 	public void setup(String a, int b) {}
+	public void setup(String a, String b) {}
 	public void setup(String serverName, 
 					  String imageID,
 					  String keyName,

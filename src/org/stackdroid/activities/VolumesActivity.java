@@ -491,9 +491,18 @@ public class VolumesActivity extends Activity {
     	@Override
     	protected Void doInBackground( String ... v ) 
     	{
-    		OSClient osc = OSClient.getInstance( U );
+    		//OSClient osc = OSClient.getInstance( U );
     		try {
-    			osc.createVolume( v[0], Integer.parseInt( v[1] ) );
+    			//osc.createVolume( v[0], Integer.parseInt( v[1] ) );
+    			Command cmd = Command.commandFactory(Command.commandType.DELETEVOLUME, U );
+   				if(cmd!=null) {
+   					cmd.setup( v[0], Integer.parseInt( v[1] ) );
+	    			cmd.execute();
+	    		} else {
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
+	    		}
     		} catch(Exception e) {
     			errorMessage = e.getMessage();
     			hasError = true;
@@ -513,7 +522,6 @@ public class VolumesActivity extends Activity {
     		
     		Utils.alert(VolumesActivity.this.getString(R.string.VOLUMECREATED), VolumesActivity.this );
     		(new AsyncTaskListVolumes()).execute( );
-    		//VolumesActivity.this.progressDialogWaitStop.dismiss( );
     	}
    }
 
@@ -603,9 +611,17 @@ public class VolumesActivity extends Activity {
  		@Override
  		protected Void doInBackground( String ... v )
  		{
- 			OSClient osc = OSClient.getInstance( U );
+ 			//OSClient osc = OSClient.getInstance( U );
  			try {
-				osc.volumeDetach( v[0], v[1] );
+				//osc.volumeDetach( v[0], v[1] );
+				Command cmd = Command.commandFactory(Command.commandType.DETACHVOLUME, U );
+				if(cmd!=null)
+	    			cmd.execute();
+	    		else {
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
+	    		}
  			} catch(Exception e) {
  				Log.d("VOLUMEDETACH", "ECCEZIONE: "+e.getMessage());
  				errorMessage = e.getMessage();;

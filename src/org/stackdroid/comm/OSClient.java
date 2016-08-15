@@ -388,6 +388,7 @@ public class OSClient {
      * 
      * 
      */
+     /*
     public void volumeAttach( String volumeID, String serverID ) 
 	throws NotAuthorizedException, NotFoundException, 
 	       ServerException, ServiceUnAvailableOrInternalError,
@@ -404,7 +405,7 @@ public class OSClient {
 				    U.getToken(), 
 				    extradata, 
 				    vp );
-    }
+    } */
     
     /**
      * 
@@ -414,6 +415,7 @@ public class OSClient {
      * 
      * 
      */
+     /*
     public void volumeDetach( String volumeID, String serverID ) 
 	throws NotAuthorizedException, NotFoundException, 
 	       ServerException, ServiceUnAvailableOrInternalError,
@@ -428,7 +430,7 @@ public class OSClient {
 				     U.getNovaEndpoint() + "/servers/" + serverID + "/os-volume_attachments/" + volumeID,
 				     U.getToken(),
 				     vp);
-    }
+    }*/
     
     /**
      * 
@@ -438,6 +440,7 @@ public class OSClient {
      * 
      * 
      */
+     /*
     public void createVolume( String volname, int size_in_GB ) 
 	throws NotAuthorizedException, NotFoundException, 
 	       ServerException, ServiceUnAvailableOrInternalError,
@@ -459,7 +462,7 @@ public class OSClient {
 				   extradata,
 				   vp);
     }
-    
+    */
     
     /**
      * 
