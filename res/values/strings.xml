@@ -7,6 +7,7 @@
 <string name="INSTANCESUSPENDED">The server is suspended</string>
 <string name="NOTREADYINSTANCE">The server is not ready yet for displaying console</string> 
 <string name="FLAVORTOOSMALL">The flavor is to small to run the selected image</string>
+<string name="OVERQUOTAFORVM">Quota exceeded for servers</string>
     <string name="INSTANCETASKNOTNULL">Cannot operate on server with an active task</string>
     <string name="CONFIRM">Confirm</string>
     <string name="SUSPENDSERVER">Suspend server</string>

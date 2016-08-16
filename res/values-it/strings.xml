@@ -7,6 +7,7 @@
 <string name="INSTANCESUSPENDED">L\'istanza &#xe8; sospesa</string>
 <string name="NOTREADYINSTANCE">L\'istanza non &#xe8; ancora pronta per mostrare la console</string>
 <string name="FLAVORTOOSMALL">Il flavor &#xe8; troppo piccolo per l\'immagine selezionata</string>
+<string name="OVERQUOTAFORVM">Quota superata per le istanze</string>
     <string name="INSTANCETASKNOTNULL">Impossibile operare su un\'istanza con un task attivo</string>
     <string name="CONFIRM">Conferma</string>
     <string name="DIRECTION">Direzione</string>
@@ -212,15 +213,15 @@
     <string name="INTERFACES">Interfacce:</string>
     <string name="EDITROUTER">Modifica Router</string>
     <string name="AREYOUSURETODELETEINTERFACE">Sei sicuro di cancellare l\'interfaccia ?</string>
-    <string name="CLEARGATEWAY">Clear Gateway</string>
-    <string name="SETGATEWAY">Set Gateway</string>
-    <string name="ADDINTERFACE">Add Interface</string>
+    <string name="CLEARGATEWAY">Rimuovi il  gateway</string>
+    <string name="SETGATEWAY">Imposta il gateway</string>
+    <string name="ADDINTERFACE">Aggiungi un\'interfaccia</string>
     <string name="NOMOREIPAVAIL">Non ci sono pi&#xf9; indirizzi IP disponibili sulla rete </string>
     <string name="STILLHASPORTS">ha ancora delle interfacce</string>
     <string name="INSUFFICIENTPRIVILEGES">o privilegi insufficienti</string>
     <string name="HOSTEDBY">Hypervisor:</string>
     <string name="INSTANCEINFO">Info istanza</string>
-    <string name="USEDHCP">Enable DHCP</string>
+    <string name="USEDHCP">Abilita DHCP</string>
     <string name="NONAME">Nessun nome</string>
     <string name="DHCPENABLED">DHCP Abilitato</string>
     <string name="IMAGEINFO">Info immagine</string>

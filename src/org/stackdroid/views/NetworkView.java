@@ -12,25 +12,7 @@ import android.content.Context;
 import android.text.method.NumberKeyListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-/*
-public class NetworkView extends CheckBox {
-    
-    Network    net 	  = null;
-    SubNetwork subnet = null;
-    
-    public NetworkView( Network net, SubNetwork subnet, OnClickListener listener, Context ctx ) {
-	  super(ctx);
-	  setOnClickListener(listener);
-	  if(net.getSubNetworks().size()>0)
-		  setText( net.getName( )+" ("+subnet.getAddress()+")" );
-	  this.net = net;
-	  this.subnet = subnet;
-    }
-    
-    public Network getNetwork( ) { return net; }
-    public SubNetwork getSubNetwork( ) { return subnet; }
-}
-*/
+
 import android.widget.TextView;
 
 public class NetworkView extends LinearLayout {
@@ -40,6 +22,10 @@ public class NetworkView extends LinearLayout {
     private CheckBoxWithView		select 		= null;
     private TextView			    netIPLabel 	= null;
     private EditText				netIP  		= null;
+    
+    public void select( ) { select.setChecked(true); }
+    public void unselect( ) { select.setChecked(false); }
+    	
     
     public NetworkView( Network net, 
 					    SubNetwork subnet,

@@ -30,7 +30,8 @@ public abstract class Command {
    	   SERVERINFO,
    	   DELETEVOLUME,
    	   CREATEVOLUME,
-   	   DETACHVOLUME
+   	   DETACHVOLUME,
+   	   ATTACHVOLUME
    }
    
    protected User U;
@@ -98,6 +99,10 @@ public abstract class Command {
    	   	   return new DeleteVolumeCommand( U );
    	   case CREATEVOLUME:
    	   	   return new CreateVolumeCommand( U );
+   	   case DETACHVOLUME:
+   	   	   return new DetachVolumeCommand( U );
+   	   case ATTACHVOLUME:
+   	   	   return new AttachVolumeCommand( U );
    	   default:
    	   	   return null;
    	   }

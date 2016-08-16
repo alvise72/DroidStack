@@ -1,4 +1,4 @@
 ristrutturazione codice
 errore nel launch di una VM se il flavor è troppo piccolo
 fissata issue https://github.com/alvise72/DroidStack/issues/17
-testare il factory che torna NULL
+quando c'è una sola rete per il tenant, la seleziona automaticamente nella finestra launch

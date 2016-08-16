@@ -180,7 +180,6 @@ public class OSImagesActivity extends Activity {
 						Pair<String,String> net_subnet = new Pair<String,String>( nv.getNetwork().getID(), nv.getSubNetwork().getID() );
 						if(netIP==null) netIP = "";
 						selectedNetworks.put(net_subnet, netIP);
-						//Log.d("SERVERLAUNCH", "Added network " + net_subnet.first + " - " + net_subnet.second + " - IP=" + netIP);
 
 					}
 				}
@@ -315,6 +314,11 @@ public class OSImagesActivity extends Activity {
 				netViewList.add( nv );
 			}
 		}
+		
+		
+        if(netViewList.size()==1) {
+        	netViewList.elementAt(0).select();
+        }
 
 		Iterator<SecGroup> sit = secgroups.iterator();
 		while(sit.hasNext()) {

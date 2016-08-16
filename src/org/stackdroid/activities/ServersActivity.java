@@ -188,7 +188,6 @@ public class ServersActivity extends Activity {
                 String secgroups  = Utils.join(selectedSecgroups, ",");
 
                 if(serverName.isEmpty()) {
-
                     Utils.alert(getString(R.string.MUSTSETNAME), ServersActivity.this);
                     return;
                 }
@@ -197,9 +196,6 @@ public class ServersActivity extends Activity {
                     Utils.alert(getString(R.string.MUSTSETNUMSERVERS), ServersActivity.this);
                     return;
                 }
-
-
-
                 int count = Integer.parseInt(number);
 
                 Iterator<NetworkView> nvit = netViewList.iterator();
@@ -771,6 +767,10 @@ public class ServersActivity extends Activity {
             }
         }
 
+        if(netViewList.size()==1) {
+        	netViewList.elementAt(0).select();
+        }
+        
         Iterator<SecGroup> sit = secgroups.iterator();
         while(sit.hasNext()) {
             SecGroupView sgv = new SecGroupView( sit.next(), new ServersActivity.SecGroupListener(),ServersActivity.this );
@@ -1818,13 +1818,11 @@ public class ServersActivity extends Activity {
      			if(cmd!=null)
      				cmd.execute( );
      			else {
-					//Utils.alert("SEVERE ERROR: Command.commandFactory return null object!", OSImagesActivity.this);
 					hasError = true;
 					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;
      			}
-     			jsonImageBuf = cmd.getRESTResponse( );
-//                jsonImageBuf   = osc.listImages();
+     			jsonImageBuf   = cmd.getRESTResponse( );
                 jsonFlavorBuf  = osc.listFlavors();
                 jsonKeyPairBuf = osc.requestKeypairs();
                 jsonNetworkBuf = osc.listNetworks();
@@ -1863,8 +1861,6 @@ public class ServersActivity extends Activity {
      					ServersActivity.this);
      		}
             displayDialogServerCreate();
-
-
      	}
     }
     
@@ -2110,6 +2106,8 @@ public class ServersActivity extends Activity {
 		protected void onPostExecute( Void v ) {
 			super.onPostExecute( v );
 			if(hasError) {
+				if(errorMessage.matches(".*Quota exceeded for instances.*"))
+					errorMessage = ServersActivity.this.getString(R.string.OVERQUOTAFORVM);
 				Utils.alert( errorMessage, ServersActivity.this );
 			} else {
                 //(new ServersActivity.AsyncTaskOSListServers()).execute( );

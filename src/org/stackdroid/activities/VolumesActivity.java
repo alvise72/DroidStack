@@ -577,9 +577,19 @@ public class VolumesActivity extends Activity {
   		@Override
   		protected Void doInBackground( String ... v )
   		{
-  			OSClient osc = OSClient.getInstance( U );
+  			//OSClient osc = OSClient.getInstance( U );
   			try {
-  				osc.volumeAttach( v[0], v[1] );
+  				//osc.volumeAttach( v[0], v[1] );
+  				Command cmd = Command.commandFactory(Command.commandType.ATTACHVOLUME, U );
+				if(cmd!=null) {
+	    			cmd.setup( v[0], v[1] );
+					cmd.execute();
+	    		}
+	    		else {
+					hasError = true;
+					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
+     				return null;
+	    		}
   			} catch(Exception e) {
   				errorMessage = e.getMessage();
   				hasError = true;
