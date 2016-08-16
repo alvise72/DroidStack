@@ -67,7 +67,7 @@
     <string name="ALREADYASSOCIATEDWARN">This floating IP is already associated to a server. If you continue, the association will be moved to the chosen server.</string>
     <string name="ALREADYASSOCIATED">Floating IP already associated to this server.</string>
 
-    <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window pressing Menu-&gt;Update.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">This IP is still associated to a server and cannot be released.\nTry to refresh the window.</string>
     <string name="NOINSTANCEAVAIL">There are not any instance.</string>
     <string name="NOIMAGEAAVAIL">There aren\'t any image.</string>
     <string name="NOSECGRPSAVAIL">There aren\'t any security group.</string>

@@ -50,7 +50,7 @@ public class AttachVolumeCommand extends Command {
     	Pair<String,String> p = new Pair<String, String>( "X-Auth-Project-Id", U.getTenantName() );
     	vp.add( p );
     	JSONObject data = new JSONObject();
-    	data.put("volumeAttachment", (new JSONObject()).put("device", "null").put("volumeId", volumeID) );
+    	data.put("volumeAttachment", (new JSONObject()).put("device", null).put("volumeId", volumeID) );
     	//String extradata = "{\"volumeAttachment\": {\"device\": null, \"volumeId\": \"" + volumeID + "\"}}";
     	RESTClient.sendPOSTRequest( U.useSSL(), 
 				    				U.getNovaEndpoint() + "/servers/" + serverID + "/os-volume_attachments", 

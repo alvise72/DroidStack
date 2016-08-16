@@ -167,7 +167,7 @@ public class VolumesActivity extends Activity {
 
 			((TextView)promptsView.findViewById(R.id.volumeName)).setText( V.getName() );
 			((TextView)promptsView.findViewById(R.id.volumeSize)).setText( "" + V.getSize() + " GB" );
-			((TextView)promptsView.findViewById(R.id.volumeStatus)).setText( V.getStatus() );
+			((TextView)promptsView.findViewById(R.id.volumeStatus)).setText( V.getStatusString() );
 			((TextView)promptsView.findViewById(R.id.volumeBootable)).setText( V.isBootable() ? getString(R.string.YES) : "No");
 			((TextView)promptsView.findViewById(R.id.volumeReadonly)).setText( V.isReadOnly() ? getString(R.string.YES) : "No" );
 			if(V.isAttached())
@@ -625,9 +625,10 @@ public class VolumesActivity extends Activity {
  			try {
 				//osc.volumeDetach( v[0], v[1] );
 				Command cmd = Command.commandFactory(Command.commandType.DETACHVOLUME, U );
-				if(cmd!=null)
-	    			cmd.execute();
-	    		else {
+				if(cmd!=null) {
+	    			cmd.setup( v[0], v[1] );
+					cmd.execute();
+	    		} else {
 					hasError = true;
 					errorMessage = "SEVERE ERROR: Command.commandFactory has returned null object!";
      				return null;

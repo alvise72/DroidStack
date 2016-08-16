@@ -69,7 +69,7 @@ public class VolumeView extends LinearLayout {
 		Name.setSingleLine();
 		
 		Status_and_Size = new TextViewWithView( ctx, (VolumeView)this );
-		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatus()+")" );
+		Status_and_Size.setText( V.getSize() + "GB (" + V.getStatusString()+")" );
 		Status_and_Size.setOnClickListener( infoVol );
 	
 		text.addView(Name);

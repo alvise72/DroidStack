@@ -13,48 +13,95 @@ public class Volume {//implements Serializable {
 	
 	//private static final long serialVersionUID = 2087368867376448461L;
 	
+	public enum Status {
+		CREATING,
+		ATTACHING,
+		DELETING,
+		ERROR,
+		ERROR_DELETING,
+		BACKING_UP,
+		RESTORING_BACKUP,
+		ERROR_RESTORING,
+		ERROR_EXTENDING,
+		INUSE,
+		AVAILABLE,
+		NA
+    }
+	
+    
     private String name;
     private String ID;
-    private String status;
+    private Status status;
     private boolean bootable;
     private boolean readonly;
-    private String attachmode;
     private int gigabyte;
     
     private String attachedto_serverid;
     private String attachedto_servername;
     private String attachedto_device;
+    private static Hashtable<Status, String> statusString;
+    private static Hashtable<String, Status> stringStatus;
     
     public Volume( String _name,
     			   String _ID,
-    			   String _status,
     			   boolean _bootable,
     			   boolean _readonly,
-    			   String _attachmode,
+    			   Status status,
     			   int _gigabyte,
     			   String _servid,
     			   String _servname,
     			   String _device) 
     {
-	  name        = _name;
-	  ID          = _ID;
-	  status      = _status;
-	  bootable    = _bootable;
-	  readonly    = _readonly;
-	  attachmode  = _attachmode;
-	  gigabyte    = _gigabyte;
+    	statusString = new Hashtable<Status,String>();
+    	stringStatus = new Hashtable<String,Status>();
+        statusString.put( Status.CREATING, "creating");
+        statusString.put( Status.ATTACHING,"attaching");
+        statusString.put( Status.DELETING,"deleting");
+        statusString.put( Status.ERROR,"error");
+        statusString.put( Status.ERROR_DELETING,"error_deleting");
+        statusString.put( Status.BACKING_UP,"backing-up");
+		statusString.put( Status.RESTORING_BACKUP,"restoring-backup");
+		statusString.put( Status.ERROR_RESTORING,"error_restoring");
+		statusString.put( Status.ERROR_EXTENDING,"error_extending");
+		statusString.put( Status.INUSE,"in-use");
+		statusString.put( Status.AVAILABLE,"available"); 
+		statusString.put( Status.NA,"N/A");
+  	  	
+		stringStatus.put( "creating", Status.CREATING);
+		stringStatus.put( "attaching", Status.ATTACHING);
+		stringStatus.put( "deleting", Status.DELETING);
+		stringStatus.put( "error", Status.ERROR);
+		stringStatus.put( "error_deleting", Status.ERROR_DELETING);
+		stringStatus.put( "backing-up", Status.BACKING_UP);
+		stringStatus.put( "restoring-backup", Status.RESTORING_BACKUP);
+		stringStatus.put( "error_restoring", Status.ERROR_RESTORING);
+		stringStatus.put( "error_extending", Status.ERROR_EXTENDING);
+		stringStatus.put( "in-use", Status.INUSE);
+		stringStatus.put( "available", Status.AVAILABLE);
+		stringStatus.put( "N/A", Status.NA);
+		
+		
+		
+		this.name        = _name;
+		this.ID          = _ID;
+		this.status      = status;
+		this.bootable    = _bootable;
+		this.readonly    = _readonly;
+		//status      = _attachmode;
+		this.gigabyte    = _gigabyte;
 	  
-	  attachedto_serverid   = _servid;
-	  attachedto_servername = _servname;
-	  attachedto_device     = _device;
+		this.attachedto_serverid   = _servid;
+		this.attachedto_servername = _servname;
+		this.attachedto_device     = _device;
     }
 
     public String 	getName() { return name; }
     public String 	getID() { return ID; }
-    public String 	getStatus() { return status; }
+    public Status 	getStatus() { return status; }
+    public String   getStatusString( ) { return statusString.get(status);}
     public boolean 	isBootable( ) { return bootable; }
     public boolean 	isReadOnly( ) { return readonly; }
-    public String 	getAttachMod( ) { return attachmode; }
+    //public String 	getAttachMod( ) { return attachmode; }
     public int 		getSize( ) { return gigabyte; }
     public String 	getAttachedServerID( ) { return attachedto_serverid; }
     public String 	getAttachedServerName( ) { return attachedto_servername; }
@@ -69,10 +116,9 @@ public class Volume {//implements Serializable {
     	return "Volume={" + 
     			"name=" + name +
     			", ID=" + ID +
-    			", status=" + status +
+    			", status=" + statusString.get(status) +
     			", bootable=" + bootable +
     			", readonly=" + readonly +
-    			", attachmode=" + attachmode +
     			", gigabytes=" + gigabyte +
     			", serverid=" + attachedto_serverid +
     			", servername=" + attachedto_servername +
@@ -81,9 +127,38 @@ public class Volume {//implements Serializable {
     			"}";
     }
     
-    public boolean isAttached( ) { return ( attachedto_serverid!=null && attachedto_serverid.length()!=0 ); }
+    //public boolean isAttached( ) { return ( attachedto_serverid!=null && attachedto_serverid.length()!=0 ); }
+    public boolean isAttached( ) { return status==Status.INUSE || status==Status.ATTACHING; }
     
 	public static Vector<Volume> parse( String volumesJson, String serversJson)  throws ParseException  {
+		
+		statusString = new Hashtable<Status,String>();
+    	stringStatus = new Hashtable<String,Status>();
+        statusString.put( Status.CREATING, "creating");
+        statusString.put( Status.ATTACHING,"attaching");
+        statusString.put( Status.DELETING,"deleting");
+        statusString.put( Status.ERROR,"error");
+        statusString.put( Status.ERROR_DELETING,"error_deleting");
+        statusString.put( Status.BACKING_UP,"backing-up");
+		statusString.put( Status.RESTORING_BACKUP,"restoring-backup");
+		statusString.put( Status.ERROR_RESTORING,"error_restoring");
+		statusString.put( Status.ERROR_EXTENDING,"error_extending");
+		statusString.put( Status.INUSE,"in-use");
+		statusString.put( Status.AVAILABLE,"available"); 
+		statusString.put( Status.NA,"N/A");
+  	  	
+		stringStatus.put( "creating", Status.CREATING);
+		stringStatus.put( "attaching", Status.ATTACHING);
+		stringStatus.put( "deleting", Status.DELETING);
+		stringStatus.put( "error", Status.ERROR);
+		stringStatus.put( "error_deleting", Status.ERROR_DELETING);
+		stringStatus.put( "backing-up", Status.BACKING_UP);
+		stringStatus.put( "restoring-backup", Status.RESTORING_BACKUP);
+		stringStatus.put( "error_restoring", Status.ERROR_RESTORING);
+		stringStatus.put( "error_extending", Status.ERROR_EXTENDING);
+		stringStatus.put( "in-use", Status.INUSE);
+		stringStatus.put( "available", Status.AVAILABLE);
+		stringStatus.put( "N/A", Status.NA);
 		
 		Vector<Server> servs = Server.parse( serversJson, null );
 		Hashtable<String, String> server_id_to_name_mapping = new Hashtable<String, String>();
@@ -101,7 +176,14 @@ public class Volume {//implements Serializable {
 				if(name.compareTo("N/A")==0) {
 					name = volume.has("name") ? volume.getString("name") : "N/A";
 				}
-				String status = volume.has("status") ? volume.getString("status") : "N/A";
+				//Status status = volume.has("status") ? volume.getString("status") : "N/A";
+				Status status = Status.NA;
+				if(volume.has("status")) {
+					if(volume.getString("status").compareTo("null")==0)
+						status = Status.NA;
+					else
+						status = stringStatus.get(volume.getString("status"));
+				}
 				boolean bootable = volume.has("bootable") ? volume.getBoolean("bootable") : false;
 				boolean readonly = false;
 				String attachmode = "rw";
@@ -123,8 +205,8 @@ public class Volume {//implements Serializable {
 					attached_servername = server_id_to_name_mapping.get(attached_serverid);
 					attached_device   = attaches.getJSONObject(0).getString("device");
 				}
-				Volume vol = new Volume(name, ID, status,
-										bootable, readonly, attachmode,
+				Volume vol = new Volume(name, ID,
+										bootable, readonly, status,
 										size, attached_serverid, attached_servername, attached_device );
 				vols.add(vol);
 			}

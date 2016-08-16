@@ -67,7 +67,7 @@
     <string name="PICKASERVERTOASSOCIATEFIP">Scegli un server a cui associare il floating IP</string>
     <string name="ALREADYASSOCIATEDWARN">Questo floating IP &#xe8; gi&#xe0; associato ad un server. Se continui, l\'associazione verr&#xe0; spostata al nuovo server che sceglierai.</string>
     <string name="ALREADYASSOCIATED">Floating IP gi&#xe0; associato a questo server.</string>
-    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.\nProva ad aggiornare la finestra premendo Menu-&gt;Aggiorna.</string>
+    <string name="CANNOTRELEASEASSOCIATEDFIP">Questo IP &#xe8; ancora associato ad un server e non pu&#xf2; essere rilasciato.\nProva ad aggiornare la finestra.</string>
     <string name="NOINSTANCEAVAIL">Non ci sono istanze.</string>
     <string name="NOIMAGEAAVAIL">Non ci sono immagini.</string>
     <string name="NOSECGRPSAVAIL">Non ci sono security groups.</string>
@@ -81,8 +81,8 @@
     <string name="LAUNCHIMAGE">Lancia immagine</string>
     <string name="IMAGELAUNCHED">L\'immagine &#xe8; stata istanziata. Vai nella finestra Istanze per vederla.</string>
     <string name="SPECIFYOPTIP">Specifica IP (opzionale)</string>
-    <string name="FIPDISSOCIATED">Il floating IP &#xe8; stato dissociato dal server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se continui a vedere il nome del server.</string>
-    <string name="FIPASSOCIATED">Il floating IP &#xe8; stato associato al server. Premi Menu-&gt;Aggiorna per aggiornare la finestra se ancora non vedi il nome del server.</string>
+    <string name="FIPDISSOCIATED">Il floating IP &#xe8; stato dissociato dal server. Aggiorna la finestra se continui a vedere il nome del server.</string>
+    <string name="FIPASSOCIATED">Il floating IP &#xe8; stato associato al server. Aggiorna la finestra se ancora non vedi il nome del server.</string>
     <string name="FIPONLYFROMEXTERNAL">La rete selezionata non &#xe8; di tipo External. Puoi allocarti un floating IP solo da una rete External.\nSeleziona un\'altra rete (se disponibile).</string>
     <string name="NONETSELECTED">Non hai selezionato una rete esterna (o non hai accesso ad alcuna).</string>
     <string name="FIPALLOCATED">Floating IP allocato. Aggiorna la finestra se ancora non lo vedi.</string>
@@ -174,7 +174,7 @@
 	<string name="NETWORKINFO">Info sulla rete</string>
 	<string name="NOIMAGETOASSOCIATE">Non ci sono immagini da cui creare un\'istanza.</string>
 	<string name="NOFIPTOASSOCIATE">Non ci sono floating IP da associare.</string>
-	<string name="FIPASSOCIATED2">Il floating IP &#xe8; stato associato al server. Premi Menu-&gt;Aggiorna se le informazioni non sono aggiornate.</string>
+	<string name="FIPASSOCIATED2">Il floating IP &#xe8; stato associato al server. Aggiorna la finestra se le informazioni non sono allineate.</string>
 	<string name="SUBNETS">Sottoreti</string>
 	<string name="ALREADYCHOOSENNET">Hai gi&#xe0; selezionato questa rete</string>
 	<string name="ROUTERS">Router</string>
