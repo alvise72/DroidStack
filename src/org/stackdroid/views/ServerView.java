@@ -25,12 +25,13 @@ public class ServerView extends LinearLayout {
     private TextViewWithView Flavor   = null;
     private TextViewWithView Status   = null;
     private TextViewWithView Task     = null;
+    private TextViewWithView Uptime   = null;
 
     private ImageButtonWithView manageServer = null;
     private ImageButtonWithView deleteServer = null;
     private ButtonWithView addIPToServer = null;
 
-	private LinearLayoutWithView btns2 = null;
+    private LinearLayoutWithView btns2 = null;
     private ButtonWithView consoleLog = null;
 	private ProgressBar serverUpdateProgress = null;
 
@@ -53,12 +54,12 @@ public class ServerView extends LinearLayout {
 	}
 
     public ServerView( Server s, 
-    				   OnClickListener infoListener, 
-    				   OnClickListener consoleLogListener,
-    				   OnClickListener deleteServerListener,
-    				   OnClickListener addIP,
-    				   OnClickListener manageServerListener,
-    				   Context ctx ) 
+    			OnClickListener infoListener, 
+    			OnClickListener consoleLogListener,
+    			OnClickListener deleteServerListener,
+    			OnClickListener addIP,
+    			OnClickListener manageServerListener,
+    			Context ctx ) 
     {
     	super(ctx);
     	S = s;
@@ -122,6 +123,14 @@ public class ServerView extends LinearLayout {
 		if(S.getTask( ).compareToIgnoreCase("null")==0) 
 			Task.setText("Task: " + ctx.getString(R.string.NONE));
 		
+		Uptime = new TextViewWithView(ctx, (ServerView)this);
+		long delay = Utils.now( ) - S.getStartTime( ) ;
+		
+		int minutes = (int) ((delay / (60)) % 60);
+		int hours   = (int) ((delay / (60*60)) % 24);
+		Uptime.setText( "uptime: " + hours + " hr "+minutes+" mins" );
+		Uptime.setOnClickListener( infoListener );
+		
 		LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		consoleLog = new ButtonWithView(ctx, this);
 		consoleLog.setText("Console Log");
@@ -150,6 +159,7 @@ public class ServerView extends LinearLayout {
 		text.addView(Flavor);
 		text.addView(Status);
 		text.addView(Task);
+		text.addView(Uptime);
 		text.addView(btns2);
 		text.setOnClickListener( infoListener );
 		row.addView(text);

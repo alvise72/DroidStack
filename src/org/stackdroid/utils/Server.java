@@ -7,6 +7,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TimeZone;
 import java.util.Vector;
+import java.util.Date;
+
+import java.sql.Timestamp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,29 +31,31 @@ public class Server {//implements Serializable {
     private String 			status;
     private String 			task;
     private int 			powerstate;
-    private Vector<String> 	privIP;
-    private Vector<String> 	pubIP;
+    private Vector<String> 		privIP;
+    private Vector<String> 		pubIP;
     private String 			computeNode;
     private String 			keyname;
     private String 			flavorID;
-    private String[] 		secgrpNames;
+    private String[] 			secgrpNames;
     private long 			creationTime;
     private Flavor 			flavor;
     private OSImage			osImage;
+    private long 			startedAt;
     
     public Server( String 			_name,
-				   String 			_ID,
-		   		   String 			_status,
-		   		   String 			_task,
-		   		   int 				_power,
-		   		   Vector<String> 	_privIP,
-		   		   Vector<String> 	_pubIP,
-		   		   String 			_computeNode,
-		   		   String 			_keyname,
-		   		   String 			_flavorID,
-		   		   long 			_creationTime,
-		   		   String[] 		secgroups,
-				   OSImage 			_osImage)
+		   String 			_ID,
+		   String 			_status,
+	 	   String 			_task,
+		   int 				_power,
+		   Vector<String> 		_privIP,
+		   Vector<String> 		_pubIP,
+		   String 			_computeNode,
+		   String 			_keyname,
+		   String 			_flavorID,
+		   long 			_creationTime,
+		   String[] 			secgroups,
+		   OSImage 			_osImage,
+		   long				startedAt)
     {
     	name           = _name;
     	ID             = _ID;
@@ -64,7 +69,8 @@ public class Server {//implements Serializable {
     	flavorID       = _flavorID;
     	creationTime   = _creationTime;
     	secgrpNames    = secgroups;
-		osImage		   = _osImage;
+	osImage	       = _osImage;
+	this.startedAt = startedAt;
     }
 
     public String 		  getName() { return name; }
@@ -72,13 +78,14 @@ public class Server {//implements Serializable {
     public String 		  getStatus() { return status; }
     public String 		  getTask() { return task; }
     public int    		  getPowerState() { return powerstate; }
-    public Vector<String> getPrivateIP() { return privIP; }
-    public Vector<String> getPublicIP() { return pubIP; }
-    public OSImage        getOSImage( ) { return osImage; }
+    public Vector<String> 	  getPrivateIP() { return privIP; }
+    public Vector<String> 	  getPublicIP() { return pubIP; }
+    public OSImage        	  getOSImage( ) { return osImage; }
     public String 		  getComputeNode2() { return computeNode; }
     public String 		  getKeyName() { return keyname; }
     public String 		  getFlavorID() { return flavorID;}
-    public String[] 	  getSecurityGroupNames() { return secgrpNames; }
+    public String[] 	 	  getSecurityGroupNames() { return secgrpNames; }
+    public long			  getStartTime( ) { return startedAt; }
 
     public boolean		  hasStableState( ) {
       if( task!=null && (task.compareTo("null") != 0) )
@@ -106,7 +113,7 @@ public class Server {//implements Serializable {
         
     Vector<Server> serverVector = new Vector<Server>();
 	String status        = "N/A";
-	String keyname       ="N/A";
+	String keyname       = "N/A";
 	String[] secgrpNames = null;
 	String flavorID      = "N/A";
 	String ID            = "N/A";
@@ -126,7 +133,7 @@ public class Server {//implements Serializable {
 
 
 		JSONObject imageid = null;
-        OSImage osimage = null;
+        	OSImage osimage = null;
 		if(server.has("image") && osImages!=null) {
 			imageid = server.getJSONObject("image");
 			if(imageid!=null) {
@@ -158,6 +165,19 @@ public class Server {//implements Serializable {
 			task = null;
 		Vector<String> fixedIP = new Vector<String>();
 		Vector<String> floatingIP = new Vector<String>();
+		//String startTime = "";
+		long millis = 0;
+		if(server.has("OS-SRV-USG:launched_at")) {
+			//startTime = server.getString("OS-SRV-USG:launched_at");
+			//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:MM:ss");
+			Date startDate;
+			try {
+			  startDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(server.getString("OS-SRV-USG:launched_at"));
+			  Timestamp startTime_T = new Timestamp(startDate.getTime());
+			  millis = startTime_T.getTime( );
+			} catch(Exception pe) {}
+			
+		}
 		try {
 		    JSONObject addresses = server.getJSONObject("addresses");
 
@@ -194,7 +214,7 @@ public class Server {//implements Serializable {
 		} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
 
 		try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
-		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames, osimage);
+		Server S = new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames, osimage, millis/1000);
 		serverVector.add(S);
 	    }
  	} catch(org.json.JSONException je) {
@@ -265,6 +285,18 @@ public class Server {//implements Serializable {
 					task = (String)server.getString("OS-EXT-STS:task_state");
 				else
 					task = null;
+				long millis = 0;
+				if(server.has("OS-SRV-USG:launched_at")) {
+					//startTime = server.getString("OS-SRV-USG:launched_at");
+					//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:MM:ss");
+					Date startDate;
+					try {
+				 	 startDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(server.getString("OS-SRV-USG:launched_at"));
+				 	 Timestamp startTime_T = new Timestamp(startDate.getTime());
+				 	 millis = startTime_T.getTime( );
+					} catch(Exception pe) {}
+			
+				}
 				Vector<String> fixedIP = new Vector<String>();
 				Vector<String> floatingIP = new Vector<String>();
 				try {
@@ -303,7 +335,7 @@ public class Server {//implements Serializable {
 				} catch(JSONException je) {throw new ParseException( je.getMessage( ) );}
 
 				try { power = (int)server.getInt("OS-EXT-STS:power_state");} catch(JSONException je) {}
-				return new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames, osimage);
+				return new Server(name,ID,status,task,power,fixedIP,floatingIP,computeNode,keyname,flavorID,creationTime,secgrpNames, osimage, millis/1000);
 				//serverVector.add(S);
 
 		} catch(org.json.JSONException je) {
